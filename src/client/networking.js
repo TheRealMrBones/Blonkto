@@ -31,7 +31,7 @@ function onInstantiated(stuff){
 export const play = username => {
     socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
 };
-  
+
 export const updateInputs = throttle(20, inputs => {
     socket.emit(Constants.MSG_TYPES.INPUT, inputs);
 });

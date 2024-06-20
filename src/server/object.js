@@ -17,13 +17,13 @@ class Object {
     updateY(y){
         this.y += y;
     }
-  
+
     distanceTo(object) {
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
-  
+
     serializeForUpdate() {
         return {
             id: this.id,

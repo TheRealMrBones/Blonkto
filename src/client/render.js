@@ -1,5 +1,6 @@
 import { getAsset } from './assets.js';
 import { getCurrentState } from './state.js';
+import { getSelf } from './input.js';
 
 const Constants = require('../shared/constants.js');
 const { NATIVE_RESOLUTION, PLAYER_SCALE } = Constants;
@@ -20,7 +21,8 @@ function render() {
         animationFrameRequestId = requestAnimationFrame(render);
         return;
     }
-    const { me, others } = getCurrentState();
+    const { others } = getCurrentState();
+    const me = getSelf();
 
     if (me) {
         Me = me;

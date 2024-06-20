@@ -1,5 +1,4 @@
 import { updateInputs } from './networking.js';
-import { getCurrentState } from './state.js';
 
 const Constants = require('../shared/constants.js');
 
@@ -92,6 +91,16 @@ function handleMouseDown(){
 }
 
 function handleInput(){
+    updatePos();
+
+    updateInputs({
+        dir: dir,
+        x: x,
+        y: y,
+    });
+}
+
+function updatePos(){
     if(startw != null){
         y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
         startw = Date.now();
@@ -108,14 +117,6 @@ function handleInput(){
         x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
         startd = Date.now();
     }
-
-    const { others } = getCurrentState();
-
-    updateInputs({
-        dir: dir,
-        x: x,
-        y: y,
-    });
 }
 
 export function startCapturingInput(xp, yp) {
@@ -132,7 +133,7 @@ export function startCapturingInput(xp, yp) {
 
     interval = setInterval(handleInput, 1000 / Constants.UPDATE_RATE);
 }
-  
+
 export function stopCapturingInput() {
     window.removeEventListener('mousemove', onMouseInput);
     window.removeEventListener('click', onMouseInput);
@@ -151,6 +152,16 @@ export function stopCapturingInput() {
     startd = null;
 
     clearInterval(interval)
+}
+
+export function getSelf(){
+    updatePos();
+
+    return {
+        dir: dir,
+        x: x,
+        y: y,
+    }
 }
 
 export function fixPos(newpos){

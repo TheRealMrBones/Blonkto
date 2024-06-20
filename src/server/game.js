@@ -90,7 +90,7 @@ class Game {
     }
 
     createUpdate(player) {
-        const nearbyPlayers = Object.values(this.players);
+        const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id);
 
         return {
             t: Date.now(),
