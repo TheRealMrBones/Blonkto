@@ -17,8 +17,8 @@ exports.moveTouchingPlayers = (player, players, map) => {
                 player2.y += Math.cos(dir) * realdist / 2;
                 // dont forget to re addd wall push check after player push check here!
 
-                player.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
-                player2.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
+                player.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
+                player2.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
             }
         }
     }

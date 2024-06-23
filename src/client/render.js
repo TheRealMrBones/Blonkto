@@ -53,14 +53,39 @@ function renderPlayer(me, player){
     context.save();
     context.translate(canvasX, canvasY);
     context.rotate(dir);
+
+    const model = colorize(getAsset('BlonktoPlayer.png'), 0.5, 0.5, 0.5);
+
     context.drawImage(
-        getAsset('BlonktoPlayer.png'),
+        model,
         -canvas.height / PLAYER_SCALE / 2,
         -canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width + canvas.height / PLAYER_SCALE / 2,
         canvas.height / PLAYER_SCALE,
         canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width,
     );
     context.restore();
+}
+
+const colorize = (image, r, g, b) => {
+    const imageWidth = image.width;
+    const imageHeight = image.height;
+
+    const offscreen = new OffscreenCanvas(imageWidth, imageHeight);
+    const ctx = offscreen.getContext("2d");
+
+    ctx.drawImage(image, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+
+    for(let i = 0; i < imageData.data.length; i += 4){
+        imageData.data[i + 0] *= r;
+        imageData.data[i + 1] *= g;
+        imageData.data[i + 2] *= b;
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+
+    return offscreen;
 }
 
 function renderPlayerUsername(me, player){
