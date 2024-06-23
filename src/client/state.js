@@ -3,6 +3,8 @@
 const RENDER_DELAY = 100;
 
 const gameUpdates = [];
+const playerUpdates = {};
+const playerDelays = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
 
@@ -20,11 +22,26 @@ export function processGameUpdate(update) {
     }
     gameUpdates.push(update);
 
+    update.others.forEach(pu => {
+        if(!playerUpdates[pu.id]){
+            playerUpdates[pu.id] = [];
+        }
+        playerUpdates[pu.id].push(pu);
+        playerDelays[pu.id] = pu.playerdelay;
+    });
+
     // Keep only one game update before the current server time
     const base = getBaseUpdate();
     if (base > 0) {
         gameUpdates.splice(0, base);
     }
+
+    Object.values(playerUpdates).forEach(pus => {
+        const pbase = getPlayerBaseUpdate(pus);
+        if (pbase > 0) {
+            //pus.splice(0, pbase);
+        }
+    });
 }
 
 function currentServerTime() {
@@ -53,6 +70,22 @@ export function getCurrentState() {
 
     // If base is the most recent update we have, use its state.
     // Otherwise, interpolate between its state and the state of (base + 1).
+    const others = [];
+    Object.keys(playerUpdates).forEach(pid => {
+        const pus = playerUpdates[pid];
+        const pbase = getPlayerBaseUpdate(pid);
+        const playerTime = currentPlayerTime(playerDelays[pid]);
+
+        if (pbase < 0 || pbase === pus.length - 1) {
+            others.push(pus[pus.length - 1]);
+        } else {
+            const baseUpdate = pus[pbase];
+            const next = pus[pbase + 1];
+            const ratio = (playerTime - baseUpdate.lastupdated) / (next.lastupdated - baseUpdate.lastupdated);
+            others.push(interpolateObject(baseUpdate, next, ratio));
+        }
+    });
+
     if (base < 0 || base === gameUpdates.length - 1) {
         return gameUpdates[gameUpdates.length - 1];
     } else {
@@ -60,7 +93,7 @@ export function getCurrentState() {
         const next = gameUpdates[base + 1];
         const ratio = (serverTime - baseUpdate.t) / (next.t - baseUpdate.t);
         return {
-            others: interpolatePlayersArray(baseUpdate.others, next.others, ratio),
+            others: others,
         };
     }
 }
@@ -98,30 +131,20 @@ function interpolateDirection(d1, d2, ratio) {
     }
 }
 
-// #region Player Specific interpolation
+// #region Player Specific state functions
 
-function interpolatePlayer(player1, player2, badRatio){
-    if (!player2) {
-        return player1;
-    }
-
-    const serverTime = currentServerTime();
-    const ratio = (serverTime - player1.lastupdated) / (player2.lastupdated - player1.lastupdated);
-
-    const interpolated = {};
-    Object.keys(player1).forEach(key => {
-        if (key === 'dir') {
-            interpolated[key] = interpolateDirection(player1[key], player2[key], badRatio);
-        } else {
-            interpolated[key] = player1[key] + (player2[key] - player1[key]) * ratio;
-            
-        }
-    });
-    return interpolated;
+function currentPlayerTime(playerdelay) {
+    return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY - playerdelay;
 }
 
-function interpolatePlayersArray(players1, players2, badRatio){
-    return players1.map(o => interpolatePlayer(o, players2.find(o2 => o.id === o2.id), badRatio));
+function getPlayerBaseUpdate(pid) {
+    const playerTime = currentPlayerTime(playerDelays[pid]);
+    for (let i = playerUpdates[pid].length - 1; i >= 0; i--) {
+        if (playerUpdates[pid][i].lastupdated <= playerTime) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 // #endregion
