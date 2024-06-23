@@ -11,16 +11,16 @@ let starts = null;
 let startd = null;
 let interval = null;
 
-function onMouseInput(e) {
+function onMouseInput(e){
     handleDirection(e.clientX, e.clientY);
 }
 
-function onTouchInput(e) {
+function onTouchInput(e){
     const touch = e.touches[0];
     handleDirection(touch.clientX, touch.clientY);
 }
 
-function handleDirection(x, y) {
+function handleDirection(x, y){
     dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
 }
 
@@ -120,7 +120,7 @@ function updatePos(){
     }
 }
 
-export function startCapturingInput(xp, yp) {
+export function startCapturingInput(xp, yp){
     x = xp;
     y = yp;
 
@@ -135,7 +135,7 @@ export function startCapturingInput(xp, yp) {
     interval = setInterval(handleInput, 1000 / Constants.UPDATE_RATE);
 }
 
-export function stopCapturingInput() {
+export function stopCapturingInput(){
     window.removeEventListener('mousemove', onMouseInput);
     window.removeEventListener('click', onMouseInput);
     window.removeEventListener('touchstart', onTouchInput);

@@ -1,5 +1,5 @@
 class Object {
-    constructor(id, x, y, dir) {
+    constructor(id, x, y, dir){
         this.id = id;
         this.x = x;
         this.y = y;
@@ -18,13 +18,13 @@ class Object {
         this.y += y;
     }
 
-    distanceTo(object) {
+    distanceTo(object){
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    serializeForUpdate() {
+    serializeForUpdate(){
         return {
             id: this.id,
             x: this.x,

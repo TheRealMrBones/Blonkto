@@ -16,10 +16,10 @@ module.exports = {
             test: /\.js$/,
             exclude: /node_modules/,
             use: {
-            loader: "babel-loader",
-            options: {
-                presets: ['@babel/preset-env'],
-            },
+                loader: "babel-loader",
+                options: {
+                    presets: ['@babel/preset-env'],
+                },
             },
         },
         {
@@ -35,11 +35,11 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css',
+            filename: '[name].[contenthash].css',
         }),
         new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: 'src/client/index.html',
+            filename: 'index.html',
+            template: 'src/client/index.html',
         }),
     ],
 };

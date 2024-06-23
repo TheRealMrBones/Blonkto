@@ -8,15 +8,15 @@ const playerDelays = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
 
-export function initState() {
+export function initState(){
     gameStart = 0;
     firstServerTimestamp = 0;
 }
 
-export function processGameUpdate(update) {
+export function processGameUpdate(update){
     
 
-    if (!firstServerTimestamp) {
+    if(!firstServerTimestamp){
         firstServerTimestamp = update.t;
         gameStart = Date.now();
     }
@@ -37,7 +37,7 @@ export function processGameUpdate(update) {
 
     // Keep only one game update before the current server time
     const base = getBaseUpdate();
-    if (base > 0) {
+    if(base > 0){
         gameUpdates.splice(0, base);
     }
 
@@ -49,24 +49,24 @@ export function processGameUpdate(update) {
     });
 }
 
-function currentServerTime() {
+function currentServerTime(){
     return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY;
 }
 
 // Returns the index of the base update, the first game update before
 // current server time, or -1 if N/A.
-function getBaseUpdate() {
+function getBaseUpdate(){
     const serverTime = currentServerTime();
-    for (let i = gameUpdates.length - 1; i >= 0; i--) {
-        if (gameUpdates[i].t <= serverTime) {
+    for(let i = gameUpdates.length - 1; i >= 0; i--){
+        if(gameUpdates[i].t <= serverTime){
             return i;
         }
     }
     return -1;
 }
 
-export function getCurrentState() {
-    if (!firstServerTimestamp) {
+export function getCurrentState(){
+    if(!firstServerTimestamp){
         return {};
     }
 
@@ -81,9 +81,9 @@ export function getCurrentState() {
         const pbase = getPlayerBaseUpdate(pid);
         const playerTime = currentPlayerTime(playerDelays[pid]);
 
-        if (pbase < 0 || pbase === pus.length - 1) {
+        if(pbase < 0 || pbase === pus.length - 1){
             others.push(pus[pus.length - 1]);
-        } else {
+        }else{
             const baseUpdate = pus[pbase];
             const next = pus[pbase + 1];
             const ratio = (playerTime - baseUpdate.lastupdated) / (next.lastupdated - baseUpdate.lastupdated);
@@ -91,9 +91,9 @@ export function getCurrentState() {
         }
     });
 
-    if (base < 0 || base === gameUpdates.length - 1) {
+    if(base < 0 || base === gameUpdates.length - 1){
         return gameUpdates[gameUpdates.length - 1];
-    } else {
+    }else{
         const baseUpdate = gameUpdates[base];
         const next = gameUpdates[base + 1];
         const ratio = (serverTime - baseUpdate.t) / (next.t - baseUpdate.t);
@@ -103,14 +103,14 @@ export function getCurrentState() {
     }
 }
 
-function interpolateObject(object1, object2, ratio) {
-    if (!object2) {
+function interpolateObject(object1, object2, ratio){
+    if(!object2){
         return object1;
     }
 
     const interpolated = {};
     Object.keys(object1).forEach(key => {
-        if (key === 'dir') {
+        if(key === 'dir'){
             interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
         }else if(key === 'username'){
             // don't interpolate these keys
@@ -122,33 +122,33 @@ function interpolateObject(object1, object2, ratio) {
     return interpolated;
 }
 
-function interpolateObjectArray(objects1, objects2, ratio) {
+function interpolateObjectArray(objects1, objects2, ratio){
     return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.id === o2.id), ratio));
 }
 
-function interpolateDirection(d1, d2, ratio) {
+function interpolateDirection(d1, d2, ratio){
     const absD = Math.abs(d2 - d1);
-    if (absD >= Math.PI) {
-        if (d1 > d2) {
+    if(absD >= Math.PI){
+        if(d1 > d2){
             return d1 + (d2 + 2 * Math.PI - d1) * ratio;
-        } else {
+        }else{
             return d1 + (d2 - 2 * Math.PI - d1) * ratio;
         }
-    } else {
+    }else{
         return d1 + (d2 - d1) * ratio;
     }
 }
 
 // #region Player Specific state functions
 
-function currentPlayerTime(playerdelay) {
+function currentPlayerTime(playerdelay){
     return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY - playerdelay;
 }
 
-function getPlayerBaseUpdate(pid) {
+function getPlayerBaseUpdate(pid){
     const playerTime = currentPlayerTime(playerDelays[pid]);
-    for (let i = playerUpdates[pid].length - 1; i >= 0; i--) {
-        if (playerUpdates[pid][i].lastupdated <= playerTime) {
+    for(let i = playerUpdates[pid].length - 1; i >= 0; i--){
+        if(playerUpdates[pid][i].lastupdated <= playerTime){
             return i;
         }
     }

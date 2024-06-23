@@ -11,10 +11,10 @@ const app = express();
 
 app.use(express.static('public'));
 
-if (process.env.NODE_ENV === 'development') {
+if(process.env.NODE_ENV === 'development'){
   	const compiler = webpack(webpackConfig);
   	app.use(webpackDevMiddleware(compiler));
-} else {
+}else{
   	app.use(express.static('dist'));
 }
 
@@ -35,7 +35,7 @@ io.on('connection', socket => {
 
 const game = new Game();
 
-function joinGame(username) {
+function joinGame(username){
 	if(username.trim().length === 0){
 		username = "Silly Goose";
 	}
@@ -44,7 +44,7 @@ function joinGame(username) {
 	game.addPlayer(this, newUsername);
 }
 
-function handleInput(dir) {
+function handleInput(dir){
   	game.handleInput(this, dir);
 }
 
@@ -52,7 +52,7 @@ function shoot(){
 	game.shoot(this);
 }
 
-function onDisconnect() {
+function onDisconnect(){
 	console.log('Player left game!', this.id);
   	game.removePlayer(this);
 }

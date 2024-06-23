@@ -18,9 +18,9 @@ Promise.all([
     downloadAssets(),
 ]).then(() => {
     usernameInput.focus();
-    usernameInput.addEventListener("keyup", function(event) {
+    usernameInput.addEventListener("keyup", function(event){
         event.preventDefault();
-        if (event.key === "Enter") {
+        if(event.key === "Enter"){
             init();
         }
     });
@@ -47,7 +47,7 @@ function init(){
     }
 }
 
-function onGameOver() {
+function onGameOver(){
     stopCapturingInput();
     stopRendering();
     startMenu.style.display = "block";

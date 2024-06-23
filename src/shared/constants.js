@@ -1,13 +1,21 @@
 module.exports = Object.freeze({
+    // player related
     PLAYER_SCALE: 19,
     PLAYER_SPEED: 300,
     PLAYER_FIRE_COOLDOWN: 1,
-    PLAYER_USERNAME_HEIGHT: 40,
+    PLAYER_USERNAME_HEIGHT: 45,
 
-    UPDATE_RATE: 30,
+    // update related
+    UPDATE_RATE: 40,
 
+    // render related
     NATIVE_RESOLUTION: 1080,
 
+    // map related
+    REGION_SIZE: 10,
+    CELL_SIZE: 15,
+
+    // message types
     MSG_TYPES: {
         JOIN_GAME: 'join_game',
         LEAVE_GAME: 'disconnect',

@@ -1,7 +1,7 @@
 const ObjectClass = require('./object.js');
 
 class Player extends ObjectClass {
-    constructor(id, socket, username, x, y, dir) {
+    constructor(id, socket, username, x, y, dir){
         super(id, x, y, dir);
         this.socket = socket;
         this.username = username;
@@ -21,12 +21,12 @@ class Player extends ObjectClass {
         this.y = y;
     }
 
-    serializeForUpdate() {
+    serializeForUpdate(){
         return {
-        ...(super.serializeForUpdate()),
-        username: this.username,
-        lastupdated: this.lastupdated,
-        playerdelay: this.playerdelay,
+            ...(super.serializeForUpdate()),
+            username: this.username,
+            lastupdated: this.lastupdated,
+            playerdelay: this.playerdelay,
         };
     }
 }

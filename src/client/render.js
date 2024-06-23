@@ -14,7 +14,7 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
-function render() {
+function render(){
     if(getCurrentState() == null){
         animationFrameRequestId = requestAnimationFrame(render);
         return;
@@ -80,10 +80,10 @@ function fixCoord(x){
 
 let animationFrameRequestId;
 
-export function startRendering() {
+export function startRendering(){
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
-export function stopRendering() {
+export function stopRendering(){
     cancelAnimationFrame(animationFrameRequestId);
 }

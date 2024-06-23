@@ -1,6 +1,6 @@
 const Constants = require('../shared/constants.js');
 
-class Map{
+class Map {
     constructor(){
         // defaults
         this.spawnpoints = [[0, 0]];

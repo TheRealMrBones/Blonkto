@@ -1,13 +1,10 @@
 const Constants = require('../shared/constants');
 
 exports.moveTouchingPlayers = (player, players, map) => {
-    for (let i = 0; i < players.length; i++) {
+    for(let i = 0; i < players.length; i++){
         const player2 = players[i];
         let dist = player.distanceTo(player2);
-        if (
-            player2.id != player.id &&
-            dist <= (Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE + Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE) / 2
-        ) {
+        if(player2.id != player.id && dist <= (Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE + Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE) / 2){
             if(dist == 0){
                 player.x += dist / 4;
                 player2.x -= dist / 4;
