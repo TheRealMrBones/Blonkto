@@ -7,6 +7,7 @@ const {filterText} = require('./filter.js');
 class Game {
     constructor() {
         this.players = {};
+        this.leaves = [];
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
         this.map = new Map();
@@ -44,6 +45,7 @@ class Game {
     }
 
     removePlayer(socket) {
+        this.leaves.push(socket.id);
         delete this.players[socket.id];
     }
 
@@ -91,10 +93,13 @@ class Game {
 
     createUpdate(player) {
         const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id);
+        const leavscopy = [...this.leaves];
+        this.leaves = [];
 
         return {
             t: Date.now(),
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
+            leaves: leavscopy,
         };
     }
 }

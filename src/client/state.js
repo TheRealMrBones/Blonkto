@@ -30,6 +30,11 @@ export function processGameUpdate(update) {
         playerDelays[pu.id] = pu.playerdelay;
     });
 
+    update.leaves.forEach(pid => {
+        delete playerUpdates[pid];
+        delete playerDelays[pid];
+    });
+
     // Keep only one game update before the current server time
     const base = getBaseUpdate();
     if (base > 0) {
