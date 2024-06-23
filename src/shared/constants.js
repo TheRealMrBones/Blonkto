@@ -23,7 +23,6 @@ module.exports = Object.freeze({
         PLAYER_INSTANTIATED: 'instantiated',
         GAME_UPDATE: 'update',
         INPUT: 'input',
-        FIX_POS: 'fixpos',
         SHOOT: 'shoot',
         DEAD: 'dead',
     },

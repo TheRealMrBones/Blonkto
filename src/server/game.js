@@ -64,7 +64,7 @@ class Game {
             if(this.players[socket.id]){
                 this.players[socket.id].setDirection(dir);
                 this.players[socket.id].move(t, x, y);
-                moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.map);
+                //moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.map);
             }
         }
     }
@@ -95,9 +95,12 @@ class Game {
         const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id);
         const leavscopy = [...this.leaves];
         this.leaves = [];
+        const fixescopy = player.getFixes();
+        player.resetFixes();
 
         return {
             t: Date.now(),
+            fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             leaves: leavscopy,
         };

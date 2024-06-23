@@ -10,6 +10,7 @@ class Player extends ObjectClass {
         this.lastshot = Date.now();
         this.lastupdated = Date.now();
         this.playerdelay = 0;
+        this.resetFixes();
     }
 
     move(t, x, y){
@@ -19,6 +20,35 @@ class Player extends ObjectClass {
         this.lastupdated = t;
         this.x = x;
         this.y = y;
+    }
+
+    resetFixes(){
+        this.fixes = {
+            pushx: 0,
+            pushy: 0,
+            setpos: null,
+        }
+    }
+
+    getFixes(){
+        const fixescopy = {
+            pushx: this.fixes.pushx,
+            pushy: this.fixes.pushy,
+            setpos: this.fixes.setpos,
+        }
+        return fixescopy;
+    }
+
+    push(x, y){
+        this.fixes.pushx += x;
+        this.fixes.pushy += y;
+    }
+
+    setPos(x, y){
+        this.fixes.setpos = {
+            x: x,
+            y: y
+        }
     }
 
     serializeForUpdate(){

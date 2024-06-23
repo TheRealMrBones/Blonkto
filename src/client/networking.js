@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 import { processGameUpdate } from './state.js';
 import { throttle } from 'throttle-debounce';
 import { startRendering } from './render.js';
-import { startCapturingInput, fixPos } from './input.js';
+import { startCapturingInput } from './input.js';
 
 const Constants = require('../shared/constants.js');
 const socketProtocol = (window.location.protocol.includes('https')) ? 'wss' : 'ws';
@@ -19,7 +19,6 @@ export const connect = onGameOver => (
         socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on(Constants.MSG_TYPES.DEAD, onGameOver);
         socket.on(Constants.MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
-        socket.on(Constants.MSG_TYPES.FIX_POS, fixPos);
     })
 );
 

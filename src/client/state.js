@@ -1,4 +1,4 @@
-
+import { push } from './input.js';
 
 const RENDER_DELAY = 100;
 
@@ -14,7 +14,7 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
-    
+    push(update.fixes.pushx, update.fixes.pushy);
 
     if(!firstServerTimestamp){
         firstServerTimestamp = update.t;
@@ -41,10 +41,10 @@ export function processGameUpdate(update){
         gameUpdates.splice(0, base);
     }
 
-    Object.values(playerUpdates).forEach(pus => {
-        const pbase = getPlayerBaseUpdate(pus);
+    Object.keys(playerUpdates).forEach(pid => {
+        const pbase = getPlayerBaseUpdate(pid);
         if (pbase > 0) {
-            //pus.splice(0, pbase);
+            playerUpdates[pid].splice(0, pbase);
         }
     });
 }

@@ -165,7 +165,12 @@ export function getSelf(){
     }
 }
 
+export function push(pushx, pushy){
+    x += pushx;
+    y += pushy;
+}
+
 export function fixPos(newpos){
-    x = newpos.newx;
-    y = newpos.newy;
+    x = newpos.x;
+    y = newpos.y;
 }
