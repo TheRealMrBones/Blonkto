@@ -1,5 +1,5 @@
 const ASSET_NAMES = [
-    'bluePlayer.png',
+    'BlonktoPlayer.png',
     'tiles.png',
 ];
 

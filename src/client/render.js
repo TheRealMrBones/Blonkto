@@ -24,6 +24,7 @@ function render() {
 
     renderBG(me);
     others.forEach(renderPlayer.bind(null, me));
+    others.forEach(renderPlayerUsername.bind(null, me));
     renderPlayer(me, me);
 
     animationFrameRequestId = requestAnimationFrame(render);
@@ -52,12 +53,24 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
     context.drawImage(
-        getAsset('bluePlayer.png'),
+        getAsset('BlonktoPlayer.png'),
         -canvas.height / PLAYER_SCALE / 2,
-        -canvas.height / PLAYER_SCALE * getAsset('bluePlayer.png').height / getAsset('bluePlayer.png').width + canvas.height / PLAYER_SCALE / 2,
+        -canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width + canvas.height / PLAYER_SCALE / 2,
         canvas.height / PLAYER_SCALE,
-        canvas.height / PLAYER_SCALE * getAsset('bluePlayer.png').height / getAsset('bluePlayer.png').width,
+        canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width,
     );
+    context.restore();
+}
+
+function renderPlayerUsername(me, player){
+    const { x, y, username } = player;
+    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
+    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
+    context.save();
+    context.translate(canvasX, canvasY);
+    context.font = "48px serif";
+    context.textAlign = "center";
+    context.strokeText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
     context.restore();
 }
 

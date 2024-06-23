@@ -112,7 +112,10 @@ function interpolateObject(object1, object2, ratio) {
     Object.keys(object1).forEach(key => {
         if (key === 'dir') {
             interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
-        } else {
+        }else if(key === 'username'){
+            // don't interpolate these keys
+            interpolated[key] = object1[key];
+        }else{
             interpolated[key] = object1[key] + (object2[key] - object1[key]) * ratio;
         }
     });
