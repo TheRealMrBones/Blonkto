@@ -22,10 +22,11 @@ function render(){
     const { others } = getCurrentState();
     const me = getSelf();
 
+    // render priority goes low to high
     renderBG(me);
     others.forEach(renderPlayer.bind(null, me));
-    others.forEach(renderPlayerUsername.bind(null, me));
     renderPlayer(me, me);
+    others.forEach(renderPlayerUsername.bind(null, me));
 
     animationFrameRequestId = requestAnimationFrame(render);
 }
@@ -68,9 +69,9 @@ function renderPlayerUsername(me, player){
     const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
     context.save();
     context.translate(canvasX, canvasY);
-    context.font = "48px serif";
+    context.font = Constants.TEXT_FONT;
     context.textAlign = "center";
-    context.strokeText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
+    context.fillText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
     context.restore();
 }
 

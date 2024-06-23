@@ -10,10 +10,11 @@ module.exports = Object.freeze({
 
     // render related
     NATIVE_RESOLUTION: 1080,
+    TEXT_FONT: "32px Verdana",
 
     // map related
     REGION_SIZE: 10,
-    CELL_SIZE: 15,
+    CELL_SIZE: 11,
 
     // message types
     MSG_TYPES: {
