@@ -1,9 +1,9 @@
 module.exports = Object.freeze({
     PLAYER_SCALE: 19,
-    PLAYER_SPEED: 400,
+    PLAYER_SPEED: 300,
     PLAYER_FIRE_COOLDOWN: 1,
 
-    UPDATE_RATE: 50,
+    UPDATE_RATE: 30,
 
     NATIVE_RESOLUTION: 1080,
 

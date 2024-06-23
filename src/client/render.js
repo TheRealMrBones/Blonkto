@@ -14,8 +14,6 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
-let Me = null;
-
 function render() {
     if(getCurrentState() == null){
         animationFrameRequestId = requestAnimationFrame(render);
@@ -24,12 +22,9 @@ function render() {
     const { others } = getCurrentState();
     const me = getSelf();
 
-    if (me) {
-        Me = me;
-        renderBG(me);
-        others.forEach(renderPlayer.bind(null, me));
-        renderPlayer(me, me);
-    }
+    renderBG(me);
+    others.forEach(renderPlayer.bind(null, me));
+    renderPlayer(me, me);
 
     animationFrameRequestId = requestAnimationFrame(render);
 }

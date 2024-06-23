@@ -58,10 +58,10 @@ class Game {
 
     handleInput(socket, inputs) {
         if(this.players[socket.id] !== undefined){
-            const { dir, x, y } = inputs;
+            const { t, dir, x, y } = inputs;
             if (this.players[socket.id]) {
                 this.players[socket.id].setDirection(dir);
-                this.players[socket.id].move(x, y);
+                this.players[socket.id].move(t, x, y);
                 moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.map);
             }
         }
@@ -94,8 +94,7 @@ class Game {
 
         return {
             t: Date.now(),
-            me: player.serializeForUpdate(),
-            others: nearbyPlayers.map(p => p.serializeForUpdate())
+            others: nearbyPlayers.map(p => p.serializeForUpdate()),
         };
     }
 }

@@ -60,8 +60,7 @@ export function getCurrentState() {
         const next = gameUpdates[base + 1];
         const ratio = (serverTime - baseUpdate.t) / (next.t - baseUpdate.t);
         return {
-            me: interpolateObject(baseUpdate.me, next.me, ratio),
-            others: interpolateObjectArray(baseUpdate.others, next.others, ratio)
+            others: interpolatePlayersArray(baseUpdate.others, next.others, ratio),
         };
     }
 }
@@ -98,3 +97,31 @@ function interpolateDirection(d1, d2, ratio) {
         return d1 + (d2 - d1) * ratio;
     }
 }
+
+// #region Player Specific interpolation
+
+function interpolatePlayer(player1, player2, badRatio){
+    if (!player2) {
+        return player1;
+    }
+
+    const serverTime = currentServerTime();
+    const ratio = (serverTime - player1.lastupdated) / (player2.lastupdated - player1.lastupdated);
+
+    const interpolated = {};
+    Object.keys(player1).forEach(key => {
+        if (key === 'dir') {
+            interpolated[key] = interpolateDirection(player1[key], player2[key], badRatio);
+        } else {
+            interpolated[key] = player1[key] + (player2[key] - player1[key]) * ratio;
+            
+        }
+    });
+    return interpolated;
+}
+
+function interpolatePlayersArray(players1, players2, badRatio){
+    return players1.map(o => interpolatePlayer(o, players2.find(o2 => o.id === o2.id), badRatio));
+}
+
+// #endregion

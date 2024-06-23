@@ -94,6 +94,7 @@ function handleInput(){
     updatePos();
 
     updateInputs({
+        t: Date.now(),
         dir: dir,
         x: x,
         y: y,

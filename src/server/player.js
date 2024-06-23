@@ -8,9 +8,11 @@ class Player extends ObjectClass {
         this.dead = false;
         this.kills = 0;
         this.lastshot = Date.now();
+        this.lastupdated = Date.now();
     }
 
-    move(x, y){
+    move(t, x, y){
+        this.lastupdated = t;
         this.x = x;
         this.y = y;
     }
@@ -19,6 +21,7 @@ class Player extends ObjectClass {
         return {
         ...(super.serializeForUpdate()),
         username: this.username,
+        lastupdated: this.lastupdated,
         };
     }
 }

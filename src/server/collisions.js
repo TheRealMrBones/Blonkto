@@ -17,8 +17,8 @@ exports.moveTouchingPlayers = (player, players, map) => {
                 player.y -= Math.cos(dir) * dist / 4;
                 player2.x -= Math.sin(dir) * dist / 4;
                 player2.y += Math.cos(dir) * dist / 4;
-                PhaseCheck(player, map.getMap(player.x, player.y));
-                PhaseCheck(player2, map.getMap(player2.x, player2.y));
+                // dont forget to re addd wall push check after player push check here!
+
                 player.socket.emit(Constants.MSG_TYPES.FIX_POS, {
                     newx: player.x,
                     newy: player.y,
