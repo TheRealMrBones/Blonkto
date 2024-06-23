@@ -1,4 +1,5 @@
-import { push } from './input.js';
+import { playerCollisions } from './collisions.js';
+import { getSelf } from './input.js';
 
 const RENDER_DELAY = 100;
 
@@ -14,7 +15,7 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
-    push(update.fixes.pushx, update.fixes.pushy);
+    
 
     if(!firstServerTimestamp){
         firstServerTimestamp = update.t;
@@ -90,6 +91,8 @@ export function getCurrentState(){
             others.push(interpolateObject(baseUpdate, next, ratio));
         }
     });
+
+    playerCollisions(getSelf(), others);
 
     if(base < 0 || base === gameUpdates.length - 1){
         return gameUpdates[gameUpdates.length - 1];
