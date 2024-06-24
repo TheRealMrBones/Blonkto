@@ -1,13 +1,13 @@
 const Constants = require('../shared/constants.js');
 
-class Map {
+class World {
     constructor(){
         // defaults
         this.spawnpoints = [[0, 0]];
-        this.loadmap();
+        this.loadWorld();
     }
 
-    loadmap(){
+    loadWorld(){
         
     }
 
@@ -16,4 +16,4 @@ class Map {
     }
 }
 
-module.exports = Map;
+module.exports = World;

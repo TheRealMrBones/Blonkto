@@ -3,7 +3,7 @@ import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 
 const Constants = require('../shared/constants.js');
-const { NATIVE_RESOLUTION, PLAYER_SCALE } = Constants;
+const { NATIVE_RESOLUTION, PLAYER_SCALE, CELL_SCALE, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
@@ -19,6 +19,7 @@ export function setColor(color){
     myColor = color;
 }
 
+let cellSize;
 function render(){
     if(getCurrentState() == null){
         animationFrameRequestId = requestAnimationFrame(render);
@@ -28,8 +29,22 @@ function render(){
     const me = getSelf();
     me.color = myColor;
 
+    cellSize = canvas.height / CELL_SCALE;
+    const playertile = {
+        x: Math.floor(me.x / cellSize),
+        y: Math.floor(me.y / cellSize),
+    };
+    const firstCell = {
+        x: playertile.x - CELLS_HORIZONTAL / 2,
+        y: playertile.y - CELLS_VERTICAL / 2,
+        renderx: -CELLS_HORIZONTAL / 2 * cellSize - me.x % cellSize,
+        rendery: -CELLS_VERTICAL / 2 * cellSize - me.y % cellSize,
+    };
+
     // render priority goes low to high
-    renderBG(me);
+    renderFloor(firstCell);
+
+
     others.forEach(renderPlayer.bind(null, me));
     renderPlayer(me, me);
     others.forEach(renderPlayerUsername.bind(null, me));
@@ -37,20 +52,36 @@ function render(){
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
-function renderBG(me){
+// #region World
+
+function renderFloor(firstCell){
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
     context.translate(canvasX, canvasY);
-    context.drawImage(
-        getAsset('tiles.png'),
-        -canvas.width / 2 - fixCoord(me.x) % (canvas.height / 9) - (canvas.height / 9) * 2 + (canvas.width / 2) % (canvas.height / 9),
-        -canvas.height / 2 - fixCoord(me.y) % (canvas.height / 9) - (canvas.height / 9),
-        canvas.height / 9 * 24,
-        canvas.height / 9 * 13,
-    );
+
+    for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
+        for(let dy = 0; dy < CELLS_VERTICAL; dy++){
+            renderTile(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize);
+        }
+    }
+
     context.restore();
 }
+
+function renderTile(x, y){
+    context.drawImage(
+        getAsset('Tile.png'),
+        x,
+        y,
+        canvas.height / CELL_SCALE,
+        canvas.height / CELL_SCALE,
+    );
+}
+
+// #endregion
+
+// #region Players
 
 function renderPlayer(me, player){
     const { x, y, dir } = player;
@@ -70,6 +101,26 @@ function renderPlayer(me, player){
         canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width,
     );
     context.restore();
+}
+
+function renderPlayerUsername(me, player){
+    const { x, y, username } = player;
+    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
+    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
+    context.save();
+    context.translate(canvasX, canvasY);
+    context.font = Constants.TEXT_FONT;
+    context.textAlign = "center";
+    context.fillText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
+    context.restore();
+}
+
+// #endregion
+
+// #region Helpers
+
+function fixCoord(x){
+    return x * canvas.height / NATIVE_RESOLUTION;
 }
 
 const colorize = (image, r, g, b) => {
@@ -94,21 +145,9 @@ const colorize = (image, r, g, b) => {
     return offscreen;
 }
 
-function renderPlayerUsername(me, player){
-    const { x, y, username } = player;
-    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
-    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
-    context.save();
-    context.translate(canvasX, canvasY);
-    context.font = Constants.TEXT_FONT;
-    context.textAlign = "center";
-    context.fillText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
-    context.restore();
-}
+// #endregion
 
-function fixCoord(x){
-    return x * canvas.height / NATIVE_RESOLUTION;
-}
+// #region Exports
 
 let animationFrameRequestId;
 
@@ -119,3 +158,5 @@ export function startRendering(){
 export function stopRendering(){
     cancelAnimationFrame(animationFrameRequestId);
 }
+
+// #endregion

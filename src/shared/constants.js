@@ -13,8 +13,11 @@ module.exports = Object.freeze({
     TEXT_FONT: "32px Verdana",
 
     // map related
-    REGION_SIZE: 10,
-    CELL_SIZE: 11,
+    WORLD_SIZE: 2, // how many chunks wide and tall the world is
+    CHUNK_SIZE: 32,
+    CELL_SCALE: 11,
+    CELLS_HORIZONTAL: 28,
+    CELLS_VERTICAL: 16,
 
     // message types
     MSG_TYPES: {

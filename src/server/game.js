@@ -1,6 +1,6 @@
 const Constants = require('../shared/constants.js');
 const Player = require('./player.js');
-const Map = require('./map.js');
+const World = require('./world.js');
 const {moveTouchingPlayers} = require('./collisions.js');
 const {filterText} = require('./filter.js');
 
@@ -10,7 +10,7 @@ class Game {
         this.leaves = [];
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
-        this.map = new Map();
+        this.world = new World();
         this.leaderboard = [];
         setInterval(this.update.bind(this), 1000 / Constants.UPDATE_RATE);
     }
@@ -35,7 +35,7 @@ class Game {
     }
 
     addPlayer(socket, username){
-        let spawn = this.map.getSpawn();
+        let spawn = this.world.getSpawn();
         this.players[socket.id] = new Player(socket.id, socket, username, spawn[0], spawn[1], 0);
         this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
         socket.emit(Constants.MSG_TYPES.PLAYER_INSTANTIATED, {
@@ -65,7 +65,7 @@ class Game {
             if(this.players[socket.id]){
                 this.players[socket.id].setDirection(dir);
                 this.players[socket.id].move(t, x, y);
-                //moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.map);
+                //moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.world);
             }
         }
     }

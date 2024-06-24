@@ -1,6 +1,6 @@
 const Constants = require('../shared/constants');
 
-exports.moveTouchingPlayers = (player, players, map) => {
+exports.moveTouchingPlayers = (player, players, world) => {
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
         const dist = player.distanceTo(player2);
