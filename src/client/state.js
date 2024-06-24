@@ -4,6 +4,7 @@ import { getSelf } from './input.js';
 const RENDER_DELAY = 100;
 
 const gameUpdates = [];
+const players = {};
 const playerUpdates = {};
 const playerDelays = {};
 let gameStart = 0;
@@ -15,7 +16,9 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
-    
+    Object.keys(players).forEach(pid => {
+        players[pid] = false;
+    });
 
     if(!firstServerTimestamp){
         firstServerTimestamp = update.t;
@@ -25,15 +28,20 @@ export function processGameUpdate(update){
 
     update.others.forEach(pu => {
         if(!playerUpdates[pu.id]){
+            players[pu.id] = true;
             playerUpdates[pu.id] = [];
         }
+        players[pu.id] = true;
         playerUpdates[pu.id].push(pu);
         playerDelays[pu.id] = pu.playerdelay;
     });
 
-    update.leaves.forEach(pid => {
-        delete playerUpdates[pid];
-        delete playerDelays[pid];
+    Object.keys(players).forEach(pid => {
+        if(!players[pid]){
+            delete players[pid];
+            delete playerUpdates[pid];
+            delete playerDelays[pid];
+        }
     });
 
     // Keep only one game update before the current server time
