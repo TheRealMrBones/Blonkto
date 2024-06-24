@@ -31,14 +31,14 @@ function render(){
 
     cellSize = canvas.height / CELL_SCALE;
     const playertile = {
-        x: Math.floor(me.x / cellSize),
-        y: Math.floor(me.y / cellSize),
+        x: Math.floor(fixCoord(me.x) / cellSize),
+        y: Math.floor(fixCoord(me.y) / cellSize),
     };
     const firstCell = {
         x: playertile.x - CELLS_HORIZONTAL / 2,
         y: playertile.y - CELLS_VERTICAL / 2,
-        renderx: -CELLS_HORIZONTAL / 2 * cellSize - me.x % cellSize,
-        rendery: -CELLS_VERTICAL / 2 * cellSize - me.y % cellSize,
+        renderx: -CELLS_HORIZONTAL / 2 * cellSize - fixCoord(me.x) % cellSize,
+        rendery: -CELLS_VERTICAL / 2 * cellSize - fixCoord(me.y) % cellSize,
     };
 
     // render priority goes low to high
