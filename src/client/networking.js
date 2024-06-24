@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { processGameUpdate } from './state.js';
 import { throttle } from 'throttle-debounce';
-import { startRendering } from './render.js';
+import { startRendering, setColor } from './render.js';
 import { startCapturingInput } from './input.js';
 
 const Constants = require('../shared/constants.js');
@@ -24,6 +24,7 @@ export const connect = onGameOver => (
 
 function onInstantiated(stuff){
     startCapturingInput(stuff.x, stuff.y);
+    setColor(stuff.color);
     startRendering();
 }
 

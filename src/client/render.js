@@ -14,6 +14,11 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
+let myColor;
+export function setColor(color){
+    myColor = color;
+}
+
 function render(){
     if(getCurrentState() == null){
         animationFrameRequestId = requestAnimationFrame(render);
@@ -21,6 +26,7 @@ function render(){
     }
     const { others } = getCurrentState();
     const me = getSelf();
+    me.color = myColor;
 
     // render priority goes low to high
     renderBG(me);
@@ -54,7 +60,7 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
 
-    const model = colorize(getAsset('BlonktoPlayer.png'), 0.5, 0.5, 0.5);
+    const model = colorize(getAsset('BlonktoPlayer.png'), player.color.r, player.color.g, player.color.b);
 
     context.drawImage(
         model,

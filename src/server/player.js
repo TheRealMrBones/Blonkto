@@ -10,6 +10,11 @@ class Player extends ObjectClass {
         this.lastshot = Date.now();
         this.lastupdated = Date.now();
         this.playerdelay = 0;
+        this.color = {
+            r: .7 + Math.random() * .3,
+            g: .7 + Math.random() * .3,
+            b: .7 + Math.random() * .3,
+        }
         this.resetFixes();
     }
 
@@ -57,6 +62,7 @@ class Player extends ObjectClass {
             username: this.username,
             lastupdated: this.lastupdated,
             playerdelay: this.playerdelay,
+            color: this.color,
         };
     }
 }

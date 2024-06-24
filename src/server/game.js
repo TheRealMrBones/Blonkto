@@ -40,7 +40,8 @@ class Game {
         this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
         socket.emit(Constants.MSG_TYPES.PLAYER_INSTANTIATED, {
             x: spawn[0],
-            y: spawn[1]
+            y: spawn[1],
+            color: this.players[socket.id].color,
         });
     }
 
