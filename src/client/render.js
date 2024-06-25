@@ -3,7 +3,7 @@ import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 
 const Constants = require('../shared/constants.js');
-const { NATIVE_RESOLUTION, PLAYER_SCALE, CELL_SCALE, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
+const { ASSETS, NATIVE_RESOLUTION, PLAYER_SCALE, CELL_SCALE, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
@@ -71,7 +71,7 @@ function renderFloor(firstCell){
 
 function renderTile(x, y){
     context.drawImage(
-        getAsset('Tile.png'),
+        getAsset(ASSETS.TILE),
         x,
         y,
         canvas.height / CELL_SCALE,
@@ -91,14 +91,14 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
 
-    const model = colorize(getAsset('BlonktoPlayer.png'), player.color.r, player.color.g, player.color.b);
+    const model = colorize(getAsset(ASSETS.PLAYER), player.color.r, player.color.g, player.color.b);
 
     context.drawImage(
         model,
         -canvas.height / PLAYER_SCALE / 2,
-        -canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width + canvas.height / PLAYER_SCALE / 2,
+        -canvas.height / PLAYER_SCALE * model.height / model.width + canvas.height / PLAYER_SCALE / 2,
         canvas.height / PLAYER_SCALE,
-        canvas.height / PLAYER_SCALE * getAsset('BlonktoPlayer.png').height / getAsset('BlonktoPlayer.png').width,
+        canvas.height / PLAYER_SCALE * model.height / model.width,
     );
     context.restore();
 }

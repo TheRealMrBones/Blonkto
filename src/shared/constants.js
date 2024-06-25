@@ -31,4 +31,10 @@ module.exports = Object.freeze({
         SHOOT: 'shoot',
         DEAD: 'dead',
     },
+
+    // assets
+    ASSETS: {
+        PLAYER: 'BlonktoPlayer.png',
+        TILE: 'Tile.png',
+    },
 });

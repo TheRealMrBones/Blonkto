@@ -1,11 +1,9 @@
-const ASSET_NAMES = [
-    'BlonktoPlayer.png',
-    'Tile.png',
-];
+const Constants = require('../shared/constants.js');
+const { ASSETS } = Constants;
 
 const assets = {};
 
-const downloadPromise = Promise.all(ASSET_NAMES.map(downloadAsset));
+const downloadPromise = Promise.all(Object.values(ASSETS).map(downloadAsset));
 
 function downloadAsset(assetName){
     return new Promise(resolve => {
