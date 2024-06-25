@@ -132,7 +132,7 @@ export function startCapturingInput(xp, yp){
     window.addEventListener('keyup', handlekeyUp);
     window.addEventListener('mousedown', handleMouseDown);
 
-    interval = setInterval(handleInput, 1000 / Constants.UPDATE_RATE);
+    interval = setInterval(handleInput, 1000 / Constants.CLIENT_UPDATE_RATE);
 }
 
 export function stopCapturingInput(){

@@ -26,10 +26,14 @@ class Object {
 
     serializeForUpdate(){
         return {
-            id: this.id,
-            x: this.x,
-            y: this.y,
-            dir: this.dir,
+            static: {
+                id: this.id,
+            },
+            dynamic: {
+                x: this.x,
+                y: this.y,
+                dir: this.dir,
+            },
         };
     }
 }

@@ -6,9 +6,11 @@ module.exports = Object.freeze({
     PLAYER_USERNAME_HEIGHT: 45,
 
     // update related
-    UPDATE_RATE: 40,
+    CLIENT_UPDATE_RATE: 50,
+    SERVER_UPDATE_RATE: 40,
 
     // render related
+    RENDER_DELAY: 100,
     NATIVE_RESOLUTION: 1080,
     TEXT_FONT: "32px Verdana",
 

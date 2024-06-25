@@ -1,14 +1,15 @@
 import { playerCollisions } from './collisions.js';
 import { getSelf } from './input.js';
+import { Player } from './player.js';
 
-const RENDER_DELAY = 100;
+const Constants = require('../shared/constants.js');
+const { RENDER_DELAY } = Constants;
 
 const gameUpdates = [];
 const players = {};
-const playerUpdates = {};
-const playerDelays = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
+let serverDelay = 0;
 
 export function initState(){
     gameStart = 0;
@@ -16,53 +17,47 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
-    Object.keys(players).forEach(pid => {
-        players[pid] = false;
+    // set players default to not updated aka left (used later)
+    Object.values(players).forEach(p => {
+        p.exists = false;
     });
 
+    // if first update set server delay
     if(!firstServerTimestamp){
-        firstServerTimestamp = update.t;
         gameStart = Date.now();
+        firstServerTimestamp = update.t;
+        serverDelay = gameStart - firstServerTimestamp + RENDER_DELAY;
     }
+
+    // push updates to queue
     gameUpdates.push(update);
-
     update.others.forEach(pu => {
-        if(!playerUpdates[pu.id]){
-            players[pu.id] = true;
-            playerUpdates[pu.id] = [];
+        if(!players[pu.static.id]){
+            players[pu.static.id] = new Player(pu);
+        }else{
+            players[pu.static.id].pushUpdate(pu);
         }
-        players[pu.id] = true;
-        playerUpdates[pu.id].push(pu);
-        playerDelays[pu.id] = pu.playerdelay;
     });
 
+    // delete players that no longer update
     Object.keys(players).forEach(pid => {
-        if(!players[pid]){
+        if(!players[pid].exists){
             delete players[pid];
-            delete playerUpdates[pid];
-            delete playerDelays[pid];
         }
     });
 
-    // Keep only one game update before the current server time
-    const base = getBaseUpdate();
-    if(base > 0){
-        gameUpdates.splice(0, base);
-    }
-
-    Object.keys(playerUpdates).forEach(pid => {
-        const pbase = getPlayerBaseUpdate(pid);
-        if (pbase > 0) {
-            playerUpdates[pid].splice(0, pbase);
-        }
+    // keep only one update before the current server/player time
+    purgeUpdates();
+    Object.values(players).forEach(p => {
+        p.purgeUpdates();
     });
 }
 
-function currentServerTime(){
-    return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY;
+export function currentServerTime(){
+    return Date.now() - serverDelay;
 }
 
-// Returns the index of the base update, the first game update before
+// returns the index of the base update, the first game update before
 // current server time, or -1 if N/A.
 function getBaseUpdate(){
     const serverTime = currentServerTime();
@@ -74,6 +69,13 @@ function getBaseUpdate(){
     return -1;
 }
 
+function purgeUpdates(){
+    const base = getBaseUpdate();
+    if(base > 0){
+        gameUpdates.splice(0, base);
+    }
+}
+
 export function getCurrentState(){
     if(!firstServerTimestamp){
         return {};
@@ -82,28 +84,20 @@ export function getCurrentState(){
     const base = getBaseUpdate();
     const serverTime = currentServerTime();
 
-    // If base is the most recent update we have, use its state.
-    // Otherwise, interpolate between its state and the state of (base + 1).
+    // if base is the most recent update we have, use its state.
+    // otherwise, interpolate between its state and the state of (base + 1).
     const others = [];
-    Object.keys(playerUpdates).forEach(pid => {
-        const pus = playerUpdates[pid];
-        const pbase = getPlayerBaseUpdate(pid);
-        const playerTime = currentPlayerTime(playerDelays[pid]);
-
-        if(pbase < 0 || pbase === pus.length - 1){
-            others.push(pus[pus.length - 1]);
-        }else{
-            const baseUpdate = pus[pbase];
-            const next = pus[pbase + 1];
-            const ratio = (playerTime - baseUpdate.lastupdated) / (next.lastupdated - baseUpdate.lastupdated);
-            others.push(interpolateObject(baseUpdate, next, ratio));
-        }
+    Object.values(players).forEach(p => {
+        others.push(p.interpolateSelf());
     });
 
     playerCollisions(getSelf(), others);
 
     if(base < 0 || base === gameUpdates.length - 1){
-        return gameUpdates[gameUpdates.length - 1];
+        const update = gameUpdates[gameUpdates.length - 1];
+        return {
+            others: others,
+        };
     }else{
         const baseUpdate = gameUpdates[base];
         const next = gameUpdates[base + 1];
@@ -114,27 +108,24 @@ export function getCurrentState(){
     }
 }
 
-function interpolateObject(object1, object2, ratio){
+export function interpolateObject(object1, object2, ratio){
     if(!object2){
         return object1;
     }
 
-    const interpolated = {};
-    Object.keys(object1).forEach(key => {
+    const interpolated = {...(object1.static)};
+    Object.keys(object1.dynamic).forEach(key => {
         if(key === 'dir'){
-            interpolated[key] = interpolateDirection(object1[key], object2[key], ratio);
-        }else if(key === 'username' || key === 'color'){
-            // don't interpolate these keys
-            interpolated[key] = object1[key];
+            interpolated[key] = interpolateDirection(object1.dynamic[key], object2.dynamic[key], ratio);
         }else{
-            interpolated[key] = object1[key] + (object2[key] - object1[key]) * ratio;
+            interpolated[key] = object1.dynamic[key] + (object2.dynamic[key] - object1.dynamic[key]) * ratio;
         }
     });
     return interpolated;
 }
 
 function interpolateObjectArray(objects1, objects2, ratio){
-    return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.id === o2.id), ratio));
+    return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.static.id === o2.static.id), ratio));
 }
 
 function interpolateDirection(d1, d2, ratio){
@@ -149,21 +140,3 @@ function interpolateDirection(d1, d2, ratio){
         return d1 + (d2 - d1) * ratio;
     }
 }
-
-// #region Player Specific state functions
-
-function currentPlayerTime(playerdelay){
-    return firstServerTimestamp + (Date.now() - gameStart) - RENDER_DELAY - playerdelay;
-}
-
-function getPlayerBaseUpdate(pid){
-    const playerTime = currentPlayerTime(playerDelays[pid]);
-    for(let i = playerUpdates[pid].length - 1; i >= 0; i--){
-        if(playerUpdates[pid][i].lastupdated <= playerTime){
-            return i;
-        }
-    }
-    return -1;
-}
-
-// #endregion

@@ -11,7 +11,7 @@ class Game {
         this.shouldSendUpdate = false;
         this.world = new World();
         this.leaderboard = [];
-        setInterval(this.update.bind(this), 1000 / Constants.UPDATE_RATE);
+        setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
     }
 
     getUsername(username){

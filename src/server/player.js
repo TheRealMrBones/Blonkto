@@ -57,12 +57,18 @@ class Player extends ObjectClass {
     }
 
     serializeForUpdate(){
+        const base = super.serializeForUpdate();
         return {
-            ...(super.serializeForUpdate()),
-            username: this.username,
-            lastupdated: this.lastupdated,
-            playerdelay: this.playerdelay,
-            color: this.color,
+            static: {
+                ...(base.static),
+                username: this.username,
+                lastupdated: this.lastupdated,
+                playerdelay: this.playerdelay,
+                color: this.color,
+            },
+            dynamic: {
+                ...(base.dynamic),
+            },
         };
     }
 }
