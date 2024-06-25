@@ -6,8 +6,8 @@ module.exports = Object.freeze({
     PLAYER_USERNAME_HEIGHT: 45,
 
     // update related
-    CLIENT_UPDATE_RATE: 40,
-    SERVER_UPDATE_RATE: 30,
+    CLIENT_UPDATE_RATE: 50,
+    SERVER_UPDATE_RATE: 50,
 
     // render related
     RENDER_DELAY: 100,

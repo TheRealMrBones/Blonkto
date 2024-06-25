@@ -99,7 +99,7 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
 
-    const model = colorize(getAsset(player.asset), player.color.r, player.color.g, player.color.b);
+    const model = getColoredAsset(player);
 
     context.drawImage(
         model,
@@ -131,7 +131,17 @@ function fixCoord(x){
     return x * cellSize;
 }
 
-const colorize = (image, r, g, b) => {
+const coloredAssets = {};
+
+function getColoredAsset(object){
+    if(!coloredAssets[object.id]){
+        coloredAssets[object.id] = colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b);
+        return coloredAssets[object.id];
+    }
+    return coloredAssets[object.id];
+}
+
+function colorize(image, r, g, b){
     const imageWidth = image.width;
     const imageHeight = image.height;
 
