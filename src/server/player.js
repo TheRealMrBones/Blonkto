@@ -1,8 +1,10 @@
 const ObjectClass = require('./object.js');
+const Constants = require('../shared/constants.js');
 
 class Player extends ObjectClass {
     constructor(id, socket, username, x, y, dir){
         super(id, x, y, dir);
+        this.asset = Constants.ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
         this.dead = false;

@@ -34,6 +34,7 @@ function render(){
     const { others } = getCurrentState();
     const me = getSelf();
     me.color = myColor;
+    me.asset = ASSETS.PLAYER;
 
     // get the actual tile the player is in
     const playertile = {
@@ -69,14 +70,14 @@ function renderFloor(firstCell){
 
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-            renderTile(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize);
+            renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize);
         }
     }
 
     context.restore();
 }
 
-function renderTile(x, y){
+function renderCell(x, y){
     context.drawImage(
         getAsset(ASSETS.TILE),
         x,
@@ -98,7 +99,7 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
 
-    const model = colorize(getAsset(ASSETS.PLAYER), player.color.r, player.color.g, player.color.b);
+    const model = colorize(getAsset(player.asset), player.color.r, player.color.g, player.color.b);
 
     context.drawImage(
         model,

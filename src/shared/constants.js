@@ -1,6 +1,6 @@
 module.exports = Object.freeze({
     // player related
-    PLAYER_SCALE: .5,
+    PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     PLAYER_FIRE_COOLDOWN: 1,
     PLAYER_USERNAME_HEIGHT: 45,
@@ -33,6 +33,7 @@ module.exports = Object.freeze({
 
     // assets
     ASSETS: {
+        MISSING_TEXTURE: 'MissingTexture.png',
         PLAYER: 'BlonktoPlayer.png',
         TILE: 'Tile.png',
     },

@@ -1,9 +1,12 @@
+const Constants = require('../shared/constants.js');
+
 class Object {
     constructor(id, x, y, dir){
         this.id = id;
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
     }
 
     setDirection(dir){
@@ -28,6 +31,7 @@ class Object {
         return {
             static: {
                 id: this.id,
+                asset: this.asset,
             },
             dynamic: {
                 x: this.x,
