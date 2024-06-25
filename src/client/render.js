@@ -3,24 +3,30 @@ import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, NATIVE_RESOLUTION, PLAYER_SCALE, CELL_SCALE, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
+const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
+
+// make sure canvas width and cell size are always correct
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+let cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 });
 
+// let server set your color
 let myColor;
 export function setColor(color){
     myColor = color;
 }
 
-let cellSize;
+// continuously runs to get max fps possible
 function render(){
+    // get all needed state and self info
     if(getCurrentState() == null){
         animationFrameRequestId = requestAnimationFrame(render);
         return;
@@ -29,7 +35,7 @@ function render(){
     const me = getSelf();
     me.color = myColor;
 
-    cellSize = canvas.height / CELL_SCALE;
+    // get the actual tile the player is in
     const playertile = {
         x: Math.floor(fixCoord(me.x) / cellSize),
         y: Math.floor(fixCoord(me.y) / cellSize),
@@ -49,6 +55,7 @@ function render(){
     renderPlayer(me, me);
     others.forEach(renderPlayerUsername.bind(null, me));
 
+    // request next frame
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
@@ -74,8 +81,8 @@ function renderTile(x, y){
         getAsset(ASSETS.TILE),
         x,
         y,
-        canvas.height / CELL_SCALE,
-        canvas.height / CELL_SCALE,
+        cellSize,
+        cellSize,
     );
 }
 
@@ -95,10 +102,10 @@ function renderPlayer(me, player){
 
     context.drawImage(
         model,
-        -canvas.height / PLAYER_SCALE / 2,
-        -canvas.height / PLAYER_SCALE * model.height / model.width + canvas.height / PLAYER_SCALE / 2,
-        canvas.height / PLAYER_SCALE,
-        canvas.height / PLAYER_SCALE * model.height / model.width,
+        -cellSize * PLAYER_SCALE / 2,
+        -cellSize * PLAYER_SCALE * model.height / model.width + cellSize * PLAYER_SCALE / 2,
+        cellSize * PLAYER_SCALE,
+        cellSize * PLAYER_SCALE * model.height / model.width,
     );
     context.restore();
 }
@@ -120,7 +127,7 @@ function renderPlayerUsername(me, player){
 // #region Helpers
 
 function fixCoord(x){
-    return x * canvas.height / NATIVE_RESOLUTION;
+    return x * cellSize;
 }
 
 const colorize = (image, r, g, b) => {

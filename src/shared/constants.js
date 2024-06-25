@@ -1,23 +1,22 @@
 module.exports = Object.freeze({
     // player related
-    PLAYER_SCALE: 19,
-    PLAYER_SPEED: 300,
+    PLAYER_SCALE: .5,
+    PLAYER_SPEED: 3,
     PLAYER_FIRE_COOLDOWN: 1,
     PLAYER_USERNAME_HEIGHT: 45,
 
     // update related
-    CLIENT_UPDATE_RATE: 50,
-    SERVER_UPDATE_RATE: 40,
+    CLIENT_UPDATE_RATE: 40,
+    SERVER_UPDATE_RATE: 30,
 
     // render related
     RENDER_DELAY: 100,
-    NATIVE_RESOLUTION: 1080,
+    HEIGHT_TO_CELL_RATIO: 11, // controls how zoomed the client is
     TEXT_FONT: "32px Verdana",
 
     // map related
     WORLD_SIZE: 2, // how many chunks wide and tall the world is
     CHUNK_SIZE: 32,
-    CELL_SCALE: 11,
     CELLS_HORIZONTAL: 28,
     CELLS_VERTICAL: 16,
 
