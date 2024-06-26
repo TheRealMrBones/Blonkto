@@ -6,15 +6,14 @@ export function playerCollisions(player, players){
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
         const dist = getDistance(player, player2);
-        const realdist = dist - (Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE + Constants.NATIVE_RESOLUTION / Constants.PLAYER_SCALE) / 2;
+        const realdist = dist - Constants.PLAYER_SCALE;
         if(realdist < 0){
             if(dist == 0){
-                player.x += realdist / 2;
-                player2.x -= realdist / 2;
+                const dir = Math.random() * 2 * Math.PI;
+                const randdist = Math.random() * .01;
+                push(-Math.sin(dir) * randdist, Math.cos(dir) * randdist);
             }else{
-                let dir = Math.atan2(player.x - player2.x, player2.y - player.y);
-                // dont forget to re add wall push check after player push check here!
-
+                const dir = Math.atan2(player.x - player2.x, player2.y - player.y);
                 push(-Math.sin(dir) * realdist, Math.cos(dir) * realdist);
             }
         }
