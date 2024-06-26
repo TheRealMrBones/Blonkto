@@ -1,4 +1,4 @@
-import { getAsset } from './assets.js';
+import { getAsset, getColoredAsset } from './assets.js';
 import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 
@@ -129,38 +129,6 @@ function renderPlayerUsername(me, player){
 
 function fixCoord(x){
     return x * cellSize;
-}
-
-const coloredAssets = {};
-
-function getColoredAsset(object){
-    if(!coloredAssets[object.id]){
-        coloredAssets[object.id] = colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b);
-        return coloredAssets[object.id];
-    }
-    return coloredAssets[object.id];
-}
-
-function colorize(image, r, g, b){
-    const imageWidth = image.width;
-    const imageHeight = image.height;
-
-    const offscreen = new OffscreenCanvas(imageWidth, imageHeight);
-    const ctx = offscreen.getContext("2d");
-
-    ctx.drawImage(image, 0, 0);
-
-    const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
-
-    for(let i = 0; i < imageData.data.length; i += 4){
-        imageData.data[i + 0] *= r;
-        imageData.data[i + 1] *= g;
-        imageData.data[i + 2] *= b;
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-
-    return offscreen;
 }
 
 // #endregion
