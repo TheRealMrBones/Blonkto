@@ -1,6 +1,7 @@
 import { playerCollisions } from './collisions.js';
 import { getSelf } from './input.js';
 import { Player } from './player.js';
+import { loadChunks, unloadChunks } from './world.js';
 
 const Constants = require('../shared/constants.js');
 const { RENDER_DELAY } = Constants;
@@ -17,6 +18,12 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
+    // update local world if new data
+    if(update.worldLoad.unloadChunks){
+        unloadChunks(update.worldLoad.unloadChunks);
+        loadChunks(update.worldLoad.loadChunks);
+    }
+
     // set players default to not updated aka left (used later)
     Object.values(players).forEach(p => {
         p.exists = false;

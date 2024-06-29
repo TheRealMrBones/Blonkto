@@ -35,11 +35,12 @@ class Game {
 
     addPlayer(socket, username){
         let spawn = this.world.getSpawn();
-        this.players[socket.id] = new Player(socket.id, socket, username, spawn[0], spawn[1], 0);
+        this.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0);
+        this.players[socket.id].chunk = { x: spawn.chunk.x + 2, y: spawn.chunk.y + 2}; // purposefully make chunk off so that new update has load data
         this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
         socket.emit(Constants.MSG_TYPES.PLAYER_INSTANTIATED, {
-            x: spawn[0],
-            y: spawn[1],
+            x: spawn.pos.x,
+            y: spawn.pos.y,
             color: this.players[socket.id].color,
         });
     }
@@ -95,10 +96,14 @@ class Game {
         const fixescopy = player.getFixes();
         player.resetFixes();
 
+        const worldLoad = this.world.loadPlayerChunks(player);
+        player.chunk = worldLoad.chunk;
+
         return {
             t: Date.now(),
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
+            worldLoad: worldLoad,
         };
     }
 }

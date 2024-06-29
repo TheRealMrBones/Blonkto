@@ -1,6 +1,7 @@
 import { getAsset, getColoredAsset } from './assets.js';
 import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
+import { getCell } from './world.js';
 
 const Constants = require('../shared/constants.js');
 const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
@@ -70,16 +71,17 @@ function renderFloor(firstCell){
 
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-            renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize);
+            const cell = getCell(firstCell.x, firstCell.y);
+            renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor);
         }
     }
 
     context.restore();
 }
 
-function renderCell(x, y){
+function renderCell(x, y, asset){
     context.drawImage(
-        getAsset(ASSETS.TILE),
+        getAsset(asset),
         x,
         y,
         cellSize,

@@ -15,10 +15,11 @@ module.exports = Object.freeze({
     TEXT_FONT: "32px Verdana",
 
     // map related
-    WORLD_SIZE: 2, // how many chunks wide and tall the world is
+    WORLD_SIZE: 4, // how many chunks wide and tall the world is
     CHUNK_SIZE: 32,
     CELLS_HORIZONTAL: 28,
     CELLS_VERTICAL: 16,
+    SPAWN_SIZE: 2, // how many chunks wide and tall the spawn region is
 
     // message types
     MSG_TYPES: {
@@ -36,5 +37,6 @@ module.exports = Object.freeze({
         MISSING_TEXTURE: 'MissingTexture.png',
         PLAYER: 'BlonktoPlayer.png',
         TILE: 'Tile.png',
+        GRASS_TILE: 'GrassTile.png',
     },
 });
