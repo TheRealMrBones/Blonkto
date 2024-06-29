@@ -71,7 +71,7 @@ function renderFloor(firstCell){
 
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-            const cell = getCell(firstCell.x, firstCell.y);
+            const cell = getCell(firstCell.x + dx, firstCell.y + dy);
             renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor);
         }
     }

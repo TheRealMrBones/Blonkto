@@ -97,7 +97,10 @@ class World {
             // serialize load chunks
             const loadChunksSerialized = [];
             loadChunks.forEach(lc => {
-                loadChunksSerialized.push(this.loadedchunks[[lc.x,lc.y].toString()].serializeForLoad());
+                const chunk = this.loadedchunks[[lc.x,lc.y].toString()];
+                if(chunk){
+                    loadChunksSerialized.push(chunk.serializeForLoad());
+                }
             });
 
             // send the data
