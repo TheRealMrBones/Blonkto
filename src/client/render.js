@@ -4,7 +4,7 @@ import { getSelf } from './input.js';
 import { getCell } from './world.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL } = Constants;
+const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
@@ -50,8 +50,9 @@ function render(){
     };
 
     // render priority goes low to high
-    renderFloor(firstCell);
+    renderBackground(me);
 
+    renderFloor(firstCell);
 
     others.forEach(renderPlayer.bind(null, me));
     renderPlayer(me, me);
@@ -124,6 +125,33 @@ function renderPlayerUsername(me, player){
     context.font = Constants.TEXT_FONT;
     context.textAlign = "center";
     context.fillText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
+    context.restore();
+}
+
+// #endregion
+
+// #region Background
+
+function renderBackground(me){
+    const model = getAsset(ASSETS.SPACE_BG);
+
+    const worldSize = CHUNK_SIZE * WORLD_SIZE / 2;
+    const xpercent = -(me.x / ((CHUNK_SIZE * WORLD_SIZE / 2) + BACKGROUND_PADDING));
+    const ypercent = -(me.y / ((CHUNK_SIZE * WORLD_SIZE / 2) + BACKGROUND_PADDING));
+    const xoffset = xpercent * cellSize * ((BACKGROUND_SCALE - HEIGHT_TO_CELL_RATIO) / 2);
+    const yoffset = ypercent * cellSize * ((BACKGROUND_SCALE - HEIGHT_TO_CELL_RATIO) / 2);
+
+    const canvasX = canvas.width / 2;
+    const canvasY = canvas.height / 2;
+    context.save();
+    context.translate(canvasX, canvasY);
+    context.drawImage(
+        model,
+        -cellSize * BACKGROUND_SCALE / 2 + xoffset,
+        -cellSize * BACKGROUND_SCALE / 2 + yoffset,
+        cellSize * BACKGROUND_SCALE,
+        cellSize * BACKGROUND_SCALE,
+    );
     context.restore();
 }
 

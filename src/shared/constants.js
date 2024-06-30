@@ -13,6 +13,8 @@ module.exports = Object.freeze({
     RENDER_DELAY: 100,
     HEIGHT_TO_CELL_RATIO: 11, // controls how zoomed the client is
     TEXT_FONT: "32px Verdana",
+    BACKGROUND_SCALE: 22,
+    BACKGROUND_PADDING: 32,
 
     // map related
     WORLD_SIZE: 4, // how many chunks wide and tall the world is
@@ -38,5 +40,6 @@ module.exports = Object.freeze({
         PLAYER: 'BlonktoPlayer.png',
         TILE: 'Tile.png',
         GRASS_TILE: 'GrassTile.png',
+        SPACE_BG: 'SpaceBg.png',
     },
 });
