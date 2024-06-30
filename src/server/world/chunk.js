@@ -1,4 +1,4 @@
-const Constants = require('../shared/constants.js');
+const Constants = require('../../shared/constants.js');
 const Cell = require('./cell.js');
 
 class Chunk {

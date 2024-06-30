@@ -1,5 +1,5 @@
 const ObjectClass = require('./object.js');
-const Constants = require('../shared/constants.js');
+const Constants = require('../../shared/constants.js');
 
 class Player extends ObjectClass {
     constructor(id, socket, username, x, y, dir){

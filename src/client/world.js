@@ -39,6 +39,8 @@ export function getCell(x, y){
 
 function getDefaultCell(){
     return {
-        floor: ASSETS.TILE,
+        floor: {
+            exists: false,
+        },
     };
 }

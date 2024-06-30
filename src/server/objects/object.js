@@ -1,4 +1,4 @@
-const Constants = require('../shared/constants.js');
+const Constants = require('../../shared/constants.js');
 
 class Object {
     constructor(id, x, y, dir){

@@ -1,6 +1,6 @@
 const Constants = require('../shared/constants.js');
-const Player = require('./player.js');
-const World = require('./world.js');
+const Player = require('./objects/player.js');
+const World = require('./world/world.js');
 const {moveTouchingPlayers} = require('./collisions.js');
 const {filterText} = require('./filter.js');
 
