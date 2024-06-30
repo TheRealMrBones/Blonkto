@@ -13,8 +13,8 @@ module.exports = Object.freeze({
     RENDER_DELAY: 100,
     HEIGHT_TO_CELL_RATIO: 11, // controls how zoomed the client is
     TEXT_FONT: "32px Verdana",
-    BACKGROUND_SCALE: 22,
-    BACKGROUND_PADDING: 32,
+    BACKGROUND_SCALE: 24,
+    BACKGROUND_PADDING: 1,
 
     // map related
     WORLD_SIZE: 4, // how many chunks wide and tall the world is

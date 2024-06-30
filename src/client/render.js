@@ -136,10 +136,12 @@ function renderBackground(me){
     const model = getAsset(ASSETS.SPACE_BG);
 
     const worldSize = CHUNK_SIZE * WORLD_SIZE / 2;
-    const xpercent = -(me.x / ((CHUNK_SIZE * WORLD_SIZE / 2) + BACKGROUND_PADDING));
-    const ypercent = -(me.y / ((CHUNK_SIZE * WORLD_SIZE / 2) + BACKGROUND_PADDING));
-    const xoffset = xpercent * cellSize * ((BACKGROUND_SCALE - HEIGHT_TO_CELL_RATIO) / 2);
-    const yoffset = ypercent * cellSize * ((BACKGROUND_SCALE - HEIGHT_TO_CELL_RATIO) / 2);
+    const xpercent = -(me.x / worldSize);
+    const ypercent = -(me.y / worldSize);
+
+    const scale = cellSize * ((BACKGROUND_SCALE - HEIGHT_TO_CELL_RATIO) / 2 - BACKGROUND_PADDING);
+    const xoffset = xpercent * scale;
+    const yoffset = ypercent * scale;
 
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
@@ -147,9 +149,9 @@ function renderBackground(me){
     context.translate(canvasX, canvasY);
     context.drawImage(
         model,
-        -cellSize * BACKGROUND_SCALE / 2 + xoffset,
+        -cellSize * BACKGROUND_SCALE * (model.width / model.height) / 2 + xoffset,
         -cellSize * BACKGROUND_SCALE / 2 + yoffset,
-        cellSize * BACKGROUND_SCALE,
+        cellSize * BACKGROUND_SCALE * (model.width / model.height),
         cellSize * BACKGROUND_SCALE,
     );
     context.restore();
