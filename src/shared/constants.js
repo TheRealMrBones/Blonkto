@@ -17,7 +17,7 @@ module.exports = Object.freeze({
     BACKGROUND_PADDING: 1,
 
     // map related
-    WORLD_SIZE: 4, // how many chunks wide and tall the world is
+    WORLD_SIZE: 6, // how many chunks wide and tall the world is
     CHUNK_SIZE: 32,
     CELLS_HORIZONTAL: 28,
     CELLS_VERTICAL: 16,

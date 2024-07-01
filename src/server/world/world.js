@@ -4,7 +4,7 @@ const Chunk = require('./chunk.js');
 class World {
     constructor(){
         this.spawnpoints = [[0, 0]];
-        // key for each chunk is [x,y].toString() aka 'x,y'
+        // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
         this.generateSpawn();
     }
@@ -100,6 +100,10 @@ class World {
                 const chunk = this.loadedchunks[[lc.x,lc.y].toString()];
                 if(chunk){
                     loadChunksSerialized.push(chunk.serializeForLoad());
+                }else if(lc.x >= -Constants.WORLD_SIZE / 2 && lc.x < Constants.WORLD_SIZE / 2 && lc.y >= -Constants.WORLD_SIZE / 2 && lc.y < Constants.WORLD_SIZE / 2){
+                    const newChunk = new Chunk(lc.x, lc.y);
+                    this.loadedchunks[[lc.x,lc.y].toString()] = newChunk;
+                    loadChunksSerialized.push(newChunk.serializeForLoad());
                 }
             });
 
