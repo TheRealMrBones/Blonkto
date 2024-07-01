@@ -39,14 +39,14 @@ function render(){
 
     // get the actual tile the player is in
     const playertile = {
-        x: Math.floor(fixCoord(me.x) / cellSize),
-        y: Math.floor(fixCoord(me.y) / cellSize),
+        x: Math.floor(me.x),
+        y: Math.floor(me.y),
     };
     const firstCell = {
         x: playertile.x - CELLS_HORIZONTAL / 2,
-        y: playertile.y - CELLS_VERTICAL / 2,
-        renderx: -CELLS_HORIZONTAL / 2 * cellSize - fixCoord(me.x) % cellSize,
-        rendery: -CELLS_VERTICAL / 2 * cellSize - fixCoord(me.y) % cellSize,
+        y: playertile.y - CELLS_HORIZONTAL / 2,
+        renderx: -CELLS_HORIZONTAL / 2 * cellSize - (fixCoord(me.x) - playertile.x * cellSize),
+        rendery: -CELLS_VERTICAL / 2 * cellSize - (fixCoord(me.y) - playertile.y * cellSize),
     };
 
     // render priority goes low to high

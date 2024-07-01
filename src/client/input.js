@@ -92,7 +92,6 @@ function handleMouseDown(){
 
 function handleInput(){
     updatePos();
-    console.log(x);
 
     updateInputs({
         t: Date.now(),

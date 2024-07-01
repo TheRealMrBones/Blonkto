@@ -42,5 +42,11 @@ function getDefaultCell(){
         floor: {
             exists: false,
         },
+        ceiling: {
+            exists: false,
+        },
+        block: {
+            exists: false,
+        },
     };
 }
