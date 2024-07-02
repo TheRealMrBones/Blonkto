@@ -37,8 +37,8 @@ class World {
 
     loadPlayerChunks(player){
         // get bottom right of chunk 2 by 2 to load
-        const x = Math.floor((player.x + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
-        const y = Math.floor((player.y + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
+        const x = Math.floor(player.x / Constants.CHUNK_SIZE);
+        const y = Math.floor(player.y / Constants.CHUNK_SIZE);
         const newChunk = { x: x, y: y };
         if(x == player.chunk.x && y == player.chunk.y){
             // no need to load and unload chunks if already loaded
@@ -48,14 +48,24 @@ class World {
             const newChunks = [
                 { x: x, y: y},
                 { x: x, y: y - 1},
+                { x: x, y: y + 1},
                 { x: x - 1, y: y},
-                { x: x - 1, y: y - 1}
+                { x: x - 1, y: y - 1},
+                { x: x - 1, y: y + 1},
+                { x: x + 1, y: y},
+                { x: x + 1, y: y - 1},
+                { x: x + 1, y: y + 1},
             ];
             const oldChunks = [
                 { x: player.chunk.x, y: player.chunk.y},
                 { x: player.chunk.x, y: player.chunk.y - 1},
+                { x: player.chunk.x, y: player.chunk.y + 1},
                 { x: player.chunk.x - 1, y: player.chunk.y},
-                { x: player.chunk.x - 1, y: player.chunk.y - 1}
+                { x: player.chunk.x - 1, y: player.chunk.y - 1},
+                { x: player.chunk.x - 1, y: player.chunk.y + 1},
+                { x: player.chunk.x + 1, y: player.chunk.y},
+                { x: player.chunk.x + 1, y: player.chunk.y - 1},
+                { x: player.chunk.x + 1, y: player.chunk.y + 1},
             ];
 
             // get chunks that are in both
