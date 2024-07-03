@@ -38,15 +38,5 @@ export function getCell(x, y){
 }
 
 function getDefaultCell(){
-    return {
-        floor: {
-            exists: false,
-        },
-        ceiling: {
-            exists: false,
-        },
-        block: {
-            exists: false,
-        },
-    };
+    return {};
 }

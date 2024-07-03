@@ -40,7 +40,8 @@ module.exports = Object.freeze({
         MISSING_TEXTURE: 'MissingTexture.png',
         PLAYER: 'BlonktoPlayer.png',
         TILE: 'Tile.png',
-        GRASS_TILE: 'GrassTile.png',
+        GRASS_FLOOR: 'GrassFloor.png',
         SPACE_BG: 'SpaceBg.png',
+        STONE_BLOCK: 'StoneBlock.png',
     },
 });

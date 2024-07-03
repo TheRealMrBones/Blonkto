@@ -1,5 +1,6 @@
 const Constants = require('../../shared/constants.js');
 const Cell = require('./cell.js');
+const GrassFloor = require('./floors/grassFloor.js');
 
 class Chunk {
     constructor(chunkx, chunky){
@@ -11,6 +12,7 @@ class Chunk {
             this.cells[x] = [];
             for(let y = 0; y < Constants.CHUNK_SIZE; y++){
                 this.cells[x][y] = new Cell();
+                this.cells[x][y].floor = new GrassFloor();
             }
         }
     }

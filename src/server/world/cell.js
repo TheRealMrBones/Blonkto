@@ -1,21 +1,24 @@
-const Constants = require('../../shared/constants.js');
-const Floor = require('./floor.js');
-const Block = require('./block.js');
-const Ceiling = require('./ceiling.js');
-
 class Cell {
     constructor(){
-        this.floor = new Floor();
-        this.block = new Block();
-        this.ceiling = new Ceiling();
+        // default cell (empty)
+        this.floor = null;
+        this.block = null;
+        this.ceiling = null;
     }
 
     serializeForLoad(){
-        return {
-            floor: this.floor.serializeForLoad(),
-            block: this.block.serializeForLoad(),
-            ceiling: this.ceiling.serializeForLoad(),
+        const data = {};
+        if(this.floor){
+            data.floor = this.floor.serializeForLoad();
         }
+        if(this.block){
+            data.block = this.block.serializeForLoad();
+        }
+        if(this.ceiling){
+            data.ceiling = this.ceiling.serializeForLoad();
+        }
+
+        return data;
     }
 }
 

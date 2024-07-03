@@ -77,7 +77,7 @@ function renderFloor(firstCell){
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
-            if(cell.floor.exists){
+            if(cell.floor){
                 renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
             }
         }

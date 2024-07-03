@@ -2,13 +2,11 @@ const Constants = require('../../shared/constants.js');
 
 class Floor {
     constructor(){
-        this.exists = true;
-        this.asset = Constants.ASSETS.GRASS_TILE;
+        this.asset = Constants.ASSETS.MISSING_TEXTURE;
     }
 
     serializeForLoad(){
         return {
-            exists: this.exists,
             asset: this.asset,
         }
     }
