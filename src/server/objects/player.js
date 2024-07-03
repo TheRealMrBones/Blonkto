@@ -9,7 +9,7 @@ class Player extends ObjectClass {
         this.username = username;
         this.dead = false;
         this.kills = 0;
-        this.lastshot = Date.now();
+        this.lastclick = Date.now();
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.color = {

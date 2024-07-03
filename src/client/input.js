@@ -1,4 +1,5 @@
-import { updateInputs } from './networking.js';
+import { updateInputs, click, interact } from './networking.js';
+import { getCellSize } from './render.js';
 
 const Constants = require('../shared/constants.js');
 
@@ -86,8 +87,18 @@ function handlekeyUp(e){
     }
 }
 
-function handleMouseDown(){
-    
+function handleMouseDown(e){
+    if(e.button == 0){
+        click({
+            xoffset: e.clientX / getCellSize(),
+            yoffset: e.clientY / getCellSize(),
+        });
+    }else if(e.button == 2){
+        interact({
+            xoffset: e.clientX / getCellSize(),
+            yoffset: e.clientY / getCellSize(),
+        });
+    }
 }
 
 function handleInput(){

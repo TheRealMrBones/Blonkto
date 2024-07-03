@@ -49,11 +49,20 @@ class Game {
         delete this.players[socket.id];
     }
 
-    shoot(socket){
+    click(socket, info){
         if(this.players[socket.id] !== undefined){
-            if(Date.now() - this.players[socket.id].lastshot > Constants.PLAYER_FIRE_COOLDOWN * 1000){
+            if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
                 
-                this.players[socket.id].lastshot = Date.now();
+                this.players[socket.id].lastclick = Date.now();
+            }
+        }
+    }
+
+    interact(socket, info){
+        if(this.players[socket.id] !== undefined){
+            if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
+                
+                this.players[socket.id].lastclick = Date.now();
             }
         }
     }

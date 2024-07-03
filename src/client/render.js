@@ -19,6 +19,10 @@ window.addEventListener('resize', () => {
     cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 });
 
+export function getCellSize(){
+    return cellSize;
+}
+
 // let server set your color
 let myColor;
 export function setColor(color){

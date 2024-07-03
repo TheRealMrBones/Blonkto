@@ -29,7 +29,8 @@ io.on('connection', socket => {
 
 	socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
 	socket.on(Constants.MSG_TYPES.INPUT, handleInput);
-	socket.on(Constants.MSG_TYPES.SHOOT, shoot);
+	socket.on(Constants.MSG_TYPES.CLICK, click);
+	socket.on(Constants.MSG_TYPES.INTERACT, interact);
 	socket.on(Constants.MSG_TYPES.LEAVE_GAME, onDisconnect);
 });
 
@@ -44,12 +45,16 @@ function joinGame(username){
 	game.addPlayer(this, newUsername);
 }
 
-function handleInput(dir){
-  	game.handleInput(this, dir);
+function handleInput(inputs){
+  	game.handleInput(this, inputs);
 }
 
-function shoot(){
-	game.shoot(this);
+function click(info){
+	game.click(this, info);
+}
+
+function interact(info){
+	game.interact(this, info);
 }
 
 function onDisconnect(){

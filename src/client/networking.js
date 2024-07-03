@@ -5,6 +5,8 @@ import { startRendering, setColor } from './render.js';
 import { startCapturingInput } from './input.js';
 
 const Constants = require('../shared/constants.js');
+const { MSG_TYPES } = Constants;
+
 const socketProtocol = (window.location.protocol.includes('https')) ? 'wss' : 'ws';
 const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
 const connectedPromise = new Promise(resolve => {
@@ -16,9 +18,9 @@ const connectedPromise = new Promise(resolve => {
 
 export const connect = onGameOver => (
     connectedPromise.then(() => {
-        socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
-        socket.on(Constants.MSG_TYPES.DEAD, onGameOver);
-        socket.on(Constants.MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
+        socket.on(MSG_TYPES.GAME_UPDATE, processGameUpdate);
+        socket.on(MSG_TYPES.DEAD, onGameOver);
+        socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
     })
 );
 
@@ -29,13 +31,17 @@ function onInstantiated(stuff){
 }
 
 export const play = username => {
-    socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
+    socket.emit(MSG_TYPES.JOIN_GAME, username);
 };
 
 export const updateInputs = throttle(20, inputs => {
-    socket.emit(Constants.MSG_TYPES.INPUT, inputs);
+    socket.emit(MSG_TYPES.INPUT, inputs);
 });
 
-export const shoot = throttle(20, () => {
-    socket.emit(Constants.MSG_TYPES.SHOOT);
+export const click = throttle(20, info => {
+    socket.emit(MSG_TYPES.CLICK, info);
+});
+
+export const interact = throttle(20, info => {
+    socket.emit(MSG_TYPES.INTERACT, info);
 });

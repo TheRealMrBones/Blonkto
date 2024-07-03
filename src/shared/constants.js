@@ -2,7 +2,7 @@ module.exports = Object.freeze({
     // player related
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
-    PLAYER_FIRE_COOLDOWN: 1,
+    PLAYER_CLICK_COOLDOWN: .1,
     PLAYER_USERNAME_HEIGHT: 45,
 
     // update related
@@ -30,7 +30,8 @@ module.exports = Object.freeze({
         PLAYER_INSTANTIATED: 'instantiated',
         GAME_UPDATE: 'update',
         INPUT: 'input',
-        SHOOT: 'shoot',
+        CLICK: 'click',
+        INTERACT: 'interact',
         DEAD: 'dead',
     },
 
