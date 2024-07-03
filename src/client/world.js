@@ -1,7 +1,7 @@
 const chunks = {};
 
 const Constants = require('../shared/constants.js');
-const { CHUNK_SIZE, ASSETS } = Constants;
+const { CHUNK_SIZE } = Constants;
 
 export function loadChunks(chunks){
     chunks.forEach(chunk => {

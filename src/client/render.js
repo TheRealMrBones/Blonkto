@@ -56,8 +56,8 @@ function render(){
     // render priority goes low to high
     renderBackground(me);
 
-    renderFloor(firstCell);
-
+    renderFloors(firstCell);
+    renderBlocks(firstCell);
     others.forEach(renderPlayer.bind(null, me));
     renderPlayer(me, me);
     others.forEach(renderPlayerUsername.bind(null, me));
@@ -68,7 +68,7 @@ function render(){
 
 // #region World
 
-function renderFloor(firstCell){
+function renderFloors(firstCell){
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
@@ -79,6 +79,24 @@ function renderFloor(firstCell){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
             if(cell.floor){
                 renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
+            }
+        }
+    }
+
+    context.restore();
+}
+
+function renderBlocks(firstCell){
+    const canvasX = canvas.width / 2;
+    const canvasY = canvas.height / 2;
+    context.save();
+    context.translate(canvasX, canvasY);
+
+    for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
+        for(let dy = 0; dy < CELLS_VERTICAL; dy++){
+            const cell = getCell(firstCell.x + dx, firstCell.y + dy);
+            if(cell.block){
+                renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset);
             }
         }
     }
