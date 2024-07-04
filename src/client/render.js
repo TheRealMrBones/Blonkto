@@ -144,9 +144,9 @@ function renderPlayerUsername(me, player){
     const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
     context.save();
     context.translate(canvasX, canvasY);
-    context.font = Constants.TEXT_FONT;
+    context.font = Math.floor(Constants.USERNAME_SCALE * cellSize).toString() + "px " + Constants.TEXT_FONT;
     context.textAlign = "center";
-    context.fillText(username, 0, -Constants.PLAYER_USERNAME_HEIGHT);
+    context.fillText(username, 0, -Constants.USERNAME_HANG * cellSize);
     context.restore();
 }
 

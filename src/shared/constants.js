@@ -3,7 +3,6 @@ module.exports = Object.freeze({
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     PLAYER_CLICK_COOLDOWN: .1,
-    PLAYER_USERNAME_HEIGHT: 45,
 
     // update related
     CLIENT_UPDATE_RATE: 50,
@@ -12,9 +11,11 @@ module.exports = Object.freeze({
     // render related
     RENDER_DELAY: 100,
     HEIGHT_TO_CELL_RATIO: 11, // controls how zoomed the client is
-    TEXT_FONT: "32px Verdana",
+    TEXT_FONT: "Verdana",
     BACKGROUND_SCALE: 24,
     BACKGROUND_PADDING: 1,
+    USERNAME_SCALE: .3,
+    USERNAME_HANG: .5,
 
     // map related
     WORLD_SIZE: 6, // how many chunks wide and tall the world is
