@@ -18,21 +18,27 @@ class World {
     }
 
     getSpawn(){
-        // get random x y in spawn
-        const len = Constants.SPAWN_SIZE * Constants.CHUNK_SIZE;
-        const x = Math.random() * (len - 1) - (len / 2) + .5;
-        const y = Math.random() * (len - 1) - (len / 2) + .5;
-        const pos = { x: x, y: y };
+        while(true){
+            // get random x y in spawn
+            const len = Constants.SPAWN_SIZE * Constants.CHUNK_SIZE;
+            const x = Math.floor(Math.random() * (len - 1)) - (len / 2);
+            const y = Math.floor(Math.random() * (len - 1)) - (len / 2);
+            const pos = { x: x + .5, y: y + .5 };
 
-        // get chunk of that spawn
-        const chunkx = Math.floor((x + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
-        const chunky = Math.floor((y + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
-        const chunk = { x: chunkx, y: chunky };
+            // get chunk of that spawn
+            const chunkx = Math.floor((x + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
+            const chunky = Math.floor((y + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
+            const chunk = { x: chunkx, y: chunky };
 
-        return {
-            pos: pos,
-            chunk: chunk,
-        };
+            // check if valid spawn
+            const cell = this.getCell(x, y);
+            if(!cell.block){
+                return {
+                    pos: pos,
+                    chunk: chunk,
+                };
+            }
+        }
     }
 
     loadPlayerChunks(player){
@@ -123,6 +129,20 @@ class World {
                 loadChunks: loadChunksSerialized,
                 unloadChunks: unloadChunks,
             };
+        }
+    }
+
+    getCell(x, y){
+        const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
+        const chunky = Math.floor(y / Constants.CHUNK_SIZE);
+        const cellx = x - chunkx * Constants.CHUNK_SIZE;
+        const celly = y - chunky * Constants.CHUNK_SIZE;
+    
+        const chunk = this.loadedchunks[[chunkx,chunky].toString()];
+        if(!chunk){
+            return false;
+        }else{
+            return chunk.cells[cellx][celly];
         }
     }
 }
