@@ -30,10 +30,14 @@ export function blockCollisions(me){
         for(let y = starty; y < me.y + PLAYER_SCALE / 2; y++){
             const block = getCell(x, y).block;
             if(block){
+                const pos = { 
+                    x: x + block.scale / 2,
+                    y: y + block.scale / 2
+                };
                 if(block.shape == SHAPES.SQUARE){
-                    squareCollision(me, block.scale, { x: x, y: y });
+                    squareCollision(me, block.scale, pos);
                 }else if(block.shape == SHAPES.CIRCLE){
-                    circleCollision(me, block.scale, { x: x + block.scale / 2, y: y + block.scale / 2 });
+                    circleCollision(me, block.scale, pos);
                 }
             }
         }
@@ -41,7 +45,58 @@ export function blockCollisions(me){
 }
 
 function squareCollision(me, scale, pos){
+    const oldme = { x: me.x, y: me.y };
+    const walls = [
+        [[pos.x - scale / 2, pos.y - scale / 2], [pos.x - scale / 2, pos.y + scale / 2]],
+        [[pos.x - scale / 2, pos.y + scale / 2], [pos.x + scale / 2, pos.y + scale / 2]],
+        [[pos.x + scale / 2, pos.y + scale / 2], [pos.x + scale / 2, pos.y - scale / 2]],
+        [[pos.x + scale / 2, pos.y - scale / 2], [pos.x - scale / 2, pos.y - scale / 2]],
+    ];
 
+    walls.forEach(w => { 
+        let p1 = w[0];
+        let p2 = w[1];
+        let pdist = Math.sqrt((me.x - p1[0]) * (me.x - p1[0]) + (me.y - p1[1]) * (me.y - p1[1]));
+        if (pdist <= PLAYER_SCALE / 2) {
+            const realdist = pdist - PLAYER_SCALE / 2;
+            if(realdist < 0){
+                if(pdist == 0){
+                    const dir = Math.random() * 2 * Math.PI;
+                    me.x += (-Math.sin(dir) * realdist);
+                    me.y += (Math.cos(dir) * realdist);
+                }else{
+                    const dir = Math.atan2(me.x - pos.x, pos.y - me.y);
+                    me.x += (-Math.sin(dir) * realdist);
+                    me.y += (Math.cos(dir) * realdist);
+                }
+            }
+        }
+        if (p1[0] - p2[0] == 0) {
+            if (me.y > p1[1] && me.y < p2[1] || me.y < p1[1] && me.y > p2[1]) {
+                if (Math.abs(me.x - p1[0]) <= PLAYER_SCALE / 2) {
+                    if (me.x - p1[0] > 0) {
+                        me.x += (PLAYER_SCALE / 2 - Math.abs(me.x - p1[0]))
+                    } else {
+                        me.x -= (PLAYER_SCALE / 2 - Math.abs(me.x - p1[0]))
+                    }
+                }
+            }
+        } else if (p1[1] - p2[1] == 0) {
+            if (me.x > p1[0] && me.x < p2[0] || me.x < p1[0] && me.x > p2[0]) {
+                if (Math.abs(me.y - p1[1]) <= PLAYER_SCALE / 2) {
+                    if (me.y - p1[1] > 0) {
+                        me.y += (PLAYER_SCALE / 2 - Math.abs(me.y - p1[1]))
+                    } else {
+                        me.y -= (PLAYER_SCALE / 2 - Math.abs(me.y - p1[1]))
+                    }
+                }
+            }
+        } else {
+            // not on grid
+        }
+    });
+
+    push(me.x - oldme.x, me.y - oldme.y);
 }
 
 function circleCollision(me, scale, pos){
