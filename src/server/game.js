@@ -1,8 +1,8 @@
 const Constants = require('../shared/constants.js');
 const Player = require('./objects/player.js');
 const World = require('./world/world.js');
-const {moveTouchingPlayers} = require('./collisions.js');
-const {filterText} = require('./filter.js');
+const { moveTouchingPlayers } = require('./collisions.js');
+const { filterText } = require('./filter.js');
 
 class Game {
     constructor(){
@@ -101,7 +101,10 @@ class Game {
     }
 
     createUpdate(player){
-        const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id);
+        const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id
+            && Math.abs(p.x - player.x) < Constants.CELLS_HORIZONTAL / 2
+            && Math.abs(p.y - player.y) < Constants.CELLS_VERTICAL / 2
+        );
         const fixescopy = player.getFixes();
         player.resetFixes();
 
