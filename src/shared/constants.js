@@ -44,4 +44,11 @@ module.exports = Object.freeze({
         SPACE_BG: 'SpaceBg.png',
         STONE_BLOCK: 'StoneBlock.png',
     },
+
+    // block shapes
+    SHAPES: {
+        NONE: 0,
+        SQUARE: 1,
+        CIRCLE: 2,
+    },
 });

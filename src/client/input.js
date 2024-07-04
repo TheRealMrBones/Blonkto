@@ -1,5 +1,6 @@
 import { updateInputs, click, interact } from './networking.js';
 import { getCellSize } from './render.js';
+import { blockCollisions } from './collisions.js';
 
 const Constants = require('../shared/constants.js');
 
@@ -129,6 +130,8 @@ function updatePos(){
         x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
         startd = Date.now();
     }
+
+    blockCollisions({ x: x, y: y });
 }
 
 export function startCapturingInput(xp, yp){
