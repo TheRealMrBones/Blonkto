@@ -45,32 +45,29 @@ export function blockCollisions(me){
 }
 
 function squareCollision(me, scale, pos){
-    const oldme = { x: me.x, y: me.y };
-    const walls = [
-        [[pos.x - scale / 2, pos.y - scale / 2], [pos.x - scale / 2, pos.y + scale / 2]],
-        [[pos.x - scale / 2, pos.y + scale / 2], [pos.x + scale / 2, pos.y + scale / 2]],
-        [[pos.x + scale / 2, pos.y + scale / 2], [pos.x + scale / 2, pos.y - scale / 2]],
-        [[pos.x + scale / 2, pos.y - scale / 2], [pos.x - scale / 2, pos.y - scale / 2]],
+    const p = [
+        [pos.x - scale / 2, pos.y - scale / 2],
+        [pos.x - scale / 2, pos.y + scale / 2],
+        [pos.x + scale / 2, pos.y + scale / 2],
+        [pos.x + scale / 2, pos.y - scale / 2],
     ];
+    const walls = [
+        [p[0], p[1]],
+        [p[1], p[2]],
+        [p[2], p[3]],
+        [p[3], p[0]],
+    ];
+
+    wallCollisions(me, walls);
+    pointCollisions(me, p);
+}
+
+function wallCollisions(me, walls){
+    const oldme = { x: me.x, y: me.y };
 
     walls.forEach(w => { 
         let p1 = w[0];
         let p2 = w[1];
-        let pdist = Math.sqrt((me.x - p1[0]) * (me.x - p1[0]) + (me.y - p1[1]) * (me.y - p1[1]));
-        if (pdist <= PLAYER_SCALE / 2) {
-            const realdist = pdist - PLAYER_SCALE / 2;
-            if(realdist < 0){
-                if(pdist == 0){
-                    const dir = Math.random() * 2 * Math.PI;
-                    me.x += (-Math.sin(dir) * realdist);
-                    me.y += (Math.cos(dir) * realdist);
-                }else{
-                    const dir = Math.atan2(me.x - pos.x, pos.y - me.y);
-                    me.x += (-Math.sin(dir) * realdist);
-                    me.y += (Math.cos(dir) * realdist);
-                }
-            }
-        }
         if (p1[0] - p2[0] == 0) {
             if (me.y > p1[1] && me.y < p2[1] || me.y < p1[1] && me.y > p2[1]) {
                 if (Math.abs(me.x - p1[0]) <= PLAYER_SCALE / 2) {
@@ -91,11 +88,33 @@ function squareCollision(me, scale, pos){
                     }
                 }
             }
-        } else {
-            // not on grid
         }
     });
+    
+    push(me.x - oldme.x, me.y - oldme.y);
+}
 
+function pointCollisions(me, points){
+    const oldme = { x: me.x, y: me.y };
+
+    points.forEach(p => { 
+        let pdist = Math.sqrt((me.x - p[0]) * (me.x - p[0]) + (me.y - p[1]) * (me.y - p[1]));
+        if (pdist <= PLAYER_SCALE / 2) {
+            const realdist = pdist - PLAYER_SCALE / 2;
+            if(realdist < 0){
+                if(pdist == 0){
+                    const dir = Math.random() * 2 * Math.PI;
+                    me.x += (-Math.sin(dir) * realdist);
+                    me.y += (Math.cos(dir) * realdist);
+                }else{
+                    const dir = Math.atan2(me.x - p[0], p[1] - me.y);
+                    me.x += (-Math.sin(dir) * realdist);
+                    me.y += (Math.cos(dir) * realdist);
+                }
+            }
+        }
+    });
+    
     push(me.x - oldme.x, me.y - oldme.y);
 }
 
