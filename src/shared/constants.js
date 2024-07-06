@@ -1,5 +1,6 @@
 module.exports = Object.freeze({
     // player related
+    FILTER_USERNAME: false,
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     PLAYER_CLICK_COOLDOWN: .1,
@@ -25,6 +26,7 @@ module.exports = Object.freeze({
     SPAWN_SIZE: 2, // how many chunks wide and tall the spawn region is
 
     // chat
+    FILTER_CHAT: false,
     MESSAGE_TIME: 10,
 
     // message types

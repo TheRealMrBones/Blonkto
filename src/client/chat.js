@@ -23,5 +23,5 @@ function removeChatMessage(id){
 }
 
 function makeStringHtmlSafe(str){
-    return str.replace('<', "&lt;").replace('>', "&gt;").replace('&', "&amp;").replace('"', "&quot;").replace('\'', "&apos;");
+    return str.replaceAll('&', "&amp;").replaceAll('<', "&lt;").replaceAll('>', "&gt;").replaceAll('"', "&quot;").replaceAll('\'', "&apos;");
 }

@@ -15,7 +15,7 @@ class Game {
     }
 
     getUsername(username){
-        let newUsername = filterText(username.replace(/\s+/g, ''));
+        let newUsername = Constants.FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
         }
@@ -118,7 +118,7 @@ class Game {
     }
 
     chat(socket, message){
-        const text = filterText(message.text);
+        const text = Constants.FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         const newText = `<${this.players[socket.id].username}> ${text}`;
         const newMessage = {
             text: newText,
