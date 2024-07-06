@@ -4,6 +4,7 @@ const World = require('./world/world.js');
 const shortid = require('shortid');
 const { moveTouchingPlayers } = require('./collisions.js');
 const { filterText } = require('./filter.js');
+const { ExcecuteCommand } = require('./command.js');
 
 class Game {
     constructor(){
@@ -12,6 +13,10 @@ class Game {
         this.shouldSendUpdate = false;
         this.world = new World();
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
+
+        this.oppasscode = shortid().toString();
+        this.oppasscodeused = false;
+        console.log(`oppasscode: ${this.oppasscode}`);
     }
 
     getUsername(username){
@@ -119,15 +124,23 @@ class Game {
 
     chat(socket, message){
         const text = Constants.FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
-        const newText = `<${this.players[socket.id].username}> ${text}`;
-        const newMessage = {
-            text: newText,
-            id: shortid(),
-        };
-
-        Object.values(this.players).forEach(player => {
-            player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
-        });
+        if(text.length == 0){
+            // empty message
+        }else if(text[0] == '/'){
+            // command
+            ExcecuteCommand(this, text.substring(1), this.players[socket.id]);
+        }else{
+            // normal message
+            const newText = `<${this.players[socket.id].username}> ${text}`;
+            const newMessage = {
+                text: newText,
+                id: shortid(),
+            };
+    
+            Object.values(this.players).forEach(player => {
+                player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
+            });
+        }
     }
 }
 

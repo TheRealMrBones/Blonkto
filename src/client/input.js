@@ -30,32 +30,36 @@ function handlekeyDown(e){
     switch(e.key){
         case 'ArrowUp':
         case 'w':
-        case 'W':
+        case 'W': {
             if(startw == null){
                 startw = Date.now();
             }
             break;
+        }
         case 'ArrowDown':
         case 's':
-        case 'S':
+        case 'S': {
             if(starts == null){
                 starts = Date.now();
             }
             break;
+        }
         case 'ArrowLeft':
         case 'a':
-        case 'A':
+        case 'A': {
             if(starta == null){
                 starta = Date.now();
             }
             break;
+        }
         case 'ArrowRight':
         case 'd':
-        case 'D':
+        case 'D': {
             if(startd == null){
                 startd = Date.now();
             }
             break;
+        }
     }
 }
 
@@ -63,36 +67,40 @@ function handlekeyUp(e){
     switch(e.key){
         case 'ArrowUp':
         case 'w':
-        case 'W':
+        case 'W': {
             if(startw != null){
                 y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
                 startw = null;
             }
             break;
+        }
         case 'ArrowDown':
         case 's':
-        case 'S':
+        case 'S': {
             if(starts != null){
                 y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
                 starts = null;
             }
             break;
+        }
         case 'ArrowLeft':
         case 'a':
-        case 'A':
+        case 'A': {
             if(starta != null){
                 x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
                 starta = null;
             }
             break;
+        }
         case 'ArrowRight':
         case 'd':
-        case 'D':
+        case 'D': {
             if(startd != null){
                 x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
                 startd = null;
             }
             break;
+        }
     }
 }
 

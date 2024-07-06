@@ -4,6 +4,7 @@ const Constants = require('../../shared/constants.js');
 class Player extends Object {
     constructor(id, socket, username, x, y, dir){
         super(id, x, y, dir);
+        this.op = false;
         this.asset = Constants.ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
