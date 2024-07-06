@@ -7,6 +7,12 @@ body{
     font-family: Arial, sans-serif;
 }
 
+span {
+    display: block;
+    overflow: hidden;
+    padding-right:10px;
+}
+
 #gamecanvas{
     position: absolute;
     top: 0px;
@@ -33,4 +39,29 @@ body{
     padding: 20px;
     border-radius: 25px;
     display: none;
+}
+
+.ui{
+    position: absolute;
+    background-color:rgba(134, 134, 134, 0.5);
+    padding: 10px;
+    user-select: none;
+    font-weight: bold;
+    display: none;
+}
+
+#chat{
+    bottom: 20px;
+    left: 20px;
+    width: 20%;
+    overflow-wrap: break-word;
+    font-size: 16px;
+}
+
+#chatinput{
+    width: 100%;
+}
+
+#dont{
+    pointer-events: none;
 }

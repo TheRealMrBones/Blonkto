@@ -10,7 +10,6 @@ class Game {
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
         this.world = new World();
-        this.leaderboard = [];
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
     }
 
@@ -19,13 +18,11 @@ class Game {
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
         }
+
         if(Object.values(this.players).some(e => e.username === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
-                if(Object.values(this.players).some(e => e.username === newUsername + `${i}`)){
-                    // this gonna take a bit
-                }else{
-                    newUsername += `${i}`;
+                if(!Object.values(this.players).some(e => e.username === newUsername + `${i}`)){
                     done = true;
                 }
             }

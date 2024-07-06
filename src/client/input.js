@@ -30,24 +30,28 @@ function handlekeyDown(e){
     switch(e.key){
         case 'ArrowUp':
         case 'w':
+        case 'W':
             if(startw == null){
                 startw = Date.now();
             }
             break;
         case 'ArrowDown':
         case 's':
+        case 'S':
             if(starts == null){
                 starts = Date.now();
             }
             break;
         case 'ArrowLeft':
         case 'a':
+        case 'A':
             if(starta == null){
                 starta = Date.now();
             }
             break;
         case 'ArrowRight':
         case 'd':
+        case 'D':
             if(startd == null){
                 startd = Date.now();
             }
@@ -59,6 +63,7 @@ function handlekeyUp(e){
     switch(e.key){
         case 'ArrowUp':
         case 'w':
+        case 'W':
             if(startw != null){
                 y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
                 startw = null;
@@ -66,6 +71,7 @@ function handlekeyUp(e){
             break;
         case 'ArrowDown':
         case 's':
+        case 'S':
             if(starts != null){
                 y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
                 starts = null;
@@ -73,6 +79,7 @@ function handlekeyUp(e){
             break;
         case 'ArrowLeft':
         case 'a':
+        case 'A':
             if(starta != null){
                 x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
                 starta = null;
@@ -80,6 +87,7 @@ function handlekeyUp(e){
             break;
         case 'ArrowRight':
         case 'd':
+        case 'D':
             if(startd != null){
                 x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
                 startd = null;
@@ -112,6 +120,14 @@ function handleInput(){
         y: y,
     });
 }
+
+window.addEventListener('blur', function() {
+    updatePos();
+    startw = null;
+    starta = null;
+    starts = null;
+    startd = null;
+});
 
 function updatePos(){
     if(startw != null){
@@ -167,6 +183,32 @@ export function stopCapturingInput(){
     startd = null;
 
     clearInterval(interval)
+}
+
+export function pauseCapturingInputs(){
+    window.removeEventListener('mousemove', onMouseInput);
+    window.removeEventListener('click', onMouseInput);
+    window.removeEventListener('touchstart', onTouchInput);
+    window.removeEventListener('touchmove', onTouchInput);
+    window.removeEventListener('keydown', handlekeyDown);
+    window.removeEventListener('keyup', handlekeyUp);
+    window.removeEventListener('mousedown', handleMouseDown);
+    
+    updatePos();
+    startw = null;
+    starta = null;
+    starts = null;
+    startd = null;
+}
+
+export function resumeCapturingInputs(){
+    window.addEventListener('mousemove', onMouseInput);
+    window.addEventListener('click', onMouseInput);
+    window.addEventListener('touchstart', onTouchInput);
+    window.addEventListener('touchmove', onTouchInput);
+    window.addEventListener('keydown', handlekeyDown);
+    window.addEventListener('keyup', handlekeyUp);
+    window.addEventListener('mousedown', handleMouseDown);
 }
 
 export function getSelf(){

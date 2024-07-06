@@ -3,6 +3,7 @@ import { processGameUpdate } from './state.js';
 import { throttle } from 'throttle-debounce';
 import { startRendering, setColor } from './render.js';
 import { startCapturingInput } from './input.js';
+import { setupUi } from './ui.js';
 
 const Constants = require('../shared/constants.js');
 const { MSG_TYPES } = Constants;
@@ -28,6 +29,7 @@ function onInstantiated(stuff){
     startCapturingInput(stuff.x, stuff.y);
     setColor(stuff.color);
     startRendering();
+    setupUi();
 }
 
 export const play = username => {
@@ -44,4 +46,8 @@ export const click = throttle(20, info => {
 
 export const interact = throttle(20, info => {
     socket.emit(MSG_TYPES.INTERACT, info);
+});
+
+export const chat = throttle(20, info => {
+    socket.emit(MSG_TYPES.CHAT, info);
 });

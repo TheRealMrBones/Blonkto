@@ -34,6 +34,7 @@ module.exports = Object.freeze({
         CLICK: 'click',
         INTERACT: 'interact',
         DEAD: 'dead',
+        CHAT: 'chat',
     },
 
     // assets
