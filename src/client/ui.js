@@ -35,11 +35,19 @@ export function setupUi(){
 
 function keyUpChecks(event){
     event.preventDefault();
-    if(event.key === "Enter"){
-        if(focusingOut){
-            focusingOut = !focusingOut;
-        }else{
+    switch(event.key){
+        case "Enter": {
+            if(focusingOut){
+                focusingOut = !focusingOut;
+            }else{
+                chatInput.focus();
+            }
+            break;
+        }
+        case "/": {
             chatInput.focus();
+            chatInput.value = "/";
+            break;
         }
     }
 }
