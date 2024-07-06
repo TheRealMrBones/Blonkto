@@ -32,6 +32,7 @@ io.on('connection', socket => {
 	socket.on(Constants.MSG_TYPES.CLICK, click);
 	socket.on(Constants.MSG_TYPES.INTERACT, interact);
 	socket.on(Constants.MSG_TYPES.LEAVE_GAME, onDisconnect);
+	socket.on(Constants.MSG_TYPES.SEND_MESSAGE, chat);
 });
 
 const game = new Game();
@@ -60,4 +61,8 @@ function interact(info){
 function onDisconnect(){
 	console.log('Player left game!', this.id);
   	game.removePlayer(this);
+}
+
+function chat(message){
+  	game.chat(this, message);
 }

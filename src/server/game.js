@@ -1,6 +1,7 @@
 const Constants = require('../shared/constants.js');
 const Player = require('./objects/player.js');
 const World = require('./world/world.js');
+const shortid = require('shortid');
 const { moveTouchingPlayers } = require('./collisions.js');
 const { filterText } = require('./filter.js');
 
@@ -114,6 +115,19 @@ class Game {
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             worldLoad: worldLoad,
         };
+    }
+
+    chat(socket, message){
+        const text = filterText(message.text);
+        const newText = `<${this.players[socket.id].username}> ${text}`;
+        const newMessage = {
+            text: newText,
+            id: shortid(),
+        };
+
+        Object.values(this.players).forEach(player => {
+            player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
+        });
     }
 }
 

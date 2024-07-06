@@ -24,6 +24,9 @@ module.exports = Object.freeze({
     CELLS_VERTICAL: 16,
     SPAWN_SIZE: 2, // how many chunks wide and tall the spawn region is
 
+    // chat
+    MESSAGE_TIME: 10,
+
     // message types
     MSG_TYPES: {
         JOIN_GAME: 'join_game',
@@ -34,7 +37,8 @@ module.exports = Object.freeze({
         CLICK: 'click',
         INTERACT: 'interact',
         DEAD: 'dead',
-        CHAT: 'chat',
+        SEND_MESSAGE: 'send',
+        RECEIVE_MESSAGE: 'receive',
     },
 
     // assets

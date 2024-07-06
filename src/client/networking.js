@@ -4,6 +4,7 @@ import { throttle } from 'throttle-debounce';
 import { startRendering, setColor } from './render.js';
 import { startCapturingInput } from './input.js';
 import { setupUi } from './ui.js';
+import { receiveChatMessage } from './chat.js';
 
 const Constants = require('../shared/constants.js');
 const { MSG_TYPES } = Constants;
@@ -22,6 +23,7 @@ export const connect = onGameOver => (
         socket.on(MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on(MSG_TYPES.DEAD, onGameOver);
         socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
+        socket.on(MSG_TYPES.RECEIVE_MESSAGE, receiveChatMessage);
     })
 );
 
@@ -49,5 +51,5 @@ export const interact = throttle(20, info => {
 });
 
 export const chat = throttle(20, info => {
-    socket.emit(MSG_TYPES.CHAT, info);
+    socket.emit(MSG_TYPES.SEND_MESSAGE, info);
 });
