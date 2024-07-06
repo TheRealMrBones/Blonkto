@@ -31,7 +31,7 @@ function handlekeyDown(e){
         case 'ArrowUp':
         case 'w':
         case 'W': {
-            if(startw == null){
+            if(!startw){
                 startw = Date.now();
             }
             break;
@@ -39,7 +39,7 @@ function handlekeyDown(e){
         case 'ArrowDown':
         case 's':
         case 'S': {
-            if(starts == null){
+            if(!starts){
                 starts = Date.now();
             }
             break;
@@ -47,7 +47,7 @@ function handlekeyDown(e){
         case 'ArrowLeft':
         case 'a':
         case 'A': {
-            if(starta == null){
+            if(!starta){
                 starta = Date.now();
             }
             break;
@@ -55,7 +55,7 @@ function handlekeyDown(e){
         case 'ArrowRight':
         case 'd':
         case 'D': {
-            if(startd == null){
+            if(!startd){
                 startd = Date.now();
             }
             break;
@@ -68,7 +68,7 @@ function handlekeyUp(e){
         case 'ArrowUp':
         case 'w':
         case 'W': {
-            if(startw != null){
+            if(startw){
                 y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
                 startw = null;
             }
@@ -77,7 +77,7 @@ function handlekeyUp(e){
         case 'ArrowDown':
         case 's':
         case 'S': {
-            if(starts != null){
+            if(starts){
                 y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
                 starts = null;
             }
@@ -86,7 +86,7 @@ function handlekeyUp(e){
         case 'ArrowLeft':
         case 'a':
         case 'A': {
-            if(starta != null){
+            if(starta){
                 x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
                 starta = null;
             }
@@ -95,7 +95,7 @@ function handlekeyUp(e){
         case 'ArrowRight':
         case 'd':
         case 'D': {
-            if(startd != null){
+            if(startd){
                 x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
                 startd = null;
             }
@@ -138,19 +138,19 @@ window.addEventListener('blur', function() {
 });
 
 function updatePos(){
-    if(startw != null){
+    if(startw){
         y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
         startw = Date.now();
     }
-    if(starts != null){
+    if(starts){
         y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
         starts = Date.now();
     }
-    if(starta != null){
+    if(starta){
         x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
         starta = Date.now();
     }
-    if(startd != null){
+    if(startd){
         x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
         startd = Date.now();
     }
@@ -234,7 +234,20 @@ export function push(pushx, pushy){
     y += pushy;
 }
 
-export function fixPos(newpos){
+export function setPos(newpos){
+    if(startw){
+        startw = Date.now();
+    }
+    if(starts){
+        starts = Date.now();
+    }
+    if(starta){
+        starta = Date.now();
+    }
+    if(startd){
+        startd = Date.now();
+    }
+
     x = newpos.x;
     y = newpos.y;
 }

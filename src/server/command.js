@@ -29,7 +29,7 @@ exports.ExcecuteCommand = (game, command, player) => {
                     sendResponse(player, `opped ${p.username}`);
                 }
             }else{
-                sendResponse(player, `${tokens[1]} does not exist`);
+                sendResponse(player, `player ${tokens[1]} does not exist`);
             }
             break;
         }
@@ -49,8 +49,40 @@ exports.ExcecuteCommand = (game, command, player) => {
                     sendResponse(player, `${p.username} is not opped`);
                 }
             }else{
-                sendResponse(player, `${tokens[1]} does not exist`);
+                sendResponse(player, `player ${tokens[1]} does not exist`);
             }
+            break;
+        }
+        case "tp": {
+            if(!player.op){
+                sendResponse(player, `you do not have permission to use this command`);
+                break;
+            }
+
+            let playertoteleport, x, y;
+            if(tokens.length == 3){
+                playertoteleport = player;
+                x = parseInt(tokens[1]);
+                y = parseInt(tokens[2]);
+            }else{
+                const p = Object.values(game.players).find(p => p.username.toLowerCase() == tokens[1].toLowerCase());
+                if(p){
+                    playertoteleport = p;
+                    x = parseInt(tokens[2]);
+                    y = parseInt(tokens[3]);
+                }else{
+                    sendResponse(player, `player ${tokens[1]} does not exist`);
+                    break;
+                }
+            }
+
+            if(x && y){
+                playertoteleport.setPos(x + .5, y + .5);
+                sendResponse(player, `teleported ${playertoteleport.username} to ${x}, ${y}`);
+            }else{
+                sendResponse(player, `invalid coordinates`);
+            }
+
             break;
         }
         default: {

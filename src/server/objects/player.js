@@ -32,8 +32,8 @@ class Player extends Object {
 
     resetFixes(){
         this.fixes = {
-            pushx: 0,
-            pushy: 0,
+            pushx: null,
+            pushy: null,
             setpos: null,
         }
     }

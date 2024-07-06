@@ -1,5 +1,5 @@
 import { playerCollisions } from './collisions.js';
-import { getSelf } from './input.js';
+import { getSelf, setPos } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks } from './world.js';
 
@@ -22,6 +22,11 @@ export function processGameUpdate(update){
     if(update.worldLoad.unloadChunks){
         unloadChunks(update.worldLoad.unloadChunks);
         loadChunks(update.worldLoad.loadChunks);
+    }
+
+    // get fixes
+    if(update.fixes.setpos){
+        setPos(update.fixes.setpos);
     }
 
     // set players default to not updated aka left (used later)
