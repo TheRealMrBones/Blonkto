@@ -62,6 +62,13 @@ span {
     width: 100%;
 }
 
+#coords{
+    text-align: right;
+    bottom: 20px;
+    right: 20px;
+    font-size: 16px;
+}
+
 #dont{
     pointer-events: none;
 }

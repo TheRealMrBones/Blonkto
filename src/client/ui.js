@@ -3,11 +3,14 @@ import { pauseCapturingInputs, resumeCapturingInputs } from './input.js';
 
 const chatDiv = document.getElementById('chat');
 const chatInput = document.getElementById('chatinput');
+const coordsdiv = document.getElementById('coords');
+const coordstext = document.getElementById('coordstext');
 
 let focusingOut = false;
 
 export function setupUi(){
     chatDiv.style.display = "block";
+    coordsdiv.style.display = "block";
 
     window.addEventListener("keyup", keyUpChecks);
 
@@ -50,4 +53,8 @@ function keyUpChecks(event){
             break;
         }
     }
+}
+
+export function updateCoords(x, y){
+    coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
 }

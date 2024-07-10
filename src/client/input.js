@@ -1,6 +1,7 @@
 import { updateInputs, click, interact } from './networking.js';
 import { getCellSize } from './render.js';
 import { blockCollisions } from './collisions.js';
+import { updateCoords } from './ui.js';
 
 const Constants = require('../shared/constants.js');
 
@@ -155,6 +156,7 @@ function updatePos(){
         startd = Date.now();
     }
 
+    updateCoords(x, y);
     blockCollisions({ x: x, y: y });
 }
 
