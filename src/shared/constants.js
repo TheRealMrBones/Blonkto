@@ -59,4 +59,13 @@ module.exports = Object.freeze({
         SQUARE: 1,
         CIRCLE: 2,
     },
+
+    // commands
+    COMMAND_ARGUMENTS: {
+        KEY: 0,
+        PLAYER: 1,
+        STRING: 2,
+        INT: 3,
+        FLOAT: 4,
+    },
 });

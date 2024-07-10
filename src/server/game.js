@@ -4,7 +4,7 @@ const World = require('./world/world.js');
 const shortid = require('shortid');
 const { moveTouchingPlayers } = require('./collisions.js');
 const { filterText } = require('./filter.js');
-const { ExcecuteCommand } = require('./command.js');
+const { ExcecuteCommand } = require('./commands/commands.js');
 
 class Game {
     constructor(){
@@ -128,7 +128,7 @@ class Game {
             // empty message
         }else if(text[0] == '/'){
             // command
-            ExcecuteCommand(this, text.substring(1), this.players[socket.id]);
+            ExcecuteCommand(this, this.players[socket.id], text.substring(1));
         }else{
             // normal message
             const newText = `<${this.players[socket.id].username}> ${text}`;
