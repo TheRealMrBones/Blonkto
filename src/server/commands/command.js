@@ -12,7 +12,10 @@ class Command{
 
     static getParsedTokens(game, player, tokens){
         // tokens parsed are the possible args but as they get checked the previous values change to the parsed tokens
-        const tokensParsed = [...this.args];
+        const tokensParsed = [];
+        for(let i = 0; i < this.args.length; i++){
+            tokensParsed.push([...this.args[i]]);
+        }
         let error = "Command Failed";
 
         // do perms check if needed
@@ -27,9 +30,10 @@ class Command{
         for(let i = 0; tokensParsed.length > 0; i++){
             // end of inputed tokens
             if(tokens.length == i){
-                if(tokensParsed.length == 1 && tokensParsed[0].length == i){
+                const correctTokens = tokensParsed.find(tkns => tkns.length == i);
+                if(correctTokens){
                     // correct args!
-                    return tokensParsed[0];
+                    return correctTokens;
                 }else{
                     // too few args for available commands
                     error = `incorrect arguments for command: ${this.key}`;
@@ -41,8 +45,8 @@ class Command{
             for(let j = 0; j < tokensParsed.length; j++){
                 if(tokensParsed[j].length == i){
                     error = `incorrect arguments for command: ${this.key}`;
-                    j--;
                     tokensParsed.splice(j, 1);
+                    j--;
                     continue;
                 }
 
@@ -56,8 +60,8 @@ class Command{
                         const p = Object.values(game.players).find(p => p.username.toLowerCase() == tokens[i].toLowerCase());
                         if(!p){
                             error = `player "${tokens[i]}" does not exist`;
-                            j--;
                             tokensParsed.splice(j, 1);
+                            j--;
                         }else{
                             tokensParsed[j][i] = p;
                         }
@@ -67,8 +71,8 @@ class Command{
                         const val = parseInt(tokens[i]);
                         if(!val){
                             error = `"${tokens[i]}" is not an integer`;
-                            j--;
                             tokensParsed.splice(j, 1);
+                            j--;
                         }else{
                             tokensParsed[j][i] = val;
                         }
@@ -78,8 +82,8 @@ class Command{
                         const val = parseFloat(tokens[i]);
                         if(!val){
                             error = `"${tokens[i]}" is not an float`;
-                            j--;
                             tokensParsed.splice(j, 1);
+                            j--;
                         }else{
                             tokensParsed[j][i] = val;
                         }

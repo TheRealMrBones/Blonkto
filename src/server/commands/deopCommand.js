@@ -16,6 +16,7 @@ class DeopCommand extends Command{
         if(!parsedTokens){
             return;
         }
+        const argIndex = parsedTokens[0];
 
         // do command based on what args set used
         switch(argIndex){

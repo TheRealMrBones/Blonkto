@@ -19,6 +19,7 @@ class TpCommand extends Command{
         if(!parsedTokens){
             return;
         }
+        const argIndex = parsedTokens[0];
 
         // do command based on what args set used
         switch(argIndex){
@@ -27,16 +28,16 @@ class TpCommand extends Command{
                 let playertoteleport, x, y;
                 if(argIndex == 0){
                     playertoteleport = player;
-                    x = tokens[1];
-                    y = tokens[2];
+                    x = parsedTokens[1];
+                    y = parsedTokens[2];
                 }else{
-                    playertoteleport = tokens[1];
-                    x = tokens[2];
-                    y = tokens[3];
+                    playertoteleport = parsedTokens[1];
+                    x = parsedTokens[2];
+                    y = parsedTokens[3];
                 }
 
                 playertoteleport.setPos(x + .5, y + .5);
-                sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
+                this.sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
                 break;
             }
             case 2:
@@ -44,14 +45,14 @@ class TpCommand extends Command{
                 let playertoteleport, playertoteleportto;
                 if(argIndex == 2){
                     playertoteleport = player;
-                    playertoteleportto = tokens[1];
+                    playertoteleportto = parsedTokens[1];
                 }else{
-                    playertoteleport = tokens[1];
-                    playertoteleportto = tokens[2];
+                    playertoteleport = parsedTokens[1];
+                    playertoteleportto = parsedTokens[2];
                 }
 
                 playertoteleport.setPos(playertoteleportto.x, playertoteleportto.y);
-                sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${playertoteleportto.username}`);
+                this.sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${playertoteleportto.username}`);
                 break;
             }
         }
