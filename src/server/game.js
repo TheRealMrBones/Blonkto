@@ -46,9 +46,12 @@ class Game {
             y: spawn.pos.y,
             color: this.players[socket.id].color,
         });
+
+        this.sendMessage(`${username} has connected`);
     }
 
     removePlayer(socket){
+        this.sendMessage(`${this.players[socket.id].username} has disconnected`);
         delete this.players[socket.id];
     }
 
@@ -132,15 +135,19 @@ class Game {
         }else{
             // normal message
             const newText = `<${this.players[socket.id].username}> ${text}`;
-            const newMessage = {
-                text: newText,
-                id: shortid(),
-            };
-    
-            Object.values(this.players).forEach(player => {
-                player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
-            });
+            this.sendMessage(newText);
         }
+    }
+
+    sendMessage(text){
+        const newMessage = {
+            text: text,
+            id: shortid(),
+        };
+
+        Object.values(this.players).forEach(player => {
+            player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
+        });
     }
 }
 
