@@ -26,6 +26,9 @@ export function blockCollisions(me){
     const startx = Math.floor(me.x - PLAYER_SCALE / 2);
     const starty = Math.floor(me.y - PLAYER_SCALE / 2);
 
+    let walls = [];
+    let points = [];
+
     for(let x = startx; x < me.x + PLAYER_SCALE / 2; x++){
         for(let y = starty; y < me.y + PLAYER_SCALE / 2; y++){
             const block = getCell(x, y).block;
@@ -35,16 +38,21 @@ export function blockCollisions(me){
                     y: y + block.scale / 2
                 };
                 if(block.shape == SHAPES.SQUARE){
-                    squareCollision(me, block.scale, pos);
+                    const wallResults = getSquareWalls(me, block.scale, pos);
+                    walls = walls.concat(wallResults.walls);
+                    points = points.concat(wallResults.points);
                 }else if(block.shape == SHAPES.CIRCLE){
                     circleCollision(me, block.scale, pos);
                 }
             }
         }
     }
+
+    wallCollisions(me, walls);
+    pointCollisions(me, points);
 }
 
-function squareCollision(me, scale, pos){
+function getSquareWalls(me, scale, pos){
     const p = [
         [pos.x - scale / 2, pos.y - scale / 2],
         [pos.x - scale / 2, pos.y + scale / 2],
@@ -58,8 +66,10 @@ function squareCollision(me, scale, pos){
         [p[3], p[0]],
     ];
 
-    wallCollisions(me, walls);
-    pointCollisions(me, p);
+    return {
+        walls: walls,
+        points: p,
+    };
 }
 
 function wallCollisions(me, walls){
