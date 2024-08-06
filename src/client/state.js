@@ -1,4 +1,3 @@
-import { playerCollisions } from './collisions.js';
 import { getSelf, setPos } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks } from './world.js';
@@ -102,8 +101,6 @@ export function getCurrentState(){
     Object.values(players).forEach(p => {
         others.push(p.interpolateSelf());
     });
-
-    playerCollisions(getSelf(), others);
 
     if(base < 0 || base === gameUpdates.length - 1){
         const update = gameUpdates[gameUpdates.length - 1];

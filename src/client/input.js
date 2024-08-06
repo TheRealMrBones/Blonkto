@@ -1,7 +1,8 @@
 import { updateInputs, click, interact } from './networking.js';
 import { getCellSize } from './render.js';
-import { blockCollisions } from './collisions.js';
+import { blockCollisions, playerCollisions } from './collisions.js';
 import { updateCoords } from './ui.js';
+import { getCurrentState } from './state.js';
 
 const Constants = require('../shared/constants.js');
 
@@ -156,8 +157,14 @@ function updatePos(){
         startd = Date.now();
     }
 
+    const others = getCurrentState().others;
     updateCoords(x, y);
     blockCollisions({ x: x, y: y });
+    playerCollisions({
+        dir: dir,
+        x: x,
+        y: y,
+    }, others);
 }
 
 export function startCapturingInput(xp, yp){
