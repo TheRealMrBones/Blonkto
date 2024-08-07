@@ -107,16 +107,19 @@ function handlekeyUp(e){
 }
 
 function handleMouseDown(e){
+    // get position of click compared to current player pos
+    clickpos = {
+        xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
+        yoffset: (e.clientY - window.innerHeight / 2) / getCellSize(),
+        mex: x,
+        mey: y,
+    };
+
+    // send appropriate click event
     if(e.button == 0){
-        click({
-            xoffset: e.clientX / getCellSize(),
-            yoffset: e.clientY / getCellSize(),
-        });
+        click(clickpos);
     }else if(e.button == 2){
-        interact({
-            xoffset: e.clientX / getCellSize(),
-            yoffset: e.clientY / getCellSize(),
-        });
+        interact(clickpos);
     }
 }
 
@@ -140,6 +143,7 @@ window.addEventListener('blur', function() {
 });
 
 function updatePos(){
+    // update local position vars
     if(startw){
         y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
         startw = Date.now();
@@ -157,20 +161,25 @@ function updatePos(){
         startd = Date.now();
     }
 
-    const others = getCurrentState().others;
+    // update ui
     updateCoords(x, y);
-    blockCollisions({ x: x, y: y });
+    
+    // collisions
+    const others = getCurrentState().others;
     playerCollisions({
         dir: dir,
         x: x,
         y: y,
     }, others);
+    blockCollisions({ x: x, y: y });
 }
 
 export function startCapturingInput(xp, yp){
+    // set spawn position
     x = xp;
     y = yp;
 
+    // add input listeners
     window.addEventListener('mousemove', onMouseInput);
     window.addEventListener('click', onMouseInput);
     window.addEventListener('touchstart', onTouchInput);
@@ -179,10 +188,12 @@ export function startCapturingInput(xp, yp){
     window.addEventListener('keyup', handlekeyUp);
     window.addEventListener('mousedown', handleMouseDown);
 
+    // set client side update interval
     interval = setInterval(handleInput, 1000 / Constants.CLIENT_UPDATE_RATE);
 }
 
 export function stopCapturingInput(){
+    // remove input listeners
     window.removeEventListener('mousemove', onMouseInput);
     window.removeEventListener('click', onMouseInput);
     window.removeEventListener('touchstart', onTouchInput);
@@ -191,6 +202,7 @@ export function stopCapturingInput(){
     window.removeEventListener('keyup', handlekeyUp);
     window.removeEventListener('mousedown', handleMouseDown);
     
+    // reset variables
     dir = 0;
     x = 0;
     y = 0;
@@ -199,10 +211,12 @@ export function stopCapturingInput(){
     starts = null;
     startd = null;
 
+    // clear client side update interval
     clearInterval(interval)
 }
 
 export function pauseCapturingInputs(){
+    // pause input listeners
     window.removeEventListener('mousemove', onMouseInput);
     window.removeEventListener('click', onMouseInput);
     window.removeEventListener('touchstart', onTouchInput);
@@ -211,6 +225,7 @@ export function pauseCapturingInputs(){
     window.removeEventListener('keyup', handlekeyUp);
     window.removeEventListener('mousedown', handleMouseDown);
     
+    // do final position update then remove current movements
     updatePos();
     startw = null;
     starta = null;
@@ -219,6 +234,7 @@ export function pauseCapturingInputs(){
 }
 
 export function resumeCapturingInputs(){
+    // resume input listeners
     window.addEventListener('mousemove', onMouseInput);
     window.addEventListener('click', onMouseInput);
     window.addEventListener('touchstart', onTouchInput);
@@ -244,6 +260,7 @@ export function push(pushx, pushy){
 }
 
 export function setPos(newpos){
+    // keep current inputs running but don't include previous time held
     if(startw){
         startw = Date.now();
     }
@@ -257,6 +274,7 @@ export function setPos(newpos){
         startd = Date.now();
     }
 
+    // set new position
     x = newpos.x;
     y = newpos.y;
 }
