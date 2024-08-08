@@ -10,14 +10,15 @@ class Player extends Object {
         this.username = username;
         this.dead = false;
         this.kills = 0;
-        this.lastclick = Date.now();
+        this.lastclick = 0;
+        this.lastclickdir = 0;
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.color = {
             r: .7 + Math.random() * .3,
             g: .7 + Math.random() * .3,
             b: .7 + Math.random() * .3,
-        }
+        };
         this.resetFixes();
     }
 
@@ -61,6 +62,7 @@ class Player extends Object {
 
     serializeForUpdate(){
         const base = super.serializeForUpdate();
+
         return {
             static: {
                 ...(base.static),
@@ -68,6 +70,8 @@ class Player extends Object {
                 lastupdated: this.lastupdated,
                 playerdelay: this.playerdelay,
                 color: this.color,
+                lastclick: this.lastclick,
+                lastclickdir: this.lastclickdir,
             },
             dynamic: {
                 ...(base.dynamic),

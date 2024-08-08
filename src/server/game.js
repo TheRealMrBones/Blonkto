@@ -58,7 +58,8 @@ class Game {
     click(socket, info){
         if(this.players[socket.id] !== undefined){
             if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
-                
+                const dir = Math.atan2(info.xoffset, info.yoffset);
+                this.players[socket.id].lastclickdir = dir;
                 this.players[socket.id].lastclick = Date.now();
             }
         }
