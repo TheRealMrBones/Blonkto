@@ -29,6 +29,7 @@ module.exports = Object.freeze({
     // chat
     FILTER_CHAT: false,
     MESSAGE_TIME: 10,
+    MAX_MESSAGE_COUNT: 20,
 
     // message types
     MSG_TYPES: {
