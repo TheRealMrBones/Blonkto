@@ -30,6 +30,7 @@ class Game {
             for(let i = 2; !done; i++){
                 if(!Object.values(this.players).some(e => e.username === newUsername + `${i}`)){
                     done = true;
+                    newUsername += `${i}`;
                 }
             }
         }

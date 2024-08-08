@@ -1,4 +1,4 @@
-import { getSelf, setPos } from './input.js';
+import { setPos } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks } from './world.js';
 import { toggleConnectionLost } from './ui.js';
