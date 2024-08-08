@@ -4,6 +4,7 @@ module.exports = Object.freeze({
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     PLAYER_CLICK_COOLDOWN: .1,
+    ALLOW_CHANGE_NAME: true,
 
     // update related
     CLIENT_UPDATE_RATE: 50,
@@ -28,6 +29,7 @@ module.exports = Object.freeze({
     // chat
     FILTER_CHAT: false,
     MESSAGE_TIME: 10,
+    MAX_MESSAGE_COUNT: 20,
 
     // message types
     MSG_TYPES: {

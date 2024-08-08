@@ -108,7 +108,7 @@ function handlekeyUp(e){
 
 function handleMouseDown(e){
     // get position of click compared to current player pos
-    clickpos = {
+    const clickpos = {
         xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
         yoffset: (e.clientY - window.innerHeight / 2) / getCellSize(),
         mex: x,

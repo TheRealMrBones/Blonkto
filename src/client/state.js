@@ -1,6 +1,7 @@
-import { getSelf, setPos } from './input.js';
+import { setPos } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks } from './world.js';
+import { toggleConnectionLost } from './ui.js';
 
 const Constants = require('../shared/constants.js');
 const { RENDER_DELAY } = Constants;
@@ -17,6 +18,9 @@ export function initState(){
 }
 
 export function processGameUpdate(update){
+    // set lastUpdateTime
+    lastUpdateTime = Date.now();
+
     // update local world if new data
     if(update.worldLoad.unloadChunks){
         unloadChunks(update.worldLoad.unloadChunks);
@@ -88,6 +92,8 @@ function purgeUpdates(){
 }
 
 export function getCurrentState(){
+    checkIfConnectionLost();
+
     if(!firstServerTimestamp){
         return {};
     }
@@ -149,3 +155,14 @@ function interpolateDirection(d1, d2, ratio){
         return d1 + (d2 - d1) * ratio;
     }
 }
+
+let lastUpdateTime = Date.now();
+let connectionLost = false;
+function checkIfConnectionLost(){
+    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY;
+    if(isconnectionlost && !connectionLost){
+        toggleConnectionLost(true);
+    }else if(!isconnectionlost && connectionLost){
+        toggleConnectionLost(false);
+    }
+};
