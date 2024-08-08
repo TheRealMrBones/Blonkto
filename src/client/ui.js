@@ -5,6 +5,7 @@ const chatDiv = document.getElementById('chat');
 const chatInput = document.getElementById('chatinput');
 const coordsdiv = document.getElementById('coords');
 const coordstext = document.getElementById('coordstext');
+const connectionlostdiv = document.getElementById('connectionlost');
 
 let focusingOut = false;
 
@@ -57,4 +58,12 @@ function keyUpChecks(event){
 
 export function updateCoords(x, y){
     coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
+}
+
+export function toggleConnectionLost(toggle){
+    if(toggle){
+        connectionlostdiv.style.display = "block";
+    }else{
+        connectionlostdiv.style.display = "none";
+    }
 }

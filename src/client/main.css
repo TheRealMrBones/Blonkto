@@ -50,6 +50,13 @@ span {
     display: none;
 }
 
+.uinobg{
+    position: absolute;
+    user-select: none;
+    font-weight: bold;
+    display: none;
+}
+
 #chat{
     bottom: 50px;
     left: 20px;
@@ -67,6 +74,11 @@ span {
     bottom: 20px;
     right: 20px;
     font-size: 16px;
+}
+
+#connectionlost{
+    bottom: 90px;
+    right: 20px;
 }
 
 #dont{
