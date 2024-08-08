@@ -44,6 +44,7 @@ class OpCommand extends Command{
                 }else{
                     const newusername = game.getUsername(parsedTokens[2]);
                     this.sendResponse(player, `${newusername} is ${p.username}'s new name`);
+                    this.sendResponse(p, `you have been renamed to ${newusername}`);
                     p.username = newusername;
                 }
                 break;

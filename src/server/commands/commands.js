@@ -4,6 +4,7 @@ const DeopCommand = require('./deopCommand.js');
 const TpCommand = require('./tpCommand.js');
 const PingCommand = require('./pingCommand.js');
 const NickCommand = require('./nickCommand.js');
+const HelpCommand = require('./helpCommand.js');
 
 exports.ExcecuteCommand = (game, player, command) => {
     if(command.length == 0){
@@ -20,6 +21,7 @@ exports.ExcecuteCommand = (game, player, command) => {
         case TpCommand.key: { TpCommand.execute(game, player, tokens); break; };
         case PingCommand.key: { PingCommand.execute(game, player, tokens); break; };
         case NickCommand.key: { NickCommand.execute(game, player, tokens); break; };
+        case HelpCommand.key: { HelpCommand.execute(game, player, tokens); break; };
         default: { Command.sendResponse(player, `command "${key}" not found`); break; };
     }
 }
