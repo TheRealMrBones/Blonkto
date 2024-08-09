@@ -25,7 +25,7 @@ export function receiveChatMessage(message){
 function hideChatMessage(id){
     const message = messages.find(m => m.id == id);
     if(message){
-        if(chatopened){
+        if(!chatopened){
             message.div.style.display = "none";
         }
         message.display = false;
