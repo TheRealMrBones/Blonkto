@@ -14,6 +14,7 @@ class Player extends Object {
         this.lastclickdir = 0;
         this.lastupdated = Date.now();
         this.playerdelay = 0;
+        this.scale = 1;
         this.color = {
             r: .7 + Math.random() * .3,
             g: .7 + Math.random() * .3,
@@ -70,11 +71,12 @@ class Player extends Object {
                 lastupdated: this.lastupdated,
                 playerdelay: this.playerdelay,
                 color: this.color,
-                lastclick: this.lastclick,
                 lastclickdir: this.lastclickdir,
             },
             dynamic: {
                 ...(base.dynamic),
+                lastclick: this.lastclick,
+                scale: this.scale,
             },
         };
     }

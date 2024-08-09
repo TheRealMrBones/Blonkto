@@ -13,6 +13,7 @@ class World {
         for(let x = -Constants.SPAWN_SIZE / 2 - 1; x < Constants.SPAWN_SIZE / 2 + 1; x++){
             for(let y = -Constants.SPAWN_SIZE / 2 - 1; y < Constants.SPAWN_SIZE / 2 + 1; y++){
                 this.loadedchunks[[x,y].toString()] = new Chunk(x, y);
+                this.unloadChunk(x, y);
             }
         }
     }
@@ -31,7 +32,7 @@ class World {
             const chunk = { x: chunkx, y: chunky };
 
             // check if valid spawn
-            const cell = this.getCell(x, y);
+            const cell = this.getCell(x, y, true);
             if(!cell.block){
                 return {
                     pos: pos,
@@ -110,17 +111,18 @@ class World {
                 }
             });
 
-            // serialize load chunks
+            // load chunks
             const loadChunksSerialized = [];
             loadChunks.forEach(lc => {
-                const chunk = this.loadedchunks[[lc.x,lc.y].toString()];
+                const chunk = this.getChunk(lc.x, lc.y, true);
                 if(chunk){
                     loadChunksSerialized.push(chunk.serializeForLoad());
-                }else if(lc.x >= -Constants.WORLD_SIZE / 2 && lc.x < Constants.WORLD_SIZE / 2 && lc.y >= -Constants.WORLD_SIZE / 2 && lc.y < Constants.WORLD_SIZE / 2){
-                    const newChunk = new Chunk(lc.x, lc.y);
-                    this.loadedchunks[[lc.x,lc.y].toString()] = newChunk;
-                    loadChunksSerialized.push(newChunk.serializeForLoad());
                 }
+            });
+
+            // unload chunks
+            unloadChunks.forEach(c => {
+                this.unloadChunk(c.x, c.y);
             });
 
             // send the data
@@ -132,17 +134,37 @@ class World {
         }
     }
 
-    getCell(x, y){
+    getChunk(x, y, canloadnew){
+        const chunk = this.loadedchunks[[x,y].toString()];
+        if(chunk){
+            return chunk;
+        }else if(x >= -Constants.WORLD_SIZE / 2 && x < Constants.WORLD_SIZE / 2 && y >= -Constants.WORLD_SIZE / 2 && y < Constants.WORLD_SIZE / 2 && canloadnew){
+            const newChunk = new Chunk(x, y);
+            this.loadedchunks[[x,y].toString()] = newChunk;
+            return newChunk;
+        }else{
+            return false;
+        }
+    }
+
+    unloadChunk(x, y){
+        const chunk = this.loadedchunks[[x,y].toString()];
+        if(chunk){
+            delete this.loadedchunks[[x,y].toString()];
+        }
+    }
+
+    getCell(x, y, canloadnew){
         const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
         const chunky = Math.floor(y / Constants.CHUNK_SIZE);
         const cellx = x - chunkx * Constants.CHUNK_SIZE;
         const celly = y - chunky * Constants.CHUNK_SIZE;
     
-        const chunk = this.loadedchunks[[chunkx,chunky].toString()];
-        if(!chunk){
-            return false;
-        }else{
+        const chunk = this.getChunk(chunkx, chunky, canloadnew);
+        if(chunk){
             return chunk.cells[cellx][celly];
+        }else{
+            return false;
         }
     }
 }
