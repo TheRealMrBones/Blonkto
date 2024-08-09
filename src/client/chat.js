@@ -3,12 +3,10 @@ const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = Constants;
 
 const chatMessagesDiv = document.getElementById('chatmessages');
 
-const messages = {};
-const localMessageNum = 0;
+const messages = [];
 
 export function receiveChatMessage(message){
-    localMessageNum++;
-    if(localMessageNum > MAX_MESSAGE_COUNT){
+    if(messages.length > MAX_MESSAGE_COUNT){
         removeLastChatMessage();
     }
 
@@ -16,33 +14,41 @@ export function receiveChatMessage(message){
     newDiv.id = message.id;
     newDiv.innerHTML = makeStringHtmlSafe(message.text);
     chatMessagesDiv.appendChild(newDiv);
-    messages[message.id] = {
+    messages.push({
+        id: message.id,
         div: newDiv,
         display: true,
-    };
+    });
     setTimeout(() => { hideChatMessage(message.id) }, MESSAGE_TIME * 1000);
 }
 
 function hideChatMessage(id){
-    messages[id].div.style.display = "none";
-    messages[id].display = false;
+    const message = messages.find(m => m.id == id);
+    if(message){
+        if(chatopened){
+            message.div.style.display = "none";
+        }
+        message.display = false;
+    }
 }
 
-function removeChatMessage(id){
-    chatMessagesDiv.removeChild(messages[id].div);
-    delete messages[id];
-
-function removeLastChatMessage(){
-    chatMessagesDiv.removeChild(messages[id].div);
-    delete messages[id];
-
-    let smallestid;
-    let smallestnum = 0;
-    messages.array.forEach(message => {
-        if(){
-            
+let chatopened = false;
+export function toggleAllChatShow(show){
+    chatopened = show;
+    const ms = messages.filter(m => !m.display);
+    ms.forEach(m => {
+        if(show){
+            m.div.style.display = "block";
+        }else{
+            m.div.style.display = "none";
         }
     });
+}
+
+function removeLastChatMessage(){
+    const message = messages[0];
+    chatMessagesDiv.removeChild(message.div);
+    messages.shift();
 }
 
 function makeStringHtmlSafe(str){

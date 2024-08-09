@@ -1,5 +1,6 @@
 import { chat } from './networking.js';
 import { pauseCapturingInputs, resumeCapturingInputs } from './input.js';
+import { toggleAllChatShow } from './chat.js';
 
 const chatDiv = document.getElementById('chat');
 const chatInput = document.getElementById('chatinput');
@@ -21,19 +22,22 @@ export function setupUi(){
             chat({
                 text: chatInput.value,
             });
+            focusingOut = true;
             chatInput.blur();
+            toggleAllChatShow(false);
         }
     });
 
     chatInput.addEventListener("focusin", function(){
         pauseCapturingInputs();
         window.removeEventListener("keyup", keyUpChecks);
+        toggleAllChatShow(true);
     });
     chatInput.addEventListener("focusout", function(){
         resumeCapturingInputs();
         chatInput.value = "";
-        focusingOut = true;
         window.addEventListener("keyup", keyUpChecks);
+        toggleAllChatShow(false);
     });
 }
 
@@ -45,12 +49,14 @@ function keyUpChecks(event){
                 focusingOut = !focusingOut;
             }else{
                 chatInput.focus();
+                toggleAllChatShow(true);
             }
             break;
         }
         case "/": {
             chatInput.focus();
             chatInput.value = "/";
+            toggleAllChatShow(true);
             break;
         }
     }
