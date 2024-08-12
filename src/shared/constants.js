@@ -6,6 +6,11 @@ module.exports = Object.freeze({
     PLAYER_CLICK_COOLDOWN: .1,
     ALLOW_CHANGE_NAME: true,
 
+    // attack hitbox
+    ATTACK_HITBOX_WIDTH: 1,
+    ATTACK_HITBOX_HEIGHT: 1,
+    ATTACK_HITBOX_OFFSET: .5,
+
     // update related
     CLIENT_UPDATE_RATE: 50,
     SERVER_UPDATE_RATE: 50,
