@@ -30,6 +30,7 @@ module.exports = Object.freeze({
     CELLS_HORIZONTAL: 28,
     CELLS_VERTICAL: 16,
     SPAWN_SIZE: 2, // how many chunks wide and tall the spawn region is
+    CHUNK_UNLOAD_RATE: 1.0,
 
     // chat
     FILTER_CHAT: false,

@@ -12,6 +12,8 @@ class Game {
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
         this.world = new World();
+
+        setInterval(this.tickChunkUnloader.bind(this), 1000 / Constants.CHUNK_UNLOAD_RATE);
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
 
         this.oppasscode = shortid().toString();
@@ -106,6 +108,10 @@ class Game {
         }else{
             this.shouldSendUpdate = true;
         }
+    }
+
+    tickChunkUnloader(){
+        this.world.tickChunkUnloader(Object.values(this.players));
     }
 
     createUpdate(player){

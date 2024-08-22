@@ -3,11 +3,12 @@ const Chunk = require('./chunk.js');
 
 class World {
     constructor(){
-        this.spawnpoints = [[0, 0]];
         // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
         this.generateSpawn();
     }
+
+    // #region Spawn
 
     generateSpawn(){
         for(let x = -Constants.SPAWN_SIZE / 2 - 1; x < Constants.SPAWN_SIZE / 2 + 1; x++){
@@ -41,6 +42,10 @@ class World {
             }
         }
     }
+
+    // #endregion
+
+    // #region Player
 
     loadPlayerChunks(player){
         // get bottom right of chunk 2 by 2 to load
@@ -134,6 +139,24 @@ class World {
         }
     }
 
+    getPlayerChunks(player){
+        return [
+            { x: player.chunk.x, y: player.chunk.y},
+            { x: player.chunk.x, y: player.chunk.y - 1},
+            { x: player.chunk.x, y: player.chunk.y + 1},
+            { x: player.chunk.x - 1, y: player.chunk.y},
+            { x: player.chunk.x - 1, y: player.chunk.y - 1},
+            { x: player.chunk.x - 1, y: player.chunk.y + 1},
+            { x: player.chunk.x + 1, y: player.chunk.y},
+            { x: player.chunk.x + 1, y: player.chunk.y - 1},
+            { x: player.chunk.x + 1, y: player.chunk.y + 1},
+        ];
+    }
+
+    // #endregion
+
+    // #region Chunks
+
     getChunk(x, y, canloadnew){
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
@@ -153,6 +176,23 @@ class World {
             delete this.loadedchunks[[x,y].toString()];
         }
     }
+    
+    tickChunkUnloader(players){
+        const activeChunks = [];
+        players.forEach(p => {
+            activeChunks.push(...this.getPlayerChunks(p));
+        });
+
+        Object.values(this.loadedchunks).forEach(c => {
+            if(!activeChunks.find(ac => ac.x == c.chunkx && ac.y == c.chunky)){
+                this.unloadChunk(c.x, c.y);
+            }
+        });
+    }
+
+    // #endregion
+
+    // #region Cells
 
     getCell(x, y, canloadnew){
         const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
@@ -167,6 +207,8 @@ class World {
             return false;
         }
     }
+
+    // #endregion
 }
 
 module.exports = World;
