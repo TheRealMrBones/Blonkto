@@ -2,7 +2,7 @@ const Constants = require('../shared/constants.js');
 const Player = require('./objects/player.js');
 const World = require('./world/world.js');
 const shortid = require('shortid');
-const { moveTouchingPlayers } = require('./collisions.js');
+const { attackHitCheck } = require('./collisions.js');
 const { filterText } = require('./filter.js');
 const { ExcecuteCommand } = require('./commands/commands.js');
 
@@ -64,6 +64,8 @@ class Game {
                 const dir = Math.atan2(info.xoffset, info.yoffset);
                 this.players[socket.id].lastclickdir = dir;
                 this.players[socket.id].lastclick = Date.now();
+
+                attackHitCheck(this.players[socket.id], Object.values(this.players), dir);
             }
         }
     }
