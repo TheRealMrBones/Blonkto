@@ -1,5 +1,8 @@
 const Entity = require('./entity.js');
 const Constants = require('../../shared/constants.js');
+const StoneBlockItem = require('../items/StoneBlockItem.js');
+const PickaxeItem = require('../items/pickaxeItem.js');
+const SwordItem = require('../items/swordItem.js');
 
 class Player extends Entity {
     constructor(id, socket, username, x, y, dir){
@@ -21,6 +24,13 @@ class Player extends Entity {
             g: .7 + Math.random() * .3,
             b: .7 + Math.random() * .3,
         };
+
+        this.inventory = Array(36).fill(false);
+        this.inventory[1] = new StoneBlockItem();
+        this.inventory[2] = new PickaxeItem();
+        this.inventory[3] = new SwordItem();
+        this.hotbarslot = 0;
+
         this.resetFixes();
     }
 
