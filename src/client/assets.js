@@ -24,13 +24,24 @@ export const getAsset = assetName => assets[assetName];
 // #region colorize
 
 const coloredAssets = {};
+const coloredAssetVariants = {};
 
 export function getColoredAsset(object){
     if(!coloredAssets[object.id]){
         coloredAssets[object.id] = colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b);
-        return coloredAssets[object.id];
     }
     return coloredAssets[object.id];
+}
+
+export function getColoredAssetVariant(object, varient, varientrgb){
+    const coloredAsset = getColoredAsset(object);
+    if(!coloredAssetVariants[object.id]){
+        coloredAssetVariants[object.id] = {};
+    }
+    if(!coloredAssetVariants[object.id][varient]){
+        coloredAssetVariants[object.id][varient] = colorize(coloredAssets[object.id], varientrgb.r, varientrgb.g, varientrgb.b);
+    }
+    return coloredAssetVariants[object.id][varient];
 }
 
 function colorize(image, r, g, b){

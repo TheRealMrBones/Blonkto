@@ -6,6 +6,7 @@ class Entity extends Object {
         this.scale = 1;
         this.health = 3;
         this.hit = false;
+        this.killedby = "placeholder";
     }
 
     takeHit(damage){

@@ -16,7 +16,6 @@ class Player extends Entity {
         this.playerdelay = 0;
         this.scale = 1;
         this.health = 3;
-        this.killedby = "placeholder";
         this.color = {
             r: .7 + Math.random() * .3,
             g: .7 + Math.random() * .3,

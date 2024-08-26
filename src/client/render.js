@@ -1,4 +1,4 @@
-import { getAsset, getColoredAsset } from './assets.js';
+import { getAsset, getColoredAsset, getColoredAssetVariant } from './assets.js';
 import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 import { getCell } from './world.js';
@@ -126,7 +126,12 @@ function renderPlayer(me, player){
     context.translate(canvasX, canvasY);
     context.rotate(dir);
 
-    const model = getColoredAsset(player);
+    let model;
+    if(player.hit){
+        model = getColoredAssetVariant(player, "hit", {r: 1, g: .5, b: .5});
+    }else{
+        model = getColoredAsset(player);
+    }
 
     context.drawImage(
         model,
