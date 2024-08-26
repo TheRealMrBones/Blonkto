@@ -1,3 +1,4 @@
+const Constants = require('../../shared/constants.js');
 const Item = require('./item.js');
 
 class StoneBlockItem extends Item {
