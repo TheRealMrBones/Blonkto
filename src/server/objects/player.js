@@ -1,7 +1,7 @@
-const Object = require('./object.js');
+const Entity = require('./entity.js');
 const Constants = require('../../shared/constants.js');
 
-class Player extends Object {
+class Player extends Entity {
     constructor(id, socket, username, x, y, dir){
         super(id, x, y, dir);
         this.op = false;
@@ -15,6 +15,8 @@ class Player extends Object {
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.scale = 1;
+        this.health = 3;
+        this.killedby = "placeholder";
         this.color = {
             r: .7 + Math.random() * .3,
             g: .7 + Math.random() * .3,
@@ -76,7 +78,6 @@ class Player extends Object {
             dynamic: {
                 ...(base.dynamic),
                 lastclick: this.lastclick,
-                scale: this.scale,
             },
         };
     }

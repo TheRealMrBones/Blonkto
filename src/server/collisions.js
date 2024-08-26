@@ -11,7 +11,10 @@ exports.attackHitCheck = (player, players, attackdir) => {
         const dist = getDistance(attackpos, player2);
         const realdist = dist - (Constants.PLAYER_SCALE + Constants.ATTACK_HITBOX_WIDTH) / 2;
         if(player2.id != player.id && realdist < 0){
-            console.log("HIT");
+            if(player2.takeHit(1)){
+                player2.dead = true;
+                player2.killedby = player.username;
+            }
         }
     }
 }

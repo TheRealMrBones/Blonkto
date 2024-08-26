@@ -58,6 +58,11 @@ class Game {
         delete this.players[socket.id];
     }
 
+    killPlayer(socket, killedby){
+        this.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
+        delete this.players[socket.id];
+    }
+
     click(socket, info){
         if(this.players[socket.id] !== undefined){
             if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
@@ -85,7 +90,6 @@ class Game {
             if(this.players[socket.id]){
                 this.players[socket.id].setDirection(dir);
                 this.players[socket.id].move(t, x, y);
-                //moveTouchingPlayers(this.players[socket.id], Object.values(this.players), this.world);
             }
         }
     }
@@ -98,7 +102,7 @@ class Game {
         Object.values(this.players).forEach(p => {
             if(p.dead){
                 p.socket.emit(Constants.MSG_TYPES.DEAD);
-                this.removePlayer(p.socket);
+                this.killPlayer(p.socket, p.killedby);
             }
         })
 
