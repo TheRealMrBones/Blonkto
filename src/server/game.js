@@ -54,6 +54,9 @@ class Game {
     }
 
     removePlayer(socket){
+        if(!this.players[socket.id]){
+            return; // temp fix until i redo player saving / death mechanic
+        }
         this.sendMessage(`${this.players[socket.id].username} has disconnected`);
         delete this.players[socket.id];
     }
