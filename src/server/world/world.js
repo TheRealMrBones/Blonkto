@@ -93,14 +93,16 @@ class World {
         const updatedcells = [];
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc.x, sc.y, false);
-            chunk.cellUpdates.forEach(cellupdate => {
-                console.log(cellupdate);
-                updatedcells.push({
-                    data: this.getCell(cellupdate.x, cellupdate.y, false).serializeForLoad(),
-                    x: cellupdate.x,
-                    y: cellupdate.y,
-                });
-            })
+            if(chunk){
+                chunk.cellUpdates.forEach(cellupdate => {
+                    console.log(cellupdate);
+                    updatedcells.push({
+                        data: this.getCell(cellupdate.x, cellupdate.y, false).serializeForLoad(),
+                        x: cellupdate.x,
+                        y: cellupdate.y,
+                    });
+                })
+            }
         });
 
         returnobj.updatedcells = updatedcells;
