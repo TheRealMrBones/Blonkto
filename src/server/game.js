@@ -69,11 +69,25 @@ class Game {
     click(socket, info){
         if(this.players[socket.id] !== undefined){
             if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
-                const dir = Math.atan2(info.xoffset, info.yoffset);
-                this.players[socket.id].lastclickdir = dir;
                 this.players[socket.id].lastclick = Date.now();
 
-                attackHitCheck(this.players[socket.id], Object.values(this.players), dir);
+                const dir = Math.atan2(info.xoffset, info.yoffset);
+                const cellpos = { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) };
+
+                const hotbarItem = this.players[socket.id].inventory[this.players[socket.id].hotbarslot];
+
+                if(!hotbarItem){
+                    // fist attack
+                    attackHitCheck(this.players[socket.id], Object.values(this.players), dir, 1);
+                }else if(hotbarItem.attack){
+                    attackHitCheck(this.players[socket.id], Object.values(this.players), dir, hotbarItem.attack);
+                }else if(hotbarItem.break){
+                    this.world.breakcell(cellpos.x, cellpos.y);
+                }else if(hotbarItem.place){
+                    this.world.placecell(cellpos.x, cellpos.y, hotbarItem.getPlaced());
+                }else{
+                    // not usable i guess idk
+                }
             }
         }
     }
@@ -89,10 +103,11 @@ class Game {
 
     handleInput(socket, inputs){
         if(this.players[socket.id] !== undefined){
-            const { t, dir, x, y } = inputs;
+            const { t, dir, x, y, hotbarslot } = inputs;
             if(this.players[socket.id]){
                 this.players[socket.id].setDirection(dir);
                 this.players[socket.id].move(t, x, y);
+                this.players[socket.id].hotbarslot = hotbarslot;
             }
         }
     }

@@ -15,6 +15,8 @@ let starts = null;
 let startd = null;
 let interval = null;
 
+let hotbarslot = 0;
+
 function onMouseInput(e){
     handleDirection(e.clientX, e.clientY);
 }
@@ -60,6 +62,44 @@ function handlekeyDown(e){
             if(!startd){
                 startd = Date.now();
             }
+            break;
+        }
+
+        // hotbar
+        case '1': {
+            hotbarslot = 0;
+            break;
+        }
+        case '2': {
+            hotbarslot = 1;
+            break;
+        }
+        case '3': {
+            hotbarslot = 2;
+            break;
+        }
+        case '4': {
+            hotbarslot = 3;
+            break;
+        }
+        case '5': {
+            hotbarslot = 4;
+            break;
+        }
+        case '6': {
+            hotbarslot = 5;
+            break;
+        }
+        case '7': {
+            hotbarslot = 6;
+            break;
+        }
+        case '8': {
+            hotbarslot = 7;
+            break;
+        }
+        case '9': {
+            hotbarslot = 8;
             break;
         }
     }
@@ -131,6 +171,7 @@ function handleInput(){
         dir: dir,
         x: x,
         y: y,
+        hotbarslot: hotbarslot,
     });
 }
 
@@ -251,6 +292,7 @@ export function getSelf(){
         dir: dir,
         x: x,
         y: y,
+        hotbarslot: hotbarslot,
     }
 }
 

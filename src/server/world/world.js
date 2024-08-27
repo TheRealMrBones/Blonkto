@@ -208,6 +208,30 @@ class World {
         }
     }
 
+    breakcell(x, y){
+        const cell = this.getCell(x, y, false);
+        if(cell){
+            if(cell.block){
+                cell.block = false;
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    placecell(x, y, block){
+        const cell = this.getCell(x, y, false);
+        if(cell){
+            if(!cell.block){
+                cell.block = block;
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
     // #endregion
 }
 

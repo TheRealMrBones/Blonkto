@@ -1,5 +1,6 @@
 const Constants = require('../../shared/constants.js');
 const Item = require('./item.js');
+const StoneBlock = require('../world/blocks/stoneBlock.js');
 
 class StoneBlockItem extends Item {
     constructor(id){
@@ -10,7 +11,7 @@ class StoneBlockItem extends Item {
     }
 
     getPlaced(){
-
+        return new StoneBlock();
     }
 }
 
