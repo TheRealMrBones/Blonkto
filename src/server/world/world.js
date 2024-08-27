@@ -92,7 +92,7 @@ class World {
         // send chunk updates for same chunks
         const updatedcells = [];
         sameChunks.forEach(sc => {
-            const chunk = this.getChunk(sc.x, sc.y, false);
+            const chunk = this.getChunk(sc.x, sc.y, true);
             chunk.cellUpdates.forEach(cellupdate => {
                 console.log(cellupdate);
                 updatedcells.push({
