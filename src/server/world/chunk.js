@@ -19,6 +19,8 @@ class Chunk {
                 }
             }
         }
+
+        this.cellUpdates = [];
     }
 
     serializeForLoad(){

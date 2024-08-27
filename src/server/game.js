@@ -125,10 +125,14 @@ class Game {
         })
 
         if(this.shouldSendUpdate){
+            // send fat update packets
             Object.values(this.players).forEach(player => {
                 player.socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
             });
             this.shouldSendUpdate = false;
+
+            // reset cell updates in loaded chunks
+            this.world.resetCellUpdates();
         }else{
             this.shouldSendUpdate = true;
         }

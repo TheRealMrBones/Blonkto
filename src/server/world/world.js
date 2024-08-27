@@ -52,44 +52,62 @@ class World {
         const x = Math.floor(player.x / Constants.CHUNK_SIZE);
         const y = Math.floor(player.y / Constants.CHUNK_SIZE);
         const newChunk = { x: x, y: y };
+
+        const returnobj = { chunk: newChunk };
+
+        // get positions of new and old chunks
+        const newChunks = [
+            { x: x, y: y},
+            { x: x, y: y - 1},
+            { x: x, y: y + 1},
+            { x: x - 1, y: y},
+            { x: x - 1, y: y - 1},
+            { x: x - 1, y: y + 1},
+            { x: x + 1, y: y},
+            { x: x + 1, y: y - 1},
+            { x: x + 1, y: y + 1},
+        ];
+        const oldChunks = [
+            { x: player.chunk.x, y: player.chunk.y},
+            { x: player.chunk.x, y: player.chunk.y - 1},
+            { x: player.chunk.x, y: player.chunk.y + 1},
+            { x: player.chunk.x - 1, y: player.chunk.y},
+            { x: player.chunk.x - 1, y: player.chunk.y - 1},
+            { x: player.chunk.x - 1, y: player.chunk.y + 1},
+            { x: player.chunk.x + 1, y: player.chunk.y},
+            { x: player.chunk.x + 1, y: player.chunk.y - 1},
+            { x: player.chunk.x + 1, y: player.chunk.y + 1},
+        ];
+
+        // get chunks that are in both
+        const sameChunks = [];
+        newChunks.forEach(nc => {
+            oldChunks.forEach(oc => {
+                if(nc.x == oc.x && nc.y == oc.y){
+                    sameChunks.push(nc);
+                }
+            });
+        });
+
+        // send chunk updates for same chunks
+        const updatedcells = [];
+        sameChunks.forEach(sc => {
+            const chunk = this.getChunk(sc.x, sc.y, false);
+            chunk.cellUpdates.forEach(cellupdate => {
+                console.log(cellupdate);
+                updatedcells.push({
+                    data: this.getCell(cellupdate.x, cellupdate.y, false).serializeForLoad(),
+                    x: cellupdate.x,
+                    y: cellupdate.y,
+                });
+            })
+        });
+
+        returnobj.updatedcells = updatedcells;
+
         if(x == player.chunk.x && y == player.chunk.y){
             // no need to load and unload chunks if already loaded
-            return { chunk: newChunk };
         }else{
-            // get positions of new and old chunks
-            const newChunks = [
-                { x: x, y: y},
-                { x: x, y: y - 1},
-                { x: x, y: y + 1},
-                { x: x - 1, y: y},
-                { x: x - 1, y: y - 1},
-                { x: x - 1, y: y + 1},
-                { x: x + 1, y: y},
-                { x: x + 1, y: y - 1},
-                { x: x + 1, y: y + 1},
-            ];
-            const oldChunks = [
-                { x: player.chunk.x, y: player.chunk.y},
-                { x: player.chunk.x, y: player.chunk.y - 1},
-                { x: player.chunk.x, y: player.chunk.y + 1},
-                { x: player.chunk.x - 1, y: player.chunk.y},
-                { x: player.chunk.x - 1, y: player.chunk.y - 1},
-                { x: player.chunk.x - 1, y: player.chunk.y + 1},
-                { x: player.chunk.x + 1, y: player.chunk.y},
-                { x: player.chunk.x + 1, y: player.chunk.y - 1},
-                { x: player.chunk.x + 1, y: player.chunk.y + 1},
-            ];
-
-            // get chunks that are in both
-            const sameChunks = [];
-            newChunks.forEach(nc => {
-                oldChunks.forEach(oc => {
-                    if(nc.x == oc.x && nc.y == oc.y){
-                        sameChunks.push(nc);
-                    }
-                });
-            });
-
             // compare new and old chunks to same chunks to find which ones to load and unload
             const loadChunks = [];
             const unloadChunks = [];
@@ -130,13 +148,12 @@ class World {
                 this.unloadChunk(c.x, c.y);
             });
 
-            // send the data
-            return {
-                chunk: newChunk,
-                loadChunks: loadChunksSerialized,
-                unloadChunks: unloadChunks,
-            };
+            // append data to return obj
+            returnobj.loadChunks = loadChunksSerialized;
+            returnobj.unloadChunks = unloadChunks;
         }
+
+        return returnobj;
     }
 
     getPlayerChunks(player){
@@ -190,6 +207,12 @@ class World {
         });
     }
 
+    resetCellUpdates(){
+        Object.values(this.loadedchunks).forEach(chunk => {
+            chunk.cellUpdates = [];
+        });
+    }
+
     // #endregion
 
     // #region Cells
@@ -208,27 +231,52 @@ class World {
         }
     }
 
-    breakcell(x, y){
-        const cell = this.getCell(x, y, false);
+    getCellAndChunk(x, y, canloadnew){
+        const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
+        const chunky = Math.floor(y / Constants.CHUNK_SIZE);
+
+        const cell = this.getCell(x, y, canloadnew);
         if(cell){
-            if(cell.block){
-                cell.block = false;
-                return true;
-            }else{
-                return false;
+            return {
+                cell: cell,
+                chunk: this.getChunk(chunkx, chunky, false),
             }
+        }else{
+            return false;
+        }
+    }
+
+    breakcell(x, y){
+        const data = this.getCellAndChunk(x, y, false);
+        if(!data){
+            return false;
+        }
+        
+        const { cell, chunk } = this.getCellAndChunk(x, y, false);
+        if(cell.block){
+            cell.block = false;
+
+            chunk.cellUpdates.push({
+                x, y
+            });
+            return true;
         }
     }
 
     placecell(x, y, block){
-        const cell = this.getCell(x, y, false);
-        if(cell){
-            if(!cell.block){
-                cell.block = block;
-                return true;
-            }else{
-                return false;
-            }
+        const data = this.getCellAndChunk(x, y, false);
+        if(!data){
+            return false;
+        }
+
+        const { cell, chunk } = this.getCellAndChunk(x, y, false);
+        if(!cell.block){
+            cell.block = block;
+
+            chunk.cellUpdates.push({
+                x, y
+            });
+            return true;
         }
     }
 

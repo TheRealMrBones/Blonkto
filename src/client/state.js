@@ -1,6 +1,6 @@
 import { setPos } from './input.js';
 import { Player } from './player.js';
-import { loadChunks, unloadChunks } from './world.js';
+import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
 
 const Constants = require('../shared/constants.js');
@@ -21,10 +21,13 @@ export function processGameUpdate(update){
     // set lastUpdateTime
     lastUpdateTime = Date.now();
 
-    // update local world if new data
+    // update local world
     if(update.worldLoad.unloadChunks){
         unloadChunks(update.worldLoad.unloadChunks);
         loadChunks(update.worldLoad.loadChunks);
+    }
+    if(update.worldLoad.updatedcells){
+        updateCells(update.worldLoad.updatedcells);
     }
 
     // get fixes
