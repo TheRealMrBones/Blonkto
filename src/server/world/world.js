@@ -95,7 +95,6 @@ class World {
             const chunk = this.getChunk(sc.x, sc.y, false);
             if(chunk){
                 chunk.cellUpdates.forEach(cellupdate => {
-                    console.log(cellupdate);
                     updatedcells.push({
                         data: this.getCell(cellupdate.x, cellupdate.y, false).serializeForLoad(),
                         x: cellupdate.x,
