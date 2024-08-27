@@ -143,11 +143,6 @@ class World {
                 }
             });
 
-            // unload chunks
-            unloadChunks.forEach(c => {
-                this.unloadChunk(c.x, c.y);
-            });
-
             // append data to return obj
             returnobj.loadChunks = loadChunksSerialized;
             returnobj.unloadChunks = unloadChunks;
