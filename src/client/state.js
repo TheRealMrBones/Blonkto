@@ -160,12 +160,7 @@ function interpolateDirection(d1, d2, ratio){
 }
 
 let lastUpdateTime = Date.now();
-let connectionLost = false;
 function checkIfConnectionLost(){
     const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY;
-    if(isconnectionlost && !connectionLost){
-        toggleConnectionLost(true);
-    }else if(!isconnectionlost && connectionLost){
-        toggleConnectionLost(false);
-    }
+    toggleConnectionLost(isconnectionlost);
 };
