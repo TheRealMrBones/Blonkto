@@ -1,6 +1,6 @@
 const Entity = require('./entity.js');
 const Constants = require('../../shared/constants.js');
-const StoneBlockItem = require('../items/StoneBlockItem.js');
+const StoneBlockItem = require('../items/stoneBlockItem.js');
 const PickaxeItem = require('../items/pickaxeItem.js');
 const SwordItem = require('../items/swordItem.js');
 
