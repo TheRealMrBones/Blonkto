@@ -83,10 +83,10 @@ class Player extends Entity {
                 playerdelay: this.playerdelay,
                 color: this.color,
                 lastattackdir: this.lastattackdir,
+                lastattack: this.lastattack,
             },
             dynamic: {
                 ...(base.dynamic),
-                lastattack: this.lastattack,
             },
         };
     }
