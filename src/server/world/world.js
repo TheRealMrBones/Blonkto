@@ -198,7 +198,7 @@ class World {
 
         Object.values(this.loadedchunks).forEach(c => {
             if(!activeChunks.find(ac => ac.x == c.chunkx && ac.y == c.chunky)){
-                this.unloadChunk(c.x, c.y);
+                this.unloadChunk(c.chunkx, c.chunky);
             }
         });
     }
