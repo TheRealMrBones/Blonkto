@@ -13,8 +13,8 @@ class Player extends Entity {
         this.username = username;
         this.dead = false;
         this.kills = 0;
-        this.lastclick = 0;
-        this.lastclickdir = 0;
+        this.lastattack = 0;
+        this.lastattackdir = 0;
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.scale = 1;
@@ -82,11 +82,11 @@ class Player extends Entity {
                 lastupdated: this.lastupdated,
                 playerdelay: this.playerdelay,
                 color: this.color,
-                lastclickdir: this.lastclickdir,
+                lastattackdir: this.lastattackdir,
             },
             dynamic: {
                 ...(base.dynamic),
-                lastclick: this.lastclick,
+                lastattack: this.lastattack,
             },
         };
     }

@@ -68,9 +68,7 @@ class Game {
 
     click(socket, info){
         if(this.players[socket.id] !== undefined){
-            if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
-                this.players[socket.id].lastclick = Date.now();
-
+            if(Date.now() - this.players[socket.id].lastattack > Constants.ATTACK_DELAY * 1000){
                 const dir = Math.atan2(info.xoffset, info.yoffset);
                 const cellpos = { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) };
 
@@ -79,8 +77,12 @@ class Game {
                 if(!hotbarItem){
                     // fist attack
                     attackHitCheck(this.players[socket.id], Object.values(this.players), dir, 1);
+                    this.players[socket.id].lastattack = Date.now();
+                    this.players[socket.id].lastattackdir = dir;
                 }else if(hotbarItem.attack){
                     attackHitCheck(this.players[socket.id], Object.values(this.players), dir, hotbarItem.attack);
+                    this.players[socket.id].lastattack = Date.now();
+                    this.players[socket.id].lastattackdir = dir;
                 }else if(hotbarItem.break){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.place){
@@ -94,10 +96,7 @@ class Game {
 
     interact(socket, info){
         if(this.players[socket.id] !== undefined){
-            if(Date.now() - this.players[socket.id].lastclick > Constants.PLAYER_CLICK_COOLDOWN * 1000){
-                
-                this.players[socket.id].lastclick = Date.now();
-            }
+            
         }
     }
 

@@ -3,13 +3,14 @@ module.exports = Object.freeze({
     FILTER_USERNAME: false,
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
-    PLAYER_CLICK_COOLDOWN: .1,
     ALLOW_CHANGE_NAME: true,
 
     // attack hitbox
+    ATTACK_DELAY: .7,
     ATTACK_HITBOX_WIDTH: 1,
-    ATTACK_HITBOX_HEIGHT: 1,
     ATTACK_HITBOX_OFFSET: .5,
+    SWING_RENDER_DELAY: .2,
+    HIT_RENDER_DELAY: .5,
 
     // update related
     CLIENT_UPDATE_RATE: 50,
