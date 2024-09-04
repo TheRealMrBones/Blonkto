@@ -1,4 +1,4 @@
-import { setPos } from './input.js';
+import { setPos, setHit } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
@@ -34,6 +34,9 @@ export function processGameUpdate(update){
     if(update.fixes.setpos){
         setPos(update.fixes.setpos);
     }
+
+    // set hit
+    setHit(update.hit);
 
     // set players default to not updated aka left (used later)
     Object.values(players).forEach(p => {

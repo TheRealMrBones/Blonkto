@@ -154,6 +154,7 @@ class Game {
 
         return {
             t: Date.now(),
+            hit: player.hit,
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             worldLoad: worldLoad,

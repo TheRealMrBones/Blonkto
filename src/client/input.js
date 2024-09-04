@@ -17,6 +17,8 @@ let interval = null;
 
 let hotbarslot = 0;
 
+let hit = false;
+
 function onMouseInput(e){
     handleDirection(e.clientX, e.clientY);
 }
@@ -293,6 +295,7 @@ export function getSelf(){
         x: x,
         y: y,
         hotbarslot: hotbarslot,
+        hit: hit,
     }
 }
 
@@ -320,3 +323,11 @@ export function setPos(newpos){
     x = newpos.x;
     y = newpos.y;
 }
+
+// #region misc
+
+export function setHit(newhit){
+    hit = newhit;
+}
+
+// #endregion
