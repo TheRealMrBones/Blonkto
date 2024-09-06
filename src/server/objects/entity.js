@@ -5,9 +5,16 @@ class Entity extends Object {
     constructor(id, x, y, dir){
         super(id, x, y, dir);
         this.scale = 1;
-        this.health = 3;
+        this.health = 10;
+
         this.hit = false;
         this.hitinterval = null;
+        this.swinging = false;
+        this.swinginginterval = null;
+
+        this.lastattack = 0;
+        this.lastattackdir = 0;
+        
         this.killedby = "placeholder";
     }
 
@@ -25,6 +32,15 @@ class Entity extends Object {
         clearInterval(this.hitinterval);
     }
 
+    startSwing(){
+        this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * Constants.SWING_RENDER_DELAY);
+    }
+
+    endSwing(){
+        this.swinging = false;
+        clearInterval(this.swinginginterval);
+    }
+
     serializeForUpdate(){
         const base = super.serializeForUpdate();
 
@@ -33,6 +49,8 @@ class Entity extends Object {
                 ...(base.static),
                 health: this.health,
                 hit: this.hit,
+                swinging: this.swinging,
+                lastattackdir: this.lastattackdir,
             },
             dynamic: {
                 ...(base.dynamic),

@@ -76,13 +76,11 @@ class Game {
 
                 if(!hotbarItem){
                     // fist attack
+                    this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], Object.values(this.players), dir, 1);
-                    this.players[socket.id].lastattack = Date.now();
-                    this.players[socket.id].lastattackdir = dir;
                 }else if(hotbarItem.attack){
+                    this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], Object.values(this.players), dir, hotbarItem.attack);
-                    this.players[socket.id].lastattack = Date.now();
-                    this.players[socket.id].lastattackdir = dir;
                 }else if(hotbarItem.break){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.place){

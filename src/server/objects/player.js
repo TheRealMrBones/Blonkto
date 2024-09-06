@@ -13,8 +13,6 @@ class Player extends Entity {
         this.username = username;
         this.dead = false;
         this.kills = 0;
-        this.lastattack = 0;
-        this.lastattackdir = 0;
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.scale = 1;
@@ -72,6 +70,12 @@ class Player extends Entity {
         }
     }
 
+    attack(dir){
+        this.lastattack = Date.now();
+        this.lastattackdir = dir;
+        this.startSwing();
+    }
+
     serializeForUpdate(){
         const base = super.serializeForUpdate();
 
@@ -82,8 +86,6 @@ class Player extends Entity {
                 lastupdated: this.lastupdated,
                 playerdelay: this.playerdelay,
                 color: this.color,
-                lastattackdir: this.lastattackdir,
-                lastattack: this.lastattack,
             },
             dynamic: {
                 ...(base.dynamic),
