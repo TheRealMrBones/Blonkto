@@ -4,7 +4,7 @@ import { getSelf } from './input.js';
 import { getCell } from './world.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, HIT_RENDER_DELAY, SWING_RENDER_DELAY } = Constants;
+const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
