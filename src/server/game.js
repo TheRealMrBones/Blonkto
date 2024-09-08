@@ -153,6 +153,8 @@ class Game {
         return {
             t: Date.now(),
             hit: player.hit,
+            swinging: player.swinging,
+            lastattackdir: player.lastattackdir,
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             worldLoad: worldLoad,

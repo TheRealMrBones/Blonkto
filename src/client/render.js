@@ -4,7 +4,7 @@ import { getSelf } from './input.js';
 import { getCell } from './world.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE } = Constants;
+const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
 
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
@@ -119,13 +119,6 @@ function renderCell(x, y, asset){
 // #region Players
 
 function renderPlayer(me, player){
-    const { x, y, dir } = player;
-    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
-    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
-    context.save();
-    context.translate(canvasX, canvasY);
-    context.rotate(dir);
-
     // check if player is being hit
     let model;
     if(player.hit){
@@ -134,6 +127,20 @@ function renderPlayer(me, player){
         model = getColoredAsset(player);
     }
 
+    // check if player is swinging
+    if(player.swinging){
+        renderSwing(me, player);
+    }
+
+    // prepare context
+    const { x, y, dir } = player;
+    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
+    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
+    context.save();
+    context.translate(canvasX, canvasY);
+    context.rotate(dir);
+
+    // draw player
     context.drawImage(
         model,
         -cellSize * PLAYER_SCALE / 2,
@@ -144,12 +151,31 @@ function renderPlayer(me, player){
     context.restore();
 }
 
+function renderSwing(me, player){
+    // prepare context
+    const { x, y, lastattackdir } = player;
+    const canvasX = canvas.width / 2 + fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.x);
+    const canvasY = canvas.height / 2 + fixCoord(y + Math.cos(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.y);
+    context.save();
+    context.translate(canvasX, canvasY);
+
+    // draw swing
+    context.beginPath();
+    context.arc(0, 0, cellSize * PLAYER_SCALE / 2, 0, 2 * Math.PI);
+    context.fillStyle = "white";
+    context.fill();
+    context.restore();
+}
+
 function renderPlayerUsername(me, player){
+    // prepare context
     const { x, y, username } = player;
     const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
     const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
     context.save();
     context.translate(canvasX, canvasY);
+
+    // draw username
     context.font = Math.floor(Constants.USERNAME_SCALE * cellSize).toString() + "px " + Constants.TEXT_FONT;
     context.textAlign = "center";
     context.fillText(username, 0, -Constants.USERNAME_HANG * cellSize);

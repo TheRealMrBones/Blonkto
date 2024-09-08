@@ -33,6 +33,7 @@ class Entity extends Object {
     }
 
     startSwing(){
+        this.swinging = true;
         this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * Constants.SWING_RENDER_DELAY);
     }
 

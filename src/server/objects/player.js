@@ -16,7 +16,7 @@ class Player extends Entity {
         this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.scale = 1;
-        this.health = 3;
+        this.health = 10;
         this.color = {
             r: .7 + Math.random() * .3,
             g: .7 + Math.random() * .3,

@@ -18,6 +18,8 @@ let interval = null;
 let hotbarslot = 0;
 
 let hit = false;
+let swinging = false;
+let lastattackdir = 0;
 
 function onMouseInput(e){
     handleDirection(e.clientX, e.clientY);
@@ -296,6 +298,8 @@ export function getSelf(){
         y: y,
         hotbarslot: hotbarslot,
         hit: hit,
+        swinging: swinging,
+        lastattackdir: lastattackdir,
     }
 }
 
@@ -326,8 +330,10 @@ export function setPos(newpos){
 
 // #region misc
 
-export function setHit(newhit){
+export function setHitandSwing(newhit, newswinging, newlastattackdir){
     hit = newhit;
+    swinging = newswinging;
+    lastattackdir = newlastattackdir;
 }
 
 // #endregion
