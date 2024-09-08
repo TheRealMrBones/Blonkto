@@ -5,6 +5,7 @@ const socketio = require('socket.io');
 
 const Constants = require('../shared/constants.js');
 const Game = require('./game.js');
+const FileManager = require('./fileManager.js');
 const webpackConfig = require('../../webpack.dev.js');
 
 const app = express();
@@ -35,7 +36,8 @@ io.on('connection', socket => {
 	socket.on(Constants.MSG_TYPES.SEND_MESSAGE, chat);
 });
 
-const game = new Game();
+const fileManager = new FileManager();
+const game = new Game(fileManager);
 
 function joinGame(username){
 	if(username.trim().length === 0){

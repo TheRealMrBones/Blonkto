@@ -7,7 +7,9 @@ const { filterText } = require('./filter.js');
 const { ExcecuteCommand } = require('./commands/commands.js');
 
 class Game {
-    constructor(){
+    constructor(fm){
+        this.fileManager = fm;
+
         this.players = {};
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
