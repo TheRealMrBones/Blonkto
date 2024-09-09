@@ -6,33 +6,35 @@ class FileManager {
     }
 
     writeFile(filename, content){
-        fs.writeFile(this.savelocation + filename + '.data', content, 'utf8', (error) => {
+        fs.writeFile(this.getFullFilePath(filename), content, 'utf8', (error) => {
             if (error) {
                 console.error('An error occurred while writing to the file:', error);
                 return;
             }
-            console.log('File has been written successfully.');
         });
     }
 
     fileExists(filename){
-        fs.readFile(this.savelocation + filename + '.data', 'utf8', (error, data) => {
-            if (error) {
-                return false;
-            }
+        try {
+            const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
             return true;
-        });
+        } catch (err) {
+            return false;
+        }
     }
 
     readFile(filename){
-        fs.readFile(this.savelocation + filename + '.data', 'utf8', (error, data) => {
-            if (error) {
-                console.error('An error occurred while reading the file:', error);
-                return false;
-            }
-            
-            return data
-        });
+        try {
+            const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
+            return data;
+        } catch (err) {
+            console.error('An error occurred while reading the file:', error);
+            return false;
+        }
+    }
+
+    getFullFilePath(filename){
+        return this.savelocation + filename + '.data'
     }
 }
 

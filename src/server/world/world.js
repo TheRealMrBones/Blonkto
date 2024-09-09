@@ -15,7 +15,7 @@ class World {
     generateSpawn(){
         for(let x = -Constants.SPAWN_SIZE / 2 - 1; x < Constants.SPAWN_SIZE / 2 + 1; x++){
             for(let y = -Constants.SPAWN_SIZE / 2 - 1; y < Constants.SPAWN_SIZE / 2 + 1; y++){
-                this.loadedchunks[[x,y].toString()] = new Chunk(x, y);
+                const chunk = this.getChunk(x, y, true);
                 this.unloadChunk(x, y);
             }
         }
@@ -177,7 +177,14 @@ class World {
         if(chunk){
             return chunk;
         }else if(x >= -Constants.WORLD_SIZE / 2 && x < Constants.WORLD_SIZE / 2 && y >= -Constants.WORLD_SIZE / 2 && y < Constants.WORLD_SIZE / 2 && canloadnew){
-            const newChunk = new Chunk(x, y);
+            let newChunk;
+
+            if(this.chunkFileExists(x, y)){
+                newChunk = new Chunk(x, y, this.readChunkFile(x, y));
+            }else{
+                newChunk = new Chunk(x, y);
+            }
+            
             this.loadedchunks[[x,y].toString()] = newChunk;
             return newChunk;
         }else{
@@ -193,8 +200,20 @@ class World {
         }
     }
 
+    chunkFileExists(x, y){
+        const fileLocation = "world/" + [x,y].toString();
+
+        return this.fileManager.fileExists(fileLocation);
+    }
+
+    readChunkFile(x, y){
+        const fileLocation = "world/" + [x,y].toString();
+
+        return this.fileManager.readFile(fileLocation);
+    }
+
     writeChunkFile(chunk){
-        const fileLocation = "world/" + [chunk.chunkx,chunk.chunky].toString() + ".data";
+        const fileLocation = "world/" + [chunk.chunkx,chunk.chunky].toString();
         let chunkdata = chunk.serializeForWrite();
 
         this.fileManager.writeFile(fileLocation, chunkdata);
