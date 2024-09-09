@@ -8,6 +8,8 @@ class World {
         // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
         this.generateSpawn();
+
+        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * Constants.WORLD_AUTOSAVE_RATE);
     }
 
     // #region Spawn
@@ -166,6 +168,16 @@ class World {
             { x: player.chunk.x + 1, y: player.chunk.y - 1},
             { x: player.chunk.x + 1, y: player.chunk.y + 1},
         ];
+    }
+
+    // #endregion
+
+    // #region World
+
+    saveWorld(){
+        Object.values(this.loadedchunks).forEach(c => {
+            this.writeChunkFile(c);
+        });
     }
 
     // #endregion
