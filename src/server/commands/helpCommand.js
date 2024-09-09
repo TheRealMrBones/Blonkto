@@ -19,6 +19,7 @@ class HelpCommand extends Command{
             this.sendResponse(player, `- op - gives a player operator permissions`);
             this.sendResponse(player, `- deop - take away a players operator permissions`);
             this.sendResponse(player, `- tp - teleport a player`);
+            this.sendResponse(player, `- saveworld - saves teh world`);
         }else{
             this.sendResponse(player, `- nick - change your name`);
         }

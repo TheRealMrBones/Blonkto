@@ -6,6 +6,7 @@ const PingCommand = require('./pingCommand.js');
 const NickCommand = require('./nickCommand.js');
 const HelpCommand = require('./helpCommand.js');
 const KillCommand = require('./killCommand.js');
+const SaveWorldCommand = require('./saveWorldCommand');
 
 exports.ExcecuteCommand = (game, player, command) => {
     if(command.length == 0){
@@ -24,6 +25,7 @@ exports.ExcecuteCommand = (game, player, command) => {
         case NickCommand.key: { NickCommand.execute(game, player, tokens); break; };
         case HelpCommand.key: { HelpCommand.execute(game, player, tokens); break; };
         case KillCommand.key: { KillCommand.execute(game, player, tokens); break; };
+        case SaveWorldCommand.key: { SaveWorldCommand.execute(game, player, tokens); break; };
         default: { Command.sendResponse(player, `command "${key}" not found`); break; };
     }
 }
