@@ -13,7 +13,7 @@ class Game {
         this.players = {};
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
-        this.world = new World();
+        this.world = new World(fm);
 
         setInterval(this.tickChunkUnloader.bind(this), 1000 / Constants.CHUNK_UNLOAD_RATE);
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);

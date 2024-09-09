@@ -2,7 +2,9 @@ const Constants = require('../../shared/constants.js');
 const Chunk = require('./chunk.js');
 
 class World {
-    constructor(){
+    constructor(fm){
+        this.fileManager = fm;
+
         // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
         this.generateSpawn();
@@ -186,8 +188,16 @@ class World {
     unloadChunk(x, y){
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
+            this.writeChunkFile(chunk);
             delete this.loadedchunks[[x,y].toString()];
         }
+    }
+
+    writeChunkFile(chunk){
+        const fileLocation = "world/" + [chunk.chunkx,chunk.chunky].toString() + ".data";
+        let chunkdata = chunk.serializeForWrite();
+
+        this.fileManager.writeFile(fileLocation, chunkdata);
     }
     
     tickChunkUnloader(players){

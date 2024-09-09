@@ -20,6 +20,29 @@ class Cell {
 
         return data;
     }
+
+    serializeForWrite(){
+        let data = "";
+        if(this.floor){
+            data += this.floor.serializeForWrite();
+        }else {
+            data += "0";
+        }
+        data += ",";
+        if(this.block){
+            data += this.block.serializeForWrite();
+        }else {
+            data += "0";
+        }
+        data += ",";
+        if(this.ceiling){
+            data += this.ceiling.serializeForWrite();
+        }else {
+            data += "0";
+        }
+
+        return data;
+    }
 }
 
 module.exports = Cell;

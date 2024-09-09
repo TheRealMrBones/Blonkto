@@ -2,6 +2,7 @@ const Constants = require('../../shared/constants.js');
 
 class Block {
     constructor(){
+        this.id = 0;
         this.asset = Constants.ASSETS.MISSING_TEXTURE;
         this.scale = 1;
         this.shape = Constants.SHAPES.SQUARE;
@@ -13,6 +14,10 @@ class Block {
             scale: this.scale,
             shape: this.shape,
         }
+    }
+
+    serializeForWrite(){
+        return this.id.toString();
     }
 }
 

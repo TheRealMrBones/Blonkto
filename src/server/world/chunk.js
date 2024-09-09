@@ -38,6 +38,17 @@ class Chunk {
             cells: serializedCells,
         };
     }
+
+    serializeForWrite(){
+        let data = "";
+        for(let x = 0; x < Constants.CHUNK_SIZE; x++){
+            for(let y = 0; y < Constants.CHUNK_SIZE; y++){
+                data += this.cells[x][y].serializeForWrite() + "|";
+            }
+        }
+
+        return data;
+    }
 }
 
 module.exports = Chunk;
