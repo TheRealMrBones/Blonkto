@@ -69,7 +69,7 @@ class Command{
                     }
                     case COMMAND_ARGUMENTS.INT: {
                         const val = parseInt(tokens[i]);
-                        if(!val){
+                        if(val === NaN){
                             error = `"${tokens[i]}" is not an integer`;
                             tokensParsed.splice(j, 1);
                             j--;
@@ -80,7 +80,7 @@ class Command{
                     }
                     case COMMAND_ARGUMENTS.FLOAT: {
                         const val = parseFloat(tokens[i]);
-                        if(!val){
+                        if(val === NaN){
                             error = `"${tokens[i]}" is not an float`;
                             tokensParsed.splice(j, 1);
                             j--;
