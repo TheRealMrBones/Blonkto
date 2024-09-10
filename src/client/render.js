@@ -6,6 +6,8 @@ import { getCell } from './world.js';
 const Constants = require('../shared/constants.js');
 const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
 
+// #region init
+
 const canvas = document.getElementById('gamecanvas');
 const context = canvas.getContext('2d');
 
@@ -19,6 +21,10 @@ window.addEventListener('resize', () => {
     cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 });
 
+// #endregion
+
+// #region getters and setters
+
 export function getCellSize(){
     return cellSize;
 }
@@ -28,6 +34,10 @@ let myColor;
 export function setColor(color){
     myColor = color;
 }
+
+// #endregion
+
+// #region main render
 
 // continuously runs to get max fps possible
 function render(){
@@ -65,6 +75,8 @@ function render(){
     // request next frame
     animationFrameRequestId = requestAnimationFrame(render);
 }
+
+// #endregion
 
 // #region World
 

@@ -6,6 +6,8 @@ import { getCurrentState } from './state.js';
 
 const Constants = require('../shared/constants.js');
 
+// #region init
+
 let dir = 0;
 let x = 0;
 let y = 0;
@@ -21,6 +23,10 @@ let hit = false;
 let swinging = false;
 let lastattackdir = 0;
 
+// #endregion
+
+// #region handle mouse movement
+
 function onMouseInput(e){
     handleDirection(e.clientX, e.clientY);
 }
@@ -33,6 +39,10 @@ function onTouchInput(e){
 function handleDirection(x, y){
     dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
 }
+
+// #endregion
+
+// #region handle keys
 
 function handlekeyDown(e){
     switch(e.key){
@@ -150,6 +160,10 @@ function handlekeyUp(e){
     }
 }
 
+// #endregion
+
+// #region handle mouse clicks
+
 function handleMouseDown(e){
     // get position of click compared to current player pos
     const clickpos = {
@@ -166,6 +180,10 @@ function handleMouseDown(e){
         interact(clickpos);
     }
 }
+
+// #endregion
+
+// #region main handling
 
 function handleInput(){
     updatePos();
@@ -218,6 +236,10 @@ function updatePos(){
     }, others);
     blockCollisions({ x: x, y: y });
 }
+
+// #endregion
+
+// #region start and stop capturing
 
 export function startCapturingInput(xp, yp){
     // set spawn position
@@ -289,6 +311,10 @@ export function resumeCapturingInputs(){
     window.addEventListener('mousedown', handleMouseDown);
 }
 
+// #endregion
+
+// #region getters
+
 export function getSelf(){
     updatePos();
 
@@ -302,6 +328,10 @@ export function getSelf(){
         lastattackdir: lastattackdir,
     }
 }
+
+// #endregion
+
+// #region setters
 
 export function push(pushx, pushy){
     x += pushx;
@@ -327,8 +357,6 @@ export function setPos(newpos){
     x = newpos.x;
     y = newpos.y;
 }
-
-// #region misc
 
 export function setHitandSwing(newhit, newswinging, newlastattackdir){
     hit = newhit;

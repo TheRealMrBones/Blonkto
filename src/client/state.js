@@ -6,6 +6,8 @@ import { toggleConnectionLost } from './ui.js';
 const Constants = require('../shared/constants.js');
 const { RENDER_DELAY } = Constants;
 
+// #region init
+
 const gameUpdates = [];
 const players = {};
 let gameStart = 0;
@@ -16,6 +18,10 @@ export function initState(){
     gameStart = 0;
     firstServerTimestamp = 0;
 }
+
+// #endregion
+
+// #region receive updates
 
 export function processGameUpdate(update){
     // set lastUpdateTime
@@ -74,28 +80,9 @@ export function processGameUpdate(update){
     });
 }
 
-export function currentServerTime(){
-    return Date.now() - serverDelay;
-}
+// #endregion
 
-// returns the index of the base update, the first game update before
-// current server time, or -1 if N/A.
-function getBaseUpdate(){
-    const serverTime = currentServerTime();
-    for(let i = gameUpdates.length - 1; i >= 0; i--){
-        if(gameUpdates[i].t <= serverTime){
-            return i;
-        }
-    }
-    return -1;
-}
-
-function purgeUpdates(){
-    const base = getBaseUpdate();
-    if(base > 0){
-        gameUpdates.splice(0, base);
-    }
-}
+// #region get state
 
 export function getCurrentState(){
     checkIfConnectionLost();
@@ -128,6 +115,10 @@ export function getCurrentState(){
         };
     }
 }
+
+// #endregion
+
+// #region interpolation
 
 export function interpolateObject(object1, object2, ratio){
     if(!object2){
@@ -162,8 +153,37 @@ function interpolateDirection(d1, d2, ratio){
     }
 }
 
+// #endregion
+
+// #region helpers
+
+export function currentServerTime(){
+    return Date.now() - serverDelay;
+}
+
+// returns the index of the base update, the first game update before
+// current server time, or -1 if N/A.
+function getBaseUpdate(){
+    const serverTime = currentServerTime();
+    for(let i = gameUpdates.length - 1; i >= 0; i--){
+        if(gameUpdates[i].t <= serverTime){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function purgeUpdates(){
+    const base = getBaseUpdate();
+    if(base > 0){
+        gameUpdates.splice(0, base);
+    }
+}
+
 let lastUpdateTime = Date.now();
 function checkIfConnectionLost(){
     const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY;
     toggleConnectionLost(isconnectionlost);
 };
+
+// #endregion

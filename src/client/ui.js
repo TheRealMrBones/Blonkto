@@ -95,6 +95,8 @@ function chatInputUnfocus(event){
 
 // #endregion
 
+// #region update ui
+
 export function updateCoords(x, y){
     coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
 }
@@ -106,3 +108,5 @@ export function toggleConnectionLost(toggle){
         connectionlostdiv.style.display = "none";
     }
 }
+
+// #endregion

@@ -9,6 +9,8 @@ import { receiveChatMessage } from './chat.js';
 const Constants = require('../shared/constants.js');
 const { MSG_TYPES } = Constants;
 
+// #region init
+
 const socketProtocol = (window.location.protocol.includes('https')) ? 'wss' : 'ws';
 const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
 const connectedPromise = new Promise(resolve => {
@@ -34,6 +36,10 @@ function onInstantiated(stuff){
     setupUi();
 }
 
+// #endregion
+
+// #region send message functions
+
 export const play = username => {
     socket.emit(MSG_TYPES.JOIN_GAME, username);
 };
@@ -53,3 +59,5 @@ export const interact = throttle(20, info => {
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);
 });
+
+// #endregion

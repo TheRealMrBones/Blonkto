@@ -7,10 +7,33 @@ export class Player {
         this.updates = [pu];
     }
 
+    // #region receive updates
+
     pushUpdate(update){
         this.exists = true;
         this.updates.push(update);
     }
+
+    // #endregion
+
+    // #region get state
+
+    interpolateSelf(){
+        const base = this.getBaseUpdate();
+        if(base < 0 || base === this.updates.length - 1){
+            const update =  this.updates[this.updates.length - 1];
+            return {...(update.static), ...(update.dynamic)}
+        }else{
+            const baseUpdate = this.updates[base];
+            const next = this.updates[base + 1];
+            const ratio = (this.currentTime() - baseUpdate.static.lastupdated) / (next.static.lastupdated - baseUpdate.static.lastupdated);
+            return interpolateObject(baseUpdate, next, ratio);
+        }
+    }
+
+    // #endregion
+
+    // #region helpers
 
     currentTime(){
         return currentServerTime() - this.delay;
@@ -33,16 +56,5 @@ export class Player {
         }
     }
 
-    interpolateSelf(){
-        const base = this.getBaseUpdate();
-        if(base < 0 || base === this.updates.length - 1){
-            const update =  this.updates[this.updates.length - 1];
-            return {...(update.static), ...(update.dynamic)}
-        }else{
-            const baseUpdate = this.updates[base];
-            const next = this.updates[base + 1];
-            const ratio = (this.currentTime() - baseUpdate.static.lastupdated) / (next.static.lastupdated - baseUpdate.static.lastupdated);
-            return interpolateObject(baseUpdate, next, ratio);
-        }
-    }
+    // #endregion
 }
