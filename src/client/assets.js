@@ -3,6 +3,8 @@ const { ASSETS } = Constants;
 
 const assets = {};
 
+// #region manage assets
+
 const downloadPromise = Promise.all(Object.values(ASSETS).map(downloadAsset));
 
 function downloadAsset(assetName){
@@ -20,6 +22,8 @@ function downloadAsset(assetName){
 export const downloadAssets = () => downloadPromise;
 
 export const getAsset = assetName => assets[assetName];
+
+// #endregion
 
 // #region colorize
 

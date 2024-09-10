@@ -3,6 +3,8 @@ const chunks = {};
 const Constants = require('../shared/constants.js');
 const { CHUNK_SIZE } = Constants;
 
+// #region chunks
+
 export function loadChunks(chunks){
     chunks.forEach(chunk => {
         loadChunk(chunk);
@@ -22,6 +24,10 @@ export function unloadChunks(chunks){
 function unloadChunk(chunk){
     delete chunks[[chunk.x,chunk.y].toString()];
 }
+
+// #endregion
+
+// #region cells
 
 export function updateCells(cellUpdates){
     cellUpdates.forEach(cellUpdate => {
@@ -55,6 +61,12 @@ export function getCell(x, y){
     }
 }
 
+// #endregion
+
+// #region helpers
+
 function getDefaultCell(){
     return {};
 }
+
+// #endregion

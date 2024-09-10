@@ -7,12 +7,18 @@ import { hideUi } from './ui.js';
 
 import './main.css';
 
+// #region init
+
 const startMenu = document.getElementById('startmenu');
 const changeLog = document.getElementById('changelog');
 const playButton = document.getElementById('playbutton');
 const changeLogButton = document.getElementById('changelogbutton');
 const hidechangeLogButton = document.getElementById('hidechangelogbutton');
 const usernameInput = document.getElementById('usernameinput');
+
+// #endregion
+
+// #region prepare game
 
 Promise.all([
     connect(onGameOver),
@@ -38,6 +44,10 @@ Promise.all([
     };
 }).catch(console.error);
 
+// #endregion
+
+// #region state changes
+
 function init(){
     if(usernameInput.value.trim().length === 0){
         usernameInput.value = "name is required";
@@ -55,3 +65,5 @@ function onGameOver(){
     startMenu.style.display = "block";
     playButton.focus();
 }
+
+// #endregion

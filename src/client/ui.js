@@ -2,6 +2,8 @@ import { chat } from './networking.js';
 import { pauseCapturingInputs, resumeCapturingInputs } from './input.js';
 import { toggleAllChatShow } from './chat.js';
 
+// #region init
+
 const chatDiv = document.getElementById('chat');
 const chatInput = document.getElementById('chatinput');
 const coordsdiv = document.getElementById('coords');
@@ -11,6 +13,8 @@ const connectionlostdiv = document.getElementById('connectionlost');
 let focusingOut = false;
 
 let ignorechatenter = 0;
+
+// #endregion
 
 // #region main functions
 

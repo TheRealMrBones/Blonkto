@@ -4,6 +4,8 @@ import { getCell } from './world.js';
 const Constants = require('../shared/constants');
 const { PLAYER_SCALE, SHAPES } = Constants;
 
+// #region get collisions
+
 export function playerCollisions(me, players){
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
@@ -77,6 +79,10 @@ function getSquareWalls(scale, pos){
     };
 }
 
+// #endregion
+
+// #region run collisions
+
 function wallCollisions(me, walls){
     walls.forEach(w => { wallCollision(me, w) });
 }
@@ -126,6 +132,8 @@ function circleCollision(me, circle){
         }
     }
 }
+
+// #endregion
 
 // #region helpers
 

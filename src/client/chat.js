@@ -5,6 +5,8 @@ const chatMessagesDiv = document.getElementById('chatmessages');
 
 const messages = [];
 
+// #region receive messages
+
 export function receiveChatMessage(message){
     if(messages.length > MAX_MESSAGE_COUNT){
         removeLastChatMessage();
@@ -21,6 +23,10 @@ export function receiveChatMessage(message){
     });
     setTimeout(() => { hideChatMessage(message.id) }, MESSAGE_TIME * 1000);
 }
+
+// #endregion
+
+// #region message visibility
 
 function hideChatMessage(id){
     const message = messages.find(m => m.id == id);
@@ -51,6 +57,12 @@ function removeLastChatMessage(){
     messages.shift();
 }
 
+// #endregion
+
+// #region helpers
+
 function makeStringHtmlSafe(str){
     return str.replaceAll('&', "&amp;").replaceAll('<', "&lt;").replaceAll('>', "&gt;").replaceAll('"', "&quot;").replaceAll('\'', "&apos;");
 }
+
+// #endregion
