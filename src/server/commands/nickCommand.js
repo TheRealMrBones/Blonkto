@@ -18,10 +18,10 @@ class OpCommand extends Command{
             return;
         }
         const argIndex = parsedTokens[0];
-        if(argIndex == 1 && !player.op){
-            return;
-        }
-        if(argIndex == 0 && !player.op && !ALLOW_CHANGE_NAME){
+
+        // special op checks
+        if((argIndex == 1 && !player.op) || (argIndex == 0 && !player.op && !ALLOW_CHANGE_NAME)){
+            this.noPermMessage();
             return;
         }
 

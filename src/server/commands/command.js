@@ -21,7 +21,7 @@ class Command{
         // do perms check if needed
         if(this.op){
             if(!player.op){
-                this.sendResponse(player, "You do not have permission to use this command");
+                this.noPermMessage();
                 return false;
             }
         }
@@ -105,6 +105,10 @@ class Command{
     static sendResponse(player, r){
         const message = { text: r, id: shortid(), };
         player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, message);
+    }
+
+    static noPermMessage(){
+        this.sendResponse(player, "You do not have permission to use this command");
     }
 }
 

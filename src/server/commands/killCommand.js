@@ -5,7 +5,7 @@ const { COMMAND_ARGUMENTS } = Constants;
 
 class KillCommand extends Command{
     static key = "kill";
-    static op = true;
+    static op = false;
     static args = [
         [COMMAND_ARGUMENTS.KEY],
         [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
@@ -18,6 +18,12 @@ class KillCommand extends Command{
             return;
         }
         const argIndex = parsedTokens[0];
+        
+        // special op checks
+        if(argIndex == 1 && !player.op){
+            this.noPermMessage();
+            return;
+        }
 
         // do command based on what args set used
         switch(argIndex){
