@@ -3,6 +3,7 @@ import { stopRendering } from './render.js';
 import { stopCapturingInput } from './input.js';
 import { downloadAssets } from './assets.js';
 import { initState } from './state.js';
+import { hideUi } from './ui.js';
 
 import './main.css';
 
@@ -50,5 +51,7 @@ function init(){
 function onGameOver(){
     stopCapturingInput();
     stopRendering();
+    hideUi();
     startMenu.style.display = "block";
+    playButton.focus();
 }
