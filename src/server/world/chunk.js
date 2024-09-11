@@ -11,24 +11,40 @@ class Chunk {
         const chunkdata = data === undefined ? false : data.split("|");
 
         this.cells = [];
-        for(let x = 0; x < Constants.CHUNK_SIZE; x++){
-            this.cells[x] = [];
-            for(let y = 0; y < Constants.CHUNK_SIZE; y++){
-                this.cells[x][y] = new Cell();
 
-                if(data === undefined){
-                    // no chunk file so generate new
+        // try to read file if exists
+        let noread = data === undefined;
+        if(data !== undefined){
+            try{
+                for(let x = 0; x < Constants.CHUNK_SIZE; x++){
+                    this.cells[x] = [];
+                    for(let y = 0; y < Constants.CHUNK_SIZE; y++){
+                        this.cells[x][y] = new Cell();
+                        
+                        const celldata = chunkdata[x * Constants.CHUNK_SIZE + y].split(",");
+                        if(parseInt(celldata[0]) == 1){
+                            this.cells[x][y].floor = new GrassFloor();
+                        }
+                        if(parseInt(celldata[1]) == 1){
+                            this.cells[x][y].block = new StoneBlock();
+                        }
+                    }
+                }
+            }catch(e){
+                // read failed just generate new chunk
+                noread = true;
+            }
+        }
+
+        // generate new chunk if file doesnt exist
+        if(noread){
+            for(let x = 0; x < Constants.CHUNK_SIZE; x++){
+                this.cells[x] = [];
+                for(let y = 0; y < Constants.CHUNK_SIZE; y++){
+                    this.cells[x][y] = new Cell();
+                    
                     this.cells[x][y].floor = new GrassFloor();
                     if(Math.random() < .1){
-                        this.cells[x][y].block = new StoneBlock();
-                    }
-                }else{
-                    // chunk file so read it
-                    const celldata = chunkdata[x * Constants.CHUNK_SIZE + y].split(",");
-                    if(parseInt(celldata[0]) == 1){
-                        this.cells[x][y].floor = new GrassFloor();
-                    }
-                    if(parseInt(celldata[1]) == 1){
                         this.cells[x][y].block = new StoneBlock();
                     }
                 }
