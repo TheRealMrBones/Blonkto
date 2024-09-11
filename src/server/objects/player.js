@@ -5,7 +5,7 @@ const PickaxeItem = require('../items/pickaxeItem.js');
 const SwordItem = require('../items/swordItem.js');
 
 class Player extends Entity {
-    constructor(id, socket, username, x, y, dir){
+    constructor(id, socket, username, x, y, dir, data){
         super(id, x, y, dir);
         this.op = false;
         this.asset = Constants.ASSETS.PLAYER;
@@ -28,6 +28,10 @@ class Player extends Entity {
         this.inventory[2] = new PickaxeItem();
         this.inventory[3] = new SwordItem();
         this.hotbarslot = 0;
+
+        if(data !== undefined){
+            const playerdata = data.split("|");
+        }
 
         this.resetFixes();
     }
@@ -91,6 +95,14 @@ class Player extends Entity {
                 ...(base.dynamic),
             },
         };
+    }
+
+    serializeForWrite(){
+        let data = "";
+
+        
+
+        return data;
     }
 }
 

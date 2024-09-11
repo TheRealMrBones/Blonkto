@@ -8,13 +8,13 @@ class Chunk {
         this.chunkx = chunkx;
         this.chunky = chunky;
 
-        const chunkdata = data === undefined ? false : data.split("|");
-
         this.cells = [];
 
         // try to read file if exists
         let noread = data === undefined;
-        if(data !== undefined){
+        if(!noread){
+            const chunkdata = data.split("|");
+            
             try{
                 for(let x = 0; x < Constants.CHUNK_SIZE; x++){
                     this.cells[x] = [];
