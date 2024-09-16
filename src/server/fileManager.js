@@ -5,6 +5,8 @@ class FileManager {
         this.savelocation = "./data/";
     }
 
+    // #region writing
+
     writeFile(filename, content){
         fs.writeFile(this.getFullFilePath(filename), content, 'utf8', (error) => {
             if (error) {
@@ -13,6 +15,10 @@ class FileManager {
             }
         });
     }
+
+    // #endregion
+
+    // #region reading
 
     fileExists(filename){
         try {
@@ -33,9 +39,15 @@ class FileManager {
         }
     }
 
+    // #endregion
+
+    // #region helpers
+
     getFullFilePath(filename){
         return this.savelocation + filename + '.data'
     }
+
+    // #endregion
 }
 
 module.exports = FileManager;

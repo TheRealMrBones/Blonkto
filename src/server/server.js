@@ -8,6 +8,8 @@ const Game = require('./game.js');
 const FileManager = require('./fileManager.js');
 const webpackConfig = require('../../webpack.dev.js');
 
+// #region init
+
 const app = express();
 
 app.use(express.static('public'));
@@ -39,6 +41,10 @@ io.on('connection', socket => {
 const fileManager = new FileManager();
 const game = new Game(fileManager);
 
+// #endregion
+
+// #region socket functions
+
 function joinGame(username){
 	if(username.trim().length === 0){
 		username = "Silly Goose";
@@ -68,3 +74,5 @@ function onDisconnect(){
 function chat(message){
   	game.chat(this, message);
 }
+
+// #endregion

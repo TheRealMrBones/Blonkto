@@ -1,5 +1,7 @@
 const Constants = require('../shared/constants');
 
+// #region collision checks
+
 exports.attackHitCheck = (player, players, attackdir, damage) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * Constants.ATTACK_HITBOX_OFFSET,
@@ -19,8 +21,14 @@ exports.attackHitCheck = (player, players, attackdir, damage) => {
     }
 }
 
+// #endregion
+
+// #region helpers
+
 function getDistance(object1, object2){
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
 }
+
+// #endregion

@@ -23,6 +23,8 @@ class Game {
         console.log(`oppasscode: ${this.oppasscode}`);
     }
 
+    // #region players
+
     getUsername(username){
         let newUsername = Constants.FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
         if(newUsername.trim().length === 0){
@@ -68,6 +70,10 @@ class Game {
         delete this.players[socket.id];
     }
 
+    // #endregion
+
+    // #region inputs
+
     click(socket, info){
         if(this.players[socket.id] !== undefined){
             if(Date.now() - this.players[socket.id].lastattack > Constants.ATTACK_DELAY * 1000){
@@ -110,6 +116,10 @@ class Game {
             }
         }
     }
+
+    // #endregion
+
+    // #region updates
 
     update(){
         const now = Date.now();
@@ -163,6 +173,10 @@ class Game {
         };
     }
 
+    // #endregion
+
+    // #region chat
+
     chat(socket, message){
         const text = Constants.FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
@@ -187,6 +201,8 @@ class Game {
             player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
         });
     }
+
+    // #endregion
 }
 
 module.exports = Game;

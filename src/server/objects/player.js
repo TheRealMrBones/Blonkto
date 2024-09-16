@@ -23,18 +23,22 @@ class Player extends Entity {
             b: .7 + Math.random() * .3,
         };
 
+        // inventory
         this.inventory = Array(36).fill(false);
         this.inventory[1] = new StoneBlockItem();
         this.inventory[2] = new PickaxeItem();
         this.inventory[3] = new SwordItem();
         this.hotbarslot = 0;
 
+        // reading data
         if(data !== undefined){
             const playerdata = data.split("|");
         }
 
         this.resetFixes();
     }
+
+    // #region setters
 
     move(t, x, y){
         if(this.playerdelay == 0){
@@ -44,6 +48,10 @@ class Player extends Entity {
         this.x = x;
         this.y = y;
     }
+
+    // #endregion
+
+    // #region fixes
 
     resetFixes(){
         this.fixes = {
@@ -74,11 +82,19 @@ class Player extends Entity {
         }
     }
 
+    // #endregion
+
+    // #region attacks
+
     attack(dir){
         this.lastattack = Date.now();
         this.lastattackdir = dir;
         this.startSwing();
     }
+
+    // #endregion
+
+    // #region serialization
 
     serializeForUpdate(){
         const base = super.serializeForUpdate();
@@ -104,6 +120,8 @@ class Player extends Entity {
 
         return data;
     }
+
+    // #endregion
 }
 
 module.exports = Player;

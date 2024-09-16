@@ -9,6 +9,8 @@ class Object {
         this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
     }
 
+    // #region setters
+
     setDirection(dir){
         this.dir = dir;
     }
@@ -21,11 +23,19 @@ class Object {
         this.y += y;
     }
 
+    // #endregion
+
+    // #region helpers
+
     distanceTo(object){
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    // #endregion
+
+    // #region serialization
 
     serializeForUpdate(){
         return {
@@ -40,6 +50,8 @@ class Object {
             },
         };
     }
+
+    // #endregion
 }
 
 module.exports = Object;

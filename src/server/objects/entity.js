@@ -18,6 +18,8 @@ class Entity extends Object {
         this.killedby = "placeholder";
     }
 
+    // #region hit and swing
+
     takeHit(damage){
         this.health -= damage;
         this.hit = true;
@@ -42,6 +44,10 @@ class Entity extends Object {
         clearInterval(this.swinginginterval);
     }
 
+    // #endregion
+
+    // #region serialization
+
     serializeForUpdate(){
         const base = super.serializeForUpdate();
 
@@ -59,6 +65,8 @@ class Entity extends Object {
             },
         };
     }
+
+    // #endregion
 }
 
 module.exports = Entity;

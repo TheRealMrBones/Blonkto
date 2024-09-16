@@ -54,6 +54,8 @@ class Chunk {
         this.cellUpdates = [];
     }
 
+    // #region serialization
+
     serializeForLoad(){
         const serializedCells = [];
         for(let x = 0; x < Constants.CHUNK_SIZE; x++){
@@ -80,6 +82,8 @@ class Chunk {
 
         return data;
     }
+
+    // #endregion
 }
 
 module.exports = Chunk;

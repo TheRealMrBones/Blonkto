@@ -6,6 +6,8 @@ class Cell {
         this.ceiling = null;
     }
 
+    // #region serialization
+
     serializeForLoad(){
         const data = {};
         if(this.floor){
@@ -43,6 +45,8 @@ class Cell {
 
         return data;
     }
+
+    // #endregion
 }
 
 module.exports = Cell;

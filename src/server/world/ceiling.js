@@ -6,6 +6,8 @@ class Ceiling {
         this.asset = Constants.ASSETS.MISSING_TEXTURE;
     }
 
+    // #region serialization
+
     serializeForLoad(){
         return {
             asset: this.asset,
@@ -15,6 +17,8 @@ class Ceiling {
     serializeForWrite(){
         return this.id.toString();
     }
+
+    // #endregion
 }
 
 module.exports = Ceiling;

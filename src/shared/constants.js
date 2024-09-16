@@ -1,22 +1,25 @@
 module.exports = Object.freeze({
-    // player related
+    // #region player
     FILTER_USERNAME: false,
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     ALLOW_CHANGE_NAME: true,
+    // #endregion
 
-    // attack hitbox
+    // #region attack hitbox
     ATTACK_DELAY: .7,
     ATTACK_HITBOX_WIDTH: 1,
     ATTACK_HITBOX_OFFSET: .5,
     SWING_RENDER_DELAY: .2,
     HIT_RENDER_DELAY: .5,
+    // #endregion
 
-    // update related
+    // #region update related
     CLIENT_UPDATE_RATE: 50,
     SERVER_UPDATE_RATE: 50,
+    // #endregion
 
-    // render related
+    // #region render related
     RENDER_DELAY: 100,
     HEIGHT_TO_CELL_RATIO: 11, // controls how zoomed the client is
     TEXT_FONT: "Verdana",
@@ -24,8 +27,9 @@ module.exports = Object.freeze({
     BACKGROUND_PADDING: 1,
     USERNAME_SCALE: .3,
     USERNAME_HANG: .5,
+    // #endregion
 
-    // map related
+    // #region map related
     WORLD_SIZE: 6, // how many chunks wide and tall the world is
     CHUNK_SIZE: 32,
     CELLS_HORIZONTAL: 28,
@@ -33,13 +37,15 @@ module.exports = Object.freeze({
     SPAWN_SIZE: 2, // how many chunks wide and tall the spawn region is
     CHUNK_UNLOAD_RATE: 1.0,
     WORLD_AUTOSAVE_RATE: 60.0,
+    // #endregion
 
-    // chat
+    // #region chat
     FILTER_CHAT: false,
     MESSAGE_TIME: 10,
     MAX_MESSAGE_COUNT: 20,
+    // #endregion
 
-    // message types
+    // #region message types
     MSG_TYPES: {
         JOIN_GAME: 'join_game',
         LEAVE_GAME: 'disconnect',
@@ -52,8 +58,9 @@ module.exports = Object.freeze({
         SEND_MESSAGE: 'send',
         RECEIVE_MESSAGE: 'receive',
     },
+    // #endregion
 
-    // assets
+    // #region assets
     ASSETS: {
         MISSING_TEXTURE: 'MissingTexture.png',
         PLAYER: 'BlonktoPlayer.png',
@@ -62,15 +69,17 @@ module.exports = Object.freeze({
         SPACE_BG: 'SpaceBg.png',
         STONE_BLOCK: 'StoneBlock.png',
     },
+    // #endregion
 
-    // block shapes
+    // #region block shapes
     SHAPES: {
         NONE: 0,
         SQUARE: 1,
         CIRCLE: 2,
     },
+    // #endregion
 
-    // commands
+    // #region commands
     COMMAND_ARGUMENTS: {
         KEY: 0,
         PLAYER: 1,
@@ -78,4 +87,5 @@ module.exports = Object.freeze({
         INT: 3,
         FLOAT: 4,
     },
+    // #endregion
 });
