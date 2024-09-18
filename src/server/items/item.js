@@ -3,6 +3,7 @@ const Constants = require('../../shared/constants.js');
 class Item {
     constructor(id){
         this.id = id;
+        this.itemid = 0;
         this.name = "placeholder";
         this.break = false; // set to breaking info
         this.place = false; // set to type of object to place

@@ -116,7 +116,16 @@ class Player extends Entity {
     serializeForWrite(){
         let data = "";
 
-        
+        data += this.uesrname.toString() + "|"
+
+        data += this.health.toString() + "|"
+
+        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|"
+
+        for(let i = 0; i < this.inventory.length; i++){
+            data += this.inventory[i].itemid.toString() + ",";
+        }
+        data += "|";
 
         return data;
     }
