@@ -6,6 +6,7 @@ const socketio = require('socket.io');
 const Constants = require('../shared/constants.js');
 const Game = require('./game.js');
 const FileManager = require('./fileManager.js');
+const AccountManager = require('./accountManager.js');
 const webpackConfig = require('../../webpack.dev.js');
 
 // #region init
@@ -39,7 +40,8 @@ io.on('connection', socket => {
 });
 
 const fileManager = new FileManager();
-const game = new Game(fileManager);
+const accountManager = new AccountManager(fileManager);
+const game = new Game(fileManager, accountManager);
 
 // #endregion
 

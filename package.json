@@ -13,23 +13,25 @@
     "author": "Mr Bones",
     "license": "ISC",
     "devDependencies": {
-        "@babel/core": "^7.17.10",
-        "@babel/preset-env": "^7.17.10",
-        "babel-loader": "^8.2.5",
-        "css-loader": "^6.7.1",
-        "mini-css-extract-plugin": "^2.6.0",
-        "nodemon": "^2.0.16",
-        "webpack-cli": "^4.9.2",
-        "webpack-merge": "^5.8.0"
+        "@babel/core": "^7.25.2",
+        "@babel/preset-env": "^7.25.4",
+        "babel-loader": "^9.2.1",
+        "css-loader": "^7.1.2",
+        "mini-css-extract-plugin": "^2.9.1",
+        "nodemon": "^3.1.7",
+        "webpack-cli": "^5.1.4",
+        "webpack-merge": "^6.0.1"
     },
     "dependencies": {
-        "express": "^4.18.1",
-        "html-webpack-plugin": "^5.5.0",
+        "bcryptjs": "^2.4.3",
+        "express": "^4.21.0",
+        "html-webpack-plugin": "^5.6.0",
         "shortid": "^2.2.16",
-        "socket.io": "^4.5.0",
-        "socket.io-client": "^4.5.0",
-        "throttle-debounce": "^5.0.0",
-        "webpack": "^5.72.1",
-        "webpack-dev-middleware": "^5.3.1"
+        "socket.io": "^4.8.0",
+        "socket.io-client": "^4.8.0",
+        "throttle-debounce": "^5.0.2",
+        "validator": "^13.12.0",
+        "webpack": "^5.94.0",
+        "webpack-dev-middleware": "^7.4.2"
     }
 }
