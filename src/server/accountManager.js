@@ -8,6 +8,8 @@ class AccountManager {
         this.fileManager = fm;
     }
 
+    // #region creation
+
     async createAccount(username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
@@ -23,9 +25,18 @@ class AccountManager {
         }
 
         // Check if username already exists
+        if(this.fileManager.fileExists(username)){
+            return { error: 'Invalid username. User with that name already exists.' };
+        }
 
-        const hashedPw = await bcrypt.hash(password, 10);
+        const hashedPw = await bcrypt.hash(password, saltRounds);
+
+        
     }
+
+    // #endregion
+
+    // #region login
 
     login(username, password){
         username = sanitizeInput(username);
@@ -33,6 +44,8 @@ class AccountManager {
         
 
     }
+
+    // #endregion
 }
 
 // #region helpers
