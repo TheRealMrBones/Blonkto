@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
+const Account = require('./account.js');
+
 const saltRounds = 10;
 
 class AccountManager {
@@ -10,7 +12,7 @@ class AccountManager {
 
     // #region creation
 
-    async createAccount(username, password){
+    createAccount(username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -25,13 +27,22 @@ class AccountManager {
         }
 
         // Check if username already exists
-        if(this.fileManager.fileExists(username)){
-            return { error: 'Invalid username. User with that name already exists.' };
+        if(this.fileManager.fileExists(getPlayerFilePath(username))){
+            return { error: 'Invalid username. Account with that name already exists.' };
         }
 
-        const hashedPw = await bcrypt.hash(password, saltRounds);
+        // create account
+        const hashedPw = bcrypt.hashSync(password, saltRounds);
 
-        
+        const acc = new Account(username);
+
+        // write account file (with hashed password)
+        const data = hashedPw + "|" + acc.serializeForWrite();
+
+        this.fileManager.writeFile(getPlayerFilePath(username), data);
+
+        // return the account
+        return { success: acc };
     }
 
     // #endregion
@@ -42,7 +53,21 @@ class AccountManager {
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
+        // Check if account exists
+        if(!this.fileManager.fileExists(getPlayerFilePath(username))){
+            return { error: 'Account does not exist' };
+        }
 
+        // read account data
+        const data = this.fileManager.readFile(getPlayerFilePath(username)).split("|");
+
+        // check if password matches
+        if(!bcrypt.compareSync(password, data[0])){
+            return { error: 'Password Incorrect' };
+        }
+        
+        // return the account
+        return { success: acc };
     }
 
     // #endregion
@@ -55,6 +80,9 @@ const isAlphanumeric = (str) => /^[a-zA-Z0-9_]*$/.test(str);
 
 // Sanitize input
 const sanitizeInput = (input) => validator.escape(input);
+
+// Get player file path
+const getPlayerFilePath = (username) => ("accounts/" + username);
 
 // #endregion
 
