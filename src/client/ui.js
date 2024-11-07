@@ -6,8 +6,9 @@ import { toggleAllChatShow } from './chat.js';
 
 const chatDiv = document.getElementById('chat');
 const chatInput = document.getElementById('chatinput');
-const coordsdiv = document.getElementById('coords');
+const infodiv = document.getElementById('info');
 const coordstext = document.getElementById('coordstext');
+const fpstext = document.getElementById('fpstext');
 const connectionlostdiv = document.getElementById('connectionlost');
 
 let focusingOut = false;
@@ -21,7 +22,7 @@ let ignorechatenter = 0;
 export function setupUi(){
     // show ui
     chatDiv.style.display = "block";
-    coordsdiv.style.display = "block";
+    infodiv.style.display = "block";
 
     // add event listeners
     window.addEventListener("keyup", keyUpChecks);
@@ -36,7 +37,7 @@ export function setupUi(){
 export function hideUi(){
     // hide ui
     chatDiv.style.display = "none";
-    coordsdiv.style.display = "none";
+    infodiv.style.display = "none";
 
     // remove event listeners
     window.removeEventListener("keyup", keyUpChecks);
@@ -103,6 +104,10 @@ function chatInputUnfocus(event){
 
 export function updateCoords(x, y){
     coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
+}
+
+export function updateFps(fps){
+    fpstext.innerHTML = Math.round(fps).toString();
 }
 
 export function toggleConnectionLost(toggle){

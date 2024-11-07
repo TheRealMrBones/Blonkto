@@ -2,6 +2,7 @@ import { getAsset, getColoredAsset, getColoredAssetVariant } from './assets.js';
 import { getCurrentState } from './state.js';
 import { getSelf } from './input.js';
 import { getCell } from './world.js';
+import { updateFps } from './ui.js';
 
 const Constants = require('../shared/constants.js');
 const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
@@ -33,6 +34,26 @@ export function getCellSize(){
 let myColor;
 export function setColor(color){
     myColor = color;
+}
+
+// #endregion
+
+// #region fps data
+
+let lastframe = Date.now();
+let thisframe = Date.now();
+let fpstotal = 0;
+let fpscount = 0;
+
+function calculatefps(){
+    if(fpscount == 0){
+        updateFps(0);
+    }else{
+        updateFps(fpstotal / fpscount);
+    }
+    
+    fpstotal = 0;
+    fpscount = 0;
 }
 
 // #endregion
@@ -71,6 +92,12 @@ function render(){
     others.forEach(renderPlayer.bind(null, me));
     renderPlayer(me, me);
     others.forEach(renderPlayerUsername.bind(null, me));
+
+    // update fps
+    thisframe = Date.now();
+    fpstotal += (1000 / (thisframe - lastframe))
+    fpscount++;
+    lastframe = thisframe;
 
     // request next frame
     animationFrameRequestId = requestAnimationFrame(render);
@@ -236,12 +263,17 @@ function fixCoord(x){
 // #region Exports
 
 let animationFrameRequestId;
+let updatefpsinterval;
 
 export function startRendering(){
+    updatefpsinterval = setInterval(calculatefps, 1000);
+
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
 export function stopRendering(){
+    clearInterval(updatefpsinterval);
+
     cancelAnimationFrame(animationFrameRequestId);
 }
 
