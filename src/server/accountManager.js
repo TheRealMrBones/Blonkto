@@ -34,7 +34,7 @@ class AccountManager {
         // create account
         const hashedPw = bcrypt.hashSync(password, saltRounds);
 
-        const acc = new Account(username);
+        const acc = new Account({username});
 
         // write account file (with hashed password)
         const data = hashedPw + "|" + acc.serializeForWrite();
@@ -65,6 +65,8 @@ class AccountManager {
         if(!bcrypt.compareSync(password, data[0])){
             return { error: 'Password Incorrect' };
         }
+
+        acc = new Account(data.slice(1));
         
         // return the account
         return { success: acc };

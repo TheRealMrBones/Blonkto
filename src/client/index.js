@@ -1,4 +1,4 @@
-import { connect, play } from './networking.js';
+import { connect, login, play } from './networking.js';
 import { stopRendering } from './render.js';
 import { stopCapturingInput } from './input.js';
 import { downloadAssets } from './assets.js';
@@ -15,6 +15,12 @@ const playButton = document.getElementById('playbutton');
 const changeLogButton = document.getElementById('changelogbutton');
 const hidechangeLogButton = document.getElementById('hidechangelogbutton');
 const usernameInput = document.getElementById('usernameinput');
+const passwordInput = document.getElementById('passwordinput');
+const loginDiv = document.getElementById('logindiv');
+const playDiv = document.getElementById('playdiv');
+const errorDiv = document.getElementById('errordiv');
+
+let account;
 
 // #endregion
 
@@ -25,15 +31,13 @@ Promise.all([
     downloadAssets(),
 ]).then(() => {
     usernameInput.focus();
-    usernameInput.addEventListener("keyup", function(event){
-        event.preventDefault();
-        if(event.key === "Enter"){
-            init();
-        }
-    });
+    usernameInput.addEventListener("keyup", sendlogin);
+    passwordInput.addEventListener("keyup", sendlogin);
+
     playButton.onclick = () => {
         init();
     };
+
     changeLogButton.onclick = () => {
         changeLog.style.display = "block";
         startMenu.style.display = "none";
@@ -46,16 +50,36 @@ Promise.all([
 
 // #endregion
 
+// #region login
+
+function sendlogin(event){
+    event.preventDefault();
+    if(event.key === "Enter"){
+        login(usernameInput.value, passwordInput.value)
+    }
+}
+
+export function onlogin(response){
+    if(response.account){
+        response.error = "";
+
+        loginDiv.style.display = "none";
+        playDiv.style.display = "block";
+
+        account = response.account;
+    }else if(response.error){
+        errorDiv.innerHTML = response.error;
+    }
+}
+
+// #endregion
+
 // #region state changes
 
 function init(){
-    if(usernameInput.value.trim().length === 0){
-        usernameInput.value = "name is required";
-    }else{
-        play(usernameInput.value);
-        startMenu.style.display = "none";
-        initState();
-    }
+    play(account.username);
+    startMenu.style.display = "none";
+    initState();
 }
 
 function onGameOver(){

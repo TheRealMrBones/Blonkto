@@ -8,8 +8,17 @@
         <div id="startmenu">
             <h2>Blonkto</h2>
             <h4>Version 1.0.0</h4>
-            <input type="text" id="usernameinput" placeholder="Username" />
-            <button id="playbutton">Play</button>
+
+            <div id="logindiv">
+                <div id="errordiv"></div>
+                <input type="text" id="usernameinput" placeholder="Username" />
+                <input type="password" id="passwordinput" placeholder="Password">
+            </div>
+
+            <div id="playdiv" style="display: none;">
+                <button id="playbutton">Play</button>
+            </div>
+            
             <br>
             <button id="changelogbutton">Change Log</button>
         </div>

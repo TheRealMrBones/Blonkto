@@ -1,8 +1,14 @@
 
 
 class Account {
-    constructor(username){
-        this.username = username;
+    constructor(accinfo){
+        // defaults on creation
+        this.username = accinfo[0];
+
+        // add extra if from existing account
+        if(accinfo.length > 1){
+
+        }
     }
 
     // #region serialization
