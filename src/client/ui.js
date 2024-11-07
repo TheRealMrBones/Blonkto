@@ -53,7 +53,7 @@ function keyUpChecks(event){
     event.preventDefault();
     switch(event.key){
         case "Enter": {
-            if(Date.now() - ignorechatenter > 1000){
+            if(Date.now() - ignorechatenter < 500){
                 // ignore open chat if enter was used to start the game
             }else if(focusingOut){
                 focusingOut = !focusingOut;
@@ -79,6 +79,7 @@ function chatInputKeyUp(event){
             text: chatInput.value,
         });
         focusingOut = true;
+        chatInput.value = "";
         chatInput.blur();
         toggleAllChatShow(false);
     }
@@ -92,7 +93,6 @@ function chatInputFocus(event){
 
 function chatInputUnfocus(event){
     resumeCapturingInputs();
-    chatInput.value = "";
     window.addEventListener("keyup", keyUpChecks);
     toggleAllChatShow(false);
 }
