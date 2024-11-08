@@ -55,7 +55,18 @@ Promise.all([
 function sendlogin(event){
     event.preventDefault();
     if(event.key === "Enter"){
+        if(!usernameInput.value || !passwordInput.value){
+            errorDiv.innerHTML = "must provide a username and password";
+
+            return;
+        }
+
         login(usernameInput.value, passwordInput.value)
+
+        usernameInput.value = "";
+        passwordInput.value = "";
+        usernameInput.blur();
+        passwordInput.blur();
     }
 }
 

@@ -19,6 +19,12 @@ class Account {
         return data;
     }
 
+    serializeForSend(){
+        return {
+            username: this.username,
+        }
+    }
+
     // #endregion
 }
 

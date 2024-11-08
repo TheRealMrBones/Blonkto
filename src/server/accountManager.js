@@ -34,7 +34,7 @@ class AccountManager {
         // create account
         const hashedPw = bcrypt.hashSync(password, saltRounds);
 
-        const acc = new Account({username});
+        const acc = new Account([username]);
 
         // write account file (with hashed password)
         const data = hashedPw + "|" + acc.serializeForWrite();
@@ -42,7 +42,7 @@ class AccountManager {
         this.fileManager.writeFile(getPlayerFilePath(username), data);
 
         // return the account
-        return { success: acc };
+        return { account: acc };
     }
 
     // #endregion
@@ -55,7 +55,9 @@ class AccountManager {
         
         // Check if account exists
         if(!this.fileManager.fileExists(getPlayerFilePath(username))){
-            return { error: 'Account does not exist' };
+            //return { error: 'Account does not exist' }; temp just create the account! -Nolan
+
+            return this.createAccount(username, password);
         }
 
         // read account data
@@ -66,10 +68,10 @@ class AccountManager {
             return { error: 'Password Incorrect' };
         }
 
-        acc = new Account(data.slice(1));
+        let acc = new Account(data.slice(1));
         
         // return the account
-        return { success: acc };
+        return { account: acc.serializeForSend() };
     }
 
     // #endregion
