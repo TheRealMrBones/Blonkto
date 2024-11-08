@@ -47,6 +47,7 @@ module.exports = Object.freeze({
 
     // #region message types
     MSG_TYPES: {
+        CREATE_ACCOUNT: "create_account",
         LOGIN: "login",
         JOIN_GAME: 'join_game',
         LEAVE_GAME: 'disconnect',

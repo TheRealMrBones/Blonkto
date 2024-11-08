@@ -55,9 +55,7 @@ class AccountManager {
         
         // Check if account exists
         if(!this.fileManager.fileExists(getPlayerFilePath(username))){
-            //return { error: 'Account does not exist' }; temp just create the account! -Nolan
-
-            return this.createAccount(username, password);
+            return { error: 'Account does not exist' };
         }
 
         // read account data

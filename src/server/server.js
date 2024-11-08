@@ -31,6 +31,7 @@ const io = socketio(server);
 io.on('connection', socket => {
 	console.log('Player connected!', socket.id);
 
+	socket.on(Constants.MSG_TYPES.CREATE_ACCOUNT, createAccount);
 	socket.on(Constants.MSG_TYPES.LOGIN, login);
 	socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
 	socket.on(Constants.MSG_TYPES.INPUT, handleInput);
@@ -47,6 +48,11 @@ const game = new Game(fileManager, accountManager);
 // #endregion
 
 // #region socket functions
+
+function createAccount(credentials){
+	const response = accountManager.createAccount(credentials.username, credentials.password)
+	this.emit(Constants.MSG_TYPES.LOGIN, response);
+}
 
 function login(credentials){
 	const response = accountManager.login(credentials.username, credentials.password)

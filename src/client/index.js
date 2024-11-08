@@ -1,4 +1,4 @@
-import { connect, login, play } from './networking.js';
+import { connect, createaccount, login, play } from './networking.js';
 import { stopRendering } from './render.js';
 import { stopCapturingInput } from './input.js';
 import { downloadAssets } from './assets.js';
@@ -11,14 +11,19 @@ import './main.css';
 
 const startMenu = document.getElementById('startmenu');
 const changeLog = document.getElementById('changelog');
+
 const playButton = document.getElementById('playbutton');
 const changeLogButton = document.getElementById('changelogbutton');
 const hidechangeLogButton = document.getElementById('hidechangelogbutton');
+
 const usernameInput = document.getElementById('usernameinput');
 const passwordInput = document.getElementById('passwordinput');
 const loginDiv = document.getElementById('logindiv');
 const playDiv = document.getElementById('playdiv');
 const errorDiv = document.getElementById('errordiv');
+const loginButton = document.getElementById('loginbutton');
+const createAccountButton = document.getElementById('createaccountbutton');
+const usernameDiv = document.getElementById('usernamediv');
 
 let account;
 
@@ -31,12 +36,19 @@ Promise.all([
     downloadAssets(),
 ]).then(() => {
     usernameInput.focus();
-    usernameInput.addEventListener("keyup", sendlogin);
-    passwordInput.addEventListener("keyup", sendlogin);
+    usernameInput.addEventListener("keyup", event => {
+        event.preventDefault();
+        if(event.key === "Enter") sendcreateaccount();
+    });
+    passwordInput.addEventListener("keyup", event => {
+        event.preventDefault();
+        if(event.key === "Enter") sendlogin();
+    });
 
-    playButton.onclick = () => {
-        init();
-    };
+    createAccountButton.onclick = sendcreateaccount;
+    loginButton.onclick = sendlogin;
+
+    playButton.onclick = init;
 
     changeLogButton.onclick = () => {
         changeLog.style.display = "block";
@@ -52,32 +64,48 @@ Promise.all([
 
 // #region login
 
-function sendlogin(event){
-    event.preventDefault();
-    if(event.key === "Enter"){
-        if(!usernameInput.value || !passwordInput.value){
-            errorDiv.innerHTML = "must provide a username and password";
+function sendcreateaccount(){
+    if(!usernameInput.value || !passwordInput.value){
+        errorDiv.innerHTML = "must provide a username and password";
 
-            return;
-        }
-
-        login(usernameInput.value, passwordInput.value)
-
-        usernameInput.value = "";
-        passwordInput.value = "";
-        usernameInput.blur();
-        passwordInput.blur();
+        return;
     }
+
+    createaccount(usernameInput.value, passwordInput.value)
+
+    usernameInput.value = "";
+    passwordInput.value = "";
+    usernameInput.blur();
+    passwordInput.blur();
+}
+
+function sendlogin(){
+    if(!usernameInput.value || !passwordInput.value){
+        errorDiv.innerHTML = "must provide a username and password";
+
+        return;
+    }
+
+    login(usernameInput.value, passwordInput.value)
+
+    usernameInput.value = "";
+    passwordInput.value = "";
+    usernameInput.blur();
+    passwordInput.blur();
 }
 
 export function onlogin(response){
     if(response.account){
         response.error = "";
 
+        usernameDiv.innerHTML = `Logged in as: ${response.account.username}`;
+
         loginDiv.style.display = "none";
         playDiv.style.display = "block";
 
         account = response.account;
+
+        playButton.focus();
     }else if(response.error){
         errorDiv.innerHTML = response.error;
     }

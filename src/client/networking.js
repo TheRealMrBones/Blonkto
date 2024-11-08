@@ -42,6 +42,10 @@ function onInstantiated(stuff){
 
 // #region send message functions
 
+export const createaccount = (username, password) => {
+    socket.emit(MSG_TYPES.CREATE_ACCOUNT, {username: username, password: password});
+};
+
 export const login = (username, password) => {
     socket.emit(MSG_TYPES.LOGIN, {username: username, password: password});
 };
