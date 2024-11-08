@@ -50,7 +50,7 @@ module.exports = Object.freeze({
         CREATE_ACCOUNT: "create_account",
         LOGIN: "login",
         JOIN_GAME: 'join_game',
-        LEAVE_GAME: 'disconnect',
+        DISCONNECT: 'disconnect',
         PLAYER_INSTANTIATED: 'instantiated',
         GAME_UPDATE: 'update',
         INPUT: 'input',

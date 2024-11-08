@@ -11,6 +11,8 @@ const webpackConfig = require('../../webpack.dev.js');
 
 // #region init
 
+const loggedinaccounts = {};
+
 const app = express();
 
 app.use(express.static('public'));
@@ -24,12 +26,12 @@ if(process.env.NODE_ENV === 'development'){
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port);
-console.log(`Server listening on port ${port}`);
+console.log(`Server listening on port: ${port}`);
 
 const io = socketio(server);
 
 io.on('connection', socket => {
-	console.log('Player connected!', socket.id);
+	console.log(`[${socket.id}] Connected`);
 
 	socket.on(Constants.MSG_TYPES.CREATE_ACCOUNT, createAccount);
 	socket.on(Constants.MSG_TYPES.LOGIN, login);
@@ -37,7 +39,7 @@ io.on('connection', socket => {
 	socket.on(Constants.MSG_TYPES.INPUT, handleInput);
 	socket.on(Constants.MSG_TYPES.CLICK, click);
 	socket.on(Constants.MSG_TYPES.INTERACT, interact);
-	socket.on(Constants.MSG_TYPES.LEAVE_GAME, onDisconnect);
+	socket.on(Constants.MSG_TYPES.DISCONNECT, onDisconnect);
 	socket.on(Constants.MSG_TYPES.SEND_MESSAGE, chat);
 });
 
@@ -52,19 +54,26 @@ const game = new Game(fileManager, accountManager);
 function createAccount(credentials){
 	const response = accountManager.createAccount(credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
+
+	if(response.account){
+		loggedinaccounts[this.id] = response.account;
+		console.log(`[${this.id}] Create account: ${response.account.username}`);
+	}
 }
 
 function login(credentials){
 	const response = accountManager.login(credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
+
+	if(response.account){
+		loggedinaccounts[this.id] = response.account;
+		console.log(`[${this.id}] Logged in as: ${response.account.username}`);
+	}
 }
 
 function joinGame(username){
-	if(username.trim().length === 0){
-		username = "Silly Goose";
-	}
 	const newUsername = game.getUsername(username);
-	console.log('Player joined game!', newUsername, this.id);
+	console.log(`[${this.id}] [${loggedinaccounts[this.id].username}] Joined the game`);
 	game.addPlayer(this, newUsername);
 }
 
@@ -81,7 +90,13 @@ function interact(info){
 }
 
 function onDisconnect(){
-	console.log('Player left game!', this.id);
+	if(loggedinaccounts[this.id]){
+		console.log(`[${this.id}] [${loggedinaccounts[this.id].username}] Disconnected`);
+	}else{
+		console.log(`[${this.id}] Disconnected`);
+	}
+
+	delete loggedinaccounts[this.id];
   	game.removePlayer(this);
 }
 
