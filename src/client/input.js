@@ -197,13 +197,13 @@ function handleInput(){
     });
 }
 
-window.addEventListener('blur', function() {
+function resetMovement(){
     updatePos();
     startw = null;
     starta = null;
     starts = null;
     startd = null;
-});
+}
 
 function updatePos(){
     // update local position vars
@@ -254,6 +254,7 @@ export function startCapturingInput(xp, yp){
     window.addEventListener('keydown', handlekeyDown);
     window.addEventListener('keyup', handlekeyUp);
     window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('blur', resetMovement);
 
     // set client side update interval
     interval = setInterval(handleInput, 1000 / Constants.CLIENT_UPDATE_RATE);
@@ -268,6 +269,7 @@ export function stopCapturingInput(){
     window.removeEventListener('keydown', handlekeyDown);
     window.removeEventListener('keyup', handlekeyUp);
     window.removeEventListener('mousedown', handleMouseDown);
+    window.removeEventListener('blur', resetMovement);
     
     // reset variables
     dir = 0;
