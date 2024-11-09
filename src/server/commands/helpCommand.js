@@ -15,10 +15,11 @@ class HelpCommand extends Command{
         this.sendResponse(player, `- help - gives list of commands`);
         this.sendResponse(player, `- ping - pong!`);
         if(player.op){
-            this.sendResponse(player, `- nick - change your name or another players`);
             this.sendResponse(player, `- op - gives a player operator permissions`);
             this.sendResponse(player, `- deop - take away a players operator permissions`);
             this.sendResponse(player, `- tp - teleport a player`);
+            this.sendResponse(player, `- kill - kill yourself or another player`);
+            this.sendResponse(player, `- nick - change your name or another players`);
             this.sendResponse(player, `- saveworld - saves teh world`);
         }else{
             this.sendResponse(player, `- nick - change your name`);
