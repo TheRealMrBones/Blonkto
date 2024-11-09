@@ -31,10 +31,37 @@ const coloredAssets = {};
 const coloredAssetVariants = {};
 
 export function getColoredAsset(object){
-    if(!coloredAssets[object.id]){
-        coloredAssets[object.id] = colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b);
+    // make new if asset doesn't exist
+    let makenew = !coloredAssets[object.id];
+
+    // make new if asset color changed
+    if(!makenew){
+        const oldcolor = coloredAssets[object.id].color;
+        const newcolor = object.color;
+
+        if(oldcolor.r != newcolor.r || oldcolor.g != newcolor.g || oldcolor.b != newcolor.b){
+            // delete old colored variants aswell
+            if(coloredAssetVariants[object.id]){
+                for (var prop in coloredAssetVariants[object.id]) {
+                    if (coloredAssetVariants[object.id].hasOwnProperty(prop)) {
+                        delete coloredAssetVariants[object.id][prop];
+                    }
+                }
+            }
+
+            makenew = true;
+        }
     }
-    return coloredAssets[object.id];
+
+    // if needed make new colored asset
+    if(makenew){
+        coloredAssets[object.id] = {
+            asset: colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b),
+            color: object.color,
+        };
+    }
+
+    return coloredAssets[object.id].asset;
 }
 
 export function getColoredAssetVariant(object, varient, varientrgb){
@@ -43,7 +70,7 @@ export function getColoredAssetVariant(object, varient, varientrgb){
         coloredAssetVariants[object.id] = {};
     }
     if(!coloredAssetVariants[object.id][varient]){
-        coloredAssetVariants[object.id][varient] = colorize(coloredAssets[object.id], varientrgb.r, varientrgb.g, varientrgb.b);
+        coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb.r, varientrgb.g, varientrgb.b);
     }
     return coloredAssetVariants[object.id][varient];
 }

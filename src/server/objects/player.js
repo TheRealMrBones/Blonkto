@@ -22,7 +22,7 @@ class Player extends Entity {
         this.health = 10;
 
         // racism
-        const antiracism = 1 - Constants.RACISM
+        const antiracism = 1 - Constants.RACISM;
         this.color = {
             r: antiracism + Math.random() * Constants.RACISM,
             g: antiracism + Math.random() * Constants.RACISM,

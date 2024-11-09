@@ -69,6 +69,8 @@ class Game {
 
     killPlayer(socket, killedby){
         this.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
+        
+        socket.emit(Constants.MSG_TYPES.DEAD);
 
         this.playerManager.deletePlayer(this.players[socket.id]);
     }
@@ -140,7 +142,6 @@ class Game {
 
         Object.values(this.players).forEach(p => {
             if(p.dead){
-                p.socket.emit(Constants.MSG_TYPES.DEAD);
                 this.killPlayer(p.socket, p.killedby);
             }
         });

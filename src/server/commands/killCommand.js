@@ -29,14 +29,15 @@ class KillCommand extends Command{
         switch(argIndex){
             case 0: {
                 player.dead = true;
-                player.killedby = "the Server";
+                game.killPlayer(player.socket, "the Server");
                 break;
             };
             case 1: {
                 const p = parsedTokens[1];
                 p.dead = true;
-                p.killedby = "the Server";
                 this.sendResponse(player, `killed ${p.username}`);
+                
+                game.killPlayer(p.socket, "the Server");
                 break;
             };
         }

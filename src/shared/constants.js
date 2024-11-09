@@ -4,7 +4,7 @@ module.exports = Object.freeze({
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
     ALLOW_CHANGE_NAME: true,
-    RACISM: .7,
+    RACISM: .3,
     // #endregion
 
     // #region attack hitbox
