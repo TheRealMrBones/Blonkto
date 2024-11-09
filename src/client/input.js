@@ -231,12 +231,14 @@ function updatePos(){
     
     // collisions
     const others = getCurrentState().others;
-    playerCollisions({
-        dir: dir,
+    const self = {
         x: x,
         y: y,
-    }, others);
-    blockCollisions({ x: x, y: y });
+        scale: scale,
+    }
+    
+    playerCollisions(self, others);
+    blockCollisions(self);
 }
 
 // #endregion

@@ -2,7 +2,7 @@ import { push } from './input.js';
 import { getCell } from './world.js';
 
 const Constants = require('../shared/constants');
-const { PLAYER_SCALE, SHAPES } = Constants;
+const { SHAPES } = Constants;
 
 // #region get collisions
 
@@ -10,7 +10,7 @@ export function playerCollisions(me, players){
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
         const dist = getDistance(me, player2);
-        const realdist = dist - PLAYER_SCALE;
+        const realdist = dist - (me.scale / 2 + player2.scale / 2);
         if(realdist < 0){
             if(dist == 0){
                 const dir = Math.random() * 2 * Math.PI;
@@ -26,16 +26,16 @@ export function playerCollisions(me, players){
 
 export function blockCollisions(me){
     // only search for collisions immediatly next to you
-    const startx = Math.floor(me.x - PLAYER_SCALE / 2);
-    const starty = Math.floor(me.y - PLAYER_SCALE / 2);
+    const startx = Math.floor(me.x - me.scale / 2);
+    const starty = Math.floor(me.y - me.scale / 2);
 
     // lists of possible collisions
     let walls = [];
     let circles = [];
 
     // find all circles and walls for collision
-    for(let x = startx; x < me.x + PLAYER_SCALE / 2; x++){
-        for(let y = starty; y < me.y + PLAYER_SCALE / 2; y++){
+    for(let x = startx; x < me.x + me.scale / 2; x++){
+        for(let y = starty; y < me.y + me.scale / 2; y++){
             const block = getCell(x, y).block;
 
             if(block){
@@ -92,21 +92,21 @@ function wallCollision(me, wall){
     let p2 = wall.p2;
     if (p1.x - p2.x == 0) {
         if (me.y > p1.y && me.y < p2.y || me.y < p1.y && me.y > p2.y) {
-            if (Math.abs(me.x - p1.x) <= PLAYER_SCALE / 2) {
+            if (Math.abs(me.x - p1.x) <= me.scale / 2) {
                 if (me.x - p1.x > 0) {
-                    me.x += (PLAYER_SCALE / 2 - Math.abs(me.x - p1.x))
+                    me.x += (me.scale / 2 - Math.abs(me.x - p1.x))
                 } else {
-                    me.x -= (PLAYER_SCALE / 2 - Math.abs(me.x - p1.x))
+                    me.x -= (me.scale / 2 - Math.abs(me.x - p1.x))
                 }
             }
         }
     } else if (p1.y - p2.y == 0) {
         if (me.x > p1.x && me.x < p2.x || me.x < p1.x && me.x > p2.x) {
-            if (Math.abs(me.y - p1.y) <= PLAYER_SCALE / 2) {
+            if (Math.abs(me.y - p1.y) <= me.scale / 2) {
                 if (me.y - p1.y > 0) {
-                    me.y += (PLAYER_SCALE / 2 - Math.abs(me.y - p1.y))
+                    me.y += (me.scale / 2 - Math.abs(me.y - p1.y))
                 } else {
-                    me.y -= (PLAYER_SCALE / 2 - Math.abs(me.y - p1.y))
+                    me.y -= (me.scale / 2 - Math.abs(me.y - p1.y))
                 }
             }
         }
@@ -119,7 +119,7 @@ function circleCollisions(me, circles){
 
 function circleCollision(me, circle){
     const dist = getDistance(me, circle);
-    const realdist = dist - PLAYER_SCALE / 2 - circle.scale / 2;
+    const realdist = dist - me.scale / 2 - circle.scale / 2;
     if(realdist < 0){
         if(dist == 0){
             const dir = Math.random() * 2 * Math.PI;
