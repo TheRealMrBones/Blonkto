@@ -317,6 +317,21 @@ class World {
         }
     }
 
+    cellEmpty(x, y, entities){
+        const chunk = { x: Math.floor(x / Constants.CHUNK_SIZE), y: Math.floor(y / Constants.CHUNK_SIZE) };
+        
+        let empty = true;
+        entities.forEach(e => {
+            if(e.chunk.x == chunk.x && e.chunk.y == chunk.y){
+                if(e.tilesOn().some(t => t.x == x && t.y == y)){
+                    empty = false;
+                }
+            }
+        });
+
+        return empty;
+    }
+
     // #endregion
 }
 

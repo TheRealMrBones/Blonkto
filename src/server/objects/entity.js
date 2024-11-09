@@ -6,6 +6,8 @@ class Entity extends Object {
         super(id, x, y, dir);
         this.health = 10;
 
+        this.chunk = { x: Math.floor(x / Constants.CHUNK_SIZE), y: Math.floor(y / Constants.CHUNK_SIZE)}; // purposefully make chunk off so that new update has load data
+
         this.hit = false;
         this.hitinterval = null;
         this.swinging = false;

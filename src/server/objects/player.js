@@ -8,7 +8,7 @@ class Player extends Entity {
     constructor(id, socket, username, x, y, dir, data){
         super(id, x, y, dir);
 
-        this.chunk = { x: 1000, y: 1000}; // purposefully make chunk off so that new update has load data
+        this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
         this.op = false;
         this.asset = Constants.ASSETS.PLAYER;

@@ -75,6 +75,14 @@ class Game {
 
     // #endregion
 
+    // #region entities
+
+    getEntities(){
+        return Object.values(this.players);
+    }
+
+    // #endregion
+
     // #region inputs
 
     click(socket, info){
@@ -95,7 +103,8 @@ class Game {
                 }else if(hotbarItem.break){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.place){
-                    this.world.placecell(cellpos.x, cellpos.y, hotbarItem.getPlaced());
+                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getEntities()))
+                        this.world.placecell(cellpos.x, cellpos.y, hotbarItem.getPlaced());
                 }else{
                     // not usable i guess idk
                 }
