@@ -11,6 +11,8 @@ const Constants = require('../shared/constants.js');
 let dir = 0;
 let x = 0;
 let y = 0;
+let scale = Constants.PLAYER_SCALE;
+
 let startw = null;
 let starta = null;
 let starts = null;
@@ -324,6 +326,7 @@ export function getSelf(){
         dir: dir,
         x: x,
         y: y,
+        scale: scale,
         hotbarslot: hotbarslot,
         hit: hit,
         swinging: swinging,
@@ -360,10 +363,11 @@ export function setPos(newpos){
     y = newpos.y;
 }
 
-export function setHitandSwing(newhit, newswinging, newlastattackdir){
-    hit = newhit;
-    swinging = newswinging;
-    lastattackdir = newlastattackdir;
+export function setSelf(me){
+    scale = me.scale;
+    hit = me.hit;
+    swinging = me.swinging;
+    lastattackdir = me.lastattackdir;
 }
 
 // #endregion

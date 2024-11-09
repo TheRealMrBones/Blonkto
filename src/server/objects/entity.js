@@ -4,7 +4,6 @@ const Constants = require('../../shared/constants.js');
 class Entity extends Object {
     constructor(id, x, y, dir){
         super(id, x, y, dir);
-        this.scale = 1;
         this.health = 10;
 
         this.hit = false;
@@ -61,7 +60,6 @@ class Entity extends Object {
             },
             dynamic: {
                 ...(base.dynamic),
-                scale: this.scale,
             },
         };
     }

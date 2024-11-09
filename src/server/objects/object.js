@@ -6,6 +6,7 @@ class Object {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.scale = 1;
         this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
     }
 
@@ -47,6 +48,7 @@ class Object {
                 x: this.x,
                 y: this.y,
                 dir: this.dir,
+                scale: this.scale,
             },
         };
     }

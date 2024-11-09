@@ -18,7 +18,7 @@ class Player extends Entity {
         this.kills = 0;
         this.lastupdated = Date.now();
         this.playerdelay = 0;
-        this.scale = 1;
+        this.scale = Constants.PLAYER_SCALE;
         this.health = 10;
         this.color = {
             r: .7 + Math.random() * .3,

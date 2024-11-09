@@ -1,4 +1,4 @@
-import { setPos, setHitandSwing } from './input.js';
+import { setPos, setSelf } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
@@ -13,6 +13,7 @@ const players = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
+let self;
 
 export function initState(){
     gameStart = 0;
@@ -41,8 +42,13 @@ export function processGameUpdate(update){
         setPos(update.fixes.setpos);
     }
 
-    // set hit
-    setHitandSwing(update.hit, update.swinging, update.lastattackdir);
+    // get self updates
+    if(!self){
+        self = new Player(update.me);
+    }else{
+        self.pushUpdate(update.me);
+    }
+    self.purgeUpdates();
 
     // set players default to not updated aka left (used later)
     Object.values(players).forEach(p => {
@@ -105,6 +111,7 @@ export function getCurrentState(){
         const update = gameUpdates[gameUpdates.length - 1];
         return {
             others: others,
+            self: self.interpolateSelf(),
         };
     }else{
         const baseUpdate = gameUpdates[base];
@@ -112,6 +119,7 @@ export function getCurrentState(){
         const ratio = (serverTime - baseUpdate.t) / (next.t - baseUpdate.t);
         return {
             others: others,
+            self: self.interpolateSelf(),
         };
     }
 }

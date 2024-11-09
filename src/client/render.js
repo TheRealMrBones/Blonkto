@@ -1,11 +1,11 @@
 import { getAsset, getColoredAsset, getColoredAssetVariant } from './assets.js';
 import { getCurrentState } from './state.js';
-import { getSelf } from './input.js';
+import { getSelf, setSelf } from './input.js';
 import { getCell } from './world.js';
 import { updateFps } from './ui.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, PLAYER_SCALE, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
+const { ASSETS, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
 
 // #region init
 
@@ -63,11 +63,14 @@ function calculatefps(){
 // continuously runs to get max fps possible
 function render(){
     // get all needed state and self info
-    if(getCurrentState() == null){
+    const state = getCurrentState();
+    if(state == null){
         animationFrameRequestId = requestAnimationFrame(render);
         return;
     }
-    const { others } = getCurrentState();
+
+    const { others, self } = state;
+    setSelf(self);
     const me = getSelf();
     me.color = myColor;
     me.asset = ASSETS.PLAYER;
@@ -172,27 +175,27 @@ function renderPlayer(me, player){
     }
 
     // prepare context
-    const { x, y, dir } = player;
+    const { x, y, dir, scale } = player;
     const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
     const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
     context.save();
     context.translate(canvasX, canvasY);
     context.rotate(dir);
-
+    
     // draw player
     context.drawImage(
         model,
-        -cellSize * PLAYER_SCALE / 2,
-        -cellSize * PLAYER_SCALE * model.height / model.width + cellSize * PLAYER_SCALE / 2,
-        cellSize * PLAYER_SCALE,
-        cellSize * PLAYER_SCALE * model.height / model.width,
+        -cellSize * scale / 2,
+        -cellSize * scale * model.height / model.width + cellSize * scale / 2,
+        cellSize * scale,
+        cellSize * scale * model.height / model.width,
     );
     context.restore();
 }
 
 function renderSwing(me, player){
     // prepare context
-    const { x, y, lastattackdir } = player;
+    const { x, y, scale, lastattackdir } = player;
     const canvasX = canvas.width / 2 + fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.x);
     const canvasY = canvas.height / 2 + fixCoord(y + Math.cos(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.y);
     context.save();
@@ -200,7 +203,7 @@ function renderSwing(me, player){
 
     // draw swing
     context.beginPath();
-    context.arc(0, 0, cellSize * PLAYER_SCALE / 2, 0, 2 * Math.PI);
+    context.arc(0, 0, cellSize * scale / 2, 0, 2 * Math.PI);
     context.fillStyle = "white";
     context.fill();
     context.restore();
