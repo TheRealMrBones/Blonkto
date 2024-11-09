@@ -7,6 +7,9 @@ const SwordItem = require('../items/swordItem.js');
 class Player extends Entity {
     constructor(id, socket, username, x, y, dir, data){
         super(id, x, y, dir);
+
+        this.chunk = { x: 1000, y: 1000}; // purposefully make chunk off so that new update has load data
+
         this.op = false;
         this.asset = Constants.ASSETS.PLAYER;
         this.socket = socket;
@@ -33,6 +36,41 @@ class Player extends Entity {
         // reading data
         if(data !== undefined){
             const playerdata = data.split("|");
+
+            this.username = playerdata[0];
+            this.op = Boolean(playerdata[1]);
+
+            const coordsdata = playerdata[2].split(",");
+            this.x = parseFloat(coordsdata[0]);
+            this.y = parseFloat(coordsdata[1]);
+
+            this.health = parseInt(playerdata[3]);
+            this.kills = parseInt(playerdata[4]);
+
+            const colordata = playerdata[5].split(",");
+            this.color = {
+                r: parseFloat(colordata[0]),
+                g: parseFloat(colordata[1]),
+                b: parseFloat(colordata[2]),
+            }
+
+            const inventorydata = playerdata[6].split(",");
+            for(let i = 0; i < inventorydata.length; i++){
+                switch(parseInt(inventorydata[i])){
+                    case 0:
+                        this.inventory[i] = null;
+                        break;
+                    case 1:
+                        this.inventory[i] = new StoneBlockItem();
+                        break;
+                    case 2:
+                        this.inventory[i] = new PickaxeItem();
+                        break;
+                    case 3:
+                        this.inventory[i] = new SwordItem();
+                        break;
+                }
+            }
         }
 
         this.resetFixes();
@@ -116,14 +154,24 @@ class Player extends Entity {
     serializeForWrite(){
         let data = "";
 
-        data += this.uesrname.toString() + "|"
+        data += this.username.toString() + "|"
+
+        data += this.op.toString() + "|"
+
+        data += this.x.toString() + "," + this.y.toString() + "|";
 
         data += this.health.toString() + "|"
+
+        data += this.kills.toString() + "|"
 
         data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|"
 
         for(let i = 0; i < this.inventory.length; i++){
-            data += this.inventory[i].itemid.toString() + ",";
+            if(this.inventory[i]){
+                data += this.inventory[i].itemid.toString() + ",";
+            }else{
+                data += "0,";
+            }
         }
         data += "|";
 

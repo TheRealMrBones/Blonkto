@@ -1,5 +1,6 @@
 const Constants = require('../shared/constants.js');
 const Player = require('./objects/player.js');
+const PlayerManager = require('./playerManager.js');
 const World = require('./world/world.js');
 const shortid = require('shortid');
 const { attackHitCheck } = require('./collisions.js');
@@ -10,6 +11,7 @@ class Game {
     constructor(fm, am){
         this.fileManager = fm;
         this.accountManager = am;
+        this.playerManager = new PlayerManager(fm, this);
 
         this.players = {};
         this.lastUpdateTime = Date.now();
@@ -45,13 +47,12 @@ class Game {
     }
 
     addPlayer(socket, username){
-        let spawn = this.world.getSpawn();
-        this.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0);
-        this.players[socket.id].chunk = { x: spawn.chunk.x + 10, y: spawn.chunk.y + 10}; // purposefully make chunk off so that new update has load data
+        this.playerManager.createPlayer(socket, username);
+
         this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
         socket.emit(Constants.MSG_TYPES.PLAYER_INSTANTIATED, {
-            x: spawn.pos.x,
-            y: spawn.pos.y,
+            x: this.players[socket.id].x,
+            y: this.players[socket.id].y,
             color: this.players[socket.id].color,
         });
 
@@ -59,16 +60,17 @@ class Game {
     }
 
     removePlayer(socket){
-        if(!this.players[socket.id]){
-            return; // temp fix until i redo player saving / death mechanic
+        if(this.players[socket.id]){
+            this.sendMessage(`${this.players[socket.id].username} has disconnected`);
+
+            this.playerManager.unloadPlayer(this.players[socket.id]);
         }
-        this.sendMessage(`${this.players[socket.id].username} has disconnected`);
-        delete this.players[socket.id];
     }
 
     killPlayer(socket, killedby){
         this.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
-        delete this.players[socket.id];
+
+        this.playerManager.deletePlayer(this.players[socket.id]);
     }
 
     // #endregion
@@ -132,7 +134,7 @@ class Game {
                 p.socket.emit(Constants.MSG_TYPES.DEAD);
                 this.killPlayer(p.socket, p.killedby);
             }
-        })
+        });
 
         if(this.shouldSendUpdate){
             // send fat update packets

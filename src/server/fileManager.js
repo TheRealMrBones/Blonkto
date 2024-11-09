@@ -16,6 +16,15 @@ class FileManager {
         });
     }
 
+    deleteFile(filename){
+        try{
+            fs.unlinkSync(this.getFullFilePath(filename));
+        } catch (error) {
+            console.error('An error occurred while deleting the file:', error);
+            return false
+        }
+    }
+
     // #endregion
 
     // #region reading
@@ -24,7 +33,8 @@ class FileManager {
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
             return true;
-        } catch (err) {
+        } catch (error) {
+            // Don't return error this is expected!
             return false;
         }
     }
@@ -33,7 +43,7 @@ class FileManager {
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
             return data;
-        } catch (err) {
+        } catch (error) {
             console.error('An error occurred while reading the file:', error);
             return false;
         }

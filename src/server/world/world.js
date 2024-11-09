@@ -9,7 +9,7 @@ class World {
         this.loadedchunks = {};
         this.generateSpawn();
 
-        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * Constants.WORLD_AUTOSAVE_RATE);
+        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * Constants.AUTOSAVE_RATE);
     }
 
     // #region Spawn

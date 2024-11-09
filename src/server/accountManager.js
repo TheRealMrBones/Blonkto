@@ -27,7 +27,7 @@ class AccountManager {
         }
 
         // Check if username already exists
-        if(this.fileManager.fileExists(getPlayerFilePath(username))){
+        if(this.fileManager.fileExists(getAccountFilePath(username))){
             return { error: 'Invalid username. Account with that name already exists.' };
         }
 
@@ -39,7 +39,7 @@ class AccountManager {
         // write account file (with hashed password)
         const data = hashedPw + "|" + acc.serializeForWrite();
 
-        this.fileManager.writeFile(getPlayerFilePath(username), data);
+        this.fileManager.writeFile(getAccountFilePath(username), data);
 
         // return the account
         return { account: acc };
@@ -54,12 +54,12 @@ class AccountManager {
         password = sanitizeInput(password);
         
         // Check if account exists
-        if(!this.fileManager.fileExists(getPlayerFilePath(username))){
+        if(!this.fileManager.fileExists(getAccountFilePath(username))){
             return { error: 'Account does not exist' };
         }
 
         // read account data
-        const data = this.fileManager.readFile(getPlayerFilePath(username)).split("|");
+        const data = this.fileManager.readFile(getAccountFilePath(username)).split("|");
 
         // check if password matches
         if(!bcrypt.compareSync(password, data[0])){
@@ -83,8 +83,8 @@ const isAlphanumeric = (str) => /^[a-zA-Z0-9_]*$/.test(str);
 // Sanitize input
 const sanitizeInput = (input) => validator.escape(input);
 
-// Get player file path
-const getPlayerFilePath = (username) => ("accounts/" + username);
+// Get account file path
+const getAccountFilePath = (username) => ("accounts/" + username);
 
 // #endregion
 
