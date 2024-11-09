@@ -34,6 +34,54 @@ class Object {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    tilesOn(){
+        const points = [];
+        
+        // get all integer coordinate points that are within object
+        for(let x = Math.floor(this.x - this.scale / 2); x < this.x + this.scale / 2; x++){
+            for(let y = Math.floor(this.y - this.scale / 2); y < this.y + this.scale / 2; y++){
+                const p = { x: x, y: y };
+                if(this.distanceTo({ x: x, y: y }) <= this.scale / 2){
+                    points.push(p);
+                }
+            }
+        }
+
+        // start tile array
+        const tiles = [{ x: Math.floor(this.x), y: Math.floor(this.y) }]; // include known center tile
+
+        // include tiles hit by each main axis end of the object
+        if(Math.floor(this.x - this.scale / 2) != Math.floor(this.x)){
+            tiles.push({ x: Math.floor(this.x - this.scale / 2), y: Math.floor(this.y) });
+        }
+        if(Math.floor(this.x + this.scale / 2) != Math.floor(this.x)){
+            tiles.push({ x: Math.floor(this.x + this.scale / 2), y: Math.floor(this.y) });
+        }
+        if(Math.floor(this.y - this.scale / 2) != Math.floor(this.y)){
+            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y - this.scale / 2) });
+        }
+        if(Math.floor(this.y + this.scale / 2) != Math.floor(this.y)){
+            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y + this.scale / 2) });
+        }
+
+        // get a list of the corresponding points that the points are touching
+        points.forEach(p => {
+            const tilestoadd = [
+                { x: p.x, y: p.y },
+                { x: p.x - 1, y: p.y },
+                { x: p.x - 1, y: p.y - 1 },
+                { x: p.x, y: p.y - 1 },
+            ];
+
+            tilestoadd.forEach(t => {
+                if(!tiles.some(ct => ct.x == t.x && ct.y == t.y))
+                    tiles.push(t);
+            });
+        });
+
+        return tiles;
+    }
+
     // #endregion
 
     // #region serialization
