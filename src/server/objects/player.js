@@ -20,10 +20,13 @@ class Player extends Entity {
         this.playerdelay = 0;
         this.scale = Constants.PLAYER_SCALE;
         this.health = 10;
+
+        // racism
+        const antiracism = 1 - Constants.RACISM
         this.color = {
-            r: .7 + Math.random() * .3,
-            g: .7 + Math.random() * .3,
-            b: .7 + Math.random() * .3,
+            r: antiracism + Math.random() * Constants.RACISM,
+            g: antiracism + Math.random() * Constants.RACISM,
+            b: antiracism + Math.random() * Constants.RACISM,
         };
 
         // inventory
