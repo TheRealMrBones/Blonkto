@@ -1,8 +1,9 @@
 const Constants = require('../../shared/constants.js');
 
 class Ceiling {
+    static id = 0;
+
     constructor(){
-        this.id = 0;
         this.asset = Constants.ASSETS.MISSING_TEXTURE;
     }
 
@@ -15,7 +16,7 @@ class Ceiling {
     }
 
     serializeForWrite(){
-        return this.id.toString();
+        return this.constructor.id.toString();
     }
 
     // #endregion

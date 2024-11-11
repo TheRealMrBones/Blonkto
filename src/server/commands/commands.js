@@ -8,6 +8,17 @@ const HelpCommand = require('./helpCommand.js');
 const KillCommand = require('./killCommand.js');
 const SaveWorldCommand = require('./saveWorldCommand');
 
+const commands = [
+    OpCommand,
+    DeopCommand,
+    TpCommand,
+    PingCommand,
+    NickCommand,
+    HelpCommand,
+    KillCommand,
+    SaveWorldCommand,
+];
+
 exports.ExcecuteCommand = (game, player, command) => {
     if(command.length == 0){
         Command.sendResponse(player, `no command given`);
@@ -17,15 +28,11 @@ exports.ExcecuteCommand = (game, player, command) => {
     const tokens = command.split(' ');
     const key = tokens[0];
 
-    switch(key){
-        case OpCommand.key: { OpCommand.execute(game, player, tokens); break; };
-        case DeopCommand.key: { DeopCommand.execute(game, player, tokens); break; };
-        case TpCommand.key: { TpCommand.execute(game, player, tokens); break; };
-        case PingCommand.key: { PingCommand.execute(game, player, tokens); break; };
-        case NickCommand.key: { NickCommand.execute(game, player, tokens); break; };
-        case HelpCommand.key: { HelpCommand.execute(game, player, tokens); break; };
-        case KillCommand.key: { KillCommand.execute(game, player, tokens); break; };
-        case SaveWorldCommand.key: { SaveWorldCommand.execute(game, player, tokens); break; };
-        default: { Command.sendResponse(player, `command "${key}" not found`); break; };
+    // Find command
+    const c = commands.find(c => c.key == key);
+    if(c){
+        c.execute(game, player, tokens);
+    }else{
+        Command.sendResponse(player, `command "${key}" not found`);
     }
 }

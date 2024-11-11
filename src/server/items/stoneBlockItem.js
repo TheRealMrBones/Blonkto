@@ -3,9 +3,11 @@ const Item = require('./item.js');
 const StoneBlock = require('../world/blocks/stoneBlock.js');
 
 class StoneBlockItem extends Item {
+    static itemid = 1;
+
     constructor(id){
         super(id)
-        this.itemid = 1;
+
         this.name = "Stone Block";
         this.place = true;
         this.asset = Constants.ASSETS.MISSING_TEXTURE;

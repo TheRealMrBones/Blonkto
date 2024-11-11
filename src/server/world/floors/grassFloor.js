@@ -2,9 +2,10 @@ const Constants = require('../../../shared/constants.js');
 const Floor = require('../floor.js');
 
 class GrassFloor extends Floor {
+    static id = 1;
+
     constructor(){
         super();
-        this.id = 1;
         this.asset = Constants.ASSETS.GRASS_FLOOR;
     }
 }

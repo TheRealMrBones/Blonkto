@@ -1,5 +1,6 @@
 const Entity = require('./entity.js');
 const Constants = require('../../shared/constants.js');
+const { GetItemObject } = require('../items/items.js');
 const StoneBlockItem = require('../items/stoneBlockItem.js');
 const PickaxeItem = require('../items/pickaxeItem.js');
 const SwordItem = require('../items/swordItem.js');
@@ -59,20 +60,8 @@ class Player extends Entity {
 
             const inventorydata = playerdata[6].split(",");
             for(let i = 0; i < inventorydata.length; i++){
-                switch(parseInt(inventorydata[i])){
-                    case 0:
-                        this.inventory[i] = null;
-                        break;
-                    case 1:
-                        this.inventory[i] = new StoneBlockItem();
-                        break;
-                    case 2:
-                        this.inventory[i] = new PickaxeItem();
-                        break;
-                    case 3:
-                        this.inventory[i] = new SwordItem();
-                        break;
-                }
+                const itemid = parseInt(inventorydata[i]);
+                this.inventory[i] = GetItemObject(0, itemid);
             }
         }
 
@@ -171,7 +160,7 @@ class Player extends Entity {
 
         for(let i = 0; i < this.inventory.length; i++){
             if(this.inventory[i]){
-                data += this.inventory[i].itemid.toString() + ",";
+                data += this.inventory[i].serializeForWrite() + ",";
             }else{
                 data += "0,";
             }

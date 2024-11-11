@@ -1,8 +1,9 @@
 const Constants = require('../../shared/constants.js');
 
 class Block {
+    static id = 0;
+
     constructor(){
-        this.id = 0;
         this.asset = Constants.ASSETS.MISSING_TEXTURE;
         this.scale = 1;
         this.shape = Constants.SHAPES.SQUARE;
@@ -19,7 +20,7 @@ class Block {
     }
 
     serializeForWrite(){
-        return this.id.toString();
+        return this.constructor.id.toString();
     }
 
     // #endregion
