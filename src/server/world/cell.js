@@ -1,20 +1,19 @@
 class Cell {
-    constructor(){
-        // default cell (empty)
-        this.floor = null;
-        this.block = null;
-        this.ceiling = null;
+    constructor(block, floor, ceiling){
+        this.block = block;
+        this.floor = floor;
+        this.ceiling = ceiling;
     }
 
     // #region serialization
 
     serializeForLoad(){
         const data = {};
-        if(this.floor){
-            data.floor = this.floor.serializeForLoad();
-        }
         if(this.block){
             data.block = this.block.serializeForLoad();
+        }
+        if(this.floor){
+            data.floor = this.floor.serializeForLoad();
         }
         if(this.ceiling){
             data.ceiling = this.ceiling.serializeForLoad();
@@ -25,14 +24,14 @@ class Cell {
 
     serializeForWrite(){
         let data = "";
-        if(this.floor){
-            data += this.floor.serializeForWrite();
+        if(this.block){
+            data += this.block.serializeForWrite();
         }else {
             data += "0";
         }
         data += ",";
-        if(this.block){
-            data += this.block.serializeForWrite();
+        if(this.floor){
+            data += this.floor.serializeForWrite();
         }else {
             data += "0";
         }

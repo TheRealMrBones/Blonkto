@@ -1,5 +1,6 @@
 const Constants = require('../../shared/constants.js');
 const Cell = require('./cell.js');
+const { GetCellObject } = require('./cells.js');
 const GrassFloor = require('./floors/grassFloor.js');
 const StoneBlock = require('./blocks/stoneBlock.js');
 
@@ -19,15 +20,9 @@ class Chunk {
                 for(let x = 0; x < Constants.CHUNK_SIZE; x++){
                     this.cells[x] = [];
                     for(let y = 0; y < Constants.CHUNK_SIZE; y++){
-                        this.cells[x][y] = new Cell();
-                        
                         const celldata = chunkdata[x * Constants.CHUNK_SIZE + y].split(",");
-                        if(parseInt(celldata[0]) == 1){
-                            this.cells[x][y].floor = new GrassFloor();
-                        }
-                        if(parseInt(celldata[1]) == 1){
-                            this.cells[x][y].block = new StoneBlock();
-                        }
+                        
+                        this.cells[x][y] = GetCellObject(parseInt(celldata[0]), parseInt(celldata[1]), parseInt(celldata[2]));
                     }
                 }
             }catch(e){
