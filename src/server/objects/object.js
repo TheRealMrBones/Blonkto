@@ -3,25 +3,54 @@ const Constants = require('../../shared/constants.js');
 class Object {
     constructor(id, x, y, dir){
         this.id = id;
+
+        this.lastupdate = Date.now();
+
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.scale = 1;
         this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
+
+        this.falling = false;
     }
 
     // #region setters
 
-    setDirection(dir){
-        this.dir = dir;
+    update(data){
+        const now = Date.now();
+        const deltatime = now - this.lastupdate;
+
+        if(data.dir){
+            this.dir = data.dir;
+        }
+        
+        if(data.x){
+            this.x = data.x;
+        }else if(data.dx){
+            this.x += data.dx;
+        }
+        if(data.y){
+            this.y = data.y;
+        }else if(data.dy){
+            this.y += data.dy;
+        }
+
+        // get next fall scale
+        if(this.falling){
+            this.scale -= Constants.FALL_RATE * deltatime / 1000;
+            if(this.scale <= 0){
+                this.scale = 0;
+                this.falling = false;
+                this.onFell();
+            }
+        }
+
+        this.lastupdate = now;
     }
 
-    updateX(x){
-        this.x += x;
-    }
+    onFell(){
 
-    updateY(y){
-        this.y += y;
     }
 
     // #endregion
@@ -91,6 +120,7 @@ class Object {
             static: {
                 id: this.id,
                 asset: this.asset,
+                falling: this.falling,
             },
             dynamic: {
                 x: this.x,

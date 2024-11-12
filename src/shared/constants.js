@@ -7,6 +7,10 @@ module.exports = Object.freeze({
     RACISM: .3,
     // #endregion
 
+    // #region object
+    FALL_RATE: .5,
+    // #endregion
+
     // #region attack hitbox
     ATTACK_DELAY: .7,
     ATTACK_HITBOX_WIDTH: 1,

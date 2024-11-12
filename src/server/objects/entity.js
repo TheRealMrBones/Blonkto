@@ -16,8 +16,20 @@ class Entity extends Object {
         this.lastattack = 0;
         this.lastattackdir = 0;
         
+        this.dead = false;
         this.killedby = "placeholder";
     }
+
+    // #region setters
+
+    onFell(){
+        setTimeout(() => {
+            this.dead = true;
+            this.killedby = "gravity";
+        }, 1000);
+    }
+
+    // #endregion
 
     // #region hit and swing
 

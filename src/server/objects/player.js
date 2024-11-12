@@ -15,9 +15,7 @@ class Player extends Entity {
         this.asset = Constants.ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
-        this.dead = false;
         this.kills = 0;
-        this.lastupdated = Date.now();
         this.playerdelay = 0;
         this.scale = Constants.PLAYER_SCALE;
         this.health = 10;
@@ -70,13 +68,11 @@ class Player extends Entity {
 
     // #region setters
 
-    move(t, x, y){
+    update(data){
         if(this.playerdelay == 0){
-            this.playerdelay = Date.now() - t;
+            this.playerdelay = Date.now() - data.t;
         }
-        this.lastupdated = t;
-        this.x = x;
-        this.y = y;
+        super.update(data);
     }
 
     // #endregion

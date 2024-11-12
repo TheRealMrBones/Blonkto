@@ -1,5 +1,4 @@
 const Constants = require('../shared/constants.js');
-const Player = require('./objects/player.js');
 const PlayerManager = require('./playerManager.js');
 const World = require('./world/world.js');
 const shortid = require('shortid');
@@ -124,8 +123,12 @@ class Game {
         if(this.players[socket.id] !== undefined){
             const { t, dir, x, y, hotbarslot } = inputs;
             if(this.players[socket.id]){
-                this.players[socket.id].setDirection(dir);
-                this.players[socket.id].move(t, x, y);
+                this.players[socket.id].update({
+                    dir: dir,
+                    x: x,
+                    y: y,
+                    t: t,
+                });
                 this.players[socket.id].hotbarslot = hotbarslot;
             }
         }
@@ -174,6 +177,21 @@ class Game {
 
         const worldLoad = this.world.loadPlayerChunks(player);
         player.chunk = worldLoad.chunk;
+        
+        // check for falling
+        const tilesOn = player.tilesOn();
+        let notair = 0;
+        tilesOn.forEach(tile => {
+            const cell = this.world.getCell(tile.x, tile.y, false);
+            if(cell){
+                if(cell.floor){
+                    notair++;
+                }
+            }
+        });
+        if(notair == 0){
+            player.falling = true;
+        }
 
         return {
             t: Date.now(),
