@@ -3,39 +3,44 @@ const Command = require('./command.js');
 
 const { COMMAND_ARGUMENTS } = Constants;
 
-class OpCommand extends Command{
-    static key = "op";
-    static op = true;
+class OppedCommand extends Command{
+    static key = "opped";
+    static op = false;
     static args = [
+        [COMMAND_ARGUMENTS.KEY],
         [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
     ];
 
     static execute(game, player, tokens){
-        // op passcode
-        if(tokens[1] == game.oppasscode && !game.oppasscodeused){
-            game.opManager.op(player.username)
-            game.oppasscodeused = true;
-            this.sendResponse(player, `you are now opped`);
-            return;
-        }
-
         // get parsed tokens (and check for perms)
         const parsedTokens = this.getParsedTokens(game, player, tokens);
         if(!parsedTokens){
             return;
         }
         const argIndex = parsedTokens[0];
+        
+        // special op checks
+        if(argIndex == 1 && !game.opManager.isOp(player.username)){
+            this.noPermMessage(player);
+            return;
+        }
 
         // do command based on what args set used
         switch(argIndex){
             case 0: {
+                if(game.opManager.isOp(player.username)){
+                    this.sendResponse(player, `you are opped`);
+                }else{
+                    this.sendResponse(player, `you are not opped`);
+                }
+                break;
+            };
+            case 1: {
                 const p = parsedTokens[1];
                 if(game.opManager.isOp(p.username)){
-                    this.sendResponse(player, `${p.username} is already opped`);
+                    this.sendResponse(player, `${p.username} is opped`);
                 }else{
-                    game.opManager.op(p.username)
-                    this.sendResponse(p, `you are now opped`);
-                    this.sendResponse(player, `opped ${p.username}`);
+                    this.sendResponse(player, `${p.username} is not opped`);
                 }
                 break;
             };
@@ -43,4 +48,4 @@ class OpCommand extends Command{
     }
 }
 
-module.exports = OpCommand;
+module.exports = OppedCommand;

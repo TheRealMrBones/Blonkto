@@ -1,5 +1,6 @@
 const Constants = require('../shared/constants.js');
 const PlayerManager = require('./playerManager.js');
+const OpManager = require('./opManager.js');
 const World = require('./world/world.js');
 const shortid = require('shortid');
 const { attackHitCheck } = require('./collisions.js');
@@ -8,21 +9,32 @@ const { ExcecuteCommand } = require('./commands/commands.js');
 
 class Game {
     constructor(fm, am){
+        // managers
         this.fileManager = fm;
         this.accountManager = am;
         this.playerManager = new PlayerManager(fm, this);
+        this.opManager = new OpManager(fm);
 
+        // entities
         this.players = {};
-        this.lastUpdateTime = Date.now();
-        this.shouldSendUpdate = false;
+
+        // world
         this.world = new World(fm);
 
+        // updates
+        this.lastUpdateTime = Date.now();
+        this.shouldSendUpdate = false;
+
+        // intervals
         setInterval(this.tickChunkUnloader.bind(this), 1000 / Constants.CHUNK_UNLOAD_RATE);
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
 
-        this.oppasscode = shortid().toString();
-        this.oppasscodeused = false;
-        console.log(`oppasscode: ${this.oppasscode}`);
+        // op passcode (one time use to give owner op)
+        if(!Constants.OP_PASSCODE && (this.opManager.opCount() == 0 || Constants.OP_PASSCODE_WHEN_OPS)){
+            this.oppasscode = shortid().toString();
+            this.oppasscodeused = false;
+            console.log(`oppasscode: ${this.oppasscode}`);
+        }
     }
 
     // #region players

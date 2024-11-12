@@ -1,9 +1,14 @@
 module.exports = Object.freeze({
+    // #region server
+    OP_PASSCODE: true,
+    OP_PASSCODE_WHEN_OPS: false,
+    // #endregion
+
     // #region player
     FILTER_USERNAME: false,
     PLAYER_SCALE: .55,
     PLAYER_SPEED: 3,
-    ALLOW_CHANGE_NAME: true,
+    ALLOW_CHANGE_NAME: false,
     RACISM: .3,
     // #endregion
 

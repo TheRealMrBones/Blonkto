@@ -11,7 +11,20 @@ class PingCommand extends Command{
     ];
 
     static execute(game, player, tokens){
-        this.sendResponse(player, `pong!`);
+        // get parsed tokens (and check for perms)
+        const parsedTokens = this.getParsedTokens(game, player, tokens);
+        if(!parsedTokens){
+            return;
+        }
+        const argIndex = parsedTokens[0];
+
+        // do command based on what args set used
+        switch(argIndex){
+            case 0: {
+                this.sendResponse(player, `pong!`);
+                break;
+            };
+        }
     }
 }
 

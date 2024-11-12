@@ -3,11 +3,11 @@ const Command = require('./command.js');
 
 const { COMMAND_ARGUMENTS } = Constants;
 
-class DeopCommand extends Command{
-    static key = "deop";
+class OpListCommand extends Command{
+    static key = "oplist";
     static op = true;
     static args = [
-        [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
+        [COMMAND_ARGUMENTS.KEY],
     ];
 
     static execute(game, player, tokens){
@@ -21,13 +21,9 @@ class DeopCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                const p = parsedTokens[1];
-                if(game.opManager.isOp(p.username)){
-                    game.opManager.deop(p.username);
-                    this.sendResponse(p, `you are no longer opped`);
-                    this.sendResponse(player, `deopped ${p.username}`);
-                }else{
-                    this.sendResponse(player, `${p.username} is not opped`);
+                this.sendResponse(player, `op list:`);
+                for(const username of game.opManager.opList()){
+                    this.sendResponse(player, `- ${username}`);
                 }
                 break;
             };
@@ -35,4 +31,4 @@ class DeopCommand extends Command{
     }
 }
 
-module.exports = DeopCommand;
+module.exports = OpListCommand;

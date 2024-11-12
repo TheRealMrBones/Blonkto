@@ -11,18 +11,22 @@ class HelpCommand extends Command{
     ];
 
     static execute(game, player, tokens){
-        this.sendResponse(player, `commandList:`);
+        this.sendResponse(player, `command list:`);
         this.sendResponse(player, `- help - gives list of commands`);
         this.sendResponse(player, `- ping - pong!`);
-        if(player.op){
+        if(game.opManager.isOp(player.username)){
             this.sendResponse(player, `- op - gives a player operator permissions`);
             this.sendResponse(player, `- deop - take away a players operator permissions`);
+            this.sendResponse(player, `- opped - check if you or another play is opped`);
+            this.sendResponse(player, `- oplist - view the full list of opped players`);
             this.sendResponse(player, `- tp - teleport a player`);
             this.sendResponse(player, `- kill - kill yourself or another player`);
             this.sendResponse(player, `- nick - change your name or another players`);
-            this.sendResponse(player, `- saveworld - saves teh world`);
+            this.sendResponse(player, `- saveworld - saves the world`);
         }else{
-            this.sendResponse(player, `- nick - change your name`);
+            this.sendResponse(player, `- opped - check if you are opped`);
+            if(Constants.ALLOW_CHANGE_NAME)
+                this.sendResponse(player, `- nick - change your name`);
         }
     }
 }

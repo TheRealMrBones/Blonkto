@@ -20,8 +20,8 @@ class OpCommand extends Command{
         const argIndex = parsedTokens[0];
 
         // special op checks
-        if((argIndex == 1 && !player.op) || (argIndex == 0 && !player.op && !ALLOW_CHANGE_NAME)){
-            this.noPermMessage();
+        if((argIndex == 1 && !game.opManager.isOp(player.username)) || (argIndex == 0 && !game.opManager.isOp(player.username) && !ALLOW_CHANGE_NAME)){
+            this.noPermMessage(player);
             return;
         }
 

@@ -11,7 +11,6 @@ class Player extends Entity {
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
-        this.op = false;
         this.asset = Constants.ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
@@ -40,23 +39,22 @@ class Player extends Entity {
             const playerdata = data.split("|");
 
             this.username = playerdata[0];
-            this.op = Boolean(playerdata[1]);
 
-            const coordsdata = playerdata[2].split(",");
+            const coordsdata = playerdata[1].split(",");
             this.x = parseFloat(coordsdata[0]);
             this.y = parseFloat(coordsdata[1]);
 
-            this.health = parseInt(playerdata[3]);
-            this.kills = parseInt(playerdata[4]);
+            this.health = parseInt(playerdata[2]);
+            this.kills = parseInt(playerdata[3]);
 
-            const colordata = playerdata[5].split(",");
+            const colordata = playerdata[4].split(",");
             this.color = {
                 r: parseFloat(colordata[0]),
                 g: parseFloat(colordata[1]),
                 b: parseFloat(colordata[2]),
             }
 
-            const inventorydata = playerdata[6].split(",");
+            const inventorydata = playerdata[5].split(",");
             for(let i = 0; i < inventorydata.length; i++){
                 const itemid = parseInt(inventorydata[i]);
                 this.inventory[i] = GetItemObject(0, itemid);
@@ -143,8 +141,6 @@ class Player extends Entity {
         let data = "";
 
         data += this.username.toString() + "|"
-
-        data += this.op.toString() + "|"
 
         data += this.x.toString() + "," + this.y.toString() + "|";
 

@@ -1,6 +1,8 @@
 const Command = require('./command.js');
 const OpCommand = require('./opCommand.js');
 const DeopCommand = require('./deopCommand.js');
+const OppedCommand = require('./oppedCommand.js');
+const OpListCommand = require('./opListCommand.js');
 const TpCommand = require('./tpCommand.js');
 const PingCommand = require('./pingCommand.js');
 const NickCommand = require('./nickCommand.js');
@@ -11,6 +13,8 @@ const SaveWorldCommand = require('./saveWorldCommand');
 const commands = [
     OpCommand,
     DeopCommand,
+    OppedCommand,
+    OpListCommand,
     TpCommand,
     PingCommand,
     NickCommand,

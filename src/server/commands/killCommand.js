@@ -20,8 +20,8 @@ class KillCommand extends Command{
         const argIndex = parsedTokens[0];
         
         // special op checks
-        if(argIndex == 1 && !player.op){
-            this.noPermMessage();
+        if(argIndex == 1 && !game.opManager.isOp(player.username)){
+            this.noPermMessage(player);
             return;
         }
 
