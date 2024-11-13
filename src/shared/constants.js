@@ -10,6 +10,7 @@ module.exports = Object.freeze({
     PLAYER_SPEED: 3,
     ALLOW_CHANGE_NAME: false,
     RACISM: .3,
+    RACISM_PERM: true,
     // #endregion
 
     // #region object

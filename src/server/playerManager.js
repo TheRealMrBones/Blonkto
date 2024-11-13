@@ -10,13 +10,15 @@ class PlayerManager {
     }
 
     createPlayer(socket, username){
+        // get spawn pos
+        let spawn = this.game.world.getSpawn();
+
         if(this.fileManager.fileExists(getPlayerFilePath(username))){
             // load existing player from data
             const data = this.fileManager.readFile(getPlayerFilePath(username));
-            this.game.players[socket.id] = new Player(socket.id, socket, username, 0, 0, 0, data);
+            this.game.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0, data);
         }else{
             // create new player
-            let spawn = this.game.world.getSpawn();
             this.game.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0);
         }
     }
@@ -30,6 +32,14 @@ class PlayerManager {
     deletePlayer(player){
         if(this.fileManager.fileExists(getPlayerFilePath(player.username)))
             this.fileManager.deleteFile(getPlayerFilePath(player.username));
+
+        delete this.game.players[player.id];
+    }
+
+    killPlayer(player){
+        const data = player.serializeAfterKilled();
+
+        this.fileManager.writeFile(getPlayerFilePath(player.username), data);
 
         delete this.game.players[player.id];
     }

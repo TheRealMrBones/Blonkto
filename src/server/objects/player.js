@@ -38,26 +38,41 @@ class Player extends Entity {
         if(data !== undefined){
             const playerdata = data.split("|");
 
-            this.username = playerdata[0];
+            if(playerdata[0] == "dead!"){
+                this.username = playerdata[1];
 
-            const coordsdata = playerdata[1].split(",");
-            this.x = parseFloat(coordsdata[0]);
-            this.y = parseFloat(coordsdata[1]);
-
-            this.health = parseInt(playerdata[2]);
-            this.kills = parseInt(playerdata[3]);
-
-            const colordata = playerdata[4].split(",");
-            this.color = {
-                r: parseFloat(colordata[0]),
-                g: parseFloat(colordata[1]),
-                b: parseFloat(colordata[2]),
-            }
-
-            const inventorydata = playerdata[5].split(",");
-            for(let i = 0; i < inventorydata.length; i++){
-                const itemid = parseInt(inventorydata[i]);
-                this.inventory[i] = GetItemObject(0, itemid);
+                this.kills = parseInt(playerdata[2]);
+                
+                if(Constants.RACISM_PERM){
+                    const colordata = playerdata[3].split(",");
+                    this.color = {
+                        r: parseFloat(colordata[0]),
+                        g: parseFloat(colordata[1]),
+                        b: parseFloat(colordata[2]),
+                    }
+                }
+            }else{
+                this.username = playerdata[0];
+    
+                const coordsdata = playerdata[1].split(",");
+                this.x = parseFloat(coordsdata[0]);
+                this.y = parseFloat(coordsdata[1]);
+    
+                this.health = parseInt(playerdata[2]);
+                this.kills = parseInt(playerdata[3]);
+    
+                const colordata = playerdata[4].split(",");
+                this.color = {
+                    r: parseFloat(colordata[0]),
+                    g: parseFloat(colordata[1]),
+                    b: parseFloat(colordata[2]),
+                }
+    
+                const inventorydata = playerdata[5].split(",");
+                for(let i = 0; i < inventorydata.length; i++){
+                    const itemid = parseInt(inventorydata[i]);
+                    this.inventory[i] = GetItemObject(0, itemid);
+                }
             }
         }
 
@@ -140,15 +155,15 @@ class Player extends Entity {
     serializeForWrite(){
         let data = "";
 
-        data += this.username.toString() + "|"
+        data += this.username.toString() + "|";
 
         data += this.x.toString() + "," + this.y.toString() + "|";
 
-        data += this.health.toString() + "|"
+        data += this.health.toString() + "|";
 
-        data += this.kills.toString() + "|"
+        data += this.kills.toString() + "|";
 
-        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|"
+        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|";
 
         for(let i = 0; i < this.inventory.length; i++){
             if(this.inventory[i]){
@@ -158,6 +173,18 @@ class Player extends Entity {
             }
         }
         data += "|";
+
+        return data;
+    }
+
+    serializeAfterKilled(){
+        let data = "dead!|";
+
+        data += this.username.toString() + "|";
+
+        data += this.kills.toString() + "|";
+
+        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|";
 
         return data;
     }

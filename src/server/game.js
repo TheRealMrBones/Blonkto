@@ -83,7 +83,7 @@ class Game {
         
         socket.emit(Constants.MSG_TYPES.DEAD);
 
-        this.playerManager.deletePlayer(this.players[socket.id]);
+        this.playerManager.killPlayer(this.players[socket.id]);
     }
 
     // #endregion
