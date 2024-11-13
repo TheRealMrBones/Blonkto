@@ -75,6 +75,15 @@ function render(){
     me.color = myColor;
     me.asset = ASSETS.PLAYER;
 
+    // get object states (for deciding rendering order)
+    const fallingplayers = others.filter(o => o.falling);
+    const notfallingplayers = others.filter(o => !o.falling);
+    if(me.falling){
+        fallingplayers.push(me);
+    }else{
+        notfallingplayers.push(me);
+    }
+
     // get the actual tile the player is in
     const playertile = {
         x: Math.floor(me.x),
@@ -90,10 +99,12 @@ function render(){
     // render priority goes low to high
     renderBackground(me);
 
+    fallingplayers.forEach(renderPlayer.bind(null, me));
+
     renderFloors(firstCell);
     renderBlocks(firstCell);
-    others.forEach(renderPlayer.bind(null, me));
-    renderPlayer(me, me);
+
+    notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
 
     // update fps

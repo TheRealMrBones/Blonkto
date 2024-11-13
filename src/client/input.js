@@ -25,6 +25,8 @@ let hit = false;
 let swinging = false;
 let lastattackdir = 0;
 
+let falling = false;
+
 // #endregion
 
 // #region handle mouse movement
@@ -333,6 +335,7 @@ export function getSelf(){
         hit: hit,
         swinging: swinging,
         lastattackdir: lastattackdir,
+        falling: falling,
     }
 }
 
@@ -370,6 +373,7 @@ export function setSelf(me){
     hit = me.hit;
     swinging = me.swinging;
     lastattackdir = me.lastattackdir;
+    falling = me.falling;
 }
 
 // #endregion

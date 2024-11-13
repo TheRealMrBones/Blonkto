@@ -30,7 +30,7 @@ class Game {
         setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
-        if(!Constants.OP_PASSCODE && (this.opManager.opCount() == 0 || Constants.OP_PASSCODE_WHEN_OPS)){
+        if(Constants.OP_PASSCODE && (this.opManager.opCount() == 0 || Constants.OP_PASSCODE_WHEN_OPS)){
             this.oppasscode = shortid().toString();
             this.oppasscodeused = false;
             console.log(`oppasscode: ${this.oppasscode}`);
