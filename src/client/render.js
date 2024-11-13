@@ -9,16 +9,23 @@ const { ASSETS, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SI
 
 // #region init
 
-const canvas = document.getElementById('gamecanvas');
+const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
+const rendercanvas = document.getElementById('gamecanvas');
+const rendercontext = rendercanvas.getContext('2d');
 
 // make sure canvas width and cell size are always correct
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+rendercanvas.width = window.innerWidth;
+rendercanvas.height = window.innerHeight;
+
 let cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    rendercanvas.width = window.innerWidth;
+    rendercanvas.height = window.innerHeight;
     cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 });
 
@@ -106,6 +113,9 @@ function render(){
 
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
+
+    // draw frame on render canvas
+    rendercontext.drawImage(canvas,0,0);
 
     // update fps
     thisframe = Date.now();
@@ -280,7 +290,7 @@ let animationFrameRequestId;
 let updatefpsinterval;
 
 export function startRendering(){
-    updatefpsinterval = setInterval(calculatefps, 1000);
+    updatefpsinterval = setInterval(calculatefps, 500);
 
     animationFrameRequestId = requestAnimationFrame(render);
 }
