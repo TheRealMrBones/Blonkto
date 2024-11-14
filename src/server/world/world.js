@@ -322,7 +322,7 @@ class World {
         
         let empty = true;
         entities.forEach(e => {
-            if(e.chunk.x == chunk.x && e.chunk.y == chunk.y){
+            if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
                 if(e.tilesOn().some(t => t.x == x && t.y == y)){
                     empty = false;
                 }
