@@ -23,6 +23,10 @@ class HelpCommand extends Command{
             this.sendResponse(player, `- kill - kill yourself or another player`);
             this.sendResponse(player, `- nick - change your name or another players`);
             this.sendResponse(player, `- saveworld - saves the world`);
+            this.sendResponse(player, `- kick - kick a player from the server`);
+            this.sendResponse(player, `- ban - ban a player from the server`);
+            this.sendResponse(player, `- pardon - remove a player from the ban list`);
+            this.sendResponse(player, `- banlist - get a list of all banned players`);
         }else{
             this.sendResponse(player, `- opped - check if you are opped`);
             if(Constants.ALLOW_CHANGE_NAME)

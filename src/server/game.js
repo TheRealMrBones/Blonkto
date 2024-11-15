@@ -1,6 +1,7 @@
 const Constants = require('../shared/constants.js');
 const PlayerManager = require('./playerManager.js');
 const OpManager = require('./opManager.js');
+const BanManager = require('./banManager.js');
 const World = require('./world/world.js');
 const shortid = require('shortid');
 const { attackHitCheck } = require('./collisions.js');
@@ -14,6 +15,7 @@ class Game {
         this.accountManager = am;
         this.playerManager = new PlayerManager(fm, this);
         this.opManager = new OpManager(fm);
+        this.banManager = new BanManager(fm);
 
         // entities
         this.players = {};
@@ -58,6 +60,11 @@ class Game {
     }
 
     addPlayer(socket, username){
+        if(this.banManager.isBanned(username)){
+            socket.emit(Constants.MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned" });
+            return;
+        }
+
         this.playerManager.createPlayer(socket, username);
 
         this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));

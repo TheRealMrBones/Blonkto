@@ -61,6 +61,7 @@ module.exports = Object.freeze({
         CREATE_ACCOUNT: "create_account",
         LOGIN: "login",
         JOIN_GAME: 'join_game',
+        CONNECTION_REFUSED: 'connection_refused',
         DISCONNECT: 'disconnect',
         PLAYER_INSTANTIATED: 'instantiated',
         GAME_UPDATE: 'update',
@@ -70,6 +71,8 @@ module.exports = Object.freeze({
         DEAD: 'dead',
         SEND_MESSAGE: 'send',
         RECEIVE_MESSAGE: 'receive',
+        KICK: 'kick',
+        BAN: 'ban',
     },
     // #endregion
 

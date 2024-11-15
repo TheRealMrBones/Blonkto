@@ -9,6 +9,10 @@ const NickCommand = require('./nickCommand.js');
 const HelpCommand = require('./helpCommand.js');
 const KillCommand = require('./killCommand.js');
 const SaveWorldCommand = require('./saveWorldCommand');
+const KickCommand = require('./kickCommand');
+const BanCommand = require('./banCommand');
+const PardonCommand = require('./pardonCommand');
+const BanListCommand = require('./banListCommand');
 
 const commands = [
     OpCommand,
@@ -21,6 +25,10 @@ const commands = [
     HelpCommand,
     KillCommand,
     SaveWorldCommand,
+    KickCommand,
+    BanCommand,
+    PardonCommand,
+    BanListCommand,
 ];
 
 exports.ExcecuteCommand = (game, player, command) => {

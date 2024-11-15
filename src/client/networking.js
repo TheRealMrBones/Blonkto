@@ -26,6 +26,8 @@ export const connect = onGameOver => (
         socket.on(MSG_TYPES.LOGIN, onlogin)
         socket.on(MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on(MSG_TYPES.DEAD, onGameOver);
+        socket.on(MSG_TYPES.KICK, onGameOver);
+        socket.on(MSG_TYPES.BAN, onGameOver);
         socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
         socket.on(MSG_TYPES.RECEIVE_MESSAGE, receiveChatMessage);
     })
