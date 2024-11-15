@@ -12,6 +12,7 @@ class SaveWorldCommand extends Command{
 
     static execute(game, player, tokens){
         game.world.saveWorld();
+        game.playerManager.savePlayers();
         this.sendResponse(player, `saved the world!`);
     }
 }
