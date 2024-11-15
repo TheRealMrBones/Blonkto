@@ -142,7 +142,6 @@ class Player extends Entity {
             static: {
                 ...(base.static),
                 username: this.username,
-                lastupdated: this.lastupdated,
                 playerdelay: this.playerdelay,
                 color: this.color,
             },

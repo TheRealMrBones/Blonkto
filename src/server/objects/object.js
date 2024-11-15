@@ -4,7 +4,7 @@ class Object {
     constructor(id, x, y, dir){
         this.id = id;
 
-        this.lastupdate = Date.now();
+        this.lastupdated = Date.now();
 
         this.x = x;
         this.y = y;
@@ -18,8 +18,7 @@ class Object {
     // #region setters
 
     update(data){
-        const now = Date.now();
-        const deltatime = now - this.lastupdate;
+        const deltatime = data.t - this.lastupdated;
 
         if(data.dir){
             this.dir = data.dir;
@@ -46,7 +45,7 @@ class Object {
             }
         }
 
-        this.lastupdate = now;
+        this.lastupdated = data.t;
     }
 
     onFell(){
@@ -120,6 +119,7 @@ class Object {
             static: {
                 id: this.id,
                 asset: this.asset,
+                lastupdated: this.lastupdated,
                 falling: this.falling,
             },
             dynamic: {
