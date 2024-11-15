@@ -11,8 +11,6 @@ const webpackConfig = require('../../webpack.dev.js');
 
 // #region init
 
-const loggedinaccounts = {};
-
 const app = express();
 
 app.use(express.static('public'));
@@ -52,7 +50,7 @@ const game = new Game(fileManager, accountManager);
 // #region socket functions
 
 function createAccount(credentials){
-	const response = accountManager.createAccount(credentials.username, credentials.password)
+	const response = accountManager.createAccount(this.id, credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
 
 	if(response.account){
@@ -62,18 +60,17 @@ function createAccount(credentials){
 }
 
 function login(credentials){
-	const response = accountManager.login(credentials.username, credentials.password)
+	const response = accountManager.login(this.id, credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
 
 	if(response.account){
-		loggedinaccounts[this.id] = response.account;
 		console.log(`[${this.id}] Logged in as: ${response.account.username}`);
 	}
 }
 
 function joinGame(username){
 	const newUsername = game.getUsername(username);
-	console.log(`[${this.id}] [${loggedinaccounts[this.id].username}] Joined the game`);
+	console.log(`[${this.id}] [${accountManager.getAccount(this.id).username}] Joined the game`);
 	game.addPlayer(this, newUsername);
 }
 
@@ -90,13 +87,15 @@ function interact(info){
 }
 
 function onDisconnect(){
-	if(loggedinaccounts[this.id]){
-		console.log(`[${this.id}] [${loggedinaccounts[this.id].username}] Disconnected`);
+	const acc = accountManager.getAccount(this.id);
+
+	if(acc){
+		console.log(`[${this.id}] [${acc.username}] Disconnected`);
+		accountManager.logout(this.id);
 	}else{
 		console.log(`[${this.id}] Disconnected`);
 	}
 
-	delete loggedinaccounts[this.id];
   	game.removePlayer(this);
 }
 

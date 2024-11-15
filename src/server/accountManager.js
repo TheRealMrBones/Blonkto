@@ -8,11 +8,12 @@ const saltRounds = 10;
 class AccountManager {
     constructor(fm){
         this.fileManager = fm;
+        this.accountsloggedin = {};
     }
 
     // #region creation
 
-    createAccount(username, password){
+    createAccount(id, username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -41,21 +42,29 @@ class AccountManager {
 
         this.fileManager.writeFile(getAccountFilePath(username), data);
 
+        // add account to logged in
+        this.accountsloggedin[id] = acc;
+
         // return the account
-        return { account: acc };
+        return { account: acc.serializeForSend() };
     }
 
     // #endregion
 
     // #region login
 
-    login(username, password){
+    login(id, username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
         // Check if account exists
         if(!this.fileManager.fileExists(getAccountFilePath(username))){
             return { error: 'Account does not exist' };
+        }
+
+        // Check if account is logged in
+        if(this.isLoggedIn(username)){
+            return { error: 'Account currently logged in' };
         }
 
         // read account data
@@ -67,9 +76,30 @@ class AccountManager {
         }
 
         let acc = new Account(data.slice(1));
+
+        // add account to logged in
+        this.accountsloggedin[id] = acc;
         
         // return the account
         return { account: acc.serializeForSend() };
+    }
+
+    logout(id){
+        delete this.accountsloggedin[id];
+    }
+
+    // #endregion
+
+    // #region getters
+
+    isLoggedIn(username){
+        username = sanitizeInput(username);
+
+        return Object.values(this.accountsloggedin).some(acc => acc.username == username);
+    }
+
+    getAccount(id){
+        return this.accountsloggedin[id];
     }
 
     // #endregion
