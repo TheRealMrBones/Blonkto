@@ -54,7 +54,6 @@ function createAccount(credentials){
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
 
 	if(response.account){
-		loggedinaccounts[this.id] = response.account;
 		console.log(`[${this.id}] Create account: ${response.account.username}`);
 	}
 }
