@@ -57,6 +57,9 @@ class OpManager {
             data += key + "|";
         }
 
+        if(data.length > 0)
+            data = data.substring(0, data.length - 1); // remove last |
+
         this.fileManager.writeFile("oplist", data);
     }
 
