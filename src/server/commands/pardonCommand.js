@@ -21,6 +21,11 @@ class PardonCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
+                if(!game.banManager.isBanned(parsedTokens[1])){
+                    this.sendResponse(player, `${parsedTokens[1]} isn't banned`);
+                    return;
+                }
+
                 game.banManager.pardon(parsedTokens[1]);
                 this.sendResponse(player, `pardoned ${parsedTokens[1]}`);
                 

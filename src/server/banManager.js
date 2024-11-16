@@ -8,9 +8,9 @@ class BanManager {
     
     // #region setters
 
-    ban(username){
+    ban(username, reason){
         username = username.toLowerCase();
-        this.bannedplayers[username] = true;
+        this.bannedplayers[username] = reason;
         this.save();
     }
 
@@ -29,6 +29,11 @@ class BanManager {
         return this.bannedplayers.hasOwnProperty(username);
     }
 
+    banReason(username){
+        username = username.toLowerCase();
+        return this.bannedplayers[username];
+    }
+
     banList(){
         return Object.keys(this.bannedplayers);
     }
@@ -42,10 +47,17 @@ class BanManager {
             return;
         }
 
-        const data = this.fileManager.readFile("banlist").split("|");
+        let data = this.fileManager.readFile("banlist");
 
-        for(const username of data){
-            this.ban(username);
+        if(data.length == 0){
+            return;
+        }
+
+        data = data.split("|");
+
+        for(let bandata of data){
+            bandata = bandata.split(",");
+            this.ban(bandata[0], bandata[1]);
         }
     }
 
@@ -53,7 +65,7 @@ class BanManager {
         let data = "";
 
         for (const key of Object.keys(this.bannedplayers)) {
-            data += key + "|";
+            data += key + "," + this.bannedplayers[key] + "|";
         }
 
         if(data.length > 0)

@@ -61,7 +61,7 @@ class Game {
 
     addPlayer(socket, username){
         if(this.banManager.isBanned(username)){
-            socket.emit(Constants.MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned" });
+            socket.emit(Constants.MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned", extra: this.banManager.banReason(username) });
             return;
         }
 

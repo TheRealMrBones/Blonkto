@@ -48,7 +48,7 @@ Promise.all([
     createAccountButton.onclick = sendcreateaccount;
     loginButton.onclick = sendlogin;
 
-    playButton.onclick = init;
+    playButton.onclick = joingame;
 
     changeLogButton.onclick = () => {
         changeLog.style.display = "block";
@@ -115,13 +115,27 @@ export function onlogin(response){
 
 // #region state changes
 
-function init(){
+function joingame(){
     play(account.username);
-    startMenu.style.display = "none";
     initState();
 }
 
-function onGameOver(){
+export function connectionRefused(info){
+    errorDiv.innerHTML = `Connection refused: ${info.reason}`;
+    if(info.extra){
+        errorDiv.innerHTML += `<br>${info.extra}`;
+    }
+}
+
+export function connectionAccepted(){
+    startMenu.style.display = "none";
+}
+
+function onGameOver(connectionrefusedinfo){
+    if(connectionrefusedinfo){
+        connectionRefused(connectionrefusedinfo);
+    }
+
     stopCapturingInput();
     stopRendering();
     hideUi();

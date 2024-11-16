@@ -5,7 +5,7 @@ import { startRendering, setColor } from './render.js';
 import { startCapturingInput } from './input.js';
 import { setupUi } from './ui.js';
 import { receiveChatMessage } from './chat.js';
-import { onlogin } from './index.js';
+import { onlogin, connectionRefused, connectionAccepted } from './index.js';
 
 const Constants = require('../shared/constants.js');
 const { MSG_TYPES } = Constants;
@@ -23,17 +23,19 @@ const connectedPromise = new Promise(resolve => {
 
 export const connect = onGameOver => (
     connectedPromise.then(() => {
-        socket.on(MSG_TYPES.LOGIN, onlogin)
+        socket.on(MSG_TYPES.LOGIN, onlogin);
+        socket.on(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
+        socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
         socket.on(MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on(MSG_TYPES.DEAD, onGameOver);
         socket.on(MSG_TYPES.KICK, onGameOver);
         socket.on(MSG_TYPES.BAN, onGameOver);
-        socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
         socket.on(MSG_TYPES.RECEIVE_MESSAGE, receiveChatMessage);
     })
 );
 
 function onInstantiated(stuff){
+    connectionAccepted();
     startCapturingInput(stuff.x, stuff.y);
     setColor(stuff.color);
     startRendering();
