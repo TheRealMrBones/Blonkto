@@ -112,6 +112,7 @@ export function getCurrentState(){
         return {
             others: others,
             self: self.interpolateSelf(),
+            entities: update.entities,
         };
     }else{
         const baseUpdate = gameUpdates[base];
@@ -120,6 +121,7 @@ export function getCurrentState(){
         return {
             others: others,
             self: self.interpolateSelf(),
+            entities: interpolateObjectArray(baseUpdate.entities, next.entities, ratio),
         };
     }
 }

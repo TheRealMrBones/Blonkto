@@ -1,9 +1,12 @@
-const Entity = require('./entity.js');
+const NonplayerEntity = require('./nonplayerEntity.js');
 const Constants = require('../../shared/constants.js');
 
-class Pig extends Entity {
-    constructor(id, x, y, dir, data){
+class Pig extends NonplayerEntity {
+    constructor(id, x, y, dir){
         super(id, x, y, dir);
+
+        this.asset = Constants.ASSETS.PIG;
+        this.scale = Constants.PLAYER_SCALE;
     }
 }
 

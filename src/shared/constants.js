@@ -84,6 +84,7 @@ module.exports = Object.freeze({
         GRASS_FLOOR: 'GrassFloor.png',
         SPACE_BG: 'SpaceBg.png',
         STONE_BLOCK: 'StoneBlock.png',
+        PIG: 'Pig.png',
     },
     // #endregion
 

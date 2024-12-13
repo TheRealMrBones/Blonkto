@@ -76,7 +76,7 @@ function render(){
         return;
     }
 
-    const { others, self } = state;
+    const { others, self, entities } = state;
     setSelf(self);
     const me = getSelf();
     me.color = myColor;
@@ -111,6 +111,7 @@ function render(){
     renderFloors(firstCell);
     renderBlocks(firstCell);
 
+    entities.forEach(renderEntity.bind(null, me));
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
 
@@ -175,6 +176,36 @@ function renderCell(x, y, asset){
         cellSize,
         cellSize,
     );
+}
+
+// #endregion
+
+// #region Entities
+
+function renderEntity(me, entity){
+    // get asset if not overrided
+    const model = getAsset(entity.asset);
+    if(!model){
+        return;
+    }
+
+    // prepare context
+    const { x, y, dir, scale } = entity;
+    const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
+    const canvasY = canvas.height / 2 + fixCoord(y) - fixCoord(me.y);
+    context.save();
+    context.translate(canvasX, canvasY);
+    context.rotate(dir);
+    
+    // draw entity
+    context.drawImage(
+        model,
+        -cellSize * scale / 2,
+        -cellSize * scale * model.height / model.width + cellSize * scale / 2,
+        cellSize * scale,
+        cellSize * scale * model.height / model.width,
+    );
+    context.restore();
 }
 
 // #endregion

@@ -8,6 +8,8 @@ const { attackHitCheck } = require('./collisions.js');
 const { filterText } = require('./filter.js');
 const { ExcecuteCommand } = require('./commands/commands.js');
 
+const Pig = require('./objects/pig.js');
+
 class Game {
     constructor(fm, am){
         // managers
@@ -19,6 +21,7 @@ class Game {
 
         // entities
         this.players = {};
+        this.entities = { "tempid": new Pig("tempid", 0, 0, 0) };
 
         // world
         this.world = new World(fm);
@@ -98,7 +101,11 @@ class Game {
     // #region entities
 
     getEntities(){
-        return Object.values(this.players);
+        return [...Object.values(this.players), ...Object.values(this.entities)];
+    }
+
+    getNonplayerEntities(){
+        return Object.values(this.entities);
     }
 
     // #endregion
@@ -187,13 +194,17 @@ class Game {
     }
 
     createUpdate(player){
+        // get players
         const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < Constants.CELLS_HORIZONTAL / 2
             && Math.abs(p.y - player.y) < Constants.CELLS_VERTICAL / 2
         );
+
+        // get fixes
         const fixescopy = player.getFixes();
         player.resetFixes();
 
+        // get world updates
         const worldLoad = this.world.loadPlayerChunks(player);
         player.chunk = worldLoad.chunk;
         
@@ -212,11 +223,19 @@ class Game {
             player.falling = true;
         }
 
+        // get entities
+        const nearbyEntities = Object.values(this.entities).filter(e =>
+            Math.abs(e.x - player.x) < Constants.CELLS_HORIZONTAL / 2
+            && Math.abs(e.y - player.y) < Constants.CELLS_VERTICAL / 2
+        );
+
+        // return full update object
         return {
             t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
+            entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldLoad,
         };
     }
