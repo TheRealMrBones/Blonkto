@@ -1,5 +1,5 @@
 const Constants = require('../../shared/constants.js');
-const shortid = require('shortid');
+const { nanoid } = require("nanoid");
 
 const { COMMAND_ARGUMENTS } = Constants;
 
@@ -101,7 +101,7 @@ class Command{
     }
 
     static sendResponse(player, r){
-        const message = { text: r, id: shortid(), };
+        const message = { text: r, id: nanoid(), };
         player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, message);
     }
 

@@ -49,8 +49,8 @@ const game = new Game(fileManager, accountManager);
 
 // #region socket functions
 
-function createAccount(credentials){
-	const response = accountManager.createAccount(this.id, credentials.username, credentials.password)
+async function createAccount(credentials){
+	const response = await accountManager.createAccount(this.id, credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
 
 	if(response.account){
@@ -58,8 +58,8 @@ function createAccount(credentials){
 	}
 }
 
-function login(credentials){
-	const response = accountManager.login(this.id, credentials.username, credentials.password)
+async function login(credentials){
+	const response = await accountManager.login(this.id, credentials.username, credentials.password)
 	this.emit(Constants.MSG_TYPES.LOGIN, response);
 
 	if(response.account){

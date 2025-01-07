@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const argon2 = require('argon2');
 const validator = require('validator');
 
 const Account = require('./account.js');
@@ -13,7 +13,7 @@ class AccountManager {
 
     // #region creation
 
-    createAccount(id, username, password){
+    async createAccount(id, username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -33,7 +33,7 @@ class AccountManager {
         }
 
         // create account
-        const hashedPw = bcrypt.hashSync(password, saltRounds);
+        const hashedPw = await argon2.hash(password);
 
         const acc = new Account([username]);
 
@@ -53,7 +53,7 @@ class AccountManager {
 
     // #region login
 
-    login(id, username, password){
+    async login(id, username, password){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
@@ -71,7 +71,7 @@ class AccountManager {
         const data = this.fileManager.readFile(getAccountFilePath(username)).split("|");
 
         // check if password matches
-        if(!bcrypt.compareSync(password, data[0])){
+        if(!await argon2.verify(data[0], password)){
             return { error: 'Password Incorrect' };
         }
 
