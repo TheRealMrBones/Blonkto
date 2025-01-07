@@ -1,5 +1,6 @@
+const crypto = require('crypto');
+
 const Constants = require('../../shared/constants.js');
-const { nanoid } = require("nanoid");
 
 const { COMMAND_ARGUMENTS } = Constants;
 
@@ -101,7 +102,7 @@ class Command{
     }
 
     static sendResponse(player, r){
-        const message = { text: r, id: nanoid(), };
+        const message = { text: r, id: crypto.randomUUID(), };
         player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, message);
     }
 

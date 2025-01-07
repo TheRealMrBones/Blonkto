@@ -1,9 +1,10 @@
+const crypto = require('crypto');
+
 const Constants = require('../shared/constants.js');
 const PlayerManager = require('./playerManager.js');
 const OpManager = require('./opManager.js');
 const BanManager = require('./banManager.js');
 const World = require('./world/world.js');
-const { nanoid } = require("nanoid");
 const { attackHitCheck } = require('./collisions.js');
 const { filterText } = require('./filter.js');
 const { ExcecuteCommand } = require('./commands/commands.js');
@@ -36,7 +37,7 @@ class Game {
 
         // op passcode (one time use to give owner op)
         if(Constants.OP_PASSCODE && (this.opManager.opCount() == 0 || Constants.OP_PASSCODE_WHEN_OPS)){
-            this.oppasscode = nanoid().toString();
+            this.oppasscode = crypto.randomUUID();
             this.oppasscodeused = false;
             console.log(`oppasscode: ${this.oppasscode}`);
         }
@@ -261,7 +262,7 @@ class Game {
     sendMessage(text){
         const newMessage = {
             text: text,
-            id: nanoid(),
+            id: crypto.randomUUID(),
         };
 
         Object.values(this.players).forEach(player => {
