@@ -18,6 +18,17 @@ class OpManager {
         this.save();
     }
 
+    clearOpList(username){
+        this.oppedplayers = {};
+        
+        // if username given keep that user opped
+        if(username){
+            this.oppedplayers[username] = true;
+        }
+        
+        this.save();
+    }
+
     // #endregion
     
     // #region getters
@@ -43,7 +54,13 @@ class OpManager {
             return;
         }
 
-        const data = this.fileManager.readFile("oplist").split("|");
+        let data = this.fileManager.readFile("oplist");
+
+        if(data.length == 0 || data.trim() === ""){
+            return;
+        }
+
+        data = data.split("|");
 
         for(const username of data){
             this.op(username);

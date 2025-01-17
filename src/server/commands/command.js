@@ -80,11 +80,31 @@ class Command{
                     }
                     case COMMAND_ARGUMENTS.FLOAT: {
                         if(isNaN(tokens[i])){
-                            error = `"${tokens[i]}" is not an float`;
+                            error = `"${tokens[i]}" is not a float`;
                             tokensParsed.splice(j, 1);
                             j--;
                         }else{
                             tokensParsed[j][i] = parseFloat(tokens[i]);
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.BOOLEAN: {
+                        switch(tokens[i]){
+                            case "true":
+                            case "t":
+                            case "1":
+                                tokensParsed[j][i] = true;
+                                break;
+                            case "false":
+                            case "f":
+                            case "0":
+                                tokensParsed[j][i] = false;
+                                break;
+                            default:
+                                error = `"${tokens[i]}" is not a boolean`;
+                                tokensParsed.splice(j, 1);
+                                j--;
+                                break;
                         }
                         break;
                     }

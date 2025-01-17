@@ -13,6 +13,8 @@ const KickCommand = require('./kickCommand');
 const BanCommand = require('./banCommand');
 const PardonCommand = require('./pardonCommand');
 const BanListCommand = require('./banListCommand');
+const ClearBanListCommand = require('./clearBanListCommand');
+const ClearOpListCommand = require('./clearOpListCommand');
 
 const commands = [
     OpCommand,
@@ -29,6 +31,8 @@ const commands = [
     BanCommand,
     PardonCommand,
     BanListCommand,
+    ClearBanListCommand,
+    ClearOpListCommand
 ];
 
 exports.ExcecuteCommand = (game, player, command) => {

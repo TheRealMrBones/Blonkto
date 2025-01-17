@@ -19,6 +19,7 @@ class HelpCommand extends Command{
             this.sendResponse(player, `- deop - take away a players operator permissions`);
             this.sendResponse(player, `- opped - check if you or another play is opped`);
             this.sendResponse(player, `- oplist - view the full list of opped players`);
+            this.sendResponse(player, `- clearoplist - clears the entire list of oppped players`);
             this.sendResponse(player, `- tp - teleport a player`);
             this.sendResponse(player, `- kill - kill yourself or another player`);
             this.sendResponse(player, `- nick - change your name or another players`);
@@ -27,6 +28,7 @@ class HelpCommand extends Command{
             this.sendResponse(player, `- ban - ban a player from the server`);
             this.sendResponse(player, `- pardon - remove a player from the ban list`);
             this.sendResponse(player, `- banlist - get a list of all banned players`);
+            this.sendResponse(player, `- clearbanlist - clears the entire list of banned players`);
         }else{
             this.sendResponse(player, `- opped - check if you are opped`);
             if(Constants.ALLOW_CHANGE_NAME)

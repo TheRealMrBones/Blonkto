@@ -20,6 +20,11 @@ class BanManager {
         this.save();
     }
 
+    clearBanList(){
+        this.bannedplayers = {};
+        this.save();
+    }
+
     // #endregion
     
     // #region getters
@@ -49,7 +54,7 @@ class BanManager {
 
         let data = this.fileManager.readFile("banlist");
 
-        if(data.length == 0){
+        if(data.length == 0 || data.trim() === ""){
             return;
         }
 

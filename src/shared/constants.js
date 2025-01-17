@@ -105,6 +105,7 @@ module.exports = Object.freeze({
         STRING: 2,
         INT: 3,
         FLOAT: 4,
+        BOOLEAN: 5,
     },
     // #endregion
 });
