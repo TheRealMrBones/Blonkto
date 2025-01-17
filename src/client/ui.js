@@ -10,6 +10,7 @@ const infodiv = document.getElementById('info');
 const coordstext = document.getElementById('coordstext');
 const fpstext = document.getElementById('fpstext');
 const connectionlostdiv = document.getElementById('connectionlost');
+const hotbardiv = document.getElementById('hotbar');
 
 let focusingOut = false;
 
@@ -23,6 +24,7 @@ export function setupUi(){
     // show ui
     chatDiv.style.display = "block";
     infodiv.style.display = "block";
+    hotbardiv.style.display = "block";
 
     // add event listeners
     window.addEventListener("keyup", keyUpChecks);
@@ -38,6 +40,7 @@ export function hideUi(){
     // hide ui
     chatDiv.style.display = "none";
     infodiv.style.display = "none";
+    hotbardiv.style.display = "none";
 
     // remove event listeners
     window.removeEventListener("keyup", keyUpChecks);

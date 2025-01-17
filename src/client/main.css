@@ -57,8 +57,25 @@ span {
     display: none;
 }
 
+#hotbar{
+    bottom: 10px;
+    left: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translate(-50%, 0%);
+}
+
+.hotbarslot{
+    display: inline-block;
+    background-color:rgba(134, 134, 134, 0.5);
+    transform: none;
+    margin: 2.5px;
+    width: 100px;
+    height: 100px;
+}
+
 #chat{
-    bottom: 50px;
+    bottom: 140px;
     left: 20px;
     width: 40%;
     overflow-wrap: break-word;
