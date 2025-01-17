@@ -1,5 +1,5 @@
 import { chat } from './networking.js';
-import { pauseCapturingInputs, resumeCapturingInputs } from './input.js';
+import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from './input.js';
 import { toggleAllChatShow } from './chat.js';
 
 // #region init
@@ -15,6 +15,17 @@ const hotbardiv = document.getElementById('hotbar');
 let focusingOut = false;
 
 let ignorechatenter = 0;
+
+// #endregion
+
+// #region persistent listeners
+
+for(let i = 0; i < 9; i++){
+    const hotbarslot = document.getElementById("hotbarslot" + (i + 1));
+    hotbarslot.addEventListener("click", function() {
+        sethotbarslot(i);
+    });
+}
 
 // #endregion
 

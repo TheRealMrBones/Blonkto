@@ -189,7 +189,7 @@ function handleMouseDown(e){
 
 // #region hotbar
 
-function sethotbarslot(index){
+export function sethotbarslot(index){
     const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1));
     const newslot = document.getElementById("hotbarslot" + (index + 1));
     oldslot.classList.remove("hotbarslotselected");
