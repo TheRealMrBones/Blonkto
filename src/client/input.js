@@ -8,6 +8,8 @@ const Constants = require('../shared/constants.js');
 
 // #region init
 
+const canvas = document.getElementById("gamecanvas");
+
 let dir = 0;
 let x = 0;
 let y = 0;
@@ -272,7 +274,7 @@ export function startCapturingInput(xp, yp){
     window.addEventListener('touchmove', onTouchInput);
     window.addEventListener('keydown', handlekeyDown);
     window.addEventListener('keyup', handlekeyUp);
-    window.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('blur', resetMovement);
 
     // set client side update interval
@@ -287,7 +289,7 @@ export function stopCapturingInput(){
     window.removeEventListener('touchmove', onTouchInput);
     window.removeEventListener('keydown', handlekeyDown);
     window.removeEventListener('keyup', handlekeyUp);
-    window.removeEventListener('mousedown', handleMouseDown);
+    canvas.removeEventListener('mousedown', handleMouseDown);
     window.removeEventListener('blur', resetMovement);
     
     // reset variables
@@ -311,7 +313,7 @@ export function pauseCapturingInputs(){
     window.removeEventListener('touchmove', onTouchInput);
     window.removeEventListener('keydown', handlekeyDown);
     window.removeEventListener('keyup', handlekeyUp);
-    window.removeEventListener('mousedown', handleMouseDown);
+    canvas.removeEventListener('mousedown', handleMouseDown);
     
     // do final position update then remove current movements
     updatePos();
@@ -329,7 +331,7 @@ export function resumeCapturingInputs(){
     window.addEventListener('touchmove', onTouchInput);
     window.addEventListener('keydown', handlekeyDown);
     window.addEventListener('keyup', handlekeyUp);
-    window.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousedown', handleMouseDown);
 }
 
 // #endregion
