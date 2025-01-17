@@ -86,6 +86,8 @@ module.exports = Object.freeze({
         STONE_BLOCK: 'StoneBlock.png',
         PIG: 'Pig.png',
     },
+
+    HIT_COLOR: {r: 1, g: .5, b: .5},
     // #endregion
 
     // #region block shapes

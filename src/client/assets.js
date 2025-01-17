@@ -28,6 +28,7 @@ export const getAsset = assetName => assets[assetName];
 // #region colorize
 
 const coloredAssets = {};
+const assetVariants = {};
 const coloredAssetVariants = {};
 
 export function getColoredAsset(object){
@@ -62,6 +63,17 @@ export function getColoredAsset(object){
     }
 
     return coloredAssets[object.id].asset;
+}
+
+export function getAssetVariant(asset, varient, varientrgb){
+    const assetObj = getAsset(asset);
+    if(!assetVariants[asset]){
+        assetVariants[asset] = {};
+    }
+    if(!assetVariants[asset][varient]){
+        assetVariants[asset][varient] = colorize(assetObj, varientrgb.r, varientrgb.g, varientrgb.b);
+    }
+    return assetVariants[asset][varient];
 }
 
 export function getColoredAssetVariant(object, varient, varientrgb){

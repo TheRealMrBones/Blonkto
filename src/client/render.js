@@ -1,11 +1,11 @@
-import { getAsset, getColoredAsset, getColoredAssetVariant } from './assets.js';
+import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from './assets.js';
 import { getCurrentState } from './state.js';
 import { getSelf, setSelf } from './input.js';
 import { getCell } from './world.js';
 import { updateFps } from './ui.js';
 
 const Constants = require('../shared/constants.js');
-const { ASSETS, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET } = Constants;
+const { ASSETS, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET, HIT_COLOR } = Constants;
 
 // #region init
 
@@ -183,10 +183,19 @@ function renderCell(x, y, asset){
 // #region Entities
 
 function renderEntity(me, entity){
-    // get asset if not overrided
-    const model = getAsset(entity.asset);
-    if(!model){
-        return;
+    // check if entity is being hit
+    let model;
+    if(entity.hit){
+        model = getAssetVariant(entity.asset, "hit", HIT_COLOR);
+    }else{
+        model = getAsset(entity.asset);
+    }
+
+    if(!model) return;
+
+    // check if entity is swinging
+    if(entity.swinging){
+        renderSwing(me, entity);
     }
 
     // prepare context
@@ -216,7 +225,7 @@ function renderPlayer(me, player){
     // check if player is being hit
     let model;
     if(player.hit){
-        model = getColoredAssetVariant(player, "hit", {r: 1, g: .5, b: .5});
+        model = getColoredAssetVariant(player, "hit", HIT_COLOR);
     }else{
         model = getColoredAsset(player);
     }
@@ -245,9 +254,9 @@ function renderPlayer(me, player){
     context.restore();
 }
 
-function renderSwing(me, player){
+function renderSwing(me, entity){
     // prepare context
-    const { x, y, scale, lastattackdir } = player;
+    const { x, y, scale, lastattackdir } = entity;
     const canvasX = canvas.width / 2 + fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.x);
     const canvasY = canvas.height / 2 + fixCoord(y + Math.cos(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.y);
     context.save();

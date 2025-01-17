@@ -7,6 +7,8 @@ class Pig extends NonplayerEntity {
 
         this.asset = Constants.ASSETS.PIG;
         this.scale = Constants.PLAYER_SCALE;
+
+        this.health = 3;
     }
 }
 

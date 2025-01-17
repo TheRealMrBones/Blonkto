@@ -105,6 +105,10 @@ class Game {
         return [...Object.values(this.players), ...Object.values(this.entities)];
     }
 
+    getPlayerEntities(){
+        return Object.values(this.players);
+    }
+
     getNonplayerEntities(){
         return Object.values(this.entities);
     }
@@ -124,10 +128,10 @@ class Game {
                 if(!hotbarItem){
                     // fist attack
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], Object.values(this.players), dir, 1);
+                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
                 }else if(hotbarItem.attack){
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], Object.values(this.players), dir, hotbarItem.attack);
+                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, hotbarItem.attack);
                 }else if(hotbarItem.break){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.place){
@@ -173,6 +177,12 @@ class Game {
         Object.values(this.players).forEach(p => {
             if(p.dead){
                 this.killPlayer(p.socket, p.killedby);
+            }
+        });
+
+        Object.values(this.entities).forEach(e => {
+            if(e.dead){
+                delete this.entities[e.id];
             }
         });
 
