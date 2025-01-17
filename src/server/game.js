@@ -174,6 +174,7 @@ class Game {
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
 
+        // check deaths
         Object.values(this.players).forEach(p => {
             if(p.dead){
                 this.killPlayer(p.socket, p.killedby);
@@ -186,6 +187,12 @@ class Game {
             }
         });
 
+        // tick entities
+        Object.values(this.entities).forEach(e => {
+            e.ontick.emit("tick", dt);
+        });
+
+        // check to send update
         if(this.shouldSendUpdate){
             // send fat update packets
             Object.values(this.players).forEach(player => {
