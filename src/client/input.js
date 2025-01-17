@@ -85,39 +85,39 @@ function handlekeyDown(e){
 
         // hotbar
         case '1': {
-            hotbarslot = 0;
+            sethotbarslot(0);
             break;
         }
         case '2': {
-            hotbarslot = 1;
+            sethotbarslot(1);
             break;
         }
         case '3': {
-            hotbarslot = 2;
+            sethotbarslot(2);
             break;
         }
         case '4': {
-            hotbarslot = 3;
+            sethotbarslot(3);
             break;
         }
         case '5': {
-            hotbarslot = 4;
+            sethotbarslot(4);
             break;
         }
         case '6': {
-            hotbarslot = 5;
+            sethotbarslot(5);
             break;
         }
         case '7': {
-            hotbarslot = 6;
+            sethotbarslot(6);
             break;
         }
         case '8': {
-            hotbarslot = 7;
+            sethotbarslot(7);
             break;
         }
         case '9': {
-            hotbarslot = 8;
+            sethotbarslot(8);
             break;
         }
     }
@@ -183,6 +183,19 @@ function handleMouseDown(e){
     }else if(e.button == 2){
         interact(clickpos);
     }
+}
+
+// #endregion
+
+// #region hotbar
+
+function sethotbarslot(index){
+    const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1));
+    const newslot = document.getElementById("hotbarslot" + (index + 1));
+    oldslot.classList.remove("hotbarslotselected");
+    newslot.classList.add("hotbarslotselected");
+
+    hotbarslot = index;
 }
 
 // #endregion
