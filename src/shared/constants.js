@@ -56,6 +56,10 @@ module.exports = Object.freeze({
     MAX_MESSAGE_COUNT: 20,
     // #endregion
 
+    // #region inventory
+    INVENTORY_SIZE: 36,
+    // #endregion
+
     // #region message types
     MSG_TYPES: {
         CREATE_ACCOUNT: "create_account",

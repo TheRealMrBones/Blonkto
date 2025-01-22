@@ -28,7 +28,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = Array(36).fill(false);
+        this.inventory = Array(Constants.INVENTORY_SIZE).fill(false);
         this.inventory[1] = new StoneBlockItem();
         this.inventory[2] = new PickaxeItem();
         this.inventory[3] = new SwordItem();
