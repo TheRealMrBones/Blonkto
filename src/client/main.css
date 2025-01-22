@@ -58,7 +58,7 @@ span {
 }
 
 #hotbar{
-    bottom: 10px;
+    bottom: 20px;
     left: 50%;
     width: 100%;
     text-align: center;
@@ -69,13 +69,24 @@ span {
     display: inline-block;
     background-color:rgba(134, 134, 134, 0.5);
     transform: none;
-    margin: 2.5px;
+    margin: 2px;
     width: 100px;
     height: 100px;
+    text-align: left;
+    vertical-align: top;
 }
 
 .hotbarslotselected{
-    box-shadow: inset 0 0 0 3px black;
+    box-shadow: 0 0 0 3px black;
+}
+
+.hotbaritem{
+    width: 80%;
+    height: 80%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #chat{
