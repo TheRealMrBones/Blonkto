@@ -171,10 +171,10 @@ function renderBlocks(firstCell){
 function renderCell(x, y, asset){
     context.drawImage(
         getAsset(asset),
-        x,
-        y,
-        cellSize,
-        cellSize,
+        x + 1,
+        y + 1,
+        cellSize + 1,
+        cellSize + 1,
     );
 }
 
