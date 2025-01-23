@@ -10,7 +10,7 @@ class StoneBlockItem extends Item {
 
         this.name = "Stone Block";
         this.place = true;
-        this.asset = Constants.ASSETS.MISSING_TEXTURE;
+        this.asset = Constants.ASSETS.STONE_BLOCK;
     }
 
     getPlaced(){
