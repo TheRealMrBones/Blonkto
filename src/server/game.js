@@ -76,6 +76,7 @@ class Game {
             x: this.players[socket.id].x,
             y: this.players[socket.id].y,
             color: this.players[socket.id].color,
+            inventory: this.players[socket.id].inventory,
         });
 
         this.sendMessage(`${username} has connected`);

@@ -6,6 +6,7 @@ import { startCapturingInput } from './input.js';
 import { setupUi } from './ui.js';
 import { receiveChatMessage } from './chat.js';
 import { onlogin, connectionRefused, connectionAccepted } from './index.js';
+import { setInventory } from './inventory.js';
 
 const Constants = require('../shared/constants.js');
 const { MSG_TYPES } = Constants;
@@ -40,6 +41,7 @@ function onInstantiated(stuff){
     setColor(stuff.color);
     startRendering();
     setupUi();
+    setInventory(stuff.inventory);
 }
 
 // #endregion
