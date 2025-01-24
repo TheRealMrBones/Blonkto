@@ -22,7 +22,7 @@ if(process.env.NODE_ENV === 'development'){
   	app.use(express.static('dist'));
 }
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const server = app.listen(port);
 console.log(`Server listening on port: ${port}`);
 
