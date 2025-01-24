@@ -19,7 +19,7 @@ if(process.env.NODE_ENV === 'development'){
   	const compiler = webpack(webpackConfig);
   	app.use(webpackDevMiddleware(compiler));
 }else{
-  	app.use(express.static('dist'));
+  	app.use(express.static('../../dist'));
 }
 
 const port = process.env.PORT || 3000;
