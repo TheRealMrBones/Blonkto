@@ -4,6 +4,9 @@
     "description": "GET BLONKED! multiplayer game to host servers for your friends",
     "private": true,
     "main": "src/server/server.js",
+    "bin": {
+        "genconfig": "src/bin/genconfig.js"
+    },
     "scripts": {
         "prod": "webpack --config webpack.prod.js",
         "dev": "webpack --config webpack.dev.js",
