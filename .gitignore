@@ -1,6 +1,6 @@
 node_modules/
 dist/
-generated/
+config/
 .vscode/
 
 /data/**/*.data

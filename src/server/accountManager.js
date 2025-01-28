@@ -3,8 +3,6 @@ const validator = require('validator');
 
 const Account = require('./account.js');
 
-const saltRounds = 10;
-
 class AccountManager {
     constructor(fm){
         this.fileManager = fm;
