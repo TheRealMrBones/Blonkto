@@ -10,7 +10,8 @@
     "scripts": {
         "prod": "webpack --config webpack.prod.js",
         "dev": "webpack --config webpack.dev.js",
-        "devStart": "nodemon src/server/server.js"
+        "devStart": "nodemon src/server/server.js",
+        "devFull": "npm run dev && npm run devStart"
     },
     "keywords": [],
     "author": "Mr Bones",
