@@ -1,0 +1,48 @@
+// define schema
+type ClientConfigSchema = {
+    ATTACK: {
+        HIT_COLOR: {r: number, g: number, b: number}
+    },
+    UPDATE: {
+        CLIENT_UPDATE_RATE: number
+    },
+    RENDER: {
+        RENDER_DELAY: number,
+        HEIGHT_TO_CELL_RATIO: number,
+        TEXT_FONT: string,
+        BACKGROUND_SCALE: number,
+        BACKGROUND_PADDING: number,
+        USERNAME_SCALE: number,
+        USERNAME_HANG: number
+    },
+    CHAT: {
+        MESSAGE_TIME: number,
+        MAX_MESSAGE_COUNT: number
+    }
+};
+
+// define default values
+const ClientConfig: ClientConfigSchema = {
+    ATTACK: {
+        HIT_COLOR: {r: 1, g: 0.5, b: 0.5}
+    },
+    UPDATE: {
+        CLIENT_UPDATE_RATE: 50
+    },
+    RENDER: {
+        RENDER_DELAY: 100,
+        HEIGHT_TO_CELL_RATIO: 11,
+        TEXT_FONT: "Verdana",
+        BACKGROUND_SCALE: 24,
+        BACKGROUND_PADDING: 1,
+        USERNAME_SCALE: 0.3,
+        USERNAME_HANG: 0.5
+    },
+    CHAT: {
+        MESSAGE_TIME: 10,
+        MAX_MESSAGE_COUNT: 20
+    }
+};
+
+// freeze and export config
+module.exports = Object.freeze(ClientConfig);

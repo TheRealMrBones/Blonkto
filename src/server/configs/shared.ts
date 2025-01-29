@@ -1,0 +1,50 @@
+// define schema
+type SharedConfigSchema = {
+    PLAYER: {
+        PLAYER_SCALE: number,
+        PLAYER_SPEED: number
+    },
+    ATTACK: {
+        ATTACK_DELAY: number,
+        ATTACK_HITBOX_WIDTH: number,
+        ATTACK_HITBOX_OFFSET: number,
+        SWING_RENDER_DELAY: number,
+        HIT_RENDER_DELAY: number
+    },
+    WORLD: {
+        WORLD_SIZE: number,
+        CHUNK_SIZE: number,
+        CELLS_HORIZONTAL: number,
+        CELLS_VERTICAL: number
+    },
+    INVENTORY: {
+        INVENTORY_SIZE: number
+    }
+};
+
+// define default values
+const SharedConfig: SharedConfigSchema = {
+    PLAYER: {
+        PLAYER_SCALE: 0.55,
+        PLAYER_SPEED: 3
+    },
+    ATTACK: {
+        ATTACK_DELAY: 0.7,
+        ATTACK_HITBOX_WIDTH: 1,
+        ATTACK_HITBOX_OFFSET: 0.5,
+        SWING_RENDER_DELAY: 0.2,
+        HIT_RENDER_DELAY: 0.5
+    },
+    WORLD: {
+        WORLD_SIZE: 6,
+        CHUNK_SIZE: 32,
+        CELLS_HORIZONTAL: 28,
+        CELLS_VERTICAL: 16
+    },
+    INVENTORY: {
+        INVENTORY_SIZE: 36
+    }
+};
+
+// freeze and export config
+module.exports = Object.freeze(SharedConfig);

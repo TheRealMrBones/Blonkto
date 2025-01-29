@@ -1,5 +1,5 @@
-const Constants = require('../shared/constants');
-const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = Constants;
+const ClientConfig = require('../server/configs/client');
+const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
 const chatMessagesDiv = document.getElementById('chatmessages');
 

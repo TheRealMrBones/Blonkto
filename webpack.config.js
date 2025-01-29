@@ -14,12 +14,12 @@ module.exports = {
     module: {
         rules: [
         {
-            test: /\.js$/,
+            test: /\.(js|ts)$/,
             exclude: /node_modules/,
             use: {
-                loader: "babel-loader",
+                loader: 'babel-loader',
                 options: {
-                    presets: ['@babel/preset-env'],
+                    presets: ['@babel/preset-env', '@babel/preset-typescript'],
                 },
             },
         },
@@ -33,6 +33,9 @@ module.exports = {
             ],
         },
         ],
+    },
+    resolve: {
+        extensions: ['.ts', '.js', '.css'],
     },
     plugins: [
         new MiniCssExtractPlugin({

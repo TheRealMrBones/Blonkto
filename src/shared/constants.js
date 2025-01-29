@@ -16,7 +16,6 @@ module.exports = Object.freeze({
         KICK: 'kick',
         BAN: 'ban',
     },
-
     ASSETS: {
         MISSING_TEXTURE: 'MissingTexture.png',
         PLAYER: 'BlonktoPlayer.png',
@@ -26,13 +25,11 @@ module.exports = Object.freeze({
         STONE_BLOCK: 'StoneBlock.png',
         PIG: 'Pig.png',
     },
-
     SHAPES: {
         NONE: 0,
         SQUARE: 1,
         CIRCLE: 2,
     },
-
     COMMAND_ARGUMENTS: {
         KEY: 0,
         PLAYER: 1,
