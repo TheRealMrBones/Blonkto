@@ -1,5 +1,3 @@
-
-
 class Account {
     constructor(accinfo){
         // defaults on creation

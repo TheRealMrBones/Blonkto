@@ -13,6 +13,7 @@ const webpackConfig = require('../../webpack.dev.js');
 
 const app = express();
 
+// Sending resources
 app.use(express.static('public'));
 
 if(process.env.NODE_ENV === 'development'){
@@ -22,10 +23,16 @@ if(process.env.NODE_ENV === 'development'){
   	app.use(express.static('dist'));
 }
 
+// Including routes
+const configRoutes = require('./routes/config.js');
+app.use('/', configRoutes);
+
+// Opening server
 const port = process.env.PORT || 3000;
 const server = app.listen(port);
 console.log(`Server listening on port: ${port}`);
 
+// Opening socketio
 const io = socketio(server);
 
 io.on('connection', socket => {

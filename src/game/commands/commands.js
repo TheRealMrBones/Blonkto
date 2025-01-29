@@ -8,13 +8,13 @@ const PingCommand = require('./pingCommand.js');
 const NickCommand = require('./nickCommand.js');
 const HelpCommand = require('./helpCommand.js');
 const KillCommand = require('./killCommand.js');
-const SaveWorldCommand = require('./saveWorldCommand');
-const KickCommand = require('./kickCommand');
-const BanCommand = require('./banCommand');
-const PardonCommand = require('./pardonCommand');
-const BanListCommand = require('./banListCommand');
-const ClearBanListCommand = require('./clearBanListCommand');
-const ClearOpListCommand = require('./clearOpListCommand');
+const SaveWorldCommand = require('./saveWorldCommand.js');
+const KickCommand = require('./kickCommand.js');
+const BanCommand = require('./banCommand.js');
+const PardonCommand = require('./pardonCommand.js');
+const BanListCommand = require('./banListCommand.js');
+const ClearBanListCommand = require('./clearBanListCommand.js');
+const ClearOpListCommand = require('./clearOpListCommand.js');
 
 const commands = [
     OpCommand,

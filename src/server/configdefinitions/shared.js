@@ -1,0 +1,48 @@
+const Config = require('../config.js');
+
+module.exports = new Config("shared.json", {
+    PLAYER: {
+        PLAYER_SCALE: 0.55,
+        PLAYER_SPEED: 3
+    },
+    ATTACK: {
+        ATTACK_DELAY: 0.7,
+        ATTACK_HITBOX_WIDTH: 1,
+        ATTACK_HITBOX_OFFSET: 0.5,
+        SWING_RENDER_DELAY: 0.2,
+        HIT_RENDER_DELAY: 0.5
+    },
+    WORLD: {
+        WORLD_SIZE: 6,
+        CHUNK_SIZE: 32,
+        CELLS_HORIZONTAL: 28,
+        CELLS_VERTICAL: 16
+    },
+    INVENTORY: {
+        INVENTORY_SIZE: 36
+    },
+    MSG_TYPES: {
+        CREATE_ACCOUNT: "create_account",
+        LOGIN: "login",
+        JOIN_GAME: "join_game",
+        CONNECTION_REFUSED: "connection_refused",
+        DISCONNECT: "disconnect",
+        PLAYER_INSTANTIATED: "instantiated",
+        GAME_UPDATE: "update",
+        INPUT: "input",
+        CLICK: "click",
+        INTERACT: "interact",
+        DEAD: "dead",
+        SEND_MESSAGE: "send",
+        RECEIVE_MESSAGE: "receive",
+        KICK: "kick",
+        BAN: "ban"
+    },
+    COLLISION: {
+        SHAPES: {
+            NONE: 0,
+            SQUARE: 1,
+            CIRCLE: 2
+        }
+    }
+});
