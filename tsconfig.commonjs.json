@@ -1,9 +1,8 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
-        "outDir": "./dist/cjs",
-        "lib": ["es6"],
+        "module": "NodeNext",
+        "outDir": "./dist/nodejs",
     },
     "include": ["src/**/*"],
     "exclude": ["src/client/**"]

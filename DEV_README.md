@@ -10,5 +10,5 @@
 # Prod Build Steps
 1. Run `npm run prod:webpack`
 2. Run `npm run prod:build`
-3. Run `node src/server/server.js`
+3. Run `node dist/nodejs/src/server/server.js`
 4. The game is now playable on port 3000
