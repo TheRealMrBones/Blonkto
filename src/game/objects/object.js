@@ -1,4 +1,8 @@
-const Constants = require('../../shared/constants.js');
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
+
+import ServerConfig from '../../configs/server';
+const { FALL_RATE } = ServerConfig.OBJECT;
 
 class Object {
     constructor(id, x, y, dir){
@@ -10,7 +14,7 @@ class Object {
         this.y = y;
         this.dir = dir;
         this.scale = 1;
-        this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
+        this.asset = ASSETS.MISSING_TEXTURE; // default incase its never set
 
         this.falling = false;
     }
@@ -37,7 +41,7 @@ class Object {
 
         // get next fall scale
         if(this.falling){
-            this.scale -= Constants.FALL_RATE * deltatime / 1000;
+            this.scale -= FALL_RATE * deltatime / 1000;
             if(this.scale <= 0){
                 this.scale = 0;
                 this.falling = false;

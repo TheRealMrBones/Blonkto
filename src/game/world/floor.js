@@ -1,10 +1,11 @@
-const Constants = require('../../shared/constants.js');
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
 
 class Floor {
     static id = 0;
 
     constructor(){
-        this.asset = Constants.ASSETS.MISSING_TEXTURE;
+        this.asset = ASSETS.MISSING_TEXTURE;
     }
 
     // #region serialization

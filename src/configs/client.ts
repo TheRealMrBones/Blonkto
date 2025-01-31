@@ -45,4 +45,4 @@ const ClientConfig: ClientConfigSchema = {
 };
 
 // freeze and export config
-module.exports = Object.freeze(ClientConfig);
+export default Object.freeze(ClientConfig);

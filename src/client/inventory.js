@@ -1,7 +1,8 @@
-const Constants = require('../shared/constants.js');
 import { Item } from './item.js';
 
-const { INVENTORY_SIZE } = Constants
+import SharedConfig from '../configs/shared';
+const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
+
 const inventory = new Array(INVENTORY_SIZE).fill(false);
 
 export function getInventorySlot(slot){

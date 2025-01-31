@@ -1,14 +1,16 @@
-const Constants = require('../../../shared/constants.js');
 const Block = require('../block.js');
+
+import Constants from '../../shared/constants';
+const { ASSETS,SHAPES } = Constants;
 
 class StoneBlock extends Block {
     static id = 1;
 
     constructor(){
         super();
-        this.asset = Constants.ASSETS.STONE_BLOCK;
+        this.asset = ASSETS.STONE_BLOCK;
         this.scale = 1;
-        this.shape = Constants.SHAPES.SQUARE;
+        this.shape = SHAPES.SQUARE;
     }
 }
 

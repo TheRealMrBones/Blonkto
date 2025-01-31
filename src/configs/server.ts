@@ -55,4 +55,4 @@ const ServerConfig: ServerConfigSchema = {
 };
 
 // freeze and export config
-module.exports = Object.freeze(ServerConfig);
+export default Object.freeze(ServerConfig);

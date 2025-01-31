@@ -1,7 +1,10 @@
-const Constants = require('../../shared/constants.js');
 const Command = require('./command.js');
 
-const { COMMAND_ARGUMENTS, ALLOW_CHANGE_NAME } = Constants;
+import Constants from '../../shared/constants.js';
+const { COMMAND_ARGUMENTS } = Constants;
+
+import ServerConfig from '../../configs/server';
+const { ALLOW_CHANGE_NAME } = ServerConfig.PLAYER;
 
 class OpCommand extends Command{
     static key = "nick";

@@ -1,12 +1,14 @@
-const Constants = require('../shared/constants.js');
 const Player = require('./objects/player.js');
+
+import ServerConfig from '../configs/server';
+const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 class PlayerManager {
     constructor(fm, g){
         this.fileManager = fm;
         this.game = g;
 
-        this.saveInterval = setInterval(this.savePlayers.bind(this), 1000 * Constants.AUTOSAVE_RATE);
+        this.saveInterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     createPlayer(socket, username){

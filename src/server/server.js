@@ -3,12 +3,12 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const socketio = require('socket.io');
 
-const Constants = require('../shared/constants');
 const Game = require('../game/game.js');
 const FileManager = require('./fileManager.js');
 const AccountManager = require('./accountManager.js');
 const webpackConfig = require('../../webpack.dev.js');
 
+import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
 
 // #region init

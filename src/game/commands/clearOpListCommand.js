@@ -1,6 +1,6 @@
-const Constants = require('../../shared/constants.js');
 const Command = require('./command.js');
 
+import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
 
 class ClearOpListCommand extends Command{

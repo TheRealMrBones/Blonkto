@@ -1,4 +1,4 @@
-const ClientConfig = require('../configs/client');
+import ClientConfig from '../configs/client';
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
 const chatMessagesDiv = document.getElementById('chatmessages');

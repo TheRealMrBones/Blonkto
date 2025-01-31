@@ -1,8 +1,7 @@
 const crypto = require('crypto');
 
-const Constants = require('../../shared/constants.js');
-
-const { COMMAND_ARGUMENTS } = Constants;
+import Constants from '../../shared/constants.js';
+const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
 
 class Command{
     static key = "";
@@ -123,7 +122,7 @@ class Command{
 
     static sendResponse(player, r){
         const message = { text: r, id: crypto.randomUUID(), };
-        player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, message);
+        player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
     }
 
     static noPermMessage(player){

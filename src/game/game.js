@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-const Constants = require('../shared/constants.js');
 const PlayerManager = require('./playerManager.js');
 const OpManager = require('./opManager.js');
 const BanManager = require('./banManager.js');
@@ -9,6 +8,21 @@ const { attackHitCheck } = require('./collisions.js');
 const { filterText } = require('./filter.js');
 const { ExcecuteCommand } = require('./commands/commands.js');
 
+import Constants from '../shared/constants';
+const { MSG_TYPES } = Constants;
+
+import SharedConfig from '../configs/shared';
+const { ATTACK_DELAY } = SharedConfig.ATTACK;
+const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
+
+import ServerConfig from '../configs/server';
+const { FILTER_USERNAME } = ServerConfig.PLAYER;
+const { FILTER_CHAT } = ServerConfig.CHAT;
+const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
+const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
+const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
+
+// temp
 const Pig = require('./objects/pig.js');
 
 class Game {
@@ -32,11 +46,11 @@ class Game {
         this.shouldSendUpdate = false;
 
         // intervals
-        setInterval(this.tickChunkUnloader.bind(this), 1000 / Constants.CHUNK_UNLOAD_RATE);
-        setInterval(this.update.bind(this), 1000 / Constants.SERVER_UPDATE_RATE);
+        setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
+        setInterval(this.update.bind(this), 1000 / SERVER_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
-        if(Constants.OP_PASSCODE && (this.opManager.opCount() == 0 || Constants.OP_PASSCODE_WHEN_OPS)){
+        if(OP_PASSCODE && (this.opManager.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
             this.oppasscode = crypto.randomUUID();
             this.oppasscodeused = false;
             console.log(`oppasscode: ${this.oppasscode}`);
@@ -46,7 +60,7 @@ class Game {
     // #region players
 
     getUsername(username){
-        let newUsername = Constants.FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
+        let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
         }
@@ -65,14 +79,14 @@ class Game {
 
     addPlayer(socket, username){
         if(this.banManager.isBanned(username)){
-            socket.emit(Constants.MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned", extra: this.banManager.banReason(username) });
+            socket.emit(MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned", extra: this.banManager.banReason(username) });
             return;
         }
 
         this.playerManager.createPlayer(socket, username);
 
-        this.players[socket.id].socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
-        socket.emit(Constants.MSG_TYPES.PLAYER_INSTANTIATED, {
+        this.players[socket.id].socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(this.players[socket.id]));
+        socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, {
             x: this.players[socket.id].x,
             y: this.players[socket.id].y,
             color: this.players[socket.id].color,
@@ -93,7 +107,7 @@ class Game {
     killPlayer(socket, killedby){
         this.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
         
-        socket.emit(Constants.MSG_TYPES.DEAD);
+        socket.emit(MSG_TYPES.DEAD);
 
         this.playerManager.killPlayer(this.players[socket.id]);
     }
@@ -120,7 +134,7 @@ class Game {
 
     click(socket, info){
         if(this.players[socket.id] !== undefined){
-            if(Date.now() - this.players[socket.id].lastattack > Constants.ATTACK_DELAY * 1000){
+            if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
                 const dir = Math.atan2(info.xoffset, info.yoffset);
                 const cellpos = { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) };
 
@@ -197,7 +211,7 @@ class Game {
         if(this.shouldSendUpdate){
             // send fat update packets
             Object.values(this.players).forEach(player => {
-                player.socket.emit(Constants.MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
+                player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
             });
             this.shouldSendUpdate = false;
 
@@ -215,8 +229,8 @@ class Game {
     createUpdate(player){
         // get players
         const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id
-            && Math.abs(p.x - player.x) < Constants.CELLS_HORIZONTAL / 2
-            && Math.abs(p.y - player.y) < Constants.CELLS_VERTICAL / 2
+            && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
+            && Math.abs(p.y - player.y) < CELLS_VERTICAL / 2
         );
 
         // get fixes
@@ -244,8 +258,8 @@ class Game {
 
         // get entities
         const nearbyEntities = Object.values(this.entities).filter(e =>
-            Math.abs(e.x - player.x) < Constants.CELLS_HORIZONTAL / 2
-            && Math.abs(e.y - player.y) < Constants.CELLS_VERTICAL / 2
+            Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
+            && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );
 
         // return full update object
@@ -264,7 +278,7 @@ class Game {
     // #region chat
 
     chat(socket, message){
-        const text = Constants.FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
+        const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
             // empty message
         }else if(text[0] == '/'){
@@ -284,7 +298,7 @@ class Game {
         };
 
         Object.values(this.players).forEach(player => {
-            player.socket.emit(Constants.MSG_TYPES.RECEIVE_MESSAGE, newMessage);
+            player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, newMessage);
         });
     }
 

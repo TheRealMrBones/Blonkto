@@ -1,7 +1,7 @@
 const chunks = {};
 
-const Constants = require('../shared/constants.js');
-const { CHUNK_SIZE } = Constants;
+import SharedConfig from '../configs/shared';
+const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 // #region chunks
 

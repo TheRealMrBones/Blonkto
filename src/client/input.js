@@ -4,7 +4,8 @@ import { blockCollisions, playerCollisions } from './collisions.js';
 import { updateCoords } from './ui.js';
 import { getCurrentState } from './state.js';
 
-const Constants = require('../shared/constants.js');
+import SharedConfig from '../configs/shared';
+const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
 // #region init
 
@@ -13,7 +14,7 @@ const canvas = document.getElementById("gamecanvas");
 let dir = 0;
 let x = 0;
 let y = 0;
-let scale = Constants.PLAYER_SCALE;
+let scale = PLAYER_SCALE;
 
 let startw = null;
 let starta = null;
@@ -131,7 +132,7 @@ function handlekeyUp(e){
         case 'w':
         case 'W': {
             if(startw){
-                y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
+                y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
                 startw = null;
             }
             break;
@@ -140,7 +141,7 @@ function handlekeyUp(e){
         case 's':
         case 'S': {
             if(starts){
-                y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
+                y += (Date.now() - starts) * PLAYER_SPEED / 1000;
                 starts = null;
             }
             break;
@@ -149,7 +150,7 @@ function handlekeyUp(e){
         case 'a':
         case 'A': {
             if(starta){
-                x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
+                x -= (Date.now() - starta) * PLAYER_SPEED / 1000;
                 starta = null;
             }
             break;
@@ -158,7 +159,7 @@ function handlekeyUp(e){
         case 'd':
         case 'D': {
             if(startd){
-                x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
+                x += (Date.now() - startd) * PLAYER_SPEED / 1000;
                 startd = null;
             }
             break;
@@ -227,19 +228,19 @@ function resetMovement(){
 function updatePos(){
     // update local position vars
     if(startw){
-        y -= (Date.now() - startw) * Constants.PLAYER_SPEED / 1000;
+        y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
         startw = Date.now();
     }
     if(starts){
-        y += (Date.now() - starts) * Constants.PLAYER_SPEED / 1000;
+        y += (Date.now() - starts) * PLAYER_SPEED / 1000;
         starts = Date.now();
     }
     if(starta){
-        x -= (Date.now() - starta) * Constants.PLAYER_SPEED / 1000;
+        x -= (Date.now() - starta) * PLAYER_SPEED / 1000;
         starta = Date.now();
     }
     if(startd){
-        x += (Date.now() - startd) * Constants.PLAYER_SPEED / 1000;
+        x += (Date.now() - startd) * PLAYER_SPEED / 1000;
         startd = Date.now();
     }
 
@@ -278,7 +279,7 @@ export function startCapturingInput(xp, yp){
     window.addEventListener('blur', resetMovement);
 
     // set client side update interval
-    interval = setInterval(handleInput, 1000 / Constants.CLIENT_UPDATE_RATE);
+    interval = setInterval(handleInput, 1000 / CLIENT_UPDATE_RATE);
 }
 
 export function stopCapturingInput(){

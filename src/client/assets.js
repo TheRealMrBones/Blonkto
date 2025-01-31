@@ -1,4 +1,4 @@
-const Constants = require('../shared/constants');
+import Constants from '../shared/constants';
 const { ASSETS } = Constants;
 
 const assets = {};

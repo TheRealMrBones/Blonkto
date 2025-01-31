@@ -47,4 +47,4 @@ const SharedConfig: SharedConfigSchema = {
 };
 
 // freeze and export config
-module.exports = Object.freeze(SharedConfig);
+export default Object.freeze(SharedConfig);

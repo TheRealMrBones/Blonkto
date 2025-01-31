@@ -1,7 +1,7 @@
-const Constants = require('../../shared/constants.js');
 const Command = require('./command.js');
 
-const { COMMAND_ARGUMENTS } = Constants;
+import Constants from '../../shared/constants.js';
+const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
 
 class KickCommand extends Command{
     static key = "kick";
@@ -24,7 +24,7 @@ class KickCommand extends Command{
             case 0: {
                 const p = parsedTokens[1];
                 
-                p.socket.emit(Constants.MSG_TYPES.KICK, { reason: "Kicked", extra: "" });
+                p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: "" });
                 game.playerManager.unloadPlayer(p);
                 this.sendResponse(player, `kicked ${p.username}`);
                 
@@ -33,7 +33,7 @@ class KickCommand extends Command{
             case 1: {
                 const p = parsedTokens[1];
                 
-                p.socket.emit(Constants.MSG_TYPES.KICK, { reason: "Kicked", extra: parsedTokens[2] });
+                p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: parsedTokens[2] });
                 game.playerManager.unloadPlayer(p);
                 this.sendResponse(player, `kicked ${p.username}`);
                 

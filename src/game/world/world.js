@@ -1,5 +1,10 @@
-const Constants = require('../../shared/constants.js');
 const Chunk = require('./chunk.js');
+
+import SharedConfig from '../../configs/shared';
+const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
+
+import ServerConfig from '../../configs/server';
+const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 class World {
     constructor(fm){
@@ -9,14 +14,14 @@ class World {
         this.loadedchunks = {};
         this.generateSpawn();
 
-        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * Constants.AUTOSAVE_RATE);
+        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     // #region Spawn
 
     generateSpawn(){
-        for(let x = -Constants.SPAWN_SIZE / 2 - 1; x < Constants.SPAWN_SIZE / 2 + 1; x++){
-            for(let y = -Constants.SPAWN_SIZE / 2 - 1; y < Constants.SPAWN_SIZE / 2 + 1; y++){
+        for(let x = -SPAWN_SIZE / 2 - 1; x < SPAWN_SIZE / 2 + 1; x++){
+            for(let y = -SPAWN_SIZE / 2 - 1; y < SPAWN_SIZE / 2 + 1; y++){
                 const chunk = this.getChunk(x, y, true);
                 this.unloadChunk(x, y);
             }
@@ -26,14 +31,14 @@ class World {
     getSpawn(){
         while(true){
             // get random x y in spawn
-            const len = Constants.SPAWN_SIZE * Constants.CHUNK_SIZE;
+            const len = SPAWN_SIZE * CHUNK_SIZE;
             const x = Math.floor(Math.random() * (len - 1)) - (len / 2);
             const y = Math.floor(Math.random() * (len - 1)) - (len / 2);
             const pos = { x: x + .5, y: y + .5 };
 
             // get chunk of that spawn
-            const chunkx = Math.floor((x + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
-            const chunky = Math.floor((y + Constants.CHUNK_SIZE / 2) / Constants.CHUNK_SIZE);
+            const chunkx = Math.floor((x + CHUNK_SIZE / 2) / CHUNK_SIZE);
+            const chunky = Math.floor((y + CHUNK_SIZE / 2) / CHUNK_SIZE);
             const chunk = { x: chunkx, y: chunky };
 
             // check if valid spawn
@@ -53,8 +58,8 @@ class World {
 
     loadPlayerChunks(player){
         // get bottom right of chunk 2 by 2 to load
-        const x = Math.floor(player.x / Constants.CHUNK_SIZE);
-        const y = Math.floor(player.y / Constants.CHUNK_SIZE);
+        const x = Math.floor(player.x / CHUNK_SIZE);
+        const y = Math.floor(player.y / CHUNK_SIZE);
         const newChunk = { x: x, y: y };
 
         const returnobj = { chunk: newChunk };
@@ -188,7 +193,7 @@ class World {
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
             return chunk;
-        }else if(x >= -Constants.WORLD_SIZE / 2 && x < Constants.WORLD_SIZE / 2 && y >= -Constants.WORLD_SIZE / 2 && y < Constants.WORLD_SIZE / 2 && canloadnew){
+        }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
             let newChunk;
 
             if(this.chunkFileExists(x, y)){
@@ -255,10 +260,10 @@ class World {
     // #region Cells
 
     getCell(x, y, canloadnew){
-        const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
-        const chunky = Math.floor(y / Constants.CHUNK_SIZE);
-        const cellx = x - chunkx * Constants.CHUNK_SIZE;
-        const celly = y - chunky * Constants.CHUNK_SIZE;
+        const chunkx = Math.floor(x / CHUNK_SIZE);
+        const chunky = Math.floor(y / CHUNK_SIZE);
+        const cellx = x - chunkx * CHUNK_SIZE;
+        const celly = y - chunky * CHUNK_SIZE;
     
         const chunk = this.getChunk(chunkx, chunky, canloadnew);
         if(chunk){
@@ -269,8 +274,8 @@ class World {
     }
 
     getCellAndChunk(x, y, canloadnew){
-        const chunkx = Math.floor(x / Constants.CHUNK_SIZE);
-        const chunky = Math.floor(y / Constants.CHUNK_SIZE);
+        const chunkx = Math.floor(x / CHUNK_SIZE);
+        const chunky = Math.floor(y / CHUNK_SIZE);
 
         const cell = this.getCell(x, y, canloadnew);
         if(cell){
@@ -318,7 +323,7 @@ class World {
     }
 
     cellEmpty(x, y, entities){
-        const chunk = { x: Math.floor(x / Constants.CHUNK_SIZE), y: Math.floor(y / Constants.CHUNK_SIZE) };
+        const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
         entities.forEach(e => {

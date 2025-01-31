@@ -1,4 +1,5 @@
-const Constants = require('../../shared/constants.js');
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
 
 class Item {
     static itemid = 0;
@@ -10,7 +11,7 @@ class Item {
         this.break = false; // set to breaking info
         this.place = false; // set to type of object to place
         this.attack = false; // set to attack info
-        this.asset = Constants.ASSETS.MISSING_TEXTURE; // default incase its never set
+        this.asset = ASSETS.MISSING_TEXTURE; // default incase its never set
     }
 
     // #region serialization

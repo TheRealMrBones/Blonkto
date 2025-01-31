@@ -4,8 +4,16 @@ import { getSelf, setSelf } from './input.js';
 import { getCell } from './world.js';
 import { updateFps } from './ui.js';
 
-const Constants = require('../shared/constants.js');
-const { ASSETS, HEIGHT_TO_CELL_RATIO, CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE, BACKGROUND_PADDING, BACKGROUND_SCALE, ATTACK_HITBOX_OFFSET, HIT_COLOR } = Constants;
+import Constants from '../shared/constants';
+const { ASSETS } = Constants;
+
+import SharedConfig from '../configs/shared';
+const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
+const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
+
+import ClientConfig from '../configs/client';
+const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
+const { HIT_COLOR } = ClientConfig.ATTACK;
 
 // #region init
 
@@ -279,9 +287,9 @@ function renderPlayerUsername(me, player){
     context.translate(canvasX, canvasY);
 
     // draw username
-    context.font = Math.floor(Constants.USERNAME_SCALE * cellSize).toString() + "px " + Constants.TEXT_FONT;
+    context.font = Math.floor(USERNAME_SCALE * cellSize).toString() + "px " + TEXT_FONT;
     context.textAlign = "center";
-    context.fillText(username, 0, -Constants.USERNAME_HANG * cellSize);
+    context.fillText(username, 0, -USERNAME_HANG * cellSize);
     context.restore();
 }
 

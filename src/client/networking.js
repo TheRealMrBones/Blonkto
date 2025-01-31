@@ -8,7 +8,7 @@ import { receiveChatMessage } from './chat.js';
 import { onlogin, connectionRefused, connectionAccepted } from './index.js';
 import { setInventory } from './inventory.js';
 
-const Constants = require('../shared/constants.js');
+import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
 
 // #region init

@@ -1,6 +1,8 @@
-const Constants = require('../../shared/constants.js');
 const Item = require('./item.js');
 const StoneBlock = require('../world/blocks/stoneBlock.js');
+
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
 
 class StoneBlockItem extends Item {
     static itemid = 1;
@@ -10,7 +12,7 @@ class StoneBlockItem extends Item {
 
         this.name = "Stone Block";
         this.place = true;
-        this.asset = Constants.ASSETS.STONE_BLOCK;
+        this.asset = ASSETS.STONE_BLOCK;
     }
 
     getPlaced(){

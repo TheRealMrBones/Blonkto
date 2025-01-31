@@ -3,8 +3,8 @@ import { Player } from './player.js';
 import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
 
-const Constants = require('../shared/constants.js');
-const { RENDER_DELAY } = Constants;
+import ClientConfig from '../configs/client';
+const { RENDER_DELAY } = ClientConfig.RENDER;
 
 // #region init
 

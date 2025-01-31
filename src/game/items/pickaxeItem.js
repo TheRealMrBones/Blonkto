@@ -1,5 +1,7 @@
-const Constants = require('../../shared/constants.js');
 const Item = require('./item.js');
+
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
 
 class PickaxeItem extends Item {
     static itemid = 2;
@@ -9,7 +11,7 @@ class PickaxeItem extends Item {
 
         this.name = "Pickaxe";
         this.break = true;
-        this.asset = Constants.ASSETS.MISSING_TEXTURE;
+        this.asset = ASSETS.MISSING_TEXTURE;
     }
 }
 

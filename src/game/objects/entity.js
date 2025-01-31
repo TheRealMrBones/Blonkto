@@ -1,12 +1,15 @@
 const Object = require('./object.js');
-const Constants = require('../../shared/constants.js');
+
+import SharedConfig from '../../configs/shared';
+const { CHUNK_SIZE } = SharedConfig.WORLD;
+const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 class Entity extends Object {
     constructor(id, x, y, dir){
         super(id, x, y, dir);
         this.health = 10;
 
-        this.chunk = { x: Math.floor(x / Constants.CHUNK_SIZE), y: Math.floor(y / Constants.CHUNK_SIZE)}; // purposefully make chunk off so that new update has load data
+        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)}; // purposefully make chunk off so that new update has load data
 
         this.hit = false;
         this.hitinterval = null;
@@ -36,7 +39,7 @@ class Entity extends Object {
     takeHit(damage){
         this.health -= damage;
         this.hit = true;
-        this.hitinterval = setInterval(this.endHit.bind(this), 1000 * Constants.HIT_RENDER_DELAY);
+        this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
 
         // tell if died
         return (this.health <= 0);
@@ -49,7 +52,7 @@ class Entity extends Object {
 
     startSwing(){
         this.swinging = true;
-        this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * Constants.SWING_RENDER_DELAY);
+        this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
     }
 
     endSwing(){

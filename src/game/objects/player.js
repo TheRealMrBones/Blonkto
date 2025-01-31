@@ -1,9 +1,18 @@
 const Entity = require('./entity.js');
-const Constants = require('../../shared/constants.js');
 const { GetItemObject } = require('../items/items.js');
 const StoneBlockItem = require('../items/stoneBlockItem.js');
 const PickaxeItem = require('../items/pickaxeItem.js');
 const SwordItem = require('../items/swordItem.js');
+
+import Constants from '../../shared/constants';
+const { ASSETS } = Constants;
+
+import SharedConfig from '../../configs/shared';
+const { PLAYER_SCALE } = SharedConfig.PLAYER;
+const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
+
+import ServerConfig from '../../configs/server';
+const { RACISM, RACISM_PERM } = SharedConfig.PLAYER;
 
 class Player extends Entity {
     constructor(id, socket, username, x, y, dir, data){
@@ -11,24 +20,24 @@ class Player extends Entity {
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
-        this.asset = Constants.ASSETS.PLAYER;
+        this.asset = ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
         this.kills = 0;
         this.playerdelay = 0;
-        this.scale = Constants.PLAYER_SCALE;
+        this.scale = PLAYER_SCALE;
         this.health = 10;
 
         // racism
-        const antiracism = 1 - Constants.RACISM;
+        const antiracism = 1 - RACISM;
         this.color = {
-            r: antiracism + Math.random() * Constants.RACISM,
-            g: antiracism + Math.random() * Constants.RACISM,
-            b: antiracism + Math.random() * Constants.RACISM,
+            r: antiracism + Math.random() * RACISM,
+            g: antiracism + Math.random() * RACISM,
+            b: antiracism + Math.random() * RACISM,
         };
 
         // inventory
-        this.inventory = Array(Constants.INVENTORY_SIZE).fill(false);
+        this.inventory = Array(INVENTORY_SIZE).fill(false);
         this.inventory[1] = new StoneBlockItem();
         this.inventory[2] = new PickaxeItem();
         this.inventory[3] = new SwordItem();
@@ -43,7 +52,7 @@ class Player extends Entity {
 
                 this.kills = parseInt(playerdata[2]);
                 
-                if(Constants.RACISM_PERM){
+                if(RACISM_PERM){
                     const colordata = playerdata[3].split(",");
                     this.color = {
                         r: parseFloat(colordata[0]),
