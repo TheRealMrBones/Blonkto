@@ -83,4 +83,4 @@ class OpManager {
     // #endregion
 }
 
-module.exports = OpManager;
+export default OpManager;

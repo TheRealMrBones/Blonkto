@@ -3,7 +3,7 @@ import { Player } from './player.js';
 import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
 
-import ClientConfig from '../configs/client';
+import ClientConfig from '../configs/client.ts';
 const { RENDER_DELAY } = ClientConfig.RENDER;
 
 // #region init

@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -59,4 +59,4 @@ class TpCommand extends Command{
     }
 }
 
-module.exports = TpCommand;
+export default TpCommand;

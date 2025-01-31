@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 router.get('/getconfig', (req, res) => {
@@ -6,4 +6,4 @@ router.get('/getconfig', (req, res) => {
     //res.json(config);
 });
 
-module.exports = router;
+export default router;

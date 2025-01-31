@@ -1,20 +1,20 @@
-const Command = require('./command.js');
-const OpCommand = require('./opCommand.js');
-const DeopCommand = require('./deopCommand.js');
-const OppedCommand = require('./oppedCommand.js');
-const OpListCommand = require('./opListCommand.js');
-const TpCommand = require('./tpCommand.js');
-const PingCommand = require('./pingCommand.js');
-const NickCommand = require('./nickCommand.js');
-const HelpCommand = require('./helpCommand.js');
-const KillCommand = require('./killCommand.js');
-const SaveWorldCommand = require('./saveWorldCommand.js');
-const KickCommand = require('./kickCommand.js');
-const BanCommand = require('./banCommand.js');
-const PardonCommand = require('./pardonCommand.js');
-const BanListCommand = require('./banListCommand.js');
-const ClearBanListCommand = require('./clearBanListCommand.js');
-const ClearOpListCommand = require('./clearOpListCommand.js');
+import Command from './command';
+import OpCommand from './opCommand.js';
+import DeopCommand from './deopCommand.js';
+import OppedCommand from './oppedCommand.js';
+import OpListCommand from './opListCommand.js';
+import TpCommand from './tpCommand.js';
+import PingCommand from './pingCommand.js';
+import NickCommand from './nickCommand.js';
+import HelpCommand from './helpCommand.js';
+import KillCommand from './killCommand.js';
+import SaveWorldCommand from './saveWorldCommand.js';
+import KickCommand from './kickCommand.js';
+import BanCommand from './banCommand.js';
+import PardonCommand from './pardonCommand.js';
+import BanListCommand from './banListCommand.js';
+import ClearBanListCommand from './clearBanListCommand.js';
+import ClearOpListCommand from './clearOpListCommand.js';
 
 const commands = [
     OpCommand,
@@ -35,7 +35,7 @@ const commands = [
     ClearOpListCommand
 ];
 
-exports.ExcecuteCommand = (game, player, command) => {
+export const ExcecuteCommand = (game, player, command) => {
     if(command.length == 0){
         Command.sendResponse(player, `no command given`);
         return;

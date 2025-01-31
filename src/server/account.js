@@ -26,4 +26,4 @@ class Account {
     // #endregion
 }
 
-module.exports = Account;
+export default Account;

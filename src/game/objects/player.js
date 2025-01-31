@@ -1,8 +1,8 @@
-const Entity = require('./entity.js');
-const { GetItemObject } = require('../items/items.js');
-const StoneBlockItem = require('../items/stoneBlockItem.js');
-const PickaxeItem = require('../items/pickaxeItem.js');
-const SwordItem = require('../items/swordItem.js');
+import Entity from './entity.js';
+import { GetItemObject } from '../items/items.js';
+import StoneBlockItem from '../items/stoneBlockItem.js';
+import PickaxeItem from '../items/pickaxeItem.js';
+import SwordItem from '../items/swordItem.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -200,4 +200,4 @@ class Player extends Entity {
     // #endregion
 }
 
-module.exports = Player;
+export default Player;

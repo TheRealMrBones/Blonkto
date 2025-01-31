@@ -23,4 +23,4 @@ class Floor {
     // #endregion
 }
 
-module.exports = Floor;
+export default Floor;

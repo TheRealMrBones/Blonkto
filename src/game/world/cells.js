@@ -1,12 +1,12 @@
-const Cell = require('./cell.js');
+import Cell from './cell.js';
 
-const StoneBlock = require('./blocks/stoneBlock.js');
+import StoneBlock from './blocks/stoneBlock.js';
 
 const blocks = [
     StoneBlock,
 ];
 
-const GrassFloor = require('./floors/grassFloor.js');
+import GrassFloor from './floors/grassFloor.js';
 
 const floors = [
     GrassFloor,
@@ -18,7 +18,7 @@ const ceilings = [
 
 ];
 
-exports.GetCellObject = (blockid, floorid, ceilingid) => {
+export const GetCellObject = (blockid, floorid, ceilingid) => {
     // Find block
     let block = null;
     const b = blocks.find(b => b.id == blockid);

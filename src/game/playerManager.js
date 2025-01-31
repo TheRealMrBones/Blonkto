@@ -1,4 +1,4 @@
-const Player = require('./objects/player.js');
+import Player from './objects/player.js';
 
 import ServerConfig from '../configs/server';
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
@@ -66,4 +66,4 @@ const getPlayerFilePath = (username) => ("players/" + username);
 
 // #endregion
 
-module.exports = PlayerManager;
+export default PlayerManager;

@@ -1,6 +1,6 @@
-const EventEmitter = require('events');
+import EventEmitter from 'events';
 
-const Entity = require('./entity.js');
+import Entity from './entity.js';
 
 class NonplayerEntity extends Entity {
     constructor(id, x, y, dir){
@@ -11,4 +11,4 @@ class NonplayerEntity extends Entity {
     }
 }
 
-module.exports = NonplayerEntity;
+export default NonplayerEntity;

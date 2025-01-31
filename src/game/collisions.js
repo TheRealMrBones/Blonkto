@@ -4,7 +4,7 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 // #region collision checks
 
-exports.attackHitCheck = (player, entities, attackdir, damage) => {
+export const attackHitCheck = (player, entities, attackdir, damage) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
         y: player.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,

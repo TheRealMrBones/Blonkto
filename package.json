@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "prod:pack": "webpack --config webpack.prod.js",
-        "prod:build": "tsc -p tsconfig.commonjs.json",
+        "prod:build": "tsc -p tsconfig.nodejs.json",
         "prod": "npm run prod:pack && npm run prod:build",
         "dev:pack": "webpack --config webpack.dev.js",
         "dev:start": "nodemon src/server/server.js",

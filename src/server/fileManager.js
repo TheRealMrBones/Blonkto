@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 class FileManager {
     constructor(){
@@ -60,4 +60,4 @@ class FileManager {
     // #endregion
 }
 
-module.exports = FileManager;
+export default FileManager;

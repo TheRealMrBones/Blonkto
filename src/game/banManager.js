@@ -82,4 +82,4 @@ class BanManager {
     // #endregion
 }
 
-module.exports = BanManager;
+export default BanManager;

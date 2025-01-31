@@ -8,7 +8,7 @@ import { receiveChatMessage } from './chat.js';
 import { onlogin, connectionRefused, connectionAccepted } from './index.js';
 import { setInventory } from './inventory.js';
 
-import Constants from '../shared/constants';
+import Constants from '../shared/constants.ts';
 const { MSG_TYPES } = Constants;
 
 // #region init

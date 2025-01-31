@@ -1,4 +1,4 @@
-const Item = require('./item.js');
+import Item from './item.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -15,4 +15,4 @@ class PickaxeItem extends Item {
     }
 }
 
-module.exports = PickaxeItem;
+export default PickaxeItem;

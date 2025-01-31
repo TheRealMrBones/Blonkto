@@ -1,4 +1,4 @@
-const NonplayerEntity = require('./nonplayerEntity.js');
+import NonplayerEntity from './nonplayerEntity.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -21,4 +21,4 @@ class Pig extends NonplayerEntity {
     }
 }
 
-module.exports = Pig;
+export default Pig;

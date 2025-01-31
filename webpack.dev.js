@@ -1,6 +1,6 @@
-const { merge } = require('webpack-merge');
-const config = require('./webpack.config.js');
+import { merge } from 'webpack-merge';
+import config from './webpack.config.js';
 
-module.exports = merge(config, {
+export default merge(config, {
     mode: 'development'
 });

@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
@@ -43,4 +43,4 @@ class KickCommand extends Command{
     }
 }
 
-module.exports = KickCommand;
+export default KickCommand;

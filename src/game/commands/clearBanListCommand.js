@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -30,4 +30,4 @@ class ClearBanListCommand extends Command{
     }
 }
 
-module.exports = ClearBanListCommand;
+export default ClearBanListCommand;

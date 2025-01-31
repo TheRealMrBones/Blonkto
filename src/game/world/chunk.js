@@ -1,7 +1,7 @@
-const Cell = require('./cell.js');
-const { GetCellObject } = require('./cells.js');
-const GrassFloor = require('./floors/grassFloor.js');
-const StoneBlock = require('./blocks/stoneBlock.js');
+import Cell from './cell.js';
+import { GetCellObject } from './cells.js';
+import GrassFloor from './floors/grassFloor.js';
+import StoneBlock from './blocks/stoneBlock.js';
 
 import SharedConfig from '../../configs/shared';
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -83,4 +83,4 @@ class Chunk {
     // #endregion
 }
 
-module.exports = Chunk;
+export default Chunk;

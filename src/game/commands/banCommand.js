@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
@@ -69,4 +69,4 @@ class BanCommand extends Command{
     }
 }
 
-module.exports = BanCommand;
+export default BanCommand;

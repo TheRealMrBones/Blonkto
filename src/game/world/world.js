@@ -1,4 +1,4 @@
-const Chunk = require('./chunk.js');
+import Chunk from './chunk.js';
 
 import SharedConfig from '../../configs/shared';
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
@@ -340,4 +340,4 @@ class World {
     // #endregion
 }
 
-module.exports = World;
+export default World;

@@ -138,4 +138,4 @@ class Object {
     // #endregion
 }
 
-module.exports = Object;
+export default Object;

@@ -27,4 +27,4 @@ class Block {
     // #endregion
 }
 
-module.exports = Block;
+export default Block;

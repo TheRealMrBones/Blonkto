@@ -1,7 +1,7 @@
 import { push } from './input.js';
 import { getCell } from './world.js';
 
-import Constants from '../shared/constants';
+import Constants from '../shared/constants.ts';
 const { SHAPES } = Constants;
 
 // #region get collisions

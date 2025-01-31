@@ -48,4 +48,4 @@ class Cell {
     // #endregion
 }
 
-module.exports = Cell;
+export default Cell;

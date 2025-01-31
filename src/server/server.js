@@ -1,12 +1,12 @@
-const express = require('express');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const socketio = require('socket.io');
+import express from 'express';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import socketio from 'socket.io';
 
-const Game = require('../game/game.js');
-const FileManager = require('./fileManager.js');
-const AccountManager = require('./accountManager.js');
-const webpackConfig = require('../../webpack.dev.js');
+import Game from '../game/game.js';
+import FileManager from './fileManager.js';
+import AccountManager from './accountManager.js';
+import webpackConfig from '../../webpack.dev.js';
 
 import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
@@ -26,7 +26,7 @@ if(process.env.NODE_ENV === 'development'){
 }
 
 // Including routes
-const configRoutes = require('./routes/config.js');
+import configRoutes from './routes/config.js';
 app.use('/', configRoutes);
 
 // Opening server

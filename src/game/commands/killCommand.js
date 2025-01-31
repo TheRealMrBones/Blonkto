@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -44,4 +44,4 @@ class KillCommand extends Command{
     }
 }
 
-module.exports = KillCommand;
+export default KillCommand;

@@ -1,4 +1,4 @@
-const Block = require('../block.js');
+import Block from '../block.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS,SHAPES } = Constants;
@@ -14,4 +14,4 @@ class StoneBlock extends Block {
     }
 }
 
-module.exports = StoneBlock;
+export default StoneBlock;

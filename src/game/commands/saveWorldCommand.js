@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -17,4 +17,4 @@ class SaveWorldCommand extends Command{
     }
 }
 
-module.exports = SaveWorldCommand;
+export default SaveWorldCommand;

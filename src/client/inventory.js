@@ -1,6 +1,6 @@
 import { Item } from './item.js';
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from '../configs/shared.ts';
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 const inventory = new Array(INVENTORY_SIZE).fill(false);

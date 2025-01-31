@@ -1,4 +1,4 @@
-const Object = require('./object.js');
+import Object from './object.js';
 
 import SharedConfig from '../../configs/shared';
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -84,4 +84,4 @@ class Entity extends Object {
     // #endregion
 }
 
-module.exports = Entity;
+export default Entity;

@@ -4,14 +4,14 @@ import { getSelf, setSelf } from './input.js';
 import { getCell } from './world.js';
 import { updateFps } from './ui.js';
 
-import Constants from '../shared/constants';
+import Constants from '../shared/constants.ts';
 const { ASSETS } = Constants;
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from '../configs/shared.ts';
 const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import ClientConfig from '../configs/client';
+import ClientConfig from '../configs/client.ts';
 const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 

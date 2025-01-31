@@ -1,5 +1,5 @@
-const Item = require('./item.js');
-const StoneBlock = require('../world/blocks/stoneBlock.js');
+import Item from './item.js';
+import StoneBlock from '../world/blocks/stoneBlock.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -20,4 +20,4 @@ class StoneBlockItem extends Item {
     }
 }
 
-module.exports = StoneBlockItem;
+export default StoneBlockItem;

@@ -1,6 +1,6 @@
 const chunks = {};
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from '../configs/shared.ts';
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 // #region chunks

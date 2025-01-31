@@ -1,7 +1,7 @@
-const argon2 = require('argon2');
-const validator = require('validator');
+import argon2 from 'argon2';
+import validator from 'validator';
 
-const Account = require('./account.js');
+import Account from './account.js';
 
 class AccountManager {
     constructor(fm){
@@ -116,4 +116,4 @@ const getAccountFilePath = (username) => ("accounts/" + username);
 
 // #endregion
 
-module.exports = AccountManager;
+export default AccountManager;

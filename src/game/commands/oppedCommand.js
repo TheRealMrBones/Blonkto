@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -48,4 +48,4 @@ class OppedCommand extends Command{
     }
 }
 
-module.exports = OppedCommand;
+export default OppedCommand;

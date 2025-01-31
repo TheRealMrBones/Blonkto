@@ -29,4 +29,4 @@ class Item {
     // #endregion
 }
 
-module.exports = Item;
+export default Item;

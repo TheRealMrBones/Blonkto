@@ -1,4 +1,4 @@
-const Command = require('./command.js');
+import Command from './command';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS } = Constants;
@@ -35,4 +35,4 @@ class DeopCommand extends Command{
     }
 }
 
-module.exports = DeopCommand;
+export default DeopCommand;

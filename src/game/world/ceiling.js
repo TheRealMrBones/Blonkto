@@ -23,4 +23,4 @@ class Ceiling {
     // #endregion
 }
 
-module.exports = Ceiling;
+export default Ceiling;

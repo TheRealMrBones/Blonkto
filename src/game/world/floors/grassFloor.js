@@ -1,4 +1,4 @@
-const Floor = require('../floor.js');
+import Floor from '../floor.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -12,4 +12,4 @@ class GrassFloor extends Floor {
     }
 }
 
-module.exports = GrassFloor;
+export default GrassFloor;

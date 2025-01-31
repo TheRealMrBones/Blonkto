@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 import Constants from '../../shared/constants.js';
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
@@ -130,4 +130,4 @@ class Command{
     }
 }
 
-module.exports = Command;
+export default Command;

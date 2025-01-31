@@ -1,6 +1,6 @@
-const StoneBlockItem = require('./stoneBlockItem.js');
-const PickaxeItem = require('./pickaxeItem.js');
-const SwordItem = require('./swordItem.js');
+import StoneBlockItem from './stoneBlockItem.js';
+import PickaxeItem from './pickaxeItem.js';
+import SwordItem from './swordItem.js';
 
 const items = [
     StoneBlockItem,
@@ -8,7 +8,7 @@ const items = [
     SwordItem,
 ];
 
-exports.GetItemObject = (id, itemid) => {
+export const GetItemObject = (id, itemid) => {
     // Find item
     const i = items.find(i => i.itemid == itemid);
     if(i){

@@ -4,7 +4,7 @@ import { blockCollisions, playerCollisions } from './collisions.js';
 import { updateCoords } from './ui.js';
 import { getCurrentState } from './state.js';
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from '../configs/shared.ts';
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
 // #region init

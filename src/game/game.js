@@ -1,12 +1,12 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-const PlayerManager = require('./playerManager.js');
-const OpManager = require('./opManager.js');
-const BanManager = require('./banManager.js');
-const World = require('./world/world.js');
-const { attackHitCheck } = require('./collisions.js');
-const { filterText } = require('./filter.js');
-const { ExcecuteCommand } = require('./commands/commands.js');
+import PlayerManager from './playerManager.js';
+import OpManager from './opManager.js';
+import BanManager from './banManager.js';
+import World from './world/world.js';
+import { attackHitCheck } from './collisions.js';
+import { filterText } from './filter.js';
+import { ExcecuteCommand } from './commands/commands.js';
 
 import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
@@ -23,7 +23,7 @@ const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // temp
-const Pig = require('./objects/pig.js');
+import Pig from './objects/pig.js';
 
 class Game {
     constructor(fm, am){
@@ -305,4 +305,4 @@ class Game {
     // #endregion
 }
 
-module.exports = Game;
+export default Game;
