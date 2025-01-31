@@ -36,7 +36,13 @@ class Game {
 
         // entities
         this.players = {};
-        this.entities = { "tempid": new Pig("tempid", 0, 0, 0) };
+        this.entities = {};
+
+        //
+        // TEMP CODE!
+        //
+        const temppig = new Pig(0, 0, 0);
+        this.entities[temppig.id] = temppig;
 
         // world
         this.world = new World(fm);

@@ -7,8 +7,8 @@ import SharedConfig from '../../configs/shared';
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 class Pig extends NonplayerEntity {
-    constructor(id, x, y, dir){
-        super(id, x, y, dir);
+    constructor(x, y, dir){
+        super(x, y, dir);
 
         this.asset = ASSETS.PIG;
         this.scale = PLAYER_SCALE;

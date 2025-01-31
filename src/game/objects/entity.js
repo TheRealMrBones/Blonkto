@@ -5,8 +5,8 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 class Entity extends Object {
-    constructor(id, x, y, dir){
-        super(id, x, y, dir);
+    constructor(x, y, dir){
+        super(x, y, dir);
         this.health = 10;
 
         this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)}; // purposefully make chunk off so that new update has load data

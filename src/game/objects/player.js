@@ -16,7 +16,8 @@ const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
 
 class Player extends Entity {
     constructor(id, socket, username, x, y, dir, data){
-        super(id, x, y, dir);
+        super(x, y, dir);
+        this.id = id;
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 

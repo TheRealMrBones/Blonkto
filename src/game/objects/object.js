@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
 
@@ -5,8 +7,8 @@ import ServerConfig from '../../configs/server';
 const { FALL_RATE } = ServerConfig.OBJECT;
 
 class Object {
-    constructor(id, x, y, dir){
-        this.id = id;
+    constructor(x, y, dir){
+        this.id = crypto.randomUUID();
 
         this.lastupdated = Date.now();
 
