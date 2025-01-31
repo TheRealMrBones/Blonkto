@@ -3,11 +3,13 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const socketio = require('socket.io');
 
-const Constants = require('../shared/constants.js');
+const Constants = require('../shared/constants');
 const Game = require('../game/game.js');
 const FileManager = require('./fileManager.js');
 const AccountManager = require('./accountManager.js');
 const webpackConfig = require('../../webpack.dev.js');
+
+const { MSG_TYPES } = Constants;
 
 // #region init
 
@@ -20,7 +22,7 @@ if(process.env.NODE_ENV === 'development'){
   	const compiler = webpack(webpackConfig);
   	app.use(webpackDevMiddleware(compiler));
 }else{
-  	app.use(express.static('dist'));
+  	app.use(express.static('dist/webpack'));
 }
 
 // Including routes
@@ -38,14 +40,14 @@ const io = socketio(server);
 io.on('connection', socket => {
 	console.log(`[${socket.id}] Connected`);
 
-	socket.on(Constants.MSG_TYPES.CREATE_ACCOUNT, createAccount);
-	socket.on(Constants.MSG_TYPES.LOGIN, login);
-	socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
-	socket.on(Constants.MSG_TYPES.INPUT, handleInput);
-	socket.on(Constants.MSG_TYPES.CLICK, click);
-	socket.on(Constants.MSG_TYPES.INTERACT, interact);
-	socket.on(Constants.MSG_TYPES.DISCONNECT, onDisconnect);
-	socket.on(Constants.MSG_TYPES.SEND_MESSAGE, chat);
+	socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
+	socket.on(MSG_TYPES.LOGIN, login);
+	socket.on(MSG_TYPES.JOIN_GAME, joinGame);
+	socket.on(MSG_TYPES.INPUT, handleInput);
+	socket.on(MSG_TYPES.CLICK, click);
+	socket.on(MSG_TYPES.INTERACT, interact);
+	socket.on(MSG_TYPES.DISCONNECT, onDisconnect);
+	socket.on(MSG_TYPES.SEND_MESSAGE, chat);
 });
 
 const fileManager = new FileManager();
@@ -58,7 +60,7 @@ const game = new Game(fileManager, accountManager);
 
 async function createAccount(credentials){
 	const response = await accountManager.createAccount(this.id, credentials.username, credentials.password)
-	this.emit(Constants.MSG_TYPES.LOGIN, response);
+	this.emit(MSG_TYPES.LOGIN, response);
 
 	if(response.account){
 		console.log(`[${this.id}] Create account: ${response.account.username}`);
@@ -67,7 +69,7 @@ async function createAccount(credentials){
 
 async function login(credentials){
 	const response = await accountManager.login(this.id, credentials.username, credentials.password)
-	this.emit(Constants.MSG_TYPES.LOGIN, response);
+	this.emit(MSG_TYPES.LOGIN, response);
 
 	if(response.account){
 		console.log(`[${this.id}] Logged in as: ${response.account.username}`);

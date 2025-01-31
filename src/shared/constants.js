@@ -1,4 +1,4 @@
-module.exports = Object.freeze({
+const Constants = Object.freeze({
     MSG_TYPES: {
         CREATE_ACCOUNT: "create_account",
         LOGIN: "login",
@@ -39,3 +39,5 @@ module.exports = Object.freeze({
         BOOLEAN: 5,
     },
 });
+
+module.exports = Constants;

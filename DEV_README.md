@@ -3,11 +3,12 @@
 2. Run commands `npm install` and `npm install -g typescript` (requires npm)
 
 # Dev Build Steps
-1. Run `npm run dev`
-2. Run `npm run devStart`
+1. Run `npm run dev:pack`
+2. Run `npm run dev:start`
 3. The game is now playable at http://localhost:3000/
 
 # Prod Build Steps
-1. Run `npm run prod`
-2. Run `node src/server/server.js`
-3. The game is now playable on port 3000
+1. Run `npm run prod:webpack`
+2. Run `npm run prod:build`
+3. Run `node src/server/server.js`
+4. The game is now playable on port 3000

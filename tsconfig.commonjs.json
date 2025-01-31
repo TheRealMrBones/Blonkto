@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir": "./dist/cjs",
+        "lib": ["es6"],
+    },
+    "include": ["src/**/*"],
+    "exclude": ["src/client/**"]
+}

@@ -8,7 +8,7 @@ module.exports = {
     },
     output: {
         filename: '[name].[contenthash].js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist/webpack'),
         clean: true,
     },
     module: {
@@ -19,7 +19,15 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: ['@babel/preset-env', '@babel/preset-typescript'],
+                    presets: [
+                        '@babel/preset-env',
+                        [
+                            '@babel/preset-typescript',
+                            {
+                                configFile: 'tsconfig.webpack.json'
+                            }
+                        ]
+                    ]
                 },
             },
         },
