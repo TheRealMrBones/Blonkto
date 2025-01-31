@@ -1,6 +1,6 @@
 import Block from '../block.js';
 
-import Constants from '../../shared/constants';
+import Constants from '../../../shared/constants';
 const { ASSETS,SHAPES } = Constants;
 
 class StoneBlock extends Block {

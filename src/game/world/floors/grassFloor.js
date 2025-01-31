@@ -1,6 +1,6 @@
 import Floor from '../floor.js';
 
-import Constants from '../../shared/constants';
+import Constants from '../../../shared/constants';
 const { ASSETS } = Constants;
 
 class GrassFloor extends Floor {

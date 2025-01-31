@@ -12,7 +12,7 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 import ServerConfig from '../../configs/server';
-const { RACISM, RACISM_PERM } = SharedConfig.PLAYER;
+const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
 
 class Player extends Entity {
     constructor(id, socket, username, x, y, dir, data){

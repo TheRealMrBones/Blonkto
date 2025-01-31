@@ -1,7 +1,7 @@
 import express from 'express';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
-import socketio from 'socket.io';
+import { Server as SocketIo } from 'socket.io';
 
 import Game from '../game/game.js';
 import FileManager from './fileManager.js';
@@ -35,7 +35,7 @@ const server = app.listen(port);
 console.log(`Server listening on port: ${port}`);
 
 // Opening socketio
-const io = socketio(server);
+const io = new SocketIo(server);
 
 io.on('connection', socket => {
 	console.log(`[${socket.id}] Connected`);

@@ -7,6 +7,9 @@ import { getCurrentState } from './state.js';
 import SharedConfig from '../configs/shared.ts';
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
+import ClientConfig from '../configs/client.ts';
+const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
+
 // #region init
 
 const canvas = document.getElementById("gamecanvas");
