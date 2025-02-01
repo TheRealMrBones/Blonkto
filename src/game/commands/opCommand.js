@@ -15,7 +15,7 @@ class OpCommand extends Command{
         if(tokens[1] == game.oppasscode && !game.oppasscodeused){
             game.opManager.op(player.username)
             game.oppasscodeused = true;
-            this.sendResponse(player, `you are now opped`);
+            game.chatManager.sendMessageTo(player, `you are now opped`);
             return;
         }
 
@@ -31,11 +31,11 @@ class OpCommand extends Command{
             case 0: {
                 const p = parsedTokens[1];
                 if(game.opManager.isOp(p.username)){
-                    this.sendResponse(player, `${p.username} is already opped`);
+                    game.chatManager.sendMessageTo(player, `${p.username} is already opped`);
                 }else{
                     game.opManager.op(p.username)
-                    this.sendResponse(p, `you are now opped`);
-                    this.sendResponse(player, `opped ${p.username}`);
+                    game.chatManager.sendMessageTo(p, `you are now opped`);
+                    game.chatManager.sendMessageTo(player, `opped ${p.username}`);
                 }
                 break;
             };

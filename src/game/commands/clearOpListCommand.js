@@ -23,17 +23,17 @@ class ClearOpListCommand extends Command{
         switch(argIndex){
             case 0: {
                 game.opManager.clearOpList(player.username);
-                this.sendResponse(player, `cleared op list`);
+                game.chatManager.sendMessageTo(player, `cleared op list`);
                 
                 break;
             };
             case 1:{
                 if(parsedTokens[1]){
                     game.opManager.clearOpList();
-                    this.sendResponse(player, `cleared op list (FORCE)`);
+                    game.chatManager.sendMessageTo(player, `cleared op list (FORCE)`);
                 }else{
                     game.opManager.clearOpList(player.username);
-                    this.sendResponse(player, `cleared op list`);
+                    game.chatManager.sendMessageTo(player, `cleared op list`);
                 }
             }
         }

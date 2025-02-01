@@ -29,7 +29,7 @@ class BanCommand extends Command{
                 p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: "" });
                 game.banManager.ban(p.username, "");
                 game.playerManager.unloadPlayer(p);
-                this.sendResponse(player, `banned ${p.username}`);
+                game.chatManager.sendMessageTo(player, `banned ${p.username}`);
                 
                 break;
             };
@@ -39,29 +39,29 @@ class BanCommand extends Command{
                 p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: parsedTokens[2] });
                 game.banManager.ban(p.username, parsedTokens[2]);
                 game.playerManager.unloadPlayer(p);
-                this.sendResponse(player, `banned ${p.username}`);
+                game.chatManager.sendMessageTo(player, `banned ${p.username}`);
                 
                 break;
             };
             case 2: {
                 if(game.banManager.isBanned(parsedTokens[1])){
-                    this.sendResponse(player, `${parsedTokens[1]} is already banned`);
+                    game.chatManager.sendMessageTo(player, `${parsedTokens[1]} is already banned`);
                     return;
                 }
 
                 game.banManager.ban(parsedTokens[1], "");
-                this.sendResponse(player, `banned ${parsedTokens[1]}`);
+                game.chatManager.sendMessageTo(player, `banned ${parsedTokens[1]}`);
                 
                 break;
             };
             case 3: {
                 if(game.banManager.isBanned(parsedTokens[1])){
-                    this.sendResponse(player, `${parsedTokens[1]} is already banned`);
+                    game.chatManager.sendMessageTo(player, `${parsedTokens[1]} is already banned`);
                     return;
                 }
 
                 game.banManager.ban(parsedTokens[1], parsedTokens[2]);
-                this.sendResponse(player, `banned ${parsedTokens[1]}`);
+                game.chatManager.sendMessageTo(player, `banned ${parsedTokens[1]}`);
                 
                 break;
             };

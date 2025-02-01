@@ -24,10 +24,10 @@ class DeopCommand extends Command{
                 const p = parsedTokens[1];
                 if(game.opManager.isOp(p.username)){
                     game.opManager.deop(p.username);
-                    this.sendResponse(p, `you are no longer opped`);
-                    this.sendResponse(player, `deopped ${p.username}`);
+                    game.chatManager.sendMessageTo(p, `you are no longer opped`);
+                    game.chatManager.sendMessageTo(player, `deopped ${p.username}`);
                 }else{
-                    this.sendResponse(player, `${p.username} is not opped`);
+                    game.chatManager.sendMessageTo(player, `${p.username} is not opped`);
                 }
                 break;
             };

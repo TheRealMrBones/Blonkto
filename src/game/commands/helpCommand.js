@@ -14,28 +14,28 @@ class HelpCommand extends Command{
     ];
 
     static execute(game, player, tokens){
-        this.sendResponse(player, `command list:`);
-        this.sendResponse(player, `- help - gives list of commands`);
-        this.sendResponse(player, `- ping - pong!`);
+        game.chatManager.sendMessageTo(player, `command list:`);
+        game.chatManager.sendMessageTo(player, `- help - gives list of commands`);
+        game.chatManager.sendMessageTo(player, `- ping - pong!`);
         if(game.opManager.isOp(player.username)){
-            this.sendResponse(player, `- op - gives a player operator permissions`);
-            this.sendResponse(player, `- deop - take away a players operator permissions`);
-            this.sendResponse(player, `- opped - check if you or another play is opped`);
-            this.sendResponse(player, `- oplist - view the full list of opped players`);
-            this.sendResponse(player, `- clearoplist - clears the entire list of oppped players`);
-            this.sendResponse(player, `- tp - teleport a player`);
-            this.sendResponse(player, `- kill - kill yourself or another player`);
-            this.sendResponse(player, `- nick - change your name or another players`);
-            this.sendResponse(player, `- saveworld - saves the world`);
-            this.sendResponse(player, `- kick - kick a player from the server`);
-            this.sendResponse(player, `- ban - ban a player from the server`);
-            this.sendResponse(player, `- pardon - remove a player from the ban list`);
-            this.sendResponse(player, `- banlist - get a list of all banned players`);
-            this.sendResponse(player, `- clearbanlist - clears the entire list of banned players`);
+            game.chatManager.sendMessageTo(player, `- op - gives a player operator permissions`);
+            game.chatManager.sendMessageTo(player, `- deop - take away a players operator permissions`);
+            game.chatManager.sendMessageTo(player, `- opped - check if you or another play is opped`);
+            game.chatManager.sendMessageTo(player, `- oplist - view the full list of opped players`);
+            game.chatManager.sendMessageTo(player, `- clearoplist - clears the entire list of oppped players`);
+            game.chatManager.sendMessageTo(player, `- tp - teleport a player`);
+            game.chatManager.sendMessageTo(player, `- kill - kill yourself or another player`);
+            game.chatManager.sendMessageTo(player, `- nick - change your name or another players`);
+            game.chatManager.sendMessageTo(player, `- saveworld - saves the world`);
+            game.chatManager.sendMessageTo(player, `- kick - kick a player from the server`);
+            game.chatManager.sendMessageTo(player, `- ban - ban a player from the server`);
+            game.chatManager.sendMessageTo(player, `- pardon - remove a player from the ban list`);
+            game.chatManager.sendMessageTo(player, `- banlist - get a list of all banned players`);
+            game.chatManager.sendMessageTo(player, `- clearbanlist - clears the entire list of banned players`);
         }else{
-            this.sendResponse(player, `- opped - check if you are opped`);
+            game.chatManager.sendMessageTo(player, `- opped - check if you are opped`);
             if(ALLOW_CHANGE_NAME)
-                this.sendResponse(player, `- nick - change your name`);
+                game.chatManager.sendMessageTo(player, `- nick - change your name`);
         }
     }
 }

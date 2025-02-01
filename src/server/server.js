@@ -108,7 +108,7 @@ function onDisconnect(){
 }
 
 function chat(message){
-  	game.chat(this, message);
+  	game.chatManager.chat(this, message);
 }
 
 // #endregion

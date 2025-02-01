@@ -24,7 +24,7 @@ class OpCommand extends Command{
 
         // special op checks
         if((argIndex == 1 && !game.opManager.isOp(player.username)) || (argIndex == 0 && !game.opManager.isOp(player.username) && !ALLOW_CHANGE_NAME)){
-            this.noPermMessage(player);
+            this.noPermMessage(player, game);
             return;
         }
 
@@ -32,10 +32,10 @@ class OpCommand extends Command{
         switch(argIndex){
             case 0: {
                 if(player.username === parsedTokens[1]){
-                    this.sendResponse(player, `your name is already ${player.username}`);
+                    game.chatManager.sendMessageTo(player, `your name is already ${player.username}`);
                 }else{
                     const newusername = game.getUsername(parsedTokens[1]);
-                    this.sendResponse(player, `${newusername} is your new name`);
+                    game.chatManager.sendMessageTo(player, `${newusername} is your new name`);
                     player.username = newusername;
                 }
                 break;
@@ -43,11 +43,11 @@ class OpCommand extends Command{
             case 1: {
                 const p = parsedTokens[1];
                 if(p.username === parsedTokens[2]){
-                    this.sendResponse(player, `their name is already ${p.username}`);
+                    game.chatManager.sendMessageTo(player, `their name is already ${p.username}`);
                 }else{
                     const newusername = game.getUsername(parsedTokens[2]);
-                    this.sendResponse(player, `${newusername} is ${p.username}'s new name`);
-                    this.sendResponse(p, `you have been renamed to ${newusername}`);
+                    game.chatManager.sendMessageTo(player, `${newusername} is ${p.username}'s new name`);
+                    game.chatManager.sendMessageTo(p, `you have been renamed to ${newusername}`);
                     p.username = newusername;
                 }
                 break;

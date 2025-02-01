@@ -26,7 +26,7 @@ class KickCommand extends Command{
                 
                 p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: "" });
                 game.playerManager.unloadPlayer(p);
-                this.sendResponse(player, `kicked ${p.username}`);
+                game.chatManager.sendMessageTo(player, `kicked ${p.username}`);
                 
                 break;
             };
@@ -35,7 +35,7 @@ class KickCommand extends Command{
                 
                 p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: parsedTokens[2] });
                 game.playerManager.unloadPlayer(p);
-                this.sendResponse(player, `kicked ${p.username}`);
+                game.chatManager.sendMessageTo(player, `kicked ${p.username}`);
                 
                 break;
             };

@@ -21,7 +21,7 @@ class OppedCommand extends Command{
         
         // special op checks
         if(argIndex == 1 && !game.opManager.isOp(player.username)){
-            this.noPermMessage(player);
+            this.noPermMessage(player, game);
             return;
         }
 
@@ -29,18 +29,18 @@ class OppedCommand extends Command{
         switch(argIndex){
             case 0: {
                 if(game.opManager.isOp(player.username)){
-                    this.sendResponse(player, `you are opped`);
+                    game.chatManager.sendMessageTo(player, `you are opped`);
                 }else{
-                    this.sendResponse(player, `you are not opped`);
+                    game.chatManager.sendMessageTo(player, `you are not opped`);
                 }
                 break;
             };
             case 1: {
                 const p = parsedTokens[1];
                 if(game.opManager.isOp(p.username)){
-                    this.sendResponse(player, `${p.username} is opped`);
+                    game.chatManager.sendMessageTo(player, `${p.username} is opped`);
                 }else{
-                    this.sendResponse(player, `${p.username} is not opped`);
+                    game.chatManager.sendMessageTo(player, `${p.username} is not opped`);
                 }
                 break;
             };

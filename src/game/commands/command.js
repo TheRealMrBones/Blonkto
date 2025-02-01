@@ -1,7 +1,5 @@
-import crypto from 'crypto';
-
 import Constants from '../../shared/constants.js';
-const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
+const { COMMAND_ARGUMENTS } = Constants;
 
 class Command{
     static key = "";
@@ -21,7 +19,7 @@ class Command{
         // do perms check if needed
         if(this.op){
             if(!game.opManager.isOp(player.username)){
-                this.noPermMessage(player);
+                this.noPermMessage(player, game);
                 return false;
             }
         }
@@ -116,17 +114,12 @@ class Command{
         }
 
         // if no correct args found send most recent error
-        this.sendResponse(player, error);
+        game.chatManager.sendMessageTo(player, error);
         return false;
     }
 
-    static sendResponse(player, r){
-        const message = { text: r, id: crypto.randomUUID(), };
-        player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
-    }
-
-    static noPermMessage(player){
-        this.sendResponse(player, "You do not have permission to use this command");
+    static noPermMessage(player, game){
+        game.chatManager.sendMessageTo(player, "You do not have permission to use this command");
     }
 }
 

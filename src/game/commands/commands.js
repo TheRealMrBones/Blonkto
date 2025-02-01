@@ -1,4 +1,3 @@
-import Command from './command';
 import OpCommand from './opCommand.js';
 import DeopCommand from './deopCommand.js';
 import OppedCommand from './oppedCommand.js';
@@ -37,7 +36,7 @@ const commands = [
 
 export const ExcecuteCommand = (game, player, command) => {
     if(command.length == 0){
-        Command.sendResponse(player, `no command given`);
+        game.chatManager.sendMessageTo(player, `no command given`);
         return;
     }
 
@@ -49,6 +48,6 @@ export const ExcecuteCommand = (game, player, command) => {
     if(c){
         c.execute(game, player, tokens);
     }else{
-        Command.sendResponse(player, `command "${key}" not found`);
+        game.chatManager.sendMessageTo(player, `command "${key}" not found`);
     }
 }

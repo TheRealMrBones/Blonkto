@@ -22,7 +22,7 @@ class ClearBanListCommand extends Command{
         switch(argIndex){
             case 0: {
                 game.banManager.clearBanList();
-                this.sendResponse(player, `cleared ban list`);
+                game.chatManager.sendMessageTo(player, `cleared ban list`);
                 
                 break;
             };

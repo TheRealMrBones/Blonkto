@@ -21,7 +21,7 @@ class KillCommand extends Command{
         
         // special op checks
         if(argIndex == 1 && !game.opManager.isOp(player.username)){
-            this.noPermMessage(player);
+            this.noPermMessage(player, game);
             return;
         }
 
@@ -35,7 +35,7 @@ class KillCommand extends Command{
             case 1: {
                 const p = parsedTokens[1];
                 p.dead = true;
-                this.sendResponse(player, `killed ${p.username}`);
+                game.chatManager.sendMessageTo(player, `killed ${p.username}`);
                 
                 game.killPlayer(p.socket, "the Server");
                 break;

@@ -21,7 +21,7 @@ class PingCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                this.sendResponse(player, `pong!`);
+                game.chatManager.sendMessageTo(player, `pong!`);
                 break;
             };
         }

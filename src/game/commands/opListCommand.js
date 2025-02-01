@@ -21,9 +21,9 @@ class OpListCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                this.sendResponse(player, `op list:`);
+                game.chatManager.sendMessageTo(player, `op list:`);
                 for(const username of game.opManager.opList()){
-                    this.sendResponse(player, `- ${username}`);
+                    game.chatManager.sendMessageTo(player, `- ${username}`);
                 }
                 break;
             };

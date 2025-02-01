@@ -37,7 +37,7 @@ class TpCommand extends Command{
                 }
 
                 playertoteleport.setPos(x + .5, y + .5);
-                this.sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
+                game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
                 break;
             }
             case 2:
@@ -52,7 +52,7 @@ class TpCommand extends Command{
                 }
 
                 playertoteleport.setPos(playertoteleportto.x, playertoteleportto.y);
-                this.sendResponse(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${playertoteleportto.username}`);
+                game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${playertoteleportto.username}`);
                 break;
             }
         }

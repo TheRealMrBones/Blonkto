@@ -3,10 +3,10 @@ import crypto from 'crypto';
 import PlayerManager from './playerManager.js';
 import OpManager from './opManager.js';
 import BanManager from './banManager.js';
+import ChatManager from './chatManager.js';
 import World from './world/world.js';
 import { attackHitCheck } from './collisions.js';
 import { filterText } from './filter.js';
-import { ExcecuteCommand } from './commands/commands.js';
 
 import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
@@ -17,7 +17,6 @@ const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
 
 import ServerConfig from '../configs/server';
 const { FILTER_USERNAME } = ServerConfig.PLAYER;
-const { FILTER_CHAT } = ServerConfig.CHAT;
 const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
@@ -33,7 +32,8 @@ class Game {
         this.playerManager = new PlayerManager(fm, this);
         this.opManager = new OpManager(fm);
         this.banManager = new BanManager(fm);
-
+        this.chatManager = new ChatManager(this);
+        
         // entities
         this.players = {};
         this.entities = {};
@@ -99,19 +99,19 @@ class Game {
             inventory: this.players[socket.id].inventory,
         });
 
-        this.sendMessage(`${username} has connected`);
+        this.chatManager.sendMessage(`${username} has connected`);
     }
 
     removePlayer(socket){
         if(this.players[socket.id]){
-            this.sendMessage(`${this.players[socket.id].username} has disconnected`);
+            this.chatManager.sendMessage(`${this.players[socket.id].username} has disconnected`);
 
             this.playerManager.unloadPlayer(this.players[socket.id]);
         }
     }
 
     killPlayer(socket, killedby){
-        this.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
+        this.chatManager.sendMessage(`${this.players[socket.id].username} was killed by ${killedby}`);
         
         socket.emit(MSG_TYPES.DEAD);
 
@@ -277,35 +277,6 @@ class Game {
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldLoad,
         };
-    }
-
-    // #endregion
-
-    // #region chat
-
-    chat(socket, message){
-        const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
-        if(text.length == 0){
-            // empty message
-        }else if(text[0] == '/'){
-            // command
-            ExcecuteCommand(this, this.players[socket.id], text.substring(1));
-        }else{
-            // normal message
-            const newText = `<${this.players[socket.id].username}> ${text}`;
-            this.sendMessage(newText);
-        }
-    }
-
-    sendMessage(text){
-        const newMessage = {
-            text: text,
-            id: crypto.randomUUID(),
-        };
-
-        Object.values(this.players).forEach(player => {
-            player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, newMessage);
-        });
     }
 
     // #endregion
