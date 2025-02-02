@@ -1,8 +1,6 @@
 import Entity from './entity.js';
-import { GetItemObject } from '../items/items.js';
-import StoneBlockItem from '../items/stoneBlockItem.js';
-import PickaxeItem from '../items/pickaxeItem.js';
-import SwordItem from '../items/swordItem.js';
+import ItemRegistry from '../registries/itemRegistry.js';
+import ItemStack from '../items/itemStack.js';
 
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
@@ -39,9 +37,9 @@ class Player extends Entity {
 
         // inventory
         this.inventory = Array(INVENTORY_SIZE).fill(false);
-        this.inventory[1] = new StoneBlockItem();
-        this.inventory[2] = new PickaxeItem();
-        this.inventory[3] = new SwordItem();
+        this.inventory[1] = new ItemStack(ItemRegistry.Get("stone_block"));
+        this.inventory[2] = new ItemStack(ItemRegistry.Get("pickaxe"));
+        this.inventory[3] = new ItemStack(ItemRegistry.Get("sword"));
         this.hotbarslot = 0;
 
         // reading data
@@ -78,11 +76,11 @@ class Player extends Entity {
                     b: parseFloat(colordata[2]),
                 }
     
-                const inventorydata = playerdata[5].split(",");
+                /*const inventorydata = playerdata[5].split(",");
                 for(let i = 0; i < inventorydata.length; i++){
                     const itemid = parseInt(inventorydata[i]);
-                    this.inventory[i] = GetItemObject(0, itemid);
-                }
+                    this.inventory[i] = GetItemObject(itemid);
+                }*/
             }
         }
 
@@ -174,14 +172,14 @@ class Player extends Entity {
 
         data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|";
 
-        for(let i = 0; i < this.inventory.length; i++){
+        /*for(let i = 0; i < this.inventory.length; i++){
             if(this.inventory[i]){
                 data += this.inventory[i].serializeForWrite() + ",";
             }else{
                 data += "0,";
             }
         }
-        data += "|";
+        data += "|";*/
 
         return data;
     }

@@ -8,6 +8,9 @@ import World from './world/world.js';
 import { attackHitCheck } from './collisions.js';
 import { filterText } from './filter.js';
 
+// initialize registries
+import './registries/itemRegistry.js';
+
 import Constants from '../shared/constants';
 const { MSG_TYPES } = Constants;
 
@@ -96,7 +99,7 @@ class Game {
             x: this.players[socket.id].x,
             y: this.players[socket.id].y,
             color: this.players[socket.id].color,
-            inventory: this.players[socket.id].inventory,
+            inventory: this.players[socket.id].inventory.map(itemstack => itemstack ? itemstack.serializeForUpdate() : false),
         });
 
         this.chatManager.sendMessage(`${username} has connected`);
