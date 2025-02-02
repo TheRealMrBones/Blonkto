@@ -1,60 +1,62 @@
 import Cell from './cell.js';
-import { GetCellObject } from './cells.js';
-import GrassFloor from './floors/grassFloor.js';
-import StoneBlock from './blocks/stoneBlock.js';
 
-import SharedConfig from '../../configs/shared';
+import SharedConfig from '../../configs/shared.js';
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 class Chunk {
-    constructor(chunkx, chunky, data){
+    chunkx: number;
+    chunky: number;
+    cells: Array<Array<Cell>>;
+    cellUpdates: Array<any>;
+
+    constructor(chunkx: number, chunky: number, data?: string){
         this.chunkx = chunkx;
         this.chunky = chunky;
+        this.cellUpdates = [];
 
         this.cells = [];
 
-        // try to read file if exists
-        let noread = data === undefined;
-        if(!noread){
-            const chunkdata = data.split("|");
+        if(data !== undefined){
+            // try to read file if exists
+            const chunkdata = data.split("\n");
             
             try{
                 for(let x = 0; x < CHUNK_SIZE; x++){
                     this.cells[x] = [];
                     for(let y = 0; y < CHUNK_SIZE; y++){
-                        const celldata = chunkdata[x * CHUNK_SIZE + y].split(",");
+                        const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
                         
-                        this.cells[x][y] = GetCellObject(parseInt(celldata[0]), parseInt(celldata[1]), parseInt(celldata[2]));
+                        this.cells[x][y] = new Cell(
+                            celldata.block ? celldata.block.name : null,
+                            celldata.floor ? celldata.floor.name : null,
+                            celldata.ceiling ? celldata.ceiling.name : null);
                     }
                 }
             }catch(e){
                 // read failed just generate new chunk
-                noread = true;
+                return new Chunk(chunkx, chunky);
             }
-        }
-
-        // generate new chunk if file doesnt exist
-        if(noread){
+        }else{
+            // generate new chunk if file doesnt exist
             for(let x = 0; x < CHUNK_SIZE; x++){
                 this.cells[x] = [];
                 for(let y = 0; y < CHUNK_SIZE; y++){
-                    this.cells[x][y] = new Cell();
-                    
-                    this.cells[x][y].floor = new GrassFloor();
+                    let block: string | null = null;
+
                     if(Math.random() < .1){
-                        this.cells[x][y].block = new StoneBlock();
+                        block = "stone_block";
                     }
+                    
+                    this.cells[x][y] = new Cell(block, "grass_floor", null);
                 }
             }
         }
-
-        this.cellUpdates = [];
     }
 
     // #region serialization
 
     serializeForLoad(){
-        const serializedCells = [];
+        const serializedCells: Array<Array<any>> = [];
         for(let x = 0; x < CHUNK_SIZE; x++){
             serializedCells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
@@ -73,7 +75,7 @@ class Chunk {
         let data = "";
         for(let x = 0; x < CHUNK_SIZE; x++){
             for(let y = 0; y < CHUNK_SIZE; y++){
-                data += this.cells[x][y].serializeForWrite() + "|";
+                data += JSON.stringify(this.cells[x][y].serializeForWrite()) + "\n";
             }
         }
 
