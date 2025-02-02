@@ -8,6 +8,10 @@ import World from './world/world.js';
 import { attackHitCheck } from './collisions.js';
 import { filterText } from './filter.js';
 
+import AttackComponent from './components/itemcomponents/attackComponent.js';
+import BuildComponent from './components/itemcomponents/buildComponent.js';
+import MineComponent from './components/itemcomponents/mineComponent.js';
+
 // initialize registries
 import './registries/itemRegistry.js';
 
@@ -153,9 +157,9 @@ class Game {
                     // fist attack
                     this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
-                }else if(hotbarItem.attack){
+                }else if(hotbarItem.item.componentHandler.hasComponent(AttackComponent.cid)){
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, hotbarItem.attack);
+                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
                 }else if(hotbarItem.break){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.place){

@@ -1,5 +1,5 @@
-abstract class RegistryValue {
-    abstract mapRegistryKey(key: string): void;
+interface RegistryValue {
+    mapRegistryKey(key: string): void;
 }
 
 export default RegistryValue;
