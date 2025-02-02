@@ -16,6 +16,22 @@ class Cell {
         this.ceiling = ceiling ? CeilingRegistry.Get(ceiling) : null;
     }
 
+    // #region setters
+
+    placeBlock(block: string){
+        this.block = BlockRegistry.Get(block);
+    }
+
+    placeFloor(floor: string){
+        this.floor = FloorRegistry.Get(floor);
+    }
+
+    placeCeiling(ceiling: string){
+        this.ceiling = CeilingRegistry.Get(ceiling);
+    }
+
+    // #endregion
+
     // #region serialization
 
     serializeForLoad(){

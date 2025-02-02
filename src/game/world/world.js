@@ -296,7 +296,7 @@ class World {
         
         const { cell, chunk } = this.getCellAndChunk(x, y, false);
         if(cell.block){
-            cell.block = false;
+            cell.block = null;
 
             chunk.cellUpdates.push({
                 x, y
@@ -313,7 +313,7 @@ class World {
 
         const { cell, chunk } = this.getCellAndChunk(x, y, false);
         if(!cell.block){
-            cell.block = block;
+            cell.placeBlock(block);
 
             chunk.cellUpdates.push({
                 x, y

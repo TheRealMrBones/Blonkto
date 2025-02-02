@@ -1,12 +1,11 @@
 import Component from '../component';
 import Item from '../../items/item';
-import Block from '../../world/block';
 
 class BuildComponent implements Component<Item> {
     static cid: string = "build_component";
-    block: Block;
+    block: string;
 
-    constructor(block: Block){
+    constructor(block: string){
         this.block = block;
     }
 

@@ -160,11 +160,11 @@ class Game {
                 }else if(hotbarItem.item.componentHandler.hasComponent(AttackComponent.cid)){
                     this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], this.getEntities(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
-                }else if(hotbarItem.break){
+                }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
                     this.world.breakcell(cellpos.x, cellpos.y);
-                }else if(hotbarItem.place){
+                }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
                     if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getEntities()))
-                        this.world.placecell(cellpos.x, cellpos.y, hotbarItem.getPlaced());
+                        this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block);
                 }else{
                     // not usable i guess idk
                 }
