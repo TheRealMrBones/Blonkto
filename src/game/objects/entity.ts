@@ -1,26 +1,28 @@
-import Object from './object.js';
+import GameObject from './object.js';
 
-import SharedConfig from '../../configs/shared';
+import SharedConfig from '../../configs/shared.js';
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
-class Entity extends Object {
-    constructor(x, y, dir){
-        super(x, y, dir);
-        this.health = 10;
+class Entity extends GameObject {
+    maxhealth: number;
+    health: number;
+    chunk: {x: number, y: number};
+    hit: boolean = false;
+    hitinterval: NodeJS.Timeout | null = null;
+    swinging: boolean = false;
+    swinginginterval: NodeJS.Timeout | null = null;
+    lastattack: number = 0;
+    lastattackdir: number = 0;
+    dead: boolean = false;
+    killedby: string = "placeholder";
 
-        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)}; // purposefully make chunk off so that new update has load data
+    constructor(x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
+        super(x, y, dir, scale, asset);
+        this.maxhealth = maxhealth;
+        this.health = maxhealth;
 
-        this.hit = false;
-        this.hitinterval = null;
-        this.swinging = false;
-        this.swinginginterval = null;
-
-        this.lastattack = 0;
-        this.lastattackdir = 0;
-        
-        this.dead = false;
-        this.killedby = "placeholder";
+        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)};
     }
 
     // #region setters
@@ -36,7 +38,7 @@ class Entity extends Object {
 
     // #region hit and swing
 
-    takeHit(damage){
+    takeHit(damage: number){
         this.health -= damage;
         this.hit = true;
         this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
@@ -47,7 +49,7 @@ class Entity extends Object {
 
     endHit(){
         this.hit = false;
-        clearInterval(this.hitinterval);
+        if(this.hitinterval != null) clearInterval(this.hitinterval);
     }
 
     startSwing(){
@@ -57,7 +59,7 @@ class Entity extends Object {
 
     endSwing(){
         this.swinging = false;
-        clearInterval(this.swinginginterval);
+        if(this.swinginginterval != null) clearInterval(this.swinginginterval);
     }
 
     // #endregion

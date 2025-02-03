@@ -6,24 +6,30 @@ const { ASSETS } = Constants;
 import ServerConfig from '../../configs/server';
 const { FALL_RATE } = ServerConfig.OBJECT;
 
-class Object {
-    constructor(x, y, dir){
-        this.id = crypto.randomUUID();
+class GameObject {
+    id: string;
+    lastupdated: number;
+    x: number;
+    y: number;
+    dir: number = 0;
+    scale: number = 1;
+    asset: string = ASSETS.MISSING_TEXTURE;
+    falling: boolean = false;
 
+    constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
+        this.id = crypto.randomUUID();
         this.lastupdated = Date.now();
 
         this.x = x;
         this.y = y;
-        this.dir = dir;
-        this.scale = 1;
-        this.asset = ASSETS.MISSING_TEXTURE; // default incase its never set
-
-        this.falling = false;
+        if(dir !== undefined) this.dir = dir;
+        if(scale !== undefined) this.scale = scale;
+        if(asset !== undefined) this.asset = asset;
     }
 
     // #region setters
 
-    update(data){
+    update(data: any){
         const deltatime = data.t - this.lastupdated;
 
         if(data.dir){
@@ -62,7 +68,7 @@ class Object {
 
     // #region helpers
 
-    distanceTo(object){
+    distanceTo(object: {x: number, y: number}){
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);
@@ -140,4 +146,4 @@ class Object {
     // #endregion
 }
 
-export default Object;
+export default GameObject;
