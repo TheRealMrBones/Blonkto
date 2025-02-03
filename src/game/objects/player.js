@@ -36,7 +36,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = Array(INVENTORY_SIZE).fill(false);
+        this.inventory = Array(INVENTORY_SIZE).fill(null);
         this.inventory[1] = new ItemStack(ItemRegistry.Get("stone_block"));
         this.inventory[2] = new ItemStack(ItemRegistry.Get("pickaxe"));
         this.inventory[3] = new ItemStack(ItemRegistry.Get("sword"));
@@ -44,43 +44,23 @@ class Player extends Entity {
 
         // reading data
         if(data !== undefined){
-            const playerdata = data.split("|");
+            const playerdata = JSON.parse(data);
+            
+            this.username = playerdata.username;
+            this.kills = playerdata.kills;
 
-            if(playerdata[0] == "dead!"){
-                this.username = playerdata[1];
-
-                this.kills = parseInt(playerdata[2]);
-                
+            if(playerdata.dead){
                 if(RACISM_PERM){
-                    const colordata = playerdata[3].split(",");
-                    this.color = {
-                        r: parseFloat(colordata[0]),
-                        g: parseFloat(colordata[1]),
-                        b: parseFloat(colordata[2]),
-                    }
+                    this.color = playerdata.color;
                 }
             }else{
-                this.username = playerdata[0];
+                this.x = playerdata.x;
+                this.y = playerdata.y;
+                this.health = playerdata.health;
+                this.color = playerdata.color;
     
-                const coordsdata = playerdata[1].split(",");
-                this.x = parseFloat(coordsdata[0]);
-                this.y = parseFloat(coordsdata[1]);
-    
-                this.health = parseInt(playerdata[2]);
-                this.kills = parseInt(playerdata[3]);
-    
-                const colordata = playerdata[4].split(",");
-                this.color = {
-                    r: parseFloat(colordata[0]),
-                    g: parseFloat(colordata[1]),
-                    b: parseFloat(colordata[2]),
-                }
-    
-                /*const inventorydata = playerdata[5].split(",");
-                for(let i = 0; i < inventorydata.length; i++){
-                    const itemid = parseInt(inventorydata[i]);
-                    this.inventory[i] = GetItemObject(itemid);
-                }*/
+                console.log(playerdata.inventory);
+                this.inventory = playerdata.inventory.map(stack => stack ? new ItemStack(ItemRegistry.Get(stack.name), stack.amount) : null);
             }
         }
 
@@ -160,40 +140,25 @@ class Player extends Entity {
     }
 
     serializeForWrite(){
-        let data = "";
-
-        data += this.username.toString() + "|";
-
-        data += this.x.toString() + "," + this.y.toString() + "|";
-
-        data += this.health.toString() + "|";
-
-        data += this.kills.toString() + "|";
-
-        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|";
-
-        /*for(let i = 0; i < this.inventory.length; i++){
-            if(this.inventory[i]){
-                data += this.inventory[i].serializeForWrite() + ",";
-            }else{
-                data += "0,";
-            }
-        }
-        data += "|";*/
-
-        return data;
+        return JSON.stringify({
+            dead: false,
+            username: this.username,
+            x: this.x,
+            y: this.y,
+            health: this.health,
+            kills: this.kills,
+            color: this.color,
+            inventory: this.inventory.map(stack => stack ? stack.serializeForWrite() : null),
+        });
     }
 
     serializeAfterKilled(){
-        let data = "dead!|";
-
-        data += this.username.toString() + "|";
-
-        data += this.kills.toString() + "|";
-
-        data += this.color.r.toString() + "," + this.color.g.toString() + "," + this.color.b.toString() + "|";
-
-        return data;
+        return JSON.stringify({
+            dead: true,
+            username: this.username,
+            kills: this.kills,
+            color: this.color,
+        });
     }
 
     // #endregion

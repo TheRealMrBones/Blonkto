@@ -4,8 +4,6 @@ import AttackComponent from '../components/itemcomponents/attackComponent';
 import BuildComponent from '../components/itemcomponents/buildComponent';
 import MineComponent from '../components/itemcomponents/mineComponent';
 
-import BlockRegistry from './blockRegistry';
-
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
 
