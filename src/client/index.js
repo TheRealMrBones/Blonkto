@@ -149,32 +149,38 @@ function onGameOver(connectionrefusedinfo){
 // TEMP CODE FOR FAST LOGIN!!!
 //
 
-document.addEventListener('keydown', (event) => {
+document.addEventListener('keydown', devlogin);
+
+function devlogin(event){
     if (event.target.tagName.toLowerCase() !== 'input' && 
         event.target.tagName.toLowerCase() !== 'textarea') {
-        
-            switch(event.key){
-                case "1":
-                    console.log(1);
-                    usernameInput.value = "testuser1";
-                    passwordInput.value = "testuser1";
-                    sendlogin();
-                    break;
-                case "2":
-                    usernameInput.value = "testuser2";
-                    passwordInput.value = "testuser2";
-                    sendlogin();
-                    break;
-                case "3":
-                    usernameInput.value = "testuser3";
-                    passwordInput.value = "testuser3";
-                    sendlogin();
-                    break;
-                case "4":
-                    usernameInput.value = "testuser4";
-                    passwordInput.value = "testuser4";
-                    sendlogin();
-                    break;
-            }
+    
+        switch(event.key){
+            case "1":
+                console.log(1);
+                usernameInput.value = "testuser1";
+                passwordInput.value = "testuser1";
+                sendlogin();
+                document.removeEventListener('keydown', devlogin);
+                break;
+            case "2":
+                usernameInput.value = "testuser2";
+                passwordInput.value = "testuser2";
+                sendlogin();
+                document.removeEventListener('keydown', devlogin);
+                break;
+            case "3":
+                usernameInput.value = "testuser3";
+                passwordInput.value = "testuser3";
+                sendlogin();
+                document.removeEventListener('keydown', devlogin);
+                break;
+            case "4":
+                usernameInput.value = "testuser4";
+                passwordInput.value = "testuser4";
+                sendlogin();
+                document.removeEventListener('keydown', devlogin);
+                break;
+        }
     }
-});
+}

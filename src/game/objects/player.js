@@ -59,7 +59,6 @@ class Player extends Entity {
                 this.health = playerdata.health;
                 this.color = playerdata.color;
     
-                console.log(playerdata.inventory);
                 this.inventory = playerdata.inventory.map(stack => stack ? new ItemStack(ItemRegistry.Get(stack.name), stack.amount) : null);
             }
         }
