@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 // define schema
 type ServerConfigSchema = {
     OP_PASSCODE: {
@@ -53,6 +55,31 @@ const ServerConfig: ServerConfigSchema = {
         FILTER_CHAT: false
     }
 };
+
+// read config json if exists
+if(!fs.existsSync("./configs")){
+    fs.mkdirSync("./configs");
+}
+
+if(fs.existsSync("./configs/server.json")){
+    const savedConfig: ServerConfigSchema = JSON.parse(fs.readFileSync("./configs/server.json", 'utf8'));
+    traverse(savedConfig, ServerConfig);
+}
+
+function traverse(lastrefold: any, lastrefnew: any) {
+    Object.keys(lastrefold).forEach(key => {
+        if(key in lastrefnew){
+            if (typeof lastrefold[key] === 'object') {
+                traverse(lastrefold[key], lastrefnew[key]);
+            } else {
+                lastrefnew[key] = lastrefold[key];
+            }
+        }
+    });
+}
+
+// write new config to configs
+fs.writeFileSync("./configs/server.json", JSON.stringify(ServerConfig, null, 2));
 
 // freeze and export config
 export default Object.freeze(ServerConfig);
