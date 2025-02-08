@@ -30,6 +30,9 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // temp
 import Pig from './objects/pig.js';
+import DroppedStack from './objects/droppedStack.js';
+import ItemStack from './items/itemStack.js';
+import ItemRegistry from './registries/itemRegistry.js';
 
 class Game {
     constructor(fm, am){
@@ -50,7 +53,9 @@ class Game {
         //
         const temppig = new Pig(0, 0, 0);
         this.entities[temppig.id] = temppig;
-
+        const droppedstoneblock = new DroppedStack(1, 1, new ItemStack(ItemRegistry.Get("stone_block")));
+        this.entities[droppedstoneblock.id] = droppedstoneblock;
+        
         // world
         this.world = new World(fm);
 
@@ -217,7 +222,7 @@ class Game {
 
         // tick entities
         Object.values(this.entities).forEach(e => {
-            e.ontick.emit("tick", dt);
+            //e.ontick.emit("tick", dt);
         });
 
         // check to send update
