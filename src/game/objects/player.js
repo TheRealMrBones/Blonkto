@@ -75,6 +75,15 @@ class Player extends Entity {
         super.update(data);
     }
 
+    collectStack(itemStack){
+        const slot = this.nextOpenSlot();
+        if(slot == -1){
+            return false;
+        }
+        this.inventory[slot] = itemStack;
+        return true;
+    }
+
     // #endregion
 
     // #region fixes
@@ -116,6 +125,17 @@ class Player extends Entity {
         this.lastattack = Date.now();
         this.lastattackdir = dir;
         this.startSwing();
+    }
+
+    // #endregion
+
+    // #region helpers
+
+    nextOpenSlot(){
+        for(let i = 0; i < INVENTORY_SIZE; i++){
+            if(this.inventory[i] != null) return i;
+        }
+        return -1;
     }
 
     // #endregion

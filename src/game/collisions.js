@@ -4,6 +4,17 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 // #region collision checks
 
+export const collectCheck = (player, collectables, game) => {
+    for(let i = 0; i < collectables.length; i++){
+        const collectable = collectables[i];
+        const dist = getDistance(player, collectable);
+        const realdist = dist - (PLAYER_SCALE + collectable.scale) / 2;
+        if(realdist < 0){
+            if (player.collectStack(collectable.itemStack)) game.removeObject(collectable.id);
+        }
+    }
+}
+
 export const attackHitCheck = (player, entities, attackdir, damage) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,

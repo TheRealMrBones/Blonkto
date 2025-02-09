@@ -5,7 +5,7 @@ import OpManager from './opManager.js';
 import BanManager from './banManager.js';
 import ChatManager from './chatManager.js';
 import World from './world/world.js';
-import { attackHitCheck } from './collisions.js';
+import { collectCheck, attackHitCheck } from './collisions.js';
 import { filterText } from './filter.js';
 
 import AttackComponent from './components/itemcomponents/attackComponent.js';
@@ -159,6 +159,14 @@ class Game {
         return Object.values(this.entities);
     }
 
+    removeObject(id){
+        delete this.objects[id];
+    }
+
+    removeEntity(id){
+        delete this.entities[id];
+    }
+
     // #endregion
 
     // #region inputs
@@ -236,6 +244,11 @@ class Game {
         // tick entities
         this.getNonplayerEntities().forEach(e => {
             e.ontick.emit("tick", dt);
+        });
+
+        // proccess collisions
+        this.getPlayerEntities().forEach(p => {
+            collectCheck(p, this.getObjects(), this);
         });
 
         // check to send update
