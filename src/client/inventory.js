@@ -19,6 +19,9 @@ export function setInventorySlot(slot, item){
         itemimg.className = "hotbaritem";
         itemimg.src = item.asset;
         hotbarslot.appendChild(itemimg);
+
+        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1));
+        hotbaritemamount.innerHTML = item.amount;
     }
 }
 
@@ -26,13 +29,13 @@ export function setInventory(itemsdata){
     for(let i = 0; i < INVENTORY_SIZE; i++){
         const itemdata = itemsdata[i];
         if(itemdata){
-            setInventorySlot(i, new Item(itemdata.name, itemdata.asset));
+            setInventorySlot(i, new Item(itemdata.name, itemdata.asset, itemdata.amount));
         }
     }
 }
 
 export function setSingleInventorySlot(data){
-    setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset));
+    setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset, data.itemstack.amount));
 }
 
 export function clearInventorySlot(slot){

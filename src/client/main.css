@@ -67,6 +67,7 @@ span {
 
 .hotbarslot{
     display: inline-block;
+    position: relative;
     background-color:rgba(134, 134, 134, 0.5);
     transform: none;
     margin: 2px;
@@ -83,10 +84,18 @@ span {
 .hotbaritem{
     width: 80%;
     height: 80%;
-    position: relative;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.hotbaritemamount{
+    position: absolute;
+    bottom: 0;
+    margin: 2px;
+    left: 0;
+    z-index: 1;
 }
 
 #chat{
