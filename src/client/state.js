@@ -2,6 +2,7 @@ import { setPos, setSelf } from './input.js';
 import { Player } from './player.js';
 import { loadChunks, unloadChunks, updateCells } from './world.js';
 import { toggleConnectionLost } from './ui.js';
+import { setSingleInventorySlot } from './inventory.js';
 
 import ClientConfig from '../configs/client.ts';
 const { RENDER_DELAY } = ClientConfig.RENDER;
@@ -41,6 +42,9 @@ export function processGameUpdate(update){
     if(update.fixes.setpos){
         setPos(update.fixes.setpos);
     }
+    update.fixes.inventoryupdates.forEach(iu => {
+        setSingleInventorySlot(iu);
+    });
 
     // get self updates
     if(!self){

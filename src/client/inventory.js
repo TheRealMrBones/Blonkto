@@ -31,6 +31,10 @@ export function setInventory(itemsdata){
     }
 }
 
+export function setSingleInventorySlot(data){
+    setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset));
+}
+
 export function clearInventorySlot(slot){
     inventory[slot] = false;
 

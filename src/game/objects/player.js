@@ -75,12 +75,17 @@ class Player extends Entity {
         super.update(data);
     }
 
-    collectStack(itemStack){
+    collectStack(itemstack){
         const slot = this.nextOpenSlot();
         if(slot == -1){
             return false;
         }
-        this.inventory[slot] = itemStack;
+
+        this.inventory[slot] = itemstack;
+        this.fixes.inventoryupdates.push({
+            slot: slot,
+            itemstack: itemstack ? itemstack.serializeForUpdate() : false,
+        });
         return true;
     }
 
@@ -93,6 +98,7 @@ class Player extends Entity {
             pushx: null,
             pushy: null,
             setpos: null,
+            inventoryupdates: [],
         }
     }
 
@@ -101,6 +107,7 @@ class Player extends Entity {
             pushx: this.fixes.pushx,
             pushy: this.fixes.pushy,
             setpos: this.fixes.setpos,
+            inventoryupdates: this.fixes.inventoryupdates,
         }
         return fixescopy;
     }
@@ -133,7 +140,7 @@ class Player extends Entity {
 
     nextOpenSlot(){
         for(let i = 0; i < INVENTORY_SIZE; i++){
-            if(this.inventory[i] != null) return i;
+            if(this.inventory[i] == null) return i;
         }
         return -1;
     }
