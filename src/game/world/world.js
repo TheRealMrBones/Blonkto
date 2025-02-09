@@ -302,6 +302,8 @@ class World {
                 x, y
             });
             return true;
+        }else{
+            return false;
         }
     }
 
@@ -319,6 +321,8 @@ class World {
                 x, y
             });
             return true;
+        }else{
+            return false;
         }
     }
 

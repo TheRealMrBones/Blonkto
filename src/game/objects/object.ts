@@ -3,6 +3,9 @@ import crypto from 'crypto';
 import Constants from '../../shared/constants';
 const { ASSETS } = Constants;
 
+import SharedConfig from '../../configs/shared.js';
+const { CHUNK_SIZE } = SharedConfig.WORLD;
+
 import ServerConfig from '../../configs/server';
 const { FALL_RATE } = ServerConfig.OBJECT;
 
@@ -11,6 +14,7 @@ class GameObject {
     lastupdated: number;
     x: number;
     y: number;
+    chunk: {x: number, y: number};
     dir: number = 0;
     scale: number = 1;
     asset: string = ASSETS.MISSING_TEXTURE;
@@ -22,6 +26,7 @@ class GameObject {
 
         this.x = x;
         this.y = y;
+        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)};
         if(dir !== undefined) this.dir = dir;
         if(scale !== undefined) this.scale = scale;
         if(asset !== undefined) this.asset = asset;

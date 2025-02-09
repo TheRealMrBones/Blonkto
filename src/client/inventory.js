@@ -15,6 +15,10 @@ export function setInventorySlot(slot, item){
     // show item in slot ui
     if(slot < 9){
         const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
+        
+        const itemimage = hotbarslot.querySelector('img');
+        if (itemimage) hotbarslot.removeChild(itemimage);
+
         const itemimg = document.createElement("img");
         itemimg.className = "hotbaritem";
         itemimg.src = item.asset;
@@ -35,7 +39,11 @@ export function setInventory(itemsdata){
 }
 
 export function setSingleInventorySlot(data){
-    setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset, data.itemstack.amount));
+    if(data.itemstack == null){
+        clearInventorySlot(data.slot);
+    }else{
+        setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset, data.itemstack.amount));
+    }
 }
 
 export function clearInventorySlot(slot){
@@ -43,8 +51,12 @@ export function clearInventorySlot(slot){
 
     // remove item in slot ui
     if(slot < 9){
-        const hotbarslot = document.getElementById("hotbarslot" + (i + 1));
-        hotbarslot.innerHTML = "";
+        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
+        const itemimage = hotbarslot.querySelector('img');
+        if (itemimage) hotbarslot.removeChild(itemimage);
+        
+        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1));
+        hotbaritemamount.innerHTML = "";
     }
 }
 

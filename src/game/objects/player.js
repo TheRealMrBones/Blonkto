@@ -99,9 +99,20 @@ class Player extends Entity {
         this.inventory[slot] = itemstack;
         this.fixes.inventoryupdates.push({
             slot: slot,
-            itemstack: itemstack ? itemstack.serializeForUpdate() : false,
+            itemstack: itemstack.serializeForUpdate(),
         });
         return true;
+    }
+
+    removeFromSlot(slot, amount){
+        if(this.inventory[slot].removeAmount(amount)){
+            this.inventory[slot] = null;
+        }
+
+        this.fixes.inventoryupdates.push({
+            slot: slot,
+            itemstack: this.inventory[slot] ? this.inventory[slot].serializeForUpdate() : null,
+        });
     }
 
     // #endregion

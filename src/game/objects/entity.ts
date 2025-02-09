@@ -1,13 +1,11 @@
 import GameObject from './object.js';
 
 import SharedConfig from '../../configs/shared.js';
-const { CHUNK_SIZE } = SharedConfig.WORLD;
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 class Entity extends GameObject {
     maxhealth: number;
     health: number;
-    chunk: {x: number, y: number};
     hit: boolean = false;
     hitinterval: NodeJS.Timeout | null = null;
     swinging: boolean = false;
@@ -21,8 +19,6 @@ class Entity extends GameObject {
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
-
-        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)};
     }
 
     // #region setters

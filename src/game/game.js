@@ -189,8 +189,11 @@ class Game {
                 }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
-                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects()))
-                        this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block);
+                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects())){
+                        if(this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block)){
+                            this.players[socket.id].removeFromSlot(this.players[socket.id].hotbarslot, 1);
+                        }
+                    }
                 }else{
                     // not usable i guess idk
                 }
