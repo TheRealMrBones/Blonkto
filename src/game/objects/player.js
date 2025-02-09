@@ -76,6 +76,14 @@ class Player extends Entity {
     }
 
     collectStack(itemstack){
+        for(let i = 0; i < INVENTORY_SIZE; i++){
+            if(this.inventory[i] != null){
+                if(this.inventory[i].mergeStack(itemstack)){
+                    return true;
+                }
+            }
+        }
+
         const slot = this.nextOpenSlot();
         if(slot == -1){
             return false;
