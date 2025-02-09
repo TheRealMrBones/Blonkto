@@ -15,6 +15,29 @@ class ItemStack {
         this.amount = Math.min(Math.max(amount, 0), this.item.stacksize);
     }
 
+    addAmount(amount: number){
+        const oldamount = this.amount;
+        this.setAmount(this.amount + amount);
+        return (this.amount == oldamount + amount);
+    }
+
+    removeAmount(amount: number){
+        this.setAmount(this.amount - amount);
+        return (this.amount == 0);
+    }
+
+    mergeStack(otherstack: ItemStack){
+        if(otherstack.item.name != this.item.name || this.amount == 0){
+            return false;
+        }
+
+        const oldamount = this.amount;
+        this.addAmount(otherstack.amount);
+        const diff = this.amount - oldamount;
+
+        return otherstack.removeAmount(diff);
+    }
+
     // #endregion
 
     // #region getters

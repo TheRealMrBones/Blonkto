@@ -5,7 +5,7 @@ import OpManager from './opManager.js';
 import BanManager from './banManager.js';
 import ChatManager from './chatManager.js';
 import World from './world/world.js';
-import { collectCheck, attackHitCheck } from './collisions.js';
+import { collectCheck, itemMergeCheck, attackHitCheck } from './collisions.js';
 import { filterText } from './filter.js';
 
 import AttackComponent from './components/itemcomponents/attackComponent.js';
@@ -249,6 +249,10 @@ class Game {
         // proccess collisions
         this.getPlayerEntities().forEach(p => {
             collectCheck(p, this.getObjects(), this);
+        });
+
+        this.getObjects().forEach(o => {
+            itemMergeCheck(o, this.getObjects(), this);
         });
 
         // check to send update

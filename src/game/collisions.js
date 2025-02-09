@@ -15,6 +15,17 @@ export const collectCheck = (player, collectables, game) => {
     }
 }
 
+export const itemMergeCheck = (collectable, collectables, game) => {
+    for(let i = 0; i < collectables.length; i++){
+        const collectable2 = collectables[i];
+        const dist = getDistance(collectable, collectable2);
+        const realdist = dist - (collectable.scale + collectable2.scale) / 2;
+        if(collectable.id != collectable2.id && realdist < 0){
+            if (collectable.itemStack.mergeStack(collectable2.itemStack)) game.removeObject(collectable2.id);
+        }
+    }
+}
+
 export const attackHitCheck = (player, entities, attackdir, damage) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
