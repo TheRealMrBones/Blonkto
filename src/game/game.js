@@ -46,6 +46,7 @@ class Game {
         
         // entities
         this.players = {};
+        this.objects = {};
         this.entities = {};
 
         //
@@ -54,7 +55,7 @@ class Game {
         const temppig = new Pig(0, 0, 0);
         this.entities[temppig.id] = temppig;
         const droppedstoneblock = new DroppedStack(1, 1, new ItemStack(ItemRegistry.Get("stone_block")));
-        this.entities[droppedstoneblock.id] = droppedstoneblock;
+        this.objects[droppedstoneblock.id] = droppedstoneblock;
         
         // world
         this.world = new World(fm);
@@ -83,10 +84,10 @@ class Game {
             newUsername = "Silly Goose";
         }
 
-        if(Object.values(this.players).some(e => e.username === newUsername)){
+        if(this.getPlayerEntities().some(e => e.username === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
-                if(!Object.values(this.players).some(e => e.username === newUsername + `${i}`)){
+                if(!this.getPlayerEntities().some(e => e.username === newUsername + `${i}`)){
                     done = true;
                     newUsername += `${i}`;
                 }
@@ -134,8 +135,20 @@ class Game {
 
     // #region entities
 
+    getAllObjects(){
+        return [...Object.values(this.players), ...Object.values(this.entities), ...Object.values(this.objects)];
+    }
+
     getEntities(){
         return [...Object.values(this.players), ...Object.values(this.entities)];
+    }
+
+    getNonplayers(){
+        return [...Object.values(this.entities), ...Object.values(this.objects)];
+    }
+
+    getObjects(){
+        return Object.values(this.objects);
     }
 
     getPlayerEntities(){
@@ -161,14 +174,14 @@ class Game {
                 if(!hotbarItem){
                     // fist attack
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
+                    attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, 1);
                 }else if(hotbarItem.item.componentHandler.hasComponent(AttackComponent.cid)){
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
+                    attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
                 }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
                     this.world.breakcell(cellpos.x, cellpos.y);
                 }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
-                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getEntities()))
+                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects()))
                         this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block);
                 }else{
                     // not usable i guess idk
@@ -208,27 +221,27 @@ class Game {
         this.lastUpdateTime = now;
 
         // check deaths
-        Object.values(this.players).forEach(p => {
+        this.getPlayerEntities().forEach(p => {
             if(p.dead){
                 this.killPlayer(p.socket, p.killedby);
             }
         });
 
-        Object.values(this.entities).forEach(e => {
+        this.getNonplayerEntities().forEach(e => {
             if(e.dead){
                 delete this.entities[e.id];
             }
         });
 
         // tick entities
-        Object.values(this.entities).forEach(e => {
-            //e.ontick.emit("tick", dt);
+        this.getNonplayerEntities().forEach(e => {
+            e.ontick.emit("tick", dt);
         });
 
         // check to send update
         if(this.shouldSendUpdate){
             // send fat update packets
-            Object.values(this.players).forEach(player => {
+            this.getPlayerEntities().forEach(player => {
                 player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
             });
             this.shouldSendUpdate = false;
@@ -241,12 +254,12 @@ class Game {
     }
 
     tickChunkUnloader(){
-        this.world.tickChunkUnloader(Object.values(this.players));
+        this.world.tickChunkUnloader(this.getPlayerEntities());
     }
 
     createUpdate(player){
         // get players
-        const nearbyPlayers = Object.values(this.players).filter(p => p.id != player.id
+        const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(p.y - player.y) < CELLS_VERTICAL / 2
         );
@@ -275,7 +288,7 @@ class Game {
         }
 
         // get entities
-        const nearbyEntities = Object.values(this.entities).filter(e =>
+        const nearbyEntities = this.getNonplayers().filter(e =>
             Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );

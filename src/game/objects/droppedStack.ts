@@ -5,7 +5,7 @@ class DroppedStack extends GameObject {
     itemStack: ItemStack;
 
     constructor(x: number, y: number, itemStack: ItemStack){
-        super(x, y);
+        super(x, y, undefined, .5);
 
         this.itemStack = itemStack;
         this.asset = itemStack.item.asset;
