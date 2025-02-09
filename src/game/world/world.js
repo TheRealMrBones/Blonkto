@@ -1,4 +1,6 @@
 import Chunk from './chunk.js';
+import DroppedStack from '../objects/droppedStack.js';
+import ItemRegistry from '../registries/itemRegistry.js';
 
 import SharedConfig from '../../configs/shared';
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
@@ -288,7 +290,7 @@ class World {
         }
     }
 
-    breakcell(x, y){
+    breakcell(x, y, toggledrop, game){
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
             return false;
@@ -296,11 +298,17 @@ class World {
         
         const { cell, chunk } = this.getCellAndChunk(x, y, false);
         if(cell.block){
+            if(toggledrop){
+                const droppeditem = new DroppedStack(x + .5, y + .5, cell.block.getDroppedStack());
+                game.objects[droppeditem.id] = droppeditem;
+            }
+
             cell.block = null;
 
             chunk.cellUpdates.push({
                 x, y
             });
+
             return true;
         }else{
             return false;

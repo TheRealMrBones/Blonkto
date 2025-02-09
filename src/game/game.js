@@ -187,7 +187,7 @@ class Game {
                     this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
                 }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
-                    this.world.breakcell(cellpos.x, cellpos.y);
+                    this.world.breakcell(cellpos.x, cellpos.y, true, this);
                 }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
                     if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects())){
                         if(this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block)){
