@@ -338,7 +338,7 @@ class World {
         }
 
         if(toggledrop){
-            const droppeditem = new DroppedStack(x + .5, y + .5, cell.block.getDroppedStack());
+            const droppeditem = DroppedStack.getDroppedWithSpread(x + .5, y + .5, cell.block.getDroppedStack(), .3);
             const objectsmap: any = this.game.objects;
             objectsmap[droppeditem.id] = droppeditem;
         }
