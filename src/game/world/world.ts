@@ -1,21 +1,26 @@
 import Chunk from './chunk.js';
 import DroppedStack from '../objects/droppedStack.js';
+import FileManager from '../../server/fileManager.js';
+import Game from '../game.js';
+import Player from '../objects/player.js';
+import GameObject from '../objects/object.js';
 
 import SharedConfig from '../../configs/shared.js';
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from '../../configs/server.js';
-import FileManager from '../../server/fileManager.js';
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 
 class World {
+    game: Game
     fileManager: FileManager;
     loadedchunks: {[key: string]: Chunk};
     saveInterval: NodeJS.Timeout;
 
-    constructor(fm: FileManager){
+    constructor(game: Game, fm: FileManager){
+        this.game = game;
         this.fileManager = fm;
 
         // key for each chunk is [x,y].toString()
@@ -65,7 +70,7 @@ class World {
 
     // #region Player
 
-    loadPlayerChunks(player: { x: number; y: number; chunk: { x: number; y: number; }; }){
+    loadPlayerChunks(player: Player){
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
@@ -173,7 +178,7 @@ class World {
         return returnobj;
     }
 
-    getPlayerChunks(player: { chunk: { x: number; y: number; }; }){
+    getPlayerChunks(player: Player){
         return [
             { x: player.chunk.x, y: player.chunk.y},
             { x: player.chunk.x, y: player.chunk.y - 1},
@@ -206,6 +211,7 @@ class World {
         if(chunk){
             return chunk;
         }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
+            // load chunk
             let newChunk = null;
 
             if(this.chunkFileExists(x, y)){
@@ -219,6 +225,11 @@ class World {
             }
             
             this.loadedchunks[[x,y].toString()] = newChunk;
+
+            // load entities
+
+
+            // return new chunk
             return newChunk;
         }else{
             return null;
@@ -228,8 +239,15 @@ class World {
     unloadChunk(x: number, y: number){
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
+            // unload chunk
             this.writeChunkFile(chunk);
             delete this.loadedchunks[[x,y].toString()];
+
+            // unload entities
+            const entities = this.game.getNonplayers().filter(e =>
+                e.chunk.x == x
+                && e.chunk.y == y
+            );
         }
     }
 
@@ -252,9 +270,9 @@ class World {
         this.fileManager.writeFile(fileLocation, chunkdata);
     }
     
-    tickChunkUnloader(players: any[]){
+    tickChunkUnloader(){
         const activeChunks: { x: any; y: any; }[] = [];
-        players.forEach((p: any) => {
+        this.game.getPlayerEntities().forEach((p: any) => {
             activeChunks.push(...this.getPlayerChunks(p));
         });
 
@@ -304,7 +322,7 @@ class World {
         }
     }
 
-    breakcell(x: number, y: number, toggledrop: boolean, game: any): boolean {
+    breakcell(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
             return false;
@@ -321,7 +339,8 @@ class World {
 
         if(toggledrop){
             const droppeditem = new DroppedStack(x + .5, y + .5, cell.block.getDroppedStack());
-            game.objects[droppeditem.id] = droppeditem;
+            const objectsmap: any = this.game.objects;
+            objectsmap[droppeditem.id] = droppeditem;
         }
 
         cell.block = null;
@@ -356,11 +375,11 @@ class World {
         return true;
     }
 
-    cellEmpty(x: number, y: number, entities: any): boolean {
+    cellEmpty(x: number, y: number): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
-        entities.forEach((e: { chunk: { x: number; y: number; }; tilesOn: () => any[]; }) => {
+        this.game.getNonplayers().forEach((e: GameObject) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: { x: number; y: number; }) => t.x == x && t.y == y)){
                     empty = false;

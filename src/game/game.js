@@ -30,9 +30,6 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // temp
 import Pig from './objects/pig.js';
-import DroppedStack from './objects/droppedStack.js';
-import ItemStack from './items/itemStack.js';
-import ItemRegistry from './registries/itemRegistry.js';
 
 class Game {
     constructor(fm, am){
@@ -56,7 +53,7 @@ class Game {
         this.entities[temppig.id] = temppig;
         
         // world
-        this.world = new World(fm);
+        this.world = new World(this, fm);
 
         // updates
         this.lastUpdateTime = Date.now();
@@ -185,7 +182,7 @@ class Game {
                     this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
                 }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
-                    this.world.breakcell(cellpos.x, cellpos.y, true, this);
+                    this.world.breakcell(cellpos.x, cellpos.y, true);
                 }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
                     if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects())){
                         if(this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block)){
@@ -272,7 +269,7 @@ class Game {
     }
 
     tickChunkUnloader(){
-        this.world.tickChunkUnloader(this.getPlayerEntities());
+        this.world.tickChunkUnloader();
     }
 
     createUpdate(player){

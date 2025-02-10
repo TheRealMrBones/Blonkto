@@ -148,6 +148,13 @@ class GameObject {
         };
     }
 
+    serializeForWrite(){
+        return JSON.stringify({
+            x: this.x,
+            y: this.y,
+        });
+    }
+
     // #endregion
 }
 
