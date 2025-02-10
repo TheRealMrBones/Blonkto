@@ -1,13 +1,15 @@
 import fs from 'fs';
 
 class FileManager {
+    savelocation: string;
+    
     constructor(){
         this.savelocation = "./data/";
     }
 
     // #region writing
 
-    writeFile(filename, content){
+    writeFile(filename: string, content: string){
         fs.writeFile(this.getFullFilePath(filename), content, 'utf8', (error) => {
             if (error) {
                 console.error('An error occurred while writing to the file:', error);
@@ -16,7 +18,7 @@ class FileManager {
         });
     }
 
-    deleteFile(filename){
+    deleteFile(filename: string){
         try{
             fs.unlinkSync(this.getFullFilePath(filename));
         } catch (error) {
@@ -29,7 +31,7 @@ class FileManager {
 
     // #region reading
 
-    fileExists(filename){
+    fileExists(filename: string){
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
             return true;
@@ -39,7 +41,7 @@ class FileManager {
         }
     }
 
-    readFile(filename){
+    readFile(filename: string){
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), 'utf8');
             return data;
@@ -53,7 +55,7 @@ class FileManager {
 
     // #region helpers
 
-    getFullFilePath(filename){
+    getFullFilePath(filename: string){
         return this.savelocation + filename + '.data'
     }
 

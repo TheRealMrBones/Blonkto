@@ -2,16 +2,20 @@ import argon2 from 'argon2';
 import validator from 'validator';
 
 import Account from './account.js';
+import FileManager from './fileManager.js';
 
 class AccountManager {
-    constructor(fm){
+    fileManager: FileManager;
+    accountsloggedin: {[key: string]: Account}
+
+    constructor(fm: FileManager){
         this.fileManager = fm;
         this.accountsloggedin = {};
     }
 
     // #region creation
 
-    async createAccount(id, username, password){
+    async createAccount(id: string, username: string, password: string){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -51,7 +55,7 @@ class AccountManager {
 
     // #region login
 
-    async login(id, username, password){
+    async login(id: string | number, username: string, password: string){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
@@ -66,7 +70,9 @@ class AccountManager {
         }
 
         // read account data
-        const data = this.fileManager.readFile(getAccountFilePath(username)).split("|");
+        const request = this.fileManager.readFile(getAccountFilePath(username));
+        if(!request) return { error: 'Failed to read data' };
+        const data = request.split("|");
 
         // check if password matches
         if(!await argon2.verify(data[0], password)){
@@ -82,7 +88,7 @@ class AccountManager {
         return { account: acc.serializeForSend() };
     }
 
-    logout(id){
+    logout(id: string | number){
         delete this.accountsloggedin[id];
     }
 
@@ -90,13 +96,13 @@ class AccountManager {
 
     // #region getters
 
-    isLoggedIn(username){
+    isLoggedIn(username: string){
         username = sanitizeInput(username);
 
         return Object.values(this.accountsloggedin).some(acc => acc.username == username);
     }
 
-    getAccount(id){
+    getAccount(id: string | number){
         return this.accountsloggedin[id];
     }
 
@@ -106,13 +112,13 @@ class AccountManager {
 // #region helpers
 
 // Function to check if a string is alphanumeric
-const isAlphanumeric = (str) => /^[a-zA-Z0-9_]*$/.test(str);
+const isAlphanumeric = (str: string) => /^[a-zA-Z0-9_]*$/.test(str);
 
 // Sanitize input
-const sanitizeInput = (input) => validator.escape(input);
+const sanitizeInput = (input: string) => validator.escape(input);
 
 // Get account file path
-const getAccountFilePath = (username) => ("accounts/" + username);
+const getAccountFilePath = (username: string) => ("accounts/" + username);
 
 // #endregion
 

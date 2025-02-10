@@ -1,5 +1,7 @@
 class Account {
-    constructor(accinfo){
+    username: string;
+
+    constructor(accinfo: any){
         // defaults on creation
         this.username = accinfo[0];
 

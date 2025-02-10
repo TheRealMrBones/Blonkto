@@ -8,7 +8,7 @@ import FileManager from './fileManager.js';
 import AccountManager from './accountManager.js';
 import webpackConfig from '../../webpack.dev.js';
 
-import Constants from '../shared/constants';
+import Constants from '../shared/constants.js';
 const { MSG_TYPES } = Constants;
 
 // #region init

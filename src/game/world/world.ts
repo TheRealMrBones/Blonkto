@@ -1,17 +1,21 @@
 import Chunk from './chunk.js';
 import DroppedStack from '../objects/droppedStack.js';
-import ItemRegistry from '../registries/itemRegistry.js';
 
-import SharedConfig from '../../configs/shared';
+import SharedConfig from '../../configs/shared.js';
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
-import ServerConfig from '../../configs/server';
+import ServerConfig from '../../configs/server.js';
+import FileManager from '../../server/fileManager.js';
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 
 class World {
-    constructor(fm){
+    fileManager: FileManager;
+    loadedchunks: {[key: string]: Chunk};
+    saveInterval: NodeJS.Timeout;
+
+    constructor(fm: FileManager){
         this.fileManager = fm;
 
         // key for each chunk is [x,y].toString()
@@ -47,7 +51,8 @@ class World {
 
             // check if valid spawn
             const cell = this.getCell(x, y, true);
-            if(!cell.block){
+            if(!cell) continue;
+            if(cell.block != null){
                 return {
                     pos: pos,
                     chunk: chunk,
@@ -60,13 +65,13 @@ class World {
 
     // #region Player
 
-    loadPlayerChunks(player){
+    loadPlayerChunks(player: { x: number; y: number; chunk: { x: number; y: number; }; }){
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
         const newChunk = { x: x, y: y };
 
-        const returnobj = { chunk: newChunk };
+        const returnobj: any = { chunk: newChunk };
 
         // get positions of new and old chunks
         const newChunks = [
@@ -93,7 +98,7 @@ class World {
         ];
 
         // get chunks that are in both
-        const sameChunks = [];
+        const sameChunks: { x: number; y: number; }[] = [];
         newChunks.forEach(nc => {
             oldChunks.forEach(oc => {
                 if(nc.x == oc.x && nc.y == oc.y){
@@ -103,13 +108,16 @@ class World {
         });
 
         // send chunk updates for same chunks
-        const updatedcells = [];
+        const updatedcells: { data: any; x: any; y: any; }[] = [];
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc.x, sc.y, false);
             if(chunk){
                 chunk.cellUpdates.forEach(cellupdate => {
+                    const cell = this.getCell(cellupdate.x, cellupdate.y, false);
+                    if(!cell) return;
+
                     updatedcells.push({
-                        data: this.getCell(cellupdate.x, cellupdate.y, false).serializeForLoad(),
+                        data: cell.serializeForLoad(),
                         x: cellupdate.x,
                         y: cellupdate.y,
                     });
@@ -123,8 +131,8 @@ class World {
             // no need to load and unload chunks if already loaded
         }else{
             // compare new and old chunks to same chunks to find which ones to load and unload
-            const loadChunks = [];
-            const unloadChunks = [];
+            const loadChunks: { x: number; y: number; }[] = [];
+            const unloadChunks: { x: any; y: any; }[] = [];
             newChunks.forEach(nc => {
                 let isNew = true;
                 sameChunks.forEach(sc => {
@@ -149,7 +157,7 @@ class World {
             });
 
             // load chunks
-            const loadChunksSerialized = [];
+            const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
             loadChunks.forEach(lc => {
                 const chunk = this.getChunk(lc.x, lc.y, true);
                 if(chunk){
@@ -165,7 +173,7 @@ class World {
         return returnobj;
     }
 
-    getPlayerChunks(player){
+    getPlayerChunks(player: { chunk: { x: number; y: number; }; }){
         return [
             { x: player.chunk.x, y: player.chunk.y},
             { x: player.chunk.x, y: player.chunk.y - 1},
@@ -193,27 +201,31 @@ class World {
 
     // #region Chunks
 
-    getChunk(x, y, canloadnew){
+    getChunk(x: number, y: number, canloadnew: boolean){
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
             return chunk;
         }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
-            let newChunk;
+            let newChunk = null;
 
             if(this.chunkFileExists(x, y)){
-                newChunk = new Chunk(x, y, this.readChunkFile(x, y));
-            }else{
+                const data = this.readChunkFile(x, y);
+                if(!data) return null;
+                newChunk = new Chunk(x, y, data);
+            }
+            
+            if(newChunk == null){
                 newChunk = new Chunk(x, y);
             }
             
             this.loadedchunks[[x,y].toString()] = newChunk;
             return newChunk;
         }else{
-            return false;
+            return null;
         }
     }
 
-    unloadChunk(x, y){
+    unloadChunk(x: number, y: number){
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
             this.writeChunkFile(chunk);
@@ -221,28 +233,28 @@ class World {
         }
     }
 
-    chunkFileExists(x, y){
+    chunkFileExists(x: any, y: any){
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.fileManager.fileExists(fileLocation);
     }
 
-    readChunkFile(x, y){
+    readChunkFile(x: any, y: any){
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.fileManager.readFile(fileLocation);
     }
 
-    writeChunkFile(chunk){
+    writeChunkFile(chunk: Chunk){
         const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
         let chunkdata = chunk.serializeForWrite();
 
         this.fileManager.writeFile(fileLocation, chunkdata);
     }
     
-    tickChunkUnloader(players){
-        const activeChunks = [];
-        players.forEach(p => {
+    tickChunkUnloader(players: any[]){
+        const activeChunks: { x: any; y: any; }[] = [];
+        players.forEach((p: any) => {
             activeChunks.push(...this.getPlayerChunks(p));
         });
 
@@ -263,7 +275,7 @@ class World {
 
     // #region Cells
 
-    getCell(x, y, canloadnew){
+    getCell(x: number, y: number, canloadnew: boolean){
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
@@ -277,7 +289,7 @@ class World {
         }
     }
 
-    getCellAndChunk(x, y, canloadnew){
+    getCellAndChunk(x: number, y: number, canloadnew: boolean){
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
 
@@ -288,61 +300,69 @@ class World {
                 chunk: this.getChunk(chunkx, chunky, false),
             }
         }else{
-            return false;
+            return null;
         }
     }
 
-    breakcell(x, y, toggledrop, game){
+    breakcell(x: number, y: number, toggledrop: boolean, game: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
             return false;
         }
         
-        const { cell, chunk } = this.getCellAndChunk(x, y, false);
-        if(cell.block){
-            if(toggledrop){
-                const droppeditem = new DroppedStack(x + .5, y + .5, cell.block.getDroppedStack());
-                game.objects[droppeditem.id] = droppeditem;
-            }
-
-            cell.block = null;
-
-            chunk.cellUpdates.push({
-                x, y
-            });
-
-            return true;
-        }else{
+        const requestdata = this.getCellAndChunk(x, y, false);
+        if(requestdata == null){
             return false;
         }
+        const { cell, chunk } = requestdata;
+        if(chunk == null || cell.block == null){
+            return false;
+        }
+
+        if(toggledrop){
+            const droppeditem = new DroppedStack(x + .5, y + .5, cell.block.getDroppedStack());
+            game.objects[droppeditem.id] = droppeditem;
+        }
+
+        cell.block = null;
+
+        chunk.cellUpdates.push({
+            x, y
+        });
+
+        return true;
     }
 
-    placecell(x, y, block){
+    placecell(x: number, y: number, block: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
             return false;
         }
 
-        const { cell, chunk } = this.getCellAndChunk(x, y, false);
-        if(!cell.block){
-            cell.placeBlock(block);
-
-            chunk.cellUpdates.push({
-                x, y
-            });
-            return true;
-        }else{
+        const requestdata = this.getCellAndChunk(x, y, false);
+        if(requestdata == null){
             return false;
         }
+        const { cell, chunk } = requestdata;
+        if(chunk == null){
+            return false;
+        }
+        
+        cell.placeBlock(block);
+
+        chunk.cellUpdates.push({
+            x, y
+        });
+        return true;
     }
 
-    cellEmpty(x, y, entities){
+    cellEmpty(x: number, y: number, entities: any): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
-        entities.forEach(e => {
+        entities.forEach((e: { chunk: { x: number; y: number; }; tilesOn: () => any[]; }) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
-                if(e.tilesOn().some(t => t.x == x && t.y == y)){
+                if(e.tilesOn().some((t: { x: number; y: number; }) => t.x == x && t.y == y)){
                     empty = false;
                 }
             }

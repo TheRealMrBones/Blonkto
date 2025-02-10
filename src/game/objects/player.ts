@@ -1,19 +1,29 @@
 import Entity from './entity.js';
+import { Socket } from 'socket.io-client';
 import ItemRegistry from '../registries/itemRegistry.js';
 import ItemStack from '../items/itemStack.js';
 
-import Constants from '../../shared/constants';
+import Constants from '../../shared/constants.js';
 const { ASSETS } = Constants;
 
-import SharedConfig from '../../configs/shared';
+import SharedConfig from '../../configs/shared.js';
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
-import ServerConfig from '../../configs/server';
+import ServerConfig from '../../configs/server.js';
 const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
 
 class Player extends Entity {
-    constructor(id, socket, username, x, y, dir, data){
+    socket: Socket;
+    username: string;
+    kills: number;
+    playerdelay: number;
+    color: {r: number, g: number, b: number};
+    inventory: Array<ItemStack | null>;
+    hotbarslot: number;
+    fixes: any;
+
+    constructor(id: string, socket: Socket, username: string, x: number, y: number, dir: number, data: string){
         super(x, y, dir);
         this.id = id;
 
@@ -59,7 +69,7 @@ class Player extends Entity {
                 this.health = playerdata.health;
                 this.color = playerdata.color;
     
-                this.inventory = playerdata.inventory.map(stack => stack ? new ItemStack(ItemRegistry.Get(stack.name), stack.amount) : null);
+                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(ItemRegistry.Get(stack.name), stack.amount) : null);
             }
         }
 
@@ -68,21 +78,22 @@ class Player extends Entity {
 
     // #region setters
 
-    update(data){
+    update(data: { t: number; }){
         if(this.playerdelay == 0){
             this.playerdelay = Date.now() - data.t;
         }
         super.update(data);
     }
 
-    collectStack(itemstack){
+    collectStack(itemstack: ItemStack){
         for(let i = 0; i < INVENTORY_SIZE; i++){
-            if(this.inventory[i] != null){
-                const done = this.inventory[i].mergeStack(itemstack);
+            const itemstack2 = this.inventory[i];
+            if(itemstack2 != null){
+                const done = itemstack2.mergeStack(itemstack);
 
                 this.fixes.inventoryupdates.push({
                     slot: i,
-                    itemstack: this.inventory[i].serializeForUpdate(),
+                    itemstack: this.inventory[i] ? itemstack2.serializeForUpdate() : null,
                 });
 
                 if(done){
@@ -99,12 +110,14 @@ class Player extends Entity {
         this.inventory[slot] = itemstack;
         this.fixes.inventoryupdates.push({
             slot: slot,
-            itemstack: itemstack.serializeForUpdate(),
+            itemstack: itemstack ? itemstack.serializeForUpdate() : null,
         });
         return true;
     }
 
-    removeFromSlot(slot, amount){
+    removeFromSlot(slot: number, amount: number){
+        if(this.inventory[slot] == null) return;
+
         if(this.inventory[slot].removeAmount(amount)){
             this.inventory[slot] = null;
         }
@@ -138,12 +151,12 @@ class Player extends Entity {
         return fixescopy;
     }
 
-    push(x, y){
+    push(x: any, y: any){
         this.fixes.pushx += x;
         this.fixes.pushy += y;
     }
 
-    setPos(x, y){
+    setPos(x: any, y: any){
         this.fixes.setpos = {
             x: x,
             y: y
@@ -154,7 +167,7 @@ class Player extends Entity {
 
     // #region attacks
 
-    attack(dir){
+    attack(dir: number){
         this.lastattack = Date.now();
         this.lastattackdir = dir;
         this.startSwing();
