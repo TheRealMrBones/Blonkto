@@ -54,8 +54,6 @@ class Game {
         //
         const temppig = new Pig(0, 0, 0);
         this.entities[temppig.id] = temppig;
-        const droppedstoneblock = new DroppedStack(1, 1, new ItemStack(ItemRegistry.Get("stone_block"), 10));
-        this.objects[droppedstoneblock.id] = droppedstoneblock;
         
         // world
         this.world = new World(fm);

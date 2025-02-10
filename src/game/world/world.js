@@ -8,6 +8,8 @@ const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 import ServerConfig from '../../configs/server';
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
+const worldsavedir = "world/";
+
 class World {
     constructor(fm){
         this.fileManager = fm;
@@ -220,19 +222,19 @@ class World {
     }
 
     chunkFileExists(x, y){
-        const fileLocation = "world/" + [x,y].toString();
+        const fileLocation = worldsavedir + [x,y].toString();
 
         return this.fileManager.fileExists(fileLocation);
     }
 
     readChunkFile(x, y){
-        const fileLocation = "world/" + [x,y].toString();
+        const fileLocation = worldsavedir + [x,y].toString();
 
         return this.fileManager.readFile(fileLocation);
     }
 
     writeChunkFile(chunk){
-        const fileLocation = "world/" + [chunk.chunkx,chunk.chunky].toString();
+        const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
         let chunkdata = chunk.serializeForWrite();
 
         this.fileManager.writeFile(fileLocation, chunkdata);

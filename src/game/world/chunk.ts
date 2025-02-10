@@ -33,6 +33,8 @@ class Chunk {
                     }
                 }
             }catch(e){
+                console.log(`Chunk ${this.chunkx},${this.chunky} failed to load. File may have been corrupted`);
+
                 // read failed just generate new chunk
                 return new Chunk(chunkx, chunky);
             }
