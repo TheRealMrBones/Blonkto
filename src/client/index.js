@@ -116,7 +116,7 @@ export function onlogin(response){
 // #region state changes
 
 function joingame(){
-    play(account.username);
+    play();
     initState();
 }
 

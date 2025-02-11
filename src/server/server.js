@@ -76,10 +76,10 @@ async function login(credentials){
 	}
 }
 
-function joinGame(username){
-	const newUsername = game.getUsername(username);
-	console.log(`[${this.id}] [${accountManager.getAccount(this.id).username}] Joined the game`);
-	game.addPlayer(this, newUsername);
+function joinGame(){
+	const username = accountManager.getAccount(this.id).username;
+	console.log(`[${this.id}] [${username}] Joined the game`);
+	game.playerManager.addPlayer(this, username);
 }
 
 function handleInput(inputs){
@@ -104,7 +104,7 @@ function onDisconnect(){
 		console.log(`[${this.id}] Disconnected`);
 	}
 
-  	game.removePlayer(this);
+  	game.playerManager.removePlayer(this);
 }
 
 function chat(message){

@@ -29,7 +29,7 @@ class KillCommand extends Command{
         switch(argIndex){
             case 0: {
                 player.dead = true;
-                game.killPlayer(player.socket, "the Server");
+                game.playerManager.killPlayer(player.socket, "the Server");
                 break;
             };
             case 1: {
@@ -37,7 +37,7 @@ class KillCommand extends Command{
                 p.dead = true;
                 game.chatManager.sendMessageTo(player, `killed ${p.username}`);
                 
-                game.killPlayer(p.socket, "the Server");
+                game.playerManager.killPlayer(p.socket, "the Server");
                 break;
             };
         }

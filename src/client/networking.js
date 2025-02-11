@@ -56,8 +56,8 @@ export const login = (username, password) => {
     socket.emit(MSG_TYPES.LOGIN, {username: username, password: password});
 };
 
-export const play = username => {
-    socket.emit(MSG_TYPES.JOIN_GAME, username);
+export const play = () => {
+    socket.emit(MSG_TYPES.JOIN_GAME);
 };
 
 export const updateInputs = throttle(20, inputs => {
