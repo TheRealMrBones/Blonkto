@@ -2,6 +2,7 @@ import express from 'express';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import { Server as SocketIo } from 'socket.io';
+import { Socket } from 'socket.io-client';
 
 import Game from '../game/game.js';
 import FileManager from './fileManager.js';
@@ -58,7 +59,9 @@ const game = new Game(fileManager, accountManager);
 
 // #region socket functions
 
-async function createAccount(credentials){
+async function createAccount(this: Socket, credentials: { username: string; password: string; }){
+	if(this.id === undefined) return;
+	
 	const response = await accountManager.createAccount(this.id, credentials.username, credentials.password)
 	this.emit(MSG_TYPES.LOGIN, response);
 
@@ -67,7 +70,9 @@ async function createAccount(credentials){
 	}
 }
 
-async function login(credentials){
+async function login(this: Socket, credentials: { username: string; password: string; }){
+	if(this.id === undefined) return;
+	
 	const response = await accountManager.login(this.id, credentials.username, credentials.password)
 	this.emit(MSG_TYPES.LOGIN, response);
 
@@ -76,25 +81,29 @@ async function login(credentials){
 	}
 }
 
-function joinGame(){
+function joinGame(this: Socket){
+	if(this.id === undefined) return;
+	
 	const username = accountManager.getAccount(this.id).username;
 	console.log(`[${this.id}] [${username}] Joined the game`);
 	game.playerManager.addPlayer(this, username);
 }
 
-function handleInput(inputs){
+function handleInput(this: Socket, inputs: any){
   	game.handleInput(this, inputs);
 }
 
-function click(info){
+function click(this: Socket, info: any){
 	game.click(this, info);
 }
 
-function interact(info){
+function interact(this: Socket, info: any){
 	game.interact(this, info);
 }
 
-function onDisconnect(){
+function onDisconnect(this: Socket){
+	if(this.id === undefined) return;
+	
 	const acc = accountManager.getAccount(this.id);
 
 	if(acc){
@@ -107,7 +116,7 @@ function onDisconnect(){
   	game.playerManager.removePlayer(this);
 }
 
-function chat(message){
+function chat(this: Socket, message: any){
   	game.chatManager.chat(this, message);
 }
 
