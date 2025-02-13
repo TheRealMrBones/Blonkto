@@ -58,12 +58,12 @@ class Game {
         this.fileManager = fileManager;
         this.accountManager = accountManager;
         this.playerManager = new PlayerManager(this);
-        this.opManager = new OpManager(fileManager);
-        this.banManager = new BanManager(fileManager);
+        this.opManager = new OpManager(this);
+        this.banManager = new BanManager(this);
         this.chatManager = new ChatManager(this);
         
         // world
-        this.world = new World(this, fileManager);
+        this.world = new World(this);
 
         // updates
         this.lastUpdateTime = Date.now();

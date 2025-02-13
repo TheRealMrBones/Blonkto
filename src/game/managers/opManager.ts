@@ -1,11 +1,11 @@
-import FileManager from "../../server/fileManager";
+import Game from "../game";
 
 class OpManager {
-    fileManager: FileManager;
+    game: Game;
     oppedplayers: {[key: string]: boolean};
 
-    constructor(fileManager: FileManager){
-        this.fileManager = fileManager;
+    constructor(game: Game){
+        this.game = game;
         this.oppedplayers = {};
 
         this.load();
@@ -55,11 +55,11 @@ class OpManager {
     // #region saving
 
     load(){
-        if(!this.fileManager.fileExists("oplist")){
+        if(!this.game.fileManager.fileExists("oplist")){
             return;
         }
 
-        let rawdata = this.fileManager.readFile("oplist");
+        let rawdata = this.game.fileManager.readFile("oplist");
         if(!rawdata){
             return;
         }
@@ -84,7 +84,7 @@ class OpManager {
         if(data.length > 0)
             data = data.substring(0, data.length - 1); // remove last |
 
-        this.fileManager.writeFile("oplist", data);
+        this.game.fileManager.writeFile("oplist", data);
     }
 
     // #endregion

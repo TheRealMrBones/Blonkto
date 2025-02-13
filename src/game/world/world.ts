@@ -15,13 +15,11 @@ const worldsavedir = "world/";
 
 class World {
     game: Game
-    fileManager: FileManager;
     loadedchunks: {[key: string]: Chunk};
     saveInterval: NodeJS.Timeout;
 
-    constructor(game: Game, fm: FileManager){
+    constructor(game: Game){
         this.game = game;
-        this.fileManager = fm;
 
         // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
@@ -254,20 +252,20 @@ class World {
     chunkFileExists(x: any, y: any){
         const fileLocation = worldsavedir + [x,y].toString();
 
-        return this.fileManager.fileExists(fileLocation);
+        return this.game.fileManager.fileExists(fileLocation);
     }
 
     readChunkFile(x: any, y: any){
         const fileLocation = worldsavedir + [x,y].toString();
 
-        return this.fileManager.readFile(fileLocation);
+        return this.game.fileManager.readFile(fileLocation);
     }
 
     writeChunkFile(chunk: Chunk){
         const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
         let chunkdata = chunk.serializeForWrite();
 
-        this.fileManager.writeFile(fileLocation, chunkdata);
+        this.game.fileManager.writeFile(fileLocation, chunkdata);
     }
     
     tickChunkUnloader(){

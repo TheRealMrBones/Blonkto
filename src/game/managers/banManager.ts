@@ -1,11 +1,11 @@
-import FileManager from '../../server/fileManager';
+import Game from '../game';
 
 class BanManager {
-    fileManager: FileManager;
+    game: Game;
     bannedplayers: {[key: string]: string};
 
-    constructor(fileManager: FileManager){
-        this.fileManager = fileManager;
+    constructor(game: Game){
+        this.game = game;
         this.bannedplayers = {};
 
         this.load();
@@ -53,11 +53,11 @@ class BanManager {
     // #region saving
 
     load(){
-        if(!this.fileManager.fileExists("banlist")){
+        if(!this.game.fileManager.fileExists("banlist")){
             return;
         }
 
-        const rawdata = this.fileManager.readFile("banlist");
+        const rawdata = this.game.fileManager.readFile("banlist");
         if(!rawdata){
             return;
         }
@@ -83,7 +83,7 @@ class BanManager {
         if(data.length > 0)
             data = data.substring(0, data.length - 1); // remove last |
 
-        this.fileManager.writeFile("banlist", data);
+        this.game.fileManager.writeFile("banlist", data);
     }
 
     // #endregion
