@@ -1,21 +1,30 @@
 import crypto from 'crypto';
 
-import { ExcecuteCommand } from './commands/commands.js';
+import Game from '../game.js';
+import Player from '../objects/player.js';
+import { Socket } from 'socket.io-client';
+import { filterText } from '../filter.js';
 
-import Constants from '../shared/constants.js';
+import { ExcecuteCommand } from '../commands/commands.js';
+
+import Constants from '../../shared/constants.js';
 const { MSG_TYPES } = Constants;
 
-import ServerConfig from '../configs/server';
+import ServerConfig from '../../configs/server.js';
 const { FILTER_CHAT } = ServerConfig.CHAT;
 
 class ChatManager {
-    constructor(game){
+    game: Game;
+
+    constructor(game: Game){
         this.game = game;
     }
 
     // #region inputs
 
-    chat(socket, message){
+    chat(socket: Socket, message: any){
+        if(socket.id === undefined) return;
+
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
             // empty message
@@ -33,7 +42,7 @@ class ChatManager {
 
     // #region sending
 
-    sendMessage(text){
+    sendMessage(text: string){
         const message = this.createMessage(text);
 
         Object.values(this.game.players).forEach(player => {
@@ -41,7 +50,7 @@ class ChatManager {
         });
     }
 
-    sendMessageTo(player, text){
+    sendMessageTo(player: Player, text: string){
         const message = this.createMessage(text);
         player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
     }
@@ -50,7 +59,7 @@ class ChatManager {
 
     // #region helpers
 
-    createMessage(text){
+    createMessage(text: string){
         return {
             text: text,
             id: crypto.randomUUID(),

@@ -1,6 +1,11 @@
+import FileManager from "../../server/fileManager";
+
 class OpManager {
-    constructor(fm){
-        this.fileManager = fm;
+    fileManager: FileManager;
+    oppedplayers: {[key: string]: boolean};
+
+    constructor(fileManager: FileManager){
+        this.fileManager = fileManager;
         this.oppedplayers = {};
 
         this.load();
@@ -8,17 +13,17 @@ class OpManager {
     
     // #region setters
 
-    op(username){
+    op(username: string){
         this.oppedplayers[username] = true;
         this.save();
     }
 
-    deop(username){
+    deop(username: string){
         delete this.oppedplayers[username];
         this.save();
     }
 
-    clearOpList(username){
+    clearOpList(username: string){
         this.oppedplayers = {};
         
         // if username given keep that user opped
@@ -33,7 +38,7 @@ class OpManager {
     
     // #region getters
 
-    isOp(username){
+    isOp(username: string){
         return this.oppedplayers.hasOwnProperty(username);
     }
 
@@ -54,13 +59,15 @@ class OpManager {
             return;
         }
 
-        let data = this.fileManager.readFile("oplist");
-
-        if(data.length == 0 || data.trim() === ""){
+        let rawdata = this.fileManager.readFile("oplist");
+        if(!rawdata){
+            return;
+        }
+        if(rawdata.length == 0 || rawdata.trim() === ""){
             return;
         }
 
-        data = data.split("|");
+        const data = rawdata.split("|");
 
         for(const username of data){
             this.op(username);

@@ -25,7 +25,7 @@ class ComponentHandler<T> {
         return this.components.some(c => c.getcid() == cid);
     }
 
-    getComponent<T2>(cid: string): Component<T2> | undefined{
+    getComponent(cid: string): any{
         return this.components.find(c => c.getcid() == cid);
     }
 }

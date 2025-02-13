@@ -23,7 +23,7 @@ class Player extends Entity {
     hotbarslot: number;
     fixes: any;
 
-    constructor(id: string, socket: Socket, username: string, x: number, y: number, dir: number, data: string){
+    constructor(id: string, socket: Socket, username: string, x: number, y: number, dir: number, data?: string){
         super(x, y, dir);
         this.id = id;
 
@@ -78,7 +78,7 @@ class Player extends Entity {
 
     // #region setters
 
-    update(data: { t: number; }){
+    update(data: any){
         if(this.playerdelay == 0){
             this.playerdelay = Date.now() - data.t;
         }

@@ -1,6 +1,11 @@
+import FileManager from '../../server/fileManager';
+
 class BanManager {
-    constructor(fm){
-        this.fileManager = fm;
+    fileManager: FileManager;
+    bannedplayers: {[key: string]: string};
+
+    constructor(fileManager: FileManager){
+        this.fileManager = fileManager;
         this.bannedplayers = {};
 
         this.load();
@@ -8,13 +13,13 @@ class BanManager {
     
     // #region setters
 
-    ban(username, reason){
+    ban(username: string, reason: string){
         username = username.toLowerCase();
         this.bannedplayers[username] = reason;
         this.save();
     }
 
-    pardon(username){
+    pardon(username: string){
         username = username.toLowerCase();
         delete this.bannedplayers[username];
         this.save();
@@ -29,12 +34,12 @@ class BanManager {
     
     // #region getters
 
-    isBanned(username){
+    isBanned(username: string){
         username = username.toLowerCase();
         return this.bannedplayers.hasOwnProperty(username);
     }
 
-    banReason(username){
+    banReason(username: string){
         username = username.toLowerCase();
         return this.bannedplayers[username];
     }
@@ -52,16 +57,18 @@ class BanManager {
             return;
         }
 
-        let data = this.fileManager.readFile("banlist");
-
-        if(data.length == 0 || data.trim() === ""){
+        const rawdata = this.fileManager.readFile("banlist");
+        if(!rawdata){
+            return;
+        }
+        if(rawdata.length == 0 || rawdata.trim() === ""){
             return;
         }
 
-        data = data.split("|");
+        const data = rawdata.split("|");
 
-        for(let bandata of data){
-            bandata = bandata.split(",");
+        for(let rawbandata of data){
+            const bandata = rawbandata.split(",");
             this.ban(bandata[0], bandata[1]);
         }
     }

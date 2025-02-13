@@ -1,57 +1,69 @@
 import crypto from 'crypto';
 
-import PlayerManager from './playerManager.js';
-import OpManager from './opManager.js';
-import BanManager from './banManager.js';
-import ChatManager from './chatManager.js';
+import FileManager from '../server/fileManager.js';
+import AccountManager from '../server/accountManager.js';
+import PlayerManager from './managers/playerManager.js';
+import OpManager from './managers/opManager.js';
+import BanManager from './managers/banManager.js';
+import ChatManager from './managers/chatManager.js';
+import Player from './objects/player.js';
+import NonplayerEntity from './objects/nonplayerEntity.js';
+import GameObject from './objects/object.js';
+import DroppedStack from './objects/droppedStack.js';
 import World from './world/world.js';
+import { Socket } from 'socket.io-client';
 import { collectCheck, itemMergeCheck, attackHitCheck } from './collisions.js';
 
 import AttackComponent from './components/itemcomponents/attackComponent.js';
 import BuildComponent from './components/itemcomponents/buildComponent.js';
 import MineComponent from './components/itemcomponents/mineComponent.js';
 
-// initialize registries
-import './registries/itemRegistry.js';
-
-import Constants from '../shared/constants';
+import Constants from '../shared/constants.js';
 const { MSG_TYPES } = Constants;
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from '../configs/shared.js';
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
 
-import ServerConfig from '../configs/server';
+import ServerConfig from '../configs/server.js';
 const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
-// temp
-import Pig from './objects/pig.js';
+// initialize registries
+import './registries/itemRegistry.js';
 
 class Game {
-    constructor(fm, am){
+    fileManager: FileManager;
+    accountManager: AccountManager;
+    playerManager: PlayerManager;
+    opManager: OpManager;
+    banManager: BanManager;
+    chatManager: ChatManager;
+
+    players: {[key: string]: Player} = {};
+    objects: {[key: string]: GameObject} = {};
+    entities: {[key: string]: NonplayerEntity} = {};
+
+    world: World;
+
+    lastUpdateTime: number;
+    shouldSendUpdate: boolean;
+
+    oppasscode: string;
+    oppasscodeused: boolean;
+
+    constructor(fileManager: FileManager, accountManager: AccountManager){
         // managers
-        this.fileManager = fm;
-        this.accountManager = am;
+        this.fileManager = fileManager;
+        this.accountManager = accountManager;
         this.playerManager = new PlayerManager(this);
-        this.opManager = new OpManager(fm);
-        this.banManager = new BanManager(fm);
+        this.opManager = new OpManager(fileManager);
+        this.banManager = new BanManager(fileManager);
         this.chatManager = new ChatManager(this);
         
-        // entities
-        this.players = {};
-        this.objects = {};
-        this.entities = {};
-
-        //
-        // TEMP CODE!
-        //
-        const temppig = new Pig(0, 0, 0);
-        this.entities[temppig.id] = temppig;
-        
         // world
-        this.world = new World(this, fm);
+        this.world = new World(this, fileManager);
 
         // updates
         this.lastUpdateTime = Date.now();
@@ -62,10 +74,12 @@ class Game {
         setInterval(this.update.bind(this), 1000 / SERVER_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
+        this.oppasscode = crypto.randomUUID();
         if(OP_PASSCODE && (this.opManager.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
-            this.oppasscode = crypto.randomUUID();
             this.oppasscodeused = false;
             console.log(`oppasscode: ${this.oppasscode}`);
+        }else{
+            this.oppasscodeused = true;
         }
     }
 
@@ -95,11 +109,15 @@ class Game {
         return Object.values(this.entities);
     }
 
-    removeObject(id){
+    getDroppedStacks(){
+        return this.getObjects().filter(o => o instanceof DroppedStack);
+    }
+
+    removeObject(id: string){
         delete this.objects[id];
     }
 
-    removeEntity(id){
+    removeEntity(id: string){
         delete this.entities[id];
     }
 
@@ -107,7 +125,9 @@ class Game {
 
     // #region inputs
 
-    click(socket, info){
+    click(socket: Socket, info: any){
+        if(socket.id === undefined) return;
+        
         if(this.players[socket.id] !== undefined){
             if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
                 const dir = Math.atan2(info.xoffset, info.yoffset);
@@ -118,15 +138,19 @@ class Game {
                 if(!hotbarItem){
                     // fist attack
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, 1);
+                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
                 }else if(hotbarItem.item.componentHandler.hasComponent(AttackComponent.cid)){
                     this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getAllObjects(), dir, hotbarItem.item.componentHandler.getComponent(AttackComponent.cid).damage);
+                    const component = hotbarItem.item.componentHandler.getComponent(AttackComponent.cid);
+                    if(!(component instanceof AttackComponent)) return;
+                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, component.damage);
                 }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent.cid)){
                     this.world.breakcell(cellpos.x, cellpos.y, true);
                 }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent.cid)){
-                    if(this.world.cellEmpty(cellpos.x, cellpos.y, this.getAllObjects())){
-                        if(this.world.placecell(cellpos.x, cellpos.y, hotbarItem.item.componentHandler.getComponent(BuildComponent.cid).block)){
+                    if(this.world.cellEmpty(cellpos.x, cellpos.y)){
+                        const component = hotbarItem.item.componentHandler.getComponent(BuildComponent.cid);
+                        if(!(component instanceof BuildComponent)) return;
+                        if(this.world.placecell(cellpos.x, cellpos.y, component.block)){
                             this.players[socket.id].removeFromSlot(this.players[socket.id].hotbarslot, 1);
                         }
                     }
@@ -137,13 +161,17 @@ class Game {
         }
     }
 
-    interact(socket, info){
+    interact(socket: Socket, info: any){
+        if(socket.id === undefined) return;
+        
         if(this.players[socket.id] !== undefined){
             
         }
     }
 
-    handleInput(socket, inputs){
+    handleInput(socket: Socket, inputs: any){
+        if(socket.id === undefined) return;
+        
         if(this.players[socket.id] !== undefined){
             const { t, dir, x, y, hotbarslot } = inputs;
             if(this.players[socket.id]){
@@ -187,11 +215,11 @@ class Game {
 
         // proccess collisions
         this.getPlayerEntities().forEach(p => {
-            collectCheck(p, this.getObjects(), this);
+            collectCheck(p, this.getDroppedStacks(), this);
         });
 
-        this.getObjects().forEach(o => {
-            itemMergeCheck(o, this.getObjects(), this);
+        this.getDroppedStacks().forEach(o => {
+            itemMergeCheck(o, this.getDroppedStacks(), this);
         });
 
         // check to send update
@@ -213,7 +241,7 @@ class Game {
         this.world.tickChunkUnloader();
     }
 
-    createUpdate(player){
+    createUpdate(player: Player){
         // get players
         const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2

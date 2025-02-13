@@ -1,21 +1,28 @@
-import Player from './objects/player.js';
-import { filterText } from './filter.js';
+import Game from '../game.js';
+import Player from '../objects/player.js';
+import { Socket } from 'socket.io-client';
+import { filterText } from '../filter.js';
 
-import Constants from '../shared/constants';
+import Constants from '../../shared/constants.js';
 const { MSG_TYPES } = Constants;
 
-import ServerConfig from '../configs/server';
+import ServerConfig from '../../configs/server.js';
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { FILTER_USERNAME } = ServerConfig.PLAYER;
 
 class PlayerManager {
-    constructor(game){
+    game: Game;
+    saveInterval: NodeJS.Timeout;
+
+    constructor(game: Game){
         this.game = game;
 
         this.saveInterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
-    addPlayer(socket, username){
+    addPlayer(socket: Socket, username: string){
+        if(socket.id === undefined) return;
+
         // check if banned
         if(this.game.banManager.isBanned(username)){
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned", extra: this.game.banManager.banReason(username) });
@@ -31,6 +38,7 @@ class PlayerManager {
         if(this.game.fileManager.fileExists(getPlayerFilePath(username))){
             // load existing player from data
             const data = this.game.fileManager.readFile(getPlayerFilePath(username));
+            if(!data) return;
             this.game.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0, data);
         }else{
             // create new player
@@ -50,21 +58,25 @@ class PlayerManager {
         this.game.chatManager.sendMessage(`${username} has connected`);
     }
 
-    savePlayer(player){
+    savePlayer(player: Player){
         const data = player.serializeForWrite();
 
         this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
     }
 
-    deletePlayer(player){
+    deletePlayer(player: Player){
         if(this.game.fileManager.fileExists(getPlayerFilePath(player.username)))
             this.game.fileManager.deleteFile(getPlayerFilePath(player.username));
 
         delete this.game.players[player.id];
     }
 
-    killPlayer(socket, killedby){
-        this.game.chatManager.sendMessage(`${this.game.players[socket.id].username} was killed by ${killedby}`);
+    killPlayer(socket: Socket, killedby: string){
+        if(socket.id === undefined) return;
+
+        const player = this.game.players[socket.id];
+
+        this.game.chatManager.sendMessage(`${player.username} was killed by ${killedby}`);
         
         socket.emit(MSG_TYPES.DEAD);
 
@@ -75,11 +87,13 @@ class PlayerManager {
         delete this.game.players[player.id];
     }
 
-    removePlayer(socket){
+    removePlayer(socket: Socket){
+        if(socket.id === undefined) return;
+
         const player = this.game.players[socket.id];
 
         if(this.game.players[player.id]){
-            this.game.chatManager.sendMessage(`${this.game.players[socket.id].username} has disconnected`);
+            this.game.chatManager.sendMessage(`${player.username} has disconnected`);
 
             this.savePlayer(player)
 
@@ -93,7 +107,7 @@ class PlayerManager {
         })
     }
 
-    getUsername(username){
+    getUsername(username: string){
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
@@ -115,7 +129,7 @@ class PlayerManager {
 // #region helpers
 
 // Get player file path
-const getPlayerFilePath = (username) => ("players/" + username);
+const getPlayerFilePath = (username: string) => ("players/" + username);
 
 // #endregion
 

@@ -1,10 +1,15 @@
+import Player from './objects/player';
+import DroppedStack from './objects/droppedStack';
+import Entity from './objects/entity';
+import Game from './game';
+
 import SharedConfig from '../configs/shared';
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 // #region collision checks
 
-export const collectCheck = (player, collectables, game) => {
+export const collectCheck = (player: Player, collectables: Array<DroppedStack>, game: Game) => {
     for(let i = 0; i < collectables.length; i++){
         const collectable = collectables[i];
         const dist = getDistance(player, collectable);
@@ -15,7 +20,7 @@ export const collectCheck = (player, collectables, game) => {
     }
 }
 
-export const itemMergeCheck = (collectable, collectables, game) => {
+export const itemMergeCheck = (collectable: DroppedStack, collectables: Array<DroppedStack>, game: Game) => {
     for(let i = 0; i < collectables.length; i++){
         const collectable2 = collectables[i];
         const dist = getDistance(collectable, collectable2);
@@ -26,7 +31,7 @@ export const itemMergeCheck = (collectable, collectables, game) => {
     }
 }
 
-export const attackHitCheck = (player, entities, attackdir, damage) => {
+export const attackHitCheck = (player: Player, entities: Array<Entity>, attackdir: number, damage: number) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
         y: player.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
@@ -49,7 +54,7 @@ export const attackHitCheck = (player, entities, attackdir, damage) => {
 
 // #region helpers
 
-function getDistance(object1, object2){
+function getDistance(object1: {x: number, y: number}, object2: {x: number, y: number}){
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
