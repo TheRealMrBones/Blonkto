@@ -1,10 +1,23 @@
 import fs from 'fs';
 
+const datafolders = [
+    "accounts",
+    "entities",
+    "players",
+    "world",
+];
+
 class FileManager {
     savelocation: string;
     
     constructor(){
         this.savelocation = "./data/";
+
+        // initialize data folder
+        if (!fs.existsSync(this.savelocation)) fs.mkdirSync(this.savelocation, { recursive: true });
+        datafolders.forEach(f => {
+            if (!fs.existsSync(this.savelocation + f)) fs.mkdirSync(this.savelocation + f, { recursive: true });
+        });
     }
 
     // #region writing
