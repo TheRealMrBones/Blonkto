@@ -59,7 +59,7 @@ class OpManager {
             return;
         }
 
-        let rawdata = this.game.fileManager.readFile("oplist");
+        const rawdata = this.game.fileManager.readFile("oplist");
         if(!rawdata){
             return;
         }

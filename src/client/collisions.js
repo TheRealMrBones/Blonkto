@@ -1,7 +1,7 @@
-import { push } from './input.js';
-import { getCell } from './world.js';
+import { push } from "./input.js";
+import { getCell } from "./world.js";
 
-import Constants from '../shared/constants.ts';
+import Constants from "../shared/constants.ts";
 const { SHAPES } = Constants;
 
 // #region get collisions
@@ -84,19 +84,19 @@ function getSquareWalls(scale, pos){
 // #region run collisions
 
 function wallCollisions(me, walls){
-    walls.forEach(w => { wallCollision(me, w) });
+    walls.forEach(w => { wallCollision(me, w); });
 }
 
 function wallCollision(me, wall){
-    let p1 = wall.p1;
-    let p2 = wall.p2;
+    const p1 = wall.p1;
+    const p2 = wall.p2;
     if (p1.x - p2.x == 0) {
         if (me.y > p1.y && me.y < p2.y || me.y < p1.y && me.y > p2.y) {
             if (Math.abs(me.x - p1.x) <= me.scale / 2) {
                 if (me.x - p1.x > 0) {
-                    me.x += (me.scale / 2 - Math.abs(me.x - p1.x))
+                    me.x += (me.scale / 2 - Math.abs(me.x - p1.x));
                 } else {
-                    me.x -= (me.scale / 2 - Math.abs(me.x - p1.x))
+                    me.x -= (me.scale / 2 - Math.abs(me.x - p1.x));
                 }
             }
         }
@@ -104,9 +104,9 @@ function wallCollision(me, wall){
         if (me.x > p1.x && me.x < p2.x || me.x < p1.x && me.x > p2.x) {
             if (Math.abs(me.y - p1.y) <= me.scale / 2) {
                 if (me.y - p1.y > 0) {
-                    me.y += (me.scale / 2 - Math.abs(me.y - p1.y))
+                    me.y += (me.scale / 2 - Math.abs(me.y - p1.y));
                 } else {
-                    me.y -= (me.scale / 2 - Math.abs(me.y - p1.y))
+                    me.y -= (me.scale / 2 - Math.abs(me.y - p1.y));
                 }
             }
         }
@@ -114,7 +114,7 @@ function wallCollision(me, wall){
 }
 
 function circleCollisions(me, circles){
-    circles.forEach(c => { circleCollision(me, c) });
+    circles.forEach(c => { circleCollision(me, c); });
 }
 
 function circleCollision(me, circle){

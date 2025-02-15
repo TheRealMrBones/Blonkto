@@ -1,6 +1,6 @@
-import Cell from './cell.js';
+import Cell from "./cell.js";
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 class Chunk {

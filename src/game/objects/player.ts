@@ -1,16 +1,16 @@
-import Entity from './entity.js';
-import { Socket } from 'socket.io-client';
-import ItemRegistry from '../registries/itemRegistry.js';
-import ItemStack from '../items/itemStack.js';
+import Entity from "./entity.js";
+import { Socket } from "socket.io-client";
+import ItemRegistry from "../registries/itemRegistry.js";
+import ItemStack from "../items/itemStack.js";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
-import ServerConfig from '../../configs/server.js';
+import ServerConfig from "../../configs/server.js";
 const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
 
 class Player extends Entity {
@@ -138,7 +138,7 @@ class Player extends Entity {
             pushy: null,
             setpos: null,
             inventoryupdates: [],
-        }
+        };
     }
 
     getFixes(){
@@ -147,7 +147,7 @@ class Player extends Entity {
             pushy: this.fixes.pushy,
             setpos: this.fixes.setpos,
             inventoryupdates: this.fixes.inventoryupdates,
-        }
+        };
         return fixescopy;
     }
 
@@ -160,7 +160,7 @@ class Player extends Entity {
         this.fixes.setpos = {
             x: x,
             y: y
-        }
+        };
     }
 
     // #endregion

@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from "./component";
 
 class ComponentHandler<T> {
     private components: Array<Component<T>> = [];
@@ -11,7 +11,7 @@ class ComponentHandler<T> {
     addComponent(component: Component<T>): T{
         // Remove component if already exists
         if(this.hasComponent(component.getcid()))
-            this.removeComponent(component.getcid())
+            this.removeComponent(component.getcid());
 
         this.components.push(component);
         return this.parent;

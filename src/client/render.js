@@ -1,26 +1,26 @@
-import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from './assets.js';
-import { getCurrentState } from './state.js';
-import { getSelf, setSelf } from './input.js';
-import { getCell } from './world.js';
-import { updateFps } from './ui.js';
+import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
+import { getCurrentState } from "./state.js";
+import { getSelf, setSelf } from "./input.js";
+import { getCell } from "./world.js";
+import { updateFps } from "./ui.js";
 
-import Constants from '../shared/constants.ts';
+import Constants from "../shared/constants.ts";
 const { ASSETS } = Constants;
 
-import SharedConfig from '../configs/shared.ts';
+import SharedConfig from "../configs/shared.ts";
 const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import ClientConfig from '../configs/client.ts';
+import ClientConfig from "../configs/client.ts";
 const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 
 // #region init
 
-const canvas = document.createElement('canvas');
-const context = canvas.getContext('2d');
-const rendercanvas = document.getElementById('gamecanvas');
-const rendercontext = rendercanvas.getContext('2d');
+const canvas = document.createElement("canvas");
+const context = canvas.getContext("2d");
+const rendercanvas = document.getElementById("gamecanvas");
+const rendercontext = rendercanvas.getContext("2d");
 
 // make sure canvas width and cell size are always correct
 canvas.width = window.innerWidth;
@@ -29,7 +29,7 @@ rendercanvas.width = window.innerWidth;
 rendercanvas.height = window.innerHeight;
 
 let cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     rendercanvas.width = window.innerWidth;
@@ -128,7 +128,7 @@ function render(){
 
     // update fps
     thisframe = Date.now();
-    fpstotal += (1000 / (thisframe - lastframe))
+    fpstotal += (1000 / (thisframe - lastframe));
     fpscount++;
     lastframe = thisframe;
 

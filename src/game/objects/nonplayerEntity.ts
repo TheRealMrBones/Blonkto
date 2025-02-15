@@ -1,6 +1,6 @@
-import EventEmitter from 'events';
+import EventEmitter from "events";
 
-import Entity from './entity.js';
+import Entity from "./entity.js";
 
 class NonplayerEntity extends Entity {
     ontick: EventEmitter;

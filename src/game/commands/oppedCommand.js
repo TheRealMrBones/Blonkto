@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class OppedCommand extends Command{
@@ -29,9 +29,9 @@ class OppedCommand extends Command{
         switch(argIndex){
             case 0: {
                 if(game.opManager.isOp(player.username)){
-                    game.chatManager.sendMessageTo(player, `you are opped`);
+                    game.chatManager.sendMessageTo(player, "you are opped");
                 }else{
-                    game.chatManager.sendMessageTo(player, `you are not opped`);
+                    game.chatManager.sendMessageTo(player, "you are not opped");
                 }
                 break;
             };

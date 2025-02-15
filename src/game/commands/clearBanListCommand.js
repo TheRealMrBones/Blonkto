@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class ClearBanListCommand extends Command{
@@ -22,7 +22,7 @@ class ClearBanListCommand extends Command{
         switch(argIndex){
             case 0: {
                 game.banManager.clearBanList();
-                game.chatManager.sendMessageTo(player, `cleared ban list`);
+                game.chatManager.sendMessageTo(player, "cleared ban list");
                 
                 break;
             };

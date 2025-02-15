@@ -1,6 +1,6 @@
-import GameObject from './object.js';
+import GameObject from "./object.js";
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 class Entity extends GameObject {

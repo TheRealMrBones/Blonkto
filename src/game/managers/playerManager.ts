@@ -1,12 +1,12 @@
-import Game from '../game.js';
-import Player from '../objects/player.js';
-import { Socket } from 'socket.io-client';
-import { filterText } from '../filter.js';
+import Game from "../game.js";
+import Player from "../objects/player.js";
+import { Socket } from "socket.io-client";
+import { filterText } from "../filter.js";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
-import ServerConfig from '../../configs/server.js';
+import ServerConfig from "../../configs/server.js";
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { FILTER_USERNAME } = ServerConfig.PLAYER;
 
@@ -33,7 +33,7 @@ class PlayerManager {
 	    username = this.getUsername(username);
 
         // get spawn pos
-        let spawn = this.game.world.getSpawn();
+        const spawn = this.game.world.getSpawn();
 
         if(this.game.fileManager.fileExists(getPlayerFilePath(username))){
             // load existing player from data
@@ -95,7 +95,7 @@ class PlayerManager {
         if(this.game.players[player.id]){
             this.game.chatManager.sendMessage(`${player.username} has disconnected`);
 
-            this.savePlayer(player)
+            this.savePlayer(player);
 
             delete this.game.players[player.id];
         }
@@ -104,11 +104,11 @@ class PlayerManager {
     savePlayers(){
         Object.values(this.game.players).forEach(p => {
             this.savePlayer(p);
-        })
+        });
     }
 
     getUsername(username: string){
-        let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, '')) : username.replace(/\s+/g, '');
+        let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
         }

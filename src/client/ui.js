@@ -1,16 +1,16 @@
-import { chat } from './networking.js';
-import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from './input.js';
-import { toggleAllChatShow } from './chat.js';
+import { chat } from "./networking.js";
+import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from "./input.js";
+import { toggleAllChatShow } from "./chat.js";
 
 // #region init
 
-const chatDiv = document.getElementById('chat');
-const chatInput = document.getElementById('chatinput');
-const infodiv = document.getElementById('info');
-const coordstext = document.getElementById('coordstext');
-const fpstext = document.getElementById('fpstext');
-const connectionlostdiv = document.getElementById('connectionlost');
-const hotbardiv = document.getElementById('hotbar');
+const chatDiv = document.getElementById("chat");
+const chatInput = document.getElementById("chatinput");
+const infodiv = document.getElementById("info");
+const coordstext = document.getElementById("coordstext");
+const fpstext = document.getElementById("fpstext");
+const connectionlostdiv = document.getElementById("connectionlost");
+const hotbardiv = document.getElementById("hotbar");
 
 let focusingOut = false;
 

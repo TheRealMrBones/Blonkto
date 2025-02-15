@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class DeopCommand extends Command{
@@ -24,7 +24,7 @@ class DeopCommand extends Command{
                 const p = parsedTokens[1];
                 if(game.opManager.isOp(p.username)){
                     game.opManager.deop(p.username);
-                    game.chatManager.sendMessageTo(p, `you are no longer opped`);
+                    game.chatManager.sendMessageTo(p, "you are no longer opped");
                     game.chatManager.sendMessageTo(player, `deopped ${p.username}`);
                 }else{
                     game.chatManager.sendMessageTo(player, `${p.username} is not opped`);

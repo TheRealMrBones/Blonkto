@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from "fs";
 
 // define schema
 type ServerConfigSchema = {
@@ -62,14 +62,14 @@ if(!fs.existsSync("./configs")){
 }
 
 if(fs.existsSync("./configs/server.json")){
-    const savedConfig: ServerConfigSchema = JSON.parse(fs.readFileSync("./configs/server.json", 'utf8'));
+    const savedConfig: ServerConfigSchema = JSON.parse(fs.readFileSync("./configs/server.json", "utf8"));
     traverse(savedConfig, ServerConfig);
 }
 
 function traverse(lastrefold: any, lastrefnew: any) {
     Object.keys(lastrefold).forEach(key => {
         if(key in lastrefnew){
-            if (typeof lastrefold[key] === 'object') {
+            if (typeof lastrefold[key] === "object") {
                 traverse(lastrefold[key], lastrefnew[key]);
             } else {
                 lastrefnew[key] = lastrefold[key];

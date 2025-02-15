@@ -1,8 +1,8 @@
-import Registry from './registry';
-import Block from '../world/block';
+import Registry from "./registry";
+import Block from "../world/block";
 
-import Constants from '../../shared/constants';
-import ItemRegistry from './itemRegistry';
+import Constants from "../../shared/constants";
+import ItemRegistry from "./itemRegistry";
 const { ASSETS } = Constants;
 
 const BlockRegistry = new Registry<Block>();

@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class OpCommand extends Command{
@@ -13,9 +13,9 @@ class OpCommand extends Command{
     static execute(game, player, tokens){
         // op passcode
         if(tokens[1] == game.oppasscode && !game.oppasscodeused){
-            game.opManager.op(player.username)
+            game.opManager.op(player.username);
             game.oppasscodeused = true;
-            game.chatManager.sendMessageTo(player, `you are now opped`);
+            game.chatManager.sendMessageTo(player, "you are now opped");
             return;
         }
 
@@ -33,8 +33,8 @@ class OpCommand extends Command{
                 if(game.opManager.isOp(p.username)){
                     game.chatManager.sendMessageTo(player, `${p.username} is already opped`);
                 }else{
-                    game.opManager.op(p.username)
-                    game.chatManager.sendMessageTo(p, `you are now opped`);
+                    game.opManager.op(p.username);
+                    game.chatManager.sendMessageTo(p, "you are now opped");
                     game.chatManager.sendMessageTo(player, `opped ${p.username}`);
                 }
                 break;

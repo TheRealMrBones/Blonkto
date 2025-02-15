@@ -1,4 +1,4 @@
-import { currentServerTime, interpolateObject } from './state.js';
+import { currentServerTime, interpolateObject } from "./state.js";
 
 export class Player {
     constructor(pu){
@@ -22,7 +22,7 @@ export class Player {
         const base = this.getBaseUpdate();
         if(base < 0 || base === this.updates.length - 1){
             const update =  this.updates[this.updates.length - 1];
-            return {...(update.static), ...(update.dynamic)}
+            return {...(update.static), ...(update.dynamic)};
         }else{
             const baseUpdate = this.updates[base];
             const next = this.updates[base + 1];

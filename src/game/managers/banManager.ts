@@ -1,4 +1,4 @@
-import Game from '../game';
+import Game from "../game";
 
 class BanManager {
     game: Game;
@@ -67,7 +67,7 @@ class BanManager {
 
         const data = rawdata.split("|");
 
-        for(let rawbandata of data){
+        for(const rawbandata of data){
             const bandata = rawbandata.split(",");
             this.ban(bandata[0], bandata[1]);
         }

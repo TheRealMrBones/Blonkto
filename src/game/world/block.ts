@@ -1,9 +1,9 @@
-import RegistryValue from '../registries/registryValue';
-import ComponentHandler from '../components/componentHandler';
-import Item from '../items/item';
-import ItemStack from '../items/itemStack';
+import RegistryValue from "../registries/registryValue";
+import ComponentHandler from "../components/componentHandler";
+import Item from "../items/item";
+import ItemStack from "../items/itemStack";
 
-import Constants from '../../shared/constants';
+import Constants from "../../shared/constants";
 const { ASSETS, SHAPES } = Constants;
 
 class Block implements RegistryValue {
@@ -43,7 +43,7 @@ class Block implements RegistryValue {
             asset: this.asset,
             scale: this.scale,
             shape: this.shape,
-        }
+        };
     }
 
     serializeForWrite(){

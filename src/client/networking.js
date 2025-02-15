@@ -1,23 +1,23 @@
-import io from 'socket.io-client';
-import { processGameUpdate } from './state.js';
-import { throttle } from 'throttle-debounce';
-import { startRendering, setColor } from './render.js';
-import { startCapturingInput } from './input.js';
-import { setupUi } from './ui.js';
-import { receiveChatMessage } from './chat.js';
-import { onlogin, connectionRefused, connectionAccepted } from './index.js';
-import { setInventory } from './inventory.js';
+import io from "socket.io-client";
+import { processGameUpdate } from "./state.js";
+import { throttle } from "throttle-debounce";
+import { startRendering, setColor } from "./render.js";
+import { startCapturingInput } from "./input.js";
+import { setupUi } from "./ui.js";
+import { receiveChatMessage } from "./chat.js";
+import { onlogin, connectionRefused, connectionAccepted } from "./index.js";
+import { setInventory } from "./inventory.js";
 
-import Constants from '../shared/constants.ts';
+import Constants from "../shared/constants.ts";
 const { MSG_TYPES } = Constants;
 
 // #region init
 
-const socketProtocol = (window.location.protocol.includes('https')) ? 'wss' : 'ws';
+const socketProtocol = (window.location.protocol.includes("https")) ? "wss" : "ws";
 const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
 const connectedPromise = new Promise(resolve => {
-    socket.on('connect', () => {
-        console.log('Connected to server!');
+    socket.on("connect", () => {
+        console.log("Connected to server!");
         resolve();
     });
 });

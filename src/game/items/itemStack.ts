@@ -1,4 +1,4 @@
-import Item from './item';
+import Item from "./item";
 
 class ItemStack {
     item: Item;
@@ -55,14 +55,14 @@ class ItemStack {
             displayname: this.item.displayname,
             asset: this.item.asset,
             amount: this.amount,
-        }
+        };
     }
 
     serializeForWrite(){
         return {
             name: this.item.name,
             amount: this.amount,
-        }
+        };
     }
 
     // #endregion

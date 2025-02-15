@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class BanListCommand extends Command{
@@ -21,7 +21,7 @@ class BanListCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                game.chatManager.sendMessageTo(player, `ban list:`);
+                game.chatManager.sendMessageTo(player, "ban list:");
                 for(const username of game.banManager.banList()){
                     game.chatManager.sendMessageTo(player, `- ${username}`);
                 }

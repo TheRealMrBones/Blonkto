@@ -1,4 +1,4 @@
-import RegistryValue from './registryValue';
+import RegistryValue from "./registryValue";
 
 class Registry<T extends RegistryValue> {
     private map: { [key: string]: T };

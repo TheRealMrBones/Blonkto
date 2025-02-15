@@ -1,7 +1,7 @@
-import RegistryValue from '../registries/registryValue';
-import ComponentHandler from '../components/componentHandler';
+import RegistryValue from "../registries/registryValue";
+import ComponentHandler from "../components/componentHandler";
 
-import Constants from '../../shared/constants';
+import Constants from "../../shared/constants";
 const { ASSETS } = Constants;
 
 class Floor implements RegistryValue {
@@ -27,7 +27,7 @@ class Floor implements RegistryValue {
     serializeForLoad(){
         return {
             asset: this.asset,
-        }
+        };
     }
 
     serializeForWrite(){

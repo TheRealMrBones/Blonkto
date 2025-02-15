@@ -1,13 +1,13 @@
-import { updateInputs, click, interact } from './networking.js';
-import { getCellSize } from './render.js';
-import { blockCollisions, playerCollisions } from './collisions.js';
-import { updateCoords } from './ui.js';
-import { getCurrentState } from './state.js';
+import { updateInputs, click, interact } from "./networking.js";
+import { getCellSize } from "./render.js";
+import { blockCollisions, playerCollisions } from "./collisions.js";
+import { updateCoords } from "./ui.js";
+import { getCurrentState } from "./state.js";
 
-import SharedConfig from '../configs/shared.ts';
+import SharedConfig from "../configs/shared.ts";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
-import ClientConfig from '../configs/client.ts';
+import ClientConfig from "../configs/client.ts";
 const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
 
 // #region init
@@ -56,33 +56,33 @@ function handleDirection(x, y){
 
 function handlekeyDown(e){
     switch(e.key){
-        case 'ArrowUp':
-        case 'w':
-        case 'W': {
+        case "ArrowUp":
+        case "w":
+        case "W": {
             if(!startw){
                 startw = Date.now();
             }
             break;
         }
-        case 'ArrowDown':
-        case 's':
-        case 'S': {
+        case "ArrowDown":
+        case "s":
+        case "S": {
             if(!starts){
                 starts = Date.now();
             }
             break;
         }
-        case 'ArrowLeft':
-        case 'a':
-        case 'A': {
+        case "ArrowLeft":
+        case "a":
+        case "A": {
             if(!starta){
                 starta = Date.now();
             }
             break;
         }
-        case 'ArrowRight':
-        case 'd':
-        case 'D': {
+        case "ArrowRight":
+        case "d":
+        case "D": {
             if(!startd){
                 startd = Date.now();
             }
@@ -90,39 +90,39 @@ function handlekeyDown(e){
         }
 
         // hotbar
-        case '1': {
+        case "1": {
             sethotbarslot(0);
             break;
         }
-        case '2': {
+        case "2": {
             sethotbarslot(1);
             break;
         }
-        case '3': {
+        case "3": {
             sethotbarslot(2);
             break;
         }
-        case '4': {
+        case "4": {
             sethotbarslot(3);
             break;
         }
-        case '5': {
+        case "5": {
             sethotbarslot(4);
             break;
         }
-        case '6': {
+        case "6": {
             sethotbarslot(5);
             break;
         }
-        case '7': {
+        case "7": {
             sethotbarslot(6);
             break;
         }
-        case '8': {
+        case "8": {
             sethotbarslot(7);
             break;
         }
-        case '9': {
+        case "9": {
             sethotbarslot(8);
             break;
         }
@@ -131,36 +131,36 @@ function handlekeyDown(e){
 
 function handlekeyUp(e){
     switch(e.key){
-        case 'ArrowUp':
-        case 'w':
-        case 'W': {
+        case "ArrowUp":
+        case "w":
+        case "W": {
             if(startw){
                 y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
                 startw = null;
             }
             break;
         }
-        case 'ArrowDown':
-        case 's':
-        case 'S': {
+        case "ArrowDown":
+        case "s":
+        case "S": {
             if(starts){
                 y += (Date.now() - starts) * PLAYER_SPEED / 1000;
                 starts = null;
             }
             break;
         }
-        case 'ArrowLeft':
-        case 'a':
-        case 'A': {
+        case "ArrowLeft":
+        case "a":
+        case "A": {
             if(starta){
                 x -= (Date.now() - starta) * PLAYER_SPEED / 1000;
                 starta = null;
             }
             break;
         }
-        case 'ArrowRight':
-        case 'd':
-        case 'D': {
+        case "ArrowRight":
+        case "d":
+        case "D": {
             if(startd){
                 x += (Date.now() - startd) * PLAYER_SPEED / 1000;
                 startd = null;
@@ -256,7 +256,7 @@ function updatePos(){
         x: x,
         y: y,
         scale: scale,
-    }
+    };
     
     playerCollisions(self, others);
     blockCollisions(self);
@@ -272,14 +272,14 @@ export function startCapturingInput(xp, yp){
     y = yp;
 
     // add input listeners
-    window.addEventListener('mousemove', onMouseInput);
-    window.addEventListener('click', onMouseInput);
-    window.addEventListener('touchstart', onTouchInput);
-    window.addEventListener('touchmove', onTouchInput);
-    window.addEventListener('keydown', handlekeyDown);
-    window.addEventListener('keyup', handlekeyUp);
-    canvas.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('blur', resetMovement);
+    window.addEventListener("mousemove", onMouseInput);
+    window.addEventListener("click", onMouseInput);
+    window.addEventListener("touchstart", onTouchInput);
+    window.addEventListener("touchmove", onTouchInput);
+    window.addEventListener("keydown", handlekeyDown);
+    window.addEventListener("keyup", handlekeyUp);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("blur", resetMovement);
 
     // set client side update interval
     interval = setInterval(handleInput, 1000 / CLIENT_UPDATE_RATE);
@@ -287,14 +287,14 @@ export function startCapturingInput(xp, yp){
 
 export function stopCapturingInput(){
     // remove input listeners
-    window.removeEventListener('mousemove', onMouseInput);
-    window.removeEventListener('click', onMouseInput);
-    window.removeEventListener('touchstart', onTouchInput);
-    window.removeEventListener('touchmove', onTouchInput);
-    window.removeEventListener('keydown', handlekeyDown);
-    window.removeEventListener('keyup', handlekeyUp);
-    canvas.removeEventListener('mousedown', handleMouseDown);
-    window.removeEventListener('blur', resetMovement);
+    window.removeEventListener("mousemove", onMouseInput);
+    window.removeEventListener("click", onMouseInput);
+    window.removeEventListener("touchstart", onTouchInput);
+    window.removeEventListener("touchmove", onTouchInput);
+    window.removeEventListener("keydown", handlekeyDown);
+    window.removeEventListener("keyup", handlekeyUp);
+    canvas.removeEventListener("mousedown", handleMouseDown);
+    window.removeEventListener("blur", resetMovement);
     
     // reset variables
     dir = 0;
@@ -306,18 +306,18 @@ export function stopCapturingInput(){
     startd = null;
 
     // clear client side update interval
-    clearInterval(interval)
+    clearInterval(interval);
 }
 
 export function pauseCapturingInputs(){
     // pause input listeners
-    window.removeEventListener('mousemove', onMouseInput);
-    window.removeEventListener('click', onMouseInput);
-    window.removeEventListener('touchstart', onTouchInput);
-    window.removeEventListener('touchmove', onTouchInput);
-    window.removeEventListener('keydown', handlekeyDown);
-    window.removeEventListener('keyup', handlekeyUp);
-    canvas.removeEventListener('mousedown', handleMouseDown);
+    window.removeEventListener("mousemove", onMouseInput);
+    window.removeEventListener("click", onMouseInput);
+    window.removeEventListener("touchstart", onTouchInput);
+    window.removeEventListener("touchmove", onTouchInput);
+    window.removeEventListener("keydown", handlekeyDown);
+    window.removeEventListener("keyup", handlekeyUp);
+    canvas.removeEventListener("mousedown", handleMouseDown);
     
     // do final position update then remove current movements
     updatePos();
@@ -329,13 +329,13 @@ export function pauseCapturingInputs(){
 
 export function resumeCapturingInputs(){
     // resume input listeners
-    window.addEventListener('mousemove', onMouseInput);
-    window.addEventListener('click', onMouseInput);
-    window.addEventListener('touchstart', onTouchInput);
-    window.addEventListener('touchmove', onTouchInput);
-    window.addEventListener('keydown', handlekeyDown);
-    window.addEventListener('keyup', handlekeyUp);
-    canvas.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener("mousemove", onMouseInput);
+    window.addEventListener("click", onMouseInput);
+    window.addEventListener("touchstart", onTouchInput);
+    window.addEventListener("touchmove", onTouchInput);
+    window.addEventListener("keydown", handlekeyDown);
+    window.addEventListener("keyup", handlekeyUp);
+    canvas.addEventListener("mousedown", handleMouseDown);
 }
 
 // #endregion
@@ -355,7 +355,7 @@ export function getSelf(){
         swinging: swinging,
         lastattackdir: lastattackdir,
         falling: falling,
-    }
+    };
 }
 
 // #endregion

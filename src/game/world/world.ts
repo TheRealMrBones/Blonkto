@@ -1,20 +1,20 @@
-import Chunk from './chunk.js';
-import DroppedStack from '../objects/droppedStack.js';
-import FileManager from '../../server/fileManager.js';
-import Game from '../game.js';
-import Player from '../objects/player.js';
-import GameObject from '../objects/object.js';
+import Chunk from "./chunk.js";
+import DroppedStack from "../objects/droppedStack.js";
+import FileManager from "../../server/fileManager.js";
+import Game from "../game.js";
+import Player from "../objects/player.js";
+import GameObject from "../objects/object.js";
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
-import ServerConfig from '../../configs/server.js';
+import ServerConfig from "../../configs/server.js";
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 
 class World {
-    game: Game
+    game: Game;
     loadedchunks: {[key: string]: Chunk};
     saveInterval: NodeJS.Timeout;
 
@@ -124,7 +124,7 @@ class World {
                         x: cellupdate.x,
                         y: cellupdate.y,
                     });
-                })
+                });
             }
         });
 
@@ -263,7 +263,7 @@ class World {
 
     writeChunkFile(chunk: Chunk){
         const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
-        let chunkdata = chunk.serializeForWrite();
+        const chunkdata = chunk.serializeForWrite();
 
         this.game.fileManager.writeFile(fileLocation, chunkdata);
     }
@@ -314,7 +314,7 @@ class World {
             return {
                 cell: cell,
                 chunk: this.getChunk(chunkx, chunky, false),
-            }
+            };
         }else{
             return null;
         }

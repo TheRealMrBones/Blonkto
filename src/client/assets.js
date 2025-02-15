@@ -1,4 +1,4 @@
-import Constants from '../shared/constants.ts';
+import Constants from "../shared/constants.ts";
 const { ASSETS } = Constants;
 
 const assets = {};

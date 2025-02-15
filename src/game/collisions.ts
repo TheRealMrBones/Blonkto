@@ -1,9 +1,9 @@
-import Player from './objects/player';
-import DroppedStack from './objects/droppedStack';
-import Entity from './objects/entity';
-import Game from './game';
+import Player from "./objects/player";
+import DroppedStack from "./objects/droppedStack";
+import Entity from "./objects/entity";
+import Game from "./game";
 
-import SharedConfig from '../configs/shared';
+import SharedConfig from "../configs/shared";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
@@ -18,7 +18,7 @@ export const collectCheck = (player: Player, collectables: Array<DroppedStack>, 
             if (player.collectStack(collectable.itemStack)) game.removeObject(collectable.id);
         }
     }
-}
+};
 
 export const itemMergeCheck = (collectable: DroppedStack, collectables: Array<DroppedStack>, game: Game) => {
     for(let i = 0; i < collectables.length; i++){
@@ -29,7 +29,7 @@ export const itemMergeCheck = (collectable: DroppedStack, collectables: Array<Dr
             if (collectable.itemStack.mergeStack(collectable2.itemStack)) game.removeObject(collectable2.id);
         }
     }
-}
+};
 
 export const attackHitCheck = (player: Player, entities: Array<Entity>, attackdir: number, damage: number) => {
     const attackpos = {
@@ -48,7 +48,7 @@ export const attackHitCheck = (player: Player, entities: Array<Entity>, attackdi
             }
         }
     }
-}
+};
 
 // #endregion
 

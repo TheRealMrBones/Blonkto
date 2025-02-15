@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class PingCommand extends Command{
@@ -21,7 +21,7 @@ class PingCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                game.chatManager.sendMessageTo(player, `pong!`);
+                game.chatManager.sendMessageTo(player, "pong!");
                 break;
             };
         }

@@ -1,9 +1,9 @@
-import NonplayerEntity from './nonplayerEntity.js';
+import NonplayerEntity from "./nonplayerEntity.js";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 class Pig extends NonplayerEntity {

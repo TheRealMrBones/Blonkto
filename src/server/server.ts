@@ -1,15 +1,15 @@
-import express from 'express';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import { Server as SocketIo } from 'socket.io';
-import { Socket } from 'socket.io-client';
+import express from "express";
+import webpack from "webpack";
+import webpackDevMiddleware from "webpack-dev-middleware";
+import { Server as SocketIo } from "socket.io";
+import { Socket } from "socket.io-client";
 
-import Game from '../game/game.js';
-import FileManager from './fileManager.js';
-import AccountManager from './accountManager.js';
-import webpackConfig from '../../webpack.dev.js';
+import Game from "../game/game.js";
+import FileManager from "./fileManager.js";
+import AccountManager from "./accountManager.js";
+import webpackConfig from "../../webpack.dev.js";
 
-import Constants from '../shared/constants.js';
+import Constants from "../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
 // #region init
@@ -17,18 +17,18 @@ const { MSG_TYPES } = Constants;
 const app = express();
 
 // Sending resources
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-if(process.env.NODE_ENV === 'development'){
+if(process.env.NODE_ENV === "development"){
   	const compiler = webpack(webpackConfig);
   	app.use(webpackDevMiddleware(compiler));
 }else{
-  	app.use(express.static('dist/webpack'));
+  	app.use(express.static("dist/webpack"));
 }
 
 // Including routes
-import configRoutes from './routes/config.js';
-app.use('/', configRoutes);
+import configRoutes from "./routes/config.js";
+app.use("/", configRoutes);
 
 // Opening server
 const port = process.env.PORT || 3000;
@@ -38,17 +38,17 @@ console.log(`Server listening on port: ${port}`);
 // Opening socketio
 const io = new SocketIo(server);
 
-io.on('connection', socket => {
-	console.log(`[${socket.id}] Connected`);
+io.on("connection", socket => {
+    console.log(`[${socket.id}] Connected`);
 
-	socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
-	socket.on(MSG_TYPES.LOGIN, login);
-	socket.on(MSG_TYPES.JOIN_GAME, joinGame);
-	socket.on(MSG_TYPES.INPUT, handleInput);
-	socket.on(MSG_TYPES.CLICK, click);
-	socket.on(MSG_TYPES.INTERACT, interact);
-	socket.on(MSG_TYPES.DISCONNECT, onDisconnect);
-	socket.on(MSG_TYPES.SEND_MESSAGE, chat);
+    socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
+    socket.on(MSG_TYPES.LOGIN, login);
+    socket.on(MSG_TYPES.JOIN_GAME, joinGame);
+    socket.on(MSG_TYPES.INPUT, handleInput);
+    socket.on(MSG_TYPES.CLICK, click);
+    socket.on(MSG_TYPES.INTERACT, interact);
+    socket.on(MSG_TYPES.DISCONNECT, onDisconnect);
+    socket.on(MSG_TYPES.SEND_MESSAGE, chat);
 });
 
 const fileManager = new FileManager();
@@ -60,33 +60,33 @@ const game = new Game(fileManager, accountManager);
 // #region socket functions
 
 async function createAccount(this: Socket, credentials: { username: string; password: string; }){
-	if(this.id === undefined) return;
+    if(this.id === undefined) return;
 	
-	const response = await accountManager.createAccount(this.id, credentials.username, credentials.password)
-	this.emit(MSG_TYPES.LOGIN, response);
+    const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
+    this.emit(MSG_TYPES.LOGIN, response);
 
-	if(response.account){
-		console.log(`[${this.id}] Create account: ${response.account.username}`);
-	}
+    if(response.account){
+        console.log(`[${this.id}] Create account: ${response.account.username}`);
+    }
 }
 
 async function login(this: Socket, credentials: { username: string; password: string; }){
-	if(this.id === undefined) return;
+    if(this.id === undefined) return;
 	
-	const response = await accountManager.login(this.id, credentials.username, credentials.password)
-	this.emit(MSG_TYPES.LOGIN, response);
+    const response = await accountManager.login(this.id, credentials.username, credentials.password);
+    this.emit(MSG_TYPES.LOGIN, response);
 
-	if(response.account){
-		console.log(`[${this.id}] Logged in as: ${response.account.username}`);
-	}
+    if(response.account){
+        console.log(`[${this.id}] Logged in as: ${response.account.username}`);
+    }
 }
 
 function joinGame(this: Socket){
-	if(this.id === undefined) return;
+    if(this.id === undefined) return;
 	
-	const username = accountManager.getAccount(this.id).username;
-	console.log(`[${this.id}] [${username}] Joined the game`);
-	game.playerManager.addPlayer(this, username);
+    const username = accountManager.getAccount(this.id).username;
+    console.log(`[${this.id}] [${username}] Joined the game`);
+    game.playerManager.addPlayer(this, username);
 }
 
 function handleInput(this: Socket, inputs: any){
@@ -94,24 +94,24 @@ function handleInput(this: Socket, inputs: any){
 }
 
 function click(this: Socket, info: any){
-	game.click(this, info);
+    game.click(this, info);
 }
 
 function interact(this: Socket, info: any){
-	game.interact(this, info);
+    game.interact(this, info);
 }
 
 function onDisconnect(this: Socket){
-	if(this.id === undefined) return;
+    if(this.id === undefined) return;
 	
-	const acc = accountManager.getAccount(this.id);
+    const acc = accountManager.getAccount(this.id);
 
-	if(acc){
-		console.log(`[${this.id}] [${acc.username}] Disconnected`);
-		accountManager.logout(this.id);
-	}else{
-		console.log(`[${this.id}] Disconnected`);
-	}
+    if(acc){
+        console.log(`[${this.id}] [${acc.username}] Disconnected`);
+        accountManager.logout(this.id);
+    }else{
+        console.log(`[${this.id}] Disconnected`);
+    }
 
   	game.playerManager.removePlayer(this);
 }

@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class SaveWorldCommand extends Command{
@@ -13,7 +13,7 @@ class SaveWorldCommand extends Command{
     static execute(game, player, tokens){
         game.world.saveWorld();
         game.playerManager.savePlayers();
-        game.chatManager.sendMessageTo(player, `saved the world!`);
+        game.chatManager.sendMessageTo(player, "saved the world!");
     }
 }
 

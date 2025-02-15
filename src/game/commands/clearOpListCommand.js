@@ -1,6 +1,6 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 class ClearOpListCommand extends Command{
@@ -23,17 +23,17 @@ class ClearOpListCommand extends Command{
         switch(argIndex){
             case 0: {
                 game.opManager.clearOpList(player.username);
-                game.chatManager.sendMessageTo(player, `cleared op list`);
+                game.chatManager.sendMessageTo(player, "cleared op list");
                 
                 break;
             };
             case 1:{
                 if(parsedTokens[1]){
                     game.opManager.clearOpList();
-                    game.chatManager.sendMessageTo(player, `cleared op list (FORCE)`);
+                    game.chatManager.sendMessageTo(player, "cleared op list (FORCE)");
                 }else{
                     game.opManager.clearOpList(player.username);
-                    game.chatManager.sendMessageTo(player, `cleared op list`);
+                    game.chatManager.sendMessageTo(player, "cleared op list");
                 }
             }
         }

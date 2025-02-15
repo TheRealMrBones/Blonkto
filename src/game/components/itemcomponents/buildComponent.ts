@@ -1,5 +1,5 @@
-import Component from '../component';
-import Item from '../../items/item';
+import Component from "../component";
+import Item from "../../items/item";
 
 class BuildComponent implements Component<Item> {
     static cid: string = "build_component";

@@ -1,9 +1,9 @@
-import Command from './command';
+import Command from "./command";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
-import ServerConfig from '../../configs/server';
+import ServerConfig from "../../configs/server";
 const { ALLOW_CHANGE_NAME } = ServerConfig.PLAYER;
 
 class OpCommand extends Command{

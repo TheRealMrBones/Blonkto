@@ -1,7 +1,7 @@
-import Registry from './registry';
-import Floor from '../world/floor';
+import Registry from "./registry";
+import Floor from "../world/floor";
 
-import Constants from '../../shared/constants';
+import Constants from "../../shared/constants";
 const { ASSETS } = Constants;
 
 const FloorRegistry = new Registry<Floor>();

@@ -14,7 +14,7 @@ class Account {
     // #region serialization
 
     serializeForWrite(){
-        let data = this.username;
+        const data = this.username;
 
         return data;
     }
@@ -22,7 +22,7 @@ class Account {
     serializeForSend(){
         return {
             username: this.username,
-        }
+        };
     }
 
     // #endregion

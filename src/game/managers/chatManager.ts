@@ -1,16 +1,16 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
-import Game from '../game.js';
-import Player from '../objects/player.js';
-import { Socket } from 'socket.io-client';
-import { filterText } from '../filter.js';
+import Game from "../game.js";
+import Player from "../objects/player.js";
+import { Socket } from "socket.io-client";
+import { filterText } from "../filter.js";
 
-import { ExcecuteCommand } from '../commands/commands.js';
+import { ExcecuteCommand } from "../commands/commands.js";
 
-import Constants from '../../shared/constants.js';
+import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
-import ServerConfig from '../../configs/server.js';
+import ServerConfig from "../../configs/server.js";
 const { FILTER_CHAT } = ServerConfig.CHAT;
 
 class ChatManager {
@@ -28,7 +28,7 @@ class ChatManager {
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
             // empty message
-        }else if(text[0] == '/'){
+        }else if(text[0] == "/"){
             // command
             ExcecuteCommand(this.game, this.game.players[socket.id], text.substring(1));
         }else{

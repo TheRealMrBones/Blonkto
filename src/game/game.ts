@@ -1,37 +1,37 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
-import FileManager from '../server/fileManager.js';
-import AccountManager from '../server/accountManager.js';
-import PlayerManager from './managers/playerManager.js';
-import OpManager from './managers/opManager.js';
-import BanManager from './managers/banManager.js';
-import ChatManager from './managers/chatManager.js';
-import Player from './objects/player.js';
-import NonplayerEntity from './objects/nonplayerEntity.js';
-import GameObject from './objects/object.js';
-import DroppedStack from './objects/droppedStack.js';
-import World from './world/world.js';
-import { Socket } from 'socket.io-client';
-import { collectCheck, itemMergeCheck, attackHitCheck } from './collisions.js';
+import FileManager from "../server/fileManager.js";
+import AccountManager from "../server/accountManager.js";
+import PlayerManager from "./managers/playerManager.js";
+import OpManager from "./managers/opManager.js";
+import BanManager from "./managers/banManager.js";
+import ChatManager from "./managers/chatManager.js";
+import Player from "./objects/player.js";
+import NonplayerEntity from "./objects/nonplayerEntity.js";
+import GameObject from "./objects/object.js";
+import DroppedStack from "./objects/droppedStack.js";
+import World from "./world/world.js";
+import { Socket } from "socket.io-client";
+import { collectCheck, itemMergeCheck, attackHitCheck } from "./collisions.js";
 
-import AttackComponent from './components/itemcomponents/attackComponent.js';
-import BuildComponent from './components/itemcomponents/buildComponent.js';
-import MineComponent from './components/itemcomponents/mineComponent.js';
+import AttackComponent from "./components/itemcomponents/attackComponent.js";
+import BuildComponent from "./components/itemcomponents/buildComponent.js";
+import MineComponent from "./components/itemcomponents/mineComponent.js";
 
-import Constants from '../shared/constants.js';
+import Constants from "../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
-import SharedConfig from '../configs/shared.js';
+import SharedConfig from "../configs/shared.js";
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
 
-import ServerConfig from '../configs/server.js';
+import ServerConfig from "../configs/server.js";
 const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // initialize registries
-import './registries/itemRegistry.js';
+import "./registries/itemRegistry.js";
 
 class Game {
     fileManager: FileManager;

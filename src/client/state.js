@@ -1,10 +1,10 @@
-import { setPos, setSelf } from './input.js';
-import { Player } from './player.js';
-import { loadChunks, unloadChunks, updateCells } from './world.js';
-import { toggleConnectionLost } from './ui.js';
-import { setSingleInventorySlot } from './inventory.js';
+import { setPos, setSelf } from "./input.js";
+import { Player } from "./player.js";
+import { loadChunks, unloadChunks, updateCells } from "./world.js";
+import { toggleConnectionLost } from "./ui.js";
+import { setSingleInventorySlot } from "./inventory.js";
 
-import ClientConfig from '../configs/client.ts';
+import ClientConfig from "../configs/client.ts";
 const { RENDER_DELAY } = ClientConfig.RENDER;
 
 // #region init
@@ -141,7 +141,7 @@ export function interpolateObject(object1, object2, ratio){
 
     const interpolated = {...(object1.static)};
     Object.keys(object1.dynamic).forEach(key => {
-        if(key === 'dir'){
+        if(key === "dir"){
             interpolated[key] = interpolateDirection(object1.dynamic[key], object2.dynamic[key], ratio);
         }else{
             interpolated[key] = object1.dynamic[key] + (object2.dynamic[key] - object1.dynamic[key]) * ratio;

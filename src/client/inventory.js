@@ -1,6 +1,6 @@
-import { Item } from './item.js';
+import { Item } from "./item.js";
 
-import SharedConfig from '../configs/shared.ts';
+import SharedConfig from "../configs/shared.ts";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 const inventory = new Array(INVENTORY_SIZE).fill(false);
@@ -16,7 +16,7 @@ export function setInventorySlot(slot, item){
     if(slot < 9){
         const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
         
-        const itemimage = hotbarslot.querySelector('img');
+        const itemimage = hotbarslot.querySelector("img");
         if (itemimage) hotbarslot.removeChild(itemimage);
 
         const itemimg = document.createElement("img");
@@ -52,7 +52,7 @@ export function clearInventorySlot(slot){
     // remove item in slot ui
     if(slot < 9){
         const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
-        const itemimage = hotbarslot.querySelector('img');
+        const itemimage = hotbarslot.querySelector("img");
         if (itemimage) hotbarslot.removeChild(itemimage);
         
         const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1));

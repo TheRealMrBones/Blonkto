@@ -1,7 +1,7 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
 
-router.get('/getconfig', (req: any, res: any) => {
+router.get("/getconfig", (req: any, res: any) => {
     //const config = GetConfig(false);
     //res.json(config);
 });

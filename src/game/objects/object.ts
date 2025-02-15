@@ -1,12 +1,12 @@
-import crypto from 'crypto';
+import crypto from "crypto";
 
-import Constants from '../../shared/constants';
+import Constants from "../../shared/constants";
 const { ASSETS } = Constants;
 
-import SharedConfig from '../../configs/shared.js';
+import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
-import ServerConfig from '../../configs/server';
+import ServerConfig from "../../configs/server";
 const { FALL_RATE } = ServerConfig.OBJECT;
 
 class GameObject {
