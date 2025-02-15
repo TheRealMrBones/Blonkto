@@ -1,6 +1,6 @@
 # Steps to Initialize Project
 1. Clone sourcecode from git
-2. Run commands `npm install` and `npm install -g typescript` (requires npm)
+2. Run commands `npm install` and `npm install -g typescript eslint` (requires npm)
 
 # Dev Build Steps
 1. Run `npm run dev:pack`
