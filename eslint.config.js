@@ -14,8 +14,6 @@ export default [
             import: importPlugin
         },
         rules: {
-            "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/no-unused-vars": "warn",
             "no-undef": "off",
             "no-empty": "off",
             "no-unused-vars": "off",
@@ -24,7 +22,29 @@ export default [
             "indent": ["error", 4, { "SwitchCase": 1 }],
             "semi": ["error", "always"],
             "quotes": ["error", "double"],
-            "import/extensions": ["error", "always", { "js": "always", "ts": "always" }]
-        }
+            "import/extensions": ["error", "always", { "js": "always", "ts": "always" }],
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    "selector": "typeLike",
+                    "format": ["PascalCase"],
+                    "leadingUnderscore": "allow",
+                },
+                {
+                    "selector": "enumMember",
+                    "format": ["UPPER_CASE"],
+                },
+                {
+                    "selector": "function",
+                    "format": ["camelCase"],
+                },
+                {
+                    "selector": "method",
+                    "format": ["camelCase"],
+                },
+            ],
+        },
     },
 ];

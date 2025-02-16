@@ -7,6 +7,6 @@ const { ASSETS } = Constants;
 
 const BlockRegistry = new Registry<Block>();
 
-BlockRegistry.Register("stone_block", new Block("Stone Block", ASSETS.STONE_BLOCK, ItemRegistry.Get("stone_block")));
+BlockRegistry.register("stone_block", new Block("Stone Block", ASSETS.STONE_BLOCK, ItemRegistry.get("stone_block")));
 
 export default BlockRegistry;

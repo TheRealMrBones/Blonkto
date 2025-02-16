@@ -54,7 +54,7 @@ class World {
             // check if valid spawn
             const cell = this.getCell(x, y, true);
             if(!cell) continue;
-            if(cell.block != null){
+            if(cell.block == null){
                 return {
                     pos: pos,
                     chunk: chunk,
@@ -376,7 +376,7 @@ class World {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
-        this.game.getNonplayers().forEach((e: GameObject) => {
+        this.game.getAllObjects().forEach((e: GameObject) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: { x: number; y: number; }) => t.x == x && t.y == y)){
                     empty = false;

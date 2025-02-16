@@ -11,23 +11,23 @@ class Cell {
     ceiling: Ceiling | null;
 
     constructor(block: string | null, floor: string | null, ceiling: string | null){
-        this.block = block ? BlockRegistry.Get(block) : null;
-        this.floor = floor ? FloorRegistry.Get(floor) : null;
-        this.ceiling = ceiling ? CeilingRegistry.Get(ceiling) : null;
+        this.block = block ? BlockRegistry.get(block) : null;
+        this.floor = floor ? FloorRegistry.get(floor) : null;
+        this.ceiling = ceiling ? CeilingRegistry.get(ceiling) : null;
     }
 
     // #region setters
 
     placeBlock(block: string){
-        this.block = BlockRegistry.Get(block);
+        this.block = BlockRegistry.get(block);
     }
 
     placeFloor(floor: string){
-        this.floor = FloorRegistry.Get(floor);
+        this.floor = FloorRegistry.get(floor);
     }
 
     placeCeiling(ceiling: string){
-        this.ceiling = CeilingRegistry.Get(ceiling);
+        this.ceiling = CeilingRegistry.get(ceiling);
     }
 
     // #endregion

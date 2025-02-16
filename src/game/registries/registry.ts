@@ -7,7 +7,7 @@ class Registry<T extends RegistryValue> {
         this.map = {};
     }
 
-    Register(key: string, value: T){
+    register(key: string, value: T){
         if(key in this.map){
             throw new Error(`Key "${key}" already registered!`);
         }
@@ -16,7 +16,7 @@ class Registry<T extends RegistryValue> {
         value.mapRegistryKey(key);
     }
 
-    Get(key: string): T{
+    get(key: string): T{
         return this.map[key];
     }
 }

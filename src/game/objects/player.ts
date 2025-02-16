@@ -48,9 +48,9 @@ class Player extends Entity {
 
         // inventory
         this.inventory = Array(INVENTORY_SIZE).fill(null);
-        this.inventory[1] = new ItemStack(ItemRegistry.Get("stone_block"));
-        this.inventory[2] = new ItemStack(ItemRegistry.Get("pickaxe"));
-        this.inventory[3] = new ItemStack(ItemRegistry.Get("sword"));
+        this.inventory[1] = new ItemStack(ItemRegistry.get("stone_block"));
+        this.inventory[2] = new ItemStack(ItemRegistry.get("pickaxe"));
+        this.inventory[3] = new ItemStack(ItemRegistry.get("sword"));
         this.hotbarslot = 0;
 
         // reading data
@@ -70,7 +70,7 @@ class Player extends Entity {
                 this.health = playerdata.health;
                 this.color = playerdata.color;
     
-                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(ItemRegistry.Get(stack.name), stack.amount) : null);
+                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(ItemRegistry.get(stack.name), stack.amount) : null);
             }
         }
 
