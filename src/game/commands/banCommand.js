@@ -1,4 +1,4 @@
-import Command from "./command";
+import Command from "./command.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;

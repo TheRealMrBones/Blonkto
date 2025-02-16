@@ -1,6 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
+import importPlugin from "eslint-plugin-import";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -9,6 +10,9 @@ export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     {
+        plugins: {
+            import: importPlugin
+        },
         rules: {
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "warn",
@@ -20,6 +24,7 @@ export default [
             "indent": ["error", 4, { "SwitchCase": 1 }],
             "semi": ["error", "always"],
             "quotes": ["error", "double"],
+            "import/extensions": ["error", "always", { "js": "always", "ts": "always" }]
         }
     },
 ];

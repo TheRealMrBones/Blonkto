@@ -1,9 +1,9 @@
-import BlockRegistry from "../registries/blockRegistry";
-import FloorRegistry from "../registries/floorRegistry";
-import CeilingRegistry from "../registries/ceilingRegistry";
-import Block from "./block";
-import Floor from "./floor";
-import Ceiling from "./ceiling";
+import BlockRegistry from "../registries/blockRegistry.js";
+import FloorRegistry from "../registries/floorRegistry.js";
+import CeilingRegistry from "../registries/ceilingRegistry.js";
+import Block from "./block.js";
+import Floor from "./floor.js";
+import Ceiling from "./ceiling.js";
 
 class Cell {
     block: Block | null;

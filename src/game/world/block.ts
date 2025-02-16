@@ -1,9 +1,9 @@
-import RegistryValue from "../registries/registryValue";
-import ComponentHandler from "../components/componentHandler";
-import Item from "../items/item";
-import ItemStack from "../items/itemStack";
+import RegistryValue from "../registries/registryValue.js";
+import ComponentHandler from "../components/componentHandler.js";
+import Item from "../items/item.js";
+import ItemStack from "../items/itemStack.js";
 
-import Constants from "../../shared/constants";
+import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
 
 class Block implements RegistryValue {

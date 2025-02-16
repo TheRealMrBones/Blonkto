@@ -1,7 +1,7 @@
-import Registry from "./registry";
-import Floor from "../world/floor";
+import Registry from "./registry.js";
+import Floor from "../world/floor.js";
 
-import Constants from "../../shared/constants";
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 const FloorRegistry = new Registry<Floor>();

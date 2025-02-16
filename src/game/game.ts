@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { Socket } from "socket.io-client";
 
 import FileManager from "../server/fileManager.js";
 import AccountManager from "../server/accountManager.js";
@@ -11,7 +12,6 @@ import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/object.js";
 import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
-import { Socket } from "socket.io-client";
 import { collectCheck, itemMergeCheck, attackHitCheck } from "./collisions.js";
 
 import AttackComponent from "./components/itemcomponents/attackComponent.js";

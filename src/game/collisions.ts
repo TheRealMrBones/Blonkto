@@ -1,9 +1,9 @@
-import Player from "./objects/player";
-import DroppedStack from "./objects/droppedStack";
-import Entity from "./objects/entity";
-import Game from "./game";
+import Player from "./objects/player.js";
+import DroppedStack from "./objects/droppedStack.js";
+import Entity from "./objects/entity.js";
+import Game from "./game.js";
 
-import SharedConfig from "../configs/shared";
+import SharedConfig from "../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 

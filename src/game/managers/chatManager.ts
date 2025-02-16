@@ -1,10 +1,9 @@
 import crypto from "crypto";
+import { Socket } from "socket.io-client";
 
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import { Socket } from "socket.io-client";
 import { filterText } from "../filter.js";
-
 import { ExcecuteCommand } from "../commands/commands.js";
 
 import Constants from "../../shared/constants.js";

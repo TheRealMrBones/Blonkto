@@ -1,5 +1,5 @@
-import ItemStack from "../items/itemStack";
-import GameObject from "./object";
+import ItemStack from "../items/itemStack.js";
+import GameObject from "./object.js";
 
 class DroppedStack extends GameObject {
     itemStack: ItemStack;

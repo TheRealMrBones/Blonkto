@@ -1,6 +1,5 @@
 import Chunk from "./chunk.js";
 import DroppedStack from "../objects/droppedStack.js";
-import FileManager from "../../server/fileManager.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import GameObject from "../objects/object.js";

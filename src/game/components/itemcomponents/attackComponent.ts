@@ -1,5 +1,5 @@
-import Component from "../component";
-import Item from "../../items/item";
+import Component from "../component.js";
+import Item from "../../items/item.js";
 
 class AttackComponent implements Component<Item> {
     static cid: string = "attack_component";

@@ -1,10 +1,10 @@
-import Registry from "./registry";
-import Item from "../items/item";
-import AttackComponent from "../components/itemcomponents/attackComponent";
-import BuildComponent from "../components/itemcomponents/buildComponent";
-import MineComponent from "../components/itemcomponents/mineComponent";
+import Registry from "./registry.js";
+import Item from "../items/item.js";
+import AttackComponent from "../components/itemcomponents/attackComponent.js";
+import BuildComponent from "../components/itemcomponents/buildComponent.js";
+import MineComponent from "../components/itemcomponents/mineComponent.js";
 
-import Constants from "../../shared/constants";
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 const ItemRegistry = new Registry<Item>();
