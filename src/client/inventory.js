@@ -34,6 +34,8 @@ export function setInventory(itemsdata){
         const itemdata = itemsdata[i];
         if(itemdata){
             setInventorySlot(i, new Item(itemdata.name, itemdata.asset, itemdata.amount));
+        }else{
+            clearInventorySlot(i);
         }
     }
 }
