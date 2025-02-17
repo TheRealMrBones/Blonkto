@@ -1,0 +1,11 @@
+export class Item{
+    name: string;
+    asset: string;
+    amount: number;
+
+    constructor(name: string, asset: string, amount: number){
+        this.name = name;
+        this.asset = asset;
+        this.amount = amount;
+    }
+}

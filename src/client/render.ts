@@ -4,23 +4,23 @@ import { getSelf, setSelf } from "./input.js";
 import { getCell } from "./world.js";
 import { updateFps } from "./ui.js";
 
-import Constants from "../shared/constants.ts";
+import Constants from "../shared/constants.js";
 const { ASSETS } = Constants;
 
-import SharedConfig from "../configs/shared.ts";
+import SharedConfig from "../configs/shared.js";
 const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import ClientConfig from "../configs/client.ts";
+import ClientConfig from "../configs/client.js";
 const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 
 // #region init
 
-const canvas = document.createElement("canvas");
-const context = canvas.getContext("2d");
-const rendercanvas = document.getElementById("gamecanvas");
-const rendercontext = rendercanvas.getContext("2d");
+const canvas = document.createElement("canvas")!;
+const context = canvas.getContext("2d")!;
+const rendercanvas = document.getElementById("gamecanvas")! as HTMLCanvasElement;
+const rendercontext = rendercanvas.getContext("2d")!;
 
 // make sure canvas width and cell size are always correct
 canvas.width = window.innerWidth;
@@ -46,8 +46,8 @@ export function getCellSize(){
 }
 
 // let server set your color
-let myColor;
-export function setColor(color){
+let myColor: any;
+export function setColor(color: any){
     myColor = color;
 }
 
@@ -84,9 +84,9 @@ function render(){
         return;
     }
 
-    const { others, self, entities } = state;
+    const { others = [], self, entities } = state;
     setSelf(self);
-    const me = getSelf();
+    const me: any = getSelf();
     me.color = myColor;
     me.asset = ASSETS.PLAYER;
 
@@ -140,7 +140,7 @@ function render(){
 
 // #region World
 
-function renderFloors(firstCell){
+function renderFloors(firstCell: { x: number; y: number; renderx: number; rendery: number; }){
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
@@ -158,7 +158,7 @@ function renderFloors(firstCell){
     context.restore();
 }
 
-function renderBlocks(firstCell){
+function renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }){
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
@@ -176,7 +176,7 @@ function renderBlocks(firstCell){
     context.restore();
 }
 
-function renderCell(x, y, asset){
+function renderCell(x: number, y: number, asset: string){
     context.drawImage(
         getAsset(asset),
         x + 1,
@@ -190,7 +190,7 @@ function renderCell(x, y, asset){
 
 // #region Entities
 
-function renderEntity(me, entity){
+function renderEntity(me: any, entity: any){
     // check if entity is being hit
     let model;
     if(entity.hit){
@@ -229,7 +229,7 @@ function renderEntity(me, entity){
 
 // #region Players
 
-function renderPlayer(me, player){
+function renderPlayer(me: any, player: any){
     // check if player is being hit
     let model;
     if(player.hit){
@@ -262,7 +262,7 @@ function renderPlayer(me, player){
     context.restore();
 }
 
-function renderSwing(me, entity){
+function renderSwing(me: any, entity: any){
     // prepare context
     const { x, y, scale, lastattackdir } = entity;
     const canvasX = canvas.width / 2 + fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.x);
@@ -278,7 +278,7 @@ function renderSwing(me, entity){
     context.restore();
 }
 
-function renderPlayerUsername(me, player){
+function renderPlayerUsername(me: any, player: any){
     // prepare context
     const { x, y, username } = player;
     const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
@@ -297,7 +297,7 @@ function renderPlayerUsername(me, player){
 
 // #region Background
 
-function renderBackground(me){
+function renderBackground(me: any){
     const model = getAsset(ASSETS.SPACE_BG);
 
     const worldSize = CHUNK_SIZE * WORLD_SIZE / 2;
@@ -326,7 +326,7 @@ function renderBackground(me){
 
 // #region Helpers
 
-function fixCoord(x){
+function fixCoord(x: number){
     return x * cellSize;
 }
 
@@ -334,8 +334,8 @@ function fixCoord(x){
 
 // #region Exports
 
-let animationFrameRequestId;
-let updatefpsinterval;
+let animationFrameRequestId: number;
+let updatefpsinterval: string | number | NodeJS.Timeout | undefined;
 
 export function startRendering(){
     updatefpsinterval = setInterval(calculatefps, 500);

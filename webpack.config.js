@@ -4,7 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
     entry: {
-        game: './src/client/index.js',
+        game: './src/client/index.ts',
     },
     output: {
         filename: '[name].[contenthash].js',
@@ -44,6 +44,9 @@ export default {
     },
     resolve: {
         extensions: ['.ts', '.js', '.css'],
+        extensionAlias: {
+            '.js': ['.ts', '.js'],
+        },
     },
     plugins: [
         new MiniCssExtractPlugin({

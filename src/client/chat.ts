@@ -1,13 +1,13 @@
-import ClientConfig from "../configs/client.ts";
+import ClientConfig from "../configs/client.js";
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
-const chatMessagesDiv = document.getElementById("chatmessages");
+const chatMessagesDiv = document.getElementById("chatmessages")!;
 
-const messages = [];
+const messages: any[] = [];
 
 // #region receive messages
 
-export function receiveChatMessage(message){
+export function receiveChatMessage(message: any){
     if(messages.length > MAX_MESSAGE_COUNT){
         removeLastChatMessage();
     }
@@ -28,7 +28,7 @@ export function receiveChatMessage(message){
 
 // #region message visibility
 
-function hideChatMessage(id){
+function hideChatMessage(id: string){
     const message = messages.find(m => m.id == id);
     if(message){
         if(!chatopened){
@@ -39,7 +39,7 @@ function hideChatMessage(id){
 }
 
 let chatopened = false;
-export function toggleAllChatShow(show){
+export function toggleAllChatShow(show: boolean){
     chatopened = show;
     const ms = messages.filter(m => !m.display);
     ms.forEach(m => {
@@ -61,7 +61,7 @@ function removeLastChatMessage(){
 
 // #region helpers
 
-function makeStringHtmlSafe(str){
+function makeStringHtmlSafe(str: string){
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&apos;");
 }
 

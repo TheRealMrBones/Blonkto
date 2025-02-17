@@ -1,7 +1,7 @@
 import Component from "./component.js";
 
 class ComponentHandler<T> {
-    private components: Array<Component<T>> = [];
+    private components: Component<T>[] = [];
     parent: T;
 
     constructor(parent: T){

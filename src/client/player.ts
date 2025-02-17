@@ -1,7 +1,11 @@
 import { currentServerTime, interpolateObject } from "./state.js";
 
 export class Player {
-    constructor(pu){
+    exists: boolean;
+    delay: number;
+    updates: any[];
+
+    constructor(pu: any){
         this.exists = true;
         this.delay = pu.static.playerdelay;
         this.updates = [pu];
@@ -9,7 +13,7 @@ export class Player {
 
     // #region receive updates
 
-    pushUpdate(update){
+    pushUpdate(update: any){
         this.exists = true;
         this.updates.push(update);
     }

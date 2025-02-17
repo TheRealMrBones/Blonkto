@@ -4,17 +4,17 @@ import { loadChunks, unloadChunks, updateCells } from "./world.js";
 import { toggleConnectionLost } from "./ui.js";
 import { setSingleInventorySlot } from "./inventory.js";
 
-import ClientConfig from "../configs/client.ts";
+import ClientConfig from "../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
 
 // #region init
 
-const gameUpdates = [];
-const players = {};
+const gameUpdates: any[] = [];
+const players: {[key: string]: any} = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
-let self;
+let self: any;
 
 export function initState(){
     gameStart = 0;
@@ -25,7 +25,7 @@ export function initState(){
 
 // #region receive updates
 
-export function processGameUpdate(update){
+export function processGameUpdate(update: any){
     // set lastUpdateTime
     lastUpdateTime = Date.now();
 
@@ -42,7 +42,7 @@ export function processGameUpdate(update){
     if(update.fixes.setpos){
         setPos(update.fixes.setpos);
     }
-    update.fixes.inventoryupdates.forEach(iu => {
+    update.fixes.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
     });
 
@@ -68,7 +68,7 @@ export function processGameUpdate(update){
 
     // push updates to queue
     gameUpdates.push(update);
-    update.others.forEach(pu => {
+    update.others.forEach((pu: any) => {
         if(!players[pu.static.id]){
             players[pu.static.id] = new Player(pu);
         }else{
@@ -106,7 +106,7 @@ export function getCurrentState(){
 
     // if base is the most recent update we have, use its state.
     // otherwise, interpolate between its state and the state of (base + 1).
-    const others = [];
+    const others: any[] = [];
     Object.values(players).forEach(p => {
         others.push(p.interpolateSelf());
     });
@@ -134,7 +134,7 @@ export function getCurrentState(){
 
 // #region interpolation
 
-export function interpolateObject(object1, object2, ratio){
+export function interpolateObject(object1: any, object2: any, ratio: number){
     if(!object2){
         return object1;
     }
@@ -150,11 +150,11 @@ export function interpolateObject(object1, object2, ratio){
     return interpolated;
 }
 
-function interpolateObjectArray(objects1, objects2, ratio){
+function interpolateObjectArray(objects1: any[], objects2: any[], ratio: number){
     return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.static.id === o2.static.id), ratio));
 }
 
-function interpolateDirection(d1, d2, ratio){
+function interpolateDirection(d1: number, d2: number, ratio: number){
     const absD = Math.abs(d2 - d1);
     if(absD >= Math.PI){
         if(d1 > d2){

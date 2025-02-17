@@ -4,26 +4,26 @@ import { blockCollisions, playerCollisions } from "./collisions.js";
 import { updateCoords } from "./ui.js";
 import { getCurrentState } from "./state.js";
 
-import SharedConfig from "../configs/shared.ts";
+import SharedConfig from "../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
-import ClientConfig from "../configs/client.ts";
+import ClientConfig from "../configs/client.js";
 const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
 
 // #region init
 
-const canvas = document.getElementById("gamecanvas");
+const canvas = document.getElementById("gamecanvas")!;
 
 let dir = 0;
 let x = 0;
 let y = 0;
 let scale = PLAYER_SCALE;
 
-let startw = null;
-let starta = null;
-let starts = null;
-let startd = null;
-let interval = null;
+let startw: number | null = null;
+let starta: number | null = null;
+let starts: number | null = null;
+let startd: number | null = null;
+let interval: NodeJS.Timeout | null = null;
 
 let hotbarslot = 0;
 
@@ -37,16 +37,16 @@ let falling = false;
 
 // #region handle mouse movement
 
-function onMouseInput(e){
+function onMouseInput(e: any){
     handleDirection(e.clientX, e.clientY);
 }
 
-function onTouchInput(e){
+function onTouchInput(e: any){
     const touch = e.touches[0];
     handleDirection(touch.clientX, touch.clientY);
 }
 
-function handleDirection(x, y){
+function handleDirection(x: number, y: number){
     dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
 }
 
@@ -54,7 +54,7 @@ function handleDirection(x, y){
 
 // #region handle keys
 
-function handlekeyDown(e){
+function handlekeyDown(e: any){
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -129,7 +129,7 @@ function handlekeyDown(e){
     }
 }
 
-function handlekeyUp(e){
+function handlekeyUp(e: any){
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -174,7 +174,7 @@ function handlekeyUp(e){
 
 // #region handle mouse clicks
 
-function handleMouseDown(e){
+function handleMouseDown(e: any){
     // get position of click compared to current player pos
     const clickpos = {
         xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
@@ -195,9 +195,9 @@ function handleMouseDown(e){
 
 // #region hotbar
 
-export function sethotbarslot(index){
-    const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1));
-    const newslot = document.getElementById("hotbarslot" + (index + 1));
+export function sethotbarslot(index: number){
+    const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1))!;
+    const newslot = document.getElementById("hotbarslot" + (index + 1))!;
     oldslot.classList.remove("hotbarslotselected");
     newslot.classList.add("hotbarslotselected");
 
@@ -251,7 +251,7 @@ function updatePos(){
     updateCoords(x, y);
     
     // collisions
-    const others = getCurrentState().others;
+    const others = getCurrentState().others!;
     const self = {
         x: x,
         y: y,
@@ -266,7 +266,7 @@ function updatePos(){
 
 // #region start and stop capturing
 
-export function startCapturingInput(xp, yp){
+export function startCapturingInput(xp: number, yp: number){
     // set spawn position
     x = xp;
     y = yp;
@@ -306,7 +306,7 @@ export function stopCapturingInput(){
     startd = null;
 
     // clear client side update interval
-    clearInterval(interval);
+    if (interval !== null) clearInterval(interval);
 }
 
 export function pauseCapturingInputs(){
@@ -362,12 +362,12 @@ export function getSelf(){
 
 // #region setters
 
-export function push(pushx, pushy){
+export function push(pushx: number, pushy: number){
     x += pushx;
     y += pushy;
 }
 
-export function setPos(newpos){
+export function setPos(newpos: { x: number; y: number; }){
     // keep current inputs running but don't include previous time held
     if(startw){
         startw = Date.now();
@@ -387,7 +387,7 @@ export function setPos(newpos){
     y = newpos.y;
 }
 
-export function setSelf(me){
+export function setSelf(me: any){
     scale = me.scale;
     hit = me.hit;
     swinging = me.swinging;

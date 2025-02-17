@@ -1,20 +1,20 @@
 import { Item } from "./item.js";
 
-import SharedConfig from "../configs/shared.ts";
+import SharedConfig from "../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 const inventory = new Array(INVENTORY_SIZE).fill(false);
 
-export function getInventorySlot(slot){
+export function getInventorySlot(slot: number){
     return inventory[slot];
 }
 
-export function setInventorySlot(slot, item){
+export function setInventorySlot(slot: number, item: Item){
     inventory[slot] = item;
 
     // show item in slot ui
     if(slot < 9){
-        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
+        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
         
         const itemimage = hotbarslot.querySelector("img");
         if (itemimage) hotbarslot.removeChild(itemimage);
@@ -24,12 +24,12 @@ export function setInventorySlot(slot, item){
         itemimg.src = item.asset;
         hotbarslot.appendChild(itemimg);
 
-        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1));
-        hotbaritemamount.innerHTML = item.amount;
+        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1))!;
+        hotbaritemamount.innerHTML = item.amount.toString();
     }
 }
 
-export function setInventory(itemsdata){
+export function setInventory(itemsdata: any){
     for(let i = 0; i < INVENTORY_SIZE; i++){
         const itemdata = itemsdata[i];
         if(itemdata){
@@ -40,7 +40,7 @@ export function setInventory(itemsdata){
     }
 }
 
-export function setSingleInventorySlot(data){
+export function setSingleInventorySlot(data: any){
     if(data.itemstack == null){
         clearInventorySlot(data.slot);
     }else{
@@ -48,16 +48,16 @@ export function setSingleInventorySlot(data){
     }
 }
 
-export function clearInventorySlot(slot){
+export function clearInventorySlot(slot: number){
     inventory[slot] = false;
 
     // remove item in slot ui
     if(slot < 9){
-        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1));
+        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
         const itemimage = hotbarslot.querySelector("img");
         if (itemimage) hotbarslot.removeChild(itemimage);
         
-        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1));
+        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1))!;
         hotbaritemamount.innerHTML = "";
     }
 }

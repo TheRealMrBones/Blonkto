@@ -4,13 +4,13 @@ import { toggleAllChatShow } from "./chat.js";
 
 // #region init
 
-const chatDiv = document.getElementById("chat");
-const chatInput = document.getElementById("chatinput");
-const infodiv = document.getElementById("info");
-const coordstext = document.getElementById("coordstext");
-const fpstext = document.getElementById("fpstext");
-const connectionlostdiv = document.getElementById("connectionlost");
-const hotbardiv = document.getElementById("hotbar");
+const chatDiv = document.getElementById("chat")!;
+const chatInput = document.getElementById("chatinput") as HTMLInputElement;
+const infodiv = document.getElementById("info")!;
+const coordstext = document.getElementById("coordstext")!;
+const fpstext = document.getElementById("fpstext")!;
+const connectionlostdiv = document.getElementById("connectionlost")!;
+const hotbardiv = document.getElementById("hotbar")!;
 
 let focusingOut = false;
 
@@ -21,7 +21,7 @@ let ignorechatenter = 0;
 // #region persistent listeners
 
 for(let i = 0; i < 9; i++){
-    const hotbarslot = document.getElementById("hotbarslot" + (i + 1));
+    const hotbarslot = document.getElementById("hotbarslot" + (i + 1))!;
     hotbarslot.addEventListener("click", function() {
         sethotbarslot(i);
     });
@@ -64,7 +64,7 @@ export function hideUi(){
 
 // #region event functions
 
-function keyUpChecks(event){
+function keyUpChecks(event: any){
     event.preventDefault();
     switch(event.key){
         case "Enter": {
@@ -87,7 +87,7 @@ function keyUpChecks(event){
     }
 }
 
-function chatInputKeyUp(event){
+function chatInputKeyUp(event: any){
     event.preventDefault();
     if(event.key === "Enter"){
         chat({
@@ -100,13 +100,13 @@ function chatInputKeyUp(event){
     }
 }
 
-function chatInputFocus(event){
+function chatInputFocus(event: any){
     pauseCapturingInputs();
     window.removeEventListener("keyup", keyUpChecks);
     toggleAllChatShow(true);
 }
 
-function chatInputUnfocus(event){
+function chatInputUnfocus(event: any){
     resumeCapturingInputs();
     window.addEventListener("keyup", keyUpChecks);
     toggleAllChatShow(false);
@@ -116,15 +116,15 @@ function chatInputUnfocus(event){
 
 // #region update ui
 
-export function updateCoords(x, y){
+export function updateCoords(x: number, y: number){
     coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
 }
 
-export function updateFps(fps){
+export function updateFps(fps: number){
     fpstext.innerHTML = Math.round(fps).toString();
 }
 
-export function toggleConnectionLost(toggle){
+export function toggleConnectionLost(toggle: boolean){
     if(toggle){
         connectionlostdiv.style.display = "block";
     }else{

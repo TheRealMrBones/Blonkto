@@ -6,8 +6,8 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 class Chunk {
     chunkx: number;
     chunky: number;
-    cells: Array<Array<Cell>>;
-    cellUpdates: Array<any>;
+    cells: Cell[][];
+    cellUpdates: any[];
 
     constructor(chunkx: number, chunky: number, data?: string){
         this.chunkx = chunkx;
@@ -58,7 +58,7 @@ class Chunk {
     // #region serialization
 
     serializeForLoad(){
-        const serializedCells: Array<Array<any>> = [];
+        const serializedCells: any[][] = [];
         for(let x = 0; x < CHUNK_SIZE; x++){
             serializedCells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){

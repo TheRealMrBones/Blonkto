@@ -20,7 +20,7 @@ class Player extends Entity {
     kills: number;
     playerdelay: number;
     color: {r: number, g: number, b: number};
-    inventory: Array<ItemStack | null>;
+    inventory: (ItemStack | null)[];
     hotbarslot: number;
     fixes: any;
 

@@ -9,7 +9,7 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 // #region collision checks
 
-export const collectCheck = (player: Player, collectables: Array<DroppedStack>, game: Game) => {
+export const collectCheck = (player: Player, collectables: DroppedStack[], game: Game) => {
     for(let i = 0; i < collectables.length; i++){
         const collectable = collectables[i];
         const dist = getDistance(player, collectable);
@@ -20,7 +20,7 @@ export const collectCheck = (player: Player, collectables: Array<DroppedStack>, 
     }
 };
 
-export const itemMergeCheck = (collectable: DroppedStack, collectables: Array<DroppedStack>, game: Game) => {
+export const itemMergeCheck = (collectable: DroppedStack, collectables: DroppedStack[], game: Game) => {
     for(let i = 0; i < collectables.length; i++){
         const collectable2 = collectables[i];
         const dist = getDistance(collectable, collectable2);
@@ -31,7 +31,7 @@ export const itemMergeCheck = (collectable: DroppedStack, collectables: Array<Dr
     }
 };
 
-export const attackHitCheck = (player: Player, entities: Array<Entity>, attackdir: number, damage: number) => {
+export const attackHitCheck = (player: Player, entities: Entity[], attackdir: number, damage: number) => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
         y: player.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,

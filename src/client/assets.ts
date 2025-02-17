@@ -1,14 +1,14 @@
-import Constants from "../shared/constants.ts";
+import Constants from "../shared/constants.js";
 const { ASSETS } = Constants;
 
-const assets = {};
+const assets: {[key: string]: HTMLImageElement} = {};
 
 // #region manage assets
 
 const downloadPromise = Promise.all(Object.values(ASSETS).map(downloadAsset));
 
-function downloadAsset(assetName){
-    return new Promise(resolve => {
+function downloadAsset(assetName: string){
+    return new Promise<void>(resolve => {
         const asset = new Image();
         asset.onload = () => {
             console.log(`Downloaded ${assetName}`);
@@ -21,17 +21,17 @@ function downloadAsset(assetName){
 
 export const downloadAssets = () => downloadPromise;
 
-export const getAsset = assetName => assets[assetName];
+export const getAsset = (assetName: string) => assets[assetName];
 
 // #endregion
 
 // #region colorize
 
-const coloredAssets = {};
-const assetVariants = {};
-const coloredAssetVariants = {};
+const coloredAssets: { [key: string]: { asset: OffscreenCanvas; color: { r: number; g: number; b: number; } } } = {};
+const assetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
+const coloredAssetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
 
-export function getColoredAsset(object){
+export function getColoredAsset(object: { id: string; color: { r: number; g: number; b: number; }; asset: string; }){
     // make new if asset doesn't exist
     let makenew = !coloredAssets[object.id];
 
@@ -65,7 +65,7 @@ export function getColoredAsset(object){
     return coloredAssets[object.id].asset;
 }
 
-export function getAssetVariant(asset, varient, varientrgb){
+export function getAssetVariant(asset: string, varient: string, varientrgb: { r: number; g: number; b: number; }){
     const assetObj = getAsset(asset);
     if(!assetVariants[asset]){
         assetVariants[asset] = {};
@@ -76,7 +76,7 @@ export function getAssetVariant(asset, varient, varientrgb){
     return assetVariants[asset][varient];
 }
 
-export function getColoredAssetVariant(object, varient, varientrgb){
+export function getColoredAssetVariant(object: { id: string; color: { r: number; g: number; b: number; }; asset: string; }, varient: string, varientrgb: { r: number; g: number; b: number; }){
     const coloredAsset = getColoredAsset(object);
     if(!coloredAssetVariants[object.id]){
         coloredAssetVariants[object.id] = {};
@@ -87,12 +87,12 @@ export function getColoredAssetVariant(object, varient, varientrgb){
     return coloredAssetVariants[object.id][varient];
 }
 
-function colorize(image, r, g, b){
+function colorize(image: HTMLImageElement | OffscreenCanvas, r: number, g: number, b: number){
     const imageWidth = image.width;
     const imageHeight = image.height;
 
     const offscreen = new OffscreenCanvas(imageWidth, imageHeight);
-    const ctx = offscreen.getContext("2d");
+    const ctx = offscreen.getContext("2d")!;
 
     ctx.drawImage(image, 0, 0);
 

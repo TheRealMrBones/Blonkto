@@ -9,21 +9,21 @@ import "./main.css";
 
 // #region init
 
-const startMenu = document.getElementById("startmenu");
-const changeLog = document.getElementById("changelog");
+const startMenu = document.getElementById("startmenu")!;
+const changeLog = document.getElementById("changelog")!;
 
-const playButton = document.getElementById("playbutton");
-const changeLogButton = document.getElementById("changelogbutton");
-const hidechangeLogButton = document.getElementById("hidechangelogbutton");
+const playButton = document.getElementById("playbutton")!;
+const changeLogButton = document.getElementById("changelogbutton")!;
+const hidechangeLogButton = document.getElementById("hidechangelogbutton")!;
 
-const usernameInput = document.getElementById("usernameinput");
-const passwordInput = document.getElementById("passwordinput");
-const loginDiv = document.getElementById("logindiv");
-const playDiv = document.getElementById("playdiv");
-const errorDiv = document.getElementById("errordiv");
-const loginButton = document.getElementById("loginbutton");
-const createAccountButton = document.getElementById("createaccountbutton");
-const usernameDiv = document.getElementById("usernamediv");
+const usernameInput = document.getElementById("usernameinput") as HTMLInputElement;
+const passwordInput = document.getElementById("passwordinput") as HTMLInputElement;
+const loginDiv = document.getElementById("logindiv")!;
+const playDiv = document.getElementById("playdiv")!;
+const errorDiv = document.getElementById("errordiv")!;
+const loginButton = document.getElementById("loginbutton")!;
+const createAccountButton = document.getElementById("createaccountbutton")!;
+const usernameDiv = document.getElementById("usernamediv")!;
 
 let account;
 
@@ -94,7 +94,7 @@ function sendlogin(){
     passwordInput.blur();
 }
 
-export function onlogin(response){
+export function onlogin(response: any){
     if(response.account){
         response.error = "";
 
@@ -120,7 +120,7 @@ function joingame(){
     initState();
 }
 
-export function connectionRefused(info){
+export function connectionRefused(info: any){
     errorDiv.innerHTML = `Connection refused: ${info.reason}`;
     if(info.extra){
         errorDiv.innerHTML += `<br>${info.extra}`;
@@ -131,7 +131,7 @@ export function connectionAccepted(){
     startMenu.style.display = "none";
 }
 
-function onGameOver(connectionrefusedinfo){
+function onGameOver(connectionrefusedinfo: any){
     if(connectionrefusedinfo){
         connectionRefused(connectionrefusedinfo);
     }
@@ -151,7 +151,7 @@ function onGameOver(connectionrefusedinfo){
 
 document.addEventListener("keydown", devlogin);
 
-function devlogin(event){
+function devlogin(event: any){
     if (event.target.tagName.toLowerCase() !== "input" && 
         event.target.tagName.toLowerCase() !== "textarea") {
     

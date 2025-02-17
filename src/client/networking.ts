@@ -8,21 +8,21 @@ import { receiveChatMessage } from "./chat.js";
 import { onlogin, connectionRefused, connectionAccepted } from "./index.js";
 import { setInventory } from "./inventory.js";
 
-import Constants from "../shared/constants.ts";
+import Constants from "../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
 // #region init
 
 const socketProtocol = (window.location.protocol.includes("https")) ? "wss" : "ws";
 const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
-const connectedPromise = new Promise(resolve => {
+const connectedPromise = new Promise<void>(resolve => {
     socket.on("connect", () => {
         console.log("Connected to server!");
         resolve();
     });
 });
 
-export const connect = onGameOver => (
+export const connect = (onGameOver: any) => (
     connectedPromise.then(() => {
         socket.on(MSG_TYPES.LOGIN, onlogin);
         socket.on(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
@@ -35,7 +35,7 @@ export const connect = onGameOver => (
     })
 );
 
-function onInstantiated(stuff){
+function onInstantiated(stuff: any){
     connectionAccepted();
     startCapturingInput(stuff.x, stuff.y);
     setColor(stuff.color);
@@ -48,11 +48,11 @@ function onInstantiated(stuff){
 
 // #region send message functions
 
-export const createaccount = (username, password) => {
+export const createaccount = (username: string, password: string) => {
     socket.emit(MSG_TYPES.CREATE_ACCOUNT, {username: username, password: password});
 };
 
-export const login = (username, password) => {
+export const login = (username: string, password: string) => {
     socket.emit(MSG_TYPES.LOGIN, {username: username, password: password});
 };
 
