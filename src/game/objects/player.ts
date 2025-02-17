@@ -19,7 +19,7 @@ class Player extends Entity {
     username: string;
     kills: number;
     playerdelay: number;
-    color: {r: number, g: number, b: number};
+    color: Color;
     inventory: (ItemStack | null)[];
     hotbarslot: number;
     fixes: any;
@@ -152,12 +152,12 @@ class Player extends Entity {
         return fixescopy;
     }
 
-    push(x: any, y: any){
+    push(x: number, y: number){
         this.fixes.pushx += x;
         this.fixes.pushy += y;
     }
 
-    setPos(x: any, y: any){
+    setPos(x: number, y: number){
         this.fixes.setpos = {
             x: x,
             y: y

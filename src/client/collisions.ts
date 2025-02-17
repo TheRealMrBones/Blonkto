@@ -30,8 +30,8 @@ export function blockCollisions(me: any){
     const starty = Math.floor(me.y - me.scale / 2);
 
     // lists of possible collisions
-    let walls: any[] = [];
-    let circles: any[] = [];
+    let walls: LineSegment[] = [];
+    let circles: Circle[] = [];
 
     // find all circles and walls for collision
     for(let x = startx; x < me.x + me.scale / 2; x++){
@@ -39,14 +39,14 @@ export function blockCollisions(me: any){
             const block = getCell(x, y).block;
 
             if(block){
-                const pos = makePos(x + block.scale / 2, y + block.scale / 2);
+                const pos: Pos = { x: x + block.scale / 2, y: y + block.scale / 2 };
 
                 if(block.shape == SHAPES.SQUARE){
                     const wallResults = getSquareWalls(block.scale, pos);
                     walls = walls.concat(wallResults.walls);
                     circles = circles.concat(wallResults.points);
                 }else if(block.shape == SHAPES.CIRCLE){
-                    circles.push(makeCircle(pos.x, pos.y, block.scale));
+                    circles.push({ x: pos.x, y: pos.y, radius: block.scale / 2 });
                 }
             }
         }
@@ -59,18 +59,18 @@ export function blockCollisions(me: any){
     push(me.x - oldme.x, me.y - oldme.y);
 }
 
-function getSquareWalls(scale: number, pos: { x: number; y: number; }){
+function getSquareWalls(scale: number, pos: Pos){
     const p = [
-        makeCircle(pos.x - scale / 2, pos.y - scale / 2, 0),
-        makeCircle(pos.x - scale / 2, pos.y + scale / 2, 0),
-        makeCircle(pos.x + scale / 2, pos.y + scale / 2, 0),
-        makeCircle(pos.x + scale / 2, pos.y - scale / 2, 0),
+        { x: pos.x - scale / 2, y: pos.y - scale / 2, radius: 0 },
+        { x: pos.x - scale / 2, y: pos.y + scale / 2, radius: 0 },
+        { x: pos.x + scale / 2, y: pos.y + scale / 2, radius: 0 },
+        { x: pos.x + scale / 2, y: pos.y - scale / 2, radius: 0 },
     ];
     const walls = [
-        makeWall(p[0], p[1]),
-        makeWall(p[1], p[2]),
-        makeWall(p[2], p[3]),
-        makeWall(p[3], p[0]),
+        { p1: p[0], p2: p[1] },
+        { p1: p[1], p2: p[2] },
+        { p1: p[2], p2: p[3] },
+        { p1: p[3], p2: p[0] },
     ];
 
     return {
@@ -83,11 +83,11 @@ function getSquareWalls(scale: number, pos: { x: number; y: number; }){
 
 // #region run collisions
 
-function wallCollisions(me: any, walls: any[]){
+function wallCollisions(me: any, walls: LineSegment[]){
     walls.forEach(w => { wallCollision(me, w); });
 }
 
-function wallCollision(me: any, wall: any){
+function wallCollision(me: any, wall: LineSegment){
     const p1 = wall.p1;
     const p2 = wall.p2;
     if (p1.x - p2.x == 0) {
@@ -113,13 +113,13 @@ function wallCollision(me: any, wall: any){
     }
 }
 
-function circleCollisions(me: any, circles: any[]){
+function circleCollisions(me: any, circles: Circle[]){
     circles.forEach(c => { circleCollision(me, c); });
 }
 
-function circleCollision(me: any, circle: any){
+function circleCollision(me: any, circle: Circle){
     const dist = getDistance(me, circle);
-    const realdist = dist - me.scale / 2 - circle.scale / 2;
+    const realdist = dist - me.scale / 2 - circle.radius;
     if(realdist < 0){
         if(dist == 0){
             const dir = Math.random() * 2 * Math.PI;
@@ -137,22 +137,10 @@ function circleCollision(me: any, circle: any){
 
 // #region helpers
 
-function getDistance(object1: { x: number; y: number; }, object2: { x: number; y: number; }){
+function getDistance(object1: Pos, object2: Pos){
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
-}
-
-function makePos(x: number, y: number){
-    return { x: x, y: y };
-}
-
-function makeCircle(x: number, y: number, scale: number){
-    return { x: x, y: y, scale: scale };
-}
-
-function makeWall(p1: any, p2: any){
-    return { p1: p1, p2: p2 };
 }
 
 // #endregion

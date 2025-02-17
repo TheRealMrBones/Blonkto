@@ -14,7 +14,7 @@ class GameObject {
     lastupdated: number;
     x: number;
     y: number;
-    chunk: {x: number, y: number};
+    chunk: Pos;
     dir: number = 0;
     scale: number = 1;
     asset: string = ASSETS.MISSING_TEXTURE;
@@ -73,7 +73,7 @@ class GameObject {
 
     // #region helpers
 
-    distanceTo(object: {x: number, y: number}){
+    distanceTo(object: Pos){
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);

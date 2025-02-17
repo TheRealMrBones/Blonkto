@@ -100,7 +100,7 @@ class World {
         ];
 
         // get chunks that are in both
-        const sameChunks: { x: number; y: number; }[] = [];
+        const sameChunks: Pos[] = [];
         newChunks.forEach(nc => {
             oldChunks.forEach(oc => {
                 if(nc.x == oc.x && nc.y == oc.y){
@@ -110,7 +110,7 @@ class World {
         });
 
         // send chunk updates for same chunks
-        const updatedcells: { data: any; x: any; y: any; }[] = [];
+        const updatedcells: { data: any; x: number; y: number; }[] = [];
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc.x, sc.y, false);
             if(chunk){
@@ -133,8 +133,8 @@ class World {
             // no need to load and unload chunks if already loaded
         }else{
             // compare new and old chunks to same chunks to find which ones to load and unload
-            const loadChunks: { x: number; y: number; }[] = [];
-            const unloadChunks: { x: any; y: any; }[] = [];
+            const loadChunks: Pos[] = [];
+            const unloadChunks: Pos[] = [];
             newChunks.forEach(nc => {
                 let isNew = true;
                 sameChunks.forEach(sc => {
@@ -248,13 +248,13 @@ class World {
         }
     }
 
-    chunkFileExists(x: any, y: any){
+    chunkFileExists(x: number, y: number){
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.game.fileManager.fileExists(fileLocation);
     }
 
-    readChunkFile(x: any, y: any){
+    readChunkFile(x: number, y: number){
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.game.fileManager.readFile(fileLocation);
@@ -268,7 +268,7 @@ class World {
     }
     
     tickChunkUnloader(){
-        const activeChunks: { x: any; y: any; }[] = [];
+        const activeChunks: { x: number; y: number; }[] = [];
         this.game.getPlayerEntities().forEach((p: any) => {
             activeChunks.push(...this.getPlayerChunks(p));
         });
@@ -378,7 +378,7 @@ class World {
         let empty = true;
         this.game.getAllObjects().forEach((e: GameObject) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
-                if(e.tilesOn().some((t: { x: number; y: number; }) => t.x == x && t.y == y)){
+                if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)){
                     empty = false;
                 }
             }

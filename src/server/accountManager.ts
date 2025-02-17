@@ -55,7 +55,7 @@ class AccountManager {
 
     // #region login
 
-    async login(id: string | number, username: string, password: string){
+    async login(id: string, username: string, password: string){
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
@@ -88,7 +88,7 @@ class AccountManager {
         return { account: acc.serializeForSend() };
     }
 
-    logout(id: string | number){
+    logout(id: string){
         delete this.accountsloggedin[id];
     }
 
@@ -102,7 +102,7 @@ class AccountManager {
         return Object.values(this.accountsloggedin).some(acc => acc.username == username);
     }
 
-    getAccount(id: string | number){
+    getAccount(id: string){
         return this.accountsloggedin[id];
     }
 

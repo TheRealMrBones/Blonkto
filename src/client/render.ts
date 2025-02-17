@@ -46,8 +46,8 @@ export function getCellSize(){
 }
 
 // let server set your color
-let myColor: any;
-export function setColor(color: any){
+let myColor: Color;
+export function setColor(color: Color){
     myColor = color;
 }
 

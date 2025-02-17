@@ -37,11 +37,11 @@ let falling = false;
 
 // #region handle mouse movement
 
-function onMouseInput(e: any){
+function onMouseInput(e: MouseEvent){
     handleDirection(e.clientX, e.clientY);
 }
 
-function onTouchInput(e: any){
+function onTouchInput(e: TouchEvent){
     const touch = e.touches[0];
     handleDirection(touch.clientX, touch.clientY);
 }
@@ -54,7 +54,7 @@ function handleDirection(x: number, y: number){
 
 // #region handle keys
 
-function handlekeyDown(e: any){
+function handlekeyDown(e: KeyboardEvent){
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -129,7 +129,7 @@ function handlekeyDown(e: any){
     }
 }
 
-function handlekeyUp(e: any){
+function handlekeyUp(e: KeyboardEvent){
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -174,7 +174,7 @@ function handlekeyUp(e: any){
 
 // #region handle mouse clicks
 
-function handleMouseDown(e: any){
+function handleMouseDown(e: MouseEvent){
     // get position of click compared to current player pos
     const clickpos = {
         xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
@@ -367,7 +367,7 @@ export function push(pushx: number, pushy: number){
     y += pushy;
 }
 
-export function setPos(newpos: { x: number; y: number; }){
+export function setPos(newpos: Pos){
     // keep current inputs running but don't include previous time held
     if(startw){
         startw = Date.now();

@@ -27,11 +27,11 @@ export const getAsset = (assetName: string) => assets[assetName];
 
 // #region colorize
 
-const coloredAssets: { [key: string]: { asset: OffscreenCanvas; color: { r: number; g: number; b: number; } } } = {};
+const coloredAssets: { [key: string]: { asset: OffscreenCanvas; color: Color } } = {};
 const assetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
 const coloredAssetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
 
-export function getColoredAsset(object: { id: string; color: { r: number; g: number; b: number; }; asset: string; }){
+export function getColoredAsset(object: { id: string; color: Color; asset: string; }){
     // make new if asset doesn't exist
     let makenew = !coloredAssets[object.id];
 
@@ -57,7 +57,7 @@ export function getColoredAsset(object: { id: string; color: { r: number; g: num
     // if needed make new colored asset
     if(makenew){
         coloredAssets[object.id] = {
-            asset: colorize(getAsset(object.asset), object.color.r, object.color.g, object.color.b),
+            asset: colorize(getAsset(object.asset), object.color),
             color: object.color,
         };
     }
@@ -65,29 +65,29 @@ export function getColoredAsset(object: { id: string; color: { r: number; g: num
     return coloredAssets[object.id].asset;
 }
 
-export function getAssetVariant(asset: string, varient: string, varientrgb: { r: number; g: number; b: number; }){
+export function getAssetVariant(asset: string, varient: string, varientrgb: Color){
     const assetObj = getAsset(asset);
     if(!assetVariants[asset]){
         assetVariants[asset] = {};
     }
     if(!assetVariants[asset][varient]){
-        assetVariants[asset][varient] = colorize(assetObj, varientrgb.r, varientrgb.g, varientrgb.b);
+        assetVariants[asset][varient] = colorize(assetObj, varientrgb);
     }
     return assetVariants[asset][varient];
 }
 
-export function getColoredAssetVariant(object: { id: string; color: { r: number; g: number; b: number; }; asset: string; }, varient: string, varientrgb: { r: number; g: number; b: number; }){
+export function getColoredAssetVariant(object: { id: string; color: Color; asset: string; }, varient: string, varientrgb: Color){
     const coloredAsset = getColoredAsset(object);
     if(!coloredAssetVariants[object.id]){
         coloredAssetVariants[object.id] = {};
     }
     if(!coloredAssetVariants[object.id][varient]){
-        coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb.r, varientrgb.g, varientrgb.b);
+        coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb);
     }
     return coloredAssetVariants[object.id][varient];
 }
 
-function colorize(image: HTMLImageElement | OffscreenCanvas, r: number, g: number, b: number){
+function colorize(image: HTMLImageElement | OffscreenCanvas, color: Color){
     const imageWidth = image.width;
     const imageHeight = image.height;
 
@@ -99,9 +99,9 @@ function colorize(image: HTMLImageElement | OffscreenCanvas, r: number, g: numbe
     const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
 
     for(let i = 0; i < imageData.data.length; i += 4){
-        imageData.data[i + 0] *= r;
-        imageData.data[i + 1] *= g;
-        imageData.data[i + 2] *= b;
+        imageData.data[i + 0] *= color.r;
+        imageData.data[i + 1] *= color.g;
+        imageData.data[i + 2] *= color.b;
     }
 
     ctx.putImageData(imageData, 0, 0);

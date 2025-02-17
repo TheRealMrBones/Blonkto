@@ -54,7 +54,7 @@ export const attackHitCheck = (player: Player, entities: Entity[], attackdir: nu
 
 // #region helpers
 
-function getDistance(object1: {x: number, y: number}, object2: {x: number, y: number}){
+function getDistance(object1: Pos, object2: Pos){
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
