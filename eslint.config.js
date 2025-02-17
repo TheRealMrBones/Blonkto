@@ -24,7 +24,7 @@ export default [
             "quotes": ["error", "double"],
             "import/extensions": ["error", "always", { "js": "always", "ts": "always" }],
             "@typescript-eslint/no-explicit-any": "off",
-            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/naming-convention": [
                 "error",
                 {
