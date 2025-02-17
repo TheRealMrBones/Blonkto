@@ -5,10 +5,10 @@ class ComponentHandler<T> {
     private components: { [key: string]: Component<T> } = {};
 
     /** Builder function to add components */
-    addComponent(component: Component<T>): T {
+    addComponent(component: Component<T>): this {
         this.components[component.constructor.name] = component;
         component.setParent(this as unknown as T);
-        return this as unknown as T;
+        return this;
     }
 
     /** Returns if this handler has an instance of the given component type */
