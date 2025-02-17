@@ -135,28 +135,11 @@ class Game {
 
                 const hotbarItem = this.players[socket.id].inventory[this.players[socket.id].hotbarslot];
 
-                if(!hotbarItem){
-                    // fist attack
+                // use the item or run default use case
+                if(hotbarItem == null){
                     this.players[socket.id].attack(dir);
                     attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
-                }else if(hotbarItem.item.componentHandler.hasComponent(AttackComponent)){
-                    this.players[socket.id].attack(dir);
-                    const component = hotbarItem.item.componentHandler.getComponent(AttackComponent);
-                    if(!(component instanceof AttackComponent)) return;
-                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, component.damage);
-                }else if(hotbarItem.item.componentHandler.hasComponent(MineComponent)){
-                    this.world.breakcell(cellpos.x, cellpos.y, true);
-                }else if(hotbarItem.item.componentHandler.hasComponent(BuildComponent)){
-                    if(this.world.cellEmpty(cellpos.x, cellpos.y)){
-                        const component = hotbarItem.item.componentHandler.getComponent(BuildComponent);
-                        if(!(component instanceof BuildComponent)) return;
-                        if(this.world.placecell(cellpos.x, cellpos.y, component.block)){
-                            this.players[socket.id].removeFromSlot(this.players[socket.id].hotbarslot, 1);
-                        }
-                    }
-                }else{
-                    // not usable i guess idk
-                }
+                }else hotbarItem.use(this, this.players[socket.id], { dir: dir, cellpos: cellpos });
             }
         }
     }

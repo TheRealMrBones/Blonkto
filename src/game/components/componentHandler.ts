@@ -1,24 +1,14 @@
 import Component from "./component.js";
 
-/** A place to manage and interact with a list of components */
+/** Defines functionailty for a type to handle its own set of components */
 class ComponentHandler<T> {
     private components: { [key: string]: Component<T> } = {};
-    parent: T;
-
-    constructor(parent: T){
-        this.parent = parent;
-    }
 
     /** Builder function to add components */
-    addComponent(component: Component<T>): ComponentHandler<T> {
+    addComponent(component: Component<T>): T {
         this.components[component.constructor.name] = component;
-        component.parent = this.parent;
-        return this;
-    }
-
-    /** Returns the parents (aka finish building stack) */
-    finishBuilding(): T {
-        return this.parent;
+        component.setParent(this as unknown as T);
+        return this as unknown as T;
     }
 
     /** Returns if this handler has an instance of the given component type */

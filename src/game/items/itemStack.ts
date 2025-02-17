@@ -1,4 +1,5 @@
 import Game from "../game.js";
+import Player from "../objects/player.js";
 import Item from "./item.js";
 
 class ItemStack {
@@ -10,8 +11,8 @@ class ItemStack {
         if(amount !== undefined) this.setAmount(amount);
     }
 
-    use(game: Game){
-        this.item.use(game, this);
+    use(game: Game, player: Player, info: any){
+        this.item.eventEmitter.emit("use", game, player, this, info);
     }
 
     // #region setters
