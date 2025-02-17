@@ -21,7 +21,7 @@ class AttackComponent extends Component<Item> {
     }
 
     /** Defines the attack use of the item with this component */
-    use(game: Game, player: Player, itemStack: ItemStack, info: any){
+    use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         player.attack(info.dir);
         attackHitCheck(player, game.getEntities(), info.dir, this.damage);
     }

@@ -43,7 +43,7 @@ export function getColoredAsset(object: { id: string; color: Color; asset: strin
         if(oldcolor.r != newcolor.r || oldcolor.g != newcolor.g || oldcolor.b != newcolor.b){
             // delete old colored variants aswell
             if(coloredAssetVariants[object.id]){
-                for (var prop in coloredAssetVariants[object.id]) {
+                for (const prop in coloredAssetVariants[object.id]) {
                     if (coloredAssetVariants[object.id].hasOwnProperty(prop)) {
                         delete coloredAssetVariants[object.id][prop];
                     }

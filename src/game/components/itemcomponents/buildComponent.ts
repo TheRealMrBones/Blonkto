@@ -20,7 +20,7 @@ class BuildComponent extends Component<Item> {
     }
 
     /** Defines the build use of the item with this component */
-    use(game: Game, player: Player, itemStack: ItemStack, info: any){
+    use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         if(!game.world.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
 
         if(game.world.placecell(info.cellpos.x, info.cellpos.y, this.block))
