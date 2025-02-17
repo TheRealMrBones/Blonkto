@@ -1,16 +1,13 @@
 import Component from "../component.js";
 import Item from "../../items/item.js";
 
-class BuildComponent implements Component<Item> {
-    static cid: string = "build_component";
+/** An Item Component that alows the item to be used to place blocks */
+class BuildComponent extends Component<Item> {
     block: string;
 
     constructor(block: string){
+        super();
         this.block = block;
-    }
-
-    getcid(): string {
-        return BuildComponent.cid;
     }
 }
 

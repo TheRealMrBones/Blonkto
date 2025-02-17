@@ -1,16 +1,13 @@
 import Component from "../component.js";
 import Item from "../../items/item.js";
 
-class AttackComponent implements Component<Item> {
-    static cid: string = "attack_component";
+/** An Item Component that alows the item to be used to attack entities */
+class AttackComponent extends Component<Item> {
     damage: number;
 
     constructor(damage: number){
+        super();
         this.damage = damage;
-    }
-
-    getcid(): string {
-        return AttackComponent.cid;
     }
 }
 

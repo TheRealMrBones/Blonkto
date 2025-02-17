@@ -8,10 +8,7 @@ class Registry<T extends RegistryValue> {
     }
 
     register(key: string, value: T){
-        if(key in this.map){
-            throw new Error(`Key "${key}" already registered!`);
-        }
-
+        if(key in this.map) throw new Error(`Key "${key}" already registered!`);
         this.map[key] = value;
         value.mapRegistryKey(key);
     }

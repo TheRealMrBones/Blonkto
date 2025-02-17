@@ -1,3 +1,4 @@
+import Game from "../game.js";
 import Item from "./item.js";
 
 class ItemStack {
@@ -7,6 +8,10 @@ class ItemStack {
     constructor(item: Item, amount?: number){
         this.item = item;
         if(amount !== undefined) this.setAmount(amount);
+    }
+
+    use(game: Game){
+        this.item.use(game, this);
     }
 
     // #region setters

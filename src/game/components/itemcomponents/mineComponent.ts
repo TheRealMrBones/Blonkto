@@ -1,16 +1,13 @@
 import Component from "../component.js";
 import Item from "../../items/item.js";
 
-class MineComponent implements Component<Item> {
-    static cid: string = "mine_component";
+/** An Item Component that alows the item to be used to mine/destroy blocks */
+class MineComponent extends Component<Item> {
     power: number;
 
     constructor(power: number){
+        super();
         this.power = power;
-    }
-
-    getcid(): string {
-        return MineComponent.cid;
     }
 }
 
