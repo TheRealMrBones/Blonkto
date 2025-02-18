@@ -3,6 +3,7 @@ import GameObject from "./gameObject.js";
 import Game from "../game.js";
 import { itemMergeCheck } from "../collisions.js";
 
+/** A stack of items that has been dropped into the game world and ticking */
 class DroppedStack extends GameObject {
     itemStack: ItemStack;
 
@@ -18,6 +19,12 @@ class DroppedStack extends GameObject {
         });
     }
 
+    /** Returns the dropped stack from its save data */
+    static readFromSave(data: any): DroppedStack {
+        return new DroppedStack(data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
+    }
+
+    /** Returns a dropped stack with a random spread from the spawn point */
     static getDroppedWithSpread(x: number, y: number, itemStack: ItemStack, spread: number){
         const angle = Math.random() * 2 * Math.PI;
         const magnitude = Math.random() * spread;
@@ -27,6 +34,35 @@ class DroppedStack extends GameObject {
 
         return new DroppedStack(x + xmovement, y + ymovement, itemStack);
     }
+
+    // #region serialization
+
+    /** Return an object representing this dropped stacks data for a game update to the client */
+    serializeForUpdate(): any {
+        const base = super.serializeForUpdate();
+
+        return {
+            static: {
+                ...base.static,
+            },
+            dynamic: {
+                ...base.dynamic,
+            },
+        };
+    }
+
+    /** Return an object representing this dropped stacks data for writing to the save */
+    serializeForWrite(): any {
+        const base = super.serializeForWrite();
+        
+        return {
+            ...base,
+            name: "dropped_stack",
+            itemStack: this.itemStack.serializeForWrite(),
+        };
+    }
+
+    // #endregion
 }
 
 export default DroppedStack;

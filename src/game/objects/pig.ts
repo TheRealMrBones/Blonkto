@@ -14,10 +14,6 @@ class Pig extends NonplayerEntity {
         this.scale = PLAYER_SCALE;
 
         this.health = 3;
-
-        this.ontick.on("tick", (dt: number) => {
-            
-        });
     }
 }
 

@@ -62,7 +62,7 @@ class Entity extends GameObject {
 
     // #region serialization
 
-    serializeForUpdate(){
+    serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
         return {

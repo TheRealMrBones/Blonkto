@@ -54,9 +54,9 @@ class Player extends Entity {
 
         // reading data
         if(data === undefined){
-            this.inventory[1] = new ItemStack(ItemRegistry.get("stone_block"));
-            this.inventory[2] = new ItemStack(ItemRegistry.get("pickaxe"));
-            this.inventory[3] = new ItemStack(ItemRegistry.get("sword"));
+            this.inventory[0] = new ItemStack("pickaxe");
+            this.inventory[1] = new ItemStack("sword");
+            this.inventory[2] = new ItemStack("stone_block", 64);
         }else{
             const playerdata = JSON.parse(data);
             
@@ -73,7 +73,7 @@ class Player extends Entity {
                 this.health = playerdata.health;
                 this.color = playerdata.color;
     
-                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(ItemRegistry.get(stack.name), stack.amount) : null);
+                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
             }
         }
 
@@ -197,7 +197,7 @@ class Player extends Entity {
 
     // #region serialization
 
-    serializeForUpdate(){
+    serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
         return {
@@ -213,7 +213,7 @@ class Player extends Entity {
         };
     }
 
-    serializeForWrite(){
+    serializeForWrite(): any {
         return JSON.stringify({
             dead: false,
             username: this.username,
@@ -226,7 +226,7 @@ class Player extends Entity {
         });
     }
 
-    serializeAfterKilled(){
+    serializeAfterKilled(): any {
         return JSON.stringify({
             dead: true,
             username: this.username,

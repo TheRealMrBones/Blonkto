@@ -1,31 +1,27 @@
 import RegistryValue from "../registries/registryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
-import Item from "../items/item.js";
 import ItemStack from "../items/itemStack.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
 
-class Block implements RegistryValue {
+class Block extends ComponentHandler<Block> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
     asset: string = ASSETS.MISSING_TEXTURE;
-    drops: Item;
+    drops: string;
     dropsamount: number = 1;
     scale: number = 1;
     shape: number = SHAPES.SQUARE;
 
-    componentHandler: ComponentHandler<Block>;
-
-    constructor(displayname: string, asset: string | null, drops: Item, dropsamount?: number, scale?: number, shape?: number){
+    constructor(displayname: string, asset: string | null, drops: string, dropsamount?: number, scale?: number, shape?: number){
+        super();
         this.displayname = displayname;
         if(asset != null) this.asset = asset;
         this.drops = drops;
         if(dropsamount !== undefined) this.dropsamount = dropsamount;
         if(scale !== undefined) this.scale = scale;
         if(shape !== undefined) this.shape = shape;
-
-        this.componentHandler = new ComponentHandler<Block>(this);
     }
 
     mapRegistryKey(key: string): void {

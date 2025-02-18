@@ -1,5 +1,6 @@
 import Game from "../game.js";
 import Player from "../objects/player.js";
+import ItemRegistry from "../registries/itemRegistry.js";
 import Item from "./item.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
@@ -7,8 +8,8 @@ class ItemStack {
     item: Item;
     private amount: number = 1;
 
-    constructor(item: Item, amount?: number){
-        this.item = item;
+    constructor(item: string, amount?: number){
+        this.item = ItemRegistry.get(item);
         if(amount !== undefined) this.setAmount(amount);
     }
 

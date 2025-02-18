@@ -12,6 +12,7 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 import ServerConfig from "../../configs/server.js";
 const { FALL_RATE } = ServerConfig.OBJECT;
 
+/** The base class for any simulated object (something that ticks) in the game world */
 class GameObject {
     id: string;
     lastupdated: number;
@@ -41,7 +42,8 @@ class GameObject {
 
     // #region setters
 
-    update(data: any){
+    /** Updates the data of this item to the newest state */
+    update(data: any): void {
         const deltatime = data.t - this.lastupdated;
 
         if(data.dir){
@@ -72,7 +74,8 @@ class GameObject {
         this.lastupdated = data.t;
     }
 
-    onFell(){
+    /** Default object action after falling */
+    onFell(): void {
 
     }
 
@@ -80,13 +83,15 @@ class GameObject {
 
     // #region helpers
 
-    distanceTo(object: Pos){
+    /** Returns the distance from this object to another object */
+    distanceTo(object: Pos): number {
         const dx = this.x - object.x;
         const dy = this.y - object.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    tilesOn(){
+    /** Returns the tiles that this object is on */
+    tilesOn(): Pos[]{
         const points = [];
         
         // get all integer coordinate points that are within object
@@ -100,7 +105,7 @@ class GameObject {
         }
 
         // start tile array
-        const tiles = [{ x: Math.floor(this.x), y: Math.floor(this.y) }]; // include known center tile
+        const tiles: Pos[] = [{ x: Math.floor(this.x), y: Math.floor(this.y) }]; // include known center tile
 
         // include tiles hit by each main axis end of the object
         if(Math.floor(this.x - this.scale / 2) != Math.floor(this.x)){
@@ -118,7 +123,7 @@ class GameObject {
 
         // get a list of the corresponding points that the points are touching
         points.forEach(p => {
-            const tilestoadd = [
+            const tilestoadd: Pos[] = [
                 { x: p.x, y: p.y },
                 { x: p.x - 1, y: p.y },
                 { x: p.x - 1, y: p.y - 1 },
@@ -138,7 +143,8 @@ class GameObject {
 
     // #region serialization
 
-    serializeForUpdate(){
+    /** Return an object representing this objects data for a game update to the client */
+    serializeForUpdate(): any {
         return {
             static: {
                 id: this.id,
@@ -155,11 +161,16 @@ class GameObject {
         };
     }
 
-    serializeForWrite(){
-        return JSON.stringify({
+    /** Return an object representing this objects data for writing to the save */
+    serializeForWrite(): any {
+        return {
             x: this.x,
             y: this.y,
-        });
+            dir: this.dir,
+            scale: this.scale,
+            asset: this.asset,
+            falling: this.falling,
+        };
     }
 
     // #endregion

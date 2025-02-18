@@ -4,18 +4,15 @@ import ComponentHandler from "../components/componentHandler.js";
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-class Floor implements RegistryValue {
+class Floor extends ComponentHandler<Floor> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
     asset: string = ASSETS.MISSING_TEXTURE;
 
-    componentHandler: ComponentHandler<Floor>;
-
     constructor(displayname: string, asset: string | null){
+        super();
         this.displayname = displayname;
         if(asset != null) this.asset = asset;
-
-        this.componentHandler = new ComponentHandler<Floor>(this);
     }
 
     mapRegistryKey(key: string): void {
