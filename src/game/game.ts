@@ -126,29 +126,31 @@ class Game {
     // #region inputs
 
     click(socket: Socket, info: any){
-        if(socket.id === undefined) return;
+        if(socket.id === undefined || this.players[socket.id] !== undefined) return;
+        const newinfo = this.getClickInfo(info);
         
-        if(this.players[socket.id] !== undefined){
-            if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-                const dir = Math.atan2(info.xoffset, info.yoffset);
-                const cellpos = { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) };
+        if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
+            const hotbarItem = this.players[socket.id].inventory[this.players[socket.id].hotbarslot];
 
-                const hotbarItem = this.players[socket.id].inventory[this.players[socket.id].hotbarslot];
-
-                // use the item or run default use case
-                if(hotbarItem == null){
-                    this.players[socket.id].attack(dir);
-                    attackHitCheck(this.players[socket.id], this.getEntities(), dir, 1);
-                }else hotbarItem.use(this, this.players[socket.id], { dir: dir, cellpos: cellpos });
-            }
+            // use the item or run default use case
+            if(hotbarItem == null){
+                this.players[socket.id].attack(newinfo.dir);
+                attackHitCheck(this.players[socket.id], this.getEntities(), newinfo.dir, 1);
+            }else hotbarItem.use(this, this.players[socket.id], newinfo);
         }
     }
 
     interact(socket: Socket, info: any){
-        if(socket.id === undefined) return;
+        if(socket.id === undefined || this.players[socket.id] !== undefined) return;
+        const newinfo = this.getClickInfo(info);
         
-        if(this.players[socket.id] !== undefined){
-            
+        
+    }
+
+    getClickInfo(info: any){
+        return {
+            dir: Math.atan2(info.xoffset, info.yoffset),
+            cellpos: { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) },
         }
     }
 
