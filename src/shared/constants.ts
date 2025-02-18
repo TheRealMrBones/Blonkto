@@ -1,3 +1,4 @@
+/** Constant and non-editable values used across the codebase */
 const Constants = Object.freeze({
     MSG_TYPES: {
         CREATE_ACCOUNT: "create_account",

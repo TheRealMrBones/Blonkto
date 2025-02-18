@@ -4,6 +4,7 @@ import validator from "validator";
 import Account from "./account.js";
 import FileManager from "./fileManager.js";
 
+/** Manages user accounts for the game servers */
 class AccountManager {
     fileManager: FileManager;
     accountsloggedin: {[key: string]: Account};
@@ -15,7 +16,8 @@ class AccountManager {
 
     // #region creation
 
-    async createAccount(id: string, username: string, password: string){
+    /** Creates and returns an account with the information provided and adds it to the database */
+    async createAccount(id: string, username: string, password: string): Promise<any>{
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -55,7 +57,8 @@ class AccountManager {
 
     // #region login
 
-    async login(id: string, username: string, password: string){
+    /** Tries to log in the given user and returns the message either confiming login or error */
+    async login(id: string, username: string, password: string): Promise<any> {
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
@@ -88,7 +91,8 @@ class AccountManager {
         return { account: acc.serializeForSend() };
     }
 
-    logout(id: string){
+    /** Logs the given user out of their session */
+    logout(id: string): void {
         delete this.accountsloggedin[id];
     }
 
@@ -96,13 +100,15 @@ class AccountManager {
 
     // #region getters
 
-    isLoggedIn(username: string){
+    /** Returns if the given user is currently logged in to a session */
+    isLoggedIn(username: string): boolean {
         username = sanitizeInput(username);
 
         return Object.values(this.accountsloggedin).some(acc => acc.username == username);
     }
 
-    getAccount(id: string){
+    /** Gets the logged in account wiht the given id if it exists/is logged in */
+    getAccount(id: string): Account {
         return this.accountsloggedin[id];
     }
 
@@ -111,14 +117,14 @@ class AccountManager {
 
 // #region helpers
 
-// Function to check if a string is alphanumeric
-const isAlphanumeric = (str: string) => /^[a-zA-Z0-9_]*$/.test(str);
+/** Returns if the given string is alphanumeric */
+const isAlphanumeric = (str: string): boolean => /^[a-zA-Z0-9_]*$/.test(str);
 
-// Sanitize input
-const sanitizeInput = (input: string) => validator.escape(input);
+/** Returns the sanitized version of the given string */
+const sanitizeInput = (input: string): string => validator.escape(input);
 
-// Get account file path
-const getAccountFilePath = (username: string) => ("accounts/" + username);
+/** Returns the relative file path to the given users save file */
+const getAccountFilePath = (username: string): string => ("accounts/" + username);
 
 // #endregion
 

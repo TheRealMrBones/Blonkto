@@ -59,7 +59,8 @@ const game = new Game(fileManager, accountManager);
 
 // #region socket functions
 
-async function createAccount(this: Socket, credentials: { username: string; password: string; }){
+/** Response to the create account message from a client */
+async function createAccount(this: Socket, credentials: { username: string; password: string; }): Promise<void> {
     if(this.id === undefined) return;
 	
     const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
@@ -70,7 +71,8 @@ async function createAccount(this: Socket, credentials: { username: string; pass
     }
 }
 
-async function login(this: Socket, credentials: { username: string; password: string; }){
+/** Response to the login message from a client */
+async function login(this: Socket, credentials: { username: string; password: string; }): Promise<void> {
     if(this.id === undefined) return;
 	
     const response = await accountManager.login(this.id, credentials.username, credentials.password);
@@ -81,7 +83,8 @@ async function login(this: Socket, credentials: { username: string; password: st
     }
 }
 
-function joinGame(this: Socket){
+/** Response to the join game message from a client */
+function joinGame(this: Socket): void {
     if(this.id === undefined) return;
 	
     const username = accountManager.getAccount(this.id).username;
@@ -89,19 +92,23 @@ function joinGame(this: Socket){
     game.playerManager.addPlayer(this, username);
 }
 
-function handleInput(this: Socket, inputs: any){
+/** Response to the create account message from a client */
+function handleInput(this: Socket, inputs: any): void {
   	game.handleInput(this, inputs);
 }
 
-function click(this: Socket, info: any){
+/** Response to the click message from a client */
+function click(this: Socket, info: any): void {
     game.click(this, info);
 }
 
-function interact(this: Socket, info: any){
+/** Response to the interact message from a client */
+function interact(this: Socket, info: any): void {
     game.interact(this, info);
 }
 
-function onDisconnect(this: Socket){
+/** Response to the disconnect message from a client */
+function onDisconnect(this: Socket): void {
     if(this.id === undefined) return;
 	
     const acc = accountManager.getAccount(this.id);
@@ -116,7 +123,8 @@ function onDisconnect(this: Socket){
   	game.playerManager.removePlayer(this);
 }
 
-function chat(this: Socket, message: any){
+/** Response to the chat message from a client */
+function chat(this: Socket, message: any): void {
   	game.chatManager.chat(this, message);
 }
 

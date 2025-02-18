@@ -1,3 +1,4 @@
+/** A user account that holds credentials and identification */
 class Account {
     username: string;
 
@@ -13,13 +14,15 @@ class Account {
 
     // #region serialization
 
-    serializeForWrite(){
+    /** Return an object representing this accounts data for writing to the save */
+    serializeForWrite(): string {
         const data = this.username;
 
         return data;
     }
 
-    serializeForSend(){
+    /** Return an object representing this accounts data for a message to the client */
+    serializeForSend(): any {
         return {
             username: this.username,
         };

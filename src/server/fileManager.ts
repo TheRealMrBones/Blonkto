@@ -7,6 +7,7 @@ const datafolders = [
     "world",
 ];
 
+/** Manages the creation and reading of save files for the server */
 class FileManager {
     savelocation: string;
     
@@ -22,7 +23,8 @@ class FileManager {
 
     // #region writing
 
-    writeFile(filename: string, content: string){
+    /** Writes to (replaces if needed) a file with the given data */
+    writeFile(filename: string, content: string): void {
         fs.writeFile(this.getFullFilePath(filename), content, "utf8", (error) => {
             if (error) {
                 console.error("An error occurred while writing to the file:", error);
@@ -31,7 +33,8 @@ class FileManager {
         });
     }
 
-    deleteFile(filename: string){
+    /** Deletes the given file from save if it exists */
+    deleteFile(filename: string): void | false {
         try{
             fs.unlinkSync(this.getFullFilePath(filename));
         } catch (error) {
@@ -44,7 +47,8 @@ class FileManager {
 
     // #region reading
 
-    fileExists(filename: string){
+    /** Returns if the given file exists in the save */
+    fileExists(filename: string): boolean {
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), "utf8");
             return true;
@@ -54,7 +58,8 @@ class FileManager {
         }
     }
 
-    readFile(filename: string){
+    /** Returns the data in the given file if it exists */
+    readFile(filename: string): string | false {
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), "utf8");
             return data;
@@ -68,7 +73,8 @@ class FileManager {
 
     // #region helpers
 
-    getFullFilePath(filename: string){
+    /** Gets the full file path of the given relative path */
+    getFullFilePath(filename: string): string {
         return this.savelocation + filename + ".data";
     }
 
