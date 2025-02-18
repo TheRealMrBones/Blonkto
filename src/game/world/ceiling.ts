@@ -4,6 +4,7 @@ import ComponentHandler from "../components/componentHandler.js";
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
+/** The definition for a type of ceiling with its functionality and base statistics */
 class Ceiling extends ComponentHandler<Ceiling> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
@@ -15,19 +16,22 @@ class Ceiling extends ComponentHandler<Ceiling> implements RegistryValue {
         if(asset != null) this.asset = asset;
     }
 
+    /** Sets this objects identifier to the given key from the registry */
     mapRegistryKey(key: string): void {
         this.name = key;
     }
 
     // #region serialization
 
-    serializeForLoad(){
+    /** Return an object representing this ceilings data for loading to the game world */
+    serializeForLoad(): any {
         return {
             asset: this.asset,
         };
     }
 
-    serializeForWrite(){
+    /** Return an object representing this ceilings data for writing to the save */
+    serializeForWrite(): any {
         return {
             name: this.name,
         };

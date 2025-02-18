@@ -5,6 +5,7 @@ import ItemStack from "../items/itemStack.js";
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
 
+/** The definition for a type of block with its functionality and base statistics */
 class Block extends ComponentHandler<Block> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
@@ -24,17 +25,20 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         if(shape !== undefined) this.shape = shape;
     }
 
+    /** Sets this objects identifier to the given key from the registry */
     mapRegistryKey(key: string): void {
         this.name = key;
     }
 
+    /** Returns the item that this block drops on break */
     getDroppedStack(): ItemStack {
         return new ItemStack(this.drops, this.dropsamount);
     }
 
     // #region serialization
 
-    serializeForLoad(){
+    /** Return an object representing this blocks data for loading to the game world */
+    serializeForLoad(): any {
         return {
             asset: this.asset,
             scale: this.scale,
@@ -42,7 +46,8 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         };
     }
 
-    serializeForWrite(){
+    /** Return an object representing this blocks data for writing to the save */
+    serializeForWrite(): any {
         return {
             name: this.name,
         };

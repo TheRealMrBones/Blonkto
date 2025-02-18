@@ -28,7 +28,9 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // initialize registries
 import "./registries/itemRegistry.js";
+import Entity from "./objects/entity.js";
 
+/** The main class that manages the game world and the entities in it */
 class Game {
     fileManager: FileManager;
     accountManager: AccountManager;
@@ -81,39 +83,48 @@ class Game {
 
     // #region entities
 
-    getAllObjects(){
+    /** Returns all ticking objects loaded in the game world */
+    getAllObjects(): GameObject[] {
         return [...Object.values(this.players), ...Object.values(this.entities), ...Object.values(this.objects)];
     }
 
-    getEntities(){
+    /** Returns all ticking entities loaded in the game world */
+    getEntities(): Entity[] {
         return [...Object.values(this.players), ...Object.values(this.entities)];
     }
 
-    getNonplayers(){
+    /** Returns all ticking non-player objects loaded in the game world */
+    getNonplayers(): GameObject[] {
         return [...Object.values(this.entities), ...Object.values(this.objects)];
     }
 
-    getObjects(){
+    /** Returns all ticking non-entity objects loaded in the game world */
+    getObjects(): GameObject[] {
         return Object.values(this.objects);
     }
 
-    getPlayerEntities(){
+    /** Returns all ticking players loaded in the game world */
+    getPlayerEntities(): Player[] {
         return Object.values(this.players);
     }
 
-    getNonplayerEntities(){
+    /** Returns all ticking non-player entities loaded in the game world */
+    getNonplayerEntities(): NonplayerEntity[] {
         return Object.values(this.entities);
     }
 
-    getDroppedStacks(){
+    /** Returns all ticking dropped stacks loaded in the game world */
+    getDroppedStacks(): DroppedStack[] {
         return this.getObjects().filter(o => o instanceof DroppedStack);
     }
 
-    removeObject(id: string){
+    /** Removes and unloads the non-entity object with the given id from the game world */
+    removeObject(id: string): void {
         delete this.objects[id];
     }
 
-    removeEntity(id: string){
+    /** Removes and unloads the non-player entity with the given id from the game world */
+    removeEntity(id: string): void {
         delete this.entities[id];
     }
 
@@ -121,7 +132,8 @@ class Game {
 
     // #region inputs
 
-    click(socket: Socket, info: any){
+    /** Response to a click (left click) message from a client */
+    click(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
@@ -136,21 +148,24 @@ class Game {
         }
     }
 
-    interact(socket: Socket, info: any){
+    /** Response to a interaction (right click) message from a client */
+    interact(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
 
     }
 
-    getClickInfo(info: any){
+    /** Gets formatted click info from the raw click info in a client click message */
+    getClickInfo(info: any): any{
         return {
             dir: Math.atan2(info.xoffset, info.yoffset),
             cellpos: { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) },
         }
     }
 
-    handleInput(socket: Socket, inputs: any){
+    /** Response to the general input message from a client */
+    handleInput(socket: Socket, inputs: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
         const { t, dir, x, y, hotbarslot } = inputs;
@@ -169,7 +184,8 @@ class Game {
 
     // #region updates
 
-    update(){
+    /** Tick the game world and all currently loaded objects */
+    update(): void {
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
@@ -207,11 +223,13 @@ class Game {
         }
     }
 
-    tickChunkUnloader(){
+    /** Tick the worlds chunk unloader */
+    tickChunkUnloader(): void {
         this.world.tickChunkUnloader();
     }
 
-    createUpdate(player: Player){
+    /** Create an update object to be sent to the specified players client */
+    createUpdate(player: Player): any {
         // get players
         const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2

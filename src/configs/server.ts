@@ -1,6 +1,6 @@
 import fs from "fs";
 
-// define schema
+/** Definition for the server configuration schema */
 type ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: boolean,
@@ -28,7 +28,9 @@ type ServerConfigSchema = {
     }
 };
 
-// define default values
+// Initialize configuration with defaults then read saved after
+
+/** Configurable settings used by the server */
 const ServerConfig: ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: true,
@@ -66,6 +68,7 @@ if(fs.existsSync("./configs/server.json")){
     traverse(savedConfig, ServerConfig);
 }
 
+/** Recursive return for all values from saved data */
 function traverse(lastrefold: any, lastrefnew: any) {
     Object.keys(lastrefold).forEach(key => {
         if(key in lastrefnew){

@@ -5,6 +5,7 @@ import Block from "./block.js";
 import Floor from "./floor.js";
 import Ceiling from "./ceiling.js";
 
+/** Represents a single cell in the game world and its block, floor, and ceiling */
 class Cell {
     block: Block | null;
     floor: Floor | null;
@@ -18,15 +19,18 @@ class Cell {
 
     // #region setters
 
-    placeBlock(block: string){
+    /** Sets the block for this cell */
+    placeBlock(block: string): void {
         this.block = BlockRegistry.get(block);
     }
 
-    placeFloor(floor: string){
+    /** Sets the floor for this cell */
+    placeFloor(floor: string): void {
         this.floor = FloorRegistry.get(floor);
     }
 
-    placeCeiling(ceiling: string){
+    /** Sets the ceiling for this cell */
+    placeCeiling(ceiling: string): void {
         this.ceiling = CeilingRegistry.get(ceiling);
     }
 
@@ -34,7 +38,8 @@ class Cell {
 
     // #region serialization
 
-    serializeForLoad(){
+    /** Return an object representing this cells data for loading to the game world */
+    serializeForLoad(): any {
         const data: any = {};
 
         if(this.block){
@@ -50,7 +55,8 @@ class Cell {
         return data;
     }
 
-    serializeForWrite(){
+    /** Return an object representing this cells data for writing to the save */
+    serializeForWrite(): any {
         const data: any = {};
 
         if(this.block){

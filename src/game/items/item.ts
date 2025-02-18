@@ -10,7 +10,7 @@ import { attackHitCheck } from "../collisions.js";
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-/** The definition for a type of items functionality and base statistics */
+/** The definition for a type of item with its functionality and base statistics */
 class Item extends ComponentHandler<Item> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
@@ -28,7 +28,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
         this.eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
     }
 
-    /** Value used to map this item to the item registry */
+    /** Sets this objects identifier to the given key from the registry */
     mapRegistryKey(key: string): void {
         this.name = key;
     }

@@ -9,7 +9,8 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 // #region collision checks
 
-export const collectCheck = (player: Player, collectables: DroppedStack[], game: Game) => {
+/** Checks for dropped stacks that the given player can pick up */
+export const collectCheck = (player: Player, collectables: DroppedStack[], game: Game): void => {
     for(let i = 0; i < collectables.length; i++){
         const collectable = collectables[i];
         const dist = getDistance(player, collectable);
@@ -20,7 +21,8 @@ export const collectCheck = (player: Player, collectables: DroppedStack[], game:
     }
 };
 
-export const itemMergeCheck = (collectable: DroppedStack, collectables: DroppedStack[], game: Game) => {
+/** Checks for dropped stacks that the given dropped stack can merge with */
+export const itemMergeCheck = (collectable: DroppedStack, collectables: DroppedStack[], game: Game): void => {
     for(let i = 0; i < collectables.length; i++){
         const collectable2 = collectables[i];
         const dist = getDistance(collectable, collectable2);
@@ -31,7 +33,8 @@ export const itemMergeCheck = (collectable: DroppedStack, collectables: DroppedS
     }
 };
 
-export const attackHitCheck = (player: Player, entities: Entity[], attackdir: number, damage: number) => {
+/** Checks for entities that an attacking player hits and damages them */
+export const attackHitCheck = (player: Player, entities: Entity[], attackdir: number, damage: number): void => {
     const attackpos = {
         x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
         y: player.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
@@ -54,7 +57,8 @@ export const attackHitCheck = (player: Player, entities: Entity[], attackdir: nu
 
 // #region helpers
 
-function getDistance(object1: Pos, object2: Pos){
+/** Returns the distance between positions */
+function getDistance(object1: Pos, object2: Pos): number {
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);

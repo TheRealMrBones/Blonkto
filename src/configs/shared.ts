@@ -1,4 +1,4 @@
-// define schema
+/** Definition for the shared configuration schema */
 type SharedConfigSchema = {
     PLAYER: {
         PLAYER_SCALE: number,
@@ -22,7 +22,9 @@ type SharedConfigSchema = {
     }
 };
 
-// define default values
+// Initialize configuration with defaults then read saved after
+
+/** Configurable settings used by both the client and server (Managed by the server) */
 const SharedConfig: SharedConfigSchema = {
     PLAYER: {
         PLAYER_SCALE: 0.55,

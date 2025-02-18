@@ -1,4 +1,4 @@
-// define schema
+/** Definition for the client configuration schema */
 type ClientConfigSchema = {
     ATTACK: {
         HIT_COLOR: {r: number, g: number, b: number}
@@ -21,7 +21,9 @@ type ClientConfigSchema = {
     }
 };
 
-// define default values
+// Initialize configuration with defaults then read saved after
+
+/** Configurable settings used by the client */
 const ClientConfig: ClientConfigSchema = {
     ATTACK: {
         HIT_COLOR: {r: 1, g: 0.5, b: 0.5}

@@ -3,6 +3,7 @@ import Cell from "./cell.js";
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
+/** Represents a single chunk (square collection of cells) in the game world */
 class Chunk {
     chunkx: number;
     chunky: number;
@@ -57,7 +58,8 @@ class Chunk {
 
     // #region serialization
 
-    serializeForLoad(){
+    /** Return an object representing this chunks data for loading to the game world */
+    serializeForLoad(): any {
         const serializedCells: any[][] = [];
         for(let x = 0; x < CHUNK_SIZE; x++){
             serializedCells[x] = [];
@@ -73,7 +75,8 @@ class Chunk {
         };
     }
 
-    serializeForWrite(){
+    /** Return an object representing this chunks data for writing to the save */
+    serializeForWrite(): any {
         let data = "";
         for(let x = 0; x < CHUNK_SIZE; x++){
             for(let y = 0; y < CHUNK_SIZE; y++){

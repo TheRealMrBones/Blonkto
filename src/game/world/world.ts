@@ -1,4 +1,5 @@
 import Chunk from "./chunk.js";
+import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
@@ -12,6 +13,7 @@ const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 
+/** Manages the reading, loading, and unloading of the game world along withe the loading and unloading of ticking entities inside of it */
 class World {
     game: Game;
     loadedchunks: {[key: string]: Chunk};
@@ -29,7 +31,8 @@ class World {
 
     // #region Spawn
 
-    generateSpawn(){
+    /** Pregenerates the spawn region of the world if needed */
+    generateSpawn(): void {
         for(let x = -SPAWN_SIZE / 2 - 1; x < SPAWN_SIZE / 2 + 1; x++){
             for(let y = -SPAWN_SIZE / 2 - 1; y < SPAWN_SIZE / 2 + 1; y++){
                 const chunk = this.getChunk(x, y, true);
@@ -38,7 +41,8 @@ class World {
         }
     }
 
-    getSpawn(){
+    /** Returns a random spawn location for a player */
+    getSpawn(): any {
         while(true){
             // get random x y in spawn
             const len = SPAWN_SIZE * CHUNK_SIZE;
@@ -67,7 +71,8 @@ class World {
 
     // #region Player
 
-    loadPlayerChunks(player: Player){
+    /** Returns chunk data for an update to the given players client and handles new chunk loading as needed */
+    loadPlayerChunks(player: Player): any {
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
@@ -175,7 +180,8 @@ class World {
         return returnobj;
     }
 
-    getPlayerChunks(player: Player){
+    /** Returns the list of chunks the given player has loaded */
+    getPlayerChunks(player: Player): Pos[] {
         return [
             { x: player.chunk.x, y: player.chunk.y},
             { x: player.chunk.x, y: player.chunk.y - 1},
@@ -193,7 +199,8 @@ class World {
 
     // #region World
 
-    saveWorld(){
+    /** Saves all of the currently loaded world data to the save */
+    saveWorld(): void {
         Object.values(this.loadedchunks).forEach(c => {
             this.writeChunkFile(c);
         });
@@ -203,7 +210,8 @@ class World {
 
     // #region Chunks
 
-    getChunk(x: number, y: number, canloadnew: boolean){
+    /** Returns the requested chunk object if possible or null otherwise */
+    getChunk(x: number, y: number, canloadnew: boolean): Chunk | null {
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
             return chunk;
@@ -233,7 +241,8 @@ class World {
         }
     }
 
-    unloadChunk(x: number, y: number){
+    /** Unloads and saves the requested chunk if it is currently loaded */
+    unloadChunk(x: number, y: number): void {
         const chunk = this.loadedchunks[[x,y].toString()];
         if(chunk){
             // unload chunk
@@ -248,26 +257,30 @@ class World {
         }
     }
 
-    chunkFileExists(x: number, y: number){
+    /** Returns if the requested chunks save file exists */
+    chunkFileExists(x: number, y: number): boolean {
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.game.fileManager.fileExists(fileLocation);
     }
 
-    readChunkFile(x: number, y: number){
+    /** Returns the raw data of the requested chunks save file if it exists */
+    readChunkFile(x: number, y: number): any {
         const fileLocation = worldsavedir + [x,y].toString();
 
         return this.game.fileManager.readFile(fileLocation);
     }
 
-    writeChunkFile(chunk: Chunk){
+    /** Saves the given chunks data */
+    writeChunkFile(chunk: Chunk): void {
         const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
         const chunkdata = chunk.serializeForWrite();
 
         this.game.fileManager.writeFile(fileLocation, chunkdata);
     }
     
-    tickChunkUnloader(){
+    /** Unloads all previously loaded chunks that are not actively being loaded by a player */
+    tickChunkUnloader(): void {
         const activeChunks: { x: number; y: number; }[] = [];
         this.game.getPlayerEntities().forEach((p: any) => {
             activeChunks.push(...this.getPlayerChunks(p));
@@ -280,7 +293,8 @@ class World {
         });
     }
 
-    resetCellUpdates(){
+    /** Resets the current list of pending client cell updates */
+    resetCellUpdates(): void {
         Object.values(this.loadedchunks).forEach(chunk => {
             chunk.cellUpdates = [];
         });
@@ -290,7 +304,8 @@ class World {
 
     // #region Cells
 
-    getCell(x: number, y: number, canloadnew: boolean){
+    /** Returns the requested cell if it is loaded and false otherwise */
+    getCell(x: number, y: number, canloadnew: boolean): Cell | false {
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
@@ -304,7 +319,8 @@ class World {
         }
     }
 
-    getCellAndChunk(x: number, y: number, canloadnew: boolean){
+    /** Returns the requested cell and its containing chunk if it is loaded and null otherwise */
+    getCellAndChunk(x: number, y: number, canloadnew: boolean): { cell: Cell, chunk: Chunk } | null {
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
 
@@ -312,13 +328,14 @@ class World {
         if(cell){
             return {
                 cell: cell,
-                chunk: this.getChunk(chunkx, chunky, false),
+                chunk: this.getChunk(chunkx, chunky, false)!,
             };
         }else{
             return null;
         }
     }
 
+    /** Tries to break the requested cell and if needed drop its corrosponding item(s) */
     breakcell(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
@@ -349,6 +366,7 @@ class World {
         return true;
     }
 
+    /** Tries to place the requested block in the requested cell and returns success */
     placecell(x: number, y: number, block: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data){
@@ -372,6 +390,7 @@ class World {
         return true;
     }
 
+    /** Returns if the requested cell is empty (has no blocks or objects on it) */
     cellEmpty(x: number, y: number): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
