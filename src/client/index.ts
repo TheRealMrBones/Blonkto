@@ -157,7 +157,6 @@ function devlogin(event: any){
     
         switch(event.key){
             case "1":
-                console.log(1);
                 usernameInput.value = "testuser1";
                 passwordInput.value = "testuser1";
                 sendlogin();

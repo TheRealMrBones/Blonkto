@@ -122,7 +122,7 @@ class Game {
     // #region inputs
 
     click(socket: Socket, info: any){
-        if(socket.id === undefined || this.players[socket.id] !== undefined) return;
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
         if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
@@ -137,7 +137,7 @@ class Game {
     }
 
     interact(socket: Socket, info: any){
-        if(socket.id === undefined || this.players[socket.id] !== undefined) return;
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
 
@@ -151,19 +151,17 @@ class Game {
     }
 
     handleInput(socket: Socket, inputs: any){
-        if(socket.id === undefined) return;
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        if(this.players[socket.id] !== undefined){
-            const { t, dir, x, y, hotbarslot } = inputs;
-            if(this.players[socket.id]){
-                this.players[socket.id].update({
-                    dir: dir,
-                    x: x,
-                    y: y,
-                    t: t,
-                });
-                this.players[socket.id].hotbarslot = hotbarslot;
-            }
+        const { t, dir, x, y, hotbarslot } = inputs;
+        if(this.players[socket.id]){
+            this.players[socket.id].update({
+                dir: dir,
+                x: x,
+                y: y,
+                t: t,
+            });
+            this.players[socket.id].hotbarslot = hotbarslot;
         }
     }
 
