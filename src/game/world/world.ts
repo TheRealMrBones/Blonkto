@@ -2,7 +2,7 @@ import Chunk from "./chunk.js";
 import DroppedStack from "../objects/droppedStack.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import GameObject from "../objects/object.js";
+import GameObject from "../objects/gameObject.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;

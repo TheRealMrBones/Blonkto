@@ -3,6 +3,8 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemStack from "../items/itemStack.js";
+import Game from "../game.js";
+import { collectCheck } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -48,13 +50,14 @@ class Player extends Entity {
 
         // inventory
         this.inventory = Array(INVENTORY_SIZE).fill(null);
-        this.inventory[1] = new ItemStack(ItemRegistry.get("stone_block"));
-        this.inventory[2] = new ItemStack(ItemRegistry.get("pickaxe"));
-        this.inventory[3] = new ItemStack(ItemRegistry.get("sword"));
         this.hotbarslot = 0;
 
         // reading data
-        if(data !== undefined){
+        if(data === undefined){
+            this.inventory[1] = new ItemStack(ItemRegistry.get("stone_block"));
+            this.inventory[2] = new ItemStack(ItemRegistry.get("pickaxe"));
+            this.inventory[3] = new ItemStack(ItemRegistry.get("sword"));
+        }else{
             const playerdata = JSON.parse(data);
             
             this.username = playerdata.username;
@@ -75,6 +78,11 @@ class Player extends Entity {
         }
 
         this.resetFixes();
+
+        // add collision checks
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+            collectCheck(this, game.getDroppedStacks(), game);
+        });
     }
 
     // #region setters

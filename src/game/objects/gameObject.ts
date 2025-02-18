@@ -1,4 +1,7 @@
 import crypto from "crypto";
+import EventEmitter from "events";
+
+import Game from "../game.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -20,6 +23,8 @@ class GameObject {
     asset: string = ASSETS.MISSING_TEXTURE;
     falling: boolean = false;
 
+    eventEmitter: EventEmitter = new EventEmitter();
+
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.id = crypto.randomUUID();
         this.lastupdated = Date.now();
@@ -30,6 +35,8 @@ class GameObject {
         if(dir !== undefined) this.dir = dir;
         if(scale !== undefined) this.scale = scale;
         if(asset !== undefined) this.asset = asset;
+
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {});
     }
 
     // #region setters

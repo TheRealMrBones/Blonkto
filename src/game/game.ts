@@ -9,14 +9,10 @@ import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
 import Player from "./objects/player.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
-import GameObject from "./objects/object.js";
+import GameObject from "./objects/gameObject.js";
 import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
-import { collectCheck, itemMergeCheck, attackHitCheck } from "./collisions.js";
-
-import AttackComponent from "./components/itemcomponents/attackComponent.js";
-import BuildComponent from "./components/itemcomponents/buildComponent.js";
-import MineComponent from "./components/itemcomponents/mineComponent.js";
+import { attackHitCheck } from "./collisions.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -144,7 +140,7 @@ class Game {
         if(socket.id === undefined || this.players[socket.id] !== undefined) return;
         const newinfo = this.getClickInfo(info);
         
-        
+
     }
 
     getClickInfo(info: any){
@@ -193,18 +189,9 @@ class Game {
             }
         });
 
-        // tick entities
-        this.getNonplayerEntities().forEach(e => {
-            e.ontick.emit("tick", dt);
-        });
-
-        // proccess collisions
-        this.getPlayerEntities().forEach(p => {
-            collectCheck(p, this.getDroppedStacks(), this);
-        });
-
-        this.getDroppedStacks().forEach(o => {
-            itemMergeCheck(o, this.getDroppedStacks(), this);
+        // tick objects
+        this.getAllObjects().forEach(o => {
+            o.eventEmitter.emit("tick", this, dt);
         });
 
         // check to send update

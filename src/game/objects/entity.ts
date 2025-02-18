@@ -1,4 +1,4 @@
-import GameObject from "./object.js";
+import GameObject from "./gameObject.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;

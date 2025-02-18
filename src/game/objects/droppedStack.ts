@@ -1,5 +1,7 @@
 import ItemStack from "../items/itemStack.js";
-import GameObject from "./object.js";
+import GameObject from "./gameObject.js";
+import Game from "../game.js";
+import { itemMergeCheck } from "../collisions.js";
 
 class DroppedStack extends GameObject {
     itemStack: ItemStack;
@@ -9,6 +11,11 @@ class DroppedStack extends GameObject {
 
         this.itemStack = itemStack;
         this.asset = itemStack.item.asset;
+
+        // add collision checks
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+            itemMergeCheck(this, game.getDroppedStacks(), game);
+        });
     }
 
     static getDroppedWithSpread(x: number, y: number, itemStack: ItemStack, spread: number){
