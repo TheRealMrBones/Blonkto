@@ -12,6 +12,7 @@ const { MSG_TYPES } = Constants;
 import ServerConfig from "../../configs/server.js";
 const { FILTER_CHAT } = ServerConfig.CHAT;
 
+/** Manages chat storage and interaction for the server */
 class ChatManager {
     game: Game;
 
@@ -21,7 +22,8 @@ class ChatManager {
 
     // #region inputs
 
-    chat(socket: Socket, message: any){
+    /** Handles a chat message from a player */
+    chat(socket: Socket, message: any): void {
         if(socket.id === undefined) return;
 
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
@@ -41,7 +43,8 @@ class ChatManager {
 
     // #region sending
 
-    sendMessage(text: string){
+    /** Sends a message to all players */
+    sendMessage(text: string): void {
         const message = this.createMessage(text);
 
         Object.values(this.game.players).forEach(player => {
@@ -49,7 +52,8 @@ class ChatManager {
         });
     }
 
-    sendMessageTo(player: Player, text: string){
+    /** Sends a message to a specific player */
+    sendMessageTo(player: Player, text: string): void {
         const message = this.createMessage(text);
         player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
     }
@@ -58,7 +62,8 @@ class ChatManager {
 
     // #region helpers
 
-    createMessage(text: string){
+    /** Creates a chat message object with the given text */
+    createMessage(text: string): ChatMessage {
         return {
             text: text,
             id: crypto.randomUUID(),
@@ -66,6 +71,11 @@ class ChatManager {
     }
 
     // #endregion
+}
+
+type ChatMessage = {
+    text: string;
+    id: string;
 }
 
 export default ChatManager;

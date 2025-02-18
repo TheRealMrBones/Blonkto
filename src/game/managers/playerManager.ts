@@ -11,6 +11,7 @@ import ServerConfig from "../../configs/server.js";
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { FILTER_USERNAME } = ServerConfig.PLAYER;
 
+/** Manages the list of players for the server */
 class PlayerManager {
     game: Game;
     saveInterval: NodeJS.Timeout;
@@ -21,7 +22,8 @@ class PlayerManager {
         this.saveInterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
-    addPlayer(socket: Socket, username: string){
+    /** Creates a player for the given user and adds them to the world */
+    addPlayer(socket: Socket, username: string): void {
         if(socket.id === undefined) return;
 
         // check if banned
@@ -59,20 +61,23 @@ class PlayerManager {
         this.game.chatManager.sendMessage(`${username} has connected`);
     }
 
-    savePlayer(player: Player){
+    /** Saves the given player to their own file */
+    savePlayer(player: Player): void {
         const data = player.serializeForWrite();
 
         this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
     }
 
-    deletePlayer(player: Player){
+    /** Deletes the given player from the world and removes their save file */
+    deletePlayer(player: Player): void {
         if(this.game.fileManager.fileExists(getPlayerFilePath(player.username)))
             this.game.fileManager.deleteFile(getPlayerFilePath(player.username));
 
         delete this.game.players[player.id];
     }
 
-    killPlayer(socket: Socket, killedby: string){
+    /** Kills the given player and saves their post death data */
+    killPlayer(socket: Socket, killedby: string): void {
         if(socket.id === undefined) return;
 
         const player = this.game.players[socket.id];
@@ -88,7 +93,8 @@ class PlayerManager {
         delete this.game.players[player.id];
     }
 
-    removePlayer(socket: Socket){
+    /** Removes the player from the world and saves their data */
+    removePlayer(socket: Socket): void {
         if(socket.id === undefined) return;
 
         const player = this.game.players[socket.id];
@@ -102,13 +108,15 @@ class PlayerManager {
         }
     }
 
-    savePlayers(){
+    /** Saves all players to their own files */
+    savePlayers(): void {
         Object.values(this.game.players).forEach(p => {
             this.savePlayer(p);
         });
     }
 
-    getUsername(username: string){
+    /** Gets the cleaned username for a new/renamed player */
+    getUsername(username: string): string {
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
         if(newUsername.trim().length === 0){
             newUsername = "Silly Goose";
@@ -129,8 +137,8 @@ class PlayerManager {
 
 // #region helpers
 
-// Get player file path
-const getPlayerFilePath = (username: string) => ("players/" + username);
+/** Gets the save file path for a given player */
+const getPlayerFilePath = (username: string): string => ("players/" + username);
 
 // #endregion
 

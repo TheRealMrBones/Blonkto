@@ -1,5 +1,6 @@
 import Game from "../game.js";
 
+/** Manages the list of operators for the server */
 class OpManager {
     game: Game;
     oppedplayers: {[key: string]: boolean};
@@ -13,17 +14,20 @@ class OpManager {
     
     // #region setters
 
-    op(username: string){
+    /** Adds a user to the operator list */
+    op(username: string): void {
         this.oppedplayers[username] = true;
         this.save();
     }
 
-    deop(username: string){
+    /** Removes a user from the operator list */
+    deop(username: string): void {
         delete this.oppedplayers[username];
         this.save();
     }
 
-    clearOpList(username: string){
+    /** Clears the entire operator list */
+    clearOpList(username: string): void {
         this.oppedplayers = {};
         
         // if username given keep that user opped
@@ -38,15 +42,18 @@ class OpManager {
     
     // #region getters
 
-    isOp(username: string){
+    /** Checks if a given user is an operator */
+    isOp(username: string): boolean {
         return this.oppedplayers.hasOwnProperty(username);
     }
 
-    opCount(){
+    /** Gets the number of operators on the server */
+    opCount(): number {
         return Object.keys(this.oppedplayers).length;
     }
 
-    opList(){
+    /** Gets the list of all operators */
+    opList(): string[] {
         return Object.keys(this.oppedplayers);
     }
 
@@ -54,7 +61,8 @@ class OpManager {
     
     // #region saving
 
-    load(){
+    /** Loads the operators list from the save */
+    load(): void {
         if(!this.game.fileManager.fileExists("oplist")){
             return;
         }
@@ -74,7 +82,8 @@ class OpManager {
         }
     }
 
-    save(){
+    /** Saves the operators list to file */
+    save(): void {
         let data = "";
 
         for (const key of Object.keys(this.oppedplayers)) {

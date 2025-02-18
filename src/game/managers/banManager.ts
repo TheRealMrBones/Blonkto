@@ -1,5 +1,6 @@
 import Game from "../game.js";
 
+/** Manages the list of banned players for the server */
 class BanManager {
     game: Game;
     bannedplayers: {[key: string]: string};
@@ -13,19 +14,22 @@ class BanManager {
     
     // #region setters
 
-    ban(username: string, reason: string){
+    /** Adds a user to the ban list */
+    ban(username: string, reason: string): void {
         username = username.toLowerCase();
         this.bannedplayers[username] = reason;
         this.save();
     }
 
-    pardon(username: string){
+    /** Removes a user from the ban list */
+    pardon(username: string): void {
         username = username.toLowerCase();
         delete this.bannedplayers[username];
         this.save();
     }
 
-    clearBanList(){
+    /** Clears the entire ban list */
+    clearBanList(): void {
         this.bannedplayers = {};
         this.save();
     }
@@ -34,17 +38,20 @@ class BanManager {
     
     // #region getters
 
-    isBanned(username: string){
+    /** Checks if a given user is banned */
+    isBanned(username: string): boolean{
         username = username.toLowerCase();
         return this.bannedplayers.hasOwnProperty(username);
     }
 
-    banReason(username: string){
+    /** Gets the reason for a given user's ban */
+    banReason(username: string): string {
         username = username.toLowerCase();
         return this.bannedplayers[username];
     }
 
-    banList(){
+    /** Gets the list of all banned players */
+    banList(): string[] {
         return Object.keys(this.bannedplayers);
     }
 
@@ -52,7 +59,8 @@ class BanManager {
     
     // #region saving
 
-    load(){
+    /** Loads the ban list from the save */
+    load(): void {
         if(!this.game.fileManager.fileExists("banlist")){
             return;
         }
@@ -73,7 +81,8 @@ class BanManager {
         }
     }
 
-    save(){
+    /** Saves the ban list to file */
+    save(): void {
         let data = "";
 
         for (const key of Object.keys(this.bannedplayers)) {
