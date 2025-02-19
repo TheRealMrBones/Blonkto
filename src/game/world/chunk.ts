@@ -10,48 +10,56 @@ class Chunk {
     cells: Cell[][];
     cellUpdates: any[];
 
-    constructor(chunkx: number, chunky: number, data?: string){
+    constructor(chunkx: number, chunky: number, generate: boolean){
         this.chunkx = chunkx;
         this.chunky = chunky;
         this.cellUpdates = [];
 
         this.cells = [];
 
-        if(data !== undefined){
-            // try to read file if exists
-            const chunkdata = data.split("\n");
-            
-            try{
-                for(let x = 0; x < CHUNK_SIZE; x++){
-                    this.cells[x] = [];
-                    for(let y = 0; y < CHUNK_SIZE; y++){
-                        const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
-                        
-                        this.cells[x][y] = new Cell(
-                            celldata.block ? celldata.block.name : null,
-                            celldata.floor ? celldata.floor.name : null,
-                            celldata.ceiling ? celldata.ceiling.name : null);
-                    }
-                }
-            }catch(e){
-                console.log(`Chunk ${this.chunkx},${this.chunky} failed to load. File may have been corrupted`);
+        if(generate) this.generateChunk();
+    }
 
-                // read failed just generate new chunk
-                return new Chunk(chunkx, chunky);
-            }
-        }else{
-            // generate new chunk if file doesnt exist
+    /** Returns the chunk from its save data */
+    static readFromSave(chunkx: number, chunky: number, data: string): Chunk {
+        const chunk = new Chunk(chunkx, chunky, false);
+        const chunkdata = data.split("\n");
+
+        try{
             for(let x = 0; x < CHUNK_SIZE; x++){
-                this.cells[x] = [];
+                chunk.cells[x] = [];
                 for(let y = 0; y < CHUNK_SIZE; y++){
-                    let block: string | null = null;
-
-                    if(Math.random() < .1){
-                        block = "stone_block";
-                    }
+                    const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
                     
-                    this.cells[x][y] = new Cell(block, "grass_floor", null);
+                    chunk.cells[x][y] = new Cell(
+                        celldata.block ? celldata.block.name : null,
+                        celldata.floor ? celldata.floor.name : null,
+                        celldata.ceiling ? celldata.ceiling.name : null);
                 }
+            }
+        }catch(e){
+            console.log(`Chunk ${chunkx},${chunky} failed to load. File may have been corrupted`);
+
+            // read failed just generate new chunk
+            chunk.generateChunk();
+            return chunk;
+        }
+
+        return chunk;
+    }
+
+    /** Generates new cell data for the chunk */
+    generateChunk(){
+        for(let x = 0; x < CHUNK_SIZE; x++){
+            this.cells[x] = [];
+            for(let y = 0; y < CHUNK_SIZE; y++){
+                let block: string | null = null;
+
+                if(Math.random() < .1){
+                    block = "stone_block";
+                }
+                
+                this.cells[x][y] = new Cell(block, "grass_floor", null);
             }
         }
     }

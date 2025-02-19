@@ -42,10 +42,10 @@ class PlayerManager {
             // load existing player from data
             const data = this.game.fileManager.readFile(getPlayerFilePath(username));
             if(!data) return;
-            this.game.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0, data);
+            this.game.players[socket.id] = Player.readFromSave(socket, spawn.pos.x, spawn.pos.y, JSON.parse(data));
         }else{
             // create new player
-            this.game.players[socket.id] = new Player(socket.id, socket, username, spawn.pos.x, spawn.pos.y, 0);
+            this.game.players[socket.id] = new Player(socket, username, spawn.pos.x, spawn.pos.y, true);
         }
         
         // send info to client

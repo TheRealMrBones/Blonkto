@@ -222,11 +222,11 @@ class World {
             if(this.chunkFileExists(x, y)){
                 const data = this.readChunkFile(x, y);
                 if(!data) return null;
-                newChunk = new Chunk(x, y, data);
+                newChunk = Chunk.readFromSave(x, y, data);
             }
             
             if(newChunk == null){
-                newChunk = new Chunk(x, y);
+                newChunk = new Chunk(x, y, true);
             }
             
             this.loadedchunks[[x,y].toString()] = newChunk;

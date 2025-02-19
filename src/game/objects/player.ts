@@ -25,13 +25,12 @@ class Player extends Entity {
     hotbarslot: number;
     fixes: any;
 
-    constructor(id: string, socket: Socket, username: string, x: number, y: number, dir: number, data?: string){
-        super(x, y, dir);
-        this.id = id;
+    constructor(socket: Socket, username: string, x: number, y: number, spawn: boolean){
+        super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
+        this.id = socket.id!;
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
-        this.asset = ASSETS.PLAYER;
         this.socket = socket;
         this.username = username;
         this.kills = 0;
@@ -51,29 +50,9 @@ class Player extends Entity {
         this.inventory = Array(INVENTORY_SIZE).fill(null);
         this.hotbarslot = 0;
 
-        // reading data
-        if(data === undefined){
+        // if spawning give starter items
+        if(spawn == true){
             this.starterInventory();
-        }else{
-            const playerdata = JSON.parse(data);
-            
-            this.username = playerdata.username;
-            this.kills = playerdata.kills;
-
-            if(playerdata.dead){
-                this.starterInventory();
-
-                if(RACISM_PERM){
-                    this.color = playerdata.color;
-                }
-            }else{
-                this.x = playerdata.x;
-                this.y = playerdata.y;
-                this.health = playerdata.health;
-                this.color = playerdata.color;
-    
-                this.inventory = playerdata.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
-            }
         }
 
         this.resetFixes();
@@ -82,6 +61,29 @@ class Player extends Entity {
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             collectCheck(this, game.getDroppedStacks(), game);
         });
+    }
+
+    /** Returns the player from its save data */
+    static readFromSave(socket: Socket, x: number, y: number, data: any): Player {
+        const player = new Player(socket, data.username, x, y, data.dead);
+
+        player.kills = data.kills;
+
+        if(data.dead){
+            // Respawn
+            if(RACISM_PERM){
+                player.color = data.color;
+            }
+        }else{
+            // Load Exact
+            player.x = data.x;
+            player.y = data.y;
+            player.health = data.health;
+            player.color = data.color;
+            player.inventory = data.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
+        }
+
+        return player;
     }
 
     starterInventory(){
