@@ -54,9 +54,7 @@ class Player extends Entity {
 
         // reading data
         if(data === undefined){
-            this.inventory[0] = new ItemStack("pickaxe");
-            this.inventory[1] = new ItemStack("sword");
-            this.inventory[2] = new ItemStack("stone_block", 64);
+            this.starterInventory();
         }else{
             const playerdata = JSON.parse(data);
             
@@ -64,6 +62,8 @@ class Player extends Entity {
             this.kills = playerdata.kills;
 
             if(playerdata.dead){
+                this.starterInventory();
+
                 if(RACISM_PERM){
                     this.color = playerdata.color;
                 }
@@ -83,6 +83,12 @@ class Player extends Entity {
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             collectCheck(this, game.getDroppedStacks(), game);
         });
+    }
+
+    starterInventory(){
+        this.inventory[0] = new ItemStack("pickaxe");
+        this.inventory[1] = new ItemStack("sword");
+        this.inventory[2] = new ItemStack("stone_block", 64);
     }
 
     // #region setters
