@@ -1,7 +1,6 @@
 import { Socket } from "socket.io-client";
 
 import Entity from "./entity.js";
-import ItemRegistry from "../registries/itemRegistry.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import { collectCheck } from "../collisions.js";

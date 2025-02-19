@@ -57,7 +57,7 @@ class DroppedStack extends GameObject {
         
         return {
             ...base,
-            name: "dropped_stack",
+            type: "dropped_stack",
             itemStack: this.itemStack.serializeForWrite(),
         };
     }
