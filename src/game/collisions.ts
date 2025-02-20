@@ -2,12 +2,51 @@ import Player from "./objects/player.js";
 import DroppedStack from "./objects/droppedStack.js";
 import Entity from "./objects/entity.js";
 import Game from "./game.js";
+import GameObject from "./objects/gameObject.js";
 
 import SharedConfig from "../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
+import Constants from "../shared/constants.js";
+const { SHAPES } = Constants;
+
 // #region collision checks
+
+/** Checks for non-player objects colliding on blocks */
+export const nonplayerBlockCollision = (object: GameObject, game: Game): void => {
+    // only search for collisions immediatly next to you
+    const startx = Math.floor(object.x - object.scale / 2);
+    const starty = Math.floor(object.y - object.scale / 2);
+
+    // lists of possible collisions
+    let walls: LineSegment[] = [];
+    let circles: Circle[] = [];
+
+    // find all circles and walls for collision
+    for(let x = startx; x < object.x + object.scale / 2; x++){
+        for(let y = starty; y < object.y + object.scale / 2; y++){
+            const cell = game.world.getCell(x, y, false);
+            if(!cell) continue;
+            const block = cell.block
+            if(block === null) continue;
+
+            const pos: Pos = { x: x + block.scale / 2, y: y + block.scale / 2 };
+
+            if(block.shape == SHAPES.SQUARE){
+                const wallResults = getSquareWalls(block.scale, pos);
+                walls = walls.concat(wallResults.walls);
+                circles = circles.concat(wallResults.points);
+            }else if(block.shape == SHAPES.CIRCLE){
+                circles.push({ x: pos.x, y: pos.y, radius: block.scale / 2 });
+            }
+        }
+    }
+
+    // calculate collisions and push accordingly
+    wallCollisions(object, walls);
+    circleCollisions(object, circles);
+}
 
 /** Checks for dropped stacks that the given player can pick up */
 export const collectCheck = (player: Player, collectables: DroppedStack[], game: Game): void => {
@@ -52,6 +91,85 @@ export const attackHitCheck = (player: Player, entities: Entity[], attackdir: nu
         }
     }
 };
+
+// #endregion
+
+// #endregion shape collisions
+
+/** Returns the collision objects for the given square shape */
+function getSquareWalls(scale: number, pos: Pos): { walls: LineSegment[], points: Circle[] } {
+    const p = [
+        { x: pos.x - scale / 2, y: pos.y - scale / 2, radius: 0 },
+        { x: pos.x - scale / 2, y: pos.y + scale / 2, radius: 0 },
+        { x: pos.x + scale / 2, y: pos.y + scale / 2, radius: 0 },
+        { x: pos.x + scale / 2, y: pos.y - scale / 2, radius: 0 },
+    ];
+    const walls = [
+        { p1: p[0], p2: p[1] },
+        { p1: p[1], p2: p[2] },
+        { p1: p[2], p2: p[3] },
+        { p1: p[3], p2: p[0] },
+    ];
+
+    return {
+        walls: walls,
+        points: p,
+    };
+}
+
+/** Perform all wall collisions on the given object */
+function wallCollisions(object: GameObject, walls: LineSegment[]): void {
+    walls.forEach(w => { wallCollision(object, w); });
+}
+
+/** Perform wall collision on the given object with the given wall */
+function wallCollision(object: GameObject, wall: LineSegment): void {
+    const p1 = wall.p1;
+    const p2 = wall.p2;
+    if (p1.x - p2.x == 0) {
+        if (object.y > p1.y && object.y < p2.y || object.y < p1.y && object.y > p2.y) {
+            if (Math.abs(object.x - p1.x) <= object.scale / 2) {
+                if (object.x - p1.x > 0) {
+                    object.x += (object.scale / 2 - Math.abs(object.x - p1.x));
+                } else {
+                    object.x -= (object.scale / 2 - Math.abs(object.x - p1.x));
+                }
+            }
+        }
+    } else if (p1.y - p2.y == 0) {
+        if (object.x > p1.x && object.x < p2.x || object.x < p1.x && object.x > p2.x) {
+            if (Math.abs(object.y - p1.y) <= object.scale / 2) {
+                if (object.y - p1.y > 0) {
+                    object.y += (object.scale / 2 - Math.abs(object.y - p1.y));
+                } else {
+                    object.y -= (object.scale / 2 - Math.abs(object.y - p1.y));
+                }
+            }
+        }
+    }
+}
+
+/** Perform all circle collisions on the given object */
+function circleCollisions(object: GameObject, circles: Circle[]): void {
+    circles.forEach(c => { circleCollision(object, c); });
+}
+
+/** Perform circle collision on the given object with the given circle */
+function circleCollision(object: GameObject, circle: Circle): void {
+    const dist = getDistance(object, circle);
+    const realdist = dist - object.scale / 2 - circle.radius;
+    if(realdist < 0){
+        if(dist == 0){
+            const dir = Math.random() * 2 * Math.PI;
+            object.x -= Math.sin(dir) * realdist;
+            object.y += Math.cos(dir) * realdist;
+        }else{
+            const dir = Math.atan2(object.x - circle.x, circle.y - object.y);
+            object.x -= Math.sin(dir) * realdist;
+            object.y += Math.cos(dir) * realdist;
+        }
+    }
+}
 
 // #endregion
 
