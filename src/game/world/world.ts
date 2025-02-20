@@ -35,7 +35,7 @@ class World {
     generateSpawn(): void {
         for(let x = -SPAWN_SIZE / 2 - 1; x < SPAWN_SIZE / 2 + 1; x++){
             for(let y = -SPAWN_SIZE / 2 - 1; y < SPAWN_SIZE / 2 + 1; y++){
-                const chunk = this.getChunk(x, y, true);
+                this.getChunk(x, y, true);
                 this.unloadChunk(x, y);
             }
         }
@@ -222,11 +222,11 @@ class World {
             if(this.chunkFileExists(x, y)){
                 const data = this.readChunkFile(x, y);
                 if(!data) return null;
-                newChunk = Chunk.readFromSave(x, y, data);
+                newChunk = Chunk.readFromSave(x, y, data, this.game);
             }
             
             if(newChunk == null){
-                newChunk = new Chunk(x, y, true);
+                newChunk = new Chunk(x, y, true, this.game);
             }
             
             this.loadedchunks[[x,y].toString()] = newChunk;

@@ -1,6 +1,8 @@
 import Cell from "./cell.js";
 
 import SharedConfig from "../../configs/shared.js";
+import Game from "../game.js";
+import NonplayerEntity from "../objects/nonplayerEntity.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single chunk (square collection of cells) in the game world */
@@ -10,19 +12,19 @@ class Chunk {
     cells: Cell[][];
     cellUpdates: any[];
 
-    constructor(chunkx: number, chunky: number, generate: boolean){
+    constructor(chunkx: number, chunky: number, generate: boolean, game: Game){
         this.chunkx = chunkx;
         this.chunky = chunky;
         this.cellUpdates = [];
 
         this.cells = [];
 
-        if(generate) this.generateChunk();
+        if(generate) this.generateChunk(game);
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(chunkx: number, chunky: number, data: string): Chunk {
-        const chunk = new Chunk(chunkx, chunky, false);
+    static readFromSave(chunkx: number, chunky: number, data: string, game: Game): Chunk {
+        const chunk = new Chunk(chunkx, chunky, false, game);
         const chunkdata = data.split("\n");
 
         try{
@@ -41,7 +43,7 @@ class Chunk {
             console.log(`Chunk ${chunkx},${chunky} failed to load. File may have been corrupted`);
 
             // read failed just generate new chunk
-            chunk.generateChunk();
+            chunk.generateChunk(game);
             return chunk;
         }
 
@@ -49,7 +51,7 @@ class Chunk {
     }
 
     /** Generates new cell data for the chunk */
-    generateChunk(){
+    generateChunk(game: Game){
         for(let x = 0; x < CHUNK_SIZE; x++){
             this.cells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
@@ -57,6 +59,9 @@ class Chunk {
 
                 if(Math.random() < .1){
                     block = "stone_block";
+                }else if(Math.random() < .01){
+                    const pig = new NonplayerEntity(this.chunkx * CHUNK_SIZE + x + .5, this.chunky * CHUNK_SIZE + y + .5, 0, "pig");
+                    game.entities[pig.id] = pig;
                 }
                 
                 this.cells[x][y] = new Cell(block, "grass_floor", null);

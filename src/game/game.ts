@@ -161,7 +161,7 @@ class Game {
         return {
             dir: Math.atan2(info.xoffset, info.yoffset),
             cellpos: { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) },
-        }
+        };
     }
 
     /** Response to the general input message from a client */
