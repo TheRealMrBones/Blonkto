@@ -243,21 +243,6 @@ class Game {
         // get world updates
         const worldLoad = this.world.loadPlayerChunks(player);
         player.chunk = worldLoad.chunk;
-        
-        // check for falling
-        const tilesOn = player.tilesOn();
-        let notair = 0;
-        tilesOn.forEach(tile => {
-            const cell = this.world.getCell(tile.x, tile.y, false);
-            if(cell){
-                if(cell.floor){
-                    notair++;
-                }
-            }
-        });
-        if(notair == 0){
-            player.falling = true;
-        }
 
         // get entities
         const nearbyEntities = this.getNonplayers().filter(e =>

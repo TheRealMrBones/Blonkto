@@ -1,4 +1,5 @@
 import GameObject from "./gameObject.js";
+import Game from "../game.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -23,11 +24,9 @@ class Entity extends GameObject {
 
     // #region setters
 
-    onFell(){
-        setTimeout(() => {
-            this.dead = true;
-            this.killedby = "gravity";
-        }, 1000);
+    override onFell(game: Game): void {
+        this.dead = true;
+        this.killedby = "gravity";
     }
 
     // #endregion

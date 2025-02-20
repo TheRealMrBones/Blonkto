@@ -37,7 +37,9 @@ class GameObject {
         if(scale !== undefined) this.scale = scale;
         if(asset !== undefined) this.asset = asset;
 
-        this.eventEmitter.on("tick", (game: Game, dt: number) => {});
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+            this.checkFalling(game);
+        });
     }
 
     // #region setters
@@ -64,19 +66,44 @@ class GameObject {
         // get next fall scale
         if(this.falling){
             this.scale -= FALL_RATE * deltatime / 1000;
-            if(this.scale <= 0){
-                this.scale = 0;
-                this.falling = false;
-                this.onFell();
-            }
+            
         }
 
         this.lastupdated = data.t;
     }
 
-    /** Default object action after falling */
-    onFell(): void {
+    // #endregion
 
+    // #region ticks
+
+    /** Check for falling */
+    checkFalling(game: Game): void {
+        if(!this.falling){
+            const tilesOn = this.tilesOn();
+            let notair = 0;
+
+            tilesOn.forEach(tile => {
+                const cell = game.world.getCell(tile.x, tile.y, false);
+                if(cell){
+                    if(cell.floor){
+                        notair++;
+                    }
+                }
+            });
+
+            if(notair == 0) this.falling = true;
+        }else{
+            if(this.scale <= 0){
+                this.scale = 0;
+                this.falling = false;
+                this.onFell(game);
+            }
+        }
+    }
+
+    /** Default object action after falling */
+    onFell(game: Game): void {
+        game.removeObject(this.id);
     }
 
     // #endregion

@@ -94,6 +94,13 @@ class Player extends Entity {
 
     // #region setters
 
+    override onFell(game: Game): void {
+        setTimeout(() => {
+            this.dead = true;
+            this.killedby = "gravity";
+        }, 1000);
+    }
+
     update(data: any){
         if(this.playerdelay == 0){
             this.playerdelay = Date.now() - data.t;
