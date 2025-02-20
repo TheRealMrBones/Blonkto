@@ -46,7 +46,6 @@ class Game {
     world: World;
 
     lastUpdateTime: number;
-    shouldSendUpdate: boolean;
 
     oppasscode: string;
     oppasscodeused: boolean;
@@ -65,7 +64,6 @@ class Game {
 
         // updates
         this.lastUpdateTime = Date.now();
-        this.shouldSendUpdate = false;
 
         // intervals
         setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
@@ -189,6 +187,14 @@ class Game {
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
+        
+        // get world updates
+        const worldloads: {[key: string]: any } = {};
+        this.getPlayerEntities().forEach(p => {
+            const worldload = this.world.loadPlayerChunks(p);
+            p.chunk = worldload.chunk;
+            worldloads[p.id] = worldload;
+        });
 
         // check deaths
         this.getPlayerEntities().forEach(p => {
@@ -208,19 +214,13 @@ class Game {
             o.eventEmitter.emit("tick", this, dt);
         });
 
-        // check to send update
-        if(this.shouldSendUpdate){
-            // send fat update packets
-            this.getPlayerEntities().forEach(player => {
-                player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player));
-            });
-            this.shouldSendUpdate = false;
+        // send fat update packets
+        this.getPlayerEntities().forEach(player => {
+            player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
+        });
 
-            // reset cell updates in loaded chunks
-            this.world.resetCellUpdates();
-        }else{
-            this.shouldSendUpdate = true;
-        }
+        // reset cell updates in loaded chunks
+        this.world.resetCellUpdates();
     }
 
     /** Tick the worlds chunk unloader */
@@ -229,7 +229,7 @@ class Game {
     }
 
     /** Create an update object to be sent to the specified players client */
-    createUpdate(player: Player): any {
+    createUpdate(player: Player, worldload: any): any {
         // get players
         const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
@@ -239,10 +239,6 @@ class Game {
         // get fixes
         const fixescopy = player.getFixes();
         player.resetFixes();
-
-        // get world updates
-        const worldLoad = this.world.loadPlayerChunks(player);
-        player.chunk = worldLoad.chunk;
 
         // get entities
         const nearbyEntities = this.getNonplayers().filter(e =>
@@ -257,8 +253,14 @@ class Game {
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
-            worldLoad: worldLoad,
+            worldLoad: worldload,
         };
+    }
+
+    createInitialUpdate(player: Player): any {
+        const worldload = this.world.loadPlayerChunks(player);
+        player.chunk = worldload.chunk;
+        return this.createUpdate(player, worldload);
     }
 
     // #endregion

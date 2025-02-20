@@ -49,7 +49,7 @@ class PlayerManager {
         }
         
         // send info to client
-        this.game.players[socket.id].socket.emit(MSG_TYPES.GAME_UPDATE, this.game.createUpdate(this.game.players[socket.id]));
+        this.game.players[socket.id].socket.emit(MSG_TYPES.GAME_UPDATE, this.game.createInitialUpdate(this.game.players[socket.id]));
         socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, {
             x: this.game.players[socket.id].x,
             y: this.game.players[socket.id].y,
