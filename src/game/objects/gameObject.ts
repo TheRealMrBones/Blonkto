@@ -66,7 +66,6 @@ class GameObject {
         // get next fall scale
         if(this.falling){
             this.scale -= FALL_RATE * deltatime / 1000;
-            
         }
 
         this.lastupdated = data.t;

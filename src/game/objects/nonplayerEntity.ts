@@ -1,8 +1,19 @@
+import EntityDefinition from "../entities/entityDefinition.js";
+import EntityRegistry from "../registries/entityRegistry.js";
 import Entity from "./entity.js";
 
 class NonplayerEntity extends Entity {
-    constructor(x: number, y: number, dir: number){
-        super(x, y, dir);
+    entitydefinition: EntityDefinition;
+
+    constructor(x: number, y: number, dir: number, entitydefinition: string){
+        super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
+
+        this.entitydefinition = EntityRegistry.get(entitydefinition);
+    }
+
+    /** Returns the nonplayer entity from its save data */
+    static readFromSave(data: any): NonplayerEntity {
+        return new NonplayerEntity(data.x, data.y, data.dir, data.entitydefinition);
     }
 
     // #region serialization
@@ -28,6 +39,7 @@ class NonplayerEntity extends Entity {
         return {
             ...base,
             type: "entity",
+            entitydefinition: this.entitydefinition.name,
         };
     }
 
