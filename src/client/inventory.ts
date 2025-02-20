@@ -5,11 +5,13 @@ const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 const inventory = new Array(INVENTORY_SIZE).fill(false);
 
-export function getInventorySlot(slot: number){
+/** Returns the item from the given inventory slot */
+export function getInventorySlot(slot: number): any {
     return inventory[slot];
 }
 
-export function setInventorySlot(slot: number, item: Item){
+/** Sets the requested inventory slot to contain the given item */
+export function setInventorySlot(slot: number, item: Item): void {
     inventory[slot] = item;
 
     // show item in slot ui
@@ -29,7 +31,8 @@ export function setInventorySlot(slot: number, item: Item){
     }
 }
 
-export function setInventory(itemsdata: any){
+/** Sets the entire inventories data to the given inventory */
+export function setInventory(itemsdata: any): void {
     for(let i = 0; i < INVENTORY_SIZE; i++){
         const itemdata = itemsdata[i];
         if(itemdata){
@@ -40,7 +43,8 @@ export function setInventory(itemsdata: any){
     }
 }
 
-export function setSingleInventorySlot(data: any){
+/** Sets a single inventory slot to the given slot data */
+export function setSingleInventorySlot(data: any): void {
     if(data.itemstack == null){
         clearInventorySlot(data.slot);
     }else{
@@ -48,7 +52,8 @@ export function setSingleInventorySlot(data: any){
     }
 }
 
-export function clearInventorySlot(slot: number){
+/** Clears the given inventory slot of its item and if in the hotbar updates the UI */
+export function clearInventorySlot(slot: number): void {
     inventory[slot] = false;
 
     // remove item in slot ui
@@ -62,7 +67,8 @@ export function clearInventorySlot(slot: number){
     }
 }
 
-export function clearInventory(){
+/** Clears the entire inventory of its data */
+export function clearInventory(): void {
     for(let i = 0; i < INVENTORY_SIZE; i++){
         if(inventory[i]){
             clearInventorySlot(i);

@@ -37,16 +37,19 @@ let falling = false;
 
 // #region handle mouse movement
 
-function onMouseInput(e: MouseEvent){
+/** Response to mouse input from client */
+function onMouseInput(e: MouseEvent): void {
     handleDirection(e.clientX, e.clientY);
 }
 
-function onTouchInput(e: TouchEvent){
+/** Response to touch input from client */
+function onTouchInput(e: TouchEvent): void {
     const touch = e.touches[0];
     handleDirection(touch.clientX, touch.clientY);
 }
 
-function handleDirection(x: number, y: number){
+/** Sets the client direction based on mouse/touch screen position */
+function handleDirection(x: number, y: number): void {
     dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
 }
 
@@ -54,7 +57,8 @@ function handleDirection(x: number, y: number){
 
 // #region handle keys
 
-function handlekeyDown(e: KeyboardEvent){
+/** Response to key down input from client */
+function handlekeyDown(e: KeyboardEvent): void {
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -129,7 +133,8 @@ function handlekeyDown(e: KeyboardEvent){
     }
 }
 
-function handlekeyUp(e: KeyboardEvent){
+/** Response to key up input from client */
+function handlekeyUp(e: KeyboardEvent): void {
     switch(e.key){
         case "ArrowUp":
         case "w":
@@ -174,7 +179,8 @@ function handlekeyUp(e: KeyboardEvent){
 
 // #region handle mouse clicks
 
-function handleMouseDown(e: MouseEvent){
+/** Response to mouse click input from client */
+function handleMouseDown(e: MouseEvent): void {
     // get position of click compared to current player pos
     const clickpos = {
         xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
@@ -195,7 +201,8 @@ function handleMouseDown(e: MouseEvent){
 
 // #region hotbar
 
-export function sethotbarslot(index: number){
+/** Selects the given hotbar slot as in use */
+export function sethotbarslot(index: number): void {
     const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1))!;
     const newslot = document.getElementById("hotbarslot" + (index + 1))!;
     oldslot.classList.remove("hotbarslotselected");
@@ -208,7 +215,8 @@ export function sethotbarslot(index: number){
 
 // #region main handling
 
-function handleInput(){
+/** Updates the clients data based on most recent inputs */
+function handleInput(): void {
     updatePos();
 
     updateInputs({
@@ -220,7 +228,8 @@ function handleInput(){
     });
 }
 
-function resetMovement(){
+/** Resets the input reading variables */
+function resetMovement(): void {
     updatePos();
     startw = null;
     starta = null;
@@ -228,7 +237,8 @@ function resetMovement(){
     startd = null;
 }
 
-function updatePos(){
+/** Updates the current position of the client based on most recent movement inputs */
+function updatePos(): void {
     // update local position vars
     if(startw){
         y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
@@ -266,7 +276,8 @@ function updatePos(){
 
 // #region start and stop capturing
 
-export function startCapturingInput(xp: number, yp: number){
+/** Starts capturing client inputs for gameplay and sets interval to send input updates to the server */
+export function startCapturingInput(xp: number, yp: number): void {
     // set spawn position
     x = xp;
     y = yp;
@@ -285,7 +296,8 @@ export function startCapturingInput(xp: number, yp: number){
     interval = setInterval(handleInput, 1000 / CLIENT_UPDATE_RATE);
 }
 
-export function stopCapturingInput(){
+/** Stops capturing client inputs for gameplay and pauses sending input updates to the server */
+export function stopCapturingInput(): void {
     // remove input listeners
     window.removeEventListener("mousemove", onMouseInput);
     window.removeEventListener("click", onMouseInput);
@@ -309,7 +321,8 @@ export function stopCapturingInput(){
     if (interval !== null) clearInterval(interval);
 }
 
-export function pauseCapturingInputs(){
+/** Stops capturing client inputs for gameplay but continues sending input updates to the server */
+export function pauseCapturingInputs(): void {
     // pause input listeners
     window.removeEventListener("mousemove", onMouseInput);
     window.removeEventListener("click", onMouseInput);
@@ -327,7 +340,8 @@ export function pauseCapturingInputs(){
     startd = null;
 }
 
-export function resumeCapturingInputs(){
+/** Resumes paused client input capturing */
+export function resumeCapturingInputs(): void {
     // resume input listeners
     window.addEventListener("mousemove", onMouseInput);
     window.addEventListener("click", onMouseInput);
@@ -342,7 +356,8 @@ export function resumeCapturingInputs(){
 
 // #region getters
 
-export function getSelf(){
+/** Returns all relevant information on the clients current state */
+export function getSelf(): any {
     updatePos();
 
     return {
@@ -362,12 +377,14 @@ export function getSelf(){
 
 // #region setters
 
-export function push(pushx: number, pushy: number){
+/** Pushes the players position the given amounts */
+export function push(pushx: number, pushy: number): void {
     x += pushx;
     y += pushy;
 }
 
-export function setPos(newpos: Pos){
+/** Sets the players position to the given spot */
+export function setPos(newpos: Pos): void {
     // keep current inputs running but don't include previous time held
     if(startw){
         startw = Date.now();
@@ -387,7 +404,8 @@ export function setPos(newpos: Pos){
     y = newpos.y;
 }
 
-export function setSelf(me: any){
+/** Sets the players misc state data to the given values */
+export function setSelf(me: any): void {
     scale = me.scale;
     hit = me.hit;
     swinging = me.swinging;

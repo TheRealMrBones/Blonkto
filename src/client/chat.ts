@@ -4,10 +4,12 @@ const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 const chatMessagesDiv = document.getElementById("chatmessages")!;
 
 const messages: any[] = [];
+let chatopened = false;
 
 // #region receive messages
 
-export function receiveChatMessage(message: any){
+/** Shows/Instantiates the given chat message to the client */
+export function receiveChatMessage(message: any): void {
     if(messages.length > MAX_MESSAGE_COUNT){
         removeLastChatMessage();
     }
@@ -28,7 +30,8 @@ export function receiveChatMessage(message: any){
 
 // #region message visibility
 
-function hideChatMessage(id: string){
+/** Hides the chat message with the given id from being shown without chat opened */
+function hideChatMessage(id: string): void {
     const message = messages.find(m => m.id == id);
     if(message){
         if(!chatopened){
@@ -38,8 +41,8 @@ function hideChatMessage(id: string){
     }
 }
 
-let chatopened = false;
-export function toggleAllChatShow(show: boolean){
+/** Toggles the viewing of all chat messages vs just the most recent ones */
+export function toggleAllChatShow(show: boolean): void {
     chatopened = show;
     const ms = messages.filter(m => !m.display);
     ms.forEach(m => {
@@ -51,7 +54,8 @@ export function toggleAllChatShow(show: boolean){
     });
 }
 
-function removeLastChatMessage(){
+/** Completely removes the oldest chat message from the chat history */
+function removeLastChatMessage(): void {
     const message = messages[0];
     chatMessagesDiv.removeChild(message.div);
     messages.shift();
@@ -61,7 +65,8 @@ function removeLastChatMessage(){
 
 // #region helpers
 
-function makeStringHtmlSafe(str: string){
+/** Returns an html safe version of the given string */
+function makeStringHtmlSafe(str: string): string {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&apos;");
 }
 

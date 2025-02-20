@@ -41,13 +41,16 @@ window.addEventListener("resize", () => {
 
 // #region getters and setters
 
-export function getCellSize(){
+/** Returns the cell render size in pixels */
+export function getCellSize(): number {
     return cellSize;
 }
 
 // let server set your color
 let myColor: Color;
-export function setColor(color: Color){
+
+/** Sets your own color in game to the given color */
+export function setColor(color: Color): void {
     myColor = color;
 }
 
@@ -60,7 +63,8 @@ let thisframe = Date.now();
 let fpstotal = 0;
 let fpscount = 0;
 
-function calculatefps(){
+/** Calculates and shows your clients fps based on how many frames have rendered in the second since the last check */
+function calculatefps(): void {
     if(fpscount == 0){
         updateFps(0);
     }else{
@@ -75,8 +79,8 @@ function calculatefps(){
 
 // #region main render
 
-// continuously runs to get max fps possible
-function render(){
+/** Main render method for rendering the current (interpolated as needed) state of the loaded game world */
+function render(): void {
     // get all needed state and self info
     const state = getCurrentState();
     if(state == null){
@@ -91,8 +95,8 @@ function render(){
     me.asset = ASSETS.PLAYER;
 
     // get object states (for deciding rendering order)
-    const fallingplayers = others.filter(o => o.falling);
-    const notfallingplayers = others.filter(o => !o.falling);
+    const fallingplayers = others.filter((o: any) => o.falling);
+    const notfallingplayers = others.filter((o: any) => !o.falling);
     if(me.falling){
         fallingplayers.push(me);
     }else{
@@ -140,7 +144,8 @@ function render(){
 
 // #region World
 
-function renderFloors(firstCell: { x: number; y: number; renderx: number; rendery: number; }){
+/** Renders the floors of each cell within client view */
+function renderFloors(firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
@@ -158,7 +163,8 @@ function renderFloors(firstCell: { x: number; y: number; renderx: number; render
     context.restore();
 }
 
-function renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }){
+/** Renders the blocks of each cell within client view */
+function renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
     const canvasX = canvas.width / 2;
     const canvasY = canvas.height / 2;
     context.save();
@@ -176,7 +182,8 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
     context.restore();
 }
 
-function renderCell(x: number, y: number, asset: string){
+/** Renders the given asset onto the given cell */
+function renderCell(x: number, y: number, asset: string): void {
     context.drawImage(
         getAsset(asset),
         x + 1,
@@ -190,7 +197,8 @@ function renderCell(x: number, y: number, asset: string){
 
 // #region Entities
 
-function renderEntity(me: any, entity: any){
+/** Renders the given entity */
+function renderEntity(me: any, entity: any): void {
     // check if entity is being hit
     let model;
     if(entity.hit){
@@ -229,7 +237,8 @@ function renderEntity(me: any, entity: any){
 
 // #region Players
 
-function renderPlayer(me: any, player: any){
+/** Renders the given player entity */
+function renderPlayer(me: any, player: any): void {
     // check if player is being hit
     let model;
     if(player.hit){
@@ -262,7 +271,8 @@ function renderPlayer(me: any, player: any){
     context.restore();
 }
 
-function renderSwing(me: any, entity: any){
+/** Renders the given entity's swing animation */
+function renderSwing(me: any, entity: any): void {
     // prepare context
     const { x, y, scale, lastattackdir } = entity;
     const canvasX = canvas.width / 2 + fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - fixCoord(me.x);
@@ -278,7 +288,8 @@ function renderSwing(me: any, entity: any){
     context.restore();
 }
 
-function renderPlayerUsername(me: any, player: any){
+/** Renders the given player's username above them */
+function renderPlayerUsername(me: any, player: any): void {
     // prepare context
     const { x, y, username } = player;
     const canvasX = canvas.width / 2 + fixCoord(x) - fixCoord(me.x);
@@ -297,7 +308,8 @@ function renderPlayerUsername(me: any, player: any){
 
 // #region Background
 
-function renderBackground(me: any){
+/** Renders the background image under the world */
+function renderBackground(me: any): void {
     const model = getAsset(ASSETS.SPACE_BG);
 
     const worldSize = CHUNK_SIZE * WORLD_SIZE / 2;
@@ -326,7 +338,8 @@ function renderBackground(me: any){
 
 // #region Helpers
 
-function fixCoord(x: number){
+/** Returns the given cell coordinate as a screen coordinate */
+function fixCoord(x: number): number {
     return x * cellSize;
 }
 
@@ -337,13 +350,15 @@ function fixCoord(x: number){
 let animationFrameRequestId: number;
 let updatefpsinterval: string | number | NodeJS.Timeout | undefined;
 
-export function startRendering(){
+/** Starts the rendering loop for the client */
+export function startRendering(): void {
     updatefpsinterval = setInterval(calculatefps, 500);
 
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
-export function stopRendering(){
+/** Stops the rendering loop for the client */
+export function stopRendering(): void {
     clearInterval(updatefpsinterval);
 
     cancelAnimationFrame(animationFrameRequestId);

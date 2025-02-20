@@ -31,7 +31,8 @@ for(let i = 0; i < 9; i++){
 
 // #region main functions
 
-export function setupUi(){
+/** Prepares and shows the game UI */
+export function setupUi(): void {
     // show ui
     chatDiv.style.display = "block";
     infodiv.style.display = "block";
@@ -47,7 +48,8 @@ export function setupUi(){
     ignorechatenter = Date.now();
 }
 
-export function hideUi(){
+/** Hides the game UI */
+export function hideUi(): void {
     // hide ui
     chatDiv.style.display = "none";
     infodiv.style.display = "none";
@@ -64,7 +66,8 @@ export function hideUi(){
 
 // #region event functions
 
-function keyUpChecks(event: any){
+/** Handles UI related keyboard events */
+function keyUpChecks(event: KeyboardEvent): void {
     event.preventDefault();
     switch(event.key){
         case "Enter": {
@@ -87,7 +90,8 @@ function keyUpChecks(event: any){
     }
 }
 
-function chatInputKeyUp(event: any){
+/** Handles chat UI related keyboard events */
+function chatInputKeyUp(event: KeyboardEvent): void {
     event.preventDefault();
     if(event.key === "Enter"){
         chat({
@@ -100,13 +104,15 @@ function chatInputKeyUp(event: any){
     }
 }
 
-function chatInputFocus(event: any){
+/** Handles chat UI related focus events */
+function chatInputFocus(event: FocusEvent): void {
     pauseCapturingInputs();
     window.removeEventListener("keyup", keyUpChecks);
     toggleAllChatShow(true);
 }
 
-function chatInputUnfocus(event: any){
+/** Handles chat UI related unfocus events */
+function chatInputUnfocus(event: FocusEvent): void {
     resumeCapturingInputs();
     window.addEventListener("keyup", keyUpChecks);
     toggleAllChatShow(false);
@@ -116,15 +122,18 @@ function chatInputUnfocus(event: any){
 
 // #region update ui
 
-export function updateCoords(x: number, y: number){
+/** Updates the coordinates UI to the given position */
+export function updateCoords(x: number, y: number): void {
     coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
 }
 
-export function updateFps(fps: number){
+/** Updates the FPS UI to the given value */
+export function updateFps(fps: number): void {
     fpstext.innerHTML = Math.round(fps).toString();
 }
 
-export function toggleConnectionLost(toggle: boolean){
+/** Toggles the connection lost icon to appear or disapear */
+export function toggleConnectionLost(toggle: boolean): void {
     if(toggle){
         connectionlostdiv.style.display = "block";
     }else{

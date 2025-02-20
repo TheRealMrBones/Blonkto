@@ -5,23 +5,27 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 // #region chunks
 
-export function loadChunks(chunks: any[]){
+/** Load the requested chunks based on the given chunks data */
+export function loadChunks(chunks: any[]): void {
     chunks.forEach(chunk => {
         loadChunk(chunk);
     });
 }
 
-function loadChunk(chunk: any){
+/** Load the requested chunk based on the given chunk data */
+function loadChunk(chunk: any): void {
     chunks[[chunk.x,chunk.y].toString()] = chunk;
 }
 
-export function unloadChunks(chunks: any[]){
+/** Unload the requested chunks based on the given chunks data */
+export function unloadChunks(chunks: any[]): void {
     chunks.forEach(chunk => {
         unloadChunk(chunk);
     });
 }
 
-function unloadChunk(chunk: any){
+/** Unload the requested chunk based on the given chunk data */
+function unloadChunk(chunk: any): void {
     delete chunks[[chunk.x,chunk.y].toString()];
 }
 
@@ -29,13 +33,15 @@ function unloadChunk(chunk: any){
 
 // #region cells
 
-export function updateCells(cellUpdates: any[]){
+/** Update the given cells with their new data */
+export function updateCells(cellUpdates: any[]): void {
     cellUpdates.forEach(cellUpdate => {
         updateCell(cellUpdate);
     });
 }
 
-function updateCell(cellUpdate: any){
+/** Update the given cell with its new data */
+function updateCell(cellUpdate: any): void {
     const chunkx = Math.floor(cellUpdate.x / CHUNK_SIZE);
     const chunky = Math.floor(cellUpdate.y / CHUNK_SIZE);
     const cellx = cellUpdate.x - chunkx * CHUNK_SIZE;
@@ -47,7 +53,8 @@ function updateCell(cellUpdate: any){
     }
 }
 
-export function getCell(x: number, y: number){
+/** Returns the requested cells data if it exists or returns default values (empty) otherwise */
+export function getCell(x: number, y: number): any {
     const chunkx = Math.floor(x / CHUNK_SIZE);
     const chunky = Math.floor(y / CHUNK_SIZE);
     const cellx = x - chunkx * CHUNK_SIZE;
@@ -65,7 +72,8 @@ export function getCell(x: number, y: number){
 
 // #region helpers
 
-function getDefaultCell(){
+/** Returns the default cell data (empty) */
+function getDefaultCell(): any {
     return {};
 }
 

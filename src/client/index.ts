@@ -64,7 +64,8 @@ Promise.all([
 
 // #region login
 
-function sendcreateaccount(){
+/** Tries to send the create account message to the server */
+function sendcreateaccount(): void {
     if(!usernameInput.value || !passwordInput.value){
         errorDiv.innerHTML = "must provide a username and password";
 
@@ -79,7 +80,8 @@ function sendcreateaccount(){
     passwordInput.blur();
 }
 
-function sendlogin(){
+/** Tries to send the login message to the server */
+function sendlogin(): void {
     if(!usernameInput.value || !passwordInput.value){
         errorDiv.innerHTML = "must provide a username and password";
 
@@ -94,7 +96,8 @@ function sendlogin(){
     passwordInput.blur();
 }
 
-export function onlogin(response: any){
+/** Opens up the play UI after successful login with the server */
+export function onlogin(response: any): void {
     if(response.account){
         response.error = "";
 
@@ -115,23 +118,27 @@ export function onlogin(response: any){
 
 // #region state changes
 
-function joingame(){
+/** Tries to join the server game and initialize client state */
+function joingame(): void {
     play();
     initState();
 }
 
-export function connectionRefused(info: any){
+/** Client response to connection refused message from server */
+export function connectionRefused(info: any): void {
     errorDiv.innerHTML = `Connection refused: ${info.reason}`;
     if(info.extra){
         errorDiv.innerHTML += `<br>${info.extra}`;
     }
 }
 
-export function connectionAccepted(){
+/** Client response to connection accepted message from server */
+export function connectionAccepted(): void {
     startMenu.style.display = "none";
 }
 
-function onGameOver(connectionrefusedinfo: any){
+/** Reverts back to the play UI after server death message */
+function onGameOver(connectionrefusedinfo: any): void {
     if(connectionrefusedinfo){
         connectionRefused(connectionrefusedinfo);
     }
@@ -151,7 +158,8 @@ function onGameOver(connectionrefusedinfo: any){
 
 document.addEventListener("keydown", devlogin);
 
-function devlogin(event: any){
+/** Temp quick login code for development */
+function devlogin(event: any): void {
     if (event.target.tagName.toLowerCase() !== "input" && 
         event.target.tagName.toLowerCase() !== "textarea") {
     

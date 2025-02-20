@@ -22,7 +22,8 @@ const connectedPromise = new Promise<void>(resolve => {
     });
 });
 
-export const connect = (onGameOver: any) => (
+/** Main method to connect and prepare the clients socket for interaction with the server */
+export const connect = (onGameOver: any): Promise<void> => (
     connectedPromise.then(() => {
         socket.on(MSG_TYPES.LOGIN, onlogin);
         socket.on(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
@@ -35,7 +36,8 @@ export const connect = (onGameOver: any) => (
     })
 );
 
-function onInstantiated(stuff: any){
+/** Response to the player instantiated message from the server */
+function onInstantiated(stuff: any): void {
     connectionAccepted();
     startCapturingInput(stuff.x, stuff.y);
     setColor(stuff.color);
@@ -48,30 +50,37 @@ function onInstantiated(stuff: any){
 
 // #region send message functions
 
-export const createaccount = (username: string, password: string) => {
+/** Method to send the create account message to the server */
+export const createaccount = (username: string, password: string): void => {
     socket.emit(MSG_TYPES.CREATE_ACCOUNT, {username: username, password: password});
 };
 
-export const login = (username: string, password: string) => {
+/** Method to send the login message to the server */
+export const login = (username: string, password: string): void => {
     socket.emit(MSG_TYPES.LOGIN, {username: username, password: password});
 };
 
-export const play = () => {
+/** Method to send the play message to the server */
+export const play = (): void => {
     socket.emit(MSG_TYPES.JOIN_GAME);
 };
 
+/** Method to send the update inputs message to the server */
 export const updateInputs = throttle(20, inputs => {
     socket.emit(MSG_TYPES.INPUT, inputs);
 });
 
+/** Method to send the click message to the server */
 export const click = throttle(20, info => {
     socket.emit(MSG_TYPES.CLICK, info);
 });
 
+/** Method to send the interact message to the server */
 export const interact = throttle(20, info => {
     socket.emit(MSG_TYPES.INTERACT, info);
 });
 
+/** Method to send the chat message to the server */
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);
 });

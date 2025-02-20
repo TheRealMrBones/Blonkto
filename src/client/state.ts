@@ -1,4 +1,4 @@
-import { setPos, setSelf } from "./input.js";
+import { setPos } from "./input.js";
 import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "./world.js";
 import { toggleConnectionLost } from "./ui.js";
@@ -15,8 +15,10 @@ let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
 let self: any;
+let lastUpdateTime = Date.now();
 
-export function initState(){
+/** Initializes the world state for the client */
+export function initState(): void {
     gameStart = 0;
     firstServerTimestamp = 0;
 }
@@ -25,7 +27,8 @@ export function initState(){
 
 // #region receive updates
 
-export function processGameUpdate(update: any){
+/** Processes the given game update and adds it to the state queue */
+export function processGameUpdate(update: any): void {
     // set lastUpdateTime
     lastUpdateTime = Date.now();
 
@@ -94,7 +97,8 @@ export function processGameUpdate(update: any){
 
 // #region get state
 
-export function getCurrentState(){
+/** Returns all data relevant to the current state by interpolating the most recent past and future states */
+export function getCurrentState(): any {
     checkIfConnectionLost();
 
     if(!firstServerTimestamp){
@@ -134,7 +138,8 @@ export function getCurrentState(){
 
 // #region interpolation
 
-export function interpolateObject(object1: any, object2: any, ratio: number){
+/** Interpolates the given object between its two given states with the given ratio */
+export function interpolateObject(object1: any, object2: any, ratio: number): any {
     if(!object2){
         return object1;
     }
@@ -150,11 +155,13 @@ export function interpolateObject(object1: any, object2: any, ratio: number){
     return interpolated;
 }
 
+/** Interpolates the given object array between its two given states with the given ratio */
 function interpolateObjectArray(objects1: any[], objects2: any[], ratio: number){
     return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.static.id === o2.static.id), ratio));
 }
 
-function interpolateDirection(d1: number, d2: number, ratio: number){
+/** Interpolates the given direction between its two given states with the given ratio */
+function interpolateDirection(d1: number, d2: number, ratio: number): number {
     const absD = Math.abs(d2 - d1);
     if(absD >= Math.PI){
         if(d1 > d2){
@@ -171,13 +178,16 @@ function interpolateDirection(d1: number, d2: number, ratio: number){
 
 // #region helpers
 
-export function currentServerTime(){
+/** Returns the current server update time based on this clients delay */
+export function currentServerTime(): number {
     return Date.now() - serverDelay;
 }
 
-// returns the index of the base update, the first game update before
-// current server time, or -1 if N/A.
-function getBaseUpdate(){
+/** 
+ * returns the index of the base update, the first game update before
+ * current server time, or -1 if N/A.
+*/
+function getBaseUpdate(): number {
     const serverTime = currentServerTime();
     for(let i = gameUpdates.length - 1; i >= 0; i--){
         if(gameUpdates[i].t <= serverTime){
@@ -187,15 +197,16 @@ function getBaseUpdate(){
     return -1;
 }
 
-function purgeUpdates(){
+/** Clears all old state data to save room */
+function purgeUpdates(): void {
     const base = getBaseUpdate();
     if(base > 0){
         gameUpdates.splice(0, base);
     }
 }
 
-let lastUpdateTime = Date.now();
-function checkIfConnectionLost(){
+/** Checks if connection might have been lost based on the time of the last game update received */
+function checkIfConnectionLost(): void {
     const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY;
     toggleConnectionLost(isconnectionlost);
 };

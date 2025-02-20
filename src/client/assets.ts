@@ -7,7 +7,8 @@ const assets: {[key: string]: HTMLImageElement} = {};
 
 const downloadPromise = Promise.all(Object.values(ASSETS).map(downloadAsset));
 
-function downloadAsset(assetName: string){
+/** Prepares an individual asset and loads it into memory */
+function downloadAsset(assetName: string): Promise<void> {
     return new Promise<void>(resolve => {
         const asset = new Image();
         asset.onload = () => {
@@ -19,9 +20,11 @@ function downloadAsset(assetName: string){
     });
 }
 
-export const downloadAssets = () => downloadPromise;
+/** Prepares all of the assets the client would be using in the game */
+export const downloadAssets = (): Promise<void[]> => downloadPromise;
 
-export const getAsset = (assetName: string) => assets[assetName];
+/** Returns the image asset with the given name */
+export const getAsset = (assetName: string): HTMLImageElement => assets[assetName];
 
 // #endregion
 
@@ -31,7 +34,8 @@ const coloredAssets: { [key: string]: { asset: OffscreenCanvas; color: Color } }
 const assetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
 const coloredAssetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
 
-export function getColoredAsset(object: { id: string; color: Color; asset: string; }){
+/** Returns the image asset with the given name and colored with the given base color */
+export function getColoredAsset(object: { id: string; color: Color; asset: string; }): OffscreenCanvas {
     // make new if asset doesn't exist
     let makenew = !coloredAssets[object.id];
 
@@ -65,7 +69,8 @@ export function getColoredAsset(object: { id: string; color: Color; asset: strin
     return coloredAssets[object.id].asset;
 }
 
-export function getAssetVariant(asset: string, varient: string, varientrgb: Color){
+/** Returns the image asset with the given name and recolored with the given variant */
+export function getAssetVariant(asset: string, varient: string, varientrgb: Color): OffscreenCanvas {
     const assetObj = getAsset(asset);
     if(!assetVariants[asset]){
         assetVariants[asset] = {};
@@ -76,7 +81,8 @@ export function getAssetVariant(asset: string, varient: string, varientrgb: Colo
     return assetVariants[asset][varient];
 }
 
-export function getColoredAssetVariant(object: { id: string; color: Color; asset: string; }, varient: string, varientrgb: Color){
+/** Returns the image asset with the given name and colored with the given base color then recolored with the given varient */
+export function getColoredAssetVariant(object: { id: string; color: Color; asset: string; }, varient: string, varientrgb: Color): OffscreenCanvas {
     const coloredAsset = getColoredAsset(object);
     if(!coloredAssetVariants[object.id]){
         coloredAssetVariants[object.id] = {};
@@ -87,7 +93,8 @@ export function getColoredAssetVariant(object: { id: string; color: Color; asset
     return coloredAssetVariants[object.id][varient];
 }
 
-function colorize(image: HTMLImageElement | OffscreenCanvas, color: Color){
+/** Returns the offscreen canvsa representing the input image recolored with the given color */
+function colorize(image: HTMLImageElement | OffscreenCanvas, color: Color): OffscreenCanvas {
     const imageWidth = image.width;
     const imageHeight = image.height;
 

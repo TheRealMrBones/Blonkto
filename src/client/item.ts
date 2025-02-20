@@ -1,3 +1,4 @@
+/** Representation of a single item stack in data */
 export class Item{
     name: string;
     asset: string;

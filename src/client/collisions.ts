@@ -6,7 +6,8 @@ const { SHAPES } = Constants;
 
 // #region get collisions
 
-export function playerCollisions(me: any, players: any[]){
+/** Checks collisions between the current player and other nearby players */
+export function playerCollisions(me: any, players: any[]): void {
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
         const dist = getDistance(me, player2);
@@ -24,7 +25,8 @@ export function playerCollisions(me: any, players: any[]){
     }
 }
 
-export function blockCollisions(me: any){
+/** Checks collisions between the current player and any nearby blocks with hitboxes */
+export function blockCollisions(me: any): void {
     // only search for collisions immediatly next to you
     const startx = Math.floor(me.x - me.scale / 2);
     const starty = Math.floor(me.y - me.scale / 2);
@@ -59,7 +61,12 @@ export function blockCollisions(me: any){
     push(me.x - oldme.x, me.y - oldme.y);
 }
 
-function getSquareWalls(scale: number, pos: Pos){
+// #endregion
+
+// #region shape collisions
+
+/** Returns the collision objects for the given square shape */
+function getSquareWalls(scale: number, pos: Pos): { walls: LineSegment[], points: Circle[] } {
     const p = [
         { x: pos.x - scale / 2, y: pos.y - scale / 2, radius: 0 },
         { x: pos.x - scale / 2, y: pos.y + scale / 2, radius: 0 },
@@ -79,15 +86,13 @@ function getSquareWalls(scale: number, pos: Pos){
     };
 }
 
-// #endregion
-
-// #region run collisions
-
-function wallCollisions(me: any, walls: LineSegment[]){
+/** Perform all wall collisions on the current player */
+function wallCollisions(me: any, walls: LineSegment[]): void {
     walls.forEach(w => { wallCollision(me, w); });
 }
 
-function wallCollision(me: any, wall: LineSegment){
+/** Perform wall collision on the current player with the given wall */
+function wallCollision(me: any, wall: LineSegment): void {
     const p1 = wall.p1;
     const p2 = wall.p2;
     if (p1.x - p2.x == 0) {
@@ -113,11 +118,13 @@ function wallCollision(me: any, wall: LineSegment){
     }
 }
 
-function circleCollisions(me: any, circles: Circle[]){
+/** Perform all circle collisions on the current player */
+function circleCollisions(me: any, circles: Circle[]): void {
     circles.forEach(c => { circleCollision(me, c); });
 }
 
-function circleCollision(me: any, circle: Circle){
+/** Perform circle collision on the current player with the given circle */
+function circleCollision(me: any, circle: Circle): void {
     const dist = getDistance(me, circle);
     const realdist = dist - me.scale / 2 - circle.radius;
     if(realdist < 0){
@@ -137,7 +144,7 @@ function circleCollision(me: any, circle: Circle){
 
 // #region helpers
 
-function getDistance(object1: Pos, object2: Pos){
+function getDistance(object1: Pos, object2: Pos): number {
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
