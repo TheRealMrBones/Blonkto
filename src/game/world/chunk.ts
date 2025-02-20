@@ -59,7 +59,7 @@ class Chunk {
 
                 if(Math.random() < .1){
                     block = "stone_block";
-                }else if(Math.random() < .01){
+                }else if(Math.random() < .005){
                     const pig = new NonplayerEntity(this.chunkx * CHUNK_SIZE + x + .5, this.chunky * CHUNK_SIZE + y + .5, 0, "pig");
                     game.entities[pig.id] = pig;
                 }

@@ -9,9 +9,11 @@ import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
+import NonplayerEntity from "../objects/nonplayerEntity.js";
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
+const entitiessavedir = "entities/";
 
 /** Manages the reading, loading, and unloading of the game world along withe the loading and unloading of ticking entities inside of it */
 class World {
@@ -253,7 +255,9 @@ class World {
             const entities = this.game.getNonplayers().filter(e =>
                 e.chunk.x == x
                 && e.chunk.y == y
-            );
+            ).forEach(e => {
+                this.game.removeNonplayer(e.id);
+            });
         }
     }
 
@@ -265,18 +269,49 @@ class World {
     }
 
     /** Returns the raw data of the requested chunks save file if it exists */
-    readChunkFile(x: number, y: number): any {
-        const fileLocation = worldsavedir + [x,y].toString();
+    readChunkFile(x: number, y: number): string | false {
+        const chunkfilelocation = worldsavedir + [x,y].toString();
+        const entitiesfilelocation = entitiessavedir + [x,y].toString();
 
-        return this.game.fileManager.readFile(fileLocation);
+        // load entities first
+        if(this.game.fileManager.fileExists(entitiesfilelocation)){
+            const entitiesdata = JSON.parse(this.game.fileManager.readFile(entitiesfilelocation) || "[]");
+            for(const entitydata of entitiesdata){
+                switch(entitydata.type){
+                    case "dropped_stack":
+                        const droppedstack = DroppedStack.readFromSave(entitydata);
+                        this.game.objects[droppedstack.id] = droppedstack;
+                        break;
+                    case "entity":
+                        const entity = NonplayerEntity.readFromSave(entitydata);
+                        this.game.entities[entity.id] = entity;
+                        break;
+                    default:
+                        console.log(`Unknown entity type ${entitydata.type} read from save in chunk ${x},${y}`);
+                }
+            }
+        }
+
+        // then return actual chunk data
+        return this.game.fileManager.readFile(chunkfilelocation);
     }
 
     /** Saves the given chunks data */
     writeChunkFile(chunk: Chunk): void {
-        const fileLocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
-        const chunkdata = chunk.serializeForWrite();
+        const chunkfilelocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
+        const entitiesfilelocation = entitiessavedir + [chunk.chunkx,chunk.chunky].toString();
 
-        this.game.fileManager.writeFile(fileLocation, chunkdata);
+        const chunkdata = chunk.serializeForWrite();
+        this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
+
+        // save entities (and objects) seperately
+        const entities = this.game.getNonplayers().filter(o =>
+            o.chunk.x == chunk.chunkx &&
+            o.chunk.y == chunk.chunky
+        );
+
+        const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
+        this.game.fileManager.writeFile(entitiesfilelocation, entitiesdata);
     }
     
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */

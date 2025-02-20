@@ -116,6 +116,12 @@ class Game {
         return this.getObjects().filter(o => o instanceof DroppedStack);
     }
 
+    /** Removes and unloads the non-player object with the given id from the game world */
+    removeNonplayer(id: string): void {
+        delete this.objects[id];
+        delete this.entities[id];
+    }
+
     /** Removes and unloads the non-entity object with the given id from the game world */
     removeObject(id: string): void {
         delete this.objects[id];
