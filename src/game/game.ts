@@ -146,7 +146,7 @@ class Game {
 
             // use the item or run default use case
             if(hotbarItem == null){
-                this.players[socket.id].attack(newinfo.dir);
+                this.players[socket.id].startSwing(newinfo.dir);
                 attackHitCheck(this.players[socket.id], this.getEntities(), newinfo.dir, 1);
             }else hotbarItem.use(this, this.players[socket.id], newinfo);
         }

@@ -4,6 +4,7 @@ import Game from "../game.js";
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
+/** The base class for an entity with health loaded in the game world */
 class Entity extends GameObject {
     maxhealth: number;
     health: number;
@@ -24,6 +25,7 @@ class Entity extends GameObject {
 
     // #region setters
 
+    /** Entity action after falling */
     override onFell(game: Game): void {
         this.dead = true;
         this.killedby = "gravity";
@@ -33,7 +35,8 @@ class Entity extends GameObject {
 
     // #region hit and swing
 
-    takeHit(damage: number){
+    /** Removes the given health amount from this entity and returns if it died */
+    takeHit(damage: number): boolean {
         this.health -= damage;
         this.hit = true;
         this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
@@ -42,17 +45,22 @@ class Entity extends GameObject {
         return (this.health <= 0);
     }
 
-    endHit(){
+    /** Ends the hit animation on this entity */
+    endHit(): void {
         this.hit = false;
         if(this.hitinterval != null) clearInterval(this.hitinterval);
     }
 
-    startSwing(){
+    /** Starts an attack swing for this entity */
+    startSwing(dir: number): void {
         this.swinging = true;
+        this.lastattack = Date.now();
+        this.lastattackdir = dir;
         this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
     }
 
-    endSwing(){
+    /** Ends the current attack swing if it is going on */
+    endSwing(): void {
         this.swinging = false;
         if(this.swinginginterval != null) clearInterval(this.swinginginterval);
     }
@@ -61,6 +69,7 @@ class Entity extends GameObject {
 
     // #region serialization
 
+    /** Return an object representing this entities data for a game update to the client */
     serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 

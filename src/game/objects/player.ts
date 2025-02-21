@@ -15,6 +15,7 @@ const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 import ServerConfig from "../../configs/server.js";
 const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
 
+/** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
     socket: Socket;
     username: string;
@@ -86,7 +87,8 @@ class Player extends Entity {
         return player;
     }
 
-    starterInventory(){
+    /** Initializes this players inventory to the starter items */
+    starterInventory(): void {
         this.inventory[0] = new ItemStack("pickaxe");
         this.inventory[1] = new ItemStack("sword");
         this.inventory[2] = new ItemStack("stone_block", 64);
@@ -94,6 +96,7 @@ class Player extends Entity {
 
     // #region setters
 
+    /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {
             this.dead = true;
@@ -101,14 +104,16 @@ class Player extends Entity {
         }, 1000);
     }
 
-    update(data: any){
+    /** Updates this players data with the given new data */
+    update(data: any): void {
         if(this.playerdelay == 0){
             this.playerdelay = Date.now() - data.t;
         }
         super.update(data);
     }
 
-    collectStack(itemstack: ItemStack){
+    /** Tries to collect the given item stack and returns if complete take */
+    collectStack(itemstack: ItemStack): boolean {
         for(let i = 0; i < INVENTORY_SIZE; i++){
             const itemstack2 = this.inventory[i];
             if(itemstack2 != null){
@@ -138,7 +143,8 @@ class Player extends Entity {
         return true;
     }
 
-    removeFromSlot(slot: number, amount: number){
+    /** Removes the given amount from the given slot in this players inventory */
+    removeFromSlot(slot: number, amount: number): void {
         if(this.inventory[slot] == null) return;
 
         if(this.inventory[slot].removeAmount(amount)){
@@ -155,7 +161,8 @@ class Player extends Entity {
 
     // #region fixes
 
-    resetFixes(){
+    /** Resets the saved update fixes */
+    resetFixes(): void {
         this.fixes = {
             pushx: null,
             pushy: null,
@@ -164,7 +171,8 @@ class Player extends Entity {
         };
     }
 
-    getFixes(){
+    /** Returns the saved update fixes */
+    getFixes(): any {
         const fixescopy = {
             pushx: this.fixes.pushx,
             pushy: this.fixes.pushy,
@@ -174,12 +182,14 @@ class Player extends Entity {
         return fixescopy;
     }
 
-    push(x: number, y: number){
+    /** Pushes the player the given distances */
+    push(x: number, y: number): void {
         this.fixes.pushx += x;
         this.fixes.pushy += y;
     }
 
-    setPos(x: number, y: number){
+    /** Sets the players position to the given values */
+    setPos(x: number, y: number): void {
         this.fixes.setpos = {
             x: x,
             y: y
@@ -188,19 +198,10 @@ class Player extends Entity {
 
     // #endregion
 
-    // #region attacks
-
-    attack(dir: number){
-        this.lastattack = Date.now();
-        this.lastattackdir = dir;
-        this.startSwing();
-    }
-
-    // #endregion
-
     // #region helpers
 
-    nextOpenSlot(){
+    /** Returns the next open slot in this players inventory or -1 if there is none */
+    nextOpenSlot(): number {
         for(let i = 0; i < INVENTORY_SIZE; i++){
             if(this.inventory[i] == null) return i;
         }
@@ -211,6 +212,7 @@ class Player extends Entity {
 
     // #region serialization
 
+    /** Return an object representing this players data for a game update to the client */
     serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
@@ -227,6 +229,7 @@ class Player extends Entity {
         };
     }
 
+    /** Return an object representing this players data for writing to the save */
     serializeForWrite(): any {
         return JSON.stringify({
             dead: false,
@@ -240,6 +243,7 @@ class Player extends Entity {
         });
     }
 
+    /** Return an object representing this players kept data for writing to the save after they have died */
     serializeAfterKilled(): any {
         return JSON.stringify({
             dead: true,

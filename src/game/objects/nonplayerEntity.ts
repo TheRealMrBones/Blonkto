@@ -2,6 +2,7 @@ import EntityDefinition from "../entities/entityDefinition.js";
 import EntityRegistry from "../registries/entityRegistry.js";
 import Entity from "./entity.js";
 
+/** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity {
     entitydefinition: EntityDefinition;
 
