@@ -57,11 +57,6 @@ class Player extends Entity {
         }
 
         this.resetFixes();
-
-        // add collision checks
-        this.eventEmitter.on("tick", (game: Game, dt: number) => {
-            collectCheck(this, game.getDroppedStacks(), game);
-        });
     }
 
     /** Returns the player from its save data */
@@ -92,6 +87,11 @@ class Player extends Entity {
         this.inventory[0] = new ItemStack("pickaxe");
         this.inventory[1] = new ItemStack("sword");
         this.inventory[2] = new ItemStack("stone_block", 64);
+    }
+
+    /** Default object collision checks */
+    override checkCollisions(game: Game): void {
+        collectCheck(this, game.getDroppedStacks(), game);
     }
 
     // #region setters
