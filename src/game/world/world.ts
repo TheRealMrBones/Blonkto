@@ -3,14 +3,15 @@ import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import GameObject from "../objects/gameObject.js";
+import GameObject from "../objects/gameObject.js"; 
+import NonplayerEntity from "../objects/nonplayerEntity.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
+const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 const entitiessavedir = "entities/";
@@ -19,6 +20,7 @@ const entitiessavedir = "entities/";
 class World {
     game: Game;
     loadedchunks: {[key: string]: Chunk};
+    unloadInterval: NodeJS.Timeout;
     saveInterval: NodeJS.Timeout;
 
     constructor(game: Game){
@@ -28,6 +30,7 @@ class World {
         this.loadedchunks = {};
         this.generateSpawn();
 
+        this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
     }
 

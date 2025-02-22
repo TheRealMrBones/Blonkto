@@ -94,17 +94,17 @@ function joinGame(this: Socket): void {
 
 /** Response to the create account message from a client */
 function handleInput(this: Socket, inputs: any): void {
-  	game.handleInput(this, inputs);
+  	game.handlePlayerInput(this, inputs);
 }
 
 /** Response to the click message from a client */
 function click(this: Socket, info: any): void {
-    game.click(this, info);
+    game.handlePlayerClick(this, info);
 }
 
 /** Response to the interact message from a client */
 function interact(this: Socket, info: any): void {
-    game.interact(this, info);
+    game.handlePlayerInteract(this, info);
 }
 
 /** Response to the disconnect message from a client */

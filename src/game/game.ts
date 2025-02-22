@@ -22,7 +22,6 @@ const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
 
 import ServerConfig from "../configs/server.js";
-const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
@@ -66,8 +65,7 @@ class Game {
         this.lastUpdateTime = Date.now();
 
         // intervals
-        setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
-        setInterval(this.update.bind(this), 1000 / SERVER_UPDATE_RATE);
+        setInterval(this.tick.bind(this), 1000 / SERVER_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
         this.oppasscode = crypto.randomUUID();
@@ -137,7 +135,7 @@ class Game {
     // #region inputs
 
     /** Response to a click (left click) message from a client */
-    click(socket: Socket, info: any): void {
+    handlePlayerClick(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
@@ -153,7 +151,7 @@ class Game {
     }
 
     /** Response to a interaction (right click) message from a client */
-    interact(socket: Socket, info: any): void {
+    handlePlayerInteract(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
@@ -169,7 +167,7 @@ class Game {
     }
 
     /** Response to the general input message from a client */
-    handleInput(socket: Socket, inputs: any): void {
+    handlePlayerInput(socket: Socket, inputs: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
         const { t, dir, x, y, hotbarslot } = inputs;
@@ -186,10 +184,10 @@ class Game {
 
     // #endregion
 
-    // #region updates
+    // #region tick/update
 
     /** Tick the game world and all currently loaded objects */
-    update(): void {
+    tick(): void {
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
@@ -229,11 +227,6 @@ class Game {
         this.world.resetCellUpdates();
     }
 
-    /** Tick the worlds chunk unloader */
-    tickChunkUnloader(): void {
-        this.world.tickChunkUnloader();
-    }
-
     /** Create an update object to be sent to the specified players client */
     createUpdate(player: Player, worldload: any): any {
         // get players
@@ -263,6 +256,7 @@ class Game {
         };
     }
 
+    /** Creates the initial update for a client before they have been fully loaded */
     createInitialUpdate(player: Player): any {
         const worldload = this.world.loadPlayerChunks(player);
         player.chunk = worldload.chunk;
