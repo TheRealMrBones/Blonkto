@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import { collectCheck } from "../collisions.js";
+import { blockCollisions, collectCheck } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -91,6 +91,7 @@ class Player extends Entity {
 
     /** Default object collision checks */
     override checkCollisions(game: Game): void {
+        blockCollisions(this, game);
         collectCheck(this, game.getDroppedStacks(), game);
     }
 
@@ -104,12 +105,30 @@ class Player extends Entity {
         }, 1000);
     }
 
-    /** Updates this players data with the given new data */
+    /** Updates this players data with the given new input data */
     update(data: any): void {
         if(this.playerdelay == 0){
             this.playerdelay = Date.now() - data.t;
         }
-        super.update(data);
+        
+        const deltatime = data.t - this.lastupdated;
+
+        if(data.dir){
+            this.dir = data.dir;
+        }
+        
+        if(data.x){
+            this.x = data.x;
+        }else if(data.dx){
+            this.x += data.dx;
+        }
+        if(data.y){
+            this.y = data.y;
+        }else if(data.dy){
+            this.y += data.dy;
+        }
+
+        this.lastupdated = data.t;
     }
 
     /** Tries to collect the given item stack and returns if complete take */
@@ -183,7 +202,8 @@ class Player extends Entity {
     }
 
     /** Pushes the player the given distances */
-    push(x: number, y: number): void {
+    override push(x: number, y: number): void {
+        super.push(x, y);
         this.fixes.pushx += x;
         this.fixes.pushy += y;
     }

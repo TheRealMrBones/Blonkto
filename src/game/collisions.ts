@@ -14,7 +14,7 @@ const { SHAPES } = Constants;
 // #region collision checks
 
 /** Checks for non-player objects colliding on blocks */
-export const nonplayerBlockCollision = (object: GameObject, game: Game): void => {
+export const blockCollisions = (object: GameObject, game: Game): void => {
     // only search for collisions immediatly next to you
     const startx = Math.floor(object.x - object.scale / 2);
     const starty = Math.floor(object.y - object.scale / 2);
@@ -130,9 +130,9 @@ function wallCollision(object: GameObject, wall: LineSegment): void {
         if (object.y > p1.y && object.y < p2.y || object.y < p1.y && object.y > p2.y) {
             if (Math.abs(object.x - p1.x) <= object.scale / 2) {
                 if (object.x - p1.x > 0) {
-                    object.x += (object.scale / 2 - Math.abs(object.x - p1.x));
+                    object.push(object.scale / 2 - Math.abs(object.x - p1.x), 0);
                 } else {
-                    object.x -= (object.scale / 2 - Math.abs(object.x - p1.x));
+                    object.push(-(object.scale / 2 - Math.abs(object.x - p1.x)), 0);
                 }
             }
         }
@@ -140,9 +140,9 @@ function wallCollision(object: GameObject, wall: LineSegment): void {
         if (object.x > p1.x && object.x < p2.x || object.x < p1.x && object.x > p2.x) {
             if (Math.abs(object.y - p1.y) <= object.scale / 2) {
                 if (object.y - p1.y > 0) {
-                    object.y += (object.scale / 2 - Math.abs(object.y - p1.y));
+                    object.push(0, object.scale / 2 - Math.abs(object.y - p1.y));
                 } else {
-                    object.y -= (object.scale / 2 - Math.abs(object.y - p1.y));
+                    object.push(0, -(object.scale / 2 - Math.abs(object.y - p1.y)));
                 }
             }
         }
@@ -159,15 +159,8 @@ function circleCollision(object: GameObject, circle: Circle): void {
     const dist = getDistance(object, circle);
     const realdist = dist - object.scale / 2 - circle.radius;
     if(realdist < 0){
-        if(dist == 0){
-            const dir = Math.random() * 2 * Math.PI;
-            object.x -= Math.sin(dir) * realdist;
-            object.y += Math.cos(dir) * realdist;
-        }else{
-            const dir = Math.atan2(object.x - circle.x, circle.y - object.y);
-            object.x -= Math.sin(dir) * realdist;
-            object.y += Math.cos(dir) * realdist;
-        }
+        const dir = dist == 0 ? Math.random() * 2 * Math.PI : Math.atan2(object.x - circle.x, circle.y - object.y);
+        object.push(-Math.sin(dir) * realdist, Math.cos(dir) * realdist);
     }
 }
 

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import EventEmitter from "events";
 
 import Game from "../game.js";
-import { nonplayerBlockCollision } from "../collisions.js";
+import { blockCollisions } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -39,38 +39,17 @@ class GameObject {
         if(asset !== undefined) this.asset = asset;
 
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
-            this.checkFalling(game);
+            this.checkFalling(game, dt);
             this.checkCollisions(game);
         });
     }
 
     // #region setters
 
-    /** Updates the data of this item to the newest state */
-    update(data: any): void {
-        const deltatime = data.t - this.lastupdated;
-
-        if(data.dir){
-            this.dir = data.dir;
-        }
-        
-        if(data.x){
-            this.x = data.x;
-        }else if(data.dx){
-            this.x += data.dx;
-        }
-        if(data.y){
-            this.y = data.y;
-        }else if(data.dy){
-            this.y += data.dy;
-        }
-
-        // get next fall scale
-        if(this.falling){
-            this.scale -= FALL_RATE * deltatime / 1000;
-        }
-
-        this.lastupdated = data.t;
+    /** Pushes the object the given distances */
+    push(x: number, y: number): void {
+        this.x += x;
+        this.y += y;
     }
 
     // #endregion
@@ -79,11 +58,11 @@ class GameObject {
 
     /** Default object collision checks */
     checkCollisions(game: Game): void {
-        nonplayerBlockCollision(this, game)
+        blockCollisions(this, game);
     }
 
     /** Check for falling */
-    checkFalling(game: Game): void {
+    checkFalling(game: Game, dt: number): void {
         if(!this.falling){
             const tilesOn = this.tilesOn();
             let notair = 0;
@@ -99,6 +78,8 @@ class GameObject {
 
             if(notair == 0) this.falling = true;
         }else{
+            this.scale -= FALL_RATE * dt;
+
             if(this.scale <= 0){
                 this.scale = 0;
                 this.falling = false;
