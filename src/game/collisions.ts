@@ -28,7 +28,7 @@ export const blockCollisions = (object: GameObject, game: Game): void => {
         for(let y = starty; y < object.y + object.scale / 2; y++){
             const cell = game.world.getCell(x, y, false);
             if(!cell) continue;
-            const block = cell.block
+            const block = cell.block;
             if(block === null) continue;
 
             const pos: Pos = { x: x + block.scale / 2, y: y + block.scale / 2 };
@@ -46,7 +46,7 @@ export const blockCollisions = (object: GameObject, game: Game): void => {
     // calculate collisions and push accordingly
     wallCollisions(object, walls);
     circleCollisions(object, circles);
-}
+};
 
 /** Checks for dropped stacks that the given player can pick up */
 export const collectCheck = (player: Player, collectables: DroppedStack[], game: Game): void => {

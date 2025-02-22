@@ -281,16 +281,19 @@ class World {
             const entitiesdata = JSON.parse(this.game.fileManager.readFile(entitiesfilelocation) || "[]");
             for(const entitydata of entitiesdata){
                 switch(entitydata.type){
-                    case "dropped_stack":
+                    case "dropped_stack": {
                         const droppedstack = DroppedStack.readFromSave(entitydata);
                         this.game.objects[droppedstack.id] = droppedstack;
                         break;
-                    case "entity":
+                    }
+                    case "entity": {
                         const entity = NonplayerEntity.readFromSave(entitydata);
                         this.game.entities[entity.id] = entity;
                         break;
-                    default:
+                    }
+                    default: {
                         console.log(`Unknown entity type ${entitydata.type} read from save in chunk ${x},${y}`);
+                    }
                 }
             }
         }
