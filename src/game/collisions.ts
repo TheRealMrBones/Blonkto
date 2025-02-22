@@ -6,12 +6,25 @@ import GameObject from "./objects/gameObject.js";
 
 import SharedConfig from "../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
-const { PLAYER_SCALE } = SharedConfig.PLAYER;
 
 import Constants from "../shared/constants.js";
 const { SHAPES } = Constants;
 
 // #region collision checks
+
+/** Checks collisions between the given player and other nearby players */
+export function entityCollisions(entity: Entity, entities: Entity[]): void {
+    for(let i = 0; i < entities.length; i++){
+        const entity2 = entities[i];
+        const dist = getDistance(entity, entity2);
+        const realdist = dist - (entity.scale / 2 + entity2.scale / 2);
+        if(realdist < 0){
+            const dir = dist == 0 ? Math.random() * 2 * Math.PI : Math.atan2(entity.x - entity2.x, entity2.y - entity.y);
+            entity.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
+            entity2.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
+        }
+    }
+}
 
 /** Checks for non-player objects colliding on blocks */
 export const blockCollisions = (object: GameObject, game: Game): void => {
@@ -53,7 +66,7 @@ export const collectCheck = (player: Player, collectables: DroppedStack[], game:
     for(let i = 0; i < collectables.length; i++){
         const collectable = collectables[i];
         const dist = getDistance(player, collectable);
-        const realdist = dist - (PLAYER_SCALE + collectable.scale) / 2;
+        const realdist = dist - (player.scale + collectable.scale) / 2;
         if(realdist < 0){
             if (player.collectStack(collectable.itemStack)) game.removeObject(collectable.id);
         }
@@ -82,7 +95,7 @@ export const attackHitCheck = (player: Player, entities: Entity[], attackdir: nu
     for(let i = 0; i < entities.length; i++){
         const entity = entities[i];
         const dist = getDistance(attackpos, entity);
-        const realdist = dist - (PLAYER_SCALE + ATTACK_HITBOX_WIDTH) / 2;
+        const realdist = dist - (player.scale + ATTACK_HITBOX_WIDTH) / 2;
         if(entity.id != player.id && realdist < 0){
             if(entity.takeHit(damage)){
                 entity.dead = true;

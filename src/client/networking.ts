@@ -66,7 +66,7 @@ export const play = (): void => {
 };
 
 /** Method to send the update inputs message to the server */
-export const updateInputs = throttle(20, inputs => {
+export const updateInputs = throttle(10, inputs => {
     socket.emit(MSG_TYPES.INPUT, inputs);
 });
 

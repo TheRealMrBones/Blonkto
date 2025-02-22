@@ -170,12 +170,12 @@ class Game {
     handlePlayerInput(socket: Socket, inputs: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        const { t, dir, x, y, hotbarslot } = inputs;
+        const { t, dir, dx, dy, hotbarslot } = inputs;
         if(this.players[socket.id]){
             this.players[socket.id].update({
                 dir: dir,
-                x: x,
-                y: y,
+                dx: dx,
+                dy: dy,
                 t: t,
             });
             this.players[socket.id].hotbarslot = hotbarslot;

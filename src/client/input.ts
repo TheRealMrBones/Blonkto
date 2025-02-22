@@ -17,6 +17,8 @@ const canvas = document.getElementById("gamecanvas")!;
 let dir = 0;
 let x = 0;
 let y = 0;
+let dx = 0;
+let dy = 0;
 let scale = PLAYER_SCALE;
 
 let startw: number | null = null;
@@ -140,7 +142,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "w":
         case "W": {
             if(startw){
-                y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
+                dy -= (Date.now() - startw) * PLAYER_SPEED / 1000;
                 startw = null;
             }
             break;
@@ -149,7 +151,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "s":
         case "S": {
             if(starts){
-                y += (Date.now() - starts) * PLAYER_SPEED / 1000;
+                dy += (Date.now() - starts) * PLAYER_SPEED / 1000;
                 starts = null;
             }
             break;
@@ -158,7 +160,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "a":
         case "A": {
             if(starta){
-                x -= (Date.now() - starta) * PLAYER_SPEED / 1000;
+                dx -= (Date.now() - starta) * PLAYER_SPEED / 1000;
                 starta = null;
             }
             break;
@@ -167,7 +169,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "d":
         case "D": {
             if(startd){
-                x += (Date.now() - startd) * PLAYER_SPEED / 1000;
+                dx += (Date.now() - startd) * PLAYER_SPEED / 1000;
                 startd = null;
             }
             break;
@@ -222,10 +224,15 @@ function handleInput(): void {
     updateInputs({
         t: Date.now(),
         dir: dir,
-        x: x,
-        y: y,
+        dx: dx,
+        dy: dy,
         hotbarslot: hotbarslot,
     });
+
+    x = x + dx;
+    y = y + dy;
+    dx = 0;
+    dy = 0;
 }
 
 /** Resets the input reading variables */
@@ -241,30 +248,30 @@ function resetMovement(): void {
 function updatePos(): void {
     // update local position vars
     if(startw){
-        y -= (Date.now() - startw) * PLAYER_SPEED / 1000;
+        dy -= (Date.now() - startw) * PLAYER_SPEED / 1000;
         startw = Date.now();
     }
     if(starts){
-        y += (Date.now() - starts) * PLAYER_SPEED / 1000;
+        dy += (Date.now() - starts) * PLAYER_SPEED / 1000;
         starts = Date.now();
     }
     if(starta){
-        x -= (Date.now() - starta) * PLAYER_SPEED / 1000;
+        dx -= (Date.now() - starta) * PLAYER_SPEED / 1000;
         starta = Date.now();
     }
     if(startd){
-        x += (Date.now() - startd) * PLAYER_SPEED / 1000;
+        dx += (Date.now() - startd) * PLAYER_SPEED / 1000;
         startd = Date.now();
     }
 
     // update ui
-    updateCoords(x, y);
+    updateCoords(x + dx, y + dy);
     
     // collisions
     const others = getCurrentState().others!;
     const self = {
-        x: x,
-        y: y,
+        x: x + dx,
+        y: y + dy,
         scale: scale,
     };
     
@@ -281,6 +288,8 @@ export function startCapturingInput(xp: number, yp: number): void {
     // set spawn position
     x = xp;
     y = yp;
+    dx = 0;
+    dy = 0;
 
     // add input listeners
     window.addEventListener("mousemove", onMouseInput);
@@ -312,6 +321,8 @@ export function stopCapturingInput(): void {
     dir = 0;
     x = 0;
     y = 0;
+    dx = 0;
+    dy = 0;
     startw = null;
     starta = null;
     starts = null;
@@ -362,8 +373,8 @@ export function getSelf(): any {
 
     return {
         dir: dir,
-        x: x,
-        y: y,
+        x: x + dx,
+        y: y + dy,
         scale: scale,
         hotbarslot: hotbarslot,
         hit: hit,
@@ -377,8 +388,14 @@ export function getSelf(): any {
 
 // #region setters
 
-/** Pushes the players position the given amounts */
-export function push(pushx: number, pushy: number): void {
+/** Pushes the players position the given amounts as determined by the client */
+export function clientPush(pushx: number, pushy: number): void {
+    dx += pushx;
+    dy += pushy;
+}
+
+/** Pushes the players position the given amounts as determined by the server */
+export function serverPush(pushx: number, pushy: number): void {
     x += pushx;
     y += pushy;
 }
@@ -402,6 +419,8 @@ export function setPos(newpos: Pos): void {
     // set new position
     x = newpos.x;
     y = newpos.y;
+    dx = 0;
+    dx = 0;
 }
 
 /** Sets the players misc state data to the given values */

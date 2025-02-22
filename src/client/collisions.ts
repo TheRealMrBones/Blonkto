@@ -1,4 +1,4 @@
-import { push } from "./input.js";
+import { clientPush } from "./input.js";
 import { getCell } from "./world.js";
 
 import Constants from "../shared/constants.js";
@@ -16,10 +16,10 @@ export function playerCollisions(me: any, players: any[]): void {
             if(dist == 0){
                 const dir = Math.random() * 2 * Math.PI;
                 const randdist = Math.random() * .01;
-                push(-Math.sin(dir) * randdist, Math.cos(dir) * randdist);
+                clientPush(-Math.sin(dir) * randdist, Math.cos(dir) * randdist);
             }else{
                 const dir = Math.atan2(me.x - player2.x, player2.y - me.y);
-                push(-Math.sin(dir) * realdist, Math.cos(dir) * realdist);
+                clientPush(-Math.sin(dir) * realdist, Math.cos(dir) * realdist);
             }
         }
     }
@@ -58,7 +58,7 @@ export function blockCollisions(me: any): void {
     const oldme = { x: me.x, y: me.y };
     wallCollisions(me, walls);
     circleCollisions(me, circles);
-    push(me.x - oldme.x, me.y - oldme.y);
+    clientPush(me.x - oldme.x, me.y - oldme.y);
 }
 
 // #endregion
