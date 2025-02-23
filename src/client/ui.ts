@@ -7,6 +7,7 @@ import { toggleAllChatShow } from "./chat.js";
 const chatDiv = document.getElementById("chat")!;
 const chatInput = document.getElementById("chatinput") as HTMLInputElement;
 const infodiv = document.getElementById("info")!;
+const healthtext = document.getElementById("healthtext")!;
 const coordstext = document.getElementById("coordstext")!;
 const fpstext = document.getElementById("fpstext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
@@ -121,6 +122,11 @@ function chatInputUnfocus(event: FocusEvent): void {
 // #endregion
 
 // #region update ui
+
+/** Updates the health UI to the given value */
+export function updateHealth(health: number): void {
+    healthtext.innerHTML = Math.round(health).toString();
+}
 
 /** Updates the coordinates UI to the given position */
 export function updateCoords(x: number, y: number): void {

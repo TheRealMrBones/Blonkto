@@ -65,11 +65,7 @@ let fpscount = 0;
 
 /** Calculates and shows your clients fps based on how many frames have rendered in the second since the last check */
 function calculatefps(): void {
-    if(fpscount == 0){
-        updateFps(0);
-    }else{
-        updateFps(fpstotal / fpscount);
-    }
+    if(fpscount == 0) updateFps(0); else updateFps(fpstotal / fpscount);
     
     fpstotal = 0;
     fpscount = 0;
