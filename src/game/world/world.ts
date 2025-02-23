@@ -392,12 +392,7 @@ class World {
             return false;
         }
 
-        if(toggledrop){
-            const droppeditem = DroppedStack.getDroppedWithSpread(x + .5, y + .5, cell.block.getDroppedStack(), .3);
-            const objectsmap: any = this.game.objects;
-            objectsmap[droppeditem.id] = droppeditem;
-        }
-
+        cell.block.break(x, y, toggledrop, this.game);
         cell.block = null;
 
         chunk.cellUpdates.push({
