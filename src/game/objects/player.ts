@@ -89,9 +89,9 @@ class Player extends Entity {
         this.inventory[2] = new ItemStack("stone_block", 64);
     }
 
-    /** Default object collision checks */
+    /** Default player collision checks */
     override checkCollisions(game: Game): void {
-        blockCollisions(this, game);
+        super.checkCollisions(game);
         collectCheck(this, game.getDroppedStacks(), game);
     }
 

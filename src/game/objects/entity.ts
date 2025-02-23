@@ -2,6 +2,7 @@ import GameObject from "./gameObject.js";
 import Game from "../game.js";
 
 import SharedConfig from "../../configs/shared.js";
+import { entityCollisions } from "../collisions.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 /** The base class for an entity with health loaded in the game world */
@@ -21,6 +22,12 @@ class Entity extends GameObject {
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
+    }
+
+    /** Default entity collision checks */
+    override checkCollisions(game: Game): void {
+        super.checkCollisions(game);
+        entityCollisions(this, game.getEntities());
     }
 
     // #region setters

@@ -1,4 +1,4 @@
-import { setPos } from "./input.js";
+import { setPos, serverPush } from "./input.js";
 import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "./world.js";
 import { toggleConnectionLost } from "./ui.js";
@@ -45,6 +45,7 @@ export function processGameUpdate(update: any): void {
     if(update.fixes.setpos){
         setPos(update.fixes.setpos);
     }
+    serverPush(update.fixes.pushx, update.fixes.pushy);
     update.fixes.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
     });

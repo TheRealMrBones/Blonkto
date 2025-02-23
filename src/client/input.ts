@@ -275,7 +275,7 @@ function updatePos(): void {
         scale: scale,
     };
     
-    playerCollisions(self, others);
+    //playerCollisions(self, others);
     blockCollisions(self);
 }
 
