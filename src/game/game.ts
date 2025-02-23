@@ -7,7 +7,9 @@ import PlayerManager from "./managers/playerManager.js";
 import OpManager from "./managers/opManager.js";
 import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
+import PerformanceManager from "./managers/performanceManager.js";
 import Player from "./objects/player.js";
+import Entity from "./objects/entity.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import DroppedStack from "./objects/droppedStack.js";
@@ -27,7 +29,6 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 // initialize registries
 import "./registries/itemRegistry.js";
-import Entity from "./objects/entity.js";
 
 /** The main class that manages the game world and the entities in it */
 class Game {
@@ -37,6 +38,7 @@ class Game {
     opManager: OpManager;
     banManager: BanManager;
     chatManager: ChatManager;
+    performanceManager: PerformanceManager;
 
     players: {[key: string]: Player} = {};
     objects: {[key: string]: GameObject} = {};
@@ -57,6 +59,7 @@ class Game {
         this.opManager = new OpManager(this);
         this.banManager = new BanManager(this);
         this.chatManager = new ChatManager(this);
+        this.performanceManager = new PerformanceManager(this);
         
         // world
         this.world = new World(this);
@@ -188,6 +191,8 @@ class Game {
 
     /** Tick the game world and all currently loaded objects */
     tick(): void {
+        this.performanceManager.tickStart();
+
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
@@ -225,6 +230,8 @@ class Game {
 
         // reset cell updates in loaded chunks
         this.world.resetCellUpdates();
+
+        this.performanceManager.tickEnd();
     }
 
     /** Create an update object to be sent to the specified players client */

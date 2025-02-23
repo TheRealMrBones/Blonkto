@@ -4,28 +4,32 @@ import fs from "fs";
 type ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: boolean,
-        OP_PASSCODE_WHEN_OPS: boolean
+        OP_PASSCODE_WHEN_OPS: boolean,
     },
     PLAYER: {
         FILTER_USERNAME: boolean,
         ALLOW_CHANGE_NAME: boolean,
         RACISM: number,
-        RACISM_PERM: boolean
+        RACISM_PERM: boolean,
     },
     OBJECT: {
-        FALL_RATE: number
+        FALL_RATE: number,
     },
     UPDATE: {
-        SERVER_UPDATE_RATE: number
+        SERVER_UPDATE_RATE: number,
     },
     WORLD: {
         SPAWN_SIZE: number,
         CHUNK_UNLOAD_RATE: number,
-        AUTOSAVE_RATE: number
+        AUTOSAVE_RATE: number,
     },
     CHAT: {
-        FILTER_CHAT: boolean
-    }
+        FILTER_CHAT: boolean,
+    },
+    PERFORMACE: {
+        LOG_PERFORMANCE: boolean,
+        PERFORMANCE_LOG_RATE: number,
+    },
 };
 
 // Initialize configuration with defaults then read saved after
@@ -34,28 +38,32 @@ type ServerConfigSchema = {
 const ServerConfig: ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: true,
-        OP_PASSCODE_WHEN_OPS: false
+        OP_PASSCODE_WHEN_OPS: false,
     },
     PLAYER: {
         FILTER_USERNAME: false,
         ALLOW_CHANGE_NAME: false,
         RACISM: 0.3,
-        RACISM_PERM: true
+        RACISM_PERM: true,
     },
     OBJECT: {
-        FALL_RATE: 0.5
+        FALL_RATE: 0.5,
     },
     UPDATE: {
-        SERVER_UPDATE_RATE: 50
+        SERVER_UPDATE_RATE: 50,
     },
     WORLD: {
         SPAWN_SIZE: 2,
         CHUNK_UNLOAD_RATE: 1.0,
-        AUTOSAVE_RATE: 60.0
+        AUTOSAVE_RATE: 60.0,
     },
     CHAT: {
-        FILTER_CHAT: false
-    }
+        FILTER_CHAT: false,
+    },
+    PERFORMACE: {
+        LOG_PERFORMANCE: false,
+        PERFORMANCE_LOG_RATE: 60,
+    },
 };
 
 // read config json if exists

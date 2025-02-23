@@ -1,10 +1,10 @@
 /** Definition for the client configuration schema */
 type ClientConfigSchema = {
     ATTACK: {
-        HIT_COLOR: {r: number, g: number, b: number}
+        HIT_COLOR: {r: number, g: number, b: number},
     },
     UPDATE: {
-        CLIENT_UPDATE_RATE: number
+        CLIENT_UPDATE_RATE: number,
     },
     RENDER: {
         RENDER_DELAY: number,
@@ -13,12 +13,12 @@ type ClientConfigSchema = {
         BACKGROUND_SCALE: number,
         BACKGROUND_PADDING: number,
         USERNAME_SCALE: number,
-        USERNAME_HANG: number
+        USERNAME_HANG: number,
     },
     CHAT: {
         MESSAGE_TIME: number,
-        MAX_MESSAGE_COUNT: number
-    }
+        MAX_MESSAGE_COUNT: number,
+    },
 };
 
 // Initialize configuration with defaults then read saved after
@@ -26,10 +26,10 @@ type ClientConfigSchema = {
 /** Configurable settings used by the client */
 const ClientConfig: ClientConfigSchema = {
     ATTACK: {
-        HIT_COLOR: {r: 1, g: 0.5, b: 0.5}
+        HIT_COLOR: {r: 1, g: 0.5, b: 0.5},
     },
     UPDATE: {
-        CLIENT_UPDATE_RATE: 50
+        CLIENT_UPDATE_RATE: 50,
     },
     RENDER: {
         RENDER_DELAY: 100,
@@ -38,12 +38,12 @@ const ClientConfig: ClientConfigSchema = {
         BACKGROUND_SCALE: 24,
         BACKGROUND_PADDING: 1,
         USERNAME_SCALE: 0.3,
-        USERNAME_HANG: 0.5
+        USERNAME_HANG: 0.5,
     },
     CHAT: {
         MESSAGE_TIME: 10,
-        MAX_MESSAGE_COUNT: 20
-    }
+        MAX_MESSAGE_COUNT: 20,
+    },
 };
 
 // freeze and export config
