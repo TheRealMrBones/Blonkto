@@ -77,7 +77,7 @@ class Entity extends GameObject {
     // #region serialization
 
     /** Return an object representing this entities data for a game update to the client */
-    serializeForUpdate(): any {
+    override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
         return {

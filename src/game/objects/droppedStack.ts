@@ -38,7 +38,7 @@ class DroppedStack extends GameObject {
     // #region serialization
 
     /** Return an object representing this dropped stacks data for a game update to the client */
-    serializeForUpdate(): any {
+    override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
         return {
@@ -52,7 +52,7 @@ class DroppedStack extends GameObject {
     }
 
     /** Return an object representing this dropped stacks data for writing to the save */
-    serializeForWrite(): any {
+    override serializeForWrite(): any {
         const base = super.serializeForWrite();
         
         return {

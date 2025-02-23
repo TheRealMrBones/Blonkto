@@ -233,7 +233,7 @@ class Player extends Entity {
     // #region serialization
 
     /** Return an object representing this players data for a game update to the client */
-    serializeForUpdate(): any {
+    override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
         return {
@@ -250,7 +250,7 @@ class Player extends Entity {
     }
 
     /** Return an object representing this players data for writing to the save */
-    serializeForWrite(): any {
+    override serializeForWrite(): any {
         return JSON.stringify({
             dead: false,
             username: this.username,

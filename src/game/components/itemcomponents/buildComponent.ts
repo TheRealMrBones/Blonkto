@@ -14,7 +14,7 @@ class BuildComponent extends Component<Item> {
     }
 
     /** Implements this component into its parents functionality */
-    setParent(parent: Item): void {
+    override setParent(parent: Item): void {
         super.setParent(parent);
         this.parent?.eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
     }
