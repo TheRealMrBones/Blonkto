@@ -113,9 +113,7 @@ class World {
         const sameChunks: Pos[] = [];
         newChunks.forEach(nc => {
             oldChunks.forEach(oc => {
-                if(nc.x == oc.x && nc.y == oc.y){
-                    sameChunks.push(nc);
-                }
+                if(nc.x == oc.x && nc.y == oc.y) sameChunks.push(nc);
             });
         });
 
@@ -148,33 +146,23 @@ class World {
             newChunks.forEach(nc => {
                 let isNew = true;
                 sameChunks.forEach(sc => {
-                    if(nc.x == sc.x && nc.y == sc.y){
-                        isNew = false;
-                    }
+                    if(nc.x == sc.x && nc.y == sc.y) isNew = false;
                 });
-                if(isNew){
-                    loadChunks.push(nc);
-                }
+                if(isNew) loadChunks.push(nc);
             });
             oldChunks.forEach(oc => {
                 let isOld = true;
                 sameChunks.forEach(sc => {
-                    if(oc.x == sc.x && oc.y == sc.y){
-                        isOld = false;
-                    }
+                    if(oc.x == sc.x && oc.y == sc.y) isOld = false;
                 });
-                if(isOld){
-                    unloadChunks.push(oc);
-                }
+                if(isOld) unloadChunks.push(oc);
             });
 
             // load chunks
             const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
             loadChunks.forEach(lc => {
                 const chunk = this.getChunk(lc.x, lc.y, true);
-                if(chunk){
-                    loadChunksSerialized.push(chunk.serializeForLoad());
-                }
+                if(chunk) loadChunksSerialized.push(chunk.serializeForLoad());
             });
 
             // append data to return obj
@@ -230,9 +218,7 @@ class World {
                 newChunk = Chunk.readFromSave(x, y, data, this.game);
             }
             
-            if(newChunk == null){
-                newChunk = new Chunk(x, y, true, this.game);
-            }
+            if(newChunk == null) newChunk = new Chunk(x, y, true, this.game);
             
             this.loadedchunks[[x,y].toString()] = newChunk;
 
@@ -353,11 +339,7 @@ class World {
         const celly = y - chunky * CHUNK_SIZE;
     
         const chunk = this.getChunk(chunkx, chunky, canloadnew);
-        if(chunk){
-            return chunk.cells[cellx][celly];
-        }else{
-            return false;
-        }
+        return chunk ? chunk.cells[cellx][celly] : false;
     }
 
     /** Returns the requested cell and its containing chunk if it is loaded and null otherwise */
@@ -379,47 +361,32 @@ class World {
     /** Tries to break the requested cell and if needed drop its corrosponding item(s) */
     breakcell(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data){
-            return false;
-        }
+        if(!data) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null){
-            return false;
-        }
+        if(requestdata == null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null || cell.block == null){
-            return false;
-        }
+        if(chunk == null || cell.block == null) return false;
 
         cell.block.break(x, y, toggledrop, this.game);
         cell.block = null;
-
         chunk.cellUpdates.push({
             x, y
         });
-
         return true;
     }
 
     /** Tries to place the requested block in the requested cell and returns success */
     placecell(x: number, y: number, block: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data){
-            return false;
-        }
+        if(!data) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null){
-            return false;
-        }
+        if(requestdata == null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null){
-            return false;
-        }
+        if(chunk == null) return false;
         
         cell.placeBlock(block);
-
         chunk.cellUpdates.push({
             x, y
         });
