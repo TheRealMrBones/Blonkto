@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
+import DroppedStack from "./droppedStack.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -59,6 +60,7 @@ class Player extends Entity {
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.playerManager.killPlayer(this.socket, killedby);
+            this.dropInventory(game);
         });
     }
 
@@ -98,14 +100,28 @@ class Player extends Entity {
         game.collisionManager.collectCheck(this);
     }
 
-    // #region setters
-
     /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {
             this.eventEmitter.emit("death", "gravity", null, game);
         }, 1000);
     }
+
+    /** Drops this players entire inventory onto the ground */
+    dropInventory(game: Game){
+        for(let i = 0; i < INVENTORY_SIZE; i++){
+            this.dropItem(i, game);
+        }
+    }
+
+    /** Drops an individual item from this players inventory */
+    dropItem(slot: number, game: Game){
+        if(this.inventory[slot] === null) return;
+        const droppedstack = DroppedStack.getDroppedWithSpread(this.x, this.y, this.inventory[slot], .3);
+        game.objects[droppedstack.id] = droppedstack;
+    }
+
+    // #region setters
 
     /** Updates this players data with the given new input data */
     update(data: any): void {
