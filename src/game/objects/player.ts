@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import DroppedStack from "./droppedStack.js";
+import Inventory from "../items/inventory.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -22,7 +22,7 @@ class Player extends Entity {
     kills: number;
     playerdelay: number;
     color: Color;
-    inventory: (ItemStack | null)[];
+    inventory: Inventory;
     hotbarslot: number;
     fixes: any;
 
@@ -48,7 +48,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = Array(INVENTORY_SIZE).fill(null);
+        this.inventory = new Inventory(INVENTORY_SIZE);
         this.hotbarslot = 0;
         if(spawn == true && !KEEP_INVENTORY) this.starterInventory();
 
@@ -56,7 +56,7 @@ class Player extends Entity {
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.playerManager.killPlayer(this.socket, killedby);
-            if(!KEEP_INVENTORY) this.dropInventory(game);
+            if(!KEEP_INVENTORY) this.inventory.dropInventory(this.x, this.y, game);
         });
     }
 
@@ -70,28 +70,24 @@ class Player extends Entity {
             // Respawn
             if(RACISM_PERM) player.color = data.color;
 
-            if(KEEP_INVENTORY) player.inventory = Player.readInventoryFromSave(data.inventory);
+            if(KEEP_INVENTORY) player.inventory = Inventory.readFromSave(data.inventory);
         }else{
             // Load Exact
             player.x = data.x;
             player.y = data.y;
             player.health = data.health;
             player.color = data.color;
-            player.inventory = Player.readInventoryFromSave(data.inventory);
+            player.inventory = Inventory.readFromSave(data.inventory);
         }
 
         return player;
     }
 
-    static readInventoryFromSave(inventorydata: any[]): (ItemStack | null)[] {
-        return inventorydata.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
-    }
-
     /** Initializes this players inventory to the starter items */
     starterInventory(): void {
-        this.inventory[0] = new ItemStack("pickaxe");
-        this.inventory[1] = new ItemStack("sword");
-        this.inventory[2] = new ItemStack("stone_block", 64);
+        this.inventory.setSlot(0, new ItemStack("pickaxe"));
+        this.inventory.setSlot(1, new ItemStack("sword"));
+        this.inventory.setSlot(2, new ItemStack("stone_block", 64));
     }
 
     /** Default player collision checks */
@@ -105,20 +101,6 @@ class Player extends Entity {
         setTimeout(() => {
             this.eventEmitter.emit("death", "gravity", null, game);
         }, 1000);
-    }
-
-    /** Drops this players entire inventory onto the ground */
-    dropInventory(game: Game){
-        for(let i = 0; i < INVENTORY_SIZE; i++){
-            this.dropItem(i, game);
-        }
-    }
-
-    /** Drops an individual item from this players inventory */
-    dropItem(slot: number, game: Game){
-        if(this.inventory[slot] === null) return;
-        const droppedstack = DroppedStack.getDroppedWithSpread(this.x, this.y, this.inventory[slot], .3);
-        game.objects[droppedstack.id] = droppedstack;
     }
 
     // #region setters
@@ -138,41 +120,20 @@ class Player extends Entity {
 
     /** Tries to collect the given item stack and returns if complete take */
     collectStack(itemstack: ItemStack): boolean {
-        for(let i = 0; i < INVENTORY_SIZE; i++){
-            const itemstack2 = this.inventory[i];
-            if(itemstack2 != null){
-                const done = itemstack2.mergeStack(itemstack);
-
-                this.fixes.inventoryupdates.push({
-                    slot: i,
-                    itemstack: this.inventory[i] ? itemstack2.serializeForUpdate() : null,
-                });
-
-                if(done) return true;
-            }
-        }
-
-        const slot = this.nextOpenSlot();
-        if(slot == -1) return false;
-
-        this.inventory[slot] = itemstack;
-        this.fixes.inventoryupdates.push({
-            slot: slot,
-            itemstack: itemstack ? itemstack.serializeForUpdate() : null,
-        });
-        return true;
+        return this.inventory.collectStack(itemstack, this.fixes.inventoryupdates);
     }
 
     /** Removes the given amount from the given slot in this players inventory */
-    removeFromSlot(slot: number, amount: number): void {
-        if(this.inventory[slot] == null) return;
-
-        if(this.inventory[slot].removeAmount(amount)) this.inventory[slot] = null;
+    removeFromSlot(slot: number, amount: number): boolean {
+        if(!this.inventory.removeFromSlot(slot, amount)) return false;
+        const stack = this.inventory.getSlot(slot);
 
         this.fixes.inventoryupdates.push({
             slot: slot,
-            itemstack: this.inventory[slot] ? this.inventory[slot].serializeForUpdate() : null,
+            itemstack: stack !== null ? stack.serializeForUpdate() : null,
         });
+
+        return true;
     }
 
     // #endregion
@@ -218,18 +179,6 @@ class Player extends Entity {
 
     // #endregion
 
-    // #region helpers
-
-    /** Returns the next open slot in this players inventory or -1 if there is none */
-    nextOpenSlot(): number {
-        for(let i = 0; i < INVENTORY_SIZE; i++){
-            if(this.inventory[i] == null) return i;
-        }
-        return -1;
-    }
-
-    // #endregion
-
     // #region serialization
 
     /** Return an object representing this players data for a game update to the client */
@@ -260,7 +209,7 @@ class Player extends Entity {
             health: this.health,
             kills: this.kills,
             color: this.color,
-            inventory: this.serializeInventoryForWrite(),
+            inventory: this.inventory.serializeForWrite(),
         });
     }
 
@@ -273,14 +222,9 @@ class Player extends Entity {
             color: this.color,
         };
 
-        if(KEEP_INVENTORY) base.inventory = this.serializeInventoryForWrite();
+        if(KEEP_INVENTORY) base.inventory = this.inventory.serializeForWrite();
     
         return JSON.stringify(base);
-    }
-
-    /** Returns an object representing this players inventory for write */
-    serializeInventoryForWrite(): any {
-        return this.inventory.map(stack => stack ? stack.serializeForWrite() : null);
     }
 
     // #endregion

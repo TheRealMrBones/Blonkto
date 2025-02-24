@@ -54,7 +54,7 @@ class PlayerManager {
             x: this.game.players[socket.id].x,
             y: this.game.players[socket.id].y,
             color: this.game.players[socket.id].color,
-            inventory: this.game.players[socket.id].inventory.map(itemstack => itemstack ? itemstack.serializeForUpdate() : false),
+            inventory: this.game.players[socket.id].inventory.serializeForUpdate(),
         });
 
         // log in chat

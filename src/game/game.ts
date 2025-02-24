@@ -145,7 +145,7 @@ class Game {
         const newinfo = this.getClickInfo(info);
         
         if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = this.players[socket.id].inventory[this.players[socket.id].hotbarslot];
+            const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
             // use the item or run default use case
             if(hotbarItem == null){
