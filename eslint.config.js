@@ -11,7 +11,7 @@ export default [
     ...tseslint.configs.recommended,
     {
         plugins: {
-            import: importPlugin
+            import: importPlugin,
         },
         rules: {
             "no-undef": "off",
@@ -22,7 +22,7 @@ export default [
             "indent": ["error", 4, { "SwitchCase": 1 }],
             "semi": ["error", "always"],
             "quotes": ["error", "double"],
-            "import/extensions": ["error", "always", { "js": "always", "ts": "always" }],
+            "import/extensions": ["error", "always"],
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/naming-convention": [

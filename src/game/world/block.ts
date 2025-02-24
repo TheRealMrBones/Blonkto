@@ -1,7 +1,7 @@
 import RegistryValue from "../registries/registryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
-import Drops from "../items/drops.js";
+import DropBase from "../items/dropBase.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
@@ -11,11 +11,11 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
     asset: string = ASSETS.MISSING_TEXTURE;
-    drops: Drops | null = null;
+    drops: DropBase | null = null;
     scale: number = 1;
     shape: number = SHAPES.SQUARE;
 
-    constructor(displayname: string, asset: string | null, drops?: Drops, scale?: number, shape?: number){
+    constructor(displayname: string, asset: string | null, drops?: DropBase, scale?: number, shape?: number){
         super();
         this.displayname = displayname;
         if(asset != null) this.asset = asset;
