@@ -261,6 +261,7 @@ class Player extends Entity {
                 username: this.username,
                 playerdelay: this.playerdelay,
                 color: this.color,
+                kills: this.kills,
             },
             dynamic: {
                 ...(base.dynamic),

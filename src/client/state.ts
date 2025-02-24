@@ -1,7 +1,7 @@
 import { setPos, serverPush } from "./input.js";
 import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "./world.js";
-import { toggleConnectionLost, updateHealth } from "./ui.js";
+import { toggleConnectionLost, updateHealth, updateKills } from "./ui.js";
 import { setSingleInventorySlot } from "./inventory.js";
 
 import ClientConfig from "../configs/client.js";
@@ -60,6 +60,7 @@ export function processGameUpdate(update: any): void {
 
     // update UI
     updateHealth(update.me.static.health);
+    updateKills(update.me.static.kills);
 
     // set players default to not updated aka left (used later)
     Object.values(players).forEach(p => {

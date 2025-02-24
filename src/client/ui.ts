@@ -9,6 +9,7 @@ const chatInput = document.getElementById("chatinput") as HTMLInputElement;
 const infodiv = document.getElementById("info")!;
 const healthtext = document.getElementById("healthtext")!;
 const coordstext = document.getElementById("coordstext")!;
+const killstext = document.getElementById("killstext")!;
 const fpstext = document.getElementById("fpstext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
 const hotbardiv = document.getElementById("hotbar")!;
@@ -125,17 +126,22 @@ function chatInputUnfocus(event: FocusEvent): void {
 
 /** Updates the health UI to the given value */
 export function updateHealth(health: number): void {
-    healthtext.innerHTML = Math.round(health).toString();
+    healthtext.innerHTML = `Health: ${Math.round(health).toString()}`;
 }
 
 /** Updates the coordinates UI to the given position */
 export function updateCoords(x: number, y: number): void {
-    coordstext.innerHTML = `${x.toFixed(1)}, ${y.toFixed(1)}`;
+    coordstext.innerHTML = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
+}
+
+/** Updates the kills UI to the given value */
+export function updateKills(kills: number): void {
+    killstext.innerHTML = `Kills: ${kills.toString()}`;
 }
 
 /** Updates the FPS UI to the given value */
 export function updateFps(fps: number): void {
-    fpstext.innerHTML = Math.round(fps).toString();
+    fpstext.innerHTML = `FPS: ${Math.round(fps).toString()}`;
 }
 
 /** Toggles the connection lost icon to appear or disapear */
