@@ -8,7 +8,7 @@ import OpManager from "./managers/opManager.js";
 import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
 import PerformanceManager from "./managers/performanceManager.js";
-import CollisionManager from "./collisionManager.js";
+import CollisionManager from "./managers/collisionManager.js";
 import Player from "./objects/player.js";
 import Entity from "./objects/entity.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";

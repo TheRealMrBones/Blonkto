@@ -1,13 +1,13 @@
-import Player from "./objects/player.js";
-import DroppedStack from "./objects/droppedStack.js";
-import Entity from "./objects/entity.js";
-import Game from "./game.js";
-import GameObject from "./objects/gameObject.js";
+import Player from "../objects/player.js";
+import DroppedStack from "../objects/droppedStack.js";
+import Entity from "../objects/entity.js";
+import Game from "../game.js";
+import GameObject from "../objects/gameObject.js";
 
-import SharedConfig from "../configs/shared.js";
+import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { SHAPES } = Constants;
 
 /** Manages Collision detection for all elements in the game world */
