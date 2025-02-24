@@ -207,19 +207,6 @@ class Game {
             worldloads[p.id] = worldload;
         });
 
-        // check deaths
-        this.getPlayerEntities().forEach(p => {
-            if(p.dead){
-                this.playerManager.killPlayer(p.socket, p.killedby);
-            }
-        });
-
-        this.getNonplayerEntities().forEach(e => {
-            if(e.dead){
-                delete this.entities[e.id];
-            }
-        });
-
         // tick objects
         this.getAllObjects().forEach(o => {
             o.eventEmitter.emit("tick", this, dt);

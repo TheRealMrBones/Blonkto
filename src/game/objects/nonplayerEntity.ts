@@ -1,4 +1,5 @@
 import EntityDefinition from "../entities/entityDefinition.js";
+import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
 import Entity from "./entity.js";
 
@@ -10,6 +11,11 @@ class NonplayerEntity extends Entity {
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
         this.entitydefinition = EntityRegistry.get(entitydefinition);
+
+        this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
+            game.removeEntity(this.id);
+            this.entitydefinition.eventEmitter.emit("death", this, game);
+        });
     }
 
     /** Returns the nonplayer entity from its save data */

@@ -99,7 +99,7 @@ class PlayerManager {
 
         const player = this.game.players[socket.id];
 
-        if(this.game.players[player.id]){
+        if(player != null){
             this.game.chatManager.sendMessage(`${player.username} has disconnected`);
 
             this.savePlayer(player);

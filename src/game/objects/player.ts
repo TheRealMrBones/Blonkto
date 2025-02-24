@@ -56,6 +56,10 @@ class Player extends Entity {
         }
 
         this.resetFixes();
+
+        this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
+            game.playerManager.killPlayer(this.socket, killedby);
+        });
     }
 
     /** Returns the player from its save data */
@@ -99,8 +103,7 @@ class Player extends Entity {
     /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {
-            this.dead = true;
-            this.killedby = "gravity";
+            this.eventEmitter.emit("death", "gravity", null, game);
         }, 1000);
     }
 

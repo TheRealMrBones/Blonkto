@@ -1,5 +1,7 @@
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
+import Player from "./player.js";
+import NonplayerEntity from "./nonplayerEntity.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -14,13 +16,15 @@ class Entity extends GameObject {
     swinginginterval: NodeJS.Timeout | null = null;
     lastattack: number = 0;
     lastattackdir: number = 0;
-    dead: boolean = false;
-    killedby: string = "placeholder";
 
     constructor(x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
+
+        this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
+            this.onDeath(killedby, killer, game);
+        });
     }
 
     /** Default entity collision checks */
@@ -33,8 +37,14 @@ class Entity extends GameObject {
 
     /** Entity action after falling */
     override onFell(game: Game): void {
-        this.dead = true;
-        this.killedby = "gravity";
+        this.eventEmitter.emit("death", "gravity", null, game);
+    }
+
+    /** Entity action after death */
+    onDeath(killedby: string, killer: any, game: Game){
+        if(killer instanceof Player){
+            killer.kills++;
+        }
     }
 
     // #endregion

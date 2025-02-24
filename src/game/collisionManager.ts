@@ -112,8 +112,7 @@ class CollisionManager {
             const realdist = dist - (player.scale + ATTACK_HITBOX_WIDTH) / 2;
             if(entity.id != player.id && realdist < 0){
                 if(entity.takeHit(damage)){
-                    entity.dead = true;
-                    entity.killedby = player.username;
+                    entity.eventEmitter.emit("death", player.username, player, this.game);
                 }
             }
         }

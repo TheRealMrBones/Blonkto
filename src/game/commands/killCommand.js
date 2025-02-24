@@ -28,16 +28,13 @@ class KillCommand extends Command{
         // do command based on what args set used
         switch(argIndex){
             case 0: {
-                player.dead = true;
-                game.playerManager.killPlayer(player.socket, "the Server");
+                player.eventEmitter.emit("death", "the Server", null, game);
                 break;
             };
             case 1: {
                 const p = parsedTokens[1];
-                p.dead = true;
+                p.eventEmitter.emit("death", "the Server", null, game);
                 game.chatManager.sendMessageTo(player, `killed ${p.username}`);
-                
-                game.playerManager.killPlayer(p.socket, "the Server");
                 break;
             };
         }
