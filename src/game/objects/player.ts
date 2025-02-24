@@ -13,7 +13,7 @@ const { PLAYER_SCALE } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 import ServerConfig from "../../configs/server.js";
-const { RACISM, RACISM_PERM } = ServerConfig.PLAYER;
+const { RACISM, RACISM_PERM, KEEP_INVENTORY } = ServerConfig.PLAYER;
 
 /** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
@@ -50,17 +50,13 @@ class Player extends Entity {
         // inventory
         this.inventory = Array(INVENTORY_SIZE).fill(null);
         this.hotbarslot = 0;
-
-        // if spawning give starter items
-        if(spawn == true){
-            this.starterInventory();
-        }
+        if(spawn == true && !KEEP_INVENTORY) this.starterInventory();
 
         this.resetFixes();
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.playerManager.killPlayer(this.socket, killedby);
-            this.dropInventory(game);
+            if(!KEEP_INVENTORY) this.dropInventory(game);
         });
     }
 
@@ -72,19 +68,23 @@ class Player extends Entity {
 
         if(data.dead){
             // Respawn
-            if(RACISM_PERM){
-                player.color = data.color;
-            }
+            if(RACISM_PERM) player.color = data.color;
+
+            if(KEEP_INVENTORY) player.inventory = Player.readInventoryFromSave(data.inventory);
         }else{
             // Load Exact
             player.x = data.x;
             player.y = data.y;
             player.health = data.health;
             player.color = data.color;
-            player.inventory = data.inventory.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
+            player.inventory = Player.readInventoryFromSave(data.inventory);
         }
 
         return player;
+    }
+
+    static readInventoryFromSave(inventorydata: any[]): (ItemStack | null)[] {
+        return inventorydata.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
     }
 
     /** Initializes this players inventory to the starter items */
@@ -125,26 +125,13 @@ class Player extends Entity {
 
     /** Updates this players data with the given new input data */
     update(data: any): void {
-        if(this.playerdelay == 0){
-            this.playerdelay = Date.now() - data.t;
-        }
+        if(this.playerdelay == 0) this.playerdelay = Date.now() - data.t;
         
         const deltatime = data.t - this.lastupdated;
 
-        if(data.dir){
-            this.dir = data.dir;
-        }
-        
-        if(data.x){
-            this.x = data.x;
-        }else if(data.dx){
-            this.x += data.dx;
-        }
-        if(data.y){
-            this.y = data.y;
-        }else if(data.dy){
-            this.y += data.dy;
-        }
+        this.dir = data.dir;
+        this.x += data.dx;
+        this.y += data.dy;
 
         this.lastupdated = data.t;
     }
@@ -161,16 +148,12 @@ class Player extends Entity {
                     itemstack: this.inventory[i] ? itemstack2.serializeForUpdate() : null,
                 });
 
-                if(done){
-                    return true;
-                }
+                if(done) return true;
             }
         }
 
         const slot = this.nextOpenSlot();
-        if(slot == -1){
-            return false;
-        }
+        if(slot == -1) return false;
 
         this.inventory[slot] = itemstack;
         this.fixes.inventoryupdates.push({
@@ -184,9 +167,7 @@ class Player extends Entity {
     removeFromSlot(slot: number, amount: number): void {
         if(this.inventory[slot] == null) return;
 
-        if(this.inventory[slot].removeAmount(amount)){
-            this.inventory[slot] = null;
-        }
+        if(this.inventory[slot].removeAmount(amount)) this.inventory[slot] = null;
 
         this.fixes.inventoryupdates.push({
             slot: slot,
@@ -279,18 +260,27 @@ class Player extends Entity {
             health: this.health,
             kills: this.kills,
             color: this.color,
-            inventory: this.inventory.map(stack => stack ? stack.serializeForWrite() : null),
+            inventory: this.serializeInventoryForWrite(),
         });
     }
 
     /** Return an object representing this players kept data for writing to the save after they have died */
     serializeAfterKilled(): any {
-        return JSON.stringify({
+        const base: any = {
             dead: true,
             username: this.username,
             kills: this.kills,
             color: this.color,
-        });
+        };
+
+        if(KEEP_INVENTORY) base.inventory = this.serializeInventoryForWrite();
+    
+        return JSON.stringify(base);
+    }
+
+    /** Returns an object representing this players inventory for write */
+    serializeInventoryForWrite(): any {
+        return this.inventory.map(stack => stack ? stack.serializeForWrite() : null);
     }
 
     // #endregion

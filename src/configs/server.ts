@@ -11,6 +11,7 @@ type ServerConfigSchema = {
         ALLOW_CHANGE_NAME: boolean,
         RACISM: number,
         RACISM_PERM: boolean,
+        KEEP_INVENTORY: boolean,
     },
     OBJECT: {
         FALL_RATE: number,
@@ -45,6 +46,7 @@ const ServerConfig: ServerConfigSchema = {
         ALLOW_CHANGE_NAME: false,
         RACISM: 0.3,
         RACISM_PERM: true,
+        KEEP_INVENTORY: true,
     },
     OBJECT: {
         FALL_RATE: 0.5,
