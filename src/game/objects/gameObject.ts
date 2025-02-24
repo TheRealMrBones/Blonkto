@@ -51,6 +51,12 @@ class GameObject {
         this.y += y;
     }
 
+    /** Sets the objects position to the given values */
+    setPos(x: number, y: number): void {
+        this.x = x;
+        this.y = y;
+    }
+
     // #endregion
 
     // #region ticks

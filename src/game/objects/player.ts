@@ -227,7 +227,8 @@ class Player extends Entity {
     }
 
     /** Sets the players position to the given values */
-    setPos(x: number, y: number): void {
+    override setPos(x: number, y: number): void {
+        super.setPos(x, y);
         this.fixes.setpos = {
             x: x,
             y: y
