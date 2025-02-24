@@ -329,7 +329,7 @@ export function stopCapturingInput(): void {
     startd = null;
 
     // clear client side update interval
-    if (interval !== null) clearInterval(interval);
+    if(interval !== null) clearInterval(interval);
 }
 
 /** Stops capturing client inputs for gameplay but continues sending input updates to the server */

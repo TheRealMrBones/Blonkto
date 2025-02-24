@@ -95,20 +95,20 @@ function wallCollisions(me: any, walls: LineSegment[]): void {
 function wallCollision(me: any, wall: LineSegment): void {
     const p1 = wall.p1;
     const p2 = wall.p2;
-    if (p1.x - p2.x == 0) {
-        if (me.y > p1.y && me.y < p2.y || me.y < p1.y && me.y > p2.y) {
-            if (Math.abs(me.x - p1.x) <= me.scale / 2) {
-                if (me.x - p1.x > 0) {
+    if(p1.x - p2.x == 0) {
+        if(me.y > p1.y && me.y < p2.y || me.y < p1.y && me.y > p2.y) {
+            if(Math.abs(me.x - p1.x) <= me.scale / 2) {
+                if(me.x - p1.x > 0) {
                     me.x += (me.scale / 2 - Math.abs(me.x - p1.x));
                 } else {
                     me.x -= (me.scale / 2 - Math.abs(me.x - p1.x));
                 }
             }
         }
-    } else if (p1.y - p2.y == 0) {
-        if (me.x > p1.x && me.x < p2.x || me.x < p1.x && me.x > p2.x) {
-            if (Math.abs(me.y - p1.y) <= me.scale / 2) {
-                if (me.y - p1.y > 0) {
+    } else if(p1.y - p2.y == 0) {
+        if(me.x > p1.x && me.x < p2.x || me.x < p1.x && me.x > p2.x) {
+            if(Math.abs(me.y - p1.y) <= me.scale / 2) {
+                if(me.y - p1.y > 0) {
                     me.y += (me.scale / 2 - Math.abs(me.y - p1.y));
                 } else {
                     me.y -= (me.scale / 2 - Math.abs(me.y - p1.y));

@@ -22,12 +22,12 @@ class AccountManager {
         password = sanitizeInput(password);
 
         // Validate username
-        if (username.length < 3 || username.length > 16 || !isAlphanumeric(username)) {
+        if(username.length < 3 || username.length > 16 || !isAlphanumeric(username)) {
             return { error: "Invalid username. It must be 3-16 characters only letters, numbers, and underscores." };
         }
 
         // Validate password
-        if (password.length < 8) {
+        if(password.length < 8) {
             return { error: "Invalid password. It must be at least 8 characters." };
         }
 

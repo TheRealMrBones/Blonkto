@@ -19,7 +19,7 @@ export function setInventorySlot(slot: number, item: Item): void {
         const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
         
         const itemimage = hotbarslot.querySelector("img");
-        if (itemimage) hotbarslot.removeChild(itemimage);
+        if(itemimage) hotbarslot.removeChild(itemimage);
 
         const itemimg = document.createElement("img");
         itemimg.className = "hotbaritem";
@@ -60,7 +60,7 @@ export function clearInventorySlot(slot: number): void {
     if(slot < 9){
         const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
         const itemimage = hotbarslot.querySelector("img");
-        if (itemimage) hotbarslot.removeChild(itemimage);
+        if(itemimage) hotbarslot.removeChild(itemimage);
         
         const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1))!;
         hotbaritemamount.innerHTML = "";

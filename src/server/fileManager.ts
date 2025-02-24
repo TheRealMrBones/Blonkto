@@ -15,9 +15,9 @@ class FileManager {
         this.savelocation = "./data/";
 
         // initialize data folder
-        if (!fs.existsSync(this.savelocation)) fs.mkdirSync(this.savelocation, { recursive: true });
+        if(!fs.existsSync(this.savelocation)) fs.mkdirSync(this.savelocation, { recursive: true });
         datafolders.forEach(f => {
-            if (!fs.existsSync(this.savelocation + f)) fs.mkdirSync(this.savelocation + f, { recursive: true });
+            if(!fs.existsSync(this.savelocation + f)) fs.mkdirSync(this.savelocation + f, { recursive: true });
         });
     }
 
@@ -26,10 +26,7 @@ class FileManager {
     /** Writes to (replaces if needed) a file with the given data */
     writeFile(filename: string, content: string): void {
         fs.writeFile(this.getFullFilePath(filename), content, "utf8", (error) => {
-            if (error) {
-                console.error("An error occurred while writing to the file:", error);
-                return;
-            }
+            if(error) console.error("An error occurred while writing to the file:", error);
         });
     }
 

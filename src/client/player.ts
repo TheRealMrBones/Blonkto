@@ -61,7 +61,7 @@ export class Player {
     /** Clears all old state data to save room */
     purgeUpdates(): void {
         const base = this.getBaseUpdate();
-        if (base > 0) {
+        if(base > 0) {
             this.updates.splice(0, base);
         }
     }

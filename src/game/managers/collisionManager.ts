@@ -78,7 +78,7 @@ class CollisionManager {
             const dist = getDistance(player, collectable);
             const realdist = dist - (player.scale + collectable.scale) / 2;
             if(realdist < 0){
-                if (player.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
+                if(player.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
             }
         }
     };
@@ -92,7 +92,7 @@ class CollisionManager {
             const dist = getDistance(collectable, collectable2);
             const realdist = dist - (collectable.scale + collectable2.scale) / 2;
             if(collectable.id != collectable2.id && realdist < 0){
-                if (collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
+                if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
             }
         }
     };
@@ -151,20 +151,20 @@ function wallCollisions(object: GameObject, walls: LineSegment[]): void {
 function wallCollision(object: GameObject, wall: LineSegment): void {
     const p1 = wall.p1;
     const p2 = wall.p2;
-    if (p1.x - p2.x == 0) {
-        if (object.y > p1.y && object.y < p2.y || object.y < p1.y && object.y > p2.y) {
-            if (Math.abs(object.x - p1.x) <= object.scale / 2) {
-                if (object.x - p1.x > 0) {
+    if(p1.x - p2.x == 0) {
+        if(object.y > p1.y && object.y < p2.y || object.y < p1.y && object.y > p2.y) {
+            if(Math.abs(object.x - p1.x) <= object.scale / 2) {
+                if(object.x - p1.x > 0) {
                     object.push(object.scale / 2 - Math.abs(object.x - p1.x), 0);
                 } else {
                     object.push(-(object.scale / 2 - Math.abs(object.x - p1.x)), 0);
                 }
             }
         }
-    } else if (p1.y - p2.y == 0) {
-        if (object.x > p1.x && object.x < p2.x || object.x < p1.x && object.x > p2.x) {
-            if (Math.abs(object.y - p1.y) <= object.scale / 2) {
-                if (object.y - p1.y > 0) {
+    } else if(p1.y - p2.y == 0) {
+        if(object.x > p1.x && object.x < p2.x || object.x < p1.x && object.x > p2.x) {
+            if(Math.abs(object.y - p1.y) <= object.scale / 2) {
+                if(object.y - p1.y > 0) {
                     object.push(0, object.scale / 2 - Math.abs(object.y - p1.y));
                 } else {
                     object.push(0, -(object.scale / 2 - Math.abs(object.y - p1.y)));

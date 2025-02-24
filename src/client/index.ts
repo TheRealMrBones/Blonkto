@@ -160,7 +160,7 @@ document.addEventListener("keydown", devlogin);
 
 /** Temp quick login code for development */
 function devlogin(event: any): void {
-    if (event.target.tagName.toLowerCase() !== "input" && 
+    if(event.target.tagName.toLowerCase() !== "input" && 
         event.target.tagName.toLowerCase() !== "textarea") {
     
         switch(event.key){
