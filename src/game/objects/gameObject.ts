@@ -2,7 +2,6 @@ import crypto from "crypto";
 import EventEmitter from "events";
 
 import Game from "../game.js";
-import { blockCollisions } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -58,7 +57,7 @@ class GameObject {
 
     /** Default object collision checks */
     checkCollisions(game: Game): void {
-        blockCollisions(this, game);
+        game.collisionManager.blockCollisions(this);
     }
 
     /** Check for falling */

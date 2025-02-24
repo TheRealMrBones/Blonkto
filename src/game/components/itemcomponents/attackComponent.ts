@@ -3,7 +3,6 @@ import Item from "../../items/item.js";
 import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
-import { attackHitCheck } from "../../collisions.js";
 
 /** An Item Component that alows the item to be used to attack entities */
 class AttackComponent extends Component<Item> {
@@ -23,7 +22,7 @@ class AttackComponent extends Component<Item> {
     /** Defines the attack use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         player.startSwing(info.dir);
-        attackHitCheck(player, game.getEntities(), info.dir, this.damage);
+        game.collisionManager.attackHitCheck(player, info.dir, this.damage);
     }
 }
 

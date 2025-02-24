@@ -8,13 +8,13 @@ import OpManager from "./managers/opManager.js";
 import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
 import PerformanceManager from "./managers/performanceManager.js";
+import CollisionManager from "./collisionManager.js";
 import Player from "./objects/player.js";
 import Entity from "./objects/entity.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
-import { attackHitCheck } from "./collisions.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -39,6 +39,7 @@ class Game {
     banManager: BanManager;
     chatManager: ChatManager;
     performanceManager: PerformanceManager;
+    collisionManager: CollisionManager;
 
     players: {[key: string]: Player} = {};
     objects: {[key: string]: GameObject} = {};
@@ -60,6 +61,7 @@ class Game {
         this.banManager = new BanManager(this);
         this.chatManager = new ChatManager(this);
         this.performanceManager = new PerformanceManager(this);
+        this.collisionManager = new CollisionManager(this);
         
         // world
         this.world = new World(this);
@@ -148,7 +150,7 @@ class Game {
             // use the item or run default use case
             if(hotbarItem == null){
                 this.players[socket.id].startSwing(newinfo.dir);
-                attackHitCheck(this.players[socket.id], this.getEntities(), newinfo.dir, 1);
+                this.collisionManager.attackHitCheck(this.players[socket.id], newinfo.dir, 1);
             }else hotbarItem.use(this, this.players[socket.id], newinfo);
         }
     }

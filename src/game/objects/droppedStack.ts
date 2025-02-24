@@ -1,7 +1,6 @@
 import ItemStack from "../items/itemStack.js";
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
-import { itemMergeCheck } from "../collisions.js";
 
 /** A stack of items that has been dropped into the game world and ticking */
 class DroppedStack extends GameObject {
@@ -15,7 +14,7 @@ class DroppedStack extends GameObject {
 
         // add collision checks
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
-            itemMergeCheck(this, game.getDroppedStacks(), game);
+            game.collisionManager.itemMergeCheck(this);
         });
     }
 

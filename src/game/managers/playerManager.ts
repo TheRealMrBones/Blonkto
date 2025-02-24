@@ -2,7 +2,7 @@ import { Socket } from "socket.io-client";
 
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import { filterText } from "../filter.js";
+import { filterText } from "../../shared/filter.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;

@@ -3,7 +3,6 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import { blockCollisions, collectCheck } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -92,7 +91,7 @@ class Player extends Entity {
     /** Default player collision checks */
     override checkCollisions(game: Game): void {
         super.checkCollisions(game);
-        collectCheck(this, game.getDroppedStacks(), game);
+        game.collisionManager.collectCheck(this);
     }
 
     // #region setters

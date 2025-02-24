@@ -5,7 +5,6 @@ import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
 import ItemStack from "./itemStack.js";
 import Player from "../objects/player.js";
-import { attackHitCheck } from "../collisions.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -37,7 +36,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         if(this.eventEmitter.listenerCount("use") == 0){
             player.startSwing(info.dir);
-            attackHitCheck(player, game.getEntities(), info.dir, 1);
+            game.collisionManager.attackHitCheck(player, info.dir, 1);
         }
     }
 }
