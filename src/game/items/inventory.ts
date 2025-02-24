@@ -1,5 +1,6 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
+import Player from "../objects/player.js";
 import ItemStack from "./itemStack.js";
 
 /** A managable collection of item stacks */
@@ -97,16 +98,17 @@ class Inventory {
     }
 
     /** Drops an individual stack (or partial stack) from this inventory */
-    dropStack(x: number, y: number, slot: number, game: Game, amount?: number): void {
+    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: Player): void {
         if(this.slots[slot] === null) return;
 
         if(amount === undefined){
-            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, this.slots[slot], .3);
+            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, this.slots[slot], .3, ignore);
             game.objects[droppedstack.id] = droppedstack;
+            this.slots[slot] = null;
         }else{
             if(amount > this.slots[slot].getAmount()) amount = this.slots[slot].getAmount();
 
-            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, new ItemStack(this.slots[slot].item.name, amount), .3);
+            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, new ItemStack(this.slots[slot].item.name, amount), .3, ignore);
             game.objects[droppedstack.id] = droppedstack;
 
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;

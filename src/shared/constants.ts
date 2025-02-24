@@ -11,6 +11,7 @@ const Constants = Object.freeze({
         INPUT: "input",
         CLICK: "click",
         INTERACT: "interact",
+        DROP: "drop",
         DEAD: "dead",
         SEND_MESSAGE: "send",
         RECEIVE_MESSAGE: "receive",

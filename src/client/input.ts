@@ -1,4 +1,4 @@
-import { updateInputs, click, interact } from "./networking.js";
+import { updateInputs, click, interact, drop } from "./networking.js";
 import { getCellSize } from "./render.js";
 import { blockCollisions, playerCollisions } from "./collisions.js";
 import { updateCoords } from "./ui.js";
@@ -62,36 +62,45 @@ function handleDirection(x: number, y: number): void {
 /** Response to key down input from client */
 function handlekeyDown(e: KeyboardEvent): void {
     switch(e.key){
+        // movement
         case "ArrowUp":
         case "w":
         case "W": {
-            if(!startw){
-                startw = Date.now();
-            }
+            if(!startw) startw = Date.now();
             break;
         }
         case "ArrowDown":
         case "s":
         case "S": {
-            if(!starts){
-                starts = Date.now();
-            }
+            if(!starts) starts = Date.now();
             break;
         }
         case "ArrowLeft":
         case "a":
         case "A": {
-            if(!starta){
-                starta = Date.now();
-            }
+            if(!starta) starta = Date.now();
             break;
         }
         case "ArrowRight":
         case "d":
         case "D": {
-            if(!startd){
-                startd = Date.now();
-            }
+            if(!startd) startd = Date.now();
+            break;
+        }
+
+        // actions
+        case "q": {
+            drop({
+                slot: hotbarslot,
+                all: false,
+            });
+            break;
+        }
+        case "Q": {
+            drop({
+                slot: hotbarslot,
+                all: true,
+            });
             break;
         }
 
@@ -403,18 +412,10 @@ export function serverPush(pushx: number, pushy: number): void {
 /** Sets the players position to the given spot */
 export function setPos(newpos: Pos): void {
     // keep current inputs running but don't include previous time held
-    if(startw){
-        startw = Date.now();
-    }
-    if(starts){
-        starts = Date.now();
-    }
-    if(starta){
-        starta = Date.now();
-    }
-    if(startd){
-        startd = Date.now();
-    }
+    if(startw) startw = Date.now();
+    if(starts) starts = Date.now();
+    if(starta) starta = Date.now();
+    if(startd) startd = Date.now();
 
     // set new position
     x = newpos.x;

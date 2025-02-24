@@ -1,16 +1,24 @@
 import ItemStack from "../items/itemStack.js";
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
+import Player from "./player.js";
 
 /** A stack of items that has been dropped into the game world and ticking */
 class DroppedStack extends GameObject {
     itemStack: ItemStack;
+    ignore: Player | null = null;
 
-    constructor(x: number, y: number, itemStack: ItemStack){
+    constructor(x: number, y: number, itemStack: ItemStack, ignore?: Player){
         super(x, y, undefined, .5);
 
         this.itemStack = itemStack;
         this.asset = itemStack.item.asset;
+        if(ignore !== undefined){
+            this.ignore = ignore;
+            setTimeout(() => {
+                this.ignore = null;
+            }, 1000);
+        }
 
         // add collision checks
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
@@ -24,14 +32,14 @@ class DroppedStack extends GameObject {
     }
 
     /** Returns a dropped stack with a random spread from the spawn point */
-    static getDroppedWithSpread(x: number, y: number, itemStack: ItemStack, spread: number){
+    static getDroppedWithSpread(x: number, y: number, itemStack: ItemStack, spread: number, ignore?: Player){
         const angle = Math.random() * 2 * Math.PI;
         const magnitude = Math.random() * spread;
 
         const xmovement = Math.cos(angle) * magnitude;
         const ymovement = Math.sin(angle) * magnitude;
 
-        return new DroppedStack(x + xmovement, y + ymovement, itemStack);
+        return new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
     }
 
     // #region serialization

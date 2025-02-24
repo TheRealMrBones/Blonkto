@@ -139,6 +139,22 @@ class Game {
 
     // #region inputs
 
+    /** Response to the general input message from a client */
+    handlePlayerInput(socket: Socket, inputs: any): void {
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
+        
+        const { t, dir, dx, dy, hotbarslot } = inputs;
+        if(this.players[socket.id]){
+            this.players[socket.id].update({
+                dir: dir,
+                dx: dx,
+                dy: dy,
+                t: t,
+            });
+            this.players[socket.id].hotbarslot = hotbarslot;
+        }
+    }
+
     /** Response to a click (left click) message from a client */
     handlePlayerClick(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
@@ -171,20 +187,11 @@ class Game {
         };
     }
 
-    /** Response to the general input message from a client */
-    handlePlayerInput(socket: Socket, inputs: any): void {
+    /** Response to a drop message from a client */
+    handlePlayerDrop(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        const { t, dir, dx, dy, hotbarslot } = inputs;
-        if(this.players[socket.id]){
-            this.players[socket.id].update({
-                dir: dir,
-                dx: dx,
-                dy: dy,
-                t: t,
-            });
-            this.players[socket.id].hotbarslot = hotbarslot;
-        }
+        this.players[socket.id].dropFromSlot(info.slot, this, info.all ? undefined : 1);
     }
 
     // #endregion

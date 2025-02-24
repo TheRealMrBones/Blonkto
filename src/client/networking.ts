@@ -80,6 +80,11 @@ export const interact = throttle(20, info => {
     socket.emit(MSG_TYPES.INTERACT, info);
 });
 
+/** Method to send the drop message to the server */
+export const drop = throttle(20, info => {
+    socket.emit(MSG_TYPES.DROP, info);
+});
+
 /** Method to send the chat message to the server */
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);

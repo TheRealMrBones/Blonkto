@@ -136,6 +136,17 @@ class Player extends Entity {
         return true;
     }
 
+    /** Drops the given amount from the given slot in this players inventory */
+    dropFromSlot(slot: number, game: Game, amount?: number): void {
+        this.inventory.dropStack(this.x, this.y, slot, game, amount, this);
+        const stack = this.inventory.getSlot(slot);
+        
+        this.fixes.inventoryupdates.push({
+            slot: slot,
+            itemstack: stack !== null ? stack.serializeForUpdate() : null,
+        });
+    }
+
     // #endregion
 
     // #region fixes
