@@ -29,7 +29,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
         if(drops !== undefined) this.drops = drops;
 
         this.eventEmitter.on("death", (entity: NonplayerEntity, game: Game) => {
-            this.dropItems(entity.x, entity.y, game);
+            if(entity.scale > 0) this.dropItems(entity.x, entity.y, game);
         });
     }
 

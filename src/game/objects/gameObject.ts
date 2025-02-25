@@ -68,6 +68,8 @@ class GameObject {
 
     /** Check for falling */
     checkFalling(game: Game, dt: number): void {
+        if(this.scale <= 0) return;
+        
         if(!this.falling){
             const tilesOn = this.tilesOn();
             let notair = 0;

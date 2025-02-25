@@ -54,7 +54,7 @@ class Player extends Entity {
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.playerManager.killPlayer(this.socket, killedby);
-            if(!KEEP_INVENTORY) this.inventory.dropInventory(this.x, this.y, game);
+            if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.x, this.y, game);
         });
     }
 
