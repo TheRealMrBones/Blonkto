@@ -26,6 +26,9 @@ const Constants = Object.freeze({
         SPACE_BG: "SpaceBg.png",
         STONE_BLOCK: "StoneBlock.png",
         PIG: "Pig.png",
+        SWORD: "Sword.png",
+        PICKAXE: "Pickaxe.png",
+        RAW_PORK: "RawPork.png",
     },
     SHAPES: {
         NONE: 0,

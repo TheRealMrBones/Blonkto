@@ -26,7 +26,7 @@ class Player extends Entity {
     hotbarslot: number;
     fixes: any;
 
-    constructor(socket: Socket, username: string, x: number, y: number, spawn: boolean){
+    constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
 
@@ -50,7 +50,7 @@ class Player extends Entity {
         // inventory
         this.inventory = new Inventory(INVENTORY_SIZE);
         this.hotbarslot = 0;
-        if(spawn == true && !KEEP_INVENTORY) this.starterInventory();
+        if(starter == true) this.starterInventory();
 
         this.resetFixes();
 
@@ -62,7 +62,7 @@ class Player extends Entity {
 
     /** Returns the player from its save data */
     static readFromSave(socket: Socket, x: number, y: number, data: any): Player {
-        const player = new Player(socket, data.username, x, y, data.dead);
+        const player = new Player(socket, data.username, x, y, (data.dead && !KEEP_INVENTORY));
 
         player.kills = data.kills;
 
