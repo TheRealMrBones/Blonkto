@@ -1,13 +1,13 @@
-import { updateInputs, click, interact, drop } from "./networking.js";
-import { getCellSize } from "./render.js";
-import { blockCollisions, playerCollisions } from "./collisions.js";
-import { updateCoords } from "./ui.js";
-import { getCurrentState } from "./state.js";
+import { updateInputs, click, interact, drop } from "../networking/networking.js";
+import { getCellSize } from "../render/render.js";
+import { blockCollisions, playerCollisions } from "../networking/collisions.js";
+import { updateCoords } from "../render/ui.js";
+import { getCurrentState } from "../networking/state.js";
 
-import SharedConfig from "../configs/shared.js";
+import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
-import ClientConfig from "../configs/client.js";
+import ClientConfig from "../../configs/client.js";
 const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
 
 // #region init

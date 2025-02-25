@@ -1,9 +1,9 @@
-import { connect, createaccount, login, play } from "./networking.js";
-import { stopRendering } from "./render.js";
-import { stopCapturingInput } from "./input.js";
-import { downloadAssets } from "./assets.js";
-import { initState } from "./state.js";
-import { hideUi } from "./ui.js";
+import { connect, createaccount, login, play } from "./networking/networking.js";
+import { stopRendering } from "./render/render.js";
+import { stopCapturingInput } from "./input/input.js";
+import { downloadAssets } from "./render/assets.js";
+import { initState } from "./networking/state.js";
+import { hideUi } from "./render/ui.js";
 
 import "./main.css";
 

@@ -1,17 +1,17 @@
 import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
-import { getCurrentState } from "./state.js";
-import { getSelf, setSelf } from "./input.js";
-import { getCell } from "./world.js";
+import { getCurrentState } from "../networking/state.js";
+import { getSelf, setSelf } from "../input/input.js";
+import { getCell } from "../world/world.js";
 import { updateFps } from "./ui.js";
 
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-import SharedConfig from "../configs/shared.js";
+import SharedConfig from "../../configs/shared.js";
 const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import ClientConfig from "../configs/client.js";
+import ClientConfig from "../../configs/client.js";
 const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 

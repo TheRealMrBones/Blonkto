@@ -1,14 +1,15 @@
 import io from "socket.io-client";
-import { processGameUpdate } from "./state.js";
 import { throttle } from "throttle-debounce";
-import { startRendering, setColor } from "./render.js";
-import { startCapturingInput } from "./input.js";
-import { setupUi } from "./ui.js";
-import { receiveChatMessage } from "./chat.js";
-import { onlogin, connectionRefused, connectionAccepted } from "./index.js";
-import { setInventory } from "./inventory.js";
 
-import Constants from "../shared/constants.js";
+import { processGameUpdate } from "./state.js";
+import { startRendering, setColor } from "../render/render.js";
+import { startCapturingInput } from "../input/input.js";
+import { setupUi } from "../render/ui.js";
+import { receiveChatMessage } from "../render/chat.js";
+import { onlogin, connectionRefused, connectionAccepted } from "../index.js";
+import { setInventory } from "../inventory/inventory.js";
+
+import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
 // #region init

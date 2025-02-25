@@ -1,7 +1,7 @@
-import { clientPush } from "./input.js";
-import { getCell } from "./world.js";
+import { clientPush } from "../input/input.js";
+import { getCell } from "../world/world.js";
 
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { SHAPES } = Constants;
 
 // #region get collisions

@@ -1,4 +1,4 @@
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 const assets: {[key: string]: HTMLImageElement} = {};

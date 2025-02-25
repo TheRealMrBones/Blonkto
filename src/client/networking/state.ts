@@ -1,10 +1,10 @@
-import { setPos, serverPush } from "./input.js";
-import { Player } from "./player.js";
-import { loadChunks, unloadChunks, updateCells } from "./world.js";
-import { toggleConnectionLost, updateHealth, updateKills } from "./ui.js";
-import { setSingleInventorySlot } from "./inventory.js";
+import { setPos, serverPush } from "../input/input.js";
+import { Player } from "./player";
+import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
+import { toggleConnectionLost, updateHealth, updateKills } from "../render/ui.js";
+import { setSingleInventorySlot } from "../inventory/inventory.js";
 
-import ClientConfig from "../configs/client.js";
+import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
 
 // #region init

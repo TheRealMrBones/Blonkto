@@ -1,5 +1,5 @@
-import { chat } from "./networking.js";
-import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from "./input.js";
+import { chat } from "../networking/networking.js";
+import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 
 // #region init

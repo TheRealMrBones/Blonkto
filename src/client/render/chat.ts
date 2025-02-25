@@ -1,4 +1,4 @@
-import ClientConfig from "../configs/client.js";
+import ClientConfig from "../../configs/client.js";
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
 const chatMessagesDiv = document.getElementById("chatmessages")!;
