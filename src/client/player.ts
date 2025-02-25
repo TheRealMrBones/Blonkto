@@ -33,7 +33,7 @@ export class Player {
         }else{
             const baseUpdate = this.updates[base];
             const next = this.updates[base + 1];
-            const ratio = (this.currentTime() - baseUpdate.static.lastupdated) / (next.static.lastupdated - baseUpdate.static.lastupdated);
+            const ratio = (currentServerTime() - baseUpdate.static.lastupdated) / (next.static.lastupdated - baseUpdate.static.lastupdated);
             return interpolateObject(baseUpdate, next, ratio);
         }
     }
@@ -42,14 +42,9 @@ export class Player {
 
     // #region helpers
 
-    /** Returns the current game time for this players data based on their delay */
-    currentTime(): number {
-        return currentServerTime();
-    }
-
     /** Returns the index for the current times base update (for interpolation) */
     getBaseUpdate(): number {
-        const playerTime = this.currentTime();
+        const playerTime = currentServerTime();
         for(let i = this.updates.length - 1; i >= 0; i--){
             if(this.updates[i].static.lastupdated <= playerTime){
                 return i;
