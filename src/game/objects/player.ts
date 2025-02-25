@@ -20,7 +20,6 @@ class Player extends Entity {
     socket: Socket;
     username: string;
     kills: number;
-    playerdelay: number;
     color: Color;
     inventory: Inventory;
     hotbarslot: number;
@@ -35,7 +34,6 @@ class Player extends Entity {
         this.socket = socket;
         this.username = username;
         this.kills = 0;
-        this.playerdelay = 0;
         this.scale = PLAYER_SCALE;
         this.health = 10;
 
@@ -107,8 +105,6 @@ class Player extends Entity {
 
     /** Updates this players data with the given new input data */
     update(data: any): void {
-        if(this.playerdelay == 0) this.playerdelay = Date.now() - data.t;
-        
         const deltatime = data.t - this.lastupdated;
 
         this.dir = data.dir;
@@ -211,7 +207,6 @@ class Player extends Entity {
             static: {
                 ...(base.static),
                 username: this.username,
-                playerdelay: this.playerdelay,
                 color: this.color,
                 kills: this.kills,
             },

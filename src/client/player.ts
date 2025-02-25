@@ -3,12 +3,10 @@ import { currentServerTime, interpolateObject } from "./state.js";
 /** Represents a player loaded nearby in the game and holds their state over time information */
 export class Player {
     exists: boolean;
-    delay: number;
     updates: any[];
 
     constructor(pu: any){
         this.exists = true;
-        this.delay = pu.static.playerdelay;
         this.updates = [pu];
     }
 
