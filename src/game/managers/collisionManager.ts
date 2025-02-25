@@ -91,8 +91,14 @@ class CollisionManager {
             const collectable2 = collectables[i];
             const dist = getDistance(collectable, collectable2);
             const realdist = dist - (collectable.scale + collectable2.scale) / 2;
-            if(collectable.id != collectable2.id && realdist < 0){
-                if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
+            if(realdist < 0){
+                if(collectable.id != collectable2.id){
+                    if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
+                }else{
+                    const dir = dist == 0 ? Math.random() * 2 * Math.PI : Math.atan2(collectable.x - collectable2.x, collectable2.y - collectable.y);
+                    collectable.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
+                    collectable2.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
+                }
             }
         }
     };
