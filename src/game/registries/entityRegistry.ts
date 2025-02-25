@@ -7,6 +7,6 @@ const { ASSETS } = Constants;
 
 const EntityRegistry = new Registry<EntityDefinition>();
 
-EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 3, .5));
+EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 3, .5, new Drop("raw_pork", 1, 1, .25, 3)));
 
 export default EntityRegistry;

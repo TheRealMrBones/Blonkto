@@ -118,6 +118,12 @@ class Player extends Entity {
         this.lastupdated = data.t;
     }
 
+    /** Heal the player the given amount of health */
+    heal(amount: number, ignoremax?: boolean): void {
+        this.health += amount;
+        if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
+    }
+
     /** Tries to collect the given item stack and returns if complete take */
     collectStack(itemstack: ItemStack): boolean {
         return this.inventory.collectStack(itemstack, this.fixes.inventoryupdates);
@@ -134,6 +140,11 @@ class Player extends Entity {
         });
 
         return true;
+    }
+
+    /** Rempoves the given amount from the players current slot */
+    removeFromCurrentSlot(amount: number): boolean {
+        return this.removeFromSlot(this.hotbarslot, amount);
     }
 
     /** Drops the given amount from the given slot in this players inventory */

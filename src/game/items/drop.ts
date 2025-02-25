@@ -29,8 +29,9 @@ class Drop implements DropBase {
 
         const additionalchance = Math.random();
         if(this.chanceperadditional > 0 && additionalchance != 0){
-            dropamount += Math.log(additionalchance) / Math.log(this.chanceperadditional);
+            dropamount += Math.floor(Math.log(additionalchance) / Math.log(this.chanceperadditional));
         }
+        dropamount = Math.min(dropamount, this.maxamount);
 
         for(let i = 1; i <= dropamount / this.item.stacksize; i++){
             this.dropStack(x, y, this.item.stacksize, game);
