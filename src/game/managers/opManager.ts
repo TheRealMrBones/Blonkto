@@ -31,9 +31,7 @@ class OpManager {
         this.oppedplayers = {};
         
         // if username given keep that user opped
-        if(username){
-            this.oppedplayers[username] = true;
-        }
+        if(username) this.oppedplayers[username] = true;
         
         this.save();
     }
@@ -63,17 +61,11 @@ class OpManager {
 
     /** Loads the operators list from the save */
     load(): void {
-        if(!this.game.fileManager.fileExists("oplist")){
-            return;
-        }
+        if(!this.game.fileManager.fileExists("oplist")) return;
 
         const rawdata = this.game.fileManager.readFile("oplist");
-        if(!rawdata){
-            return;
-        }
-        if(rawdata.length == 0 || rawdata.trim() === ""){
-            return;
-        }
+        if(!rawdata) return;
+        if(rawdata.length == 0 || rawdata.trim() === "") return;
 
         const data = rawdata.split("|");
 
@@ -90,8 +82,7 @@ class OpManager {
             data += key + "|";
         }
 
-        if(data.length > 0)
-            data = data.substring(0, data.length - 1); // remove last |
+        if(data.length > 0) data = data.substring(0, data.length - 1); // remove last |
 
         this.game.fileManager.writeFile("oplist", data);
     }

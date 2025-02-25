@@ -40,9 +40,7 @@ class ItemStack {
 
     /** Merges this stack with another stack if it is of the same item */
     mergeStack(otherstack: ItemStack): boolean {
-        if(otherstack.item.name != this.item.name || this.amount == 0){
-            return false;
-        }
+        if(otherstack.item.name != this.item.name || this.amount == 0) return false;
 
         const oldamount = this.amount;
         this.addAmount(otherstack.amount);

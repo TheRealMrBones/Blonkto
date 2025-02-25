@@ -61,17 +61,11 @@ class BanManager {
 
     /** Loads the ban list from the save */
     load(): void {
-        if(!this.game.fileManager.fileExists("banlist")){
-            return;
-        }
+        if(!this.game.fileManager.fileExists("banlist")) return;
 
         const rawdata = this.game.fileManager.readFile("banlist");
-        if(!rawdata){
-            return;
-        }
-        if(rawdata.length == 0 || rawdata.trim() === ""){
-            return;
-        }
+        if(!rawdata) return;
+        if(rawdata.length == 0 || rawdata.trim() === "") return;
 
         const data = rawdata.split("|");
 
@@ -89,8 +83,7 @@ class BanManager {
             data += key + "," + this.bannedplayers[key] + "|";
         }
 
-        if(data.length > 0)
-            data = data.substring(0, data.length - 1); // remove last |
+        if(data.length > 0) data = data.substring(0, data.length - 1); // remove last |
 
         this.game.fileManager.writeFile("banlist", data);
     }

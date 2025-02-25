@@ -42,15 +42,9 @@ class Cell {
     serializeForLoad(): any {
         const data: any = {};
 
-        if(this.block){
-            data.block = this.block.serializeForLoad();
-        }
-        if(this.floor){
-            data.floor = this.floor.serializeForLoad();
-        }
-        if(this.ceiling){
-            data.ceiling = this.ceiling.serializeForLoad();
-        }
+        if(this.block) data.block = this.block.serializeForLoad();
+        if(this.floor) data.floor = this.floor.serializeForLoad();
+        if(this.ceiling) data.ceiling = this.ceiling.serializeForLoad();
 
         return data;
     }
@@ -59,15 +53,9 @@ class Cell {
     serializeForWrite(): any {
         const data: any = {};
 
-        if(this.block){
-            data.block = this.block.serializeForWrite();
-        }
-        if(this.floor){
-            data.floor = this.floor.serializeForWrite();
-        }
-        if(this.ceiling){
-            data.ceiling = this.ceiling.serializeForWrite();
-        }
+        if(this.block) data.block = this.block.serializeForWrite();
+        if(this.floor) data.floor = this.floor.serializeForWrite();
+        if(this.ceiling) data.ceiling = this.ceiling.serializeForWrite();
 
         return data;
     }

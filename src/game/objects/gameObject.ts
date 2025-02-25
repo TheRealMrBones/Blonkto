@@ -75,9 +75,7 @@ class GameObject {
             tilesOn.forEach(tile => {
                 const cell = game.world.getCell(tile.x, tile.y, false);
                 if(cell){
-                    if(cell.floor){
-                        notair++;
-                    }
+                    if(cell.floor) notair++;
                 }
             });
 
@@ -117,9 +115,7 @@ class GameObject {
         for(let x = Math.floor(this.x - this.scale / 2); x < this.x + this.scale / 2; x++){
             for(let y = Math.floor(this.y - this.scale / 2); y < this.y + this.scale / 2; y++){
                 const p = { x: x, y: y };
-                if(this.distanceTo({ x: x, y: y }) <= this.scale / 2){
-                    points.push(p);
-                }
+                if(this.distanceTo({ x: x, y: y }) <= this.scale / 2) points.push(p);
             }
         }
 
@@ -150,8 +146,7 @@ class GameObject {
             ];
 
             tilestoadd.forEach(t => {
-                if(!tiles.some(ct => ct.x == t.x && ct.y == t.y))
-                    tiles.push(t);
+                if(!tiles.some(ct => ct.x == t.x && ct.y == t.y)) tiles.push(t);
             });
         });
 

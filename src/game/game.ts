@@ -167,7 +167,9 @@ class Game {
             if(hotbarItem == null){
                 this.players[socket.id].startSwing(newinfo.dir);
                 this.collisionManager.attackHitCheck(this.players[socket.id], newinfo.dir, 1);
-            }else hotbarItem.use(this, this.players[socket.id], newinfo);
+            }else{
+                hotbarItem.use(this, this.players[socket.id], newinfo);
+            }
         }
     }
 

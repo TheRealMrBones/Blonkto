@@ -400,9 +400,7 @@ class World {
         let empty = true;
         this.game.getAllObjects().forEach((e: GameObject) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
-                if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)){
-                    empty = false;
-                }
+                if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
             }
         });
 

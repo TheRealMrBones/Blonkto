@@ -23,9 +23,7 @@ class ComponentHandler<T> {
 
     /** Removes the given component type if it exists in this handler */
     removeComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): void {
-        if(this.components[componentType.name]) {
-            delete this.components[componentType.name];
-        }
+        if(this.components[componentType.name]) delete this.components[componentType.name];
     }
 
     /** Gets all components held in this handler */

@@ -36,7 +36,8 @@ class Chunk {
                     chunk.cells[x][y] = new Cell(
                         celldata.block ? celldata.block.name : null,
                         celldata.floor ? celldata.floor.name : null,
-                        celldata.ceiling ? celldata.ceiling.name : null);
+                        celldata.ceiling ? celldata.ceiling.name : null
+                    );
                 }
             }
         }catch(e){
