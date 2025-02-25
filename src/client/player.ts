@@ -44,7 +44,7 @@ export class Player {
 
     /** Returns the current game time for this players data based on their delay */
     currentTime(): number {
-        return currentServerTime() - this.delay;
+        return currentServerTime();
     }
 
     /** Returns the index for the current times base update (for interpolation) */
