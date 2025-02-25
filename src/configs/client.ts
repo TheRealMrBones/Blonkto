@@ -32,7 +32,7 @@ const ClientConfig: ClientConfigSchema = {
         CLIENT_UPDATE_RATE: 50,
     },
     RENDER: {
-        RENDER_DELAY: 50,
+        RENDER_DELAY: 60,
         HEIGHT_TO_CELL_RATIO: 11,
         TEXT_FONT: "Verdana",
         BACKGROUND_SCALE: 24,
