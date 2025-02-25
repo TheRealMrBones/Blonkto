@@ -33,18 +33,12 @@ export function processGameUpdate(update: any): void {
     lastUpdateTime = Date.now();
 
     // update local world
-    if(update.worldLoad.unloadChunks){
-        unloadChunks(update.worldLoad.unloadChunks);
-        loadChunks(update.worldLoad.loadChunks);
-    }
-    if(update.worldLoad.updatedcells){
-        updateCells(update.worldLoad.updatedcells);
-    }
+    if(update.worldLoad.unloadChunks) unloadChunks(update.worldLoad.unloadChunks);
+    if(update.worldLoad.loadChunks) loadChunks(update.worldLoad.loadChunks);
+    if(update.worldLoad.updatedcells) updateCells(update.worldLoad.updatedcells);
 
     // get fixes
-    if(update.fixes.setpos){
-        setPos(update.fixes.setpos);
-    }
+    if(update.fixes.setpos) setPos(update.fixes.setpos);
     serverPush(update.fixes.pushx, update.fixes.pushy);
     update.fixes.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
@@ -86,9 +80,7 @@ export function processGameUpdate(update: any): void {
 
     // delete players that no longer update
     Object.keys(players).forEach(pid => {
-        if(!players[pid].exists){
-            delete players[pid];
-        }
+        if(!players[pid].exists) delete players[pid];
     });
 
     // keep only one update before the current server/player time
@@ -106,9 +98,7 @@ export function processGameUpdate(update: any): void {
 export function getCurrentState(): any {
     checkIfConnectionLost();
 
-    if(!firstServerTimestamp){
-        return {};
-    }
+    if(!firstServerTimestamp) return {};
 
     const base = getBaseUpdate();
     const serverTime = currentServerTime();
@@ -145,9 +135,7 @@ export function getCurrentState(): any {
 
 /** Interpolates the given object between its two given states with the given ratio */
 export function interpolateObject(object1: any, object2: any, ratio: number): any {
-    if(!object2){
-        return object1;
-    }
+    if(!object2) return object1;
 
     const interpolated = {...(object1.static)};
     Object.keys(object1.dynamic).forEach(key => {
@@ -195,9 +183,7 @@ export function currentServerTime(): number {
 function getBaseUpdate(): number {
     const serverTime = currentServerTime();
     for(let i = gameUpdates.length - 1; i >= 0; i--){
-        if(gameUpdates[i].t <= serverTime){
-            return i;
-        }
+        if(gameUpdates[i].t <= serverTime) return i;
     }
     return -1;
 }
@@ -205,9 +191,7 @@ function getBaseUpdate(): number {
 /** Clears all old state data to save room */
 function purgeUpdates(): void {
     const base = getBaseUpdate();
-    if(base > 0){
-        gameUpdates.splice(0, base);
-    }
+    if(base > 0) gameUpdates.splice(0, base);
 }
 
 /** Checks if connection might have been lost based on the time of the last game update received */

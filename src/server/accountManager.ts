@@ -22,19 +22,16 @@ class AccountManager {
         password = sanitizeInput(password);
 
         // Validate username
-        if(username.length < 3 || username.length > 16 || !isAlphanumeric(username)) {
+        if(username.length < 3 || username.length > 16 || !isAlphanumeric(username))
             return { error: "Invalid username. It must be 3-16 characters only letters, numbers, and underscores." };
-        }
 
         // Validate password
-        if(password.length < 8) {
+        if(password.length < 8)
             return { error: "Invalid password. It must be at least 8 characters." };
-        }
 
         // Check if username already exists
-        if(this.fileManager.fileExists(getAccountFilePath(username))){
+        if(this.fileManager.fileExists(getAccountFilePath(username)))
             return { error: "Invalid username. Account with that name already exists." };
-        }
 
         // create account
         const hashedPw = await argon2.hash(password);
@@ -63,14 +60,10 @@ class AccountManager {
         password = sanitizeInput(password);
         
         // Check if account exists
-        if(!this.fileManager.fileExists(getAccountFilePath(username))){
-            return { error: "Account does not exist" };
-        }
+        if(!this.fileManager.fileExists(getAccountFilePath(username))) return { error: "Account does not exist" };
 
         // Check if account is logged in
-        if(this.isLoggedIn(username)){
-            return { error: "Account currently logged in" };
-        }
+        if(this.isLoggedIn(username)) return { error: "Account currently logged in" };
 
         // read account data
         const request = this.fileManager.readFile(getAccountFilePath(username));
@@ -78,9 +71,7 @@ class AccountManager {
         const data = request.split("|");
 
         // check if password matches
-        if(!await argon2.verify(data[0], password)){
-            return { error: "Password Incorrect" };
-        }
+        if(!await argon2.verify(data[0], password)) return { error: "Password Incorrect" };
 
         const acc = new Account(data.slice(1));
 

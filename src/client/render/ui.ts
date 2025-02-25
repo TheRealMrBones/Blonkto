@@ -146,11 +146,7 @@ export function updateFps(fps: number): void {
 
 /** Toggles the connection lost icon to appear or disapear */
 export function toggleConnectionLost(toggle: boolean): void {
-    if(toggle){
-        connectionlostdiv.style.display = "block";
-    }else{
-        connectionlostdiv.style.display = "none";
-    }
+    connectionlostdiv.style.display = toggle ? "block" : "none";
 }
 
 // #endregion

@@ -48,9 +48,7 @@ function updateCell(cellUpdate: any): void {
     const celly = cellUpdate.y - chunky * CHUNK_SIZE;
 
     const chunk = chunks[[chunkx,chunky].toString()];
-    if(chunk){
-        chunk.cells[cellx][celly] = cellUpdate.data;
-    }
+    if(chunk) chunk.cells[cellx][celly] = cellUpdate.data;
 }
 
 /** Returns the requested cells data if it exists or returns default values (empty) otherwise */

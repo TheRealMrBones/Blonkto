@@ -10,9 +10,7 @@ let chatopened = false;
 
 /** Shows/Instantiates the given chat message to the client */
 export function receiveChatMessage(message: any): void {
-    if(messages.length > MAX_MESSAGE_COUNT){
-        removeLastChatMessage();
-    }
+    if(messages.length > MAX_MESSAGE_COUNT) removeLastChatMessage();
 
     const newDiv = document.createElement("div");
     newDiv.id = message.id;
@@ -34,9 +32,7 @@ export function receiveChatMessage(message: any): void {
 function hideChatMessage(id: string): void {
     const message = messages.find(m => m.id == id);
     if(message){
-        if(!chatopened){
-            message.div.style.display = "none";
-        }
+        if(!chatopened) message.div.style.display = "none";
         message.display = false;
     }
 }
@@ -46,11 +42,7 @@ export function toggleAllChatShow(show: boolean): void {
     chatopened = show;
     const ms = messages.filter(m => !m.display);
     ms.forEach(m => {
-        if(show){
-            m.div.style.display = "block";
-        }else{
-            m.div.style.display = "none";
-        }
+        m.div.style.display = show ? "block" : "none";
     });
 }
 

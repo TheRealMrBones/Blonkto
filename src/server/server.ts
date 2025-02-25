@@ -67,9 +67,7 @@ async function createAccount(this: Socket, credentials: { username: string; pass
     const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account){
-        console.log(`[${this.id}] Create account: ${response.account.username}`);
-    }
+    if(response.account) console.log(`[${this.id}] Create account: ${response.account.username}`);
 }
 
 /** Response to the login message from a client */
@@ -79,9 +77,7 @@ async function login(this: Socket, credentials: { username: string; password: st
     const response = await accountManager.login(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account){
-        console.log(`[${this.id}] Logged in as: ${response.account.username}`);
-    }
+    if(response.account) console.log(`[${this.id}] Logged in as: ${response.account.username}`);
 }
 
 /** Response to the join game message from a client */

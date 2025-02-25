@@ -68,7 +68,6 @@ Promise.all([
 function sendcreateaccount(): void {
     if(!usernameInput.value || !passwordInput.value){
         errorDiv.innerHTML = "must provide a username and password";
-
         return;
     }
 
@@ -84,7 +83,6 @@ function sendcreateaccount(): void {
 function sendlogin(): void {
     if(!usernameInput.value || !passwordInput.value){
         errorDiv.innerHTML = "must provide a username and password";
-
         return;
     }
 
@@ -127,9 +125,7 @@ function joingame(): void {
 /** Client response to connection refused message from server */
 export function connectionRefused(info: any): void {
     errorDiv.innerHTML = `Connection refused: ${info.reason}`;
-    if(info.extra){
-        errorDiv.innerHTML += `<br>${info.extra}`;
-    }
+    if(info.extra) errorDiv.innerHTML += `<br>${info.extra}`;
 }
 
 /** Client response to connection accepted message from server */
@@ -139,9 +135,7 @@ export function connectionAccepted(): void {
 
 /** Reverts back to the play UI after server death message */
 function onGameOver(connectionrefusedinfo: any): void {
-    if(connectionrefusedinfo){
-        connectionRefused(connectionrefusedinfo);
-    }
+    if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
 
     stopCapturingInput();
     stopRendering();

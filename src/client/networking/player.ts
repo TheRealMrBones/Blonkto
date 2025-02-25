@@ -44,9 +44,7 @@ export class Player {
     getBaseUpdate(): number {
         const playerTime = currentServerTime();
         for(let i = this.updates.length - 1; i >= 0; i--){
-            if(this.updates[i].static.lastupdated <= playerTime){
-                return i;
-            }
+            if(this.updates[i].static.lastupdated <= playerTime) return i;
         }
         return -1;
     }
@@ -54,9 +52,7 @@ export class Player {
     /** Clears all old state data to save room */
     purgeUpdates(): void {
         const base = this.getBaseUpdate();
-        if(base > 0) {
-            this.updates.splice(0, base);
-        }
+        if(base > 0) this.updates.splice(0, base);
     }
 
     // #endregion

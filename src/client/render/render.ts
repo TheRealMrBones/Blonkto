@@ -150,9 +150,7 @@ function renderFloors(firstCell: { x: number; y: number; renderx: number; render
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
-            if(cell.floor){
-                renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
-            }
+            if(cell.floor) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
         }
     }
 
@@ -169,9 +167,7 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
-            if(cell.block){
-                renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset);
-            }
+            if(cell.block) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset);
         }
     }
 
@@ -196,19 +192,11 @@ function renderCell(x: number, y: number, asset: string): void {
 /** Renders the given entity */
 function renderEntity(me: any, entity: any): void {
     // check if entity is being hit
-    let model;
-    if(entity.hit){
-        model = getAssetVariant(entity.asset, "hit", HIT_COLOR);
-    }else{
-        model = getAsset(entity.asset);
-    }
-
+    const model = entity.hit ? getAssetVariant(entity.asset, "hit", HIT_COLOR) : getAsset(entity.asset);
     if(!model) return;
 
     // check if entity is swinging
-    if(entity.swinging){
-        renderSwing(me, entity);
-    }
+    if(entity.swinging) renderSwing(me, entity);
 
     // prepare context
     const { x, y, dir, scale } = entity;
@@ -236,17 +224,10 @@ function renderEntity(me: any, entity: any): void {
 /** Renders the given player entity */
 function renderPlayer(me: any, player: any): void {
     // check if player is being hit
-    let model;
-    if(player.hit){
-        model = getColoredAssetVariant(player, "hit", HIT_COLOR);
-    }else{
-        model = getColoredAsset(player);
-    }
+    const model = player.hit ? getColoredAssetVariant(player, "hit", HIT_COLOR) : getColoredAsset(player);
 
     // check if player is swinging
-    if(player.swinging){
-        renderSwing(me, player);
-    }
+    if(player.swinging) renderSwing(me, player);
 
     // prepare context
     const { x, y, dir, scale } = player;
@@ -349,14 +330,12 @@ let updatefpsinterval: string | number | NodeJS.Timeout | undefined;
 /** Starts the rendering loop for the client */
 export function startRendering(): void {
     updatefpsinterval = setInterval(calculatefps, 500);
-
     animationFrameRequestId = requestAnimationFrame(render);
 }
 
 /** Stops the rendering loop for the client */
 export function stopRendering(): void {
     clearInterval(updatefpsinterval);
-
     cancelAnimationFrame(animationFrameRequestId);
 }
 

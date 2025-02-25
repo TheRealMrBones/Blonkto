@@ -70,8 +70,6 @@ export function clearInventorySlot(slot: number): void {
 /** Clears the entire inventory of its data */
 export function clearInventory(): void {
     for(let i = 0; i < INVENTORY_SIZE; i++){
-        if(inventory[i]){
-            clearInventorySlot(i);
-        }
+        if(inventory[i]) clearInventorySlot(i);
     }
 }

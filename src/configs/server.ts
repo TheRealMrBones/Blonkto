@@ -69,9 +69,7 @@ const ServerConfig: ServerConfigSchema = {
 };
 
 // read config json if exists
-if(!fs.existsSync("./configs")){
-    fs.mkdirSync("./configs");
-}
+if(!fs.existsSync("./configs")) fs.mkdirSync("./configs");
 
 if(fs.existsSync("./configs/server.json")){
     const savedConfig: ServerConfigSchema = JSON.parse(fs.readFileSync("./configs/server.json", "utf8"));

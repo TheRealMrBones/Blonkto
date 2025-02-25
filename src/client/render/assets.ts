@@ -48,9 +48,7 @@ export function getColoredAsset(object: { id: string; color: Color; asset: strin
             // delete old colored variants aswell
             if(coloredAssetVariants[object.id]){
                 for (const prop in coloredAssetVariants[object.id]) {
-                    if(coloredAssetVariants[object.id].hasOwnProperty(prop)) {
-                        delete coloredAssetVariants[object.id][prop];
-                    }
+                    if(coloredAssetVariants[object.id].hasOwnProperty(prop)) delete coloredAssetVariants[object.id][prop];
                 }
             }
 
@@ -72,24 +70,16 @@ export function getColoredAsset(object: { id: string; color: Color; asset: strin
 /** Returns the image asset with the given name and recolored with the given variant */
 export function getAssetVariant(asset: string, varient: string, varientrgb: Color): OffscreenCanvas {
     const assetObj = getAsset(asset);
-    if(!assetVariants[asset]){
-        assetVariants[asset] = {};
-    }
-    if(!assetVariants[asset][varient]){
-        assetVariants[asset][varient] = colorize(assetObj, varientrgb);
-    }
+    if(!assetVariants[asset]) assetVariants[asset] = {};
+    if(!assetVariants[asset][varient]) assetVariants[asset][varient] = colorize(assetObj, varientrgb);
     return assetVariants[asset][varient];
 }
 
 /** Returns the image asset with the given name and colored with the given base color then recolored with the given varient */
 export function getColoredAssetVariant(object: { id: string; color: Color; asset: string; }, varient: string, varientrgb: Color): OffscreenCanvas {
     const coloredAsset = getColoredAsset(object);
-    if(!coloredAssetVariants[object.id]){
-        coloredAssetVariants[object.id] = {};
-    }
-    if(!coloredAssetVariants[object.id][varient]){
-        coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb);
-    }
+    if(!coloredAssetVariants[object.id]) coloredAssetVariants[object.id] = {};
+    if(!coloredAssetVariants[object.id][varient]) coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb);
     return coloredAssetVariants[object.id][varient];
 }
 
