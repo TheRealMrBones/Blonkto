@@ -21,6 +21,8 @@ class EatComponent extends Component<Item> {
 
     /** Defines the eat use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
+        if(player.health >= player.maxhealth) return;
+
         player.removeFromCurrentSlot(1);
         player.heal(this.heal);
     }
