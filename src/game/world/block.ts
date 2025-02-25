@@ -14,6 +14,7 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     drops: DropBase | null = null;
     scale: number = 1;
     shape: number = SHAPES.SQUARE;
+    blockscell: boolean = true;
 
     constructor(displayname: string, asset: string | null, drops?: DropBase, scale?: number, shape?: number){
         super();

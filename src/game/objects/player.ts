@@ -84,8 +84,10 @@ class Player extends Entity {
     /** Initializes this players inventory to the starter items */
     starterInventory(): void {
         this.inventory.setSlot(0, new ItemStack("pickaxe"));
-        this.inventory.setSlot(1, new ItemStack("sword"));
-        this.inventory.setSlot(2, new ItemStack("stone_block", 64));
+        this.inventory.setSlot(1, new ItemStack("shovel"));
+        this.inventory.setSlot(2, new ItemStack("sword"));
+        this.inventory.setSlot(3, new ItemStack("stone_block", 64));
+        this.inventory.setSlot(4, new ItemStack("wood_floor", 64));
     }
 
     /** Default player collision checks */

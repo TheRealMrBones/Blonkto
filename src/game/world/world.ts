@@ -358,8 +358,8 @@ class World {
         }
     }
 
-    /** Tries to break the requested cell and if needed drop its corrosponding item(s) */
-    breakcell(x: number, y: number, toggledrop: boolean): boolean {
+    /** Tries to break the requested block and returns success */
+    breakBlock(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data) return false;
         
@@ -368,16 +368,15 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk == null || cell.block == null) return false;
 
-        cell.block.break(x, y, toggledrop, this.game);
-        cell.block = null;
+        const response = cell.breakBlock(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({
             x, y
         });
-        return true;
+        return response;
     }
 
     /** Tries to place the requested block in the requested cell and returns success */
-    placecell(x: number, y: number, block: any): boolean {
+    placeBlock(x: number, y: number, block: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
         if(!data) return false;
 
@@ -386,11 +385,45 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk == null) return false;
         
-        cell.placeBlock(block);
+        const response = cell.placeBlock(block);
         chunk.cellUpdates.push({
             x, y
         });
-        return true;
+        return response;
+    }
+
+    /** Tries to break the requested floor and returns success */
+    breakFloor(x: number, y: number, toggledrop: boolean): boolean {
+        const data = this.getCellAndChunk(x, y, false);
+        if(!data) return false;
+        
+        const requestdata = this.getCellAndChunk(x, y, false);
+        if(requestdata == null) return false;
+        const { cell, chunk } = requestdata;
+        if(chunk == null || cell.floor == null) return false;
+
+        const response = cell.breakFloor(x, y, toggledrop, this.game);
+        chunk.cellUpdates.push({
+            x, y
+        });
+        return response;
+    }
+
+    /** Tries to place the requested floor in the requested cell and returns success */
+    placeFloor(x: number, y: number, floor: any): boolean {
+        const data = this.getCellAndChunk(x, y, false);
+        if(!data) return false;
+
+        const requestdata = this.getCellAndChunk(x, y, false);
+        if(requestdata == null) return false;
+        const { cell, chunk } = requestdata;
+        if(chunk == null) return false;
+        
+        const response = cell.placeFloor(floor);
+        chunk.cellUpdates.push({
+            x, y
+        });
+        return response;
     }
 
     /** Returns if the requested cell is empty (has no blocks or objects on it) */

@@ -4,13 +4,13 @@ import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 
-/** An Item Component that alows the item to be used to place blocks */
-class BuildComponent extends Component<Item> {
-    block: string;
+/** An Item Component that alows the item to be used to place floors */
+class BuildFloorComponent extends Component<Item> {
+    floor: string;
 
-    constructor(block: string){
+    constructor(floor: string){
         super();
-        this.block = block;
+        this.floor = floor;
     }
 
     /** Implements this component into its parents functionality */
@@ -23,8 +23,8 @@ class BuildComponent extends Component<Item> {
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         if(!game.world.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
 
-        if(game.world.placeBlock(info.cellpos.x, info.cellpos.y, this.block)) player.removeFromCurrentSlot(1);
+        if(game.world.placeFloor(info.cellpos.x, info.cellpos.y, this.floor)) player.removeFromCurrentSlot(1);
     }
 }
 
-export default BuildComponent;
+export default BuildFloorComponent;

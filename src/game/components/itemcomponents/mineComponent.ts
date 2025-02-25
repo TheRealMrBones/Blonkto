@@ -21,7 +21,7 @@ class MineComponent extends Component<Item> {
 
     /** Defines the mine use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
-        game.world.breakcell(info.cellpos.x, info.cellpos.y, true);
+        game.world.breakBlock(info.cellpos.x, info.cellpos.y, true);
     }
 }
 

@@ -4,34 +4,74 @@ import CeilingRegistry from "../registries/ceilingRegistry.js";
 import Block from "./block.js";
 import Floor from "./floor.js";
 import Ceiling from "./ceiling.js";
+import Game from "../game.js";
 
 /** Represents a single cell in the game world and its block, floor, and ceiling */
 class Cell {
     block: Block | null;
     floor: Floor | null;
+    basefloor: Floor | null;
     ceiling: Ceiling | null;
 
     constructor(block: string | null, floor: string | null, ceiling: string | null){
         this.block = block ? BlockRegistry.get(block) : null;
         this.floor = floor ? FloorRegistry.get(floor) : null;
+        this.basefloor = this.floor;
         this.ceiling = ceiling ? CeilingRegistry.get(ceiling) : null;
     }
 
     // #region setters
 
-    /** Sets the block for this cell */
-    placeBlock(block: string): void {
+    /** Sets the block for this cell and returns success */
+    placeBlock(block: string): boolean {
+        if(this.block !== null) return false;
         this.block = BlockRegistry.get(block);
+        return true;
     }
 
-    /** Sets the floor for this cell */
-    placeFloor(floor: string): void {
+    /** Sets the floor for this cell and returns success */
+    placeFloor(floor: string): boolean {
+        if(this.floor !== this.basefloor) return false;
+        if(this.block !== null)
+            if(this.block.blockscell) return false;
         this.floor = FloorRegistry.get(floor);
+        return true;
     }
 
-    /** Sets the ceiling for this cell */
-    placeCeiling(ceiling: string): void {
+    /** Sets the ceiling for this cell and returns success */
+    placeCeiling(ceiling: string): boolean {
+        if(this.ceiling !== null) return false;
+        if(this.block !== null)
+            if(this.block.blockscell) return false;
         this.ceiling = CeilingRegistry.get(ceiling);
+        return true;
+    }
+
+    /** Removes the block for this cell and returns success */
+    breakBlock(x: number, y: number, toggledrop: boolean, game: Game): boolean {
+        this.block?.break(x, y, toggledrop, game);
+        this.block = null;
+        return true;
+    }
+
+    /** Removes the floor for this cell and returns success */
+    breakFloor(x: number, y: number, toggledrop: boolean, game: Game): boolean {
+        if(this.floor === this.basefloor) return false;
+        if(this.block !== null)
+            if(this.block.blockscell) return false;
+        this.floor?.break(x, y, toggledrop, game);
+        this.floor = null;
+        if(this.basefloor !== null) this.floor = this.basefloor;
+        return true;
+    }
+
+    /** Removes the ceiling for this cell and returns success */
+    breakCeiling(x: number, y: number, toggledrop: boolean, game: Game): boolean {
+        if(this.block !== null)
+            if(this.block.blockscell) return false;
+        this.ceiling?.break(x, y, toggledrop, game);
+        this.ceiling = null;
+        return true;
     }
 
     // #endregion
