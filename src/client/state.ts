@@ -212,7 +212,7 @@ function purgeUpdates(): void {
 
 /** Checks if connection might have been lost based on the time of the last game update received */
 function checkIfConnectionLost(): void {
-    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY;
+    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY * 1.5;
     toggleConnectionLost(isconnectionlost);
 };
 
