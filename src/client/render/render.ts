@@ -169,7 +169,7 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
-            if(cell.block) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset);
+            if(cell.block) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset, cell.block.scale);
         }
     }
 
@@ -177,13 +177,20 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
 }
 
 /** Renders the given asset onto the given cell */
-function renderCell(x: number, y: number, asset: string): void {
+function renderCell(x: number, y: number, asset: string, scale?: number): void {
+    if(scale !== undefined){
+        const renderoffset = ((1 - scale) / 2) * cellSize;
+        x = x + renderoffset;
+        y = y + renderoffset;
+    }
+
+    const renderscale = scale ? scale : 1;
     context.drawImage(
         getAsset(asset),
         x + 1,
         y + 1,
-        cellSize + 1,
-        cellSize + 1,
+        (cellSize + 1) * renderscale,
+        (cellSize + 1) * renderscale,
     );
 }
 
