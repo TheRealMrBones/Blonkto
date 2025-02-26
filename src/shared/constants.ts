@@ -23,11 +23,13 @@ const Constants = Object.freeze({
         PLAYER: "BlonktoPlayer.png",
         TILE: "Tile.png",
         GRASS_FLOOR: "GrassFloor.png",
+        WOOD_FLOOR: "WoodFloor.png",
         SPACE_BG: "SpaceBg.png",
         STONE_BLOCK: "StoneBlock.png",
         PIG: "Pig.png",
         SWORD: "Sword.png",
         PICKAXE: "Pickaxe.png",
+        SHOVEL: "Shovel.png",
         RAW_PORK: "RawPork.png",
     },
     SHAPES: {
