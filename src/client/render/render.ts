@@ -5,7 +5,7 @@ import { getCell } from "../world/world.js";
 import { updateFps } from "./ui.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS } = Constants;
+const { ASSETS, SHAPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
@@ -150,6 +150,8 @@ function renderFloors(firstCell: { x: number; y: number; renderx: number; render
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = getCell(firstCell.x + dx, firstCell.y + dy);
+            if(cell.block)
+                if(cell.block.scale == 1 && cell.block.shape == SHAPES.SQUARE) continue;
             if(cell.floor) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
         }
     }
