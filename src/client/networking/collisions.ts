@@ -41,7 +41,7 @@ export function blockCollisions(me: any): void {
             const block = getCell(x, y).block;
 
             if(block){
-                const pos: Pos = { x: x + block.scale / 2, y: y + block.scale / 2 };
+                const pos: Pos = { x: x + .5, y: y + .5 };
 
                 if(block.shape == SHAPES.SQUARE){
                     const wallResults = getSquareWalls(block.scale, pos);
