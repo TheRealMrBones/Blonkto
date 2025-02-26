@@ -71,6 +71,7 @@ export function processGameUpdate(update: any): void {
     // push updates to queue
     gameUpdates.push(update);
     update.others.forEach((pu: any) => {
+        pu.t = update.t;
         if(!players[pu.static.id]){
             players[pu.static.id] = new Player(pu);
         }else{

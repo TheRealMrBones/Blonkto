@@ -31,7 +31,7 @@ export class Player {
         }else{
             const baseUpdate = this.updates[base];
             const next = this.updates[base + 1];
-            const ratio = (currentServerTime() - baseUpdate.static.lastupdated) / (next.static.lastupdated - baseUpdate.static.lastupdated);
+            const ratio = (currentServerTime() - baseUpdate.t) / (next.t - baseUpdate.t);
             return interpolateObject(baseUpdate, next, ratio);
         }
     }
@@ -42,9 +42,10 @@ export class Player {
 
     /** Returns the index for the current times base update (for interpolation) */
     getBaseUpdate(): number {
-        const playerTime = currentServerTime();
+        const serverTime = currentServerTime();
         for(let i = this.updates.length - 1; i >= 0; i--){
-            if(this.updates[i].static.lastupdated <= playerTime) return i;
+            const updatetime = this.updates[i].t;
+            if(updatetime <= serverTime) return i;
         }
         return -1;
     }
