@@ -8,15 +8,15 @@ import Game from "../game.js";
 
 /** Represents a single cell in the game world and its block, floor, and ceiling */
 class Cell {
+    basefloor: Floor | null;
     block: Block | null;
     floor: Floor | null;
-    basefloor: Floor | null;
     ceiling: Ceiling | null;
 
-    constructor(block: string | null, floor: string | null, ceiling: string | null){
+    constructor(basefloor: string | null, block: string | null, ceiling: string | null, floor?: string){
+        this.basefloor = basefloor ? FloorRegistry.get(basefloor) : null;
         this.block = block ? BlockRegistry.get(block) : null;
-        this.floor = floor ? FloorRegistry.get(floor) : null;
-        this.basefloor = this.floor;
+        this.floor = floor ? FloorRegistry.get(floor) : this.basefloor;
         this.ceiling = ceiling ? CeilingRegistry.get(ceiling) : null;
     }
 
@@ -93,6 +93,7 @@ class Cell {
     serializeForWrite(): any {
         const data: any = {};
 
+        if(this.basefloor) data.basefloor = this.basefloor.serializeForWrite();
         if(this.block) data.block = this.block.serializeForWrite();
         if(this.floor) data.floor = this.floor.serializeForWrite();
         if(this.ceiling) data.ceiling = this.ceiling.serializeForWrite();

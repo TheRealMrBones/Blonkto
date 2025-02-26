@@ -34,9 +34,10 @@ class Chunk {
                     const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
                     
                     chunk.cells[x][y] = new Cell(
+                        celldata.basefloor ? celldata.basefloor.name : null,
                         celldata.block ? celldata.block.name : null,
-                        celldata.floor ? celldata.floor.name : null,
-                        celldata.ceiling ? celldata.ceiling.name : null
+                        celldata.ceiling ? celldata.ceiling.name : null,
+                        celldata.floor ? celldata.floor.name : null
                     );
                 }
             }
@@ -65,7 +66,7 @@ class Chunk {
                     game.entities[pig.id] = pig;
                 }
                 
-                this.cells[x][y] = new Cell(block, "grass_floor", null);
+                this.cells[x][y] = new Cell("grass_floor", block, null);
             }
         }
     }
