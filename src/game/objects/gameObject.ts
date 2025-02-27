@@ -28,7 +28,7 @@ class GameObject {
 
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.id = crypto.randomUUID();
-        this.lastupdated = new Date().getTime();
+        this.lastupdated = Date.now();
 
         this.x = x;
         this.y = y;

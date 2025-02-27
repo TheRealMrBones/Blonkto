@@ -67,7 +67,7 @@ class Game {
         this.world = new World(this);
 
         // updates
-        this.lastUpdateTime = new Date().getTime();
+        this.lastUpdateTime = Date.now();
 
         // intervals
         setInterval(this.tick.bind(this), 1000 / SERVER_UPDATE_RATE);
@@ -160,7 +160,7 @@ class Game {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(info);
         
-        if(new Date().getTime() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
+        if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
             // use the item or run default use case
@@ -204,7 +204,7 @@ class Game {
     tick(): void {
         this.performanceManager.tickStart();
 
-        const now = new Date().getTime();
+        const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.lastUpdateTime = now;
         
@@ -252,7 +252,7 @@ class Game {
 
         // return full update object
         return {
-            t: new Date().getTime(),
+            t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),

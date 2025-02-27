@@ -44,6 +44,7 @@ io.on("connection", socket => {
     socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
     socket.on(MSG_TYPES.LOGIN, login);
     socket.on(MSG_TYPES.JOIN_GAME, joinGame);
+    socket.on(MSG_TYPES.PING, ping);
     socket.on(MSG_TYPES.INPUT, handleInput);
     socket.on(MSG_TYPES.CLICK, click);
     socket.on(MSG_TYPES.INTERACT, interact);
@@ -87,6 +88,11 @@ function joinGame(this: Socket): void {
     const username = accountManager.getAccount(this.id).username;
     console.log(`[${this.id}] [${username}] Joined the game`);
     game.playerManager.addPlayer(this, username);
+}
+
+/** Response to the ping message from a client */
+function ping(this: Socket): void {
+  	this.emit(MSG_TYPES.PING);
 }
 
 /** Response to the create account message from a client */

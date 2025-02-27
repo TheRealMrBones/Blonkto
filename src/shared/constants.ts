@@ -6,6 +6,7 @@ const Constants = Object.freeze({
         JOIN_GAME: "join_game",
         CONNECTION_REFUSED: "connection_refused",
         DISCONNECT: "disconnect",
+        PING: "ping",
         PLAYER_INSTANTIATED: "instantiated",
         GAME_UPDATE: "update",
         INPUT: "input",

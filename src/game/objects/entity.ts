@@ -70,7 +70,7 @@ class Entity extends GameObject {
     /** Starts an attack swing for this entity */
     startSwing(dir: number): void {
         this.swinging = true;
-        this.lastattack = new Date().getTime();
+        this.lastattack = Date.now();
         this.lastattackdir = dir;
         this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
     }

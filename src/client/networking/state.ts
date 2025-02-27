@@ -1,7 +1,7 @@
 import { setPos, serverPush } from "../input/input.js";
 import { Player } from "./player";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
-import { toggleConnectionLost, updateHealth, updateKills, updatePing } from "../render/ui.js";
+import { toggleConnectionLost, updateHealth, updateKills } from "../render/ui.js";
 import { setSingleInventorySlot } from "../inventory/inventory.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -15,7 +15,7 @@ let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
 let self: any;
-let lastUpdateTime = new Date().getTime();
+let lastUpdateTime = Date.now();
 
 /** Initializes the world state for the client */
 export function initState(): void {
@@ -30,12 +30,7 @@ export function initState(): void {
 /** Processes the given game update and adds it to the state queue */
 export function processGameUpdate(update: any): void {
     // set lastUpdateTime
-    lastUpdateTime = new Date().getTime();
-
-    // update ping data
-    pingcount++;
-    pingtotal += (lastUpdateTime - update.t);
-    if(pingcount == 100) calculatePing();
+    lastUpdateTime = Date.now();
 
     // update local world
     if(update.worldLoad.unloadChunks) unloadChunks(update.worldLoad.unloadChunks);
@@ -68,7 +63,7 @@ export function processGameUpdate(update: any): void {
 
     // if first update set server delay
     if(!firstServerTimestamp){
-        gameStart = new Date().getTime();
+        gameStart = Date.now();
         firstServerTimestamp = update.t;
         serverDelay = gameStart - firstServerTimestamp + RENDER_DELAY;
         console.log(`state delay: ${serverDelay}`);
@@ -176,26 +171,11 @@ function interpolateDirection(d1: number, d2: number, ratio: number): number {
 
 // #endregion
 
-// #region ping
-
-let pingtotal = 0;
-let pingcount = 0;
-
-/** Calculates and shows your clients average ping */
-function calculatePing(): void {
-    if(pingcount == 0) updatePing(0); else updatePing(pingtotal / pingcount);
-    
-    pingtotal = 0;
-    pingcount = 0;
-}
-
-// #endregion
-
 // #region helpers
 
 /** Returns the current server update time based on this clients delay */
 export function currentServerTime(): number {
-    return new Date().getTime() - serverDelay;
+    return Date.now() - serverDelay;
 }
 
 /** 
@@ -218,7 +198,7 @@ function purgeUpdates(): void {
 
 /** Checks if connection might have been lost based on the time of the last game update received */
 function checkIfConnectionLost(): void {
-    const isconnectionlost = new Date().getTime() - lastUpdateTime > RENDER_DELAY * 2;
+    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY * 2;
     toggleConnectionLost(isconnectionlost);
 };
 

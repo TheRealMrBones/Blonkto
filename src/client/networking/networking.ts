@@ -4,7 +4,7 @@ import { throttle } from "throttle-debounce";
 import { processGameUpdate } from "./state.js";
 import { startRendering, setColor } from "../render/render.js";
 import { startCapturingInput } from "../input/input.js";
-import { setupUi } from "../render/ui.js";
+import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { onlogin, connectionRefused, connectionAccepted } from "../index.js";
 import { setInventory } from "../inventory/inventory.js";
@@ -18,6 +18,7 @@ const socketProtocol = (window.location.protocol.includes("https")) ? "wss" : "w
 const socket = io(`${socketProtocol}://${window.location.host}`, { reconnection: false });
 const connectedPromise = new Promise<void>(resolve => {
     socket.on("connect", () => {
+        pinginterval = setInterval(ping, 1000);
         console.log("Connected to server!");
         resolve();
     });
@@ -28,6 +29,7 @@ export const connect = (onGameOver: any): Promise<void> => (
     connectedPromise.then(() => {
         socket.on(MSG_TYPES.LOGIN, onlogin);
         socket.on(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
+        socket.on(MSG_TYPES.PING, onPing);
         socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
         socket.on(MSG_TYPES.GAME_UPDATE, processGameUpdate);
         socket.on(MSG_TYPES.DEAD, onGameOver);
@@ -90,5 +92,22 @@ export const drop = throttle(20, info => {
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);
 });
+
+// #endregion
+
+// #region ping
+
+let pinginterval = null;
+let pingsent = 0;
+
+function ping(){
+    socket.emit(MSG_TYPES.PING);
+    pingsent = Date.now();
+}
+
+function onPing(){
+    const ping = Date.now() - pingsent;
+    updatePing(ping);
+}
 
 // #endregion

@@ -58,8 +58,8 @@ export function setColor(color: Color): void {
 
 // #region fps data
 
-let lastframe = new Date().getTime();
-let thisframe = new Date().getTime();
+let lastframe = Date.now();
+let thisframe = Date.now();
 let fpstotal = 0;
 let fpscount = 0;
 
@@ -127,7 +127,7 @@ function render(): void {
     rendercontext.drawImage(canvas,0,0);
 
     // update fps
-    thisframe = new Date().getTime();
+    thisframe = Date.now();
     fpstotal += (1000 / (thisframe - lastframe));
     fpscount++;
     lastframe = thisframe;
