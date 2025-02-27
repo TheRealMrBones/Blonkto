@@ -46,6 +46,10 @@ const Constants = Object.freeze({
         FLOAT: 4,
         BOOLEAN: 5,
     },
+    MINE_TYPES: {
+        MINE: 0,
+        CHOP: 1,
+    },
 });
 
 export default Constants;

@@ -4,7 +4,7 @@ import Game from "../game.js";
 import DropBase from "../items/dropBase.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS, SHAPES } = Constants;
+const { ASSETS, SHAPES, MINE_TYPES } = Constants;
 
 /** The definition for a type of block with its functionality and base statistics */
 class Block extends ComponentHandler<Block> implements RegistryValue {
@@ -12,15 +12,17 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     displayname: string;
     asset: string = ASSETS.MISSING_TEXTURE;
     drops: DropBase | null = null;
+    minetype: number = MINE_TYPES.MINE;
     scale: number = 1;
     shape: number = SHAPES.SQUARE;
     blockscell: boolean = true;
 
-    constructor(displayname: string, asset: string | null, drops?: DropBase, scale?: number, shape?: number){
+    constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, scale?: number, shape?: number){
         super();
         this.displayname = displayname;
         if(asset != null) this.asset = asset;
         if(drops !== undefined) this.drops = drops;
+        if(minetype !== undefined) this.minetype = minetype;
         if(scale !== undefined) this.scale = scale;
         if(shape !== undefined) this.shape = shape;
     }

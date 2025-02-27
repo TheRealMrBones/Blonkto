@@ -4,13 +4,18 @@ import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 
+import Constants from "../../../shared/constants.js";
+const { MINE_TYPES } = Constants;
+
 /** An Item Component that alows the item to be used to mine/destroy blocks */
 class MineComponent extends Component<Item> {
     power: number;
+    minetype: number = MINE_TYPES.MINE;
 
-    constructor(power: number){
+    constructor(power: number, minetype?: number){
         super();
         this.power = power;
+        if(minetype !== undefined) this.minetype = minetype;
     }
 
     /** Implements this component into its parents functionality */
@@ -21,6 +26,11 @@ class MineComponent extends Component<Item> {
 
     /** Defines the mine use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
+        const cell = game.world.getCell(info.cellpos.x, info.cellpos.y, false);
+        if(cell !== false){
+            if(cell.block !== null)
+                if(cell.block.minetype != this.minetype) return;
+        }
         game.world.breakBlock(info.cellpos.x, info.cellpos.y, true);
     }
 }
