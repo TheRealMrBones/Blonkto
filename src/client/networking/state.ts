@@ -15,13 +15,12 @@ let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
 let self: any;
-let lastUpdateTime = Date.now();
+let lastUpdateTime = new Date().getTime();
 
 /** Initializes the world state for the client */
 export function initState(): void {
     gameStart = 0;
     firstServerTimestamp = 0;
-    calculatePing();
 }
 
 // #endregion
@@ -31,11 +30,12 @@ export function initState(): void {
 /** Processes the given game update and adds it to the state queue */
 export function processGameUpdate(update: any): void {
     // set lastUpdateTime
-    lastUpdateTime = Date.now();
+    lastUpdateTime = new Date().getTime();
 
     // update ping data
     pingcount++;
     pingtotal += (lastUpdateTime - update.t);
+    if(pingcount == 100) calculatePing();
 
     // update local world
     if(update.worldLoad.unloadChunks) unloadChunks(update.worldLoad.unloadChunks);
@@ -68,7 +68,7 @@ export function processGameUpdate(update: any): void {
 
     // if first update set server delay
     if(!firstServerTimestamp){
-        gameStart = Date.now();
+        gameStart = new Date().getTime();
         firstServerTimestamp = update.t;
         serverDelay = gameStart - firstServerTimestamp + RENDER_DELAY;
         console.log(`state delay: ${serverDelay}`);
@@ -187,10 +187,6 @@ function calculatePing(): void {
     
     pingtotal = 0;
     pingcount = 0;
-
-    setTimeout(() => {
-        if(Date.now() - lastUpdateTime < 1000) calculatePing();
-    }, 1000);
 }
 
 // #endregion
@@ -199,7 +195,7 @@ function calculatePing(): void {
 
 /** Returns the current server update time based on this clients delay */
 export function currentServerTime(): number {
-    return Date.now() - serverDelay;
+    return new Date().getTime() - serverDelay;
 }
 
 /** 
@@ -222,7 +218,7 @@ function purgeUpdates(): void {
 
 /** Checks if connection might have been lost based on the time of the last game update received */
 function checkIfConnectionLost(): void {
-    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY * 2;
+    const isconnectionlost = new Date().getTime() - lastUpdateTime > RENDER_DELAY * 2;
     toggleConnectionLost(isconnectionlost);
 };
 

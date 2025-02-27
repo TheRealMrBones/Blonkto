@@ -66,25 +66,25 @@ function handlekeyDown(e: KeyboardEvent): void {
         case "ArrowUp":
         case "w":
         case "W": {
-            if(!startw) startw = Date.now();
+            if(!startw) startw = new Date().getTime();
             break;
         }
         case "ArrowDown":
         case "s":
         case "S": {
-            if(!starts) starts = Date.now();
+            if(!starts) starts = new Date().getTime();
             break;
         }
         case "ArrowLeft":
         case "a":
         case "A": {
-            if(!starta) starta = Date.now();
+            if(!starta) starta = new Date().getTime();
             break;
         }
         case "ArrowRight":
         case "d":
         case "D": {
-            if(!startd) startd = Date.now();
+            if(!startd) startd = new Date().getTime();
             break;
         }
 
@@ -151,7 +151,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "w":
         case "W": {
             if(startw){
-                dy -= (Date.now() - startw) * PLAYER_SPEED / 1000;
+                dy -= (new Date().getTime() - startw) * PLAYER_SPEED / 1000;
                 startw = null;
             }
             break;
@@ -160,7 +160,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "s":
         case "S": {
             if(starts){
-                dy += (Date.now() - starts) * PLAYER_SPEED / 1000;
+                dy += (new Date().getTime() - starts) * PLAYER_SPEED / 1000;
                 starts = null;
             }
             break;
@@ -169,7 +169,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "a":
         case "A": {
             if(starta){
-                dx -= (Date.now() - starta) * PLAYER_SPEED / 1000;
+                dx -= (new Date().getTime() - starta) * PLAYER_SPEED / 1000;
                 starta = null;
             }
             break;
@@ -178,7 +178,7 @@ function handlekeyUp(e: KeyboardEvent): void {
         case "d":
         case "D": {
             if(startd){
-                dx += (Date.now() - startd) * PLAYER_SPEED / 1000;
+                dx += (new Date().getTime() - startd) * PLAYER_SPEED / 1000;
                 startd = null;
             }
             break;
@@ -231,7 +231,7 @@ function handleInput(): void {
     updatePos();
 
     updateInputs({
-        t: Date.now(),
+        t: new Date().getTime(),
         dir: dir,
         dx: dx,
         dy: dy,
@@ -257,20 +257,20 @@ function resetMovement(): void {
 function updatePos(): void {
     // update local position vars
     if(startw){
-        dy -= (Date.now() - startw) * PLAYER_SPEED / 1000;
-        startw = Date.now();
+        dy -= (new Date().getTime() - startw) * PLAYER_SPEED / 1000;
+        startw = new Date().getTime();
     }
     if(starts){
-        dy += (Date.now() - starts) * PLAYER_SPEED / 1000;
-        starts = Date.now();
+        dy += (new Date().getTime() - starts) * PLAYER_SPEED / 1000;
+        starts = new Date().getTime();
     }
     if(starta){
-        dx -= (Date.now() - starta) * PLAYER_SPEED / 1000;
-        starta = Date.now();
+        dx -= (new Date().getTime() - starta) * PLAYER_SPEED / 1000;
+        starta = new Date().getTime();
     }
     if(startd){
-        dx += (Date.now() - startd) * PLAYER_SPEED / 1000;
-        startd = Date.now();
+        dx += (new Date().getTime() - startd) * PLAYER_SPEED / 1000;
+        startd = new Date().getTime();
     }
 
     // update ui
@@ -412,10 +412,10 @@ export function serverPush(pushx: number, pushy: number): void {
 /** Sets the players position to the given spot */
 export function setPos(newpos: Pos): void {
     // keep current inputs running but don't include previous time held
-    if(startw) startw = Date.now();
-    if(starts) starts = Date.now();
-    if(starta) starta = Date.now();
-    if(startd) startd = Date.now();
+    if(startw) startw = new Date().getTime();
+    if(starts) starts = new Date().getTime();
+    if(starta) starta = new Date().getTime();
+    if(startd) startd = new Date().getTime();
 
     // set new position
     x = newpos.x;

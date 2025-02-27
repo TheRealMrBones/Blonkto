@@ -48,7 +48,7 @@ export function setupUi(): void {
     chatInput.addEventListener("focusout", chatInputUnfocus);
 
     // prepare ignorechatenter
-    ignorechatenter = Date.now();
+    ignorechatenter = new Date().getTime();
 }
 
 /** Hides the game UI */
@@ -74,7 +74,7 @@ function keyUpChecks(event: KeyboardEvent): void {
     event.preventDefault();
     switch(event.key){
         case "Enter": {
-            if(Date.now() - ignorechatenter < 500){
+            if(new Date().getTime() - ignorechatenter < 500){
                 // ignore open chat if enter was used to start the game
             }else if(focusingOut){
                 focusingOut = !focusingOut;
