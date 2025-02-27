@@ -6,6 +6,7 @@ import { setSingleInventorySlot } from "../inventory/inventory.js";
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
+const { SERVER_RESYNC_THRESHOLD } = ClientConfig.UPDATE;
 
 // #region init
 
@@ -14,6 +15,8 @@ const players: {[key: string]: any} = {};
 let gameStart = 0;
 let firstServerTimestamp = 0;
 let serverDelay = 0;
+let newserverdelays = 0;
+let newserverdelayscount = 0;
 let self: any;
 let lastUpdateTime = Date.now();
 
@@ -66,7 +69,19 @@ export function processGameUpdate(update: any): void {
         gameStart = Date.now();
         firstServerTimestamp = update.t;
         serverDelay = gameStart - firstServerTimestamp + RENDER_DELAY;
-        console.log(`state delay: ${serverDelay}`);
+    }else{
+        // if newserverdelay consistently different reset server delay (will visibly stutter)
+        newserverdelays += Date.now() - update.t + RENDER_DELAY;
+        newserverdelayscount++;
+
+        if(newserverdelayscount == 10){
+            const avgnewserverdelay = newserverdelays / newserverdelayscount;
+            if(Math.abs(avgnewserverdelay - serverDelay) > SERVER_RESYNC_THRESHOLD)
+                serverDelay = avgnewserverdelay;
+        
+            newserverdelays = 0;
+            newserverdelayscount = 0;
+        }
     }
 
     // push updates to queue
