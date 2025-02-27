@@ -11,6 +11,7 @@ const healthtext = document.getElementById("healthtext")!;
 const coordstext = document.getElementById("coordstext")!;
 const killstext = document.getElementById("killstext")!;
 const fpstext = document.getElementById("fpstext")!;
+const pingtext = document.getElementById("pingtext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
 const hotbardiv = document.getElementById("hotbar")!;
 
@@ -142,6 +143,11 @@ export function updateKills(kills: number): void {
 /** Updates the FPS UI to the given value */
 export function updateFps(fps: number): void {
     fpstext.innerHTML = `FPS: ${Math.round(fps).toString()}`;
+}
+
+/** Updates the ping UI to the given value */
+export function updatePing(ping: number): void {
+    pingtext.innerHTML = `Ping: ${Math.round(ping).toString()}`;
 }
 
 /** Toggles the connection lost icon to appear or disapear */

@@ -1,7 +1,7 @@
 import { setPos, serverPush } from "../input/input.js";
 import { Player } from "./player";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
-import { toggleConnectionLost, updateHealth, updateKills } from "../render/ui.js";
+import { toggleConnectionLost, updateHealth, updateKills, updatePing } from "../render/ui.js";
 import { setSingleInventorySlot } from "../inventory/inventory.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -21,6 +21,7 @@ let lastUpdateTime = Date.now();
 export function initState(): void {
     gameStart = 0;
     firstServerTimestamp = 0;
+    calculatePing();
 }
 
 // #endregion
@@ -31,6 +32,10 @@ export function initState(): void {
 export function processGameUpdate(update: any): void {
     // set lastUpdateTime
     lastUpdateTime = Date.now();
+
+    // update ping data
+    pingcount++;
+    pingtotal += (lastUpdateTime - update.t);
 
     // update local world
     if(update.worldLoad.unloadChunks) unloadChunks(update.worldLoad.unloadChunks);
@@ -66,6 +71,7 @@ export function processGameUpdate(update: any): void {
         gameStart = Date.now();
         firstServerTimestamp = update.t;
         serverDelay = gameStart - firstServerTimestamp + RENDER_DELAY;
+        console.log(`state delay: ${serverDelay}`);
     }
 
     // push updates to queue
@@ -170,6 +176,25 @@ function interpolateDirection(d1: number, d2: number, ratio: number): number {
 
 // #endregion
 
+// #region ping
+
+let pingtotal = 0;
+let pingcount = 0;
+
+/** Calculates and shows your clients average ping */
+function calculatePing(): void {
+    if(pingcount == 0) updatePing(0); else updatePing(pingtotal / pingcount);
+    
+    pingtotal = 0;
+    pingcount = 0;
+
+    setTimeout(() => {
+        if(Date.now() - lastUpdateTime < 1000) calculatePing();
+    }, 1000);
+}
+
+// #endregion
+
 // #region helpers
 
 /** Returns the current server update time based on this clients delay */
@@ -197,7 +222,7 @@ function purgeUpdates(): void {
 
 /** Checks if connection might have been lost based on the time of the last game update received */
 function checkIfConnectionLost(): void {
-    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY * 1.5;
+    const isconnectionlost = Date.now() - lastUpdateTime > RENDER_DELAY * 2;
     toggleConnectionLost(isconnectionlost);
 };
 

@@ -63,7 +63,7 @@ let thisframe = Date.now();
 let fpstotal = 0;
 let fpscount = 0;
 
-/** Calculates and shows your clients fps based on how many frames have rendered in the second since the last check */
+/** Calculates and shows your clients average fps */
 function calculatefps(): void {
     if(fpscount == 0) updateFps(0); else updateFps(fpstotal / fpscount);
     
