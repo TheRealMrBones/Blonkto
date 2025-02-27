@@ -43,7 +43,7 @@ class PerformanceManager {
 
     /** Logs the current performance statistics */
     logPerformance(): void {
-        const tps = (PERFORMANCE_LOG_RATE * 1000) / this.cummilativetickcount;
+        const tps = this.cummilativetickcount / PERFORMANCE_LOG_RATE;
         const averageticktime = this.cummilativeticktime / this.cummilativetickcount;
 
         const players = this.game.getPlayerEntities().length;
