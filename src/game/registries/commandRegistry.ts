@@ -39,3 +39,5 @@ import clearOpListCommand from "../commands/clearOpListCommand.js";
 clearOpListCommand();
 import giveCommand from "../commands/giveCommand.js";
 giveCommand();
+import broadcastCommand from "../commands/broadcastCommand.js";
+broadcastCommand();

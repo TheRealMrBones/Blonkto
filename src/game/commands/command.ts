@@ -81,6 +81,7 @@ class Command implements RegistryValue {
         let error = "Command Failed";
 
         // read inputed args to find correct args
+        let backupsuccess = null;
         for(let i = 0; parsedargs.length > 0; i++){
             // end of inputed args
             if(rawargs.length == i){
@@ -162,12 +163,63 @@ class Command implements RegistryValue {
                         break;
                     }
                     case COMMAND_ARGUMENTS.STRING: {
-                        parsedargs[j][i] = rawargs[i];
+                        if((rawargs[i] as string).startsWith("\"")){
+                            // try to read string that starts and end in quotes
+                            let fullstring = (rawargs[i] as string).slice(1);
+                            let endindex = fullstring.indexOf("\"");
+                            if(endindex == fullstring.length - 1){
+                                parsedargs[j][i] = fullstring.slice(0, -1);
+                                break;
+                            }else if(endindex != -1){
+                                error = "string has bad end quote placement";
+                                break;
+                            }
+
+                            let errored = false;
+                            let hasend = false;
+                            for(let k = i + 1; k < rawargs.length; rawargs.splice(k, 1)){
+                                fullstring += " " + rawargs[k];
+                                endindex = fullstring.indexOf("\"");
+                                if(endindex == fullstring.length - 1){
+                                    parsedargs[j][i] = fullstring.slice(0, -1);
+                                    hasend = true;
+                                    rawargs.splice(k, 1);
+                                    break;
+                                }else if(endindex != -1){
+                                    error = "string has bad end quote placement";
+                                    errored = true;
+                                    break;
+                                }
+                            }
+
+                            if(errored) break;
+                            if(!hasend) error = "quoted string does not have end";
+                        }else if((rawargs[i] as string).indexOf("\"") != -1){
+                            // error because start quote must be at front
+                            error = "string has bad start quote placement";
+                        }else if(parsedargs[j].length == i + 1){
+                            // just read entire rest of args if last argument needed
+                            let fullstring = rawargs[i];
+                            for(let k = i + 1; k < rawargs.length; k++){
+                                fullstring += " " + rawargs[k];
+                            }
+
+                            parsedargs[j][i] = fullstring;
+                            backupsuccess = [];
+                            for(const val of parsedargs[j]){
+                                backupsuccess.push(val);
+                            }
+                        }else{
+                            parsedargs[j][i] = rawargs[i];
+                        }
                         break;
                     }
                 }
             }
         }
+
+        // return backup success if exists
+        if(backupsuccess !== null) return backupsuccess;
 
         // if no correct args found send most recent error
         return error;
