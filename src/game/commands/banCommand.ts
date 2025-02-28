@@ -24,7 +24,7 @@ function banCommand(args: any[], player: Player, game: Game){
             
             p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: "" });
             game.banManager.ban(p.username, "");
-            game.playerManager.removePlayer(p);
+            game.playerManager.removePlayer(p.socket);
             game.chatManager.sendMessageTo(player, `banned ${p.username}`);
             
             break;
@@ -34,7 +34,7 @@ function banCommand(args: any[], player: Player, game: Game){
             
             p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: args[2] });
             game.banManager.ban(p.username, args[2]);
-            game.playerManager.removePlayer(p);
+            game.playerManager.removePlayer(p.socket);
             game.chatManager.sendMessageTo(player, `banned ${p.username}`);
             
             break;

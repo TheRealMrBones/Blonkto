@@ -17,8 +17,7 @@ function kickCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     const p: Player = args[1];
-
     p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: argIndex == 0 ? "" : args[2] });
-    game.playerManager.removePlayer(p);
+    game.playerManager.removePlayer(p.socket);
     game.chatManager.sendMessageTo(player, `kicked ${p.username}`);
 }

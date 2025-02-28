@@ -25,20 +25,14 @@ function oppedCommand(args: any[], player: Player, game: Game){
     // actually run command
     switch(argIndex){
         case 0: {
-            if(game.opManager.isOp(player.username)){
-                game.chatManager.sendMessageTo(player, "you are opped");
-            }else{
-                game.chatManager.sendMessageTo(player, "you are not opped");
-            }
+            const isop = game.opManager.isOp(player.username);
+            game.chatManager.sendMessageTo(player, isop ? "you are opped" : "you are not opped");
             break;
         };
         case 1: {
             const p: Player = args[1];
-            if(game.opManager.isOp(p.username)){
-                game.chatManager.sendMessageTo(player, `${p.username} is opped`);
-            }else{
-                game.chatManager.sendMessageTo(player, `${p.username} is not opped`);
-            }
+            const isop = game.opManager.isOp(p.username);
+            game.chatManager.sendMessageTo(player, isop ? `${p.username} is opped` : `${p.username} is not opped`);
             break;
         };
     }

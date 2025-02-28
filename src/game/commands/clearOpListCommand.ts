@@ -16,21 +16,11 @@ export default (): void => CommandRegistry.register("clearoplist", new Command(t
 function clearOpListCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
-    switch(argIndex){
-        case 0: {
-            game.opManager.clearOpList(player.username);
-            game.chatManager.sendMessageTo(player, "cleared op list");
-            
-            break;
-        };
-        case 1:{
-            if(args[1]){
-                game.opManager.clearOpList();
-                game.chatManager.sendMessageTo(player, "cleared op list (FORCE)");
-            }else{
-                game.opManager.clearOpList(player.username);
-                game.chatManager.sendMessageTo(player, "cleared op list");
-            }
-        }
+    if(args[1]){
+        game.opManager.clearOpList();
+        game.chatManager.sendMessageTo(player, "cleared op list (FORCE)");
+    }else{
+        game.opManager.clearOpList(player.username);
+        game.chatManager.sendMessageTo(player, "cleared op list");
     }
 }
