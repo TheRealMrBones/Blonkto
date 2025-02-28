@@ -5,6 +5,7 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import GameObject from "../objects/gameObject.js"; 
 import NonplayerEntity from "../objects/nonplayerEntity.js";
+import { Pos } from "../../shared/types.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;

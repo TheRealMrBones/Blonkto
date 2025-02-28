@@ -3,6 +3,7 @@ import DroppedStack from "../objects/droppedStack.js";
 import Entity from "../objects/entity.js";
 import Game from "../game.js";
 import GameObject from "../objects/gameObject.js";
+import { Circle, LineSegment, Pos } from "../../shared/types.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;

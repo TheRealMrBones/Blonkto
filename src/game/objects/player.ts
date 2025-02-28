@@ -4,6 +4,7 @@ import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
+import { Color } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;

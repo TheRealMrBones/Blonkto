@@ -1,6 +1,6 @@
-import Game from "../game";
-import Player from "../objects/player";
-import RegistryValue from "../registries/registryValue";
+import Game from "../game.js";
+import Player from "../objects/player.js";
+import RegistryValue from "../registries/registryValue.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
@@ -111,7 +111,7 @@ class Command implements RegistryValue {
                         break;
                     }
                     case COMMAND_ARGUMENTS.PLAYER: {
-                        const p = Object.values(game.players).find(p => p.username.toLowerCase() == rawargs[i].toLowerCase());
+                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
                         if(!p){
                             error = `Player "${rawargs[i]}" does not exist`;
                             parsedargs.splice(j, 1);

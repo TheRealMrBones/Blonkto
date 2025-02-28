@@ -2,6 +2,7 @@ import crypto from "crypto";
 import EventEmitter from "events";
 
 import Game from "../game.js";
+import { Pos } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
