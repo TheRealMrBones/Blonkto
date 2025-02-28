@@ -18,17 +18,10 @@ export default (): void => CommandRegistry.register("ban", new Command(true, arg
 function banCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
+    if(args[2] === undefined) args[2] = "";
+
     switch(argIndex){
-        case 0: {
-            const p: Player = args[1];
-            
-            p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: "" });
-            game.banManager.ban(p.username, "");
-            game.playerManager.removePlayer(p.socket);
-            game.chatManager.sendMessageTo(player, `banned ${p.username}`);
-            
-            break;
-        };
+        case 0:
         case 1: {
             const p: Player = args[1];
             
@@ -39,17 +32,7 @@ function banCommand(args: any[], player: Player, game: Game){
             
             break;
         };
-        case 2: {
-            if(game.banManager.isBanned(args[1])){
-                game.chatManager.sendMessageTo(player, `${args[1]} is already banned`);
-                return;
-            }
-
-            game.banManager.ban(args[1], "");
-            game.chatManager.sendMessageTo(player, `banned ${args[1]}`);
-            
-            break;
-        };
+        case 2:
         case 3: {
             if(game.banManager.isBanned(args[1])){
                 game.chatManager.sendMessageTo(player, `${args[1]} is already banned`);
