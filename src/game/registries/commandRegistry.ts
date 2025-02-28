@@ -41,3 +41,5 @@ import giveCommand from "../commands/giveCommand.js";
 giveCommand();
 import broadcastCommand from "../commands/broadcastCommand.js";
 broadcastCommand();
+import spawnCommand from "../commands/spawnCommand.js";
+spawnCommand();
