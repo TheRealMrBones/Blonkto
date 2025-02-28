@@ -27,11 +27,11 @@ class OpManager {
     }
 
     /** Clears the entire operator list */
-    clearOpList(username: string): void {
+    clearOpList(username?: string): void {
         this.oppedplayers = {};
         
         // if username given keep that user opped
-        if(username) this.oppedplayers[username] = true;
+        if(username !== undefined) this.oppedplayers[username] = true;
         
         this.save();
     }

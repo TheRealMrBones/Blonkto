@@ -15,9 +15,19 @@ class Registry<T extends RegistryValue> {
         value.mapRegistryKey(key);
     }
 
+    /** Returns if an object exists with the requested key */
+    has(key: string): boolean {
+        return (this.map[key] !== undefined);
+    }
+
     /** Returns the stored object for the requested key */
     get(key: string): T {
         return this.map[key];
+    }
+
+    /** Returns all of the registered objects */
+    getAll(): T[] {
+        return Object.values(this.map);
     }
 }
 

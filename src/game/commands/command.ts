@@ -11,14 +11,14 @@ class Command implements RegistryValue {
     private op: boolean;
     private possibleargs: any[][];
     private executeParsed: (args: any[], player: Player, game: Game) => void;
-    alternativekeys: string[] = [];
+    private help: string
     private customCanExecute: ((player: Player, game: Game) => boolean) | null = null;
 
-    constructor(op: boolean, possibleargs: any[][], executeParsed: (args: any[], player: Player, game: Game) => void, alternativekeys?: string[]){
+    constructor(op: boolean, possibleargs: any[][], executeParsed: (args: any[], player: Player, game: Game) => void, help: string){
         this.op = op;
         this.possibleargs = possibleargs;
         this.executeParsed = executeParsed;
-        if(alternativekeys !== undefined) this.alternativekeys = alternativekeys;
+        this.help = help;
     }
 
     /** Sets this objects identifier to the given key from the registry */
@@ -31,18 +31,38 @@ class Command implements RegistryValue {
         this.customCanExecute = customCanExecute;
     }
 
+    /** Returns the key of this command */
+    getKey(): string {
+        return this.key;
+    }
+
+    /** Returns if this command requires op */
+    getOp(): boolean {
+        return this.op;
+    }
+
+    /** Returns the help string of this command */
+    getHelp(): string {
+        return this.help;
+    }
+
     // #region command execution
 
     /** Tries to run this command with the given args */
     execute(rawargs: any[], player: Player, game: Game): void {
         if(!this.canExecute(player, game))
-            game.chatManager.sendMessageTo(player, "You do not have permission to use this command");
+            Command.sendNoPermission(player, game);
 
         const args = this.parseArgs(rawargs, game);
         if(typeof args === "string") // string return is a parsing error
             game.chatManager.sendMessageTo(player, args);
         
         this.executeParsed(args as any[], player, game);
+    }
+
+    /** Sends a no permission response to the player running a command */
+    static sendNoPermission(player: Player, game: Game): void {
+        game.chatManager.sendMessageTo(player, "You do not have permission to use this command");
     }
 
     /** Returns if the requesting player has permission to execute this command */

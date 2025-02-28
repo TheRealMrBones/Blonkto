@@ -27,9 +27,6 @@ import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
-// initialize registries
-import "./registries/itemRegistry.js";
-
 /** The main class that manages the game world and the entities in it */
 class Game {
     fileManager: FileManager;

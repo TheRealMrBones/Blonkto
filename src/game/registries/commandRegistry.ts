@@ -1,0 +1,39 @@
+import Registry from "./registry.js";
+import Command from "../commands/command.js";
+
+const CommandRegistry = new Registry<Command>();
+
+export default CommandRegistry;
+
+import opCommand from "../commands/opCommand.js";
+opCommand();
+import deopCommand from "../commands/deopCommand.js";
+deopCommand();
+import oppedCommand from "../commands/oppedCommand.js";
+oppedCommand();
+import opListCommand from "../commands/opListCommand.js";
+opListCommand();
+import tpCommand from "../commands/tpCommand.js";
+tpCommand();
+import pingCommand from "../commands/pingCommand.js";
+pingCommand();
+import nickCommand from "../commands/nickCommand.js";
+nickCommand();
+import helpCommand from "../commands/helpCommand.js";
+helpCommand();
+import killCommand from "../commands/killCommand.js";
+killCommand();
+import saveWorldCommand from "../commands/saveWorldCommand.js";
+saveWorldCommand();
+import kickCommand from "../commands/kickCommand.js";
+kickCommand();
+import banCommand from "../commands/banCommand.js";
+banCommand();
+import pardonCommand from "../commands/pardonCommand.js";
+pardonCommand();
+import banListCommand from "../commands/banListCommand.js";
+banListCommand();
+import clearBanListCommand from "../commands/clearBanListCommand.js";
+clearBanListCommand();
+import clearOpListCommand from "../commands/clearOpListCommand.js";
+clearOpListCommand();
