@@ -16,7 +16,7 @@ export default (): void => CommandRegistry.register("kick", new Command(true, ar
 function kickCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
-    const p = args[1];
+    const p: Player = args[1];
 
     p.socket.emit(MSG_TYPES.KICK, { reason: "Kicked", extra: argIndex == 0 ? "" : args[2] });
     game.playerManager.removePlayer(p);

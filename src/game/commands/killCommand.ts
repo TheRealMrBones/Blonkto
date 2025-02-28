@@ -29,7 +29,7 @@ function killCommand(args: any[], player: Player, game: Game){
             break;
         };
         case 1: {
-            const p = args[1];
+            const p: Player = args[1];
             p.eventEmitter.emit("death", "the Server", null, game);
             game.chatManager.sendMessageTo(player, `killed ${p.username}`);
             break;

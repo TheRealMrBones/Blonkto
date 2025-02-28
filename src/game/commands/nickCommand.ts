@@ -41,7 +41,7 @@ function nickCommand(args: any[], player: Player, game: Game){
             break;
         };
         case 1: {
-            const p = args[1];
+            const p: Player = args[1];
             if(p.username === args[2]){
                 game.chatManager.sendMessageTo(player, `their name is already ${p.username}`);
             }else{

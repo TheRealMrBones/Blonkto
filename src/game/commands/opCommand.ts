@@ -25,7 +25,7 @@ function opCommand(args: any[], player: Player, game: Game){
     // actually run command
     switch(argIndex){
         case 0: {
-            const p = args[1];
+            const p: Player = args[1];
             if(game.opManager.isOp(p.username)){
                 game.chatManager.sendMessageTo(player, `${p.username} is already opped`);
             }else{

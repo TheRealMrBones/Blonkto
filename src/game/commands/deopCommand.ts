@@ -13,7 +13,7 @@ const args = [
 export default (): void => CommandRegistry.register("deop", new Command(true, args, deopCommand, "Takes away a players operator permissions"));
 
 function deopCommand(args: any[], player: Player, game: Game){
-    const p = args[1];
+    const p: Player = args[1];
     if(game.opManager.isOp(p.username)){
         game.opManager.deop(p.username);
         game.chatManager.sendMessageTo(p, "you are no longer opped");

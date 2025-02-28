@@ -20,7 +20,7 @@ function banCommand(args: any[], player: Player, game: Game){
 
     switch(argIndex){
         case 0: {
-            const p = args[1];
+            const p: Player = args[1];
             
             p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: "" });
             game.banManager.ban(p.username, "");
@@ -30,7 +30,7 @@ function banCommand(args: any[], player: Player, game: Game){
             break;
         };
         case 1: {
-            const p = args[1];
+            const p: Player = args[1];
             
             p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: args[2] });
             game.banManager.ban(p.username, args[2]);

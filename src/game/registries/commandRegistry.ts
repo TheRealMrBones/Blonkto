@@ -37,3 +37,5 @@ import clearBanListCommand from "../commands/clearBanListCommand.js";
 clearBanListCommand();
 import clearOpListCommand from "../commands/clearOpListCommand.js";
 clearOpListCommand();
+import giveCommand from "../commands/giveCommand.js";
+giveCommand();

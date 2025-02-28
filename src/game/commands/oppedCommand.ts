@@ -33,7 +33,7 @@ function oppedCommand(args: any[], player: Player, game: Game){
             break;
         };
         case 1: {
-            const p = args[1];
+            const p: Player = args[1];
             if(game.opManager.isOp(p.username)){
                 game.chatManager.sendMessageTo(player, `${p.username} is opped`);
             }else{
