@@ -2,9 +2,10 @@ import Command from "./command.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
+import NonplayerEntity from "../objects/nonplayerEntity.js";
+import EntityRegistry from "../registries/entityRegistry.js";
 
 import Constants from "../../shared/constants.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
@@ -16,6 +17,11 @@ const args = [
 export default (): void => CommandRegistry.register("spawn", new Command(true, args, spawnCommand, "Spawns an entity"));
 
 function spawnCommand(args: any[], player: Player, game: Game){
+    if(!EntityRegistry.has(args[1])){
+        game.chatManager.sendMessageTo(player, `no entity of name: ${args[1]}`);
+        return;
+    }
+
     const argIndex = args[0];
     let x = 0, y = 0;
 
@@ -40,5 +46,5 @@ function spawnCommand(args: any[], player: Player, game: Game){
 
     const entity = new NonplayerEntity(x, y, 0, args[1]);
     game.entities[entity.id] = entity;
-    game.chatManager.sendMessageTo(player, `spawned entity at: ${x}, ${y}`);
+    game.chatManager.sendMessageTo(player, `spawned ${args[1]} at: ${Math.floor(x)}, ${Math.floor(y)}`);
 }

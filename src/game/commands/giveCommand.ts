@@ -3,6 +3,7 @@ import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
 import ItemStack from "../items/itemStack.js";
+import ItemRegistry from "../registries/itemRegistry.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
@@ -23,6 +24,12 @@ function giveCommand(args: any[], player: Player, game: Game){
     if(amount % 2 == 1)
         amount = argIndex == 1 ? args[3] : args[2];
     const item = argIndex == 1 ? args[2] : args[1];
+
+    if(!ItemRegistry.has(item)){
+        game.chatManager.sendMessageTo(player, `no item of name: ${item}`);
+        return;
+    }
+
     const itemStack = new ItemStack(item, amount);
 
     switch(argIndex){
