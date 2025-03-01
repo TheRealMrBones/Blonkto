@@ -10,7 +10,7 @@ const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
 class DroppedStack extends GameObject {
     itemStack: ItemStack;
     ignore: Player | null = null;
-    ttl: number;
+    despawntime: number;
 
     constructor(x: number, y: number, itemStack: ItemStack, ignore?: Player){
         super(x, y, undefined, .5);
@@ -23,18 +23,20 @@ class DroppedStack extends GameObject {
                 this.ignore = null;
             }, 1000);
         }
-        this.ttl = DROPPED_STACK_TTL;
+        this.despawntime = Date.now() + DROPPED_STACK_TTL * 1000;
 
         // add collision checks
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             game.collisionManager.itemMergeCheck(this);
-            this.tickTtl(game, dt);
+            this.tickDespawn(game);
         });
     }
 
     /** Returns the dropped stack from its save data */
     static readFromSave(data: any): DroppedStack {
-        return new DroppedStack(data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
+        const droppedstack = new DroppedStack(data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
+        droppedstack.despawntime = data.despawntime;
+        return droppedstack;
     }
 
     /** Returns a dropped stack with a random spread from the spawn point */
@@ -49,9 +51,8 @@ class DroppedStack extends GameObject {
     }
 
     /** Ticks TTL and deletes self if too old */
-    tickTtl(game: Game, dt: number): void {
-        this.ttl -= dt;
-        if(this.ttl <= 0) game.removeObject(this.id);
+    tickDespawn(game: Game): void {
+        if(Date.now() >= this.despawntime) game.removeObject(this.id);
     }
 
     // #region serialization
@@ -78,6 +79,7 @@ class DroppedStack extends GameObject {
             ...base,
             type: "dropped_stack",
             itemStack: this.itemStack.serializeForWrite(),
+            despawntime: this.despawntime,
         };
     }
 
