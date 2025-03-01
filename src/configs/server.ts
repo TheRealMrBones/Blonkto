@@ -15,6 +15,7 @@ type ServerConfigSchema = {
     },
     OBJECT: {
         FALL_RATE: number,
+        DROPPED_STACK_TTL: number,
     },
     UPDATE: {
         SERVER_UPDATE_RATE: number,
@@ -50,6 +51,7 @@ const ServerConfig: ServerConfigSchema = {
     },
     OBJECT: {
         FALL_RATE: 0.5,
+        DROPPED_STACK_TTL: 300,
     },
     UPDATE: {
         SERVER_UPDATE_RATE: 50,

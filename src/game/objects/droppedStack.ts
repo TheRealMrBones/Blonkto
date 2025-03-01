@@ -3,10 +3,14 @@ import GameObject from "./gameObject.js";
 import Game from "../game.js";
 import Player from "./player.js";
 
+import ServerConfig from "../../configs/server.js";
+const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
+
 /** A stack of items that has been dropped into the game world and ticking */
 class DroppedStack extends GameObject {
     itemStack: ItemStack;
     ignore: Player | null = null;
+    ttl: number;
 
     constructor(x: number, y: number, itemStack: ItemStack, ignore?: Player){
         super(x, y, undefined, .5);
@@ -19,10 +23,12 @@ class DroppedStack extends GameObject {
                 this.ignore = null;
             }, 1000);
         }
+        this.ttl = DROPPED_STACK_TTL;
 
         // add collision checks
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             game.collisionManager.itemMergeCheck(this);
+            this.tickTtl(game, dt);
         });
     }
 
@@ -40,6 +46,12 @@ class DroppedStack extends GameObject {
         const ymovement = Math.sin(angle) * magnitude;
 
         return new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
+    }
+
+    /** Ticks TTL and deletes self if too old */
+    tickTtl(game: Game, dt: number): void {
+        this.ttl -= dt;
+        if(this.ttl <= 0) game.removeObject(this.id);
     }
 
     // #region serialization
