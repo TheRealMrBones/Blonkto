@@ -14,6 +14,8 @@ class PerformanceManager {
     cummilativeticktime: number = 0;
     maxticktime: number = 0;
 
+    lastperformancelog: string[] = ["No Performance Log has been generated recently"];
+
     constructor(game: Game){
         this.game = game;
 
@@ -50,9 +52,15 @@ class PerformanceManager {
         const entities = this.game.getNonplayerEntities().length;
         const objects = this.game.getObjects().length;
 
-        console.log(`Performance Log - ${new Date().toLocaleTimeString()}`);
-        console.log(`TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`);
-        console.log(`Ticking Objects: ${players} players, ${entities} entities, ${objects} objects`);
+        this.lastperformancelog = [
+            `Performance Log - ${new Date().toLocaleTimeString()}`,
+            `TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`,
+            `Ticking Objects: ${players} players, ${entities} entities, ${objects} objects`,
+        ];
+
+        for(const message of this.lastperformancelog){
+            console.log(message);
+        }
 
         this.cummilativetickcount = 0;
         this.cummilativeticktime = 0;

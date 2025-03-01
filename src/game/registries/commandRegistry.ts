@@ -45,3 +45,5 @@ import spawnCommand from "../commands/spawnCommand.js";
 spawnCommand();
 import clearCommand from "../commands/clearCommand.js";
 clearCommand();
+import performanceCommand from "../commands/performanceCommand.js";
+performanceCommand();
