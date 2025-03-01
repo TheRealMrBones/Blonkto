@@ -115,6 +115,18 @@ class Inventory {
         }
     }
 
+    /** Clears the requested slot in this inventory */
+    clearSlot(slot: number): void {
+        this.slots[slot] = null;
+    }
+
+    /** Clears this entire inventory */
+    clear(): void {
+        for(let i = 0; i < this.size; i++){
+            this.clearSlot(i);
+        }
+    }
+
     // #endregion
 
     // #region helpers

@@ -157,6 +157,17 @@ class Player extends Entity {
         });
     }
 
+    /** Clears this players entire inventory */
+    clearInventory(): void {
+        this.inventory.clear();
+        for(let i = 0; i < this.inventory.getSize(); i++){
+            this.fixes.inventoryupdates.push({
+                slot: i,
+                itemstack: null,
+            });
+        }
+    }
+
     // #endregion
 
     // #region fixes

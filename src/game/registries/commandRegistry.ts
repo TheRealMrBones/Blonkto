@@ -43,3 +43,5 @@ import broadcastCommand from "../commands/broadcastCommand.js";
 broadcastCommand();
 import spawnCommand from "../commands/spawnCommand.js";
 spawnCommand();
+import clearCommand from "../commands/clearCommand.js";
+clearCommand();
