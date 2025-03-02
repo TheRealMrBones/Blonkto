@@ -122,6 +122,15 @@ span {
     right: 20px;
 }
 
+#tab{
+    top: 20px;
+    left: 50%;
+    width: fit-content;
+    text-align: left;
+    transform: translate(-50%, 0%);
+    font-size: 16px;
+}
+
 #dont{
     pointer-events: none;
 }

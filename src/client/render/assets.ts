@@ -1,3 +1,5 @@
+import { Color } from "../../shared/types.js";
+
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 

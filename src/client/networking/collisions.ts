@@ -1,5 +1,6 @@
 import { clientPush } from "../input/input.js";
 import { getCell } from "../world/world.js";
+import { Circle, LineSegment, Pos } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { SHAPES } = Constants;

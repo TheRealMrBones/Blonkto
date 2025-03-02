@@ -2,6 +2,9 @@ import { chat } from "../networking/networking.js";
 import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 
+import SharedConfig from "../../configs/shared.js";
+const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
+
 // #region init
 
 const chatDiv = document.getElementById("chat")!;
@@ -13,6 +16,7 @@ const killstext = document.getElementById("killstext")!;
 const fpstext = document.getElementById("fpstext")!;
 const pingtext = document.getElementById("pingtext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
+const tabdiv = document.getElementById("tab")!;
 const hotbardiv = document.getElementById("hotbar")!;
 
 let focusingOut = false;
@@ -40,6 +44,7 @@ export function setupUi(): void {
     chatDiv.style.display = "block";
     infodiv.style.display = "block";
     hotbardiv.style.display = "block";
+    if(SHOW_TAB) tabdiv.style.display = "block";
 
     // add event listeners
     window.addEventListener("keyup", keyUpChecks);
@@ -57,6 +62,7 @@ export function hideUi(): void {
     chatDiv.style.display = "none";
     infodiv.style.display = "none";
     hotbardiv.style.display = "none";
+    if(SHOW_TAB) tabdiv.style.display = "none";
 
     // remove event listeners
     window.removeEventListener("keyup", keyUpChecks);
@@ -153,6 +159,27 @@ export function updatePing(ping: number): void {
 /** Toggles the connection lost icon to appear or disapear */
 export function toggleConnectionLost(toggle: boolean): void {
     connectionlostdiv.style.display = toggle ? "block" : "none";
+}
+
+/** Updates the tab list with the given data */
+export function updateTab(data: any[]): void {
+    if(data.length == 0){
+        tabdiv.innerHTML = "";
+        return;
+    };
+
+    let newtext = getTabString(data[0]);
+    for(let i = 1; i < data.length; i++){
+        newtext += `<br>${getTabString(data[i])}`;
+    }
+    tabdiv.innerHTML = newtext;
+}
+
+/** Returns string representation of a player in tab with the given data */
+function getTabString(playerdata: any): string {
+    let text = playerdata.username;
+    if(KILLS_TAB) text = playerdata.kills + " " + text;
+    return text;
 }
 
 // #endregion
