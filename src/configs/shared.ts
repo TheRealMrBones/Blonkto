@@ -20,6 +20,10 @@ type SharedConfigSchema = {
     INVENTORY: {
         INVENTORY_SIZE: number,
     },
+    TAB: {
+        SHOW_TAB: boolean,
+        KILLS_TAB: boolean,
+    },
 };
 
 // Initialize configuration with defaults then read saved after
@@ -45,6 +49,10 @@ const SharedConfig: SharedConfigSchema = {
     },
     INVENTORY: {
         INVENTORY_SIZE: 36,
+    },
+    TAB: {
+        SHOW_TAB: true,
+        KILLS_TAB: true,
     },
 };
 

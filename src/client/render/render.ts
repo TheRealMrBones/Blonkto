@@ -3,6 +3,7 @@ import { getCurrentState } from "../networking/state.js";
 import { getSelf, setSelf } from "../input/input.js";
 import { getCell } from "../world/world.js";
 import { updateFps } from "./ui.js";
+import { Color } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;

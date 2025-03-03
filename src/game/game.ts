@@ -22,6 +22,7 @@ const { MSG_TYPES } = Constants;
 import SharedConfig from "../configs/shared.js";
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
+const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
@@ -231,6 +232,18 @@ class Game {
 
     /** Create an update object to be sent to the specified players client */
     createUpdate(player: Player, worldload: any): any {
+        // Get Tab
+        let tab = [];
+        if(SHOW_TAB){
+            tab = this.getPlayerEntities().map(p => { 
+                let returnobj: any = {
+                    username: p.username,
+                }
+                if(KILLS_TAB) returnobj.kills = p.kills;
+                return returnobj;
+            });
+        }
+
         // get players
         const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
@@ -255,6 +268,7 @@ class Game {
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldload,
+            tab: tab,
         };
     }
 
