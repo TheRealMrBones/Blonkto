@@ -1,4 +1,4 @@
-import { currentServerTime, interpolateObject } from "./state.js";
+import { currentServerTime, interpolateObject, noninterpolateObject } from "./state.js";
 
 /** Represents a player loaded nearby in the game and holds their state over time information */
 export class Player {
@@ -27,7 +27,7 @@ export class Player {
         const base = this.getBaseUpdate();
         if(base < 0 || base === this.updates.length - 1){
             const update =  this.updates[this.updates.length - 1];
-            return {...(update.static), ...(update.dynamic)};
+            return noninterpolateObject(update);
         }else{
             const baseUpdate = this.updates[base];
             const next = this.updates[base + 1];

@@ -78,10 +78,10 @@ export function hideUi(): void {
 
 /** Handles UI related key down events */
 function keyDownChecks(event: KeyboardEvent): void {
-    event.preventDefault();
     switch(event.key){
         case "Tab": {
             if(SHOW_TAB) tabdiv.style.display = "block";
+            event.preventDefault();
             break;
         }
     }

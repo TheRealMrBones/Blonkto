@@ -133,7 +133,7 @@ export function getCurrentState(): any {
         return {
             others: others,
             self: self.interpolateSelf(),
-            entities: update.entities,
+            entities: noninterpolateObjectArray(update.entities),
         };
     }else{
         const baseUpdate = gameUpdates[base];
@@ -167,7 +167,7 @@ export function interpolateObject(object1: any, object2: any, ratio: number): an
 }
 
 /** Interpolates the given object array between its two given states with the given ratio */
-function interpolateObjectArray(objects1: any[], objects2: any[], ratio: number){
+function interpolateObjectArray(objects1: any[], objects2: any[], ratio: number): any[] {
     return objects1.map(o => interpolateObject(o, objects2.find(o2 => o.static.id === o2.static.id), ratio));
 }
 
@@ -183,6 +183,16 @@ function interpolateDirection(d1: number, d2: number, ratio: number): number {
     }else{
         return d1 + (d2 - d1) * ratio;
     }
+}
+
+/** Returns the given object from its single state */
+export function noninterpolateObject(object1: any): any {
+    return {...(object1.static), ...(object1.dynamic)};
+}
+
+/** Returns the given object array from its single state */
+function noninterpolateObjectArray(objects1: any[]): any[] {
+    return objects1.map(o => noninterpolateObject(o));
 }
 
 // #endregion
