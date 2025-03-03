@@ -44,9 +44,9 @@ export function setupUi(): void {
     chatDiv.style.display = "block";
     infodiv.style.display = "block";
     hotbardiv.style.display = "block";
-    if(SHOW_TAB) tabdiv.style.display = "block";
 
     // add event listeners
+    window.addEventListener("keydown", keyDownChecks);
     window.addEventListener("keyup", keyUpChecks);
     chatInput.addEventListener("keyup", chatInputKeyUp);
     chatInput.addEventListener("focusin", chatInputFocus);
@@ -65,6 +65,7 @@ export function hideUi(): void {
     if(SHOW_TAB) tabdiv.style.display = "none";
 
     // remove event listeners
+    window.removeEventListener("keydown", keyDownChecks);
     window.removeEventListener("keyup", keyUpChecks);
     chatInput.removeEventListener("keyup", chatInputKeyUp);
     chatInput.removeEventListener("focusin", chatInputFocus);
@@ -75,7 +76,18 @@ export function hideUi(): void {
 
 // #region event functions
 
-/** Handles UI related keyboard events */
+/** Handles UI related key down events */
+function keyDownChecks(event: KeyboardEvent): void {
+    event.preventDefault();
+    switch(event.key){
+        case "Tab": {
+            if(SHOW_TAB) tabdiv.style.display = "block";
+            break;
+        }
+    }
+}
+
+/** Handles UI related key up events */
 function keyUpChecks(event: KeyboardEvent): void {
     event.preventDefault();
     switch(event.key){
@@ -94,6 +106,10 @@ function keyUpChecks(event: KeyboardEvent): void {
             chatInput.focus();
             chatInput.value = "/";
             toggleAllChatShow(true);
+            break;
+        }
+        case "Tab": {
+            if(SHOW_TAB) tabdiv.style.display = "none";
             break;
         }
     }
