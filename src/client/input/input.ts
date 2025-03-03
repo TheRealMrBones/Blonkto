@@ -219,6 +219,11 @@ export function selectSlot(index: number): void {
     if(index < 9 && !hotbarpaused) hotbarslot = index;
 }
 
+/** Returns the slot number than is currently selected */
+export function getSelectedSlot(): number {
+    return selectedslot;
+}
+
 /** Pauses the hotbar selection functionailty */
 export function pauseHotbar(): void {
     hotbarpaused = true;

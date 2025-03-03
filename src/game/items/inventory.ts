@@ -115,6 +115,22 @@ class Inventory {
         }
     }
 
+    /** Swaps the item stacks between two slots */
+    swapSlots(slot1: number, slot2: number): void {
+        const item1 = this.getSlot(slot1);
+        const item2 = this.getSlot(slot2);
+        if(item1 !== null){
+            this.setSlot(slot2, item1);
+        }else{
+            this.clearSlot(slot2);
+        }
+        if(item2 !== null){
+            this.setSlot(slot1, item2);
+        }else{
+            this.clearSlot(slot1);
+        }
+    }
+
     /** Clears the requested slot in this inventory */
     clearSlot(slot: number): void {
         this.slots[slot] = null;

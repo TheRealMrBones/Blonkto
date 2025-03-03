@@ -1,6 +1,7 @@
-import { chat } from "../networking/networking.js";
-import { pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
+import { chat, drop } from "../networking/networking.js";
+import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
+import { swapSlots } from "../inventory/inventory.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
@@ -185,6 +186,49 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
             if(inventoryopen){
                 closeInventory();
             }
+            break;
+        }
+        case "q": {
+            drop({
+                slot: getSelectedSlot(),
+                all: event.ctrlKey,
+            });
+            break;
+        }
+        case "1": {
+            swapSlots(getSelectedSlot(), 0);
+            break;
+        }
+        case "2": {
+            swapSlots(getSelectedSlot(), 1);
+            break;
+        }
+        case "3": {
+            swapSlots(getSelectedSlot(), 2);
+            break;
+        }
+        case "4": {
+            swapSlots(getSelectedSlot(), 3);
+            break;
+        }
+        case "5": {
+            swapSlots(getSelectedSlot(), 4);
+            break;
+        }
+        case "6": {
+            swapSlots(getSelectedSlot(), 5);
+            break;
+        }
+        case "7": {
+            swapSlots(getSelectedSlot(), 6);
+            break;
+        }
+        case "8": {
+            swapSlots(getSelectedSlot(), 7);
+            break;
+        }
+        case "9": {
+            swapSlots(getSelectedSlot(), 8);
             break;
         }
     }

@@ -194,6 +194,13 @@ class Game {
         this.players[socket.id].dropFromSlot(info.slot, this, info.all ? undefined : 1);
     }
 
+    /** Response to a swap message from a client */
+    handlePlayerSwap(socket: Socket, info: any): void {
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
+        
+        this.players[socket.id].swapSlots(info.slot1, info.slot2);
+    }
+
     // #endregion
 
     // #region tick/update

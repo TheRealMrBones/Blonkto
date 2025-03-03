@@ -1,12 +1,13 @@
 import { Item } from "./item.js";
+import { drop, swap } from "../networking/networking.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
-const inventory = new Array(INVENTORY_SIZE).fill(false);
+const inventory: (Item | false)[] = new Array(INVENTORY_SIZE).fill(false);
 
 /** Returns the item from the given inventory slot */
-export function getInventorySlot(slot: number): any {
+export function getInventorySlot(slot: number): Item | false {
     return inventory[slot];
 }
 
@@ -68,4 +69,25 @@ export function clearInventory(): void {
     for(let i = 0; i < INVENTORY_SIZE; i++){
         if(inventory[i]) clearInventorySlot(i);
     }
+}
+
+/** Swaps the item stacks between two slots */
+export function swapSlots(slot1: number, slot2: number): void {
+    swap({
+        slot1: slot1,
+        slot2: slot2,
+    });
+
+    /*const item1 = getInventorySlot(slot1);
+    const item2 = getInventorySlot(slot2);
+    if(item1){
+        setInventorySlot(slot2, item1)
+    }else{
+        clearInventorySlot(slot2);
+    }
+    if(item2){
+        setInventorySlot(slot1, item2)
+    }else{
+        clearInventorySlot(slot1);
+    }*/
 }

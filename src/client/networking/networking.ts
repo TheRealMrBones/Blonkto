@@ -88,6 +88,11 @@ export const drop = throttle(20, info => {
     socket.emit(MSG_TYPES.DROP, info);
 });
 
+/** Method to send the swap message to the server */
+export const swap = throttle(20, info => {
+    socket.emit(MSG_TYPES.SWAP, info);
+});
+
 /** Method to send the chat message to the server */
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);

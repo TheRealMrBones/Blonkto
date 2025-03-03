@@ -166,6 +166,22 @@ class Player extends Entity {
         });
     }
 
+    /** Swaps the item stacks of 2 slots in this players inventory */
+    swapSlots(slot1: number, slot2: number): void {
+        this.inventory.swapSlots(slot1, slot2);
+
+        const stack1 = this.inventory.getSlot(slot1);
+        const stack2 = this.inventory.getSlot(slot2);
+        this.fixes.inventoryupdates.push({
+            slot: slot1,
+            itemstack: stack1 !== null ? stack1.serializeForUpdate() : null,
+        });
+        this.fixes.inventoryupdates.push({
+            slot: slot2,
+            itemstack: stack2 !== null ? stack2.serializeForUpdate() : null,
+        });
+    }
+
     /** Clears this players entire inventory */
     clearInventory(): void {
         this.inventory.clear();
