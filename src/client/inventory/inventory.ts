@@ -15,20 +15,18 @@ export function setInventorySlot(slot: number, item: Item): void {
     inventory[slot] = item;
 
     // show item in slot ui
-    if(slot < 9){
-        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
-        
-        const itemimage = hotbarslot.querySelector("img");
-        if(itemimage) hotbarslot.removeChild(itemimage);
+    const hotbarslot = document.getElementById("slot" + (slot + 1))!;
+    
+    const itemimage = hotbarslot.querySelector("img");
+    if(itemimage) hotbarslot.removeChild(itemimage);
 
-        const itemimg = document.createElement("img");
-        itemimg.className = "hotbaritem";
-        itemimg.src = item.asset;
-        hotbarslot.appendChild(itemimg);
+    const itemimg = document.createElement("img");
+    itemimg.className = "item";
+    itemimg.src = item.asset;
+    hotbarslot.appendChild(itemimg);
 
-        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1))!;
-        hotbaritemamount.innerHTML = item.amount.toString();
-    }
+    const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
+    hotbaritemamount.innerHTML = item.amount.toString();
 }
 
 /** Sets the entire inventories data to the given inventory */
@@ -57,14 +55,12 @@ export function clearInventorySlot(slot: number): void {
     inventory[slot] = false;
 
     // remove item in slot ui
-    if(slot < 9){
-        const hotbarslot = document.getElementById("hotbarslot" + (slot + 1))!;
-        const itemimage = hotbarslot.querySelector("img");
-        if(itemimage) hotbarslot.removeChild(itemimage);
-        
-        const hotbaritemamount = document.getElementById("hotbaritemamount" + (slot + 1))!;
-        hotbaritemamount.innerHTML = "";
-    }
+    const hotbarslot = document.getElementById("slot" + (slot + 1))!;
+    const itemimage = hotbarslot.querySelector("img");
+    if(itemimage) hotbarslot.removeChild(itemimage);
+    
+    const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
+    hotbaritemamount.innerHTML = "";
 }
 
 /** Clears the entire inventory of its data */

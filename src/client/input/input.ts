@@ -28,7 +28,9 @@ let starts: number | null = null;
 let startd: number | null = null;
 let interval: NodeJS.Timeout | null = null;
 
+let selectedslot = 0;
 let hotbarslot = 0;
+let hotbarpaused = false;
 
 let hit = false;
 let swinging = false;
@@ -92,7 +94,7 @@ function handlekeyDown(e: KeyboardEvent): void {
         // actions
         case "q": {
             drop({
-                slot: hotbarslot,
+                slot: selectedslot,
                 all: e.ctrlKey,
             });
             break;
@@ -100,39 +102,39 @@ function handlekeyDown(e: KeyboardEvent): void {
 
         // hotbar
         case "1": {
-            sethotbarslot(0);
+            selectSlot(0);
             break;
         }
         case "2": {
-            sethotbarslot(1);
+            selectSlot(1);
             break;
         }
         case "3": {
-            sethotbarslot(2);
+            selectSlot(2);
             break;
         }
         case "4": {
-            sethotbarslot(3);
+            selectSlot(3);
             break;
         }
         case "5": {
-            sethotbarslot(4);
+            selectSlot(4);
             break;
         }
         case "6": {
-            sethotbarslot(5);
+            selectSlot(5);
             break;
         }
         case "7": {
-            sethotbarslot(6);
+            selectSlot(6);
             break;
         }
         case "8": {
-            sethotbarslot(7);
+            selectSlot(7);
             break;
         }
         case "9": {
-            sethotbarslot(8);
+            selectSlot(8);
             break;
         }
     }
@@ -207,13 +209,25 @@ function handleMouseDown(e: MouseEvent): void {
 // #region hotbar
 
 /** Selects the given hotbar slot as in use */
-export function sethotbarslot(index: number): void {
-    const oldslot = document.getElementById("hotbarslot" + (hotbarslot + 1))!;
-    const newslot = document.getElementById("hotbarslot" + (index + 1))!;
-    oldslot.classList.remove("hotbarslotselected");
-    newslot.classList.add("hotbarslotselected");
+export function selectSlot(index: number): void {
+    const oldslot = document.getElementById("slot" + (selectedslot + 1))!;
+    const newslot = document.getElementById("slot" + (index + 1))!;
+    oldslot.classList.remove("slotselected");
+    newslot.classList.add("slotselected");
 
-    hotbarslot = index;
+    selectedslot = index;
+    if(index < 9 && !hotbarpaused) hotbarslot = index;
+}
+
+/** Pauses the hotbar selection functionailty */
+export function pauseHotbar(): void {
+    hotbarpaused = true;
+}
+
+/** Unpauses the hotbar selection functionailty */
+export function unpauseHotbar(): void {
+    hotbarpaused = false;
+    selectSlot(hotbarslot);
 }
 
 // #endregion
@@ -229,7 +243,7 @@ function handleInput(): void {
         dir: dir,
         dx: dx,
         dy: dy,
-        hotbarslot: hotbarslot,
+        hotbarslot: selectedslot,
     });
 
     x = x + dx;
@@ -379,7 +393,7 @@ export function getSelf(): any {
         x: x + dx,
         y: y + dy,
         scale: scale,
-        hotbarslot: hotbarslot,
+        hotbarslot: selectedslot,
         hit: hit,
         swinging: swinging,
         lastattackdir: lastattackdir,

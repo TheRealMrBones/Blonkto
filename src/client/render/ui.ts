@@ -1,5 +1,5 @@
 import { chat } from "../networking/networking.js";
-import { pauseCapturingInputs, resumeCapturingInputs, sethotbarslot } from "../input/input.js";
+import { pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 
 import SharedConfig from "../../configs/shared.js";
@@ -18,8 +18,10 @@ const pingtext = document.getElementById("pingtext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
 const tabdiv = document.getElementById("tab")!;
 const hotbardiv = document.getElementById("hotbar")!;
+const inventorydiv = document.getElementById("inventory")!;
 
 let focusingOut = false;
+let inventoryopen = false;
 
 let ignorechatenter = 0;
 
@@ -27,10 +29,10 @@ let ignorechatenter = 0;
 
 // #region persistent listeners
 
-for(let i = 0; i < 9; i++){
-    const hotbarslot = document.getElementById("hotbarslot" + (i + 1))!;
+for(let i = 0; i < 36; i++){
+    const hotbarslot = document.getElementById("slot" + (i + 1))!;
     hotbarslot.addEventListener("click", function() {
-        sethotbarslot(i);
+        selectSlot(i);
     });
 }
 
@@ -62,6 +64,8 @@ export function hideUi(): void {
     chatDiv.style.display = "none";
     infodiv.style.display = "none";
     hotbardiv.style.display = "none";
+    inventorydiv.style.display = "none";
+    inventoryopen = false;
     if(SHOW_TAB) tabdiv.style.display = "none";
 
     // remove event listeners
@@ -91,6 +95,12 @@ function keyDownChecks(event: KeyboardEvent): void {
 function keyUpChecks(event: KeyboardEvent): void {
     event.preventDefault();
     switch(event.key){
+        case "e": {
+            if(!inventoryopen){
+                openInventory();
+            }
+            break;
+        }
         case "Enter": {
             if(Date.now() - ignorechatenter < 500){
                 // ignore open chat if enter was used to start the game
@@ -132,6 +142,7 @@ function chatInputKeyUp(event: KeyboardEvent): void {
 /** Handles chat UI related focus events */
 function chatInputFocus(event: FocusEvent): void {
     pauseCapturingInputs();
+    window.removeEventListener("keydown", keyDownChecks);
     window.removeEventListener("keyup", keyUpChecks);
     toggleAllChatShow(true);
 }
@@ -139,8 +150,44 @@ function chatInputFocus(event: FocusEvent): void {
 /** Handles chat UI related unfocus events */
 function chatInputUnfocus(event: FocusEvent): void {
     resumeCapturingInputs();
+    window.addEventListener("keydown", keyDownChecks);
     window.addEventListener("keyup", keyUpChecks);
     toggleAllChatShow(false);
+}
+
+/** Handles the open inventory action */
+function openInventory(): void {
+    inventoryopen = true;
+    inventorydiv.style.display = "block";
+    pauseCapturingInputs();
+    window.removeEventListener("keydown", keyDownChecks);
+    window.removeEventListener("keyup", keyUpChecks);
+    window.addEventListener("keyup", keyUpChecksInventory);
+    pauseHotbar();
+}
+
+/** Handles the close inventory action */
+function closeInventory(): void {
+    inventoryopen = false;
+    inventorydiv.style.display = "none";
+    resumeCapturingInputs();
+    window.addEventListener("keydown", keyDownChecks);
+    window.addEventListener("keyup", keyUpChecks);
+    window.removeEventListener("keyup", keyUpChecksInventory);
+    unpauseHotbar();
+}
+
+/** Handles keyboard inputs when in inventory */
+function keyUpChecksInventory(event: KeyboardEvent): void {
+    event.preventDefault();
+    switch(event.key){
+        case "e": {
+            if(inventoryopen){
+                closeInventory();
+            }
+            break;
+        }
+    }
 }
 
 // #endregion

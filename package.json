@@ -1,6 +1,6 @@
 {
     "name": "blonkto",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "GET BLONKED! multiplayer game to host servers for your friends",
     "private": true,
     "main": "src/server/server.js",

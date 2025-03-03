@@ -65,7 +65,15 @@ span {
     transform: translate(-50%, 0%);
 }
 
-.hotbarslot{
+#inventory{
+    bottom: 50%;
+    left: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translate(-50%, 0%);
+}
+
+.slot{
     display: inline-block;
     position: relative;
     background-color:rgba(134, 134, 134, 0.5);
@@ -77,11 +85,11 @@ span {
     vertical-align: top;
 }
 
-.hotbarslotselected{
+.slotselected{
     box-shadow: 0 0 0 3px black;
 }
 
-.hotbaritem{
+.item{
     width: 80%;
     height: 80%;
     position: absolute;
@@ -90,7 +98,7 @@ span {
     transform: translate(-50%, -50%);
 }
 
-.hotbaritemamount{
+.itemamount{
     position: absolute;
     bottom: 0;
     margin: 2px;
