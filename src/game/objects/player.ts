@@ -105,6 +105,14 @@ class Player extends Entity {
         }, 1000);
     }
 
+    /** Entity action after death */
+    override onDeath(killedby: string, killer: any, game: Game){
+        super.onDeath(killedby, killer, game);
+        if(killer instanceof Player){
+            killer.kills++;
+        }
+    }
+
     // #region setters
 
     /** Updates this players data with the given new input data */

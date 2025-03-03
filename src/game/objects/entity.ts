@@ -43,7 +43,7 @@ class Entity extends GameObject {
     /** Entity action after death */
     onDeath(killedby: string, killer: any, game: Game){
         if(killer instanceof Player){
-            killer.kills++;
+            //killer.kills++;
         }
     }
 
