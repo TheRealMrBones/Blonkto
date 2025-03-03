@@ -142,6 +142,8 @@ function chatInputKeyUp(event: KeyboardEvent): void {
 
 /** Handles chat UI related focus events */
 function chatInputFocus(event: FocusEvent): void {
+    if(inventoryopen) closeInventory();
+    
     pauseCapturingInputs();
     window.removeEventListener("keydown", keyDownChecks);
     window.removeEventListener("keyup", keyUpChecks);
