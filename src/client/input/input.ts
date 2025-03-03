@@ -3,6 +3,7 @@ import { getCellSize } from "../render/render.js";
 import { blockCollisions, playerCollisions } from "../networking/collisions.js";
 import { updateCoords } from "../render/ui.js";
 import { getCurrentState } from "../networking/state.js";
+import { Pos } from "../../shared/types.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
@@ -92,14 +93,7 @@ function handlekeyDown(e: KeyboardEvent): void {
         case "q": {
             drop({
                 slot: hotbarslot,
-                all: false,
-            });
-            break;
-        }
-        case "Q": {
-            drop({
-                slot: hotbarslot,
-                all: true,
+                all: e.ctrlKey,
             });
             break;
         }
