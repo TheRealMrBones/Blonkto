@@ -1,13 +1,13 @@
-import FileManager from "./fileManager.js";
+import FileManager from "../fileManager.js";
 import Log from "./log.js";
 
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { LOG_PRIORITIES } = Constants;
 
 /** Manages logging for the game server */
-class Logger {
-    static _Logger: Logger | undefined;
-    fileManager: FileManager | undefined;
+class LogManager {
+    private static _LogManager: LogManager;
+    private fileManager: FileManager | undefined;
     logs: Log[];
 
     private constructor(){
@@ -16,16 +16,17 @@ class Logger {
         this.info("Logger Started");
     }
 
-    /** Singleton getter */
-    static getLogger(): Logger {
-        if(this._Logger !== undefined) return this._Logger;
-        return new Logger();
+    /** Returns the singleton object for log manager */
+    static getLogManager(): LogManager {
+        if(this._LogManager !== undefined) return this._LogManager;
+        const logmanager = new LogManager();
+        this._LogManager = logmanager;
+        return logmanager;
     }
 
     /** Sets this loggers file manager */
-    setFileManager(fileManager: FileManager): Logger {
+    setFileManager(fileManager: FileManager){
         this.fileManager = fileManager;
-        return this;
     }
 
     /** Logs the given message */
@@ -56,4 +57,4 @@ class Logger {
     }
 }
 
-export default Logger;
+export default LogManager;

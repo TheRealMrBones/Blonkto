@@ -1,4 +1,4 @@
-import Constants from "../shared/constants.js";
+import Constants from "../../shared/constants.js";
 const { LOG_PRIORITIES, LOG_CATEGORIES, CONSOLE_FORMAT } = Constants;
 
 /** An object representation of a single log line */

@@ -6,7 +6,8 @@ import { Socket } from "socket.io-client";
 
 import Game from "../game/game.js";
 import FileManager from "./fileManager.js";
-import Logger from "./logger.js";
+import LogManager from "./logging/logManager.js";
+import Logger from "./logging/logger.js";
 import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
 
@@ -18,7 +19,8 @@ const { MSG_TYPES } = Constants;
 const app = express();
 
 const fileManager = new FileManager();
-const logger = Logger.getLogger().setFileManager(fileManager);
+LogManager.getLogManager().setFileManager(fileManager);
+const logger = Logger.getLogger("server");
 const accountManager = new AccountManager(fileManager);
 const game = new Game(fileManager, accountManager);
 
