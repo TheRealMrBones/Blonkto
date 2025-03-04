@@ -1,4 +1,4 @@
-import LogManager from "./logManager";
+import LogManager from "./logManager.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -15,7 +15,7 @@ class Logger {
 
     /** Returns the singleton object for logger of the requested category */
     static getLogger(category?: string): Logger {
-        const categorystring = category || LOG_CATEGORIES.NONE
+        const categorystring = category || LOG_CATEGORIES.NONE;
         if(this._Loggers[categorystring] !== undefined) return this._Loggers[categorystring];
         const logger = new Logger(category);
         this._Loggers[categorystring] = logger;
