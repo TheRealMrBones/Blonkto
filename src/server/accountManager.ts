@@ -9,8 +9,8 @@ class AccountManager {
     fileManager: FileManager;
     accountsloggedin: {[key: string]: Account};
 
-    constructor(fm: FileManager){
-        this.fileManager = fm;
+    constructor(fileManager: FileManager){
+        this.fileManager = fileManager;
         this.accountsloggedin = {};
     }
 

@@ -4,16 +4,28 @@ import Log from "./log.js";
 import Constants from "../shared/constants.js";
 const { LOG_PRIORITIES } = Constants;
 
-/** Manages logging for the game servers */
+/** Manages logging for the game server */
 class Logger {
-    fileManager: FileManager;
+    static _Logger: Logger | undefined;
+    fileManager: FileManager | undefined;
     logs: Log[];
 
-    constructor(fm: FileManager){
-        this.fileManager = fm;
+    private constructor(){
         this.logs = [];
 
         this.info("Logger Started");
+    }
+
+    /** Singleton getter */
+    static getLogger(): Logger {
+        if(this._Logger !== undefined) return this._Logger;
+        return new Logger();
+    }
+
+    /** Sets this loggers file manager */
+    setFileManager(fileManager: FileManager): Logger {
+        this.fileManager = fileManager;
+        return this;
     }
 
     /** Logs the given message */

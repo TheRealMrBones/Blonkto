@@ -17,6 +17,11 @@ const { MSG_TYPES } = Constants;
 
 const app = express();
 
+const fileManager = new FileManager();
+const logger = Logger.getLogger().setFileManager(fileManager);
+const accountManager = new AccountManager(fileManager);
+const game = new Game(fileManager, accountManager);
+
 // Sending resources
 app.use(express.static("public"));
 
@@ -34,13 +39,13 @@ app.use("/", configRoutes);
 // Opening server
 const port = process.env.PORT || 3000;
 const server = app.listen(port);
-console.log(`Server listening on port: ${port}`);
+logger.log(`Server listening on port: ${port}`);
 
 // Opening socketio
 const io = new SocketIo(server);
 
 io.on("connection", socket => {
-    console.log(`[${socket.id}] Connected`);
+    logger.log(`[${socket.id}] Connected`);
 
     socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
     socket.on(MSG_TYPES.LOGIN, login);
@@ -55,11 +60,6 @@ io.on("connection", socket => {
     socket.on(MSG_TYPES.SEND_MESSAGE, chat);
 });
 
-const fileManager = new FileManager();
-const logger = new Logger(fileManager);
-const accountManager = new AccountManager(fileManager);
-const game = new Game(fileManager, accountManager);
-
 // #endregion
 
 // #region socket functions
@@ -71,7 +71,7 @@ async function createAccount(this: Socket, credentials: { username: string; pass
     const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account) console.log(`[${this.id}] Create account: ${response.account.username}`);
+    if(response.account) logger.log(`[${this.id}] Create account: ${response.account.username}`);
 }
 
 /** Response to the login message from a client */
@@ -81,7 +81,7 @@ async function login(this: Socket, credentials: { username: string; password: st
     const response = await accountManager.login(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account) console.log(`[${this.id}] Logged in as: ${response.account.username}`);
+    if(response.account) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
 }
 
 /** Response to the join game message from a client */
@@ -89,7 +89,7 @@ function joinGame(this: Socket): void {
     if(this.id === undefined) return;
 	
     const username = accountManager.getAccount(this.id).username;
-    console.log(`[${this.id}] [${username}] Joined the game`);
+    logger.log(`[${this.id}] [${username}] Joined the game`);
     game.playerManager.addPlayer(this, username);
 }
 
@@ -130,10 +130,10 @@ function onDisconnect(this: Socket): void {
     const acc = accountManager.getAccount(this.id);
 
     if(acc){
-        console.log(`[${this.id}] [${acc.username}] Disconnected`);
+        logger.log(`[${this.id}] [${acc.username}] Disconnected`);
         accountManager.logout(this.id);
     }else{
-        console.log(`[${this.id}] Disconnected`);
+        logger.log(`[${this.id}] Disconnected`);
     }
 
   	game.playerManager.removePlayer(this);
