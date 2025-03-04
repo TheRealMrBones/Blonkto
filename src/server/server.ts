@@ -12,7 +12,7 @@ import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
 
 import Constants from "../shared/constants.js";
-const { MSG_TYPES } = Constants;
+const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 // #region init
 
@@ -20,7 +20,7 @@ const app = express();
 
 const fileManager = new FileManager();
 LogManager.getLogManager().setFileManager(fileManager);
-const logger = Logger.getLogger("server");
+const logger = Logger.getLogger(LOG_CATEGORIES.SERVER);
 const accountManager = new AccountManager(fileManager);
 const game = new Game(fileManager, accountManager);
 

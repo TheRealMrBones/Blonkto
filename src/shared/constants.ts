@@ -62,6 +62,7 @@ const Constants = Object.freeze({
     },
     LOG_CATEGORIES: {
         NONE: "none",
+        SERVER: "server",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",
