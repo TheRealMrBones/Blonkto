@@ -11,7 +11,7 @@ class Command implements RegistryValue {
     private op: boolean;
     private possibleargs: any[][];
     private executeParsed: (args: any[], player: Player, game: Game) => void;
-    private help: string
+    private help: string;
     private customCanExecute: ((player: Player, game: Game) => boolean) | null = null;
 
     constructor(op: boolean, possibleargs: any[][], executeParsed: (args: any[], player: Player, game: Game) => void, help: string){

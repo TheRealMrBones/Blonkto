@@ -1,5 +1,5 @@
 import { setPos, serverPush } from "../input/input.js";
-import { Player } from "./player";
+import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { setSingleInventorySlot } from "../inventory/inventory.js";

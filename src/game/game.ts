@@ -243,9 +243,9 @@ class Game {
         let tab = [];
         if(SHOW_TAB){
             tab = this.getPlayerEntities().map(p => { 
-                let returnobj: any = {
+                const returnobj: any = {
                     username: p.username,
-                }
+                };
                 if(KILLS_TAB) returnobj.kills = p.kills;
                 return returnobj;
             });

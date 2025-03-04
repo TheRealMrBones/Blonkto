@@ -6,6 +6,7 @@ import { Socket } from "socket.io-client";
 
 import Game from "../game/game.js";
 import FileManager from "./fileManager.js";
+import Logger from "./logger.js";
 import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
 
@@ -55,6 +56,7 @@ io.on("connection", socket => {
 });
 
 const fileManager = new FileManager();
+const logger = new Logger(fileManager);
 const accountManager = new AccountManager(fileManager);
 const game = new Game(fileManager, accountManager);
 

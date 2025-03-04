@@ -37,7 +37,7 @@ function spawnCommand(args: any[], player: Player, game: Game){
             y = p.y;
             break;
         }
-        case 1: {
+        case 2: {
             x = args[2] + .5;
             y = args[3] + .5;
             break;

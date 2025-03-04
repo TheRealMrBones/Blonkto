@@ -1,6 +1,6 @@
 import Registry from "./registry.js";
 import Floor from "../world/floor.js";
-import Drop from "../items/drop.js"
+import Drop from "../items/drop.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;

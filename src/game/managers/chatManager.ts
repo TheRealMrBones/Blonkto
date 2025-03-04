@@ -31,7 +31,7 @@ class ChatManager {
             // empty message
         }else if(text[0] == "/"){
             // command
-            this.ExcecuteCommand(this.game, this.game.players[socket.id], text.substring(1));
+            this.excecuteCommand(this.game, this.game.players[socket.id], text.substring(1));
         }else{
             // normal message
             const newText = `<${this.game.players[socket.id].username}> ${text}`;
@@ -39,7 +39,7 @@ class ChatManager {
         }
     }
 
-    ExcecuteCommand(game: Game, player: Player, command: string): void {
+    excecuteCommand(game: Game, player: Player, command: string): void {
         if(command.length == 0){
             game.chatManager.sendMessageTo(player, "no command given");
             return;
