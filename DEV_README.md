@@ -1,5 +1,6 @@
 # Steps to Initialize Project
 1. Clone sourcecode from git
+2. Make sure nodejs and npm are installed with `node -v` and `npm -v`
 2. Run commands `npm install` and `npm install -g typescript eslint jsdoc` (requires npm)
 
 # Dev Build Steps
