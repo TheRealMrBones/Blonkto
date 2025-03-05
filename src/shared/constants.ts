@@ -63,6 +63,8 @@ const Constants = Object.freeze({
     LOG_CATEGORIES: {
         NONE: "none",
         SERVER: "server",
+        FILE_MANAGER: "file manager",
+        GAME: "game",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",

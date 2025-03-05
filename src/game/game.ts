@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { Socket } from "socket.io-client";
 
+import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
 import AccountManager from "../server/accountManager.js";
 import PlayerManager from "./managers/playerManager.js";
@@ -17,7 +18,7 @@ import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
 
 import Constants from "../shared/constants.js";
-const { MSG_TYPES } = Constants;
+const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
@@ -30,6 +31,8 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 /** The main class that manages the game world and the entities in it */
 class Game {
+    logger: Logger;
+
     fileManager: FileManager;
     accountManager: AccountManager;
     playerManager: PlayerManager;
@@ -51,6 +54,9 @@ class Game {
     oppasscodeused: boolean;
 
     constructor(fileManager: FileManager, accountManager: AccountManager){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
+        this.logger.info("Initializing game");
+
         // managers
         this.fileManager = fileManager;
         this.accountManager = accountManager;
@@ -74,10 +80,12 @@ class Game {
         this.oppasscode = crypto.randomUUID();
         if(OP_PASSCODE && (this.opManager.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
             this.oppasscodeused = false;
-            console.log(`oppasscode: ${this.oppasscode}`);
+            this.logger.info(`oppasscode: ${this.oppasscode}`);
         }else{
             this.oppasscodeused = true;
         }
+
+        this.logger.info("Game initialized");
     }
 
     // #region entities

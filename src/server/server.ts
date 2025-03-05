@@ -21,6 +21,7 @@ const app = express();
 const fileManager = new FileManager();
 LogManager.getLogManager().setFileManager(fileManager);
 const logger = Logger.getLogger(LOG_CATEGORIES.SERVER);
+logger.info("Initializing server");
 const accountManager = new AccountManager(fileManager);
 const game = new Game(fileManager, accountManager);
 
@@ -61,6 +62,8 @@ io.on("connection", socket => {
     socket.on(MSG_TYPES.DISCONNECT, onDisconnect);
     socket.on(MSG_TYPES.SEND_MESSAGE, chat);
 });
+
+logger.info("Server initialized");
 
 // #endregion
 
