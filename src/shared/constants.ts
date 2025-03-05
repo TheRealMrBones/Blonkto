@@ -66,6 +66,7 @@ const Constants = Object.freeze({
         FILE_MANAGER: "file manager",
         GAME: "game",
         PERFORMANCE: "performance",
+        CHAT: "chat",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",

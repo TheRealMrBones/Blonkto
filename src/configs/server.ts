@@ -6,6 +6,13 @@ type ServerConfigSchema = {
         OP_PASSCODE: boolean,
         OP_PASSCODE_WHEN_OPS: boolean,
     },
+    LOG: {
+        LOG_PRIORITY: number,
+        LOG_CONNECTIONS: boolean,
+        LOG_COMMANDS: boolean,
+        LOG_CHAT: boolean,
+        LOG_PERFORMANCE: boolean,
+    },
     PLAYER: {
         FILTER_USERNAME: boolean,
         ALLOW_CHANGE_NAME: boolean,
@@ -29,7 +36,6 @@ type ServerConfigSchema = {
         FILTER_CHAT: boolean,
     },
     PERFORMACE: {
-        LOG_PERFORMANCE: boolean,
         PERFORMANCE_LOG_RATE: number,
     },
 };
@@ -41,6 +47,13 @@ const ServerConfig: ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: true,
         OP_PASSCODE_WHEN_OPS: false,
+    },
+    LOG: {
+        LOG_PRIORITY: 0,
+        LOG_CONNECTIONS: true,
+        LOG_COMMANDS: true,
+        LOG_CHAT: true,
+        LOG_PERFORMANCE: true,
     },
     PLAYER: {
         FILTER_USERNAME: false,
@@ -65,7 +78,6 @@ const ServerConfig: ServerConfigSchema = {
         FILTER_CHAT: false,
     },
     PERFORMACE: {
-        LOG_PERFORMANCE: false,
         PERFORMANCE_LOG_RATE: 60,
     },
 };

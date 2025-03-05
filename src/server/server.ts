@@ -14,6 +14,9 @@ import webpackConfig from "../../webpack.dev.js";
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
+import ServerConfig from "../configs/server.js";
+const { LOG_CONNECTIONS } = ServerConfig.LOG;
+
 // #region init
 
 const app = express();
@@ -48,7 +51,7 @@ logger.log(`Server listening on port: ${port}`);
 const io = new SocketIo(server);
 
 io.on("connection", socket => {
-    logger.log(`[${socket.id}] Connected`);
+    if(LOG_CONNECTIONS) logger.log(`[${socket.id}] Connected`);
 
     socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
     socket.on(MSG_TYPES.LOGIN, login);
@@ -76,7 +79,7 @@ async function createAccount(this: Socket, credentials: { username: string; pass
     const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account) logger.log(`[${this.id}] Create account: ${response.account.username}`);
+    if(response.account && LOG_CONNECTIONS) logger.log(`[${this.id}] Create account: ${response.account.username}`);
 }
 
 /** Response to the login message from a client */
@@ -86,7 +89,7 @@ async function login(this: Socket, credentials: { username: string; password: st
     const response = await accountManager.login(this.id, credentials.username, credentials.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
+    if(response.account && LOG_CONNECTIONS) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
 }
 
 /** Response to the join game message from a client */
@@ -94,7 +97,7 @@ function joinGame(this: Socket): void {
     if(this.id === undefined) return;
 	
     const username = accountManager.getAccount(this.id).username;
-    logger.log(`[${this.id}] [${username}] Joined the game`);
+    if(LOG_CONNECTIONS) logger.log(`[${this.id}] [${username}] Joined the game`);
     game.playerManager.addPlayer(this, username);
 }
 
@@ -135,10 +138,10 @@ function onDisconnect(this: Socket): void {
     const acc = accountManager.getAccount(this.id);
 
     if(acc){
-        logger.log(`[${this.id}] [${acc.username}] Disconnected`);
+        if(LOG_CONNECTIONS) logger.log(`[${this.id}] [${acc.username}] Disconnected`);
         accountManager.logout(this.id);
     }else{
-        logger.log(`[${this.id}] Disconnected`);
+        if(LOG_CONNECTIONS) logger.log(`[${this.id}] Disconnected`);
     }
 
   	game.playerManager.removePlayer(this);

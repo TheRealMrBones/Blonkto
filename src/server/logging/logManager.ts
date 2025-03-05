@@ -4,6 +4,9 @@ import Log from "./log.js";
 import Constants from "../../shared/constants.js";
 const { LOG_PRIORITIES } = Constants;
 
+import ServerConfig from "../../configs/server.js";
+const { LOG_PRIORITY } = ServerConfig.LOG;
+
 /** Manages logging for the game server */
 class LogManager {
     private static _LogManager: LogManager;
@@ -33,7 +36,7 @@ class LogManager {
     log(message: string, category?: string, priority?: number): void {
         const log = new Log(message, category, priority);
         this.logs.push(log);
-        console.log(log.getLineFormatted());
+        if(log.priority >= LOG_PRIORITY) console.log(log.getLineFormatted());
     }
 
     /** Logs the given message as priority level info */

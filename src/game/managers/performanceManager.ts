@@ -5,7 +5,8 @@ import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 import ServerConfig from "../../configs/server.js";
-const { LOG_PERFORMANCE, PERFORMANCE_LOG_RATE } = ServerConfig.PERFORMACE;
+const { PERFORMANCE_LOG_RATE } = ServerConfig.PERFORMACE;
+const { LOG_PERFORMANCE } = ServerConfig.LOG;
 
 /** Manages performance monitoring for the server */
 class PerformanceManager {
