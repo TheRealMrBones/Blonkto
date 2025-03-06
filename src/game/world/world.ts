@@ -64,7 +64,7 @@ class World {
             // check if valid spawn
             const cell = this.getCell(x, y, true);
             if(!cell) continue;
-            if(cell.block == null){
+            if(cell.block === null){
                 return {
                     pos: pos,
                     chunk: chunk,
@@ -428,7 +428,7 @@ class World {
     }
 
     /** Returns if the requested cell is empty (has no blocks or objects on it) */
-    cellEmpty(x: number, y: number): boolean {
+    cellEmpty(x: number, y: number, ignoreobjects?: boolean): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;

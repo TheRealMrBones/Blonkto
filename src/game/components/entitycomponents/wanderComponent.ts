@@ -23,11 +23,25 @@ class WanderComponent extends Component<EntityDefinition> {
     tick(game: Game, dt: number, entity: Entity): void {
         if(entity.targetpos !== null) return;
 
-        const movex = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
-        const movey = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
-        if(Math.random() < .001) entity.targetpos = {
-            x: entity.x + movex,
-            y: entity.y + movey
+        if(Math.random() < .001){
+            let movex, movey, cellx, celly;
+            while(true){
+                movex = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
+                movey = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
+                cellx = Math.floor(entity.x) + movex;
+                celly = Math.floor(entity.y) + movey;
+                const cell = game.world.getCell(cellx, celly, false);
+                if(cell)
+                    if(cell.block === null) break;
+            }
+            
+            const newx = cellx + .5;
+            const newy = celly + .5;
+
+            entity.targetpos = {
+                x: newx,
+                y: newy
+            }
         }
     }
 }
