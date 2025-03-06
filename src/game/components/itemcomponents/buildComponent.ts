@@ -4,7 +4,7 @@ import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 
-/** An Item Component that alows the item to be used to place blocks */
+/** An Item Component that allows the item to be used to place blocks */
 class BuildComponent extends Component<Item> {
     block: string;
 

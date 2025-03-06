@@ -7,7 +7,7 @@ import ItemStack from "../../items/itemStack.js";
 import Constants from "../../../shared/constants.js";
 const { MINE_TYPES } = Constants;
 
-/** An Item Component that alows the item to be used to mine/destroy blocks */
+/** An Item Component that allows the item to be used to mine/destroy blocks */
 class MineComponent extends Component<Item> {
     power: number;
     minetype: number = MINE_TYPES.MINE;

@@ -10,7 +10,7 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
-const { PLAYER_SCALE } = SharedConfig.PLAYER;
+const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 import ServerConfig from "../../configs/server.js";
@@ -37,6 +37,7 @@ class Player extends Entity {
         this.kills = 0;
         this.scale = PLAYER_SCALE;
         this.health = 10;
+        this.speed = PLAYER_SPEED;
 
         // racism
         const antiracism = 1 - RACISM;

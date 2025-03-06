@@ -12,6 +12,10 @@ class NonplayerEntity extends Entity {
 
         this.entitydefinition = EntityRegistry.get(entitydefinition);
 
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+            this.entitydefinition.eventEmitter.emit("tick", game, dt, this);
+        });
+
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.removeEntity(this.id);
             this.entitydefinition.eventEmitter.emit("death", this, game);

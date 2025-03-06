@@ -1,7 +1,6 @@
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
 import Player from "./player.js";
-import NonplayerEntity from "./nonplayerEntity.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -21,6 +20,7 @@ class Entity extends GameObject {
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
+        this.speed = 1;
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             this.onDeath(killedby, killer, game);
