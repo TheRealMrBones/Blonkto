@@ -26,7 +26,7 @@ class GameObject {
     asset: string = ASSETS.MISSING_TEXTURE;
     falling: boolean = false;
 
-    targetpos: Pos | null = null;
+    targetposqueue: Pos[] = [];
     speed: number = 0;
 
     eventEmitter: EventEmitter = new EventEmitter();
@@ -51,23 +51,25 @@ class GameObject {
 
     /** Tries to move to target if there is one */
     moveToTarget(dt: number): void {
-        if(this.targetpos === null) return;
-        if(this.x == this.targetpos.x && this.y == this.targetpos.y){
-            this.targetpos = null;
-            return;
-        }
+        if(this.targetposqueue.length == 0) return;
+        let movedist = this.speed * dt;
 
-        this.dir = Math.atan2(this.targetpos.x - this.x, this.y - this.targetpos.y);
-        const dist = this.distanceTo(this.targetpos);
-        const movedist = this.speed * dt;
+        while(this.targetposqueue.length > 0 && movedist > 0){
+            const targetpos = this.targetposqueue[0];
 
-        if(dist <= movedist){
-            this.x = this.targetpos.x;
-            this.y = this.targetpos.y;
-            this.targetpos = null;
-        }else{
-            this.x += Math.sin(this.dir) * movedist;
-            this.y -= Math.cos(this.dir) * movedist;
+            this.dir = Math.atan2(targetpos.x - this.x, this.y - targetpos.y);
+            const dist = this.distanceTo(targetpos);
+            
+            if(dist <= movedist){
+                this.x = targetpos.x;
+                this.y = targetpos.y;
+                movedist -= dist;
+                this.targetposqueue.shift();
+            }else{
+                this.x += Math.sin(this.dir) * movedist;
+                this.y -= Math.cos(this.dir) * movedist;
+                movedist = 0;
+            }
         }
     }
 

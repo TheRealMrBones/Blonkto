@@ -21,7 +21,7 @@ class WanderComponent extends Component<EntityDefinition> {
 
     /** Defines the tick action of an entity with this component */
     tick(game: Game, dt: number, entity: Entity): void {
-        if(entity.targetpos !== null) return;
+        if(entity.targetposqueue.length > 0) return;
 
         if(Math.random() < .001){
             let movex, movey, cellx, celly;
@@ -38,10 +38,10 @@ class WanderComponent extends Component<EntityDefinition> {
             const newx = cellx + .5;
             const newy = celly + .5;
 
-            entity.targetpos = {
+            entity.targetposqueue.push({
                 x: newx,
                 y: newy
-            }
+            });
         }
     }
 }
