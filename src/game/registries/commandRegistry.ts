@@ -47,3 +47,5 @@ import clearCommand from "../commands/clearCommand.js";
 clearCommand();
 import performanceCommand from "../commands/performanceCommand.js";
 performanceCommand();
+import damageCommand from "../commands/damageCommand.js";
+damageCommand();
