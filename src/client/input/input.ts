@@ -297,8 +297,10 @@ function updatePos(): void {
         scale: scale,
     };
     
-    //playerCollisions(self, others);
-    blockCollisions(self);
+    if(!falling){
+        //playerCollisions(self, others);
+        blockCollisions(self);
+    }
 }
 
 // #endregion

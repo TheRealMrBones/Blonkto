@@ -45,7 +45,7 @@ class GameObject {
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             this.checkFalling(game, dt);
             this.moveToTarget(dt);
-            this.checkCollisions(game);
+            if(!this.falling) this.checkCollisions(game);
         });
     }
 
@@ -90,7 +90,7 @@ class GameObject {
     // #endregion
 
     // #region ticks
-
+    
     /** Default object collision checks */
     checkCollisions(game: Game): void {
         game.collisionManager.blockCollisions(this);
