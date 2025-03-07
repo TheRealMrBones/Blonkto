@@ -49,3 +49,7 @@ import performanceCommand from "../commands/performanceCommand.js";
 performanceCommand();
 import damageCommand from "../commands/damageCommand.js";
 damageCommand();
+import setBlockCommand from "../commands/setBlockCommand.js";
+setBlockCommand();
+import setFloorCommand from "../commands/setFloorCommand.js";
+setFloorCommand();

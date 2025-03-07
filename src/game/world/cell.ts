@@ -22,14 +22,29 @@ class Cell {
 
     // #region setters
 
-    /** Sets the block for this cell and returns success */
+    /** Sets the block for this cell */
+    setBlock(block: string | null): void {
+        this.block = (block === null) ? null : BlockRegistry.get(block);
+    }
+
+    /** Sets the floor for this cell */
+    setFloor(floor: string | null): void {
+        this.floor = (floor === null) ? this.basefloor : FloorRegistry.get(floor);
+    }
+
+    /** Sets the ceiling for this cell */
+    setCeiling(ceiling: string | null): void {
+        this.ceiling = (ceiling === null) ? null : CeilingRegistry.get(ceiling);
+    }
+
+    /** Tries to place the block for this cell and returns success */
     placeBlock(block: string): boolean {
         if(this.block !== null) return false;
         this.block = BlockRegistry.get(block);
         return true;
     }
 
-    /** Sets the floor for this cell and returns success */
+    /** Tries to place the floor for this cell and returns success */
     placeFloor(floor: string): boolean {
         if(this.floor !== this.basefloor) return false;
         if(this.block !== null)
@@ -38,7 +53,7 @@ class Cell {
         return true;
     }
 
-    /** Sets the ceiling for this cell and returns success */
+    /** Tries to place the ceiling for this cell and returns success */
     placeCeiling(ceiling: string): boolean {
         if(this.ceiling !== null) return false;
         if(this.block !== null)
@@ -47,14 +62,14 @@ class Cell {
         return true;
     }
 
-    /** Removes the block for this cell and returns success */
+    /** Tries to break the block for this cell and returns success */
     breakBlock(x: number, y: number, toggledrop: boolean, game: Game): boolean {
         this.block?.break(x, y, toggledrop, game);
         this.block = null;
         return true;
     }
 
-    /** Removes the floor for this cell and returns success */
+    /** Tries to break the floor for this cell and returns success */
     breakFloor(x: number, y: number, toggledrop: boolean, game: Game): boolean {
         if(this.floor === this.basefloor) return false;
         if(this.block !== null)
@@ -65,7 +80,7 @@ class Cell {
         return true;
     }
 
-    /** Removes the ceiling for this cell and returns success */
+    /** Tries to break the ceiling for this cell and returns success */
     breakCeiling(x: number, y: number, toggledrop: boolean, game: Game): boolean {
         if(this.block !== null)
             if(this.block.blockscell) return false;

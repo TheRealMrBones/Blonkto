@@ -359,6 +359,19 @@ class World {
         }
     }
 
+    /** Sets the block at the requested postion to the requested value */
+    setBlock(x: number, y: number, block: string | null): void {
+        const requestdata = this.getCellAndChunk(x, y, true);
+        if(requestdata == null) return;
+        const { cell, chunk } = requestdata;
+        if(chunk == null) return;
+
+        cell.setBlock(block);
+        chunk.cellUpdates.push({
+            x, y
+        });
+    }
+
     /** Tries to break the requested block and returns success */
     breakBlock(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
@@ -391,6 +404,19 @@ class World {
             x, y
         });
         return response;
+    }
+
+    /** Sets the floor at the requested postion to the requested value */
+    setFloor(x: number, y: number, floor: string | null): void {
+        const requestdata = this.getCellAndChunk(x, y, true);
+        if(requestdata == null) return;
+        const { cell, chunk } = requestdata;
+        if(chunk == null) return;
+
+        cell.setFloor(floor);
+        chunk.cellUpdates.push({
+            x, y
+        });
     }
 
     /** Tries to break the requested floor and returns success */
