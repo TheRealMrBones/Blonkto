@@ -89,6 +89,13 @@ class Cell {
         return true;
     }
 
+    /** Sets the base floor for this cell */
+    setBaseFloor(floor: string | null): void {
+        const floorval = (floor === null) ? null : FloorRegistry.get(floor)
+        this.floor = floorval;
+        this.basefloor = floorval;
+    }
+
     // #endregion
 
     // #region serialization

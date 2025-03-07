@@ -453,6 +453,19 @@ class World {
         return response;
     }
 
+    /** Sets the base floor at the requested postion to the requested value */
+    setBaseFloor(x: number, y: number, floor: string | null): void {
+        const requestdata = this.getCellAndChunk(x, y, true);
+        if(requestdata == null) return;
+        const { cell, chunk } = requestdata;
+        if(chunk == null) return;
+
+        cell.setBaseFloor(floor);
+        chunk.cellUpdates.push({
+            x, y
+        });
+    }
+
     /** Returns if the requested cell is empty (has no blocks or objects on it) */
     cellEmpty(x: number, y: number, ignoreobjects?: boolean): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };

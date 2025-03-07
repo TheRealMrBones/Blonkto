@@ -53,3 +53,5 @@ import setBlockCommand from "../commands/setBlockCommand.js";
 setBlockCommand();
 import setFloorCommand from "../commands/setFloorCommand.js";
 setFloorCommand();
+import setBaseFloorCommand from "../commands/setBaseFloorCommand.js";
+setBaseFloorCommand();
