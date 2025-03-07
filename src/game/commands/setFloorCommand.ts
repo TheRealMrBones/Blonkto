@@ -11,9 +11,9 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("setfloor", new Command(true, args, setfloorCommand, "Sets a cells floor"));
+export default (): void => CommandRegistry.register("setfloor", new Command(true, args, setFloorCommand, "Sets a cells floor"));
 
-function setfloorCommand(args: any[], player: Player, game: Game){
+function setFloorCommand(args: any[], player: Player, game: Game){
     if(!FloorRegistry.has(args[3]) && args[3] != "air"){
         game.chatManager.sendMessageTo(player, `no floor of name: ${args[3]}`);
         return;
