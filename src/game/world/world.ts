@@ -285,9 +285,12 @@ class World {
             }
 
             // spawn new entities if there are too few
-            const minentities = 3;
+            const minentities = 1;
             for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
-                // todo: spawn new entities
+                const cellx = x * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
+                const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
+                const pig = new NonplayerEntity(cellx + .5, celly + .5, 0, "pig");
+                this.game.entities[pig.id] = pig;
             }
         }
 
