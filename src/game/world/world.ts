@@ -211,20 +211,14 @@ class World {
             return chunk;
         }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
             // load chunk
-            let newChunk = null;
-
             if(this.chunkFileExists(x, y)){
-                const data = this.readChunkFile(x, y);
-                if(!data) return null;
-                newChunk = Chunk.readFromSave(x, y, data, this.game);
+                const loadedchunk = this.loadChunk(x, y);
+                if(loadedchunk != false) return loadedchunk;
             }
             
-            if(newChunk == null) newChunk = new Chunk(x, y, true, this.game);
-            
+            // if no loaded chunk then create new chunk
+            const newChunk = new Chunk(x, y, true, this.game);
             this.loadedchunks[[x,y].toString()] = newChunk;
-
-            // load entities
-
 
             // return new chunk
             return newChunk;
@@ -258,12 +252,18 @@ class World {
         return this.game.fileManager.fileExists(fileLocation);
     }
 
-    /** Returns the raw data of the requested chunks save file if it exists */
-    readChunkFile(x: number, y: number): string | false {
+    /** Returns the chunk object or false otherwise */
+    loadChunk(x: number, y: number): Chunk | false {
         const chunkfilelocation = worldsavedir + [x,y].toString();
         const entitiesfilelocation = entitiessavedir + [x,y].toString();
 
-        // load entities first
+        // read chunk data
+        const data = this.game.fileManager.readFile(chunkfilelocation);
+        if(!data) return false;
+        const chunk = Chunk.readFromSave(x, y, data, this.game);
+        this.loadedchunks[[x,y].toString()] = chunk;
+
+        // load entities
         if(this.game.fileManager.fileExists(entitiesfilelocation)){
             const entitiesdata = JSON.parse(this.game.fileManager.readFile(entitiesfilelocation) || "[]");
             for(const entitydata of entitiesdata){
@@ -289,13 +289,18 @@ class World {
             for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
                 const cellx = x * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
                 const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
+
+                const cell = this.getCell(cellx, celly, false);
+                if(!cell) continue;
+                if(cell.block != null) continue;
+
                 const pig = new NonplayerEntity(cellx + .5, celly + .5, 0, "pig");
                 this.game.entities[pig.id] = pig;
             }
         }
 
-        // then return actual chunk data
-        return this.game.fileManager.readFile(chunkfilelocation);
+        // finally return the chunk
+        return chunk;
     }
 
     /** Saves the given chunks data */
