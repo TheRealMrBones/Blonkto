@@ -283,6 +283,12 @@ class World {
                     }
                 }
             }
+
+            // spawn new entities if there are too few
+            const minentities = 3;
+            for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
+                // todo: spawn new entities
+            }
         }
 
         // then return actual chunk data
