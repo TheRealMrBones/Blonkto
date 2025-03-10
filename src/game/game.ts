@@ -170,7 +170,7 @@ class Game {
             const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
             // use the item or run default use case
-            if(hotbarItem == null){
+            if(hotbarItem === null){
                 this.players[socket.id].startSwing(newinfo.dir);
                 this.collisionManager.attackHitCheck(this.players[socket.id], newinfo.dir, 1);
             }else{

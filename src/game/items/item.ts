@@ -14,7 +14,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
     stacksize: number;
-    asset: string = ASSETS.MISSING_TEXTURE;
+    asset: string;
 
     eventEmitter: EventEmitter = new EventEmitter();
 
@@ -22,7 +22,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
         super();
         this.displayname = displayname;
         this.stacksize = stacksize;
-        if(asset != null) this.asset = asset;
+        this.asset = asset || ASSETS.MISSING_TEXTURE;
 
         this.eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
     }

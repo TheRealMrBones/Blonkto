@@ -379,9 +379,9 @@ class World {
     /** Sets the block at the requested postion to the requested value */
     setBlock(x: number, y: number, block: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setBlock(block);
         chunk.cellUpdates.push({
@@ -395,9 +395,9 @@ class World {
         if(!data) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null || cell.block == null) return false;
+        if(chunk === null || cell.block === null) return false;
 
         const response = cell.breakBlock(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({
@@ -412,9 +412,9 @@ class World {
         if(!data) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return false;
+        if(chunk === null) return false;
         
         const response = cell.placeBlock(block);
         chunk.cellUpdates.push({
@@ -426,9 +426,9 @@ class World {
     /** Sets the floor at the requested postion to the requested value */
     setFloor(x: number, y: number, floor: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setFloor(floor);
         chunk.cellUpdates.push({
@@ -442,9 +442,9 @@ class World {
         if(!data) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null || cell.floor == null) return false;
+        if(chunk === null || cell.floor === null) return false;
 
         const response = cell.breakFloor(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({
@@ -459,9 +459,9 @@ class World {
         if(!data) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return false;
+        if(chunk === null) return false;
         
         const response = cell.placeFloor(floor);
         chunk.cellUpdates.push({
@@ -473,9 +473,9 @@ class World {
     /** Sets the base floor at the requested postion to the requested value */
     setBaseFloor(x: number, y: number, floor: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setBaseFloor(floor);
         chunk.cellUpdates.push({

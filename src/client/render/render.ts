@@ -80,7 +80,7 @@ function calculatefps(): void {
 function render(): void {
     // get all needed state and self info
     const state = getCurrentState();
-    if(state == null){
+    if(state === null){
         animationFrameRequestId = requestAnimationFrame(render);
         return;
     }

@@ -10,12 +10,12 @@ const { MINE_TYPES } = Constants;
 /** An Item Component that allows the item to be used to mine/destroy blocks */
 class MineComponent extends Component<Item> {
     power: number;
-    minetype: number = MINE_TYPES.MINE;
+    minetype: number;
 
     constructor(power: number, minetype?: number){
         super();
         this.power = power;
-        if(minetype !== undefined) this.minetype = minetype;
+        this.minetype = minetype || MINE_TYPES.MINE;
     }
 
     /** Implements this component into its parents functionality */

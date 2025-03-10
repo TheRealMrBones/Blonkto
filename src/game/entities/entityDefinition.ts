@@ -14,9 +14,9 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     name: string = "unregistered";
     displayname: string;
     maxhealth: number;
-    scale: number = 1;
-    asset: string = ASSETS.MISSING_TEXTURE;
-    drops: DropBase | null = null;
+    scale: number;
+    asset: string;
+    drops: DropBase | null;
 
     eventEmitter: EventEmitter = new EventEmitter();
 
@@ -24,9 +24,9 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
         super();
         this.displayname = displayname;
         this.maxhealth = maxhealth;
-        if(scale != null) this.scale = scale;
-        if(asset != null) this.asset = asset;
-        if(drops !== undefined) this.drops = drops;
+        this.scale = scale || 1;
+        this.asset = asset || ASSETS.MISSING_TEXTURE;
+        this.drops = drops || null;
 
         this.eventEmitter.on("death", (entity: NonplayerEntity, game: Game) => {
             if(entity.scale > 0) this.dropItems(entity.x, entity.y, game);

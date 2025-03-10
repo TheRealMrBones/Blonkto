@@ -89,7 +89,7 @@ class Inventory {
 
     /** Removes the given amount from the given slot in this inventory */
     removeFromSlot(slot: number, amount: number): boolean {
-        if(this.slots[slot] == null) return false;
+        if(this.slots[slot] === null) return false;
         if(amount > this.slots[slot].getAmount()) return false;
 
         if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
@@ -150,7 +150,7 @@ class Inventory {
     /** Returns the next open slot in this players inventory or -1 if there is none */
     nextOpenSlot(): number {
         for(let i = 0; i < this.size; i++){
-            if(this.slots[i] == null) return i;
+            if(this.slots[i] === null) return i;
         }
         return -1;
     }

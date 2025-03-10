@@ -10,14 +10,14 @@ const { ASSETS } = Constants;
 class Ceiling extends ComponentHandler<Ceiling> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
-    asset: string = ASSETS.MISSING_TEXTURE;
-    drops: DropBase | null = null;
+    asset: string;
+    drops: DropBase | null;
 
     constructor(displayname: string, asset: string | null, drops?: DropBase){
         super();
         this.displayname = displayname;
-        if(asset !== null) this.asset = asset;
-        if(drops !== undefined) this.drops = drops;
+        this.asset = asset || ASSETS.MISSING_TEXTURE;
+        this.drops = drops || null;
     }
 
     /** Sets this objects identifier to the given key from the registry */

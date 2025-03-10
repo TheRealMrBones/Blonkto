@@ -44,7 +44,7 @@ export function setInventory(itemsdata: any): void {
 
 /** Sets a single inventory slot to the given slot data */
 export function setSingleInventorySlot(data: any): void {
-    if(data.itemstack == null){
+    if(data.itemstack === null){
         clearInventorySlot(data.slot);
     }else{
         setInventorySlot(data.slot, new Item(data.itemstack.name, data.itemstack.asset, data.itemstack.amount));
