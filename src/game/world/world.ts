@@ -216,12 +216,8 @@ class World {
                 if(loadedchunk != false) return loadedchunk;
             }
             
-            // if no loaded chunk then create new chunk
-            const newChunk = new Chunk(x, y, true, this.game);
-            this.loadedchunks[[x,y].toString()] = newChunk;
-
-            // return new chunk
-            return newChunk;
+            // if no loaded chunk then generate a new chunk
+            return this.generateChunk(x, y);
         }else{
             return null;
         }
@@ -319,6 +315,13 @@ class World {
 
         const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
         this.game.fileManager.writeFile(entitiesfilelocation, entitiesdata);
+    }
+
+    /** Returns a new generated chunk */
+    generateChunk(x: number, y: number): Chunk {
+        const newChunk = new Chunk(x, y, true, this.game);
+        this.loadedchunks[[x,y].toString()] = newChunk;
+        return newChunk;
     }
     
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
