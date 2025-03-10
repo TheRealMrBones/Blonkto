@@ -213,7 +213,7 @@ class World {
             // load chunk
             if(this.chunkFileExists(x, y)){
                 const loadedchunk = this.loadChunk(x, y);
-                if(loadedchunk != false) return loadedchunk;
+                if(loadedchunk !== null) return loadedchunk;
             }
             
             // if no loaded chunk then generate a new chunk
@@ -248,14 +248,14 @@ class World {
         return this.game.fileManager.fileExists(fileLocation);
     }
 
-    /** Returns the chunk object or false otherwise */
-    loadChunk(x: number, y: number): Chunk | false {
+    /** Returns the chunk object or null otherwise */
+    loadChunk(x: number, y: number): Chunk | null {
         const chunkfilelocation = worldsavedir + [x,y].toString();
         const entitiesfilelocation = entitiessavedir + [x,y].toString();
 
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
-        if(!data) return false;
+        if(!data) return null;
         const chunk = Chunk.readFromSave(x, y, data, this.game);
         this.loadedchunks[[x,y].toString()] = chunk;
 
@@ -350,14 +350,14 @@ class World {
     // #region Cells
 
     /** Returns the requested cell if it is loaded and false otherwise */
-    getCell(x: number, y: number, canloadnew: boolean): Cell | false {
+    getCell(x: number, y: number, canloadnew: boolean): Cell | null {
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
         const celly = y - chunky * CHUNK_SIZE;
     
         const chunk = this.getChunk(chunkx, chunky, canloadnew);
-        return chunk ? chunk.cells[cellx][celly] : false;
+        return chunk ? chunk.cells[cellx][celly] : null;
     }
 
     /** Returns the requested cell and its containing chunk if it is loaded and null otherwise */

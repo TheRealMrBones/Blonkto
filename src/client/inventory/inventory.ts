@@ -4,10 +4,10 @@ import { drop, swap } from "../networking/networking.js";
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
-const inventory: (Item | false)[] = new Array(INVENTORY_SIZE).fill(false);
+const inventory: (Item | null)[] = new Array(INVENTORY_SIZE).fill(null);
 
 /** Returns the item from the given inventory slot */
-export function getInventorySlot(slot: number): Item | false {
+export function getInventorySlot(slot: number): Item | null {
     return inventory[slot];
 }
 
@@ -53,7 +53,7 @@ export function setSingleInventorySlot(data: any): void {
 
 /** Clears the given inventory slot of its item and if in the hotbar updates the UI */
 export function clearInventorySlot(slot: number): void {
-    inventory[slot] = false;
+    inventory[slot] = null;
 
     // remove item in slot ui
     const hotbarslot = document.getElementById("slot" + (slot + 1))!;
@@ -67,7 +67,7 @@ export function clearInventorySlot(slot: number): void {
 /** Clears the entire inventory of its data */
 export function clearInventory(): void {
     for(let i = 0; i < INVENTORY_SIZE; i++){
-        if(inventory[i]) clearInventorySlot(i);
+        if(inventory[i] !== null) clearInventorySlot(i);
     }
 }
 
@@ -80,12 +80,12 @@ export function swapSlots(slot1: number, slot2: number): void {
 
     /*const item1 = getInventorySlot(slot1);
     const item2 = getInventorySlot(slot2);
-    if(item1){
+    if(item1 !== null){
         setInventorySlot(slot2, item1)
     }else{
         clearInventorySlot(slot2);
     }
-    if(item2){
+    if(item2 !== null){
         setInventorySlot(slot1, item2)
     }else{
         clearInventorySlot(slot1);
