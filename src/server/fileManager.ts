@@ -38,12 +38,11 @@ class FileManager {
     }
 
     /** Deletes the given file from save if it exists */
-    deleteFile(filename: string): void | false {
+    deleteFile(filename: string): void {
         try{
             fs.unlinkSync(this.getFullFilePath(filename));
         } catch (error) {
             this.logger.error(`An error occurred while deleting the file: ${error}`);
-            return false;
         }
     }
 
@@ -63,13 +62,13 @@ class FileManager {
     }
 
     /** Returns the data in the given file if it exists */
-    readFile(filename: string): string | false {
+    readFile(filename: string): string | null {
         try {
             const data = fs.readFileSync(this.getFullFilePath(filename), "utf8");
             return data;
         } catch (error) {
             this.logger.error(`An error occurred while reading the file: ${error}`);
-            return false;
+            return null;
         }
     }
 

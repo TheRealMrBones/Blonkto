@@ -213,15 +213,11 @@ class World {
             // load chunk
             if(this.chunkFileExists(x, y)){
                 const loadedchunk = this.loadChunk(x, y);
-                if(loadedchunk != false) return loadedchunk;
+                if(loadedchunk !== null) return loadedchunk;
             }
             
-            // if no loaded chunk then create new chunk
-            const newChunk = new Chunk(x, y, true, this.game);
-            this.loadedchunks[[x,y].toString()] = newChunk;
-
-            // return new chunk
-            return newChunk;
+            // if no loaded chunk then generate a new chunk
+            return this.generateChunk(x, y);
         }else{
             return null;
         }
@@ -252,14 +248,14 @@ class World {
         return this.game.fileManager.fileExists(fileLocation);
     }
 
-    /** Returns the chunk object or false otherwise */
-    loadChunk(x: number, y: number): Chunk | false {
+    /** Returns the chunk object or null otherwise */
+    loadChunk(x: number, y: number): Chunk | null {
         const chunkfilelocation = worldsavedir + [x,y].toString();
         const entitiesfilelocation = entitiessavedir + [x,y].toString();
 
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
-        if(!data) return false;
+        if(!data) return null;
         const chunk = Chunk.readFromSave(x, y, data, this.game);
         this.loadedchunks[[x,y].toString()] = chunk;
 
@@ -320,6 +316,13 @@ class World {
         const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
         this.game.fileManager.writeFile(entitiesfilelocation, entitiesdata);
     }
+
+    /** Returns a new generated chunk */
+    generateChunk(x: number, y: number): Chunk {
+        const newChunk = new Chunk(x, y, true, this.game);
+        this.loadedchunks[[x,y].toString()] = newChunk;
+        return newChunk;
+    }
     
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
     tickChunkUnloader(): void {
@@ -347,14 +350,14 @@ class World {
     // #region Cells
 
     /** Returns the requested cell if it is loaded and false otherwise */
-    getCell(x: number, y: number, canloadnew: boolean): Cell | false {
+    getCell(x: number, y: number, canloadnew: boolean): Cell | null {
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
         const celly = y - chunky * CHUNK_SIZE;
     
         const chunk = this.getChunk(chunkx, chunky, canloadnew);
-        return chunk ? chunk.cells[cellx][celly] : false;
+        return chunk ? chunk.cells[cellx][celly] : null;
     }
 
     /** Returns the requested cell and its containing chunk if it is loaded and null otherwise */
@@ -376,9 +379,9 @@ class World {
     /** Sets the block at the requested postion to the requested value */
     setBlock(x: number, y: number, block: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setBlock(block);
         chunk.cellUpdates.push({
@@ -392,9 +395,9 @@ class World {
         if(!data) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null || cell.block == null) return false;
+        if(chunk === null || cell.block === null) return false;
 
         const response = cell.breakBlock(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({
@@ -409,9 +412,9 @@ class World {
         if(!data) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return false;
+        if(chunk === null) return false;
         
         const response = cell.placeBlock(block);
         chunk.cellUpdates.push({
@@ -423,9 +426,9 @@ class World {
     /** Sets the floor at the requested postion to the requested value */
     setFloor(x: number, y: number, floor: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setFloor(floor);
         chunk.cellUpdates.push({
@@ -439,9 +442,9 @@ class World {
         if(!data) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null || cell.floor == null) return false;
+        if(chunk === null || cell.floor === null) return false;
 
         const response = cell.breakFloor(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({
@@ -456,9 +459,9 @@ class World {
         if(!data) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata == null) return false;
+        if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return false;
+        if(chunk === null) return false;
         
         const response = cell.placeFloor(floor);
         chunk.cellUpdates.push({
@@ -470,9 +473,9 @@ class World {
     /** Sets the base floor at the requested postion to the requested value */
     setBaseFloor(x: number, y: number, floor: string | null): void {
         const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata == null) return;
+        if(requestdata === null) return;
         const { cell, chunk } = requestdata;
-        if(chunk == null) return;
+        if(chunk === null) return;
 
         cell.setBaseFloor(floor);
         chunk.cellUpdates.push({

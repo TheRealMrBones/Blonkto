@@ -10,21 +10,21 @@ const { ASSETS, SHAPES, MINE_TYPES } = Constants;
 class Block extends ComponentHandler<Block> implements RegistryValue {
     name: string = "unregistered";
     displayname: string;
-    asset: string = ASSETS.MISSING_TEXTURE;
-    drops: DropBase | null = null;
-    minetype: number = MINE_TYPES.MINE;
-    scale: number = 1;
-    shape: number = SHAPES.SQUARE;
+    asset: string;
+    drops: DropBase | null;
+    minetype: number;
+    scale: number;
+    shape: number;
     blockscell: boolean = true;
 
     constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, scale?: number, shape?: number){
         super();
         this.displayname = displayname;
-        if(asset != null) this.asset = asset;
-        if(drops !== undefined) this.drops = drops;
-        if(minetype !== undefined) this.minetype = minetype;
-        if(scale !== undefined) this.scale = scale;
-        if(shape !== undefined) this.shape = shape;
+        this.asset = asset || ASSETS.MISSING_TEXTURE;
+        this.drops = drops || null;
+        this.minetype = minetype || MINE_TYPES.MINE;
+        this.scale = scale || 1;
+        this.shape = shape || SHAPES.SQUARE;
     }
 
     /** Sets this objects identifier to the given key from the registry */

@@ -21,9 +21,9 @@ class GameObject {
     x: number;
     y: number;
     chunk: Pos;
-    dir: number = 0;
-    scale: number = 1;
-    asset: string = ASSETS.MISSING_TEXTURE;
+    dir: number;
+    scale: number;
+    asset: string;
     falling: boolean = false;
 
     targetposqueue: Pos[] = [];
@@ -38,9 +38,9 @@ class GameObject {
         this.x = x;
         this.y = y;
         this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)};
-        if(dir !== undefined) this.dir = dir;
-        if(scale !== undefined) this.scale = scale;
-        if(asset !== undefined) this.asset = asset;
+        this.dir = dir || 0;
+        this.scale = scale || 1;
+        this.asset = asset || ASSETS.MISSING_TEXTURE;
 
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             this.checkFalling(game, dt);
