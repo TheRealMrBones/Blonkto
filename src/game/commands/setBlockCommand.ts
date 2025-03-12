@@ -21,7 +21,7 @@ function setBlockCommand(args: any[], player: Player, game: Game){
 
     const cell = game.world.getCell(args[1], args[2], true);
     if(!cell){
-        game.chatManager.sendMessageTo(player, `invalid block location`);
+        game.chatManager.sendMessageTo(player, "invalid block location");
         return;
     }
 
