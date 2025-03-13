@@ -27,7 +27,7 @@ class MineComponent extends Component<Item> {
     /** Defines the mine use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         const cell = game.world.getCell(info.cellpos.x, info.cellpos.y, false);
-        if(cell !== false){
+        if(cell !== null){
             if(cell.block !== null)
                 if(cell.block.minetype != this.minetype) return;
         }
