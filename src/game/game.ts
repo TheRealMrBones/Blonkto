@@ -10,6 +10,7 @@ import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
 import PerformanceManager from "./managers/performanceManager.js";
 import CollisionManager from "./managers/collisionManager.js";
+import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
 import Entity from "./objects/entity.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
@@ -41,6 +42,7 @@ class Game {
     chatManager: ChatManager;
     performanceManager: PerformanceManager;
     collisionManager: CollisionManager;
+    craftManager: CraftManager;
 
     players: {[key: string]: Player} = {};
     objects: {[key: string]: GameObject} = {};
@@ -66,6 +68,7 @@ class Game {
         this.chatManager = new ChatManager(this);
         this.performanceManager = new PerformanceManager(this);
         this.collisionManager = new CollisionManager(this);
+        this.craftManager = new CraftManager(this);
         
         // world
         this.world = new World(this);
