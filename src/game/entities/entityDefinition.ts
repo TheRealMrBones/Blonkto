@@ -29,7 +29,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
         this.drops = drops || null;
 
         this.eventEmitter.on("death", (entity: NonplayerEntity, game: Game) => {
-            if(entity.scale > 0) this.dropItems(entity.x, entity.y, game);
+            if(entity.scale > 0) this.dropItems(entity, game);
         });
     }
 
@@ -39,8 +39,8 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     }
 
     /** Drops this entities types items on an instances death */
-    dropItems(x: number, y: number, game: Game): void {
-        if(this.drops != null) this.drops.drop(x, y, game);
+    dropItems(entity: NonplayerEntity, game: Game): void {
+        if(this.drops != null) this.drops.drop(entity.x, entity.y, game);
     }
 }
 
