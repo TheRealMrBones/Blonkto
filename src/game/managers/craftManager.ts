@@ -1,4 +1,6 @@
+import { fork } from "node:child_process";
 import Game from "../game.js";
+import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
 
 /** Manages crafting opeprations on all loaded recipes */
@@ -32,6 +34,22 @@ class CraftManager {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
             if(recipe.result.includes(search)) recipes.push(recipe);
+        }
+        return recipes;
+    }
+
+    /** Returns all recipes craftable with the given inventories items */
+    getCraftableRecipes(inventory: Inventory): Recipe[] {
+        const recipes: Recipe[] = [];
+        for(const recipe of this.recipes) {
+            let cancraft = true;
+            for(const ingredient in recipe.ingredients) {
+                if(inventory.contains(ingredient, recipe.ingredients[ingredient])) {
+                    cancraft = false;
+                    break;
+                }
+            }
+            if(cancraft) recipes.push(recipe);
         }
         return recipes;
     }
