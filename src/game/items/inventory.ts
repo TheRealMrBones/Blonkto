@@ -157,6 +157,11 @@ class Inventory {
 
     /** Returns if this inventory contains at least the specified amount of an item */
     contains(item: string, amount: number): boolean {
+        return this.containsAmount(item) >= amount;
+    }
+
+    /** Returns the amount of the given item that this inventory contains */
+    containsAmount(item: string): number {
         let count = 0;
         for(let i = 0; i < this.size; i++){
             const itemstack = this.slots[i];
@@ -165,7 +170,7 @@ class Inventory {
             count += itemstack.getAmount();
         }
 
-        return count >= amount;
+        return count;
     }
 
     // #endregion
