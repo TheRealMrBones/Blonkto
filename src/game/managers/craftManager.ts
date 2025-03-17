@@ -1,7 +1,8 @@
-import { fork } from "node:child_process";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
+
+const defaultrecipesfolder = "recipes";
 
 /** Manages crafting opeprations on all loaded recipes */
 class CraftManager {
@@ -11,17 +12,31 @@ class CraftManager {
     constructor(game: Game){
         this.game = game;
         this.recipes = [];
+
+        this.loadRecipes();
     }
 
-    /** Loads all recipes written in the default location */
-    loadRecipes(): void {
-        const recipeFiles: any[] = [];//this.game.fileManager.getFiles("recipes");
+    /** Loads all JSON recipes written in the default location */
+    loadRecipes(folder?: string): void {
+        const folder2 = folder || defaultrecipesfolder;
+
+        const recipeFiles: any[] = [];//this.game.fileManager.getFiles(folder2);
         for(const file of recipeFiles) {
-            const recipeData = this.game.fileManager.readFile(file);
-            if(recipeData === null) continue;
-            const recipe = JSON.parse(recipeData);
-            this.addRecipe(new Recipe(recipe.result, recipe.ingredients, recipe.resultCount));
+            this.loadSingleRecipe(file);
         }
+    }
+
+    /** Loads a single recipe from the given file */
+    loadSingleRecipe(file: string): void {
+        const recipeData = this.game.fileManager.readFile(file);
+        if(recipeData === null) return;
+        const recipe = JSON.parse(recipeData);
+        this.loadRecipe(recipe);
+    }
+
+    /** Loads a recipe from its parsed data */
+    loadRecipe(recipe: any): void {
+        this.addRecipe(new Recipe(recipe.result, recipe.ingredients, recipe.resultCount));
     }
 
     /** Adds a recipe to the list of available recipes */
