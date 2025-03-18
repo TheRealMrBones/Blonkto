@@ -1,5 +1,8 @@
+import DroppedStack from "../objects/droppedStack.js";
 import Player from "../objects/player.js";
+import ItemRegistry from "../registries/itemRegistry.js";
 import Inventory from "./inventory.js";
+import ItemStack from "./itemStack.js";
 
 class Recipe {
     ingredients: { [item: string]: number };
@@ -34,9 +37,20 @@ class Recipe {
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
     craftRecipe(inventory: Inventory, x: number, y:number, amount?: number): void {
-        let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory));
+        let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultCount;
+        const stacksize = ItemRegistry.get(this.result).stacksize;
+
+        for(const ingredient in this.ingredients){
+            const removeamount = this.ingredients[ingredient] * craftamount;
+            inventory.removeItem(ingredient, removeamount);
+        }
+
         while(craftamount > 0){
-            // temp
+            const stackamount = Math.min(craftamount, stacksize);
+            craftamount -= stackamount;
+
+            const itemstack = new ItemStack(this.result, stackamount);
+            DroppedStack.getDroppedWithSpread(x, y, itemstack, .1);
         }
     }
 }
