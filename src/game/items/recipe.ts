@@ -15,6 +15,7 @@ class Recipe {
         this.resultCount = resultCount || 1;
     }
 
+    /** Returns a recipe object loaded from the data of a json file */
     static readFromJson(data: string): Recipe {
         const recipe = JSON.parse(data);
         return new Recipe(recipe.result, recipe.ingredients, recipe.resultCount);
