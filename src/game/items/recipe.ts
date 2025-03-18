@@ -15,6 +15,11 @@ class Recipe {
         this.resultCount = resultCount || 1;
     }
 
+    static readFromJson(data: string): Recipe {
+        const recipe = JSON.parse(data);
+        return new Recipe(recipe.result, recipe.ingredients, recipe.resultCount);
+    }
+
     /** Returns if the requested player can craft this item */
     canCraft(player: Player): boolean {
         for(const ingredient in this.ingredients) {

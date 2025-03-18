@@ -28,15 +28,14 @@ class CraftManager {
 
     /** Loads a single recipe from the given file */
     loadSingleRecipe(file: string): void {
-        const recipeData = this.game.fileManager.readFile(file);
-        if(recipeData === null) return;
-        const recipe = JSON.parse(recipeData);
-        this.loadRecipe(recipe);
+        const data = this.game.fileManager.readFile(file);
+        if(data === null) return;
+        this.loadRecipe(data);
     }
 
     /** Loads a recipe from its parsed data */
-    loadRecipe(recipe: any): void {
-        this.addRecipe(new Recipe(recipe.result, recipe.ingredients, recipe.resultCount));
+    loadRecipe(data: string): void {
+        this.addRecipe(Recipe.readFromJson(data));
     }
 
     /** Adds a recipe to the list of available recipes */
