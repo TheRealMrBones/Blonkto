@@ -97,6 +97,26 @@ class Inventory {
         return true;
     }
 
+    /** Removes the requested amount of the requested item from this inventory */
+    removeItem(item: string, amount?: number): void {
+        let removeamount = amount || 1;
+
+        for(let i = 0; i < this.size && removeamount > 0; i++){
+            const itemstack = this.slots[i];
+            if(itemstack === null) continue;
+            if(itemstack.item.name != item) continue;
+
+            const stackamount = itemstack.getAmount();
+            if(stackamount >= removeamount){
+                this.slots[i] = null;
+                removeamount -= stackamount;
+            }else{
+                itemstack.removeAmount(removeamount);
+                removeamount = 0;
+            }
+        }
+    }
+
     /** Drops an individual stack (or partial stack) from this inventory */
     dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: Player): void {
         if(this.slots[slot] === null) return;
