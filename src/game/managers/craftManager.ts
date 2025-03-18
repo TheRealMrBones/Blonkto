@@ -20,15 +20,17 @@ class CraftManager {
     loadRecipes(folder?: string): void {
         const folder2 = folder || defaultrecipesfolder;
 
-        const recipeFiles: any[] = [];//this.game.fileManager.getFiles(folder2);
+        const recipeFiles: any[] = this.game.fileManager.listDirectory(folder2, "definitions");
         for(const file of recipeFiles) {
             this.loadSingleRecipe(file);
         }
     }
 
     /** Loads a single recipe from the given file */
-    loadSingleRecipe(file: string): void {
-        const data = this.game.fileManager.readFile(file);
+    loadSingleRecipe(file: string, folder?: string): void {
+        const folder2 = folder || defaultrecipesfolder;
+        
+        const data = this.game.fileManager.readFile(`${folder2}/${file}`, "definitions");
         if(data === null) return;
         this.loadRecipe(data);
     }
