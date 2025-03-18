@@ -18,9 +18,7 @@ class Recipe {
     /** Returns if the requested player can craft this item */
     canCraft(player: Player): boolean {
         for(const ingredient in this.ingredients) {
-            if(!player.inventory.contains(ingredient, this.ingredients[ingredient])) {
-                return false;
-            }
+            if(!player.inventory.contains(ingredient, this.ingredients[ingredient])) return false;
         }
         return true;
     }
@@ -50,7 +48,8 @@ class Recipe {
             craftamount -= stackamount;
 
             const itemstack = new ItemStack(this.result, stackamount);
-            DroppedStack.getDroppedWithSpread(x, y, itemstack, .1);
+            if(!inventory.collectStack(itemstack))
+                DroppedStack.getDroppedWithSpread(x, y, itemstack, .1);
         }
     }
 }
