@@ -58,6 +58,19 @@ class Recipe {
                 DroppedStack.getDroppedWithSpread(x, y, itemstack, .1);
         }
     }
+
+    // #region serialization
+
+    /** Return an object representing this recipes data for a game update to the client */
+    serializeForUpdate(): any {
+        return {
+            ingredients: this.ingredients,
+            result: this.result,
+            resultcount: this.resultcount,
+        };
+    }
+
+    // #endregion
 }
 
 export default Recipe;

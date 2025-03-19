@@ -69,6 +69,15 @@ class CraftManager {
         }
         return recipes;
     }
+
+    // #region serialization
+
+    /** Return the list of recipe data for all craftable recipes for a game update to the client */
+    serializeCraftableRecipesForUpdate(inventory: Inventory): any {
+        return this.getCraftableRecipes(inventory).map(recipe => recipe.serializeForUpdate());
+    }
+
+    // #endregion
 }
 
 export default CraftManager;
