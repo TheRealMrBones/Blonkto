@@ -7,12 +7,12 @@ import ItemStack from "./itemStack.js";
 class Recipe {
     ingredients: { [item: string]: number };
     result: string;
-    resultCount: number;
+    resultcount: number;
 
     constructor(result: string, ingredients: { [item: string]: number }, resultCount?: number) {
         this.result = result;
         this.ingredients = ingredients;
-        this.resultCount = resultCount || 1;
+        this.resultcount = resultCount || 1;
     }
 
     /** Returns a recipe object loaded from the data of a json file */
@@ -41,7 +41,7 @@ class Recipe {
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
     craftRecipe(inventory: Inventory, x: number, y:number, amount?: number): void {
-        let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultCount;
+        let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
         const stacksize = ItemRegistry.get(this.result).stacksize;
 
         for(const ingredient in this.ingredients){
