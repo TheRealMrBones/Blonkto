@@ -1,6 +1,7 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import Player from "../objects/player.js";
+import ItemRegistry from "../registries/itemRegistry.js";
 import ItemStack from "./itemStack.js";
 
 /** A managable collection of item stacks */
@@ -59,6 +60,31 @@ class Inventory {
             itemstack: itemstack ? itemstack.serializeForUpdate() : null,
         });
         return true;
+    }
+
+    /** Tries to collect the given item and returns the amount leftover */
+    collectItem(item: string, amount?: number): number {
+        const stacksize = ItemRegistry.get(item).stacksize;
+        let itemamount = amount || 1;
+        
+        for(let i = 0; i < this.size && itemamount > 0; i++){
+            const itemstack = this.slots[i];
+            if(itemstack != null){
+                if(itemstack.item.name == item){
+                    const addamount = Math.min(stacksize - itemstack.getAmount(), itemamount);
+                    itemstack.addAmount(addamount);
+                    itemamount -= addamount;
+                }
+            }
+        }
+
+        for(let nextslot = this.nextOpenSlot(); itemamount > 0 && nextslot != -1; nextslot = this.nextOpenSlot()){
+            const addamount = Math.min(stacksize, itemamount);
+            this.slots[nextslot] = new ItemStack(item, addamount);
+            itemamount -= addamount;
+        }
+
+        return itemamount;
     }
 
     // #endregion
