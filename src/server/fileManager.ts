@@ -24,7 +24,8 @@ class FileManager {
         // initialize data folder
         if(!fs.existsSync(this.defaultlocation)) fs.mkdirSync(this.defaultlocation, { recursive: true });
         datafolders.forEach(f => {
-            if(!fs.existsSync(this.defaultlocation + f)) fs.mkdirSync(this.defaultlocation + f, { recursive: true });
+            const newfolder = `${this.defaultlocation}/${f}`
+            if(!fs.existsSync(newfolder)) fs.mkdirSync(newfolder, { recursive: true });
         });
     }
 
