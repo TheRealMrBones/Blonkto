@@ -1,5 +1,4 @@
 import DroppedStack from "../objects/droppedStack.js";
-import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import Inventory from "./inventory.js";
 import ItemStack from "./itemStack.js";
@@ -30,10 +29,10 @@ class Recipe {
         return true;
     }
 
-    /** Returns if the requested player can craft this item */
-    canCraft(player: Player): boolean {
+    /** Returns if the requested inventory can craft this item */
+    canCraft(inventory: Inventory): boolean {
         for(const ingredient in this.ingredients) {
-            if(!player.inventory.contains(ingredient, this.ingredients[ingredient])) return false;
+            if(!inventory.contains(ingredient, this.ingredients[ingredient])) return false;
         }
         return true;
     }

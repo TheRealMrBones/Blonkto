@@ -66,14 +66,7 @@ class CraftManager {
     getCraftableRecipes(inventory: Inventory): Recipe[] {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
-            let cancraft = true;
-            for(const ingredient in recipe.ingredients) {
-                if(inventory.contains(ingredient, recipe.ingredients[ingredient])) {
-                    cancraft = false;
-                    break;
-                }
-            }
-            if(cancraft) recipes.push(recipe);
+            if(recipe.canCraft(inventory)) recipes.push(recipe);
         }
         return recipes;
     }
