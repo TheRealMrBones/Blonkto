@@ -8,15 +8,19 @@ import ItemStack from "./itemStack.js";
 class Inventory {
     private size: number;
     private slots: (ItemStack | null)[];
+    private changes: null | boolean[];
 
-    constructor(size: number){
+    constructor(size: number, trackchanges?: boolean){
         this.size = size;
         this.slots = Array(size).fill(null);
+
+        if(trackchanges) this.changes = Array(size).fill(false);
+        else this.changes = null;
     }
 
     /** Returns an inventory object with the given itemstacks in it */
-    static readFromSave(inventorydata: any[]): Inventory {
-        const inventory = new Inventory(inventorydata.length);
+    static readFromSave(inventorydata: any[], trackchanges?: boolean): Inventory {
+        const inventory = new Inventory(inventorydata.length, trackchanges);
         inventory.slots = inventorydata.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
         return inventory;
     }
@@ -36,17 +40,12 @@ class Inventory {
     }
 
     /** Tries to collect the given item stack and returns if fully take */
-    collectStack(itemstack: ItemStack, inventoryupdates?: any): boolean {
+    collectStack(itemstack: ItemStack): boolean {
         for(let i = 0; i < this.size; i++){
             const itemstack2 = this.slots[i];
             if(itemstack2 != null){
                 const done = itemstack2.mergeStack(itemstack);
-
-                inventoryupdates.push({
-                    slot: i,
-                    itemstack: this.slots[i] ? itemstack2.serializeForUpdate() : null,
-                });
-
+                this.toggleChange(i);
                 if(done) return true;
             }
         }
@@ -55,10 +54,7 @@ class Inventory {
         if(slot == -1) return false;
 
         this.slots[slot] = itemstack;
-        inventoryupdates.push({
-            slot: slot,
-            itemstack: itemstack ? itemstack.serializeForUpdate() : null,
-        });
+        this.toggleChange(slot);
         return true;
     }
 
@@ -74,6 +70,7 @@ class Inventory {
                     const addamount = Math.min(stacksize - itemstack.getAmount(), itemamount);
                     itemstack.addAmount(addamount);
                     itemamount -= addamount;
+                    this.toggleChange(i);
                 }
             }
         }
@@ -82,6 +79,7 @@ class Inventory {
             const addamount = Math.min(stacksize, itemamount);
             this.slots[nextslot] = new ItemStack(item, addamount);
             itemamount -= addamount;
+            this.toggleChange(nextslot);
         }
 
         return itemamount;
@@ -99,18 +97,21 @@ class Inventory {
     /** Sets the itemstack in the requested slot to the given itemstack */
     setSlot(slot: number, stack: ItemStack | null): void {
         this.slots[slot] = stack;
+        this.toggleChange(slot);
     }
 
     /** Adds the given stack to the requested slot as much as possible */
-    addToSlot(slot: number, stack: ItemStack): boolean {
+    addToSlot(slot: number, itemstack: ItemStack): boolean {
         if(this.slots[slot] === null){
-            this.slots[slot] = stack;
+            this.slots[slot] = itemstack;
+            this.toggleChange(slot);
             return true;
         }
 
-        if(this.slots[slot].item.name != stack.item.name) return false;
+        if(this.slots[slot].item.name != itemstack.item.name) return false;
 
-        return this.slots[slot].mergeStack(stack);
+        this.toggleChange(slot);
+        return this.slots[slot].mergeStack(itemstack);
     }
 
     /** Removes the given amount from the given slot in this inventory */
@@ -119,6 +120,7 @@ class Inventory {
         if(amount > this.slots[slot].getAmount()) return false;
 
         if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
+        this.toggleChange(slot);
 
         return true;
     }
@@ -140,6 +142,7 @@ class Inventory {
                 itemstack.removeAmount(removeamount);
                 removeamount = 0;
             }
+            this.toggleChange(i);
         }
     }
 
@@ -159,6 +162,7 @@ class Inventory {
 
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }
+        this.toggleChange(slot);
     }
 
     /** Swaps the item stacks between two slots */
@@ -175,17 +179,53 @@ class Inventory {
         }else{
             this.clearSlot(slot1);
         }
+        this.toggleChange(slot1);
+        this.toggleChange(slot2);
     }
 
     /** Clears the requested slot in this inventory */
     clearSlot(slot: number): void {
         this.slots[slot] = null;
+        this.toggleChange(slot);
     }
 
     /** Clears this entire inventory */
     clear(): void {
         for(let i = 0; i < this.size; i++){
             this.clearSlot(i);
+        }
+    }
+
+    // #endregion
+
+    // #region changes
+
+    /** Toggles the changed indicator for the requested slot */
+    toggleChange(slot: number): void {
+        if(this.changes !== null) this.changes[slot] = true;
+    }
+
+    /** Returns the object representing all changes to this inventory since last reset */
+    getChanges(): any[] {
+        if(this.changes === null) return [];
+        const changeslist = [];
+        for(let i = 0; i < this.size; i++){
+            if(this.changes[i]){
+                const itemstack = this.slots[i];
+                changeslist.push({
+                    slot: i,
+                    itemstack: itemstack !== null ? itemstack.serializeForUpdate() : null,
+                });
+            }
+        }
+
+        return changeslist;
+    }
+
+    resetChanges(): void {
+        if(this.changes === null) return;
+        for(let i = 0; i < this.size; i++){
+            this.changes[i] = false;
         }
     }
 

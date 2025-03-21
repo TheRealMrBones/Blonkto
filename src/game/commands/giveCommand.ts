@@ -36,13 +36,13 @@ function giveCommand(args: any[], player: Player, game: Game){
         case 0:
         case 1: {
             const p: Player = args[1];
-            p.collectStack(itemStack);
+            p.inventory.collectStack(itemStack);
             game.chatManager.sendMessageTo(player, `gave ${p.username} ${amount} ${item}`);
             break;
         };
         case 2:
         case 3: {
-            player.collectStack(itemStack);
+            player.inventory.collectStack(itemStack);
             game.chatManager.sendMessageTo(player, `gave you ${amount} ${item}`);
             break;
         }

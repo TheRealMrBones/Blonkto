@@ -209,7 +209,7 @@ class Game {
     handlePlayerSwap(socket: Socket, info: any): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        this.players[socket.id].swapSlots(info.slot1, info.slot2);
+        this.players[socket.id].inventory.swapSlots(info.slot1, info.slot2);
     }
 
     // #endregion
@@ -272,6 +272,10 @@ class Game {
         const fixescopy = player.getFixes();
         player.resetFixes();
 
+        // get inventory updates
+        const inventoryupdates = player.inventory.getChanges();
+        player.inventory.resetChanges();
+
         // get entities
         const nearbyEntities = this.getNonplayers().filter(e =>
             Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
@@ -283,6 +287,7 @@ class Game {
             t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
+            inventoryupdates: inventoryupdates,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldload,

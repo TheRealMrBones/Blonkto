@@ -48,7 +48,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = new Inventory(INVENTORY_SIZE);
+        this.inventory = new Inventory(INVENTORY_SIZE, true);
         this.hotbarslot = 0;
         if(starter == true) this.starterInventory();
 
@@ -70,14 +70,14 @@ class Player extends Entity {
             // Respawn
             if(RACISM_PERM) player.color = data.color;
 
-            if(KEEP_INVENTORY) player.inventory = Inventory.readFromSave(data.inventory);
+            if(KEEP_INVENTORY) player.inventory = Inventory.readFromSave(data.inventory, true);
         }else{
             // Load Exact
             player.x = data.x;
             player.y = data.y;
             player.health = data.health;
             player.color = data.color;
-            player.inventory = Inventory.readFromSave(data.inventory);
+            player.inventory = Inventory.readFromSave(data.inventory, true);
         }
 
         return player;
@@ -133,65 +133,15 @@ class Player extends Entity {
         if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
     }
 
-    /** Tries to collect the given item stack and returns if complete take */
-    collectStack(itemstack: ItemStack): boolean {
-        return this.inventory.collectStack(itemstack, this.fixes.inventoryupdates);
-    }
-
-    /** Removes the given amount from the given slot in this players inventory */
-    removeFromSlot(slot: number, amount: number): boolean {
-        if(!this.inventory.removeFromSlot(slot, amount)) return false;
-        const stack = this.inventory.getSlot(slot);
-
-        this.fixes.inventoryupdates.push({
-            slot: slot,
-            itemstack: stack !== null ? stack.serializeForUpdate() : null,
-        });
-
-        return true;
-    }
-
     /** Rempoves the given amount from the players current slot */
     removeFromCurrentSlot(amount: number): boolean {
-        return this.removeFromSlot(this.hotbarslot, amount);
+        return this.inventory.removeFromSlot(this.hotbarslot, amount);
     }
 
     /** Drops the given amount from the given slot in this players inventory */
     dropFromSlot(slot: number, game: Game, amount?: number): void {
         this.inventory.dropStack(this.x, this.y, slot, game, amount, this);
         const stack = this.inventory.getSlot(slot);
-        
-        this.fixes.inventoryupdates.push({
-            slot: slot,
-            itemstack: stack !== null ? stack.serializeForUpdate() : null,
-        });
-    }
-
-    /** Swaps the item stacks of 2 slots in this players inventory */
-    swapSlots(slot1: number, slot2: number): void {
-        this.inventory.swapSlots(slot1, slot2);
-
-        const stack1 = this.inventory.getSlot(slot1);
-        const stack2 = this.inventory.getSlot(slot2);
-        this.fixes.inventoryupdates.push({
-            slot: slot1,
-            itemstack: stack1 !== null ? stack1.serializeForUpdate() : null,
-        });
-        this.fixes.inventoryupdates.push({
-            slot: slot2,
-            itemstack: stack2 !== null ? stack2.serializeForUpdate() : null,
-        });
-    }
-
-    /** Clears this players entire inventory */
-    clearInventory(): void {
-        this.inventory.clear();
-        for(let i = 0; i < this.inventory.getSize(); i++){
-            this.fixes.inventoryupdates.push({
-                slot: i,
-                itemstack: null,
-            });
-        }
     }
 
     // #endregion
@@ -204,7 +154,6 @@ class Player extends Entity {
             pushx: null,
             pushy: null,
             setpos: null,
-            inventoryupdates: [],
         };
     }
 
@@ -214,7 +163,6 @@ class Player extends Entity {
             pushx: this.fixes.pushx,
             pushy: this.fixes.pushy,
             setpos: this.fixes.setpos,
-            inventoryupdates: this.fixes.inventoryupdates,
         };
         return fixescopy;
     }

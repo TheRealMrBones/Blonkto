@@ -43,7 +43,7 @@ export function processGameUpdate(update: any): void {
     // get fixes
     if(update.fixes.setpos) setPos(update.fixes.setpos);
     serverPush(update.fixes.pushx, update.fixes.pushy);
-    update.fixes.inventoryupdates.forEach((iu: any) => {
+    update.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
     });
 

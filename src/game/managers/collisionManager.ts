@@ -79,7 +79,7 @@ class CollisionManager {
             const dist = getDistance(player, collectable);
             const realdist = dist - (player.scale + collectable.scale) / 2;
             if(realdist < 0 && collectable.ignore != player){
-                if(player.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
+                if(player.inventory.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
             }
         }
     };
