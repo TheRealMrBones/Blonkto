@@ -21,6 +21,15 @@ class Recipe {
         return new Recipe(recipe.result, recipe.ingredients, recipe.resultCount);
     }
 
+    /** Returns if this ingredients list correctly matches this recipes */
+    matchesIngredients(ingredients: { [item: string]: number }): boolean {
+        if(ingredients.length !== this.ingredients.length) return false;
+        for(const ingredient in this.ingredients) {
+            if(ingredients[ingredient] !== this.ingredients[ingredient]) return false;
+        }
+        return true;
+    }
+
     /** Returns if the requested player can craft this item */
     canCraft(player: Player): boolean {
         for(const ingredient in this.ingredients) {

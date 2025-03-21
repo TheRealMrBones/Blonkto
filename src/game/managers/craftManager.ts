@@ -54,6 +54,14 @@ class CraftManager {
         return recipes;
     }
 
+    /** Returns the recipe that matches the given ingredients if one exists */
+    getRecipeFromIngredients(ingredients: { [item: string]: number }): Recipe | null {
+        for(const recipe of this.recipes) {
+            if(recipe.matchesIngredients(ingredients)) return recipe;
+        }
+        return null;
+    }
+
     /** Returns all recipes craftable with the given inventories items */
     getCraftableRecipes(inventory: Inventory): Recipe[] {
         const recipes: Recipe[] = [];
@@ -68,6 +76,13 @@ class CraftManager {
             if(cancraft) recipes.push(recipe);
         }
         return recipes;
+    }
+
+    /** Tries to craft whatever recipe takes the given ingredients */
+    craftRecipe(inventory: Inventory, x: number, y: number, ingredients: { [item: string]: number }, amount: number): void {
+        const recipe = this.getRecipeFromIngredients(ingredients);
+        if(recipe === null) return;
+        recipe.craftRecipe(inventory, x, y, amount);
     }
 
     // #region serialization

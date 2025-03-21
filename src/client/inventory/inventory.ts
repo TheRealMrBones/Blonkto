@@ -1,5 +1,5 @@
 import { Item } from "./item.js";
-import { drop, swap } from "../networking/networking.js";
+import { swap } from "../networking/networking.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;

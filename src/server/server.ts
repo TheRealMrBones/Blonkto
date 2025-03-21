@@ -62,6 +62,7 @@ io.on("connection", socket => {
     socket.on(MSG_TYPES.INTERACT, interact);
     socket.on(MSG_TYPES.DROP, drop);
     socket.on(MSG_TYPES.SWAP, swap);
+    socket.on(MSG_TYPES.CRAFT, craft);
     socket.on(MSG_TYPES.DISCONNECT, onDisconnect);
     socket.on(MSG_TYPES.SEND_MESSAGE, chat);
 });
@@ -129,6 +130,11 @@ function drop(this: Socket, info: any): void {
 /** Response to the swap message from a client */
 function swap(this: Socket, info: any): void {
     game.handlePlayerSwap(this, info);
+}
+
+/** Response to the craft message from a client */
+function craft(this: Socket, info: any): void {
+    game.handlePlayerCraft(this, info);
 }
 
 /** Response to the disconnect message from a client */

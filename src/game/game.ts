@@ -212,6 +212,14 @@ class Game {
         this.players[socket.id].inventory.swapSlots(info.slot1, info.slot2);
     }
 
+    /** Response to a craft message from a client */
+    handlePlayerCraft(socket: Socket, info: any): void {
+        if(socket.id === undefined || this.players[socket.id] === undefined) return;
+        
+        const player = this.players[socket.id];
+        this.craftManager.craftRecipe(player.inventory, player.x, player.y, info.ingredients, info.amount);
+    }
+
     // #endregion
 
     // #region tick/update

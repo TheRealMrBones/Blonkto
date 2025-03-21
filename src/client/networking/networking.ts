@@ -93,6 +93,11 @@ export const swap = throttle(20, info => {
     socket.emit(MSG_TYPES.SWAP, info);
 });
 
+/** Method to send the craft message to the server */
+export const craft = throttle(20, info => {
+    socket.emit(MSG_TYPES.CRAFT, info);
+});
+
 /** Method to send the chat message to the server */
 export const chat = throttle(20, info => {
     socket.emit(MSG_TYPES.SEND_MESSAGE, info);
