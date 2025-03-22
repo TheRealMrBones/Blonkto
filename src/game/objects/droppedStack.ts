@@ -2,6 +2,7 @@ import ItemStack from "../items/itemStack.js";
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
 import Player from "./player.js";
+import ItemRegistry from "../registries/itemRegistry.js";
 
 import ServerConfig from "../../configs/server.js";
 const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
@@ -40,14 +41,26 @@ class DroppedStack extends GameObject {
     }
 
     /** Returns a dropped stack with a random spread from the spawn point */
-    static getDroppedWithSpread(x: number, y: number, itemStack: ItemStack, spread: number, ignore?: Player){
+    static dropWithSpread(game: Game, x: number, y: number, itemStack: ItemStack, spread: number, ignore?: Player): void {
         const angle = Math.random() * 2 * Math.PI;
         const magnitude = Math.random() * spread;
 
         const xmovement = Math.cos(angle) * magnitude;
         const ymovement = Math.sin(angle) * magnitude;
 
-        return new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
+        const droppedstack = new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
+        game.objects[droppedstack.id] = droppedstack;
+    }
+
+    /** Returns an array of dropped stack with a random spread from the spawn point */
+    static dropManyWithSpread(game: Game, x: number, y: number, item: string, amount: number, spread: number, ignore?: Player): void {
+        const stacksize = ItemRegistry.get(item).stacksize;
+
+        while(amount > 0){
+            const itemstack = new ItemStack(item, Math.min(amount, stacksize));
+            DroppedStack.dropWithSpread(game, x, y, itemstack, spread, ignore);
+            amount -= itemstack.getAmount();
+        }
     }
 
     /** Ticks TTL and deletes self if too old */

@@ -1,3 +1,4 @@
+import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import Inventory from "./inventory.js";
@@ -48,7 +49,7 @@ class Recipe {
     }
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
-    craftRecipe(inventory: Inventory, x: number, y:number, amount?: number): void {
+    craftRecipe(game: Game, inventory: Inventory, x: number, y:number, amount?: number): void {
         let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
         const stacksize = ItemRegistry.get(this.result).stacksize;
 
@@ -57,14 +58,8 @@ class Recipe {
             inventory.removeItem(ingredient, removeamount);
         }
 
-        while(craftamount > 0){
-            const stackamount = Math.min(craftamount, stacksize);
-            craftamount -= stackamount;
-
-            const itemstack = new ItemStack(this.result, stackamount);
-            if(!inventory.collectStack(itemstack))
-                DroppedStack.getDroppedWithSpread(x, y, itemstack, .1);
-        }
+        const leftover = inventory.collectItem(this.result, craftamount);
+        if(leftover > 0) DroppedStack.dropManyWithSpread(game, x, y, this.result, leftover, .3);
     }
 
     // #region serialization

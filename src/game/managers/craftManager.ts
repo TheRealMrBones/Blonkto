@@ -98,7 +98,7 @@ class CraftManager {
     craftRecipe(inventory: Inventory, x: number, y: number, ingredients: { [item: string]: number }, amount: number): void {
         const recipe = this.getRecipeFromIngredients(ingredients);
         if(recipe === null) return;
-        recipe.craftRecipe(inventory, x, y, amount);
+        recipe.craftRecipe(this.game, inventory, x, y, amount);
     }
 
     // #endregion

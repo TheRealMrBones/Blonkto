@@ -2,8 +2,8 @@ import Command from "./command.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
-import ItemStack from "../items/itemStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
+import DroppedStack from "../objects/droppedStack.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
@@ -34,13 +34,17 @@ function giveCommand(args: any[], player: Player, game: Game){
         case 0:
         case 1: {
             const p: Player = args[1];
-            p.inventory.collectItem(item, amount);
+            const leftover = p.inventory.collectItem(item, amount);
+            if(leftover > 0) DroppedStack.dropManyWithSpread(game, p.x, p.y, item, leftover, .3);
+
             game.chatManager.sendMessageTo(player, `gave ${p.username} ${amount} ${item}`);
             break;
         };
         case 2:
         case 3: {
-            player.inventory.collectItem(item, amount);
+            const leftover = player.inventory.collectItem(item, amount);
+            if(leftover > 0) DroppedStack.dropManyWithSpread(game, player.x, player.y, item, leftover, .3);
+
             game.chatManager.sendMessageTo(player, `gave you ${amount} ${item}`);
             break;
         }

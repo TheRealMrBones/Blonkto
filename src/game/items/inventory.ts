@@ -151,15 +151,13 @@ class Inventory {
         if(this.slots[slot] === null) return;
 
         if(amount === undefined){
-            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, this.slots[slot], .3, ignore);
-            game.objects[droppedstack.id] = droppedstack;
+            DroppedStack.dropWithSpread(game, x, y, this.slots[slot], .3, ignore);
             this.slots[slot] = null;
         }else{
             if(amount > this.slots[slot].getAmount()) amount = this.slots[slot].getAmount();
 
-            const droppedstack = DroppedStack.getDroppedWithSpread(x, y, new ItemStack(this.slots[slot].item.name, amount), .3, ignore);
-            game.objects[droppedstack.id] = droppedstack;
-
+            DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.slots[slot].item.name, amount), .3, ignore);
+            
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }
         this.toggleChange(slot);
