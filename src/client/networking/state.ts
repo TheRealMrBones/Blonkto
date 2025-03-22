@@ -2,7 +2,7 @@ import { setPos, serverPush } from "../input/input.js";
 import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
-import { setSingleInventorySlot } from "../inventory/inventory.js";
+import { addRecipes, setSingleInventorySlot } from "../inventory/inventory.js";
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
@@ -43,9 +43,11 @@ export function processGameUpdate(update: any): void {
     // get fixes
     if(update.fixes.setpos) setPos(update.fixes.setpos);
     serverPush(update.fixes.pushx, update.fixes.pushy);
+
     update.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
     });
+    addRecipes(update.recipes);
 
     // get self updates
     if(!self){

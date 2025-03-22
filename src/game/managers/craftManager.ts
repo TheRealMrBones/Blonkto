@@ -82,7 +82,7 @@ class CraftManager {
         }
 
         if(playerid !== undefined){
-            for(const recipe of this.recipes) {
+            for(const recipe of recipes) {
                 this.playerrecipes[playerid].push(recipe);
             }
         }

@@ -1,10 +1,14 @@
 import { Item } from "./item.js";
+import { Recipe } from "./recipe.js";
 import { swap } from "../networking/networking.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 const inventory: (Item | null)[] = new Array(INVENTORY_SIZE).fill(null);
+const recipes: Recipe[] = [];
+
+// #region inventory operations
 
 /** Returns the item from the given inventory slot */
 export function getInventorySlot(slot: number): Item | null {
@@ -91,3 +95,25 @@ export function swapSlots(slot1: number, slot2: number): void {
         clearInventorySlot(slot1);
     }*/
 }
+
+// #endregion
+
+// #region recipes
+
+/** Adds new recipes to the saved list */
+export function addRecipes(recipesdata: any[]): void {
+    for(const recipedata of recipesdata){
+        recipes.push(new Recipe(recipedata.result, recipedata.ingredients, recipedata.resultcount, recipedata.asset));
+    }
+}
+
+/** Returns all craftable recipes with the current inventory */
+export function getCraftableRecipes(): Recipe[] {
+    const craftablerecipes: Recipe[] = [];
+    for(const recipe of recipes){
+        if(recipe.canCraft(inventory)) craftablerecipes.push(recipe);
+    }
+    return craftablerecipes;
+}
+
+// #endregion
