@@ -290,12 +290,16 @@ class Game {
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );
 
+        // get recipes
+        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id);
+
         // return full update object
         return {
             t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
             inventoryupdates: inventoryupdates,
+            recipes: recipes,
             others: nearbyPlayers.map(p => p.serializeForUpdate()),
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldload,

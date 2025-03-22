@@ -8,13 +8,17 @@ const defaultrecipesfolder = "recipes";
 class CraftManager {
     game: Game;
     recipes: Recipe[];
+    playerrecipes: { [playerid: string]: Recipe[] };
 
     constructor(game: Game){
         this.game = game;
         this.recipes = [];
+        this.playerrecipes = {};
 
         this.loadRecipes();
     }
+
+    // #regpion loading
 
     /** Loads all JSON recipes written in the default location */
     loadRecipes(folder?: string): void {
@@ -45,6 +49,10 @@ class CraftManager {
         this.recipes.push(recipe);
     }
 
+    // #endregion
+
+    // #region getters
+
     /** Returns the recipes for the given search */
     getRecipes(search: string): Recipe[] {
         const recipes: Recipe[] = [];
@@ -63,13 +71,28 @@ class CraftManager {
     }
 
     /** Returns all recipes craftable with the given inventories items */
-    getCraftableRecipes(inventory: Inventory): Recipe[] {
+    getCraftableRecipes(inventory: Inventory, playerid?: string): Recipe[] {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
+            if(playerid !== undefined){
+                if(this.playerrecipes[playerid] === undefined) this.playerrecipes[playerid] = [];
+                else if(this.playerrecipes[playerid].includes(recipe)) continue;
+            }
             if(recipe.canCraft(inventory)) recipes.push(recipe);
         }
+
+        if(playerid !== undefined){
+            for(const recipe of this.recipes) {
+                this.playerrecipes[playerid].push(recipe);
+            }
+        }
+
         return recipes;
     }
+
+    // #endregion
+
+    // #region crafting
 
     /** Tries to craft whatever recipe takes the given ingredients */
     craftRecipe(inventory: Inventory, x: number, y: number, ingredients: { [item: string]: number }, amount: number): void {
@@ -78,11 +101,13 @@ class CraftManager {
         recipe.craftRecipe(inventory, x, y, amount);
     }
 
+    // #endregion
+
     // #region serialization
 
     /** Return the list of recipe data for all craftable recipes for a game update to the client */
-    serializeCraftableRecipesForUpdate(inventory: Inventory): any {
-        return this.getCraftableRecipes(inventory).map(recipe => recipe.serializeForUpdate());
+    serializeCraftableRecipesForUpdate(inventory: Inventory, playerid?: string): any[] {
+        return this.getCraftableRecipes(inventory, playerid).map(recipe => recipe.serializeForUpdate());
     }
 
     // #endregion
