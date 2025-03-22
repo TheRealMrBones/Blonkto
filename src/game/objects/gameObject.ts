@@ -142,12 +142,13 @@ class GameObject {
     /** Returns the tiles that this object is on */
     tilesOn(): Pos[]{
         const points = [];
+        const posoffset = (this.scale / 2) - .01; // offset so barely touching tiles are not counted
         
         // get all integer coordinate points that are within object
-        for(let x = Math.floor(this.x - this.scale / 2); x < this.x + this.scale / 2; x++){
-            for(let y = Math.floor(this.y - this.scale / 2); y < this.y + this.scale / 2; y++){
+        for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){
+            for(let y = Math.floor(this.y - posoffset); y < this.y + posoffset; y++){
                 const p = { x: x, y: y };
-                if(this.distanceTo({ x: x, y: y }) <= this.scale / 2) points.push(p);
+                if(this.distanceTo({ x: x, y: y }) <= posoffset) points.push(p);
             }
         }
 
@@ -155,17 +156,17 @@ class GameObject {
         const tiles: Pos[] = [{ x: Math.floor(this.x), y: Math.floor(this.y) }]; // include known center tile
 
         // include tiles hit by each main axis end of the object
-        if(Math.floor(this.x - this.scale / 2) != Math.floor(this.x)){
-            tiles.push({ x: Math.floor(this.x - this.scale / 2), y: Math.floor(this.y) });
+        if(Math.floor(this.x - posoffset) != Math.floor(this.x)){
+            tiles.push({ x: Math.floor(this.x - posoffset), y: Math.floor(this.y) });
         }
-        if(Math.floor(this.x + this.scale / 2) != Math.floor(this.x)){
-            tiles.push({ x: Math.floor(this.x + this.scale / 2), y: Math.floor(this.y) });
+        if(Math.floor(this.x + posoffset) != Math.floor(this.x)){
+            tiles.push({ x: Math.floor(this.x + posoffset), y: Math.floor(this.y) });
         }
-        if(Math.floor(this.y - this.scale / 2) != Math.floor(this.y)){
-            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y - this.scale / 2) });
+        if(Math.floor(this.y - posoffset) != Math.floor(this.y)){
+            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y - posoffset) });
         }
-        if(Math.floor(this.y + this.scale / 2) != Math.floor(this.y)){
-            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y + this.scale / 2) });
+        if(Math.floor(this.y + posoffset) != Math.floor(this.y)){
+            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y + posoffset) });
         }
 
         // get a list of the corresponding points that the points are touching
