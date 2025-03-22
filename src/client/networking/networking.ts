@@ -8,6 +8,7 @@ import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { onlogin, connectionRefused, connectionAccepted } from "../index.js";
 import { setInventory } from "../inventory/inventory.js";
+import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, LoginContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messagecontenttypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -40,13 +41,13 @@ export const connect = (onGameOver: any): Promise<void> => (
 );
 
 /** Response to the player instantiated message from the server */
-function onInstantiated(stuff: any): void {
+function onInstantiated(content: PlayerInstantiatedContent): void {
     connectionAccepted();
-    startCapturingInput(stuff.x, stuff.y);
-    setColor(stuff.color);
+    startCapturingInput(content.x, content.y);
+    setColor(content.color);
     startRendering();
     setupUi();
-    setInventory(stuff.inventory);
+    setInventory(content.inventory);
 }
 
 // #endregion
@@ -55,12 +56,14 @@ function onInstantiated(stuff: any): void {
 
 /** Method to send the create account message to the server */
 export const createaccount = (username: string, password: string): void => {
-    socket.emit(MSG_TYPES.CREATE_ACCOUNT, {username: username, password: password});
+    const content: CreateAccountContent = {username: username, password: password};
+    socket.emit(MSG_TYPES.CREATE_ACCOUNT, content);
 };
 
 /** Method to send the login message to the server */
 export const login = (username: string, password: string): void => {
-    socket.emit(MSG_TYPES.LOGIN, {username: username, password: password});
+    const content: LoginContent = {username: username, password: password};
+    socket.emit(MSG_TYPES.LOGIN, content);
 };
 
 /** Method to send the play message to the server */
@@ -69,38 +72,38 @@ export const play = (): void => {
 };
 
 /** Method to send the update inputs message to the server */
-export const updateInputs = throttle(10, inputs => {
-    socket.emit(MSG_TYPES.INPUT, inputs);
+export const updateInputs = throttle(10, (content: InputContent) => {
+    socket.emit(MSG_TYPES.INPUT, content);
 });
 
 /** Method to send the click message to the server */
-export const click = throttle(20, info => {
-    socket.emit(MSG_TYPES.CLICK, info);
+export const click = throttle(20, (content: ClickContent) => {
+    socket.emit(MSG_TYPES.CLICK, content);
 });
 
 /** Method to send the interact message to the server */
-export const interact = throttle(20, info => {
-    socket.emit(MSG_TYPES.INTERACT, info);
+export const interact = throttle(20, (content: ClickContent) => {
+    socket.emit(MSG_TYPES.INTERACT, content);
 });
 
 /** Method to send the drop message to the server */
-export const drop = throttle(20, info => {
-    socket.emit(MSG_TYPES.DROP, info);
+export const drop = throttle(20, (content: DropContent) => {
+    socket.emit(MSG_TYPES.DROP, content);
 });
 
 /** Method to send the swap message to the server */
-export const swap = throttle(20, info => {
-    socket.emit(MSG_TYPES.SWAP, info);
+export const swap = throttle(20, (content: SwapContent) => {
+    socket.emit(MSG_TYPES.SWAP, content);
 });
 
 /** Method to send the craft message to the server */
-export const craft = throttle(20, info => {
-    socket.emit(MSG_TYPES.CRAFT, info);
+export const craft = throttle(20, (content: CraftContent) => {
+    socket.emit(MSG_TYPES.CRAFT, content);
 });
 
 /** Method to send the chat message to the server */
-export const chat = throttle(20, info => {
-    socket.emit(MSG_TYPES.SEND_MESSAGE, info);
+export const chat = throttle(20, (content: SendMessageContent) => {
+    socket.emit(MSG_TYPES.SEND_MESSAGE, content);
 });
 
 // #endregion

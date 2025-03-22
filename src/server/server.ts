@@ -10,6 +10,7 @@ import LogManager from "./logging/logManager.js";
 import Logger from "./logging/logger.js";
 import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
+import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, isLoginResponseContent, LoginContent, LoginResponseContent, SendMessageContent, SwapContent } from "../shared/messagecontenttypes.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -74,23 +75,23 @@ logger.info("Server initialized");
 // #region socket functions
 
 /** Response to the create account message from a client */
-async function createAccount(this: Socket, credentials: { username: string; password: string; }): Promise<void> {
+async function createAccount(this: Socket, content: CreateAccountContent): Promise<void> {
     if(this.id === undefined) return;
 	
-    const response = await accountManager.createAccount(this.id, credentials.username, credentials.password);
+    const response = await accountManager.createAccount(this.id, content.username, content.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account && LOG_CONNECTIONS) logger.log(`[${this.id}] Create account: ${response.account.username}`);
+    if(isLoginResponseContent(response) && LOG_CONNECTIONS) logger.log(`[${this.id}] Create account: ${response.account.username}`);
 }
 
 /** Response to the login message from a client */
-async function login(this: Socket, credentials: { username: string; password: string; }): Promise<void> {
+async function login(this: Socket, content: LoginContent): Promise<void> {
     if(this.id === undefined) return;
 	
-    const response = await accountManager.login(this.id, credentials.username, credentials.password);
+    const response = await accountManager.login(this.id, content.username, content.password);
     this.emit(MSG_TYPES.LOGIN, response);
 
-    if(response.account && LOG_CONNECTIONS) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
+    if(isLoginResponseContent(response) && LOG_CONNECTIONS) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
 }
 
 /** Response to the join game message from a client */
@@ -108,33 +109,33 @@ function ping(this: Socket): void {
 }
 
 /** Response to the create account message from a client */
-function handleInput(this: Socket, inputs: any): void {
-  	game.handlePlayerInput(this, inputs);
+function handleInput(this: Socket, content: InputContent): void {
+  	game.handlePlayerInput(this, content);
 }
 
 /** Response to the click message from a client */
-function click(this: Socket, info: any): void {
-    game.handlePlayerClick(this, info);
+function click(this: Socket, content: ClickContent): void {
+    game.handlePlayerClick(this, content);
 }
 
 /** Response to the interact message from a client */
-function interact(this: Socket, info: any): void {
-    game.handlePlayerInteract(this, info);
+function interact(this: Socket, content: ClickContent): void {
+    game.handlePlayerInteract(this, content);
 }
 
 /** Response to the drop message from a client */
-function drop(this: Socket, info: any): void {
-    game.handlePlayerDrop(this, info);
+function drop(this: Socket, content: DropContent): void {
+    game.handlePlayerDrop(this, content);
 }
 
 /** Response to the swap message from a client */
-function swap(this: Socket, info: any): void {
-    game.handlePlayerSwap(this, info);
+function swap(this: Socket, content: SwapContent): void {
+    game.handlePlayerSwap(this, content);
 }
 
 /** Response to the craft message from a client */
-function craft(this: Socket, info: any): void {
-    game.handlePlayerCraft(this, info);
+function craft(this: Socket, content: CraftContent): void {
+    game.handlePlayerCraft(this, content);
 }
 
 /** Response to the disconnect message from a client */
@@ -154,8 +155,8 @@ function onDisconnect(this: Socket): void {
 }
 
 /** Response to the chat message from a client */
-function chat(this: Socket, message: any): void {
-  	game.chatManager.chat(this, message);
+function chat(this: Socket, content: SendMessageContent): void {
+  	game.chatManager.chat(this, content);
 }
 
 // #endregion

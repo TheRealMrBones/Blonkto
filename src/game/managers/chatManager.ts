@@ -6,6 +6,7 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import { filterText } from "../../shared/filter.js";
+import { ReceiveMessageContent, SendMessageContent } from "../../shared/messagecontenttypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -27,7 +28,7 @@ class ChatManager {
     // #region inputs
 
     /** Handles a chat message from a player */
-    chat(socket: Socket, message: any): void {
+    chat(socket: Socket, message: SendMessageContent): void {
         if(socket.id === undefined) return;
 
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
@@ -89,7 +90,7 @@ class ChatManager {
     // #region helpers
 
     /** Creates a chat message object with the given text */
-    createMessage(text: string): ChatMessage {
+    createMessage(text: string): ReceiveMessageContent {
         return {
             text: text,
             id: crypto.randomUUID(),
@@ -97,11 +98,6 @@ class ChatManager {
     }
 
     // #endregion
-}
-
-type ChatMessage = {
-    text: string;
-    id: string;
 }
 
 export default ChatManager;

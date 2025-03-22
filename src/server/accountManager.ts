@@ -3,6 +3,7 @@ import validator from "validator";
 
 import Account from "./account.js";
 import FileManager from "./fileManager.js";
+import { ErrorResponseContent, LoginResponseContent } from "../shared/messagecontenttypes.js";
 
 /** Manages user accounts for the game servers */
 class AccountManager {
@@ -17,7 +18,7 @@ class AccountManager {
     // #region creation
 
     /** Creates and returns an account with the information provided and adds it to the database */
-    async createAccount(id: string, username: string, password: string): Promise<any>{
+    async createAccount(id: string, username: string, password: string): Promise<LoginResponseContent | ErrorResponseContent> {
         username = sanitizeInput(username);
         password = sanitizeInput(password);
 
@@ -47,7 +48,8 @@ class AccountManager {
         this.accountsloggedin[id] = acc;
 
         // return the account
-        return { account: acc.serializeForSend() };
+        const content: LoginResponseContent = { account: acc.serializeForSend() };
+        return content;
     }
 
     // #endregion
@@ -55,7 +57,7 @@ class AccountManager {
     // #region login
 
     /** Tries to log in the given user and returns the message either confiming login or error */
-    async login(id: string, username: string, password: string): Promise<any> {
+    async login(id: string, username: string, password: string): Promise<LoginResponseContent | ErrorResponseContent> {
         username = sanitizeInput(username);
         password = sanitizeInput(password);
         
@@ -79,7 +81,8 @@ class AccountManager {
         this.accountsloggedin[id] = acc;
         
         // return the account
-        return { account: acc.serializeForSend() };
+        const content: LoginResponseContent = { account: acc.serializeForSend() };
+        return content;
     }
 
     /** Logs the given user out of their session */

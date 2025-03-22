@@ -17,6 +17,7 @@ import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
+import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messagecontenttypes.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -149,10 +150,10 @@ class Game {
     // #region inputs
 
     /** Response to the general input message from a client */
-    handlePlayerInput(socket: Socket, inputs: any): void {
+    handlePlayerInput(socket: Socket, content: InputContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        const { t, dir, dx, dy, hotbarslot } = inputs;
+        const { t, dir, dx, dy, hotbarslot } = content;
         if(this.players[socket.id]){
             this.players[socket.id].update({
                 dir: dir,
@@ -165,9 +166,9 @@ class Game {
     }
 
     /** Response to a click (left click) message from a client */
-    handlePlayerClick(socket: Socket, info: any): void {
+    handlePlayerClick(socket: Socket, content: ClickContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        const newinfo = this.getClickInfo(info);
+        const newinfo = this.getClickInfo(content);
         
         if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
@@ -183,41 +184,41 @@ class Game {
     }
 
     /** Response to a interaction (right click) message from a client */
-    handlePlayerInteract(socket: Socket, info: any): void {
+    handlePlayerInteract(socket: Socket, content: ClickContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        const newinfo = this.getClickInfo(info);
+        const newinfo = this.getClickInfo(content);
         
 
     }
 
     /** Gets formatted click info from the raw click info in a client click message */
-    getClickInfo(info: any): any{
+    getClickInfo(content: ClickContent): any {
         return {
-            dir: Math.atan2(info.xoffset, info.yoffset),
-            cellpos: { x: Math.floor(info.mex + info.xoffset), y: Math.floor(info.mey + info.yoffset) },
+            dir: Math.atan2(content.xoffset, content.yoffset),
+            cellpos: { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) },
         };
     }
 
     /** Response to a drop message from a client */
-    handlePlayerDrop(socket: Socket, info: any): void {
+    handlePlayerDrop(socket: Socket, content: DropContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        this.players[socket.id].dropFromSlot(info.slot, this, info.all ? undefined : 1);
+        this.players[socket.id].dropFromSlot(content.slot, this, content.all ? undefined : 1);
     }
 
     /** Response to a swap message from a client */
-    handlePlayerSwap(socket: Socket, info: any): void {
+    handlePlayerSwap(socket: Socket, content: SwapContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        this.players[socket.id].inventory.swapSlots(info.slot1, info.slot2);
+        this.players[socket.id].inventory.swapSlots(content.slot1, content.slot2);
     }
 
     /** Response to a craft message from a client */
-    handlePlayerCraft(socket: Socket, info: any): void {
+    handlePlayerCraft(socket: Socket, content: CraftContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
         const player = this.players[socket.id];
-        this.craftManager.craftRecipe(player.inventory, player.x, player.y, info.ingredients, info.amount);
+        this.craftManager.craftRecipe(player.inventory, player.x, player.y, content.ingredients, content.amount);
     }
 
     // #endregion
@@ -257,7 +258,7 @@ class Game {
     }
 
     /** Create an update object to be sent to the specified players client */
-    createUpdate(player: Player, worldload: any): any {
+    createUpdate(player: Player, worldload: any): GameUpdateContent {
         // Get Tab
         let tab = [];
         if(SHOW_TAB){
@@ -294,7 +295,7 @@ class Game {
         const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id);
 
         // return full update object
-        return {
+        const cotnent: GameUpdateContent = {
             t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
@@ -305,10 +306,11 @@ class Game {
             worldLoad: worldload,
             tab: tab,
         };
+        return cotnent;
     }
 
     /** Creates the initial update for a client before they have been fully loaded */
-    createInitialUpdate(player: Player): any {
+    createInitialUpdate(player: Player): GameUpdateContent {
         const worldload = this.world.loadPlayerChunks(player);
         player.chunk = worldload.chunk;
         return this.createUpdate(player, worldload);

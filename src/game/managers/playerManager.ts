@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
+import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messagecontenttypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -28,7 +29,8 @@ class PlayerManager {
 
         // check if banned
         if(this.game.banManager.isBanned(username)){
-            socket.emit(MSG_TYPES.CONNECTION_REFUSED, { reason: "Banned", extra: this.game.banManager.banReason(username) });
+            const content: FailedConnectionContent = { reason: "Banned", extra: this.game.banManager.banReason(username) };
+            socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             return;
         }
 
@@ -50,12 +52,13 @@ class PlayerManager {
         
         // send info to client
         this.game.players[socket.id].socket.emit(MSG_TYPES.GAME_UPDATE, this.game.createInitialUpdate(this.game.players[socket.id]));
-        socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, {
+        const content: PlayerInstantiatedContent = {
             x: this.game.players[socket.id].x,
             y: this.game.players[socket.id].y,
             color: this.game.players[socket.id].color,
             inventory: this.game.players[socket.id].inventory.serializeForUpdate(),
-        });
+        };
+        socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, content);
 
         // log in chat
         this.game.chatManager.sendMessage(`${username} has connected`);

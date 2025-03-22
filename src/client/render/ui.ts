@@ -2,6 +2,7 @@ import { chat, drop } from "../networking/networking.js";
 import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 import { swapSlots } from "../inventory/inventory.js";
+import { DropContent, SendMessageContent } from "../../shared/messagecontenttypes.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
@@ -130,9 +131,10 @@ function keyUpChecks(event: KeyboardEvent): void {
 function chatInputKeyUp(event: KeyboardEvent): void {
     event.preventDefault();
     if(event.key === "Enter"){
-        chat({
+        const content: SendMessageContent = {
             text: chatInput.value,
-        });
+        }
+        chat(content);
         focusingOut = true;
         chatInput.value = "";
         chatInput.blur();
@@ -191,10 +193,11 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
             break;
         }
         case "q": {
-            drop({
+            const content: DropContent = {
                 slot: getSelectedSlot(),
                 all: event.ctrlKey,
-            });
+            }
+            drop(content);
             break;
         }
         case "1": {

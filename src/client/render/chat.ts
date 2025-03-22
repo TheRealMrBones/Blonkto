@@ -1,3 +1,5 @@
+import { ReceiveMessageContent } from "../../shared/messagecontenttypes.js";
+
 import ClientConfig from "../../configs/client.js";
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
@@ -9,7 +11,7 @@ let chatopened = false;
 // #region receive messages
 
 /** Shows/Instantiates the given chat message to the client */
-export function receiveChatMessage(message: any): void {
+export function receiveChatMessage(message: ReceiveMessageContent): void {
     if(messages.length > MAX_MESSAGE_COUNT) removeLastChatMessage();
 
     const newDiv = document.createElement("div");

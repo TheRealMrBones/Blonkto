@@ -14,7 +14,6 @@ function downloadAsset(assetName: string): Promise<void> {
     return new Promise<void>(resolve => {
         const asset = new Image();
         asset.onload = () => {
-            console.log(`Downloaded ${assetName}`);
             assets[assetName] = asset;
             resolve();
         };

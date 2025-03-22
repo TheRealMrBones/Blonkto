@@ -4,6 +4,7 @@ import { stopCapturingInput } from "./input/input.js";
 import { downloadAssets } from "./render/assets.js";
 import { initState } from "./networking/state.js";
 import { hideUi } from "./render/ui.js";
+import { FailedConnectionContent, ErrorResponseContent, isLoginResponseContent, LoginResponseContent } from "../shared/messagecontenttypes.js";
 
 import "./main.css";
 
@@ -95,10 +96,8 @@ function sendlogin(): void {
 }
 
 /** Opens up the play UI after successful login with the server */
-export function onlogin(response: any): void {
-    if(response.account){
-        response.error = "";
-
+export function onlogin(response: LoginResponseContent | ErrorResponseContent): void {
+    if(isLoginResponseContent(response)){
         usernameDiv.innerHTML = `Logged in as: ${response.account.username}`;
 
         loginDiv.style.display = "none";
@@ -107,7 +106,7 @@ export function onlogin(response: any): void {
         account = response.account;
 
         playButton.focus();
-    }else if(response.error){
+    }else{
         errorDiv.innerHTML = response.error;
     }
 }
@@ -123,7 +122,7 @@ function joingame(): void {
 }
 
 /** Client response to connection refused message from server */
-export function connectionRefused(info: any): void {
+export function connectionRefused(info: FailedConnectionContent): void {
     errorDiv.innerHTML = `Connection refused: ${info.reason}`;
     if(info.extra) errorDiv.innerHTML += `<br>${info.extra}`;
 }

@@ -2,6 +2,7 @@ import Command from "./command.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
+import { FailedConnectionContent } from "../../shared/messagecontenttypes.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
@@ -25,7 +26,11 @@ function banCommand(args: any[], player: Player, game: Game){
         case 1: {
             const p: Player = args[1];
             
-            p.socket.emit(MSG_TYPES.BAN, { reason: "Banned", extra: args[2] });
+            const content: FailedConnectionContent = {
+                reason: "Banned",
+                extra: args[2],
+            };
+            p.socket.emit(MSG_TYPES.BAN, content);
             game.banManager.ban(p.username, args[2]);
             game.playerManager.removePlayer(p.socket);
             game.chatManager.sendMessageTo(player, `banned ${p.username}`);

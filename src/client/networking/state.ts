@@ -3,6 +3,7 @@ import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { addRecipes, setSingleInventorySlot } from "../inventory/inventory.js";
+import { GameUpdateContent } from "../../shared/messagecontenttypes.js";
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
@@ -31,7 +32,7 @@ export function initState(): void {
 // #region receive updates
 
 /** Processes the given game update and adds it to the state queue */
-export function processGameUpdate(update: any): void {
+export function processGameUpdate(update: GameUpdateContent): void {
     // set lastUpdateTime
     lastUpdateTime = Date.now();
 

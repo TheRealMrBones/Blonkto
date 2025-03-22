@@ -4,6 +4,7 @@ import { blockCollisions, playerCollisions } from "../networking/collisions.js";
 import { updateCoords } from "../render/ui.js";
 import { getCurrentState } from "../networking/state.js";
 import { Pos } from "../../shared/types.js";
+import { ClickContent, DropContent, InputContent } from "../../shared/messagecontenttypes.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
@@ -93,10 +94,11 @@ function handlekeyDown(e: KeyboardEvent): void {
 
         // actions
         case "q": {
-            drop({
+            const content: DropContent = {
                 slot: selectedslot,
                 all: e.ctrlKey,
-            });
+            };
+            drop(content);
             break;
         }
 
@@ -189,7 +191,7 @@ function handlekeyUp(e: KeyboardEvent): void {
 /** Response to mouse click input from client */
 function handleMouseDown(e: MouseEvent): void {
     // get position of click compared to current player pos
-    const clickpos = {
+    const content: ClickContent = {
         xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
         yoffset: (e.clientY - window.innerHeight / 2) / getCellSize(),
         mex: x,
@@ -198,9 +200,9 @@ function handleMouseDown(e: MouseEvent): void {
 
     // send appropriate click event
     if(e.button == 0){
-        click(clickpos);
+        click(content);
     }else if(e.button == 2){
-        interact(clickpos);
+        interact(content);
     }
 }
 
@@ -243,13 +245,14 @@ export function unpauseHotbar(): void {
 function handleInput(): void {
     updatePos();
 
-    updateInputs({
+    const content: InputContent = {
         t: Date.now(),
         dir: dir,
         dx: dx,
         dy: dy,
         hotbarslot: selectedslot,
-    });
+    };
+    updateInputs(content);
 
     x = x + dx;
     y = y + dy;

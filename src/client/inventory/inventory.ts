@@ -1,6 +1,7 @@
 import { Item } from "./item.js";
 import { Recipe } from "./recipe.js";
 import { swap } from "../networking/networking.js";
+import { SwapContent } from "../../shared/messagecontenttypes.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
@@ -77,10 +78,11 @@ export function clearInventory(): void {
 
 /** Swaps the item stacks between two slots */
 export function swapSlots(slot1: number, slot2: number): void {
-    swap({
+    const content: SwapContent = {
         slot1: slot1,
         slot2: slot2,
-    });
+    }
+    swap(content);
 
     /*const item1 = getInventorySlot(slot1);
     const item2 = getInventorySlot(slot2);
