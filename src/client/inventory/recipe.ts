@@ -40,10 +40,10 @@ export class Recipe {
                 const content: CraftContent = {
                     ingredients: this.ingredients,
                     amount: 1,
-                }
+                };
                 craft(content);
             }
-        }
+        };
     }
 
     /** Returns if the requested inventory can craft this item */

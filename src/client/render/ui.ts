@@ -133,7 +133,7 @@ function chatInputKeyUp(event: KeyboardEvent): void {
     if(event.key === "Enter"){
         const content: SendMessageContent = {
             text: chatInput.value,
-        }
+        };
         chat(content);
         focusingOut = true;
         chatInput.value = "";
@@ -196,7 +196,7 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
             const content: DropContent = {
                 slot: getSelectedSlot(),
                 all: event.ctrlKey,
-            }
+            };
             drop(content);
             break;
         }

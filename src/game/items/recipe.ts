@@ -50,7 +50,7 @@ class Recipe {
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
     craftRecipe(game: Game, inventory: Inventory, x: number, y:number, amount?: number): void {
-        let craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
+        const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
         const stacksize = ItemRegistry.get(this.result).stacksize;
 
         for(const ingredient in this.ingredients){

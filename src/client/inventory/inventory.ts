@@ -86,7 +86,7 @@ export function swapSlots(slot1: number, slot2: number): void {
     const content: SwapContent = {
         slot1: slot1,
         slot2: slot2,
-    }
+    };
     swap(content);
 
     /*const item1 = getInventorySlot(slot1);
