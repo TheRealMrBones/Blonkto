@@ -35,11 +35,13 @@ export class Recipe {
 
         craftingmenudiv.appendChild(this.div);
 
-        this.div.onclick = () => {
+        this.div.onclick = (e) => {
             if(this.canCraft(getInventory())){
+                const amount = e.ctrlKey ? this.canCraftAmount(getInventory()) : 1;
+
                 const content: CraftContent = {
                     ingredients: this.ingredients,
-                    amount: 1,
+                    amount: amount,
                 };
                 craft(content);
             }
