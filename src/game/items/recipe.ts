@@ -75,6 +75,7 @@ class Recipe {
             ingredients: this.ingredients,
             result: this.result,
             resultcount: this.resultcount,
+            asset: ItemRegistry.get(this.result).asset,
         };
     }
 
