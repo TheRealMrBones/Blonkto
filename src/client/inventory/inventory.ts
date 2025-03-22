@@ -11,6 +11,11 @@ const recipes: Recipe[] = [];
 
 // #region inventory operations
 
+/** Returns the entire inventory */
+export function getInventory(): (Item | null)[] {
+    return inventory;
+}
+
 /** Returns the item from the given inventory slot */
 export function getInventorySlot(slot: number): Item | null {
     return inventory[slot];

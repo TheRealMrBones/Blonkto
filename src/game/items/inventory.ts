@@ -135,7 +135,7 @@ class Inventory {
             if(itemstack.item.name != item) continue;
 
             const stackamount = itemstack.getAmount();
-            if(stackamount >= removeamount){
+            if(stackamount <= removeamount){
                 this.slots[i] = null;
                 removeamount -= stackamount;
             }else{

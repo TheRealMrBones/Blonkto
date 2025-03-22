@@ -66,6 +66,7 @@ class ItemStack {
     serializeForUpdate(): any {
         return {
             displayname: this.item.displayname,
+            name: this.item.name,
             asset: this.item.asset,
             amount: this.amount,
         };
