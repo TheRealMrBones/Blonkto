@@ -30,19 +30,17 @@ function giveCommand(args: any[], player: Player, game: Game){
         return;
     }
 
-    const itemStack = new ItemStack(item, amount);
-
     switch(argIndex){
         case 0:
         case 1: {
             const p: Player = args[1];
-            p.inventory.collectStack(itemStack);
+            p.inventory.collectItem(item, amount);
             game.chatManager.sendMessageTo(player, `gave ${p.username} ${amount} ${item}`);
             break;
         };
         case 2:
         case 3: {
-            player.inventory.collectStack(itemStack);
+            player.inventory.collectItem(item, amount);
             game.chatManager.sendMessageTo(player, `gave you ${amount} ${item}`);
             break;
         }
