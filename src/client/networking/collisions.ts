@@ -1,6 +1,6 @@
 import { clientPush } from "../input/input.js";
 import { getCell } from "../world/world.js";
-import { Circle, LineSegment, Pos, CollisionObject, CircleCollisionObject } from "../../shared/types.js";
+import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
 import Constants from "../../shared/constants.js";
@@ -13,7 +13,7 @@ export function playerCollisions(me: any, players: any[]): void {
     const meobject: CircleCollisionObject = me as CircleCollisionObject;
     const playerobjects: CircleCollisionObject[] = players as CircleCollisionObject[];
 
-    const push = SharedCollisions.playerCollisions(meobject, playerobjects);
+    const push = SharedCollisions.entityCollisions(meobject, playerobjects);
     clientPush(push.x, push.y);
 }
 

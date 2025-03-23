@@ -6,13 +6,13 @@ const { SHAPES } = Constants;
 // #region get collisions
 
 /** Returns the push amounts of the player after colliding with other players */
-export function playerCollisions(me: CircleCollisionObject, players: CircleCollisionObject[]): Pos {
+export function entityCollisions(me: CircleCollisionObject, players: CircleCollisionObject[]): Pos {
     const oldpos: Pos = { x: me.x, y: me.y };
     const newpos: Pos = { x: me.x, y: me.y };
 
     for(let i = 0; i < players.length; i++){
         const player2 = players[i];
-        const dist = getDistance(me, player2);
+        const dist = getDistance(me as Pos, player2 as Pos);
         const realdist = dist - (me.scale / 2 + player2.scale / 2);
         if(realdist < 0){
             const pushdist = (dist > 0) ? realdist : Math.random() * .01;
@@ -125,18 +125,12 @@ function circleCollisions(me: CircleCollisionObject, newpos: Pos, circles: Circl
 
 /** Perform circle collision on the current player with the given circle */
 function circleCollision(me: CircleCollisionObject, newpos: Pos, circle: Circle): void {
-    const dist = getDistance(me, circle);
+    const dist = getDistance(newpos, circle as Pos);
     const realdist = dist - me.scale / 2 - circle.radius;
     if(realdist < 0){
-        if(dist == 0){
-            const dir = Math.random() * 2 * Math.PI;
-            newpos.x -= Math.sin(dir) * realdist;
-            newpos.y += Math.cos(dir) * realdist;
-        }else{
-            const dir = Math.atan2(newpos.x - circle.x, circle.y - newpos.y);
-            newpos.x -= Math.sin(dir) * realdist;
-            newpos.y += Math.cos(dir) * realdist;
-        }
+        const dir = (dist == 0) ? Math.random() * 2 * Math.PI : Math.atan2(newpos.x - circle.x, circle.y - newpos.y);
+        newpos.x += -Math.sin(dir) * realdist;
+        newpos.y += Math.cos(dir) * realdist;
     }
 }
 
@@ -145,7 +139,7 @@ function circleCollision(me: CircleCollisionObject, newpos: Pos, circle: Circle)
 // #region helpers
 
 /** Returns the distance between two positions */
-function getDistance(object1: Pos, object2: Pos): number {
+export function getDistance(object1: Pos, object2: Pos): number {
     const dx = object1.x - object2.x;
     const dy = object1.y - object2.y;
     return Math.sqrt(dx * dx + dy * dy);
