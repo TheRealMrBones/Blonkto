@@ -9,9 +9,6 @@ import * as SharedCollisions from "../../shared/collision.js";
 import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
-import Constants from "../../shared/constants.js";
-const { SHAPES } = Constants;
-
 /** Manages Collision detection for all elements in the game world */
 class CollisionManager {
     game: Game;
@@ -26,13 +23,10 @@ class CollisionManager {
 
         for(let i = 0; i < entities.length; i++){
             const entity2 = entities[i];
-            const dist = SharedCollisions.getDistance(entity, entity2);
-            const realdist = dist - (entity.scale / 2 + entity2.scale / 2);
-            if(realdist < 0){
-                const dir = dist == 0 ? Math.random() * 2 * Math.PI : Math.atan2(entity.x - entity2.x, entity2.y - entity.y);
-                entity.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
-                entity2.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
-            }
+
+            const push = SharedCollisions.entityCollision(entity, { x: entity.x, y: entity.y }, { x: entity2.x, y: entity2.y, scale: entity2.scale });
+            entity.push(push.x / 2, push.y / 2);
+            entity2.push(-push.x / 2, -push.y / 2);
         }
     }
 
@@ -67,9 +61,10 @@ class CollisionManager {
 
         for(let i = 0; i < collectables.length; i++){
             const collectable = collectables[i];
-            const dist = SharedCollisions.getDistance(player, collectable);
-            const realdist = dist - (player.scale + collectable.scale) / 2;
-            if(realdist < 0 && collectable.ignore != player){
+            const push = SharedCollisions.entityCollision(player, { x: player.x, y: player.y }, { x: collectable.x, y: collectable.y, scale: collectable.scale });
+            const collided = (push.x != 0 || push.y != 0);
+            
+            if(collided && collectable.ignore != player){
                 if(player.inventory.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
             }
         }
@@ -81,15 +76,16 @@ class CollisionManager {
 
         for(let i = 0; i < collectables.length; i++){
             const collectable2 = collectables[i];
-            const dist = SharedCollisions.getDistance(collectable, collectable2);
-            const realdist = dist - (collectable.scale + collectable2.scale) / 2;
-            if(realdist < 0){
+            const collectable = collectables[i];
+            const push = SharedCollisions.entityCollision(collectable, { x: collectable.x, y: collectable.y }, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
+            const collided = (push.x != 0 || push.y != 0);
+
+            if(collided){
                 if(collectable.id != collectable2.id){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
                 }else{
-                    const dir = dist == 0 ? Math.random() * 2 * Math.PI : Math.atan2(collectable.x - collectable2.x, collectable2.y - collectable.y);
-                    collectable.push(-Math.sin(dir) * realdist / 2, Math.cos(dir) * realdist / 2);
-                    collectable2.push(Math.sin(dir) * realdist / 2, -Math.cos(dir) * realdist / 2);
+                    collectable.push(push.x / 2, push.y / 2);
+                    collectable2.push(-push.x / 2, -push.y / 2);
                 }
             }
         }

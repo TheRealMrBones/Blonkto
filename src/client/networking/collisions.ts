@@ -3,9 +3,6 @@ import { getCell } from "../world/world.js";
 import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
-import Constants from "../../shared/constants.js";
-const { SHAPES } = Constants;
-
 // #region get collisions
 
 /** Checks collisions between the current player and other nearby players */

@@ -5,28 +5,41 @@ const { SHAPES } = Constants;
 
 // #region get collisions
 
-/** Returns the push amounts of the player after colliding with other players */
-export function entityCollisions(me: CircleCollisionObject, players: CircleCollisionObject[]): Pos {
+/** Returns the push amounts of the object after colliding with other entities */
+export function entityCollisions(me: CircleCollisionObject, entities: CircleCollisionObject[]): Pos {
     const oldpos: Pos = { x: me.x, y: me.y };
     const newpos: Pos = { x: me.x, y: me.y };
 
-    for(let i = 0; i < players.length; i++){
-        const player2 = players[i];
-        const dist = getDistance(me as Pos, player2 as Pos);
-        const realdist = dist - (me.scale / 2 + player2.scale / 2);
-        if(realdist < 0){
-            const pushdist = (dist > 0) ? realdist : Math.random() * .01;
-            const dir = Math.random() * 2 * Math.PI;
-
-            newpos.x += -Math.sin(dir) * pushdist;
-            newpos.y += Math.cos(dir) * pushdist;
-        }
+    for(let i = 0; i < entities.length; i++){
+        const entity = entities[i];
+        const push = entityCollision(me, newpos, entity);
+        newpos.x += push.x;
+        newpos.y += push.y;
     }
 
     return {
         x: newpos.x - oldpos.x,
         y: newpos.y - oldpos.y
     };
+}
+
+/** Returns the push amounts of the object after colliding with the other entity */
+export function entityCollision(me: CircleCollisionObject, newpos: Pos, entity: CircleCollisionObject): Pos {
+    const dist = getDistance(me as Pos, entity as Pos);
+    const realdist = dist - (me.scale / 2 + entity.scale / 2);
+    if(realdist < 0){
+        const dir = (dist == 0) ? Math.random() * 2 * Math.PI : Math.atan2(me.x - entity.x, entity.y - me.y);
+
+        return {
+            x: -Math.sin(dir) * realdist,
+            y: Math.cos(dir) * realdist
+        };
+    }else{
+        return {
+            x: 0,
+            y: 0
+        };
+    }
 }
 
 /** Returns the push amounts of the player after colliding with cell blocks */
