@@ -19,3 +19,18 @@ export type Color = {
     g: number;
     b: number;
 }
+
+/** An object in the game world that has a shape and can collide */
+export type CollisionObject = {
+    shape: number;
+    scale: number;
+    x: number;
+    y: number;
+}
+
+/** A circular object in the game world that has a shape and can collide */
+export type CircleCollisionObject = {
+    scale: number;
+    x: number;
+    y: number;
+}
