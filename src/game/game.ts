@@ -295,7 +295,7 @@ class Game {
         const recipes = (inventoryupdates.length > 0) ? this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id) : [];
 
         // return full update object
-        const cotnent: GameUpdateContent = {
+        const content: GameUpdateContent = {
             t: Date.now(),
             me: player.serializeForUpdate(),
             fixes: fixescopy,
@@ -306,7 +306,7 @@ class Game {
             worldLoad: worldload,
             tab: tab,
         };
-        return cotnent;
+        return content;
     }
 
     /** Creates the initial update for a client before they have been fully loaded */
