@@ -6,13 +6,13 @@ import { Item } from "./item.js";
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 
 export class Recipe {
-    ingredients: { [item: string]: number };
+    ingredients: any[];
     result: string;
     resultcount: number;
     asset: string;
     div: HTMLDivElement;
 
-    constructor(result: string, ingredients: { [item: string]: number }, resultcount: number, asset: string) {
+    constructor(result: string, ingredients: any[], resultcount: number, asset: string) {
         this.result = result;
         this.ingredients = ingredients;
         this.resultcount = resultcount;
@@ -38,9 +38,14 @@ export class Recipe {
         this.div.onclick = (e) => {
             if(this.canCraft(getInventory())){
                 const amount = e.ctrlKey ? this.canCraftAmount(getInventory()) : 1;
+                
+                const ingredientsdictionary: { [key: string]: number } = {};
+                this.ingredients.forEach((ingredient: any) => {
+                    ingredientsdictionary[ingredient.item] = ingredient.amount;
+                });
 
                 const content: CraftContent = {
-                    ingredients: this.ingredients,
+                    ingredients: ingredientsdictionary,
                     amount: amount,
                 };
                 craft(content);

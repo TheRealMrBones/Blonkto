@@ -67,7 +67,11 @@ class Recipe {
     /** Return an object representing this recipes data for a game update to the client */
     serializeForUpdate(): any {
         return {
-            ingredients: this.ingredients,
+            ingredients: Object.entries(this.ingredients).map(([item, amount]) => ({
+                item: item,
+                amount: amount,
+                asset: ItemRegistry.get(item).asset,
+            })),
             result: this.result,
             resultcount: this.resultcount,
             asset: ItemRegistry.get(this.result).asset,
