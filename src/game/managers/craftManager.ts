@@ -75,8 +75,7 @@ class CraftManager {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
             if(playerid !== undefined){
-                if(this.playerrecipes[playerid] === undefined) this.playerrecipes[playerid] = [];
-                else if(this.playerrecipes[playerid].includes(recipe)) continue;
+                if(this.playerrecipes[playerid].includes(recipe)) continue;
             }
             if(recipe.canCraft(inventory)) recipes.push(recipe);
         }
@@ -88,6 +87,17 @@ class CraftManager {
         }
 
         return recipes;
+    }
+
+    // #endregion
+
+    // #region player recipes
+
+    /** Returns if this player is yet to get initial recipes */
+    playerHasInitialRecipes(playerid: string): boolean {
+        if(this.playerrecipes[playerid] !== undefined) return false;
+        this.playerrecipes[playerid] = [];
+        return true;
     }
 
     // #endregion

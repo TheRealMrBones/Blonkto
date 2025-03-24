@@ -292,7 +292,9 @@ class Game {
         );
 
         // get recipes
-        const recipes = (inventoryupdates.length > 0) ? this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id) : [];
+        let recipes: any[] = [];
+        if(inventoryupdates.length > 0 || this.craftManager.playerHasInitialRecipes(player.id))
+            recipes = this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id);
 
         // return full update object
         const content: GameUpdateContent = {
