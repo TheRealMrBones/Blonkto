@@ -101,6 +101,18 @@ span {
     vertical-align: top;
 }
 
+.ingredientslot{
+    display: inline-block;
+    position: relative;
+    background-color:rgba(134, 134, 134, 0.5);
+    transform: none;
+    margin: 2px;
+    width: 75px;
+    height: 75px;
+    text-align: left;
+    vertical-align: top;
+}
+
 .item{
     width: 80%;
     height: 80%;

@@ -35,6 +35,27 @@ export class Recipe {
 
         craftingmenudiv.appendChild(this.div);
 
+        for(const ingredient of ingredients){
+            const ingredientdiv = document.createElement("div");
+            ingredientdiv.className = "ingredientslot";
+
+            const ingredientimg = document.createElement("img");
+            ingredientimg.className = "item";
+            ingredientimg.src = ingredient.asset;
+            ingredientdiv.appendChild(ingredientimg);
+
+            if(ingredient.amount > 1){
+                const ingredientamount = document.createElement("p");
+                ingredientamount.className = "itemamount";
+                ingredientamount.innerHTML = ingredient.amount.toString();
+                ingredientdiv.appendChild(ingredientamount);
+            }
+
+            craftingmenudiv.appendChild(ingredientdiv);
+        }
+
+        craftingmenudiv.appendChild(document.createElement("br"));
+
         this.div.onclick = (e) => {
             if(this.canCraft(getInventory())){
                 const amount = e.ctrlKey ? this.canCraftAmount(getInventory()) : 1;
