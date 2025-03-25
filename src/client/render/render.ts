@@ -100,6 +100,9 @@ function render(): void {
         notfallingplayers.push(me);
     }
 
+    const fallingentities = entities.filter((e: any) => e.falling);
+    const notfallingentities = entities.filter((e: any) => !e.falling);
+
     // get the actual tile the player is in
     const playertile = {
         x: Math.floor(me.x),
@@ -115,12 +118,13 @@ function render(): void {
     // render priority goes low to high
     renderBackground(me);
 
+    fallingentities.forEach(renderEntity.bind(null, me));
     fallingplayers.forEach(renderPlayer.bind(null, me));
 
     renderFloors(firstCell);
     renderBlocks(firstCell);
 
-    entities.forEach(renderEntity.bind(null, me));
+    notfallingentities.forEach(renderEntity.bind(null, me));
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
 
