@@ -19,7 +19,7 @@ class Drop implements DropBase {
         this.amount = amount || 1;
         this.chance = chance || 1;
         this.chanceperadditional = chanceperadditional || 0;
-        this.maxamount = maxamount || Number.MAX_SAFE_INTEGER;
+        this.maxamount = maxamount || Infinity;
     }
 
     /** Calculates and drops the specified amounts of items */

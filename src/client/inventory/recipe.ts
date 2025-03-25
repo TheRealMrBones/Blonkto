@@ -76,27 +76,27 @@ export class Recipe {
 
     /** Returns if the requested inventory can craft this item */
     canCraft(inventory: (Item | null)[]): boolean {
-        for(const ingredient in this.ingredients) {
+        for(const ingredient of this.ingredients) {
             let ingredientamount = 0;
             for(const item of inventory){
-                if(item !== null && item.name === ingredient) ingredientamount += item.amount;
+                if(item !== null && item.name === ingredient.item) ingredientamount += item.amount;
             }
 
-            if(ingredientamount < this.ingredients[ingredient]) return false;
+            if(ingredientamount < ingredient.amount) return false;
         }
         return true;
     }
 
     /** Returns the amount of the given recipe the given inventory can craft */
     canCraftAmount(inventory: (Item | null)[]): number {
-        let amount = Number.MAX_SAFE_INTEGER;
-        for(const ingredient in this.ingredients){
+        let amount = Infinity;
+        for(const ingredient of this.ingredients){
             let ingredientamount = 0;
             for(const item of inventory){
-                if(item !== null && item.name === ingredient) ingredientamount += item.amount;
+                if(item !== null && item.name === ingredient.item) ingredientamount += item.amount;
             }
 
-            amount = Math.min(amount, Math.floor(ingredientamount / this.ingredients[ingredient]));
+            amount = Math.min(amount, Math.floor(ingredientamount / ingredient.amount));
         }
 
         return amount;

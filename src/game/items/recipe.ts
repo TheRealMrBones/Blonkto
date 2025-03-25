@@ -40,7 +40,7 @@ class Recipe {
 
     /** Returns the amount of the given recipe the given inventory can craft */
     canCraftAmount(inventory: Inventory): number {
-        let amount = Number.MAX_SAFE_INTEGER;
+        let amount = Infinity;
         for(const ingredient in this.ingredients){
             amount = Math.min(amount, Math.floor(inventory.containsAmount(ingredient) / this.ingredients[ingredient]));
         }

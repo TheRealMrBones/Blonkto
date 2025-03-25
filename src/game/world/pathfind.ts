@@ -124,6 +124,6 @@ function posToKey(pos: Pos): string {
 
 /** Converts a unique string key back to a position */
 function keyToPos(key: string): Pos {
-    const [x, y] = key.split(',').map(Number);
+    const [x, y] = key.split(",").map(Number);
     return { x, y };
 }
