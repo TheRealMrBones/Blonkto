@@ -2,6 +2,7 @@ import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../entities/entityDefinition.js";
 import Entity from "../../objects/entity.js";
+import { pathfind } from "../../world/pathfind.js";
 
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
@@ -35,13 +36,10 @@ class WanderComponent extends Component<EntityDefinition> {
                     if(cell.block === null) break;
             }
             
-            const newx = cellx + .5;
-            const newy = celly + .5;
+            const path = pathfind({ x: Math.floor(entity.x), y: Math.floor(entity.y) }, { x: cellx, y: celly }, game.world);
+            if(path === null) return;
 
-            entity.targetposqueue.push({
-                x: newx,
-                y: newy
-            });
+            entity.targetposqueue.push(...path.map(pos => ({ x: pos.x + .5, y: pos.y + .5 })));
         }
     }
 }
