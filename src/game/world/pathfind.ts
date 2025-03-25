@@ -3,46 +3,45 @@ import World from "./world.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
 export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
-    const openSet = new Set<string>();
-    const closedSet = new Set<string>();
-    const cameFrom = new Map<string, Pos>();
-    const gScore = new Map<string, number>();
-    const fScore = new Map<string, number>();
+    const maxdistfromstart = Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) * 2;
 
-    const startKey = posToKey(start);
-    const endKey = posToKey(end);
+    const openset = new Set<string>();
+    const closedset = new Set<string>();
+    const camefrom = new Map<string, Pos>();
+    const gscore = new Map<string, number>();
+    const fscore = new Map<string, number>();
 
-    openSet.add(startKey);
-    gScore.set(startKey, 0);
-    fScore.set(startKey, heuristic(start, end));
+    const startkey = posToKey(start);
+    const endkey = posToKey(end);
 
-    while (openSet.size > 0) {
-        const currentKey = getLowestFScore(openSet, fScore);
-        const current = keyToPos(currentKey);
+    openset.add(startkey);
+    gscore.set(startkey, 0);
+    fscore.set(startkey, heuristic(start, end));
 
-        if (currentKey === endKey) {
-            return getParentsInOrder(cameFrom, startKey, endKey);
-        }
+    while(openset.size > 0){
+        const currentkey = getLowestFScore(openset, fscore);
+        const current = keyToPos(currentkey);
 
-        openSet.delete(currentKey);
-        closedSet.add(currentKey);
+        if(currentkey === endkey) return getParentsInOrder(camefrom, startkey, endkey);
 
-        for (const neighbor of getNeighbors(current, world)) {
-            const neighborKey = posToKey(neighbor);
-            if (closedSet.has(neighborKey)) {
+        openset.delete(currentkey);
+        closedset.add(currentkey);
+
+        for(const neighbor of getNeighbors(current, world)){
+            const neighborkey = posToKey(neighbor);
+            if(closedset.has(neighborkey)) continue;
+            if(maxdistfromstart < Math.max(Math.abs(start.x - neighbor.x), Math.abs(start.y - neighbor.y))) continue;
+
+            const tentativegscore = gscore.get(currentkey)! + 1;
+            if(!openset.has(neighborkey)){
+                openset.add(neighborkey);
+            }else if(tentativegscore >= gscore.get(neighborkey)!) {
                 continue;
             }
 
-            const tentativeGScore = gScore.get(currentKey)! + 1;
-            if (!openSet.has(neighborKey)) {
-                openSet.add(neighborKey);
-            } else if (tentativeGScore >= gScore.get(neighborKey)!) {
-                continue;
-            }
-
-            cameFrom.set(neighborKey, current);
-            gScore.set(neighborKey, tentativeGScore);
-            fScore.set(neighborKey, gScore.get(neighborKey)! + heuristic(neighbor, end));
+            camefrom.set(neighborkey, current);
+            gscore.set(neighborkey, tentativegscore);
+            fscore.set(neighborkey, gscore.get(neighborkey)! + heuristic(neighbor, end));
         }
     }
 
@@ -50,14 +49,14 @@ export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
 }
 
 /** Returns the position in the open set with the lowest fScore */
-function getLowestFScore(openSet: Set<string>, fScore: Map<string, number>): string {
+function getLowestFScore(openset: Set<string>, fscore: Map<string, number>): string {
     let lowest: string | null = null;
-    let lowestScore = Infinity;
+    let lowestscore = Infinity;
 
-    for (const key of Array.from(openSet)) {
-        const score = fScore.get(key) ?? Infinity;
-        if (score < lowestScore) {
-            lowestScore = score;
+    for(const key of Array.from(openset)){
+        const score = fscore.get(key) ?? Infinity;
+        if(score < lowestscore){
+            lowestscore = score;
             lowest = key;
         }
     }
@@ -66,14 +65,14 @@ function getLowestFScore(openSet: Set<string>, fScore: Map<string, number>): str
 }
 
 /** Converts the cameFrom map to an array of parents in order */
-export function getParentsInOrder(cameFrom: Map<string, Pos>, startKey: string, endKey: string): Pos[] {
+export function getParentsInOrder(camefrom: Map<string, Pos>, startkey: string, endkey: string): Pos[] {
     const path: Pos[] = [];
-    let currentKey: string | undefined = endKey;
+    let currentkey: string | undefined = endkey;
 
-    while (currentKey && currentKey !== startKey) {
-        const current = keyToPos(currentKey);
+    while(currentkey && currentkey !== startkey){
+        const current = keyToPos(currentkey);
         path.unshift(current);
-        currentKey = posToKey(cameFrom.get(currentKey)!);
+        currentkey = posToKey(camefrom.get(currentkey)!);
     }
 
     return path;
@@ -82,26 +81,26 @@ export function getParentsInOrder(cameFrom: Map<string, Pos>, startKey: string, 
 /** Returns all neighbors of a cell that are not blocked (8 directional) */
 function getNeighbors(pos: Pos, world: World): Pos[] {
     const neighbors: Pos[] = [];
-    for (let dx = -1; dx <= 1; dx++) {
+    for(let dx = -1; dx <= 1; dx++){
         for (let dy = -1; dy <= 1; dy++) {
-            if (dx === 0 && dy === 0) continue;
+            if(dx === 0 && dy === 0) continue;
 
             const neighbor = { x: pos.x + dx, y: pos.y + dy };
             const cell = world.getCell(neighbor.x, neighbor.y, false);
-            if (cell === null) continue;
-            if (cell.block !== null) continue;
+            if(cell === null) continue;
+            if(cell.block !== null) continue;
 
-            if (dx != 0 && dy != 0) {
-                const neighborX = { x: pos.x + dx, y: pos.y };
-                const neighborY = { x: pos.x, y: pos.y + dy };
+            if(dx != 0 && dy != 0){
+                const neighborx = { x: pos.x + dx, y: pos.y };
+                const neighbory = { x: pos.x, y: pos.y + dy };
 
-                const cellX = world.getCell(neighborX.x, neighborX.y, false);
-                if (cellX === null) continue;
-                if (cellX.block !== null) continue;
+                const cellx = world.getCell(neighborx.x, neighborx.y, false);
+                if(cellx === null) continue;
+                if(cellx.block !== null) continue;
 
-                const cellY = world.getCell(neighborY.x, neighborY.y, false);
-                if (cellY === null) continue;
-                if (cellY.block !== null) continue;
+                const celly = world.getCell(neighbory.x, neighbory.y, false);
+                if(celly === null) continue;
+                if(celly.block !== null) continue;
             }
 
             neighbors.push(neighbor);
