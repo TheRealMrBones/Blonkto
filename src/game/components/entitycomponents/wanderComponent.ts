@@ -11,7 +11,7 @@ class WanderComponent extends Component<EntityDefinition> {
     constructor(distance?: number){
         super();
 
-        this.distance = distance || 10;
+        this.distance = distance || 5;
     }
 
     /** Implements this component into its parents functionality */
@@ -24,7 +24,7 @@ class WanderComponent extends Component<EntityDefinition> {
     tick(game: Game, dt: number, entity: Entity): void {
         if(entity.targetposqueue.length > 0) return;
 
-        if(Math.random() < .001){
+        if(Math.random() < .01){
             let movex, movey, cellx, celly;
             while(true){
                 movex = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
