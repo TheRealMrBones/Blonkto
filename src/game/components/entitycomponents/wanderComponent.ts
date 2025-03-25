@@ -34,7 +34,7 @@ class WanderComponent extends Component<EntityDefinition> {
                 cellx = Math.floor(entity.x) + movex;
                 celly = Math.floor(entity.y) + movey;
                 const cell = game.world.getCell(cellx, celly, false);
-                if(cell)
+                if(cell !== null)
                     if(cell.block === null) break;
             }
             
