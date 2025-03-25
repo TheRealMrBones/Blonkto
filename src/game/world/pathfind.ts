@@ -76,10 +76,6 @@ export function getParentsInOrder(cameFrom: Map<string, Pos>, startKey: string, 
         currentKey = posToKey(cameFrom.get(currentKey)!);
     }
 
-    if (currentKey === startKey) {
-        path.unshift(keyToPos(startKey));
-    }
-
     return path;
 }
 

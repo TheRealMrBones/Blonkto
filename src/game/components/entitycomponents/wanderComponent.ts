@@ -7,11 +7,13 @@ import { pathfind } from "../../world/pathfind.js";
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
     distance: number;
+    cellposrandomness: number;
 
-    constructor(distance?: number){
+    constructor(distance?: number, cellposrandomness?: number) {
         super();
 
         this.distance = distance || 5;
+        this.cellposrandomness = cellposrandomness || .2;
     }
 
     /** Implements this component into its parents functionality */
@@ -39,7 +41,10 @@ class WanderComponent extends Component<EntityDefinition> {
             const path = pathfind({ x: Math.floor(entity.x), y: Math.floor(entity.y) }, { x: cellx, y: celly }, game.world);
             if(path === null) return;
 
-            entity.targetposqueue.push(...path.map(pos => ({ x: pos.x + .5, y: pos.y + .5 })));
+            entity.targetposqueue.push(...path.map(pos => ({
+                x: pos.x + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+                y: pos.y + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+            })));
         }
     }
 }
