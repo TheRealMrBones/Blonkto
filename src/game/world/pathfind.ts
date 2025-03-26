@@ -32,7 +32,8 @@ export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
             if(closedset.has(neighborkey)) continue;
             if(maxdistfromstart < Math.max(Math.abs(start.x - neighbor.x), Math.abs(start.y - neighbor.y))) continue;
 
-            const tentativegscore = gscore.get(currentkey)! + 1;
+            const h = heuristic(neighbor, end);
+            const tentativegscore = gscore.get(currentkey)! + h;
             if(!openset.has(neighborkey)){
                 openset.add(neighborkey);
             }else if(tentativegscore >= gscore.get(neighborkey)!) {
@@ -41,7 +42,7 @@ export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
 
             camefrom.set(neighborkey, current);
             gscore.set(neighborkey, tentativegscore);
-            fscore.set(neighborkey, gscore.get(neighborkey)! + heuristic(neighbor, end));
+            fscore.set(neighborkey, gscore.get(neighborkey)! + h);
         }
     }
 
