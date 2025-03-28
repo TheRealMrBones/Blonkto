@@ -19,21 +19,23 @@ export class Recipe {
         this.asset = asset;
 
         this.div = document.createElement("div");
-        this.div.className = "craftingslot";
+
+        const maindiv = document.createElement("div");
+        maindiv.className = "craftingslot";
         
         const itemimg = document.createElement("img");
         itemimg.className = "item";
         itemimg.src = asset;
-        this.div.appendChild(itemimg);
+        maindiv.appendChild(itemimg);
 
         if(resultcount > 1){
             const itemamount = document.createElement("p");
             itemamount.className = "itemamount";
             itemamount.innerHTML = resultcount.toString();
-            this.div.appendChild(itemamount);
+            maindiv.appendChild(itemamount);
         }
 
-        craftingmenudiv.appendChild(this.div);
+        this.div.appendChild(maindiv);
 
         for(const ingredient of ingredients){
             const ingredientdiv = document.createElement("div");
@@ -51,12 +53,10 @@ export class Recipe {
                 ingredientdiv.appendChild(ingredientamount);
             }
 
-            craftingmenudiv.appendChild(ingredientdiv);
+            this.div.appendChild(ingredientdiv);
         }
 
-        craftingmenudiv.appendChild(document.createElement("br"));
-
-        this.div.onclick = (e) => {
+        maindiv.onclick = (e) => {
             if(this.canCraft(getInventory())){
                 const amount = e.ctrlKey ? this.canCraftAmount(getInventory()) : 1;
                 
@@ -72,6 +72,9 @@ export class Recipe {
                 craft(content);
             }
         };
+
+        craftingmenudiv.appendChild(this.div);
+        craftingmenudiv.appendChild(document.createElement("br"));
     }
 
     /** Returns if the requested inventory can craft this item */
