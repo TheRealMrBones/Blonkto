@@ -104,4 +104,13 @@ export class Recipe {
 
         return amount;
     }
+
+    /** Toggle visibility of this crafting recipe based on it if is craftable */
+    toggleVisibility(inventory: (Item | null)[]): void {
+        if(this.canCraft(inventory)){
+            this.div.style.display = "block";
+        }else{
+            this.div.style.display = "none";
+        }
+    }
 }

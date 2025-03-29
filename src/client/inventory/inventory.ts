@@ -123,4 +123,11 @@ export function getCraftableRecipes(): Recipe[] {
     return craftablerecipes;
 }
 
+/** Sets recipe visibility based on the current inventory */
+export function setRecipeVisibility(): void {
+    for(const recipe of recipes){
+        recipe.toggleVisibility(inventory);
+    }
+}
+
 // #endregion

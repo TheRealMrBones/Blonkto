@@ -2,7 +2,7 @@ import { setPos, serverPush } from "../input/input.js";
 import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
-import { addRecipes, setSingleInventorySlot } from "../inventory/inventory.js";
+import { addRecipes, setSingleInventorySlot, setRecipeVisibility } from "../inventory/inventory.js";
 import { GameUpdateContent } from "../../shared/messagecontenttypes.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -48,6 +48,7 @@ export function processGameUpdate(update: GameUpdateContent): void {
     update.inventoryupdates.forEach((iu: any) => {
         setSingleInventorySlot(iu);
     });
+    if(update.inventoryupdates.length > 0) setRecipeVisibility();
     addRecipes(update.recipes);
 
     // get self updates
