@@ -13,7 +13,8 @@
         "dev:start": "nodemon src/server/server.js",
         "dev": "npm run dev:pack && npm run dev:start",
         "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\"",
-        "format": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix"
+        "format": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
+        "resetworld": "rd /s /q data\\world & rd /s /q data\\entities & rd /s /q data\\players"
     },
     "keywords": [],
     "author": "Mr Bones",
