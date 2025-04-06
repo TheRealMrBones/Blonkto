@@ -36,7 +36,6 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         if(this.eventEmitter.listenerCount("use") == 0){
             player.startSwing(info.dir);
-            game.collisionManager.attackHitCheck(player, info.dir, 1);
         }
     }
 }

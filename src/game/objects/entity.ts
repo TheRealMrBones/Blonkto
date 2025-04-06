@@ -25,6 +25,10 @@ class Entity extends GameObject {
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             this.onDeath(killedby, killer, game);
         });
+
+        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+            if(this.swinging) game.collisionManager.attackHitCheck(game.players[this.id], this.lastattackdir, 1);
+        });
     }
 
     /** Default entity collision checks */

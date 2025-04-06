@@ -104,7 +104,7 @@ class CollisionManager {
             const entity = entities[i];
             const dist = SharedCollisions.getDistance(attackpos, entity);
             const realdist = dist - (player.scale + ATTACK_HITBOX_WIDTH) / 2;
-            if(entity.id != player.id && realdist < 0){
+            if(entity.id != player.id && realdist < 0 && !entity.hit){
                 if(entity.takeHit(damage)){
                     entity.eventEmitter.emit("death", player.username, player, this.game);
                 }
