@@ -1,3 +1,4 @@
+import { EqualPos } from "../../shared/typecomparisons.js";
 import { Pos } from "../../shared/types.js";
 import World from "./world.js";
 
@@ -90,7 +91,7 @@ function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
             if(dx === 0 && dy === 0) continue;
 
             const neighbor = { x: pos.x + dx, y: pos.y + dy };
-            if(ghostblocked.some(gb => posToKey(gb) == posToKey(neighbor))) continue;
+            if(ghostblocked.some(gb => EqualPos(gb, neighbor))) continue;
 
             const cell = world.getCell(neighbor.x, neighbor.y, false);
             if(cell === null) continue;
