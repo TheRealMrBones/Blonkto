@@ -2,7 +2,9 @@ import { Pos } from "../../shared/types.js";
 import World from "./world.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
-export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
+export function pathfind(start: Pos, end: Pos, world: World, ghostblocked?: Pos[]): Pos[] | null {
+    ghostblocked = ghostblocked || [];
+
     const maxdistfromstart = Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) * 2;
 
     const openset = new Set<string>();
@@ -27,7 +29,7 @@ export function pathfind(start: Pos, end: Pos, world: World): Pos[] | null {
         openset.delete(currentkey);
         closedset.add(currentkey);
 
-        for(const neighbor of getNeighbors(current, world)){
+        for(const neighbor of getNeighbors(current, world, ghostblocked)){
             const neighborkey = posToKey(neighbor);
             if(closedset.has(neighborkey)) continue;
             if(maxdistfromstart < Math.max(Math.abs(start.x - neighbor.x), Math.abs(start.y - neighbor.y))) continue;
@@ -80,13 +82,16 @@ export function getParentsInOrder(camefrom: Map<string, Pos>, startkey: string, 
 }
 
 /** Returns all neighbors of a cell that are not blocked (8 directional) */
-function getNeighbors(pos: Pos, world: World): Pos[] {
+function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
     const neighbors: Pos[] = [];
+
     for(let dx = -1; dx <= 1; dx++){
         for (let dy = -1; dy <= 1; dy++) {
             if(dx === 0 && dy === 0) continue;
 
             const neighbor = { x: pos.x + dx, y: pos.y + dy };
+            if(ghostblocked.some(gb => posToKey(gb) == posToKey(neighbor))) continue;
+
             const cell = world.getCell(neighbor.x, neighbor.y, false);
             if(cell === null) continue;
             if(cell.block !== null) continue;

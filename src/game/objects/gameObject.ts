@@ -28,6 +28,9 @@ class GameObject {
 
     targetposqueue: Pos[] = [];
     speed: number = 0;
+    currenttarget: Pos | null = null;
+    startofcurrenttarget: number | null = null;
+    blocked: boolean = false;
 
     eventEmitter: EventEmitter = new EventEmitter();
 
@@ -51,11 +54,21 @@ class GameObject {
 
     /** Tries to move to target if there is one */
     moveToTarget(dt: number): void {
-        if(this.targetposqueue.length == 0) return;
+        if(this.targetposqueue.length == 0){
+            if(this.currenttarget !== null) this.currenttarget = null;
+            if(this.startofcurrenttarget !== null) this.startofcurrenttarget = null;
+            return;
+        }
+
         let movedist = this.speed * dt;
 
         while(this.targetposqueue.length > 0 && movedist > 0){
             const targetpos = this.targetposqueue[0];
+            if(targetpos !== this.currenttarget){
+                this.currenttarget = targetpos;
+                this.startofcurrenttarget = Date.now();
+                this.blocked = false;
+            }
 
             this.dir = Math.atan2(targetpos.x - this.x, this.y - targetpos.y);
             const dist = this.distanceTo(targetpos);
@@ -139,8 +152,16 @@ class GameObject {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    /** Returns the single cell that this object is centered on */
+    getCell(): Pos {
+        return {
+            x: Math.floor(this.x),
+            y: Math.floor(this.y),
+        }
+    }
+
     /** Returns the tiles that this object is on */
-    tilesOn(): Pos[]{
+    tilesOn(): Pos[] {
         const points = [];
         const posoffset = (this.scale / 2) - .01; // offset so barely touching tiles are not counted
         

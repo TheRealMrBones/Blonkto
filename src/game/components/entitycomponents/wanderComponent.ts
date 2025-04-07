@@ -24,7 +24,42 @@ class WanderComponent extends Component<EntityDefinition> {
 
     /** Defines the tick action of an entity with this component */
     tick(game: Game, dt: number, entity: Entity): void {
-        if(entity.targetposqueue.length > 0) return;
+        if(entity.targetposqueue.length > 0){
+            if(entity.startofcurrenttarget === null) return;
+            
+            const lasttarget = entity.targetposqueue[entity.targetposqueue.length - 1];
+            const currenttarget = entity.targetposqueue[0];
+
+            if(entity.blocked){
+                entity.blocked = false;
+                return;
+            }
+
+            if(Date.now() - entity.startofcurrenttarget > entity.speed * 2000){
+                entity.blocked = true;
+
+                const lasttargetcell = {
+                    x: Math.floor(lasttarget.x),
+                    y: Math.floor(lasttarget.y),
+                }
+                const currenttargetcell = {
+                    x: Math.floor(currenttarget.x),
+                    y: Math.floor(currenttarget.y),
+                }
+                
+                const path = pathfind({ x: Math.floor(entity.x), y: Math.floor(entity.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, game.world, [currenttargetcell]);
+
+                entity.targetposqueue = [];
+                if(path !== null){
+                    entity.targetposqueue.push(...path.map(pos => ({
+                        x: pos.x + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+                        y: pos.y + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+                    })));
+                }
+            }
+
+            return;
+        }
 
         if(Math.random() < .01){
             let movex, movey, cellx, celly;
