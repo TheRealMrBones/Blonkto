@@ -21,7 +21,7 @@ class AttackComponent extends Component<Item> {
 
     /** Defines the attack use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
-        player.startSwing(info.dir);
+        player.startSwing(info.dir, this.damage);
     }
 }
 

@@ -35,7 +35,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     /** The base functionality of using (left clicking) this item */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
         if(this.eventEmitter.listenerCount("use") == 0){
-            player.startSwing(info.dir);
+            player.startSwing(info.dir, 1);
         }
     }
 }

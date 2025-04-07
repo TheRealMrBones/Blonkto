@@ -18,6 +18,7 @@ abstract class Entity extends GameObject {
     swinginginterval: NodeJS.Timeout | null = null;
     lastattack: number = 0;
     lastattackdir: number = 0;
+    lastattackdamage: number = 0;
 
     constructor(x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
         super(x, y, dir, scale, asset);
@@ -30,7 +31,7 @@ abstract class Entity extends GameObject {
         });
 
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
-            if(this.swinging) game.collisionManager.attackHitCheck(game.players[this.id], this.lastattackdir, 1);
+            if(this.swinging) game.collisionManager.attackHitCheck(game.players[this.id], this.lastattackdir, this.lastattackdamage);
         });
     }
 
@@ -85,10 +86,11 @@ abstract class Entity extends GameObject {
     }
 
     /** Starts an attack swing for this entity */
-    startSwing(dir: number): void {
+    startSwing(dir: number, damage: number): void {
         this.swinging = true;
         this.lastattack = Date.now();
         this.lastattackdir = dir;
+        this.lastattackdamage = damage;
         this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
     }
 
