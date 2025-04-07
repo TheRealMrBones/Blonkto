@@ -1,4 +1,4 @@
-import { EqualColor } from "../../shared/typecomparisons.js";
+import { equalColor } from "../../shared/typecomparisons.js";
 import { Color } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
@@ -46,7 +46,7 @@ export function getColoredAsset(object: { id: string; color: Color; asset: strin
         const oldcolor = coloredAssets[object.id].color;
         const newcolor = object.color;
 
-        if(!EqualColor(oldcolor, newcolor)){
+        if(!equalColor(oldcolor, newcolor)){
             // delete old colored variants aswell
             if(coloredAssetVariants[object.id]){
                 for (const prop in coloredAssetVariants[object.id]) {
