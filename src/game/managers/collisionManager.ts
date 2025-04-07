@@ -7,6 +7,7 @@ import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
 import SharedConfig from "../../configs/shared.js";
+import NonplayerEntity from "../objects/nonplayerEntity.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 /** Manages Collision detection for all elements in the game world */
@@ -91,22 +92,30 @@ class CollisionManager {
         }
     };
 
-    /** Checks for entities that an attacking player hits and damages them */
-    attackHitCheck(player: Player, attackdir: number, damage: number): void {
+    /** Checks for entities that an attacking entity hits and damages them */
+    attackHitCheck(entity: Entity, attackdir: number, damage: number): void {
         const entities = this.game.getEntities();
         
         const attackpos = {
-            x: player.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
-            y: player.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
+            x: entity.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
+            y: entity.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
         };
 
         for(let i = 0; i < entities.length; i++){
-            const entity = entities[i];
-            const dist = SharedCollisions.getDistance(attackpos, entity);
-            const realdist = dist - (player.scale + ATTACK_HITBOX_WIDTH) / 2;
-            if(entity.id != player.id && realdist < 0 && !entity.hit){
-                if(entity.takeHit(damage)){
-                    entity.eventEmitter.emit("death", player.username, player, this.game);
+            const entity2 = entities[i];
+            const dist = SharedCollisions.getDistance(attackpos, entity2);
+            const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
+            if(entity2.id != entity.id && realdist < 0 && !entity2.hit){
+                if(entity2.takeHit(damage, entity)){
+                    let killer = "unknown";
+
+                    if(entity instanceof NonplayerEntity){
+                        killer = entity.entitydefinition.displayname;
+                    }else if(entity instanceof Player){
+                        killer = entity.username;
+                    }
+
+                    entity2.eventEmitter.emit("death", killer, entity, this.game);
                 }
             }
         }

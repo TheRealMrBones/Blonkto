@@ -11,6 +11,7 @@ class Entity extends GameObject {
     health: number;
     hit: boolean = false;
     hitinterval: NodeJS.Timeout | null = null;
+    lasthitby: Entity | undefined = undefined;
     swinging: boolean = false;
     swinginginterval: NodeJS.Timeout | null = null;
     lastattack: number = 0;
@@ -56,10 +57,11 @@ class Entity extends GameObject {
     // #region hit and swing
 
     /** Removes the given health amount from this entity and returns if it died */
-    takeHit(damage: number): boolean {
+    takeHit(damage: number, attacker?: Entity): boolean {
         this.health -= damage;
         this.hit = true;
         this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
+        this.lasthitby = attacker;
 
         // tell if died
         return (this.health <= 0);

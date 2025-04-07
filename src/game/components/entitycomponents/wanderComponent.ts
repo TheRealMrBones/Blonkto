@@ -7,13 +7,13 @@ import { pathfind } from "../../world/pathfind.js";
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
     distance: number;
-    cellposrandomness: number;
+    randomness: number;
 
     constructor(distance?: number, cellposrandomness?: number) {
         super();
 
         this.distance = distance || 5;
-        this.cellposrandomness = cellposrandomness || .2;
+        this.randomness = cellposrandomness || .2;
     }
 
     /** Implements this component into its parents functionality */
@@ -52,8 +52,8 @@ class WanderComponent extends Component<EntityDefinition> {
                 entity.targetposqueue = [];
                 if(path !== null){
                     entity.targetposqueue.push(...path.map(pos => ({
-                        x: pos.x + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
-                        y: pos.y + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+                        x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                        y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
                     })));
                 }
             }
@@ -77,8 +77,8 @@ class WanderComponent extends Component<EntityDefinition> {
             if(path === null) return;
 
             entity.targetposqueue.push(...path.map(pos => ({
-                x: pos.x + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
-                y: pos.y + .5 + (Math.random() * this.cellposrandomness - this.cellposrandomness / 2),
+                x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
             })));
         }
     }
