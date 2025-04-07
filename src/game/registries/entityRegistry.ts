@@ -9,8 +9,8 @@ const { ASSETS } = Constants;
 
 const EntityRegistry = new Registry<EntityDefinition>();
 
-EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 3, .5, new Drop("raw_pork", 1, 1, .25, 3))
+EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .25, 3))
     .addComponent(new WanderComponent())
-    .addComponent(new ScaredComponent()));
+    .addComponent(new ScaredComponent(1.8)));
 
 export default EntityRegistry;

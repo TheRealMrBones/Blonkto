@@ -7,14 +7,14 @@ import { Pos } from "../../../shared/types.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class ScaredComponent extends Component<EntityDefinition> {
+    speedmultiplier: number;
     distance: number;
-    randomness: number;
 
-    constructor(distance?: number, randomness?: number) {
+    constructor(speedmultiplier?: number, distance?: number) {
         super();
 
+        this.speedmultiplier = speedmultiplier || 1;
         this.distance = distance || 3;
-        this.randomness = randomness || .1;
     }
 
     /** Implements this component into its parents functionality */
@@ -31,6 +31,7 @@ class ScaredComponent extends Component<EntityDefinition> {
                     entity.targetposqueue = [this.getRunPosition(entity)];
                 }else{
                     entity.targetposqueue = [];
+                    entity.speedmultiplier = 1;
                 }
             }
         }
@@ -41,17 +42,17 @@ class ScaredComponent extends Component<EntityDefinition> {
     /** Returns a new run target postion given the current entity */
     getRunPosition(entity: Entity): Pos {
         if(entity.lasthitby === undefined) return {x: entity.x, y: entity.y};
+        
+        entity.speedmultiplier = this.speedmultiplier;
 
-        let dir = Math.atan2(entity.lasthitby.x - entity.x, entity.y - entity.lasthitby.y);
-        dir += Math.random() * this.randomness - (this.randomness / 2);
-
+        const dir = Math.atan2(entity.lasthitby.x - entity.x, entity.y - entity.lasthitby.y);
         const movex = -Math.sin(dir) * this.distance * 2;
         const movey = Math.cos(dir) * this.distance * 2;
 
         return {
             x: entity.x + movex,
             y: entity.y + movey,
-        }
+        };
     }
 }
 

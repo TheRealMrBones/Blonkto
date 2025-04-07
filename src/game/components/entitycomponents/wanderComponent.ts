@@ -35,17 +35,17 @@ class WanderComponent extends Component<EntityDefinition> {
                 return;
             }
 
-            if(Date.now() - entity.startofcurrenttarget > entity.speed * 2000){
+            if(Date.now() - entity.startofcurrenttarget > entity.getSpeed() * 2000){
                 entity.blocked = true;
 
                 const lasttargetcell = {
                     x: Math.floor(lasttarget.x),
                     y: Math.floor(lasttarget.y),
-                }
+                };
                 const currenttargetcell = {
                     x: Math.floor(currenttarget.x),
                     y: Math.floor(currenttarget.y),
-                }
+                };
                 
                 const path = pathfind({ x: Math.floor(entity.x), y: Math.floor(entity.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, game.world, [currenttargetcell]);
 

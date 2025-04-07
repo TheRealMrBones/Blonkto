@@ -37,7 +37,7 @@ class Player extends Entity {
         this.kills = 0;
         this.scale = PLAYER_SCALE;
         this.health = 10;
-        this.speed = PLAYER_SPEED;
+        this.basespeed = PLAYER_SPEED;
 
         // racism
         const antiracism = 1 - RACISM;

@@ -6,9 +6,11 @@ import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 /** The base class for an entity with health loaded in the game world */
-class Entity extends GameObject {
+abstract class Entity extends GameObject {
     maxhealth: number;
     health: number;
+    basespeed: number;
+    speedmultiplier: number = 1;
     hit: boolean = false;
     hitinterval: NodeJS.Timeout | null = null;
     lasthitby: Entity | undefined = undefined;
@@ -21,7 +23,7 @@ class Entity extends GameObject {
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
-        this.speed = 1;
+        this.basespeed = 1;
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             this.onDeath(killedby, killer, game);
@@ -37,6 +39,15 @@ class Entity extends GameObject {
         super.checkCollisions(game);
         game.collisionManager.entityCollisions(this);
     }
+
+    // #region getters
+
+    /** Returns the current speed of this object */
+    override getSpeed(): number {
+        return this.basespeed * this.speedmultiplier;
+    }
+
+    // #endregion
 
     // #region setters
 

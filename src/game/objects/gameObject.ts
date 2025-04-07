@@ -14,7 +14,7 @@ import ServerConfig from "../../configs/server.js";
 const { FALL_RATE } = ServerConfig.OBJECT;
 
 /** The base class for any simulated object (something that ticks) in the game world */
-class GameObject {
+abstract class GameObject {
     id: string;
     lastupdated: number;
 
@@ -27,7 +27,6 @@ class GameObject {
     falling: boolean = false;
 
     targetposqueue: Pos[] = [];
-    speed: number = 0;
     currenttarget: Pos | null = null;
     startofcurrenttarget: number | null = null;
     blocked: boolean = false;
@@ -60,7 +59,7 @@ class GameObject {
             return;
         }
 
-        let movedist = this.speed * dt;
+        let movedist = this.getSpeed() * dt;
 
         while(this.targetposqueue.length > 0 && movedist > 0){
             const targetpos = this.targetposqueue[0];
@@ -85,6 +84,15 @@ class GameObject {
             }
         }
     }
+
+    // #region getters
+
+    /** Returns the current speed of this object */
+    getSpeed(): number {
+        return 0;
+    }
+
+    // #endregion
 
     // #region setters
 
@@ -157,7 +165,7 @@ class GameObject {
         return {
             x: Math.floor(this.x),
             y: Math.floor(this.y),
-        }
+        };
     }
 
     /** Returns the tiles that this object is on */

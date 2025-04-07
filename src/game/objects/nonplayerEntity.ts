@@ -11,6 +11,7 @@ class NonplayerEntity extends Entity {
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
         this.entitydefinition = EntityRegistry.get(entitydefinition);
+        this.basespeed = this.entitydefinition.speed;
 
         this.eventEmitter.on("tick", (game: Game, dt: number) => {
             this.entitydefinition.eventEmitter.emit("tick", game, dt, this);

@@ -14,17 +14,19 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     name: string = "unregistered";
     displayname: string;
     maxhealth: number;
+    speed: number;
     scale: number;
     asset: string;
     drops: DropBase | null;
 
     eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, maxhealth: number, scale: number | null, drops?: DropBase){
+    constructor(displayname: string, asset: string | null, maxhealth: number, speed: number, scale: number, drops?: DropBase){
         super();
         this.displayname = displayname;
         this.maxhealth = maxhealth;
-        this.scale = scale || 1;
+        this.speed = speed;
+        this.scale = scale;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
 
