@@ -20,7 +20,7 @@ class CollisionManager {
 
     /** Checks collisions between the given player and other nearby players */
     entityCollisions(entity: Entity): void {
-        const entities = this.game.getEntities();
+        const entities = this.game.entityManager.getEntities();
 
         for(let i = 0; i < entities.length; i++){
             const entity2 = entities[i];
@@ -58,7 +58,7 @@ class CollisionManager {
 
     /** Checks for dropped stacks that the given player can pick up */
     collectCheck(player: Player): void {
-        const collectables = this.game.getDroppedStacks();
+        const collectables = this.game.entityManager.getDroppedStacks();
 
         for(let i = 0; i < collectables.length; i++){
             const collectable = collectables[i];
@@ -66,14 +66,14 @@ class CollisionManager {
             const collided = (push.x != 0 || push.y != 0);
             
             if(collided && collectable.ignore != player){
-                if(player.inventory.collectStack(collectable.itemStack)) this.game.removeObject(collectable.id);
+                if(player.inventory.collectStack(collectable.itemStack)) this.game.entityManager.removeObject(collectable.id);
             }
         }
     };
 
     /** Checks for dropped stacks that the given dropped stack can merge with */
     itemMergeCheck(collectable: DroppedStack): void {
-        const collectables = this.game.getDroppedStacks();
+        const collectables = this.game.entityManager.getDroppedStacks();
 
         for(let i = 0; i < collectables.length; i++){
             const collectable2 = collectables[i];
@@ -83,7 +83,7 @@ class CollisionManager {
 
             if(collided){
                 if(collectable.id != collectable2.id){
-                    if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.removeObject(collectable2.id);
+                    if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
                 }else{
                     collectable.push(push.x / 2, push.y / 2);
                     collectable2.push(-push.x / 2, -push.y / 2);
@@ -94,7 +94,7 @@ class CollisionManager {
 
     /** Checks for entities that an attacking entity hits and damages them */
     attackHitCheck(entity: Entity, attackdir: number, damage: number): void {
-        const entities = this.game.getEntities();
+        const entities = this.game.entityManager.getEntities();
         
         const attackpos = {
             x: entity.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,

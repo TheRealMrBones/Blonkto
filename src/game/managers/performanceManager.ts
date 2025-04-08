@@ -54,14 +54,15 @@ class PerformanceManager {
         const tps = this.cummilativetickcount / PERFORMANCE_LOG_RATE;
         const averageticktime = this.cummilativeticktime / this.cummilativetickcount;
 
-        const players = this.game.getPlayerEntities().length;
-        const entities = this.game.getNonplayerEntities().length;
-        const objects = this.game.getObjects().length;
+        const allobjects = this.game.entityManager.getAllObjectCount();
+        const players = this.game.entityManager.getPlayerEntityCount();
+        const entities = this.game.entityManager.getNonplayerEntityCount();
+        const objects = this.game.entityManager.getObjectCount();
 
         this.lastperformancelog = [
             `Performance Log - ${new Date().toLocaleTimeString()}`,
             `TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`,
-            `Ticking Objects: ${players} players, ${entities} entities, ${objects} objects`,
+            `Ticking Objects: ${allobjects} total, ${players} players, ${entities} entities, ${objects} objects`,
         ];
 
         for(const message of this.lastperformancelog){

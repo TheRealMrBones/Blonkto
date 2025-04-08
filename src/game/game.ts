@@ -5,6 +5,7 @@ import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
 import AccountManager from "../server/accountManager.js";
 import PlayerManager from "./managers/playerManager.js";
+import EntityManager from "./managers/entityManager.js";
 import OpManager from "./managers/opManager.js";
 import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
@@ -12,10 +13,8 @@ import PerformanceManager from "./managers/performanceManager.js";
 import CollisionManager from "./managers/collisionManager.js";
 import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
-import Entity from "./objects/entity.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
-import DroppedStack from "./objects/droppedStack.js";
 import World from "./world/world.js";
 import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messagecontenttypes.js";
 
@@ -38,6 +37,7 @@ class Game {
     fileManager: FileManager;
     accountManager: AccountManager;
     playerManager: PlayerManager;
+    entityManager: EntityManager;
     opManager: OpManager;
     banManager: BanManager;
     chatManager: ChatManager;
@@ -64,6 +64,7 @@ class Game {
         this.fileManager = fileManager;
         this.accountManager = accountManager;
         this.playerManager = new PlayerManager(this);
+        this.entityManager = new EntityManager(this);
         this.opManager = new OpManager(this);
         this.banManager = new BanManager(this);
         this.chatManager = new ChatManager(this);
@@ -91,61 +92,6 @@ class Game {
 
         this.logger.info("Game initialized");
     }
-
-    // #region entities
-
-    /** Returns all ticking objects loaded in the game world */
-    getAllObjects(): GameObject[] {
-        return [...Object.values(this.players), ...Object.values(this.entities), ...Object.values(this.objects)];
-    }
-
-    /** Returns all ticking entities loaded in the game world */
-    getEntities(): Entity[] {
-        return [...Object.values(this.players), ...Object.values(this.entities)];
-    }
-
-    /** Returns all ticking non-player objects loaded in the game world */
-    getNonplayers(): GameObject[] {
-        return [...Object.values(this.entities), ...Object.values(this.objects)];
-    }
-
-    /** Returns all ticking non-entity objects loaded in the game world */
-    getObjects(): GameObject[] {
-        return Object.values(this.objects);
-    }
-
-    /** Returns all ticking players loaded in the game world */
-    getPlayerEntities(): Player[] {
-        return Object.values(this.players);
-    }
-
-    /** Returns all ticking non-player entities loaded in the game world */
-    getNonplayerEntities(): NonplayerEntity[] {
-        return Object.values(this.entities);
-    }
-
-    /** Returns all ticking dropped stacks loaded in the game world */
-    getDroppedStacks(): DroppedStack[] {
-        return this.getObjects().filter(o => o instanceof DroppedStack);
-    }
-
-    /** Removes and unloads the non-player object with the given id from the game world */
-    removeNonplayer(id: string): void {
-        delete this.objects[id];
-        delete this.entities[id];
-    }
-
-    /** Removes and unloads the non-entity object with the given id from the game world */
-    removeObject(id: string): void {
-        delete this.objects[id];
-    }
-
-    /** Removes and unloads the non-player entity with the given id from the game world */
-    removeEntity(id: string): void {
-        delete this.entities[id];
-    }
-
-    // #endregion
 
     // #region inputs
 
@@ -234,19 +180,19 @@ class Game {
         
         // get world updates
         const worldloads: {[key: string]: any } = {};
-        this.getPlayerEntities().forEach(p => {
+        this.entityManager.getPlayerEntities().forEach(p => {
             const worldload = this.world.loadPlayerChunks(p);
             p.chunk = worldload.chunk;
             worldloads[p.id] = worldload;
         });
 
         // tick objects
-        this.getAllObjects().forEach(o => {
+        this.entityManager.getAllObjects().forEach(o => {
             o.eventEmitter.emit("tick", this, dt);
         });
 
         // send fat update packets
-        this.getPlayerEntities().forEach(player => {
+        this.entityManager.getPlayerEntities().forEach(player => {
             player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
         });
 
@@ -261,7 +207,7 @@ class Game {
         // Get Tab
         let tab = [];
         if(SHOW_TAB){
-            tab = this.getPlayerEntities().map(p => { 
+            tab = this.entityManager.getPlayerEntities().map(p => { 
                 const returnobj: any = {
                     username: p.username,
                 };
@@ -271,7 +217,7 @@ class Game {
         }
 
         // get players
-        const nearbyPlayers = this.getPlayerEntities().filter(p => p.id != player.id
+        const nearbyPlayers = this.entityManager.getPlayerEntities().filter(p => p.id != player.id
             && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(p.y - player.y) < CELLS_VERTICAL / 2
         );
@@ -285,7 +231,7 @@ class Game {
         player.inventory.resetChanges();
 
         // get entities
-        const nearbyEntities = this.getNonplayers().filter(e =>
+        const nearbyEntities = this.entityManager.getNonplayers().filter(e =>
             Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );

@@ -18,7 +18,7 @@ class NonplayerEntity extends Entity {
         });
 
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
-            game.removeEntity(this.id);
+            game.entityManager.removeEntity(this.id);
             this.entitydefinition.eventEmitter.emit("death", this, game);
         });
     }

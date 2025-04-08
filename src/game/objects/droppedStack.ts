@@ -65,7 +65,7 @@ class DroppedStack extends GameObject {
 
     /** Ticks TTL and deletes self if too old */
     tickDespawn(game: Game): void {
-        if(Date.now() >= this.despawntime) game.removeObject(this.id);
+        if(Date.now() >= this.despawntime) game.entityManager.removeObject(this.id);
     }
 
     // #region serialization

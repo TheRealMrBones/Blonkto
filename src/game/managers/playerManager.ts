@@ -123,10 +123,10 @@ class PlayerManager {
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
         if(newUsername.trim().length === 0) newUsername = "Silly Goose";
     
-        if(this.game.getPlayerEntities().some(e => e.username === newUsername)){
+        if(this.game.entityManager.getPlayerEntities().some(e => e.username === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
-                if(!this.game.getPlayerEntities().some(e => e.username === newUsername + `${i}`)){
+                if(!this.game.entityManager.getPlayerEntities().some(e => e.username === newUsername + `${i}`)){
                     done = true;
                     newUsername += `${i}`;
                 }

@@ -232,11 +232,11 @@ class World {
             delete this.loadedchunks[[x,y].toString()];
 
             // unload entities
-            const entities = this.game.getNonplayers().filter(e =>
+            const entities = this.game.entityManager.getNonplayers().filter(e =>
                 e.chunk.x == x
                 && e.chunk.y == y
             ).forEach(e => {
-                this.game.removeNonplayer(e.id);
+                this.game.entityManager.removeNonplayer(e.id);
             });
         }
     }
@@ -308,7 +308,7 @@ class World {
         this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
 
         // save entities (and objects) seperately
-        const entities = this.game.getNonplayers().filter(o =>
+        const entities = this.game.entityManager.getNonplayers().filter(o =>
             o.chunk.x == chunk.chunkx &&
             o.chunk.y == chunk.chunky
         );
@@ -327,7 +327,7 @@ class World {
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
     tickChunkUnloader(): void {
         const activeChunks: { x: number; y: number; }[] = [];
-        this.game.getPlayerEntities().forEach((p: any) => {
+        this.game.entityManager.getPlayerEntities().forEach((p: any) => {
             activeChunks.push(...this.getPlayerChunks(p));
         });
 
@@ -488,7 +488,7 @@ class World {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
-        this.game.getAllObjects().forEach((e: GameObject) => {
+        this.game.entityManager.getAllObjects().forEach((e: GameObject) => {
             if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
             }

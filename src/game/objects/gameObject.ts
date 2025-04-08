@@ -146,7 +146,7 @@ abstract class GameObject {
 
     /** Default object action after falling */
     onFell(game: Game): void {
-        game.removeObject(this.id);
+        game.entityManager.removeObject(this.id);
     }
 
     // #endregion
