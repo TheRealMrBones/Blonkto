@@ -2,6 +2,7 @@ import crypto from "crypto";
 
 const generateApiKey = () => crypto.randomUUID();
 
+/** Returns if the requested user is an admin */
 const isAdmin = async (userId: string): Promise<boolean> => {
     try {
         const user = {admin: false};//await prisma.user.findUnique({ where: { id: userId } });
@@ -12,6 +13,7 @@ const isAdmin = async (userId: string): Promise<boolean> => {
     }
 };
 
+/** Returns if the requested user is a mod */
 const isMod = async (userId: string): Promise<boolean> => {
     try {
         const user = {mod: false};//await prisma.user.findUnique({ where: { id: userId } });
@@ -22,6 +24,7 @@ const isMod = async (userId: string): Promise<boolean> => {
     }
 };
 
+/** Sets the requested users admin status */
 const setAdminStatus = async (userId: string, bool: boolean): Promise<any> => {
     try {
         const updatedUser = null;/*await prisma.user.update({
@@ -35,6 +38,7 @@ const setAdminStatus = async (userId: string, bool: boolean): Promise<any> => {
     }
 };
 
+/** Sets the requested users mod status */
 const setModStatus = async (userId: string, bool: boolean): Promise<any> => {
     try {
         const updatedUser = null;/*await prisma.user.update({
@@ -48,6 +52,7 @@ const setModStatus = async (userId: string, bool: boolean): Promise<any> => {
     }
 };
 
+/** Returns the api key of the requested user */
 const getApiKeyById = async (userId: string): Promise<any> => {
     try {
         const user = readAccount(userId);//await prisma.user.findUnique({ where: { id: userId } });
@@ -58,6 +63,7 @@ const getApiKeyById = async (userId: string): Promise<any> => {
     }
 };
 
+/** Returns whether the requested api key is valid */
 const verifyApiKey = async (apiKey: string): Promise<boolean> => {
     try {
         const user = readAccountByKey(apiKey);/*await prisma.user.findFirst({
@@ -70,6 +76,7 @@ const verifyApiKey = async (apiKey: string): Promise<boolean> => {
     }
 };
 
+/** Returns the user that currently uses the requested login token */
 const getUserByApiKey = async (apiKey: string): Promise<any> => {
     try {
         return readAccountByKey(apiKey);/*await prisma.user.findFirst({
@@ -81,6 +88,7 @@ const getUserByApiKey = async (apiKey: string): Promise<any> => {
     }
 };
 
+/** Returns a newly generated login token for the requested user */
 const newApiKey = async (userId: string): Promise<any> => {
     try {
         const newApiKey = generateApiKey();
@@ -98,6 +106,7 @@ const newApiKey = async (userId: string): Promise<any> => {
     }
 };
 
+/** Returns the requested user from their username */
 const getUserByUsername = async (username: string): Promise<any> => {
     try {
         return readAccount(username);//await prisma.user.findUnique({ where: { username: username }});
@@ -107,6 +116,7 @@ const getUserByUsername = async (username: string): Promise<any> => {
     }
 };
 
+/** Returns the requested users username from their id */
 const getUsernameById = async (id: string): Promise<any> => {
     try {
         if (!id) return null;
@@ -123,6 +133,7 @@ const getUsernameById = async (id: string): Promise<any> => {
     }
 };
 
+/** Returns the requested user from their id */
 const getUserById = async (id: string): Promise<any> => {
     try {
         if (!id) return null;
@@ -137,6 +148,7 @@ const getUserById = async (id: string): Promise<any> => {
     }
 };
 
+/** Returns the list of all users */
 const getAllUsers = async (): Promise<any> => {
     try {
         return null;//await prisma.user.findMany();
@@ -146,6 +158,7 @@ const getAllUsers = async (): Promise<any> => {
     }
 };
 
+/** Creates a new user with the given username and password hash */
 const createUser = async (username: string, hashedPw: string): Promise<any> => {
     try {
         const apiKey = generateApiKey();
@@ -166,6 +179,7 @@ const createUser = async (username: string, hashedPw: string): Promise<any> => {
     }
 };
 
+/** Updates the requested users password hash to the new value */
 const updateUserPassword = async (userId: string, hashedPassword: string): Promise<any> => {
     /*try {
         const user = await prisma.user.findUnique({
@@ -186,6 +200,7 @@ const updateUserPassword = async (userId: string, hashedPassword: string): Promi
     }*/
 };
 
+/** Deletes the requested user from the database */
 const deleteUserById = async (userId: string): Promise<any> => {
     /*try {
         await prisma.user.delete({ where: { id: userId } });
@@ -201,6 +216,7 @@ const deleteUserById = async (userId: string): Promise<any> => {
 import FileManager from "../fileManager.js";
 const filemanager = new FileManager();
 
+/** Base type for the attributes of a user account */
 type Account = {
     username: string;
     id: string; // will make the id the same as the username for now
@@ -208,11 +224,13 @@ type Account = {
     token: string;
 }
 
+/** Returns the account with the requested username if it exists */
 function readAccount(username: string): Account | null {
     if(!filemanager.fileExists(getAccountFilePath(username))) return null;
     return JSON.parse(filemanager.readFile(getAccountFilePath(username))!) as Account;
 }
 
+/** Returns the account with the requested login token if it exists */
 function readAccountByKey(key: string): Account | null {
     const files = filemanager.listDirectory("accounts");
     for(const file of files){
@@ -222,6 +240,7 @@ function readAccountByKey(key: string): Account | null {
     return null;
 }
 
+/** Writes the requested account into the database */
 function writeAccount(account: Account): void {
     filemanager.writeFile(getAccountFilePath(account.username), JSON.stringify(account));
 }

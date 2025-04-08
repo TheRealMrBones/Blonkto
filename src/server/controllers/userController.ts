@@ -4,6 +4,7 @@ import validator from "validator";
 
 import userModel from "../models/userModel.js";
 
+/** Returns if the requested user is an admin */
 const isAdmin = async (userId: string): Promise<boolean> => {
     try {
         const user = await userModel.isAdmin(userId);
@@ -14,6 +15,7 @@ const isAdmin = async (userId: string): Promise<boolean> => {
     }
 };
 
+/** Returns if the requested user is a mod */
 const isMod = async (userId: string): Promise<boolean> => {
     try {
         const user = await userModel.isMod(userId);
@@ -23,7 +25,8 @@ const isMod = async (userId: string): Promise<boolean> => {
         return false;
     }
 };
-  
+
+/** Sets the requested users admin status */
 const setAdminStatus = async (userId: string, bool: boolean): Promise<any> => {
     try {
         return await userModel.setAdminStatus(userId, bool);
@@ -32,7 +35,8 @@ const setAdminStatus = async (userId: string, bool: boolean): Promise<any> => {
         throw error;
     }
 };
-  
+
+/** Sets the requested users mod status */
 const setModStatus = async (userId: string, bool: boolean): Promise<any> => {
     try {
         return await userModel.setModStatus(userId, bool);
@@ -41,7 +45,8 @@ const setModStatus = async (userId: string, bool: boolean): Promise<any> => {
         throw error;
     }
 };
-  
+
+/** Returns the api key of the requested user */
 const getApiKeyById = async (userId: string): Promise<any> => {
     try {
         const apiKey = await userModel.getApiKeyById(userId);
@@ -51,7 +56,8 @@ const getApiKeyById = async (userId: string): Promise<any> => {
         return null;
     }
 };
-  
+
+/** Returns whether the requested api key is valid */
 const verifyApiKey = async (apiKey: string): Promise<boolean> => {
     try {
         const isValid = await userModel.verifyApiKey(apiKey);
@@ -61,7 +67,8 @@ const verifyApiKey = async (apiKey: string): Promise<boolean> => {
         return false;
     }
 };
-  
+
+/** Returns the requested user from their id */
 const getUserById = async (userId: string): Promise<any> => {
     try {
         const user = await userModel.getUserById(userId);
@@ -71,7 +78,8 @@ const getUserById = async (userId: string): Promise<any> => {
         return null;
     }
 };
-  
+
+/** Returns the requested users username from their id */
 const getUsernameById = async (userId: string): Promise<any> => {
     try {
         const user = await userModel.getUsernameById(userId);
@@ -81,7 +89,8 @@ const getUsernameById = async (userId: string): Promise<any> => {
         return null;
     }
 };
-  
+
+/** Returns the requested user from their username */
 const getUserByUsername = async (username: string): Promise<any> => {
     try {
         const user = await userModel.getUserByUsername(username);
@@ -92,6 +101,7 @@ const getUserByUsername = async (username: string): Promise<any> => {
     }
 };
 
+/** Returns the list of all users */
 const getAllUsers = async (): Promise<any> => {
     try {
         return await userModel.getAllUsers();
@@ -100,7 +110,8 @@ const getAllUsers = async (): Promise<any> => {
         throw error;
     }
 };
-  
+
+/** Registers a new user with the given username and password */
 const registerUser = async (username: string, password: string): Promise<any> => {
     username = sanitizeInput(username);
     password = sanitizeInput(password);
@@ -128,7 +139,8 @@ const registerUser = async (username: string, password: string): Promise<any> =>
         return { error: "Error registering user" };
     }
 };
-  
+
+/** Logins in with the given credentials and returns the login token */
 const loginUser = async (username: string, password: string): Promise<any> => {
     // Sanitize inputs
     username = sanitizeInput(username);
@@ -149,7 +161,8 @@ const loginUser = async (username: string, password: string): Promise<any> => {
         throw error;
     }
 };
-  
+
+/** Returns if the requested token is valid */
 const verifyToken = (token: string): any => {
     try {
         const decoded: any = jwt.verify(token, "process.env.SECRET_KEY");
@@ -160,6 +173,7 @@ const verifyToken = (token: string): any => {
     }
 };
 
+/** Updates the requested users password to the new value */
 const updateUserPassword = async (userId: string, password: string): Promise<any> => {
     try {
         const newHashedPw = await argon2.hash(password);
@@ -175,7 +189,8 @@ const updateUserPassword = async (userId: string, password: string): Promise<any
         throw error;
     }
 };
-  
+
+/** Returns the user that currently uses the requested login token */
 const getUserByApiKey = async (apiKey: string): Promise<any> => {
     try {
         return await userModel.getUserByApiKey(apiKey);
@@ -184,7 +199,8 @@ const getUserByApiKey = async (apiKey: string): Promise<any> => {
         throw error;
     }
 };
-  
+
+/** Deletes the requested user from the database */
 const deleteUserById = async (userId: string): Promise<any> => {
     try {
         const result = await userModel.deleteUserById(userId);
@@ -195,7 +211,7 @@ const deleteUserById = async (userId: string): Promise<any> => {
     }
 };
 
-// Get userId from username
+/** Returns the id of the requested user from their username */
 const getIdFromUsername = async (username: string): Promise<any> => {
     try {
         const user = await userModel.getUserByUsername(username);
