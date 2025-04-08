@@ -2,7 +2,7 @@ import Command from "./command.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
-import { FailedConnectionContent } from "../../shared/messagecontenttypes.js";
+import { FailedConnectionContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;

@@ -16,7 +16,7 @@ import Player from "./objects/player.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import World from "./world/world.js";
-import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messagecontenttypes.js";
+import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;

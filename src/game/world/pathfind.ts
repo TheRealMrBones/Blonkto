@@ -1,4 +1,4 @@
-import { equalPos } from "../../shared/typecomparisons.js";
+import { equalPos } from "../../shared/typeComparisons.js";
 import { Pos } from "../../shared/types.js";
 import World from "./world.js";
 

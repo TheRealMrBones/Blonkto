@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
-import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messagecontenttypes.js";
+import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;

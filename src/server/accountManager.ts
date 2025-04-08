@@ -3,7 +3,7 @@ import validator from "validator";
 
 import Account from "./account.js";
 import FileManager from "./fileManager.js";
-import { ErrorResponseContent, LoginResponseContent } from "../shared/messagecontenttypes.js";
+import { ErrorResponseContent, LoginResponseContent } from "../shared/messageContentTypes.js";
 
 /** Manages user accounts for the game servers */
 class AccountManager {

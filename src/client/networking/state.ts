@@ -3,7 +3,7 @@ import { Player } from "./player.js";
 import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { addRecipes, setSingleInventorySlot, setRecipeVisibility } from "../inventory/inventory.js";
-import { GameUpdateContent } from "../../shared/messagecontenttypes.js";
+import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;

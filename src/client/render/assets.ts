@@ -1,4 +1,4 @@
-import { equalColor } from "../../shared/typecomparisons.js";
+import { equalColor } from "../../shared/typeComparisons.js";
 import { Color } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";

@@ -1,7 +1,7 @@
 import { Item } from "./item.js";
 import { Recipe } from "./recipe.js";
 import { swap } from "../networking/networking.js";
-import { SwapContent } from "../../shared/messagecontenttypes.js";
+import { SwapContent } from "../../shared/messageContentTypes.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;

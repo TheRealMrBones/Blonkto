@@ -2,7 +2,7 @@ import { chat, drop } from "../networking/networking.js";
 import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 import { swapSlots } from "../inventory/inventory.js";
-import { DropContent, SendMessageContent } from "../../shared/messagecontenttypes.js";
+import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;

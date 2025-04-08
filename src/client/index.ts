@@ -4,7 +4,7 @@ import { stopCapturingInput } from "./input/input.js";
 import { downloadAssets } from "./render/assets.js";
 import { initState } from "./networking/state.js";
 import { hideUi } from "./render/ui.js";
-import { FailedConnectionContent, ErrorResponseContent, isLoginResponseContent, LoginResponseContent } from "../shared/messagecontenttypes.js";
+import { FailedConnectionContent, ErrorResponseContent, isLoginResponseContent, LoginResponseContent } from "../shared/messageContentTypes.js";
 
 import "./main.css";
 

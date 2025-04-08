@@ -10,7 +10,7 @@ import LogManager from "./logging/logManager.js";
 import Logger from "./logging/logger.js";
 import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
-import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, isLoginResponseContent, LoginContent, LoginResponseContent, SendMessageContent, SwapContent } from "../shared/messagecontenttypes.js";
+import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, isLoginResponseContent, LoginContent, LoginResponseContent, SendMessageContent, SwapContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;

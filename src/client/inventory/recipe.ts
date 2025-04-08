@@ -1,4 +1,4 @@
-import { CraftContent } from "../../shared/messagecontenttypes.js";
+import { CraftContent } from "../../shared/messageContentTypes.js";
 import { craft } from "../networking/networking.js";
 import { getInventory } from "./inventory.js";
 import { Item } from "./item.js";

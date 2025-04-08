@@ -1,4 +1,4 @@
-import { ReceiveMessageContent } from "../../shared/messagecontenttypes.js";
+import { ReceiveMessageContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
