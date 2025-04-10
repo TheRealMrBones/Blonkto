@@ -4,6 +4,8 @@ import World from "./world.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
 export function pathfind(start: Pos, end: Pos, world: World, ghostblocked?: Pos[]): Pos[] | null {
+    if(equalPos(start, end)) return null;
+
     ghostblocked = ghostblocked || [];
 
     const maxdistfromstart = Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y)) * 2;

@@ -9,7 +9,7 @@ import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
 import { setInventory } from "../inventory/inventory.js";
-import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
+import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
