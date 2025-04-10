@@ -1,37 +1,15 @@
 import { Color } from "./types.js";
 
-/** Defines the format of the error server response message */
-export type ErrorResponseContent = {
-    error: string;
-};
-
 /** Defines the format of the failed connection / kicked messages */
 export type FailedConnectionContent = {
     reason: string;
     extra: string;
 };
 
-/** Defines the format of the create account message */
-export type CreateAccountContent = {
-    username: string;
-    password: string;
+/** Defines the format of the join game messages */
+export type JoinGameContent = {
+    token: string;
 };
-
-/** Defines the format of the login message */
-export type LoginContent = {
-    username: string;
-    password: string;
-};
-
-/** Defines the format of the login server response message */
-export type LoginResponseContent = {
-    account: {
-        username: string;
-    };
-};
-
-/** Checks to make sure that a response is of the type LoginResponseContent */
-export const isLoginResponseContent = (val: any): val is LoginResponseContent => { return true; };
 
 /** Defines the format of the player instantiated message */
 export type PlayerInstantiatedContent = {

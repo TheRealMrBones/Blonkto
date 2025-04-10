@@ -121,8 +121,8 @@ const registerUser = async (username: string, password: string): Promise<any> =>
         return { error: "Invalid username. It must be 3-16 characters only letters, numbers, and underscores." };
 
     // Validate password
-    if (password.length < 8)
-        return { error: "Invalid password. It must be at least 8 characters." };
+    //if (password.length < 8)
+    //    return { error: "Invalid password. It must be at least 8 characters." };
 
     const existingUser = await userModel.getUserByUsername(username);
 
@@ -140,7 +140,7 @@ const registerUser = async (username: string, password: string): Promise<any> =>
     }
 };
 
-/** Logins in with the given credentials and returns the login token */
+/** Logins in with the given credentials and returns the api key */
 const loginUser = async (username: string, password: string): Promise<any> => {
     // Sanitize inputs
     username = sanitizeInput(username);
@@ -148,13 +148,12 @@ const loginUser = async (username: string, password: string): Promise<any> => {
 
     try {
         const user = await userModel.getUserByUsername(username);
-
         if (!user) return { error: "Invalid username or password" };
 
         const passwordMatch = await argon2.verify(user.hashedPw, password);
         if (!passwordMatch) return { error: "Invalid username or password" };
-
-        const token = jwt.sign({ username }, "process.env.SECRET_KEY", { expiresIn: "24h" });
+        
+        const token = jwt.sign({ username }, process.env.SECRET_KEY!, { expiresIn: "24h" });
         return { token };
     } catch (error) {
         console.error("Error in loginUser:", error);
@@ -165,7 +164,7 @@ const loginUser = async (username: string, password: string): Promise<any> => {
 /** Returns if the requested token is valid */
 const verifyToken = (token: string): any => {
     try {
-        const decoded: any = jwt.verify(token, "process.env.SECRET_KEY");
+        const decoded: any = jwt.verify(token, process.env.SECRET_KEY!);
         return { valid: true, username: decoded.username, token: token };
     } catch (error) {
         console.error("Error verifying token:", error);
@@ -190,7 +189,7 @@ const updateUserPassword = async (userId: string, password: string): Promise<any
     }
 };
 
-/** Returns the user that currently uses the requested login token */
+/** Returns the user that currently uses the requested api key */
 const getUserByApiKey = async (apiKey: string): Promise<any> => {
     try {
         return await userModel.getUserByApiKey(apiKey);

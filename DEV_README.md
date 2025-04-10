@@ -13,3 +13,7 @@
 2. Run `npm run prod:build`
 3. Run `node dist/nodejs/src/server/server.js`
 4. The game is now playable on port 3000
+
+# Environment Variables
+- SECRET_KEY - the key used for secure token generation
+- PORT - the port the server will run on / be open on

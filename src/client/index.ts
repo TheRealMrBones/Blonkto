@@ -1,10 +1,10 @@
-import { connect, createaccount, login, play } from "./networking/networking.js";
+import { connect, play } from "./networking/networking.js";
 import { stopRendering } from "./render/render.js";
 import { stopCapturingInput } from "./input/input.js";
 import { downloadAssets } from "./render/assets.js";
 import { initState } from "./networking/state.js";
 import { hideUi } from "./render/ui.js";
-import { FailedConnectionContent, ErrorResponseContent, isLoginResponseContent, LoginResponseContent } from "../shared/messageContentTypes.js";
+import { FailedConnectionContent, JoinGameContent } from "../shared/messageContentTypes.js";
 
 import "./main.css";
 
@@ -26,8 +26,6 @@ const loginButton = document.getElementById("loginbutton")!;
 const createAccountButton = document.getElementById("createaccountbutton")!;
 const usernameDiv = document.getElementById("usernamediv")!;
 
-let account;
-
 // #endregion
 
 // #region prepare game
@@ -39,17 +37,17 @@ Promise.all([
     usernameInput.focus();
     usernameInput.addEventListener("keyup", event => {
         event.preventDefault();
-        if(event.key === "Enter") sendcreateaccount();
+        if(event.key === "Enter") sendLogin();
     });
     passwordInput.addEventListener("keyup", event => {
         event.preventDefault();
-        if(event.key === "Enter") sendlogin();
+        if(event.key === "Enter") sendLogin();
     });
 
-    createAccountButton.onclick = sendcreateaccount;
-    loginButton.onclick = sendlogin;
+    createAccountButton.onclick = sendCreateAccount;
+    loginButton.onclick = sendLogin;
 
-    playButton.onclick = joingame;
+    playButton.onclick = joinGame;
 
     changeLogButton.onclick = () => {
         changeLog.style.display = "block";
@@ -66,28 +64,79 @@ Promise.all([
 // #region login
 
 /** Tries to send the create account message to the server */
-function sendcreateaccount(): void {
-    if(!usernameInput.value || !passwordInput.value){
-        errorDiv.innerHTML = "must provide a username and password";
-        return;
-    }
+function sendCreateAccount(): void {
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
-    createaccount(usernameInput.value, passwordInput.value);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/register", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
 
-    usernameInput.value = "";
-    passwordInput.value = "";
-    usernameInput.blur();
-    passwordInput.blur();
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4){
+            if(xhr.status == 201){
+                sendLogin();
+            }else{
+                const data = JSON.parse(xhr.responseText);
+                showError("Registration failed: " + data.error);
+            }
+        }
+    };
+
+    // Convert the data to JSON format
+    const jsonData = JSON.stringify({
+        username: username,
+        password: password
+    });
+
+    // Send the request
+    xhr.send(jsonData);
 }
 
 /** Tries to send the login message to the server */
-function sendlogin(): void {
-    if(!usernameInput.value || !passwordInput.value){
+function sendLogin(): void {
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    if(!username || !password){
         errorDiv.innerHTML = "must provide a username and password";
         return;
     }
 
-    login(usernameInput.value, passwordInput.value);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/login", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                const data = JSON.parse(xhr.responseText);
+
+                // Check if login was successful
+                if(data.token){
+                    onLogin(username);
+                }else{
+                    // Display the error message from the server
+                    showError("Login failed: " + data.error);
+                }
+            }else if(xhr.status == 401) {
+                // Unauthorized - Incorrect username or password
+                showError("Invalid username or password. Please try again.");
+            }else{
+                // Handle other server errors or HTTP status codes
+                showError("Failed to make the login request. Please try again later.");
+            }
+        }
+    };
+
+    // Convert the data to JSON format
+    const jsonData = JSON.stringify({
+        username: username,
+        password: password
+    });
+
+    // Send the request
+    xhr.send(jsonData);
 
     usernameInput.value = "";
     passwordInput.value = "";
@@ -96,19 +145,13 @@ function sendlogin(): void {
 }
 
 /** Opens up the play UI after successful login with the server */
-export function onlogin(response: LoginResponseContent | ErrorResponseContent): void {
-    if(isLoginResponseContent(response)){
-        usernameDiv.innerHTML = `Logged in as: ${response.account.username}`;
+function onLogin(username: string): void {
+    usernameDiv.innerHTML = `Logged in as: ${username}`;
 
-        loginDiv.style.display = "none";
-        playDiv.style.display = "block";
+    loginDiv.style.display = "none";
+    playDiv.style.display = "block";
 
-        account = response.account;
-
-        playButton.focus();
-    }else{
-        errorDiv.innerHTML = response.error;
-    }
+    playButton.focus();
 }
 
 // #endregion
@@ -116,8 +159,14 @@ export function onlogin(response: LoginResponseContent | ErrorResponseContent): 
 // #region state changes
 
 /** Tries to join the server game and initialize client state */
-function joingame(): void {
-    play();
+function joinGame(): void {
+    const token = getCookie("token");
+    if(token === null) return;
+    const content: JoinGameContent = {
+        token: token,
+    }
+
+    play(content);
     initState();
 }
 
@@ -145,6 +194,25 @@ function onGameOver(connectionrefusedinfo: any): void {
 
 // #endregion
 
+// #region helpers
+
+/** Displays the given error in the main menu */
+function showError(error: string): void{
+    errorDiv.innerHTML = error;
+}
+
+/** Returns the requested cookie if it exists */
+function getCookie(name: string): string | null {
+    const cookies = document.cookie.split(';');
+    for(let i = 0; i < cookies.length; i++){
+        const cookie = cookies[i].trim();
+        if(cookie.startsWith(name + '=')) return cookie.substring(name.length + 1);
+    }
+    return null;
+}
+
+// #endregion
+
 //
 // TEMP CODE FOR FAST LOGIN!!!
 //
@@ -160,25 +228,25 @@ function devlogin(event: any): void {
             case "1":
                 usernameInput.value = "testuser1";
                 passwordInput.value = "testuser1";
-                sendlogin();
+                sendLogin();
                 document.removeEventListener("keydown", devlogin);
                 break;
             case "2":
                 usernameInput.value = "testuser2";
                 passwordInput.value = "testuser2";
-                sendlogin();
+                sendLogin();
                 document.removeEventListener("keydown", devlogin);
                 break;
             case "3":
                 usernameInput.value = "testuser3";
                 passwordInput.value = "testuser3";
-                sendlogin();
+                sendLogin();
                 document.removeEventListener("keydown", devlogin);
                 break;
             case "4":
                 usernameInput.value = "testuser4";
                 passwordInput.value = "testuser4";
-                sendlogin();
+                sendLogin();
                 document.removeEventListener("keydown", devlogin);
                 break;
         }

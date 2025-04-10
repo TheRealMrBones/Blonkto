@@ -6,9 +6,9 @@ import { startRendering, setColor } from "../render/render.js";
 import { startCapturingInput } from "../input/input.js";
 import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
-import { onlogin, connectionRefused, connectionAccepted } from "../index.js";
+import { connectionRefused, connectionAccepted } from "../index.js";
 import { setInventory } from "../inventory/inventory.js";
-import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, LoginContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
+import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -28,7 +28,6 @@ const connectedPromise = new Promise<void>(resolve => {
 /** Main method to connect and prepare the clients socket for interaction with the server */
 export const connect = (onGameOver: any): Promise<void> => (
     connectedPromise.then(() => {
-        socket.on(MSG_TYPES.LOGIN, onlogin);
         socket.on(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
         socket.on(MSG_TYPES.PING, onPing);
         socket.on(MSG_TYPES.PLAYER_INSTANTIATED, onInstantiated);
@@ -54,21 +53,9 @@ function onInstantiated(content: PlayerInstantiatedContent): void {
 
 // #region send message functions
 
-/** Method to send the create account message to the server */
-export const createaccount = (username: string, password: string): void => {
-    const content: CreateAccountContent = {username: username, password: password};
-    socket.emit(MSG_TYPES.CREATE_ACCOUNT, content);
-};
-
-/** Method to send the login message to the server */
-export const login = (username: string, password: string): void => {
-    const content: LoginContent = {username: username, password: password};
-    socket.emit(MSG_TYPES.LOGIN, content);
-};
-
 /** Method to send the play message to the server */
-export const play = (): void => {
-    socket.emit(MSG_TYPES.JOIN_GAME);
+export const play = (content: JoinGameContent): void => {
+    socket.emit(MSG_TYPES.JOIN_GAME, content);
 };
 
 /** Method to send the update inputs message to the server */

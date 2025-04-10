@@ -3,7 +3,6 @@ import { Socket } from "socket.io-client";
 
 import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
-import AccountManager from "../server/accountManager.js";
 import PlayerManager from "./managers/playerManager.js";
 import EntityManager from "./managers/entityManager.js";
 import OpManager from "./managers/opManager.js";
@@ -35,7 +34,6 @@ class Game {
     logger: Logger;
 
     fileManager: FileManager;
-    accountManager: AccountManager;
     playerManager: PlayerManager;
     entityManager: EntityManager;
     opManager: OpManager;
@@ -56,13 +54,12 @@ class Game {
     oppasscode: string;
     oppasscodeused: boolean;
 
-    constructor(fileManager: FileManager, accountManager: AccountManager){
+    constructor(fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
 
         // managers
         this.fileManager = fileManager;
-        this.accountManager = accountManager;
         this.playerManager = new PlayerManager(this);
         this.entityManager = new EntityManager(this);
         this.opManager = new OpManager(this);

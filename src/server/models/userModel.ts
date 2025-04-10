@@ -56,7 +56,7 @@ const setModStatus = async (userId: string, bool: boolean): Promise<any> => {
 const getApiKeyById = async (userId: string): Promise<any> => {
     try {
         const user = readAccount(userId);//await prisma.user.findUnique({ where: { id: userId } });
-        return user?.token;//.apiKey;
+        return user?.apiKey;//.apiKey;
     } catch (error) {
         console.error("Error in getApiKeyById:", error);
         return null;
@@ -76,7 +76,7 @@ const verifyApiKey = async (apiKey: string): Promise<boolean> => {
     }
 };
 
-/** Returns the user that currently uses the requested login token */
+/** Returns the user that currently uses the requested api key */
 const getUserByApiKey = async (apiKey: string): Promise<any> => {
     try {
         return readAccountByKey(apiKey);/*await prisma.user.findFirst({
@@ -88,13 +88,13 @@ const getUserByApiKey = async (apiKey: string): Promise<any> => {
     }
 };
 
-/** Returns a newly generated login token for the requested user */
+/** Returns a newly generated api key for the requested user */
 const newApiKey = async (userId: string): Promise<any> => {
     try {
         const newApiKey = generateApiKey();
         const acc = readAccount(userId);
         if(!acc) return null;
-        acc.token = newApiKey;
+        acc.apiKey = newApiKey;
         writeAccount(acc);/*await prisma.user.update({
             where: { id: userId },
             data: { apiKey: newApiKey },
@@ -166,10 +166,10 @@ const createUser = async (username: string, hashedPw: string): Promise<any> => {
             username: username,
             id: username,
             hashedPw: hashedPw,
-            token: "",
+            apiKey: apiKey,
         };
         writeAccount(user);/*await prisma.user.create({
-            data: { username, hashedPw, apiKey },
+            data: { username, hashedPw, token },
             include: { Profile: true },
         });*/
         return user;
@@ -221,7 +221,7 @@ type Account = {
     username: string;
     id: string; // will make the id the same as the username for now
     hashedPw: string;
-    token: string;
+    apiKey: string;
 }
 
 /** Returns the account with the requested username if it exists */
@@ -230,12 +230,12 @@ function readAccount(username: string): Account | null {
     return JSON.parse(filemanager.readFile(getAccountFilePath(username))!) as Account;
 }
 
-/** Returns the account with the requested login token if it exists */
-function readAccountByKey(key: string): Account | null {
+/** Returns the account with the requested api key if it exists */
+function readAccountByKey(apiKey: string): Account | null {
     const files = filemanager.listDirectory("accounts");
     for(const file of files){
         const acc = JSON.parse(filemanager.readFile(getAccountFilePath(file))!) as Account;
-        if(acc.token === key) return acc;
+        if(acc.apiKey === apiKey) return acc;
     }
     return null;
 }

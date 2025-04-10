@@ -1,16 +1,18 @@
 import express from "express";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
 import Game from "../game/game.js";
+import userController from "./controllers/userController.js";
 import FileManager from "./fileManager.js";
 import LogManager from "./logging/logManager.js";
 import Logger from "./logging/logger.js";
-import AccountManager from "./accountManager.js";
 import webpackConfig from "../../webpack.dev.js";
-import { ClickContent, CraftContent, CreateAccountContent, DropContent, InputContent, isLoginResponseContent, LoginContent, LoginResponseContent, SendMessageContent, SwapContent } from "../shared/messageContentTypes.js";
+import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, SendMessageContent, SwapContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -26,10 +28,9 @@ const fileManager = new FileManager();
 LogManager.getLogManager().setFileManager(fileManager);
 const logger = Logger.getLogger(LOG_CATEGORIES.SERVER);
 logger.info("Initializing server");
-const accountManager = new AccountManager(fileManager);
-const game = new Game(fileManager, accountManager);
+const game = new Game(fileManager);
 
-// Sending resources
+// Middleware
 app.use(express.static("public"));
 
 if(process.env.NODE_ENV === "development"){
@@ -39,7 +40,14 @@ if(process.env.NODE_ENV === "development"){
   	app.use(express.static("dist/webpack"));
 }
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 // Including routes
+import userRoutes from "./routes/user.js";
+app.use("/", userRoutes);
+
 import configRoutes from "./routes/config.js";
 app.use("/", configRoutes);
 
@@ -54,8 +62,6 @@ const io = new SocketIo(server);
 io.on("connection", socket => {
     if(LOG_CONNECTIONS) logger.log(`[${socket.id}] Connected`);
 
-    socket.on(MSG_TYPES.CREATE_ACCOUNT, createAccount);
-    socket.on(MSG_TYPES.LOGIN, login);
     socket.on(MSG_TYPES.JOIN_GAME, joinGame);
     socket.on(MSG_TYPES.PING, ping);
     socket.on(MSG_TYPES.INPUT, handleInput);
@@ -74,32 +80,12 @@ logger.info("Server initialized");
 
 // #region socket functions
 
-/** Response to the create account message from a client */
-async function createAccount(this: Socket, content: CreateAccountContent): Promise<void> {
-    if(this.id === undefined) return;
-	
-    const response = await accountManager.createAccount(this.id, content.username, content.password);
-    this.emit(MSG_TYPES.LOGIN, response);
-
-    if(isLoginResponseContent(response) && LOG_CONNECTIONS) logger.log(`[${this.id}] Create account: ${response.account.username}`);
-}
-
-/** Response to the login message from a client */
-async function login(this: Socket, content: LoginContent): Promise<void> {
-    if(this.id === undefined) return;
-	
-    const response = await accountManager.login(this.id, content.username, content.password);
-    this.emit(MSG_TYPES.LOGIN, response);
-
-    if(isLoginResponseContent(response) && LOG_CONNECTIONS) logger.log(`[${this.id}] Logged in as: ${response.account.username}`);
-}
-
 /** Response to the join game message from a client */
-function joinGame(this: Socket): void {
-    if(this.id === undefined) return;
-	
-    const username = accountManager.getAccount(this.id).username;
-    if(LOG_CONNECTIONS) logger.log(`[${this.id}] [${username}] Joined the game`);
+async function joinGame(this: Socket, content: JoinGameContent): Promise<void> {
+    const account = await userController.verifyToken(content.token);
+    if(!account.valid) return;
+
+    const username = account.username;
     game.playerManager.addPlayer(this, username);
 }
 
@@ -140,17 +126,6 @@ function craft(this: Socket, content: CraftContent): void {
 
 /** Response to the disconnect message from a client */
 function onDisconnect(this: Socket): void {
-    if(this.id === undefined) return;
-	
-    const acc = accountManager.getAccount(this.id);
-
-    if(acc){
-        if(LOG_CONNECTIONS) logger.log(`[${this.id}] [${acc.username}] Disconnected`);
-        accountManager.logout(this.id);
-    }else{
-        if(LOG_CONNECTIONS) logger.log(`[${this.id}] Disconnected`);
-    }
-
   	game.playerManager.removePlayer(this);
 }
 
