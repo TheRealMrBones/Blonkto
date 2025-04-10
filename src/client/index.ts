@@ -57,6 +57,12 @@ Promise.all([
         changeLog.style.display = "none";
         startMenu.style.display = "block";
     };
+    
+    // try silent login if have old token
+    const token = getCookie("token");
+    if(token !== null){
+        verifyToken(token);
+    }
 }).catch(console.error);
 
 // #endregion
@@ -142,6 +148,37 @@ function sendLogin(): void {
     passwordInput.value = "";
     usernameInput.blur();
     passwordInput.blur();
+}
+
+/** Tries to send the verify token message to the server */
+function verifyToken(token: string): void {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/verify", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                const data = JSON.parse(xhr.responseText);
+
+                // Check if login was successful
+                if(data.valid){
+                    onLogin(data.username);
+                }else{
+                    // Display the error message from the server
+                    showError("Login failed: " + data.error);
+                }
+            }
+        }
+    };
+
+    // Convert the data to JSON format
+    const jsonData = JSON.stringify({
+        token: token
+    });
+
+    // Send the request
+    xhr.send(jsonData);
 }
 
 /** Opens up the play UI after successful login with the server */

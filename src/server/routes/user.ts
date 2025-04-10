@@ -45,6 +45,19 @@ router.post("/login", async (req: any, res: any) => {
     return res.status(result.error ? 401 : 200).json(result);
 });
 
+/** Logs into an existing account with the given information */
+router.post("/verify", async (req: any, res: any) => {
+    let { token } = req.body;
+
+    // Sanitize token
+    token = validator.trim(token);
+    token = validator.escape(token);
+
+    const result = await userController.verifyToken(token);
+
+    return res.status(result.error ? 401 : 200).json(result);
+});
+
 /** Logs out of the current account */
 router.post("/logout", (req: any, res: any) => {
     res.clearCookie("token");
