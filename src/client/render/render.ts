@@ -1,9 +1,10 @@
 import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
-import { getCurrentState } from "../networking/state.js";
 import { getSelf, setSelf } from "../input/input.js";
 import { getCell } from "../world/world.js";
 import { updateFps } from "./ui.js";
 import { Color } from "../../shared/types.js";
+
+import { playerclient } from "../index.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
@@ -79,7 +80,7 @@ function calculatefps(): void {
 /** Main render method for rendering the current (interpolated as needed) state of the loaded game world */
 function render(): void {
     // get all needed state and self info
-    const state = getCurrentState();
+    const state = playerclient.stateManager.getCurrentState();
     if(state === null){
         animationFrameRequestId = requestAnimationFrame(render);
         return;

@@ -3,21 +3,20 @@ import { throttle } from "throttle-debounce";
 import { Socket } from "socket.io";
 
 import PlayerClient from "../playerClient.js";
-import { processGameUpdate } from "../networking/state.js";
 import { startRendering, setColor } from "../render/render.js";
 import { startCapturingInput } from "../input/input.js";
 import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
 import { setInventory } from "../inventory/inventory.js";
-import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
+import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
 class NetworkingManager {
-    private playerclient: PlayerClient;
-    private socket: Socket;
+    private readonly playerclient: PlayerClient;
+    private readonly socket: Socket;
 
     private pinginterval: NodeJS.Timeout | undefined;
     private pingsent: number = 0;
@@ -30,7 +29,7 @@ class NetworkingManager {
 
         const connectedPromise = new Promise<void>(resolve => {
             this.socket.on("connect", () => {
-                this.pinginterval = setInterval(this.ping, 1000);
+                this.pinginterval = setInterval(this.ping.bind(this), 1000);
                 console.log("Connected to server!");
                 resolve();
             });
@@ -38,9 +37,9 @@ class NetworkingManager {
 
         connectedPromise.then(() => {
             this.addListener(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
-            this.addListener(MSG_TYPES.PING, this.onPing);
+            this.addListener(MSG_TYPES.PING, this.onPing.bind(this));
             this.addListener(MSG_TYPES.PLAYER_INSTANTIATED, this.onInstantiated);
-            this.addListener(MSG_TYPES.GAME_UPDATE, processGameUpdate);
+            this.addListener(MSG_TYPES.GAME_UPDATE, playerclient.stateManager.processGameUpdate.bind(playerclient.stateManager));
             this.addListener(MSG_TYPES.DEAD, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.KICK, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.BAN, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));

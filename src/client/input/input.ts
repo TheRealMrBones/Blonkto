@@ -1,7 +1,6 @@
 import { getCellSize } from "../render/render.js";
 import { blockCollisions, playerCollisions } from "../networking/collisions.js";
 import { updateCoords } from "../render/ui.js";
-import { getCurrentState } from "../networking/state.js";
 import { Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
 
@@ -294,7 +293,7 @@ function updatePos(): void {
     updateCoords(x + dx, y + dy);
     
     // collisions
-    const others = getCurrentState().others!;
+    const others = playerclient.stateManager.getCurrentState().others!;
     const self = {
         x: x + dx,
         y: y + dy,
