@@ -1,4 +1,4 @@
-import { connect, play } from "./networking/networking.js";
+import PlayerClient from "./playerClient.js";
 import { stopRendering } from "./render/render.js";
 import { stopCapturingInput } from "./input/input.js";
 import { downloadAssets } from "./render/assets.js";
@@ -30,8 +30,11 @@ const usernameDiv = document.getElementById("usernamediv")!;
 
 // #region prepare game
 
+// initialize the player client
+export const playerclient = new PlayerClient();
+
+// conect the client to the server
 Promise.all([
-    connect(onGameOver),
     downloadAssets(),
 ]).then(() => {
     usernameInput.focus();
@@ -201,9 +204,9 @@ function joinGame(): void {
     if(token === null) return;
     const content: JoinGameContent = {
         token: token,
-    }
+    };
 
-    play(content);
+    playerclient.networkingManager.play(content);
     initState();
 }
 
@@ -219,7 +222,7 @@ export function connectionAccepted(): void {
 }
 
 /** Reverts back to the play UI after server death message */
-function onGameOver(connectionrefusedinfo: any): void {
+export function onGameOver(connectionrefusedinfo: any): void {
     if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
 
     stopCapturingInput();
@@ -240,10 +243,10 @@ function showError(error: string): void{
 
 /** Returns the requested cookie if it exists */
 function getCookie(name: string): string | null {
-    const cookies = document.cookie.split(';');
+    const cookies = document.cookie.split(";");
     for(let i = 0; i < cookies.length; i++){
         const cookie = cookies[i].trim();
-        if(cookie.startsWith(name + '=')) return cookie.substring(name.length + 1);
+        if(cookie.startsWith(name + "=")) return cookie.substring(name.length + 1);
     }
     return null;
 }

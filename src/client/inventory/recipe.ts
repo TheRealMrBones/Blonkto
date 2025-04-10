@@ -1,7 +1,8 @@
 import { CraftContent } from "../../shared/messageContentTypes.js";
-import { craft } from "../networking/networking.js";
 import { getInventory } from "./inventory.js";
 import { Item } from "./item.js";
+
+import { playerclient } from "../index.js";
 
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 
@@ -69,7 +70,7 @@ export class Recipe {
                     ingredients: ingredientsdictionary,
                     amount: amount,
                 };
-                craft(content);
+                playerclient.networkingManager.craft(content);
             }
         };
 

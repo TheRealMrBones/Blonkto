@@ -1,8 +1,9 @@
-import { chat, drop } from "../networking/networking.js";
 import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 import { swapSlots } from "../inventory/inventory.js";
 import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
+
+import { playerclient } from "../index.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
@@ -134,7 +135,7 @@ function chatInputKeyUp(event: KeyboardEvent): void {
         const content: SendMessageContent = {
             text: chatInput.value,
         };
-        chat(content);
+        playerclient.networkingManager.chat(content);
         focusingOut = true;
         chatInput.value = "";
         chatInput.blur();
@@ -197,7 +198,7 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
                 slot: getSelectedSlot(),
                 all: event.ctrlKey,
             };
-            drop(content);
+            playerclient.networkingManager.drop(content);
             break;
         }
         case "1": {

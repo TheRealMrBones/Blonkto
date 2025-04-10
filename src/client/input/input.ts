@@ -1,10 +1,11 @@
-import { updateInputs, click, interact, drop } from "../networking/networking.js";
 import { getCellSize } from "../render/render.js";
 import { blockCollisions, playerCollisions } from "../networking/collisions.js";
 import { updateCoords } from "../render/ui.js";
 import { getCurrentState } from "../networking/state.js";
 import { Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
+
+import { playerclient } from "../index.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
@@ -98,7 +99,7 @@ function handlekeyDown(e: KeyboardEvent): void {
                 slot: selectedslot,
                 all: e.ctrlKey,
             };
-            drop(content);
+            playerclient.networkingManager.drop(content);
             break;
         }
 
@@ -200,9 +201,9 @@ function handleMouseDown(e: MouseEvent): void {
 
     // send appropriate click event
     if(e.button == 0){
-        click(content);
+        playerclient.networkingManager.click(content);
     }else if(e.button == 2){
-        interact(content);
+        playerclient.networkingManager.interact(content);
     }
 }
 
@@ -252,7 +253,7 @@ function handleInput(): void {
         dy: dy,
         hotbarslot: selectedslot,
     };
-    updateInputs(content);
+    playerclient.networkingManager.updateInputs(content);
 
     x = x + dx;
     y = y + dy;
