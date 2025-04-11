@@ -62,16 +62,23 @@ class WanderComponent extends Component<EntityDefinition> {
         }
 
         if(Math.random() < .01){
-            let movex, movey, cellx, celly;
-            while(true){
+            let movex, movey, cellx = 0, celly = 0;
+
+            let found = false;
+            for(let tries = 10; tries > 0; tries--){
                 movex = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
                 movey = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
                 cellx = Math.floor(entity.x) + movex;
                 celly = Math.floor(entity.y) + movey;
                 const cell = game.world.getCell(cellx, celly, false);
-                if(cell !== null)
-                    if(cell.block === null) break;
+                if(cell !== null){
+                    if(cell.block === null){
+                        found = true;
+                        break;
+                    }
+                }
             }
+            if(!found) return;
             
             const path = pathfind({ x: Math.floor(entity.x), y: Math.floor(entity.y) }, { x: cellx, y: celly }, game.world);
             if(path === null) return;
