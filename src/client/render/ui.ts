@@ -1,4 +1,3 @@
-import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
 import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
 
@@ -34,7 +33,7 @@ let ignorechatenter = 0;
 for(let i = 0; i < 36; i++){
     const hotbarslot = document.getElementById("slot" + (i + 1))!;
     hotbarslot.addEventListener("click", function() {
-        selectSlot(i);
+        playerclient.inputManager.selectSlot(i);
     });
 }
 
@@ -146,7 +145,7 @@ function chatInputKeyUp(event: KeyboardEvent): void {
 function chatInputFocus(event: FocusEvent): void {
     if(inventoryopen) closeInventory();
     
-    pauseCapturingInputs();
+    playerclient.inputManager.pauseCapturingInputs();
     window.removeEventListener("keydown", keyDownChecks);
     window.removeEventListener("keyup", keyUpChecks);
     toggleAllChatShow(true);
@@ -154,7 +153,7 @@ function chatInputFocus(event: FocusEvent): void {
 
 /** Handles chat UI related unfocus events */
 function chatInputUnfocus(event: FocusEvent): void {
-    resumeCapturingInputs();
+    playerclient.inputManager.resumeCapturingInputs();
     window.addEventListener("keydown", keyDownChecks);
     window.addEventListener("keyup", keyUpChecks);
     toggleAllChatShow(false);
@@ -164,22 +163,22 @@ function chatInputUnfocus(event: FocusEvent): void {
 function openInventory(): void {
     inventoryopen = true;
     inventorydiv.style.display = "block";
-    pauseCapturingInputs();
+    playerclient.inputManager.pauseCapturingInputs();
     window.removeEventListener("keydown", keyDownChecks);
     window.removeEventListener("keyup", keyUpChecks);
     window.addEventListener("keyup", keyUpChecksInventory);
-    pauseHotbar();
+    playerclient.inputManager.pauseHotbar();
 }
 
 /** Handles the close inventory action */
 function closeInventory(): void {
     inventoryopen = false;
     inventorydiv.style.display = "none";
-    resumeCapturingInputs();
+    playerclient.inputManager.resumeCapturingInputs();
     window.addEventListener("keydown", keyDownChecks);
     window.addEventListener("keyup", keyUpChecks);
     window.removeEventListener("keyup", keyUpChecksInventory);
-    unpauseHotbar();
+    playerclient.inputManager.unpauseHotbar();
 }
 
 /** Handles keyboard inputs when in inventory */
@@ -194,49 +193,17 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
         }
         case "q": {
             const content: DropContent = {
-                slot: getSelectedSlot(),
+                slot: playerclient.inputManager.getSelectedSlot(),
                 all: event.ctrlKey,
             };
             playerclient.networkingManager.drop(content);
             break;
         }
-        case "1": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 0);
-            break;
-        }
-        case "2": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 1);
-            break;
-        }
-        case "3": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 2);
-            break;
-        }
-        case "4": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 3);
-            break;
-        }
-        case "5": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 4);
-            break;
-        }
-        case "6": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 5);
-            break;
-        }
-        case "7": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 6);
-            break;
-        }
-        case "8": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 7);
-            break;
-        }
-        case "9": {
-            playerclient.inventory.swapSlots(getSelectedSlot(), 8);
-            break;
-        }
     }
+
+    // hotbar
+    const posnum = parseInt(event.key);
+    if(!Number.isNaN(posnum) && posnum != 0) playerclient.inventory.swapSlots(playerclient.inputManager.getSelectedSlot(), posnum - 1);
 }
 
 // #endregion

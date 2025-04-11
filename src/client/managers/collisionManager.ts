@@ -1,5 +1,4 @@
 import PlayerClient from "../playerClient.js";
-import { clientPush } from "../input/input.js";
 import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
@@ -16,7 +15,7 @@ class CollisionManager {
         const playerobjects: CircleCollisionObject[] = players as CircleCollisionObject[];
 
         const push = SharedCollisions.entityCollisions(meobject, playerobjects);
-        clientPush(push.x, push.y);
+        this.playerclient.inputManager.clientPush(push.x, push.y);
     }
 
     /** Checks collisions between the current player and any nearby blocks with hitboxes */
@@ -38,7 +37,7 @@ class CollisionManager {
         }
 
         const push = SharedCollisions.blockCollisions(meobject, checkcells);
-        clientPush(push.x, push.y);
+        this.playerclient.inputManager.clientPush(push.x, push.y);
     }
 }
 

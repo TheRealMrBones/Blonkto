@@ -1,5 +1,4 @@
 import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
-import { getSelf, setSelf } from "../input/input.js";
 import { updateFps } from "./ui.js";
 import { Color } from "../../shared/types.js";
 
@@ -86,8 +85,8 @@ function render(): void {
     }
 
     const { others = [], self, entities } = state;
-    setSelf(self);
-    const me: any = getSelf();
+    playerclient.inputManager.setSelf(self);
+    const me: any = playerclient.inputManager.getSelf();
     me.color = myColor;
     me.asset = ASSETS.PLAYER;
 

@@ -1,5 +1,4 @@
 import PlayerClient from "../playerClient.js";
-import { setPos, serverPush } from "../input/input.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
@@ -41,8 +40,8 @@ class StateManager {
         if(update.worldLoad.updatedcells) this.playerclient.world.updateCells(update.worldLoad.updatedcells);
 
         // get fixes
-        if(update.fixes.setpos) setPos(update.fixes.setpos);
-        serverPush(update.fixes.pushx, update.fixes.pushy);
+        if(update.fixes.setpos) this.playerclient.inputManager.setPos(update.fixes.setpos);
+        this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy);
 
         update.inventoryupdates.forEach((iu: any) => {
             this.playerclient.inventory.setSingleInventorySlot(iu);

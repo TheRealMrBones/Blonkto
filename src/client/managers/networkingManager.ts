@@ -4,7 +4,6 @@ import { Socket } from "socket.io";
 
 import PlayerClient from "../playerClient.js";
 import { startRendering, setColor } from "../render/render.js";
-import { startCapturingInput } from "../input/input.js";
 import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
@@ -37,7 +36,7 @@ class NetworkingManager {
         connectedPromise.then(() => {
             this.addListener(MSG_TYPES.CONNECTION_REFUSED, connectionRefused);
             this.addListener(MSG_TYPES.PING, this.onPing.bind(this));
-            this.addListener(MSG_TYPES.PLAYER_INSTANTIATED, this.onInstantiated);
+            this.addListener(MSG_TYPES.PLAYER_INSTANTIATED, this.onInstantiated.bind(this));
             this.addListener(MSG_TYPES.GAME_UPDATE, playerclient.stateManager.processGameUpdate.bind(playerclient.stateManager));
             this.addListener(MSG_TYPES.DEAD, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.KICK, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
@@ -109,7 +108,7 @@ class NetworkingManager {
     /** Response to the player instantiated message from the server */
     onInstantiated(content: PlayerInstantiatedContent): void {
         connectionAccepted();
-        startCapturingInput(content.x, content.y);
+        this.playerclient.inputManager.startCapturingInput(content.x, content.y);
         setColor(content.color);
         startRendering();
         setupUi();

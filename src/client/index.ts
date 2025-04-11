@@ -1,6 +1,5 @@
 import PlayerClient from "./playerClient.js";
 import { stopRendering } from "./render/render.js";
-import { stopCapturingInput } from "./input/input.js";
 import { downloadAssets } from "./render/assets.js";
 import { hideUi } from "./render/ui.js";
 import { FailedConnectionContent, JoinGameContent } from "../shared/messageContentTypes.js";
@@ -254,7 +253,7 @@ export function connectionAccepted(): void {
 export function onGameOver(connectionrefusedinfo: any): void {
     if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
 
-    stopCapturingInput();
+    playerclient.inputManager.stopCapturingInput();
     stopRendering();
     hideUi();
     startMenu.style.display = "block";

@@ -1,0 +1,435 @@
+import PlayerClient from "../playerClient.js";
+import { getCellSize } from "../render/render.js";
+import { updateCoords } from "../render/ui.js";
+import { Pos } from "../../shared/types.js";
+import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
+
+import SharedConfig from "../../configs/shared.js";
+const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
+
+import ClientConfig from "../../configs/client.js";
+const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
+
+type InputListener = {
+    event: string;
+    callback: any;
+};
+
+class InputManager {
+    private readonly playerclient: PlayerClient;
+    private readonly canvas = document.getElementById("gamecanvas")!;
+    private readonly listeners: InputListener[] = [];
+    private readonly canvaslisteners: InputListener[] = []; // temp while UI is still in actual html
+
+    private dir = 0;
+    private x = 0;
+    private y = 0;
+    private dx = 0;
+    private dy = 0;
+    private scale = PLAYER_SCALE;
+
+    private startw: number | null = null;
+    private starta: number | null = null;
+    private starts: number | null = null;
+    private startd: number | null = null;
+    private interval: NodeJS.Timeout | null = null;
+
+    private selectedslot = 0;
+    private hotbarslot = 0;
+    private hotbarpaused = false;
+
+    private hit = false;
+    private swinging = false;
+    private lastattackdir = 0;
+
+    private falling = false;
+
+    constructor(playerclient: PlayerClient) {
+        this.playerclient = playerclient;
+
+        // register default listeners
+        this.registerListener("mousemove", this.onMouseInput);
+        this.registerListener("keydown", this.handlekeyDown);
+        this.registerListener("keyup", this.handlekeyUp);
+        this.registerListener("mousedown", this.handleMouseDown);
+        this.registerListener("blur", this.resetMovement);
+    }
+
+    // #region listener management
+
+    /** Registers the given listener to the given event so that when it happens during the game loop it is called */
+    registerListener(event: string, callback: (e: any) => void): void {
+        if(event.includes("mouse") || event.includes("click") || event.includes("touch")){
+            this.canvaslisteners.push({
+                event: event,
+                callback: callback
+            });
+        }else{
+            this.listeners.push({
+                event: event,
+                callback: callback
+            });
+        }
+    }
+
+    /** Toggles all game loop listeners on or off */
+    toggleListeners(toggle: boolean): void {
+        if(toggle){
+            this.listeners.forEach(l => window.addEventListener(l.event, l.callback.bind(this)));
+            this.canvaslisteners.forEach(l => window.addEventListener(l.event, l.callback.bind(this)));
+        }else{
+            this.listeners.forEach(l => window.removeEventListener(l.event, l.callback.bind(this)));
+            this.canvaslisteners.forEach(l => window.removeEventListener(l.event, l.callback.bind(this)));
+        }
+    }
+
+    // #endregion
+
+    // #region mouse
+
+    /** Response to mouse input from client */
+    private onMouseInput(e: MouseEvent): void {
+        this.handleDirection(e.clientX, e.clientY);
+    }
+
+    /** Sets the client direction based on mouse/touch screen position */
+    private handleDirection(x: number, y: number): void {
+        this.dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
+    }
+
+    // #endregion
+
+    // #region handle keys
+
+    /** Response to key down input from client */
+    private handlekeyDown(e: KeyboardEvent): void {
+        switch(e.key){
+            // movement
+            case "ArrowUp":
+            case "w":
+            case "W": {
+                if(!this.startw) this.startw = Date.now();
+                break;
+            }
+            case "ArrowDown":
+            case "s":
+            case "S": {
+                if(!this.starts) this.starts = Date.now();
+                break;
+            }
+            case "ArrowLeft":
+            case "a":
+            case "A": {
+                if(!this.starta) this.starta = Date.now();
+                break;
+            }
+            case "ArrowRight":
+            case "d":
+            case "D": {
+                if(!this.startd) this.startd = Date.now();
+                break;
+            }
+
+            // actions
+            case "q": {
+                const content: DropContent = {
+                    slot: this.selectedslot,
+                    all: e.ctrlKey,
+                };
+                this.playerclient.networkingManager.drop(content);
+                break;
+            }
+        }
+
+        // hotbar
+        const posnum = parseInt(e.key);
+        if(!Number.isNaN(posnum) && posnum != 0) this.selectSlot(posnum - 1);
+    }
+
+    /** Response to key up input from client */
+    private handlekeyUp(e: KeyboardEvent): void {
+        switch(e.key){
+            case "ArrowUp":
+            case "w":
+            case "W": {
+                if(this.startw){
+                    this.dy -= (Date.now() - this.startw) * PLAYER_SPEED / 1000;
+                    this.startw = null;
+                }
+                break;
+            }
+            case "ArrowDown":
+            case "s":
+            case "S": {
+                if(this.starts){
+                    this.dy += (Date.now() - this.starts) * PLAYER_SPEED / 1000;
+                    this.starts = null;
+                }
+                break;
+            }
+            case "ArrowLeft":
+            case "a":
+            case "A": {
+                if(this.starta){
+                    this.dx -= (Date.now() - this.starta) * PLAYER_SPEED / 1000;
+                    this.starta = null;
+                }
+                break;
+            }
+            case "ArrowRight":
+            case "d":
+            case "D": {
+                if(this.startd){
+                    this.dx += (Date.now() - this.startd) * PLAYER_SPEED / 1000;
+                    this.startd = null;
+                }
+                break;
+            }
+        }
+    }
+
+    // #endregion
+
+    // #region handle mouse clicks
+
+    /** Response to mouse click input from client */
+    private handleMouseDown(e: MouseEvent): void {
+        // get position of click compared to current player pos
+        const content: ClickContent = {
+            xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
+            yoffset: (e.clientY - window.innerHeight / 2) / getCellSize(),
+            mex: this.x,
+            mey: this.y,
+        };
+
+        // send appropriate click event
+        if(e.button == 0){
+            this.playerclient.networkingManager.click(content);
+        }else if(e.button == 2){
+            this.playerclient.networkingManager.interact(content);
+        }
+    }
+
+    // #endregion
+
+    // #region hotbar
+
+    /** Selects the given hotbar slot as in use */
+    selectSlot(index: number): void {
+        const oldslot = document.getElementById("slot" + (this.selectedslot + 1))!;
+        const newslot = document.getElementById("slot" + (index + 1))!;
+        oldslot.classList.remove("slotselected");
+        newslot.classList.add("slotselected");
+
+        this.selectedslot = index;
+        if(index < 9 && !this.hotbarpaused) this.hotbarslot = index;
+    }
+
+    /** Returns the slot number than is currently selected */
+    getSelectedSlot(): number {
+        return this.selectedslot;
+    }
+
+    /** Pauses the hotbar selection functionailty */
+    pauseHotbar(): void {
+        this.hotbarpaused = true;
+    }
+
+    /** Unpauses the hotbar selection functionailty */
+    unpauseHotbar(): void {
+        this.hotbarpaused = false;
+        this.selectSlot(this.hotbarslot);
+    }
+
+    // #endregion
+
+    // #region main handling
+
+    /** Updates the clients data based on most recent inputs */
+    private handleInput(): void {
+        this.updatePos();
+
+        const content: InputContent = {
+            t: Date.now(),
+            dir: this.dir,
+            dx: this.dx,
+            dy: this.dy,
+            hotbarslot: this.selectedslot,
+        };
+        this.playerclient.networkingManager.updateInputs(content);
+
+        this.x = this.x + this.dx;
+        this.y = this.y + this.dy;
+        this.dx = 0;
+        this.dy = 0;
+    }
+
+    /** Resets the input reading variables */
+    private resetMovement(): void {
+        this.updatePos();
+        this.startw = null;
+        this.starta = null;
+        this.starts = null;
+        this.startd = null;
+    }
+
+    /** Updates the current position of the client based on most recent movement inputs */
+    private updatePos(): void {
+        // update local position vars
+        if(this.startw){
+            this.dy -= (Date.now() - this.startw) * PLAYER_SPEED / 1000;
+            this.startw = Date.now();
+        }
+        if(this.starts){
+            this.dy += (Date.now() - this.starts) * PLAYER_SPEED / 1000;
+            this.starts = Date.now();
+        }
+        if(this.starta){
+            this.dx -= (Date.now() - this.starta) * PLAYER_SPEED / 1000;
+            this.starta = Date.now();
+        }
+        if(this.startd){
+            this.dx += (Date.now() - this.startd) * PLAYER_SPEED / 1000;
+            this.startd = Date.now();
+        }
+
+        // update ui
+        updateCoords(this.x + this.dx, this.y + this.dy);
+        
+        // collisions
+        const others = this.playerclient.stateManager.getCurrentState().others!;
+        const self = {
+            x: this.x + this.dx,
+            y: this.y + this.dy,
+            scale: this.scale,
+        };
+        
+        if(!this.falling){
+            //playerCollisions(self, others);
+            this.playerclient.collisionManager.blockCollisions(self);
+        }
+    }
+
+    // #endregion
+
+    // #region start and stop capturing
+
+    /** Starts capturing client inputs for gameplay and sets interval to send input updates to the server */
+    startCapturingInput(xp: number, yp: number): void {
+        // set spawn position
+        this.x = xp;
+        this.y = yp;
+        this.dx = 0;
+        this.dy = 0;
+
+        // add input listeners
+        this.toggleListeners(true);
+
+        // set client side update interval
+        this.interval = setInterval(this.handleInput.bind(this), 1000 / CLIENT_UPDATE_RATE);
+    }
+
+    /** Stops capturing client inputs for gameplay and pauses sending input updates to the server */
+    stopCapturingInput(): void {
+        // remove input listeners
+        this.toggleListeners(false);
+        
+        // reset variables
+        this.dir = 0;
+        this.x = 0;
+        this.y = 0;
+        this.dx = 0;
+        this.dy = 0;
+        this.startw = null;
+        this.starta = null;
+        this.starts = null;
+        this.startd = null;
+
+        // clear client side update interval
+        if(this.interval !== null) clearInterval(this.interval);
+    }
+
+    /** Stops capturing client inputs for gameplay but continues sending input updates to the server */
+    pauseCapturingInputs(): void {
+        // pause input listeners
+        this.toggleListeners(false);
+        
+        // do final position update then remove current movements
+        this.updatePos();
+        this.startw = null;
+        this.starta = null;
+        this.starts = null;
+        this.startd = null;
+    }
+
+    /** Resumes paused client input capturing */
+    resumeCapturingInputs(): void {
+        // resume input listeners
+        this.toggleListeners(true);
+    }
+
+    // #endregion
+
+    // #region getters
+
+    /** Returns all relevant information on the clients current state */
+    getSelf(): any {
+        this.updatePos();
+
+        return {
+            dir: this.dir,
+            x: this.x + this.dx,
+            y: this.y + this.dy,
+            scale: this.scale,
+            hotbarslot: this.selectedslot,
+            hit: this.hit,
+            swinging: this.swinging,
+            lastattackdir: this.lastattackdir,
+            falling: this.falling,
+        };
+    }
+
+    // #endregion
+
+    // #region setters
+
+    /** Pushes the players position the given amounts as determined by the client */
+    clientPush(pushx: number, pushy: number): void {
+        this.dx += pushx;
+        this.dy += pushy;
+    }
+
+    /** Pushes the players position the given amounts as determined by the server */
+    serverPush(pushx: number, pushy: number): void {
+        this.x += pushx;
+        this.y += pushy;
+    }
+
+    /** Sets the players position to the given spot */
+    setPos(newpos: Pos): void {
+        // keep current inputs running but don't include previous time held
+        if(this.startw) this.startw = Date.now();
+        if(this.starts) this.starts = Date.now();
+        if(this.starta) this.starta = Date.now();
+        if(this.startd) this.startd = Date.now();
+
+        // set new position
+        this.x = newpos.x;
+        this.y = newpos.y;
+        this.dx = 0;
+        this.dx = 0;
+    }
+
+    /** Sets the players misc state data to the given values */
+    setSelf(me: any): void {
+        this.scale = me.scale;
+        this.hit = me.hit;
+        this.swinging = me.swinging;
+        this.lastattackdir = me.lastattackdir;
+        this.falling = me.falling;
+    }
+
+    // #endregion
+}
+
+export default InputManager;
