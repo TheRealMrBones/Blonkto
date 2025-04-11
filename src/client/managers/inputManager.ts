@@ -62,12 +62,12 @@ class InputManager {
         if(event.includes("mouse") || event.includes("click") || event.includes("touch")){
             this.canvaslisteners.push({
                 event: event,
-                callback: callback
+                callback: callback.bind(this)
             });
         }else{
             this.listeners.push({
                 event: event,
-                callback: callback
+                callback: callback.bind(this)
             });
         }
     }
@@ -75,11 +75,11 @@ class InputManager {
     /** Toggles all game loop listeners on or off */
     toggleListeners(toggle: boolean): void {
         if(toggle){
-            this.listeners.forEach(l => window.addEventListener(l.event, l.callback.bind(this)));
-            this.canvaslisteners.forEach(l => window.addEventListener(l.event, l.callback.bind(this)));
+            this.listeners.forEach(l => window.addEventListener(l.event, l.callback));
+            this.canvaslisteners.forEach(l => this.canvas.addEventListener(l.event, l.callback));
         }else{
-            this.listeners.forEach(l => window.removeEventListener(l.event, l.callback.bind(this)));
-            this.canvaslisteners.forEach(l => window.removeEventListener(l.event, l.callback.bind(this)));
+            this.listeners.forEach(l => window.removeEventListener(l.event, l.callback));
+            this.canvaslisteners.forEach(l => this.canvas.removeEventListener(l.event, l.callback));
         }
     }
 
