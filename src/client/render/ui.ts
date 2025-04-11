@@ -1,6 +1,5 @@
 import { getSelectedSlot, pauseCapturingInputs, pauseHotbar, resumeCapturingInputs, selectSlot, unpauseHotbar } from "../input/input.js";
 import { toggleAllChatShow } from "./chat.js";
-import { swapSlots } from "../inventory/inventory.js";
 import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
 
 import { playerclient } from "../index.js";
@@ -202,39 +201,39 @@ function keyUpChecksInventory(event: KeyboardEvent): void {
             break;
         }
         case "1": {
-            swapSlots(getSelectedSlot(), 0);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 0);
             break;
         }
         case "2": {
-            swapSlots(getSelectedSlot(), 1);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 1);
             break;
         }
         case "3": {
-            swapSlots(getSelectedSlot(), 2);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 2);
             break;
         }
         case "4": {
-            swapSlots(getSelectedSlot(), 3);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 3);
             break;
         }
         case "5": {
-            swapSlots(getSelectedSlot(), 4);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 4);
             break;
         }
         case "6": {
-            swapSlots(getSelectedSlot(), 5);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 5);
             break;
         }
         case "7": {
-            swapSlots(getSelectedSlot(), 6);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 6);
             break;
         }
         case "8": {
-            swapSlots(getSelectedSlot(), 7);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 7);
             break;
         }
         case "9": {
-            swapSlots(getSelectedSlot(), 8);
+            playerclient.inventory.swapSlots(getSelectedSlot(), 8);
             break;
         }
     }

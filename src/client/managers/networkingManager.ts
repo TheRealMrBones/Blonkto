@@ -8,7 +8,6 @@ import { startCapturingInput } from "../input/input.js";
 import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
-import { setInventory } from "../inventory/inventory.js";
 import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
@@ -120,7 +119,7 @@ class NetworkingManager {
         setColor(content.color);
         startRendering();
         setupUi();
-        setInventory(content.inventory);
+        this.playerclient.inventory.setInventory(content.inventory);
     }
     
     /** Response to the ping message from the server */
