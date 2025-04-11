@@ -1,5 +1,5 @@
 /** Representation of a single item stack in data */
-export class Item {
+class Item {
     name: string;
     asset: string;
     amount: number;
@@ -10,3 +10,5 @@ export class Item {
         this.amount = amount;
     }
 }
+
+export default Item;

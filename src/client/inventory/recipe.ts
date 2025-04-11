@@ -1,19 +1,17 @@
+import PlayerClient from "../playerClient.js";
 import { CraftContent } from "../../shared/messageContentTypes.js";
-import { getInventory } from "./inventory.js";
-import { Item } from "./item.js";
-
-import { playerclient } from "../index.js";
+import Item from "./item.js";
 
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 
-export class Recipe {
+class Recipe {
     ingredients: any[];
     result: string;
     resultcount: number;
     asset: string;
     div: HTMLDivElement;
 
-    constructor(result: string, ingredients: any[], resultcount: number, asset: string) {
+    constructor(result: string, ingredients: any[], resultcount: number, asset: string, playerclient: PlayerClient) {
         this.result = result;
         this.ingredients = ingredients;
         this.resultcount = resultcount;
@@ -58,8 +56,8 @@ export class Recipe {
         }
 
         maindiv.onclick = (e) => {
-            if(this.canCraft(getInventory())){
-                const amount = e.ctrlKey ? this.canCraftAmount(getInventory()) : 1;
+            if(this.canCraft(playerclient.inventory.getInventory())){
+                const amount = e.ctrlKey ? this.canCraftAmount(playerclient.inventory.getInventory()) : 1;
                 
                 const ingredientsdictionary: { [key: string]: number } = {};
                 this.ingredients.forEach((ingredient: any) => {
@@ -115,3 +113,5 @@ export class Recipe {
         }
     }
 }
+
+export default Recipe;

@@ -1,7 +1,6 @@
 import PlayerClient from "../playerClient.js";
 import { setPos, serverPush } from "../input/input.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
-import { addRecipes, setSingleInventorySlot, setRecipeVisibility } from "../inventory/inventory.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -46,10 +45,10 @@ class StateManager {
         serverPush(update.fixes.pushx, update.fixes.pushy);
 
         update.inventoryupdates.forEach((iu: any) => {
-            setSingleInventorySlot(iu);
+            this.playerclient.inventory.setSingleInventorySlot(iu);
         });
-        if(update.inventoryupdates.length > 0) setRecipeVisibility();
-        addRecipes(update.recipes);
+        if(update.inventoryupdates.length > 0) this.playerclient.inventory.setRecipeVisibility();
+        this.playerclient.inventory.addRecipes(update.recipes);
 
         // update UI
         updateHealth(update.me.static.health);
