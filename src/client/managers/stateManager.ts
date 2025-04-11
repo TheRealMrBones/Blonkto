@@ -13,12 +13,12 @@ class StateManager {
     private readonly playerclient: PlayerClient;
     private readonly gameUpdates: GameUpdateContent[] = [];
 
-    private gameStart = 0;
-    private firstServerTimestamp = 0;
-    private serverDelay = 0;
-    private newserverdelays = 0;
-    private newserverdelayscount = 0;
-    private lastUpdateTime = Date.now();
+    private gameStart: number = 0;
+    private firstServerTimestamp: number = 0;
+    private serverDelay: number = 0;
+    private newserverdelays: number = 0;
+    private newserverdelayscount: number = 0;
+    private lastUpdateTime: number = Date.now();
 
     constructor(playerclient: PlayerClient){
         this.playerclient = playerclient;

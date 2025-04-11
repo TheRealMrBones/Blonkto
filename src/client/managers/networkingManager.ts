@@ -28,7 +28,7 @@ class NetworkingManager {
 
         const connectedPromise = new Promise<void>(resolve => {
             this.socket.on("connect", () => {
-                this.pinginterval = setInterval(this.ping.bind(this), 1000);
+                this.startPinging();
                 console.log("Connected to server!");
                 resolve();
             });
@@ -102,12 +102,6 @@ class NetworkingManager {
         this.emit(MSG_TYPES.SEND_MESSAGE, content);
     });
 
-    /** Method to send the ping message to the server */
-    ping(): void {
-        this.emit(MSG_TYPES.PING);
-        this.pingsent = Date.now();
-    }
-
     // #endregion
 
     // #region default listeners
@@ -120,6 +114,26 @@ class NetworkingManager {
         startRendering();
         setupUi();
         this.playerclient.inventory.setInventory(content.inventory);
+    }
+
+    // #endregion
+
+    // #region ping
+
+    /** Sets the pinging interval to retreive new ping values */
+    startPinging(): void {
+        this.pinginterval = setInterval(this.ping.bind(this), 1000);
+    }
+
+    /** Stops the pinging interval to stop retreiving new ping values */
+    stopPinging(): void {
+        clearInterval(this.pinginterval);
+    }
+
+    /** Method to send the ping message to the server */
+    ping(): void {
+        this.emit(MSG_TYPES.PING);
+        this.pingsent = Date.now();
     }
     
     /** Response to the ping message from the server */

@@ -214,6 +214,7 @@ function verifyToken(token: string): void {
 
 /** Opens up the play UI after successful login with the server */
 function onLogin(username: string): void {
+    console.log(`Logged in as: ${username}`);
     usernameDiv.innerHTML = `Logged in as: ${username}`;
 
     loginDiv.style.display = "none";
