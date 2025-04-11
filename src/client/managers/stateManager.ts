@@ -1,6 +1,5 @@
 import PlayerClient from "../playerClient.js";
 import { setPos, serverPush } from "../input/input.js";
-import { loadChunks, unloadChunks, updateCells } from "../world/world.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { addRecipes, setSingleInventorySlot, setRecipeVisibility } from "../inventory/inventory.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
@@ -38,9 +37,9 @@ class StateManager {
         this.lastUpdateTime = Date.now();
 
         // update local world
-        if(update.worldLoad.unloadChunks) unloadChunks(update.worldLoad.unloadChunks);
-        if(update.worldLoad.loadChunks) loadChunks(update.worldLoad.loadChunks);
-        if(update.worldLoad.updatedcells) updateCells(update.worldLoad.updatedcells);
+        if(update.worldLoad.unloadChunks) this.playerclient.world.unloadChunks(update.worldLoad.unloadChunks);
+        if(update.worldLoad.loadChunks) this.playerclient.world.loadChunks(update.worldLoad.loadChunks);
+        if(update.worldLoad.updatedcells) this.playerclient.world.updateCells(update.worldLoad.updatedcells);
 
         // get fixes
         if(update.fixes.setpos) setPos(update.fixes.setpos);

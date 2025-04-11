@@ -1,5 +1,4 @@
 import { getCellSize } from "../render/render.js";
-import { blockCollisions, playerCollisions } from "../networking/collisions.js";
 import { updateCoords } from "../render/ui.js";
 import { Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
@@ -302,7 +301,7 @@ function updatePos(): void {
     
     if(!falling){
         //playerCollisions(self, others);
-        blockCollisions(self);
+        playerclient.collisionManager.blockCollisions(self);
     }
 }
 

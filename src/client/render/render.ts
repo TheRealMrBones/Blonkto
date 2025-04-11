@@ -1,6 +1,5 @@
 import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
 import { getSelf, setSelf } from "../input/input.js";
-import { getCell } from "../world/world.js";
 import { updateFps } from "./ui.js";
 import { Color } from "../../shared/types.js";
 
@@ -155,7 +154,7 @@ function renderFloors(firstCell: { x: number; y: number; renderx: number; render
 
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-            const cell = getCell(firstCell.x + dx, firstCell.y + dy);
+            const cell = playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
             if(cell.block)
                 if(cell.block.scale == 1 && cell.block.shape == SHAPES.SQUARE) continue;
             if(cell.floor) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
@@ -174,7 +173,7 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
 
     for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-            const cell = getCell(firstCell.x + dx, firstCell.y + dy);
+            const cell = playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
             if(cell.block) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.block.asset, cell.block.scale);
         }
     }
