@@ -12,7 +12,7 @@ const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
 
 type InputListener = {
     event: string;
-    callback: any;
+    callback: EventListenerOrEventListenerObject;
 };
 
 class InputManager {
