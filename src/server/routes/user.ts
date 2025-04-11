@@ -61,6 +61,7 @@ router.post("/verify", async (req: any, res: any) => {
 /** Logs out of the current account */
 router.post("/logout", (req: any, res: any) => {
     res.clearCookie("token");
+    return res.status(200).json();
 });
 
 export default router;

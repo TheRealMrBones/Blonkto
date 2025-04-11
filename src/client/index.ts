@@ -13,6 +13,7 @@ const startMenu = document.getElementById("startmenu")!;
 const changeLog = document.getElementById("changelog")!;
 
 const playButton = document.getElementById("playbutton")!;
+const logoutButton = document.getElementById("logoutbutton")!;
 const changeLogButton = document.getElementById("changelogbutton")!;
 const hidechangeLogButton = document.getElementById("hidechangelogbutton")!;
 
@@ -50,6 +51,7 @@ Promise.all([
     loginButton.onclick = sendLogin;
 
     playButton.onclick = joinGame;
+    logoutButton.onclick = sendLogout;
 
     changeLogButton.onclick = () => {
         changeLog.style.display = "block";
@@ -150,6 +152,33 @@ function sendLogin(): void {
     passwordInput.value = "";
     usernameInput.blur();
     passwordInput.blur();
+}
+
+/** Logs the user out of their current account */
+function sendLogout(): void {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/logout", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+            if(xhr.status == 200){
+                errorDiv.innerHTML = "";
+
+                loginDiv.style.display = "block";
+                playDiv.style.display = "none";
+
+                usernameInput.focus();
+                
+                document.addEventListener("keydown", devlogin);
+            }else{
+                showError("Logout failed. Please try again.");
+            }
+        }
+    };
+
+    // Send the request
+    xhr.send();
 }
 
 /** Tries to send the verify token message to the server */
