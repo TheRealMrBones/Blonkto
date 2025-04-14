@@ -20,6 +20,7 @@ const { RACISM, RACISM_PERM, KEEP_INVENTORY } = ServerConfig.PLAYER;
 class Player extends Entity {
     socket: Socket;
     lastupdated: number;
+    serverlastupdated: number;
     username: string;
     kills: number;
     color: Color;
@@ -31,6 +32,7 @@ class Player extends Entity {
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
         this.lastupdated = Date.now();
+        this.serverlastupdated = Date.now();
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
@@ -127,6 +129,7 @@ class Player extends Entity {
         this.y += data.dy;
 
         this.lastupdated = data.t;
+        this.serverlastupdated = Date.now();
     }
 
     /** Heal the player the given amount of health */
@@ -196,7 +199,7 @@ class Player extends Entity {
         return {
             static: {
                 ...(base.static),
-                lastupdated: this.lastupdated,
+                lastupdated: this.serverlastupdated,
                 username: this.username,
                 color: this.color,
                 kills: this.kills,
