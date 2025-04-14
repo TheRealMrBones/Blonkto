@@ -19,6 +19,7 @@ const { RACISM, RACISM_PERM, KEEP_INVENTORY } = ServerConfig.PLAYER;
 /** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
     socket: Socket;
+    lastupdated: number;
     username: string;
     kills: number;
     color: Color;
@@ -29,6 +30,7 @@ class Player extends Entity {
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
+        this.lastupdated = Date.now();
 
         this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
@@ -194,6 +196,7 @@ class Player extends Entity {
         return {
             static: {
                 ...(base.static),
+                lastupdated: this.lastupdated,
                 username: this.username,
                 color: this.color,
                 kills: this.kills,

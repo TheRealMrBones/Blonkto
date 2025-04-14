@@ -16,7 +16,6 @@ const { FALL_RATE } = ServerConfig.OBJECT;
 /** The base class for any simulated object (something that ticks) in the game world */
 abstract class GameObject {
     id: string;
-    lastupdated: number;
 
     x: number;
     y: number;
@@ -35,7 +34,6 @@ abstract class GameObject {
 
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.id = crypto.randomUUID();
-        this.lastupdated = Date.now();
 
         this.x = x;
         this.y = y;
@@ -225,7 +223,6 @@ abstract class GameObject {
             static: {
                 id: this.id,
                 asset: this.asset,
-                lastupdated: this.lastupdated,
                 falling: this.falling,
             },
             dynamic: {

@@ -1,4 +1,5 @@
 import PlayerClient from "../playerClient.js";
+import IndependentObject from "../state/independentObject.js";
 import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
@@ -11,10 +12,11 @@ const { SERVER_RESYNC_THRESHOLD } = ClientConfig.UPDATE;
 class StateManager {
     private readonly playerclient: PlayerClient;
     private readonly gameUpdates: GameUpdateContent[] = [];
+    private readonly independentObjects: {[key: string]: IndependentObject} = {};
 
     private gameStart: number = 0;
     private firstServerTimestamp: number = 0;
-    private serverDelay: number = 0;
+    private static serverDelay: number = 0;
     private newserverdelays: number = 0;
     private newserverdelayscount: number = 0;
     private lastUpdateTime: number = Date.now();
@@ -58,7 +60,7 @@ class StateManager {
         if(!this.firstServerTimestamp){
             this.gameStart = Date.now();
             this.firstServerTimestamp = update.t;
-            this.serverDelay = this.gameStart - this.firstServerTimestamp + RENDER_DELAY;
+            StateManager.serverDelay = this.gameStart - this.firstServerTimestamp + RENDER_DELAY;
         }else{
             // if newserverdelay consistently different reset server delay (will visibly stutter)
             this.newserverdelays += Date.now() - update.t + RENDER_DELAY;
@@ -66,8 +68,8 @@ class StateManager {
 
             if(this.newserverdelayscount == 10){
                 const avgnewserverdelay = this.newserverdelays / this.newserverdelayscount;
-                if(Math.abs(avgnewserverdelay - this.serverDelay) > SERVER_RESYNC_THRESHOLD)
-                    this.serverDelay = avgnewserverdelay;
+                if(Math.abs(avgnewserverdelay - StateManager.serverDelay) > SERVER_RESYNC_THRESHOLD)
+                    StateManager.serverDelay = avgnewserverdelay;
             
                 this.newserverdelays = 0;
                 this.newserverdelayscount = 0;
@@ -76,9 +78,28 @@ class StateManager {
 
         // push updates to queue
         this.gameUpdates.push(update);
+
+        Object.values(this.independentObjects).forEach(o => {
+            o.exists = false;
+        });
+        update.others.forEach((pu: any) => {
+            if(!this.independentObjects[pu.static.id]){
+                this.independentObjects[pu.static.id] = new IndependentObject(pu);
+            }else{
+                this.independentObjects[pu.static.id].pushUpdate(pu);
+            }
+        });
+
+        // delete players that no longer update
+        Object.keys(this.independentObjects).forEach(id => {
+            if(!this.independentObjects[id].exists) delete this.independentObjects[id];
+        });
         
         // keep only one update before the current server/player time
         this.purgeUpdates();
+        Object.values(this.independentObjects).forEach(o => {
+            o.purgeUpdates();
+        });
     }
 
     /** Returns all data relevant to the current state by interpolating the most recent past and future states */
@@ -88,25 +109,31 @@ class StateManager {
         if(!this.firstServerTimestamp) return {};
 
         const base = this.getBaseUpdate();
-        const serverTime = this.currentServerTime();
+        const serverTime = StateManager.currentServerTime();
+
+        // get states of independent objects
+        const others: any[] = [];
+        Object.values(this.independentObjects).forEach(o => {
+            others.push(o.interpolateSelf());
+        });
 
         // if base is the most recent update we have, use its state.
         // otherwise, interpolate between its state and the state of (base + 1).
         if(base < 0 || base === this.gameUpdates.length - 1){
             const update = this.gameUpdates[this.gameUpdates.length - 1];
             return {
-                self: this.noninterpolateObject(update.me),
-                others: this.noninterpolateObjectArray(update.others),
-                entities: this.noninterpolateObjectArray(update.entities),
+                self: StateManager.noninterpolateObject(update.me),
+                others: others,
+                entities: StateManager.noninterpolateObjectArray(update.entities),
             };
         }else{
             const baseUpdate = this.gameUpdates[base];
             const next = this.gameUpdates[base + 1];
             const ratio = (serverTime - baseUpdate.t) / (next.t - baseUpdate.t);
             return {
-                self: this.interpolateObject(baseUpdate.me, next.me, ratio),
-                others: this.interpolateObjectArray(baseUpdate.others, next.others, ratio),
-                entities: this.interpolateObjectArray(baseUpdate.entities, next.entities, ratio),
+                self: StateManager.interpolateObject(baseUpdate.me, next.me, ratio),
+                others: others,
+                entities: StateManager.interpolateObjectArray(baseUpdate.entities, next.entities, ratio),
             };
         }
     }
@@ -114,7 +141,7 @@ class StateManager {
     // #region interpolation
 
     /** Interpolates the given object between its two given states with the given ratio */
-    interpolateObject(object1: any, object2: any, ratio: number): any {
+    static interpolateObject(object1: any, object2: any, ratio: number): any {
         if(!object2) return object1;
 
         const interpolated = {...(object1.static)};
@@ -129,12 +156,12 @@ class StateManager {
     }
 
     /** Interpolates the given object array between its two given states with the given ratio */
-    interpolateObjectArray(objects1: any[], objects2: any[], ratio: number): any[] {
+    static interpolateObjectArray(objects1: any[], objects2: any[], ratio: number): any[] {
         return objects1.map(o => this.interpolateObject(o, objects2.find(o2 => o.static.id === o2.static.id), ratio));
     }
 
     /** Interpolates the given direction between its two given states with the given ratio */
-    interpolateDirection(d1: number, d2: number, ratio: number): number {
+    static interpolateDirection(d1: number, d2: number, ratio: number): number {
         const absD = Math.abs(d2 - d1);
         if(absD >= Math.PI){
             if(d1 > d2){
@@ -148,12 +175,12 @@ class StateManager {
     }
 
     /** Returns the given object from its single state */
-    noninterpolateObject(object1: any): any {
+    static noninterpolateObject(object1: any): any {
         return {...(object1.static), ...(object1.dynamic)};
     }
 
     /** Returns the given object array from its single state */
-    noninterpolateObjectArray(objects1: any[]): any[] {
+    static noninterpolateObjectArray(objects1: any[]): any[] {
         return objects1.map(o => this.noninterpolateObject(o));
     }
 
@@ -162,7 +189,7 @@ class StateManager {
     // #region helpers
 
     /** Returns the current server update time based on this clients delay */
-    currentServerTime(): number {
+    static currentServerTime(): number {
         return Date.now() - this.serverDelay;
     }
 
@@ -171,7 +198,7 @@ class StateManager {
      * current server time, or -1 if N/A.
     */
     getBaseUpdate(): number {
-        const serverTime = this.currentServerTime();
+        const serverTime = StateManager.currentServerTime();
         for(let i = this.gameUpdates.length - 1; i >= 0; i--){
             if(this.gameUpdates[i].t <= serverTime) return i;
         }
