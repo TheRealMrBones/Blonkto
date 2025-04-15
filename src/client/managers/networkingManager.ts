@@ -60,7 +60,7 @@ class NetworkingManager {
         if(FAKE_PING == 0) this.socket.emit(event, content);
         else setTimeout(() =>
             this.socket.emit(event, content)
-        , FAKE_PING);
+        , FAKE_PING / 2);
     }
 
     // #endregion

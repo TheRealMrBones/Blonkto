@@ -194,7 +194,7 @@ class Game {
             if(FAKE_PING == 0) player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
             else setTimeout(() =>
                 player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]))
-            , FAKE_PING);
+            , FAKE_PING / 2);
         });
 
         // reset cell updates in loaded chunks

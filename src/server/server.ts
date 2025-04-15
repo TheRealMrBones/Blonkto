@@ -17,6 +17,9 @@ import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent,
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
+import SharedConfig from "../configs/shared.js";
+const { FAKE_PING } = SharedConfig.UPDATES;
+
 import ServerConfig from "../configs/server.js";
 const { LOG_CONNECTIONS } = ServerConfig.LOG;
 
@@ -91,7 +94,10 @@ async function joinGame(this: Socket, content: JoinGameContent): Promise<void> {
 
 /** Response to the ping message from a client */
 function ping(this: Socket): void {
-  	this.emit(MSG_TYPES.PING);
+    if(FAKE_PING == 0) this.emit(MSG_TYPES.PING);
+    else setTimeout(() =>
+        this.emit(MSG_TYPES.PING)
+    , FAKE_PING / 2);
 }
 
 /** Response to the create account message from a client */
