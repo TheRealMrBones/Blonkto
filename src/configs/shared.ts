@@ -1,5 +1,8 @@
 /** Definition for the shared configuration schema */
 type SharedConfigSchema = {
+    UPDATES: {
+        FAKE_PING: number,
+    },
     PLAYER: {
         PLAYER_SCALE: number,
         PLAYER_SPEED: number,
@@ -30,6 +33,9 @@ type SharedConfigSchema = {
 
 /** Configurable settings used by both the client and server (Managed by the server) */
 const SharedConfig: SharedConfigSchema = {
+    UPDATES: {
+        FAKE_PING: 0,
+    },
     PLAYER: {
         PLAYER_SCALE: 0.55,
         PLAYER_SPEED: 3,

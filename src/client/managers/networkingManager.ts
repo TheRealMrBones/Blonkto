@@ -12,6 +12,9 @@ import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent,
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
+import SharedConfig from "../../configs/shared.js";
+const { FAKE_PING } = SharedConfig.UPDATES;
+
 class NetworkingManager {
     private readonly playerclient: PlayerClient;
     private readonly socket: Socket;
@@ -54,7 +57,10 @@ class NetworkingManager {
 
     /** Sends the given message (and content) to the server */
     emit(event: string, content?: any): void {
-        this.socket.emit(event, content);
+        if(FAKE_PING == 0) this.socket.emit(event, content);
+        else setTimeout(() =>
+            this.socket.emit(event, content)
+        , FAKE_PING);
     }
 
     // #endregion
@@ -121,12 +127,12 @@ class NetworkingManager {
 
     /** Sets the pinging interval to retreive new ping values */
     startPinging(): void {
-        this.pinginterval = setInterval(this.ping.bind(this), 1000);
+        this.pinginterval = setTimeout(this.ping.bind(this), 1000);
     }
 
     /** Stops the pinging interval to stop retreiving new ping values */
     stopPinging(): void {
-        clearInterval(this.pinginterval);
+        clearTimeout(this.pinginterval);
     }
 
     /** Method to send the ping message to the server */
@@ -139,6 +145,7 @@ class NetworkingManager {
     onPing(): void {
         const ping = Date.now() - this.pingsent;
         updatePing(ping);
+        this.pinginterval = setTimeout(this.ping.bind(this), 1000);
     }
 
     // #endregion

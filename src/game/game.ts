@@ -21,6 +21,7 @@ import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
+const { FAKE_PING } = SharedConfig.UPDATES;
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
@@ -190,7 +191,10 @@ class Game {
 
         // send fat update packets
         this.entityManager.getPlayerEntities().forEach(player => {
-            player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
+            if(FAKE_PING == 0) player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
+            else setTimeout(() =>
+                player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]))
+            , FAKE_PING);
         });
 
         // reset cell updates in loaded chunks
