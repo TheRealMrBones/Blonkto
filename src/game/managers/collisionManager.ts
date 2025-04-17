@@ -52,8 +52,7 @@ class CollisionManager {
         }
     
         const push = SharedCollisions.blockCollisions(meobject, checkcells);
-        object.x += push.x;
-        object.y += push.y;
+        object.push(push.x, push.y);
     };
 
     /** Checks for dropped stacks that the given player can pick up */
