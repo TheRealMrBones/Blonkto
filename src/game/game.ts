@@ -104,6 +104,7 @@ class Game {
                 dx: dx,
                 dy: dy,
                 t: t,
+                pushes: content.pushes,
             });
             this.players[socket.id].hotbarslot = hotbarslot;
         }

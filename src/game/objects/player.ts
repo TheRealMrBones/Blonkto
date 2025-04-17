@@ -27,6 +27,7 @@ class Player extends Entity {
     inventory: Inventory;
     hotbarslot: number;
     fixes: any;
+    pendingpushes: any[] = [];
 
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
@@ -128,6 +129,11 @@ class Player extends Entity {
         this.x += data.dx;
         this.y += data.dy;
 
+        if (data.pushes) for(const push of data.pushes){
+            const i = this.pendingpushes.findIndex(p => p.id === push);
+            if(i != -1) this.pendingpushes.splice(i, 1);
+        }
+
         this.lastupdated = data.t;
         this.serverlastupdated = Date.now();
     }
@@ -164,9 +170,14 @@ class Player extends Entity {
 
     /** Returns the saved update fixes */
     getFixes(): any {
+        this.checkPendingPushes();
+        const pushid = (this.fixes.pushx || this.fixes.pushy) ? Date.now() : null;
+        if(pushid !== null) this.pendingpushes.push({ pushx: this.fixes.pushx, pushy: this.fixes.pushy, id: pushid });
+
         const fixescopy = {
             pushx: this.fixes.pushx,
             pushy: this.fixes.pushy,
+            pushid: pushid,
             setpos: this.fixes.setpos,
         };
         return fixescopy;
@@ -186,6 +197,20 @@ class Player extends Entity {
             x: x,
             y: y
         };
+    }
+
+    /** Checks pending pushes for possible resends */
+    checkPendingPushes(): void {
+        for(let i = 0; i < this.pendingpushes.length; i++){
+            const push = this.pendingpushes[i];
+            if(push.id + 1000 < Date.now()){
+                console.log("RESEND!");
+                this.fixes.pushx += push.pushx;
+                this.fixes.pushy += push.pushy;
+                this.pendingpushes.splice(i, 1);
+                i--;
+            }
+        }
     }
 
     // #endregion

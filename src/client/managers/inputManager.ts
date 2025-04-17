@@ -43,6 +43,7 @@ class InputManager {
     private lastattackdir = 0;
 
     private falling = false;
+    private pushes: number[] = [];
 
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
@@ -255,6 +256,7 @@ class InputManager {
             dx: this.dx,
             dy: this.dy,
             hotbarslot: this.selectedslot,
+            pushes: this.pushes,
         };
         this.playerclient.networkingManager.updateInputs(content);
 
@@ -262,6 +264,7 @@ class InputManager {
         this.y = this.y + this.dy;
         this.dx = 0;
         this.dy = 0;
+        this.pushes = [];
     }
 
     /** Resets the input reading variables */
@@ -400,9 +403,10 @@ class InputManager {
     }
 
     /** Pushes the players position the given amounts as determined by the server */
-    serverPush(pushx: number, pushy: number): void {
+    serverPush(pushx: number, pushy: number, pushid: number): void {
         this.x += pushx;
         this.y += pushy;
+        this.pushes.push(pushid);
     }
 
     /** Sets the players position to the given spot */

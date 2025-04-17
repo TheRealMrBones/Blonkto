@@ -39,6 +39,7 @@ export type InputContent = {
     dx: number;
     dy: number;
     hotbarslot: number;
+    pushes: number[];
 };
 
 /** Defines the format of the click and interact message */
