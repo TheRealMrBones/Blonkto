@@ -1,4 +1,4 @@
-import { getAsset, getColoredAsset, getAssetVariant, getColoredAssetVariant } from "./assets.js";
+import { getAsset } from "./assets.js";
 import { updateFps } from "./ui.js";
 import { Color } from "../../shared/types.js";
 
@@ -12,6 +12,7 @@ const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfi
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 import ClientConfig from "../../configs/client.js";
+import { combineColors } from "../../shared/typeOperations.js";
 const { HEIGHT_TO_CELL_RATIO, BACKGROUND_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 
@@ -189,8 +190,11 @@ function renderCell(x: number, y: number, asset: string, scale?: number): void {
     }
 
     const renderscale = scale ? scale : 1;
+    const model = getAsset(asset, (cellSize + 1) * renderscale);
+    if(model === null) return;
+    
     context.drawImage(
-        getAsset(asset),
+        model,
         x + 1,
         y + 1,
         (cellSize + 1) * renderscale,
@@ -204,10 +208,6 @@ function renderCell(x: number, y: number, asset: string, scale?: number): void {
 
 /** Renders the given entity */
 function renderEntity(me: any, entity: any): void {
-    // check if entity is being hit
-    const model = entity.hit ? getAssetVariant(entity.asset, "hit", HIT_COLOR) : getAsset(entity.asset);
-    if(!model) return;
-
     // check if entity is swinging
     if(entity.swinging) renderSwing(me, entity);
 
@@ -218,6 +218,10 @@ function renderEntity(me: any, entity: any): void {
     context.save();
     context.translate(canvasX, canvasY);
     context.rotate(dir);
+    
+    // get model
+    const model = entity.hit ? getAsset(entity.asset, cellSize * scale, HIT_COLOR) : getAsset(entity.asset, cellSize * scale);
+    if(!model) return;
     
     // draw entity
     context.drawImage(
@@ -236,9 +240,6 @@ function renderEntity(me: any, entity: any): void {
 
 /** Renders the given player entity */
 function renderPlayer(me: any, player: any): void {
-    // check if player is being hit
-    const model = player.hit ? getColoredAssetVariant(player, "hit", HIT_COLOR) : getColoredAsset(player);
-
     // check if player is swinging
     if(player.swinging) renderSwing(me, player);
 
@@ -249,7 +250,11 @@ function renderPlayer(me: any, player: any): void {
     context.save();
     context.translate(canvasX, canvasY);
     context.rotate(dir);
-    
+
+    // get player model
+    const model = player.hit ? getAsset(player.asset, cellSize * scale, combineColors(player.color, HIT_COLOR)) : getAsset(player.asset, cellSize * scale, player.color);
+    if(model === null) return;
+
     // draw player
     context.drawImage(
         model,
@@ -300,7 +305,8 @@ function renderPlayerUsername(me: any, player: any): void {
 
 /** Renders the background image under the world */
 function renderBackground(me: any): void {
-    const model = getAsset(ASSETS.SPACE_BG);
+    const model = getAsset(ASSETS.SPACE_BG, cellSize * BACKGROUND_SCALE);
+    if(model === null) return;
 
     const worldSize = CHUNK_SIZE * WORLD_SIZE / 2;
     const xpercent = -(me.x / worldSize);

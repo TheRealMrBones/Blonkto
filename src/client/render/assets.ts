@@ -1,10 +1,17 @@
-import { equalColor } from "../../shared/typeComparisons.js";
+import { equalColor, getBaseColor } from "../../shared/typeOperations.js";
 import { Color } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
-const assets: {[key: string]: HTMLImageElement} = {};
+type AssetCache = {
+    image: OffscreenCanvas,
+    scale: number,
+    color: Color,
+};
+
+const assetsbase: {[key: string]: HTMLImageElement} = {};
+const assetscache: {[key: string]: AssetCache[] } = {};
 
 // #region manage assets
 
@@ -15,7 +22,7 @@ function downloadAsset(assetName: string): Promise<void> {
     return new Promise<void>(resolve => {
         const asset = new Image();
         asset.onload = () => {
-            assets[assetName] = asset;
+            assetsbase[assetName] = asset;
             resolve();
         };
         asset.src = `/${assetName}`;
@@ -26,76 +33,26 @@ function downloadAsset(assetName: string): Promise<void> {
 export const downloadAssets = (): Promise<void[]> => downloadPromise;
 
 /** Returns the image asset with the given name */
-export const getAsset = (assetName: string): HTMLImageElement => assets[assetName];
+export function getAsset(assetname: string, scale: number, color?: Color): OffscreenCanvas | null {
+    if(assetname === undefined) return null;
+    if(color === undefined) color = getBaseColor();
+    if(!assetscache[assetname]) assetscache[assetname] = [];
 
-// #endregion
+    const foundasset = assetscache[assetname].find(a => a.scale == scale && equalColor(a.color as Color, color));
+    if(foundasset !== undefined) return foundasset.image;
 
-// #region colorize
+    // create new asset cache
+    console.log(assetname);
+    const model = assetsbase[assetname];
+    const width = scale;
+    const height = scale * model.height / model.width;
 
-const coloredAssets: { [key: string]: { asset: OffscreenCanvas; color: Color } } = {};
-const assetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
-const coloredAssetVariants: { [key: string]: { [variant: string]: OffscreenCanvas } } = {};
-
-/** Returns the image asset with the given name and colored with the given base color */
-export function getColoredAsset(object: { id: string; color: Color; asset: string; }): OffscreenCanvas {
-    // make new if asset doesn't exist
-    let makenew = !coloredAssets[object.id];
-
-    // make new if asset color changed
-    if(!makenew){
-        const oldcolor = coloredAssets[object.id].color;
-        const newcolor = object.color;
-
-        if(!equalColor(oldcolor, newcolor)){
-            // delete old colored variants aswell
-            if(coloredAssetVariants[object.id]){
-                for (const prop in coloredAssetVariants[object.id]) {
-                    if(coloredAssetVariants[object.id].hasOwnProperty(prop)) delete coloredAssetVariants[object.id][prop];
-                }
-            }
-
-            makenew = true;
-        }
-    }
-
-    // if needed make new colored asset
-    if(makenew){
-        coloredAssets[object.id] = {
-            asset: colorize(getAsset(object.asset), object.color),
-            color: object.color,
-        };
-    }
-
-    return coloredAssets[object.id].asset;
-}
-
-/** Returns the image asset with the given name and recolored with the given variant */
-export function getAssetVariant(asset: string, varient: string, varientrgb: Color): OffscreenCanvas {
-    const assetObj = getAsset(asset);
-    if(!assetVariants[asset]) assetVariants[asset] = {};
-    if(!assetVariants[asset][varient]) assetVariants[asset][varient] = colorize(assetObj, varientrgb);
-    return assetVariants[asset][varient];
-}
-
-/** Returns the image asset with the given name and colored with the given base color then recolored with the given varient */
-export function getColoredAssetVariant(object: { id: string; color: Color; asset: string; }, varient: string, varientrgb: Color): OffscreenCanvas {
-    const coloredAsset = getColoredAsset(object);
-    if(!coloredAssetVariants[object.id]) coloredAssetVariants[object.id] = {};
-    if(!coloredAssetVariants[object.id][varient]) coloredAssetVariants[object.id][varient] = colorize(coloredAsset, varientrgb);
-    return coloredAssetVariants[object.id][varient];
-}
-
-/** Returns the offscreen canvsa representing the input image recolored with the given color */
-function colorize(image: HTMLImageElement | OffscreenCanvas, color: Color): OffscreenCanvas {
-    const imageWidth = image.width;
-    const imageHeight = image.height;
-
-    const offscreen = new OffscreenCanvas(imageWidth, imageHeight);
+    const offscreen = new OffscreenCanvas(width, height);
     const ctx = offscreen.getContext("2d")!;
 
-    ctx.drawImage(image, 0, 0);
+    ctx.drawImage(model, 0, 0, width, height);
 
-    const imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
+    const imageData = ctx.getImageData(0, 0, width, height);
 
     for(let i = 0; i < imageData.data.length; i += 4){
         imageData.data[i + 0] *= color.r;
@@ -105,6 +62,11 @@ function colorize(image: HTMLImageElement | OffscreenCanvas, color: Color): Offs
 
     ctx.putImageData(imageData, 0, 0);
 
+    assetscache[assetname].push({
+        image: offscreen,
+        scale: scale,
+        color: color,
+    });
     return offscreen;
 }
 
