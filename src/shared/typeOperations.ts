@@ -16,7 +16,7 @@ export function combineColors(color1: Color, color2: Color): Color {
         r: color1.r * color2.r,
         g: color1.g * color2.g,
         b: color1.b * color2.b,
-    }
+    };
 }
 
 /** Returns the default color (white) */
@@ -25,5 +25,5 @@ export function getBaseColor(): Color {
         r: 1,
         g: 1,
         b: 1,
-    }
+    };
 }
