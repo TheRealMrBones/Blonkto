@@ -1,3 +1,5 @@
+import EventEmitter from "events";
+
 import RegistryValue from "../registries/registryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
@@ -16,6 +18,8 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     scale: number;
     shape: number;
     blockscell: boolean = true;
+
+    eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, scale?: number, shape?: number){
         super();

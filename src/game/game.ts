@@ -118,12 +118,13 @@ class Game {
         if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
-            // use the item or run default use case
-            if(hotbarItem === null){
-                this.players[socket.id].startSwing(newinfo.dir, 1);
-            }else{
-                hotbarItem.use(this, this.players[socket.id], newinfo);
+            // try to use item
+            if(hotbarItem !== null){
+                if(!hotbarItem.use(this, this.players[socket.id], newinfo)) return;
             }
+
+            // default action
+            this.players[socket.id].startSwing(newinfo.dir, 1);
         }
     }
 
@@ -132,7 +133,20 @@ class Game {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         const newinfo = this.getClickInfo(content);
         
+        if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
+            const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
+            // try to use item
+            if(hotbarItem !== null){
+                if(!hotbarItem.interact(this, this.players[socket.id], newinfo)) return;
+            }
+
+            // default action
+            const cell = this.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
+            if(cell === null) return;
+            if(cell.block === null) return;
+            cell.block.eventEmitter.emit("interact", this, this.players[socket.id], cell, newinfo);
+        }
     }
 
     /** Gets formatted click info from the raw click info in a client click message */

@@ -23,20 +23,11 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
         this.displayname = displayname;
         this.stacksize = stacksize;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
-
-        this.eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
     }
 
     /** Sets this objects identifier to the given key from the registry */
     mapRegistryKey(key: string): void {
         this.name = key;
-    }
-
-    /** The base functionality of using (left clicking) this item */
-    use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
-        if(this.eventEmitter.listenerCount("use") == 0){
-            player.startSwing(info.dir, 1);
-        }
     }
 }
 
