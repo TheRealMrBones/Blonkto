@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
 import Logger from "../server/logging/logger.js";
@@ -55,7 +56,7 @@ class Game {
     oppasscode: string;
     oppasscodeused: boolean;
 
-    constructor(fileManager: FileManager){
+    constructor(io: SocketIo, fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
 
@@ -87,6 +88,18 @@ class Game {
         }else{
             this.oppasscodeused = true;
         }
+
+        // prepare socket connections
+        io.on("connection", socket => {
+            socket.on(MSG_TYPES.INPUT, (content) => { this.handlePlayerInput(socket as any, content); });
+            socket.on(MSG_TYPES.CLICK, (content) => { this.handlePlayerClick(socket as any, content); });
+            socket.on(MSG_TYPES.INTERACT, (content) => { this.handlePlayerInteract(socket as any, content); });
+            socket.on(MSG_TYPES.DROP, (content) => { this.handlePlayerDrop(socket as any, content); });
+            socket.on(MSG_TYPES.SWAP, (content) => { this.handlePlayerSwap(socket as any, content); });
+            socket.on(MSG_TYPES.CRAFT, (content) => { this.handlePlayerCraft(socket as any, content); });
+            socket.on(MSG_TYPES.DISCONNECT, () => { this.playerManager.removePlayer(socket as any); });
+            socket.on(MSG_TYPES.SEND_MESSAGE, (content) => { this.chatManager.chat(socket as any, content); });
+        });
 
         this.logger.info("Game initialized");
     }
