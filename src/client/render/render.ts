@@ -197,8 +197,6 @@ function renderCell(x: number, y: number, asset: string, scale?: number): void {
         model,
         x + 1,
         y + 1,
-        (cellSize + 1) * renderscale,
-        (cellSize + 1) * renderscale,
     );
 }
 
@@ -228,8 +226,6 @@ function renderEntity(me: any, entity: any): void {
         model,
         -cellSize * scale / 2,
         -cellSize * scale * model.height / model.width + cellSize * scale / 2,
-        cellSize * scale,
-        cellSize * scale * model.height / model.width,
     );
     context.restore();
 }
@@ -260,8 +256,6 @@ function renderPlayer(me: any, player: any): void {
         model,
         -cellSize * scale / 2,
         -cellSize * scale * model.height / model.width + cellSize * scale / 2,
-        cellSize * scale,
-        cellSize * scale * model.height / model.width,
     );
     context.restore();
 }
@@ -324,8 +318,6 @@ function renderBackground(me: any): void {
         model,
         -cellSize * BACKGROUND_SCALE * (model.width / model.height) / 2 + xoffset,
         -cellSize * BACKGROUND_SCALE / 2 + yoffset,
-        cellSize * BACKGROUND_SCALE * (model.width / model.height),
-        cellSize * BACKGROUND_SCALE,
     );
     context.restore();
 }
