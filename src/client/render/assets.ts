@@ -33,7 +33,7 @@ function downloadAsset(assetName: string): Promise<void> {
 export const downloadAssets = (): Promise<void[]> => downloadPromise;
 
 /** Returns the image asset with the given name */
-export function getAsset(assetname: string, scale: number, color?: Color): OffscreenCanvas | null {
+export function getAsset(assetname: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
     if(assetname === undefined) return null;
     if(color === undefined) color = getBaseColor();
     if(!assetscache[assetname]) assetscache[assetname] = [];
@@ -44,8 +44,8 @@ export function getAsset(assetname: string, scale: number, color?: Color): Offsc
     // create new asset cache
     console.log(assetname);
     const model = assetsbase[assetname];
-    const width = scale;
-    const height = scale * model.height / model.width;
+    const width = scaleheight ? scale * model.width / model.height : scale;
+    const height = scaleheight ? scale : scale * model.height / model.width;
 
     const offscreen = new OffscreenCanvas(width, height);
     const ctx = offscreen.getContext("2d")!;

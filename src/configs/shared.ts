@@ -50,8 +50,8 @@ const SharedConfig: SharedConfigSchema = {
     WORLD: {
         WORLD_SIZE: 6,
         CHUNK_SIZE: 32,
-        CELLS_HORIZONTAL: 28,
-        CELLS_VERTICAL: 16,
+        CELLS_HORIZONTAL: 34,
+        CELLS_VERTICAL: 20,
     },
     INVENTORY: {
         INVENTORY_SIZE: 36,
