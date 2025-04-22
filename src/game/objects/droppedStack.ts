@@ -20,9 +20,6 @@ class DroppedStack extends GameObject {
         this.asset = itemStack.item.asset;
         if(ignore !== undefined){
             this.ignore = ignore;
-            setTimeout(() => {
-                this.ignore = null;
-            }, 1000);
         }
         this.despawntime = Date.now() + DROPPED_STACK_TTL * 1000;
 

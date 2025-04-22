@@ -63,10 +63,18 @@ class CollisionManager {
             const collectable = collectables[i];
             const push = SharedCollisions.entityCollision(player, { x: player.x, y: player.y }, { x: collectable.x, y: collectable.y, scale: collectable.scale });
             const collided = (push.x != 0 || push.y != 0);
+
+            let removeignore = (collectable.ignore != null);
             
-            if(collided && collectable.ignore != player){
+            if(collided){
+                if(collectable.ignore === player){
+                    removeignore = false;
+                    continue;
+                }
                 if(player.inventory.collectStack(collectable.itemStack)) this.game.entityManager.removeObject(collectable.id);
             }
+
+            if(removeignore) collectable.ignore = null;
         }
     };
 
