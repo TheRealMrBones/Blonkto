@@ -7,7 +7,7 @@ const { LOG_CATEGORIES } = Constants;
 class Logger {
     private static _LogManager: LogManager = LogManager.getLogManager();
     private static _Loggers: {[key: string]: Logger} = {};
-    category: string;
+    private category: string;
 
     private constructor(category?: string){
         this.category = category || LOG_CATEGORIES.NONE;

@@ -33,7 +33,7 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 /** The main class that manages the game world and the entities in it */
 class Game {
-    logger: Logger;
+    private logger: Logger;
 
     fileManager: FileManager;
     playerManager: PlayerManager;
@@ -51,7 +51,7 @@ class Game {
 
     world: World;
 
-    lastUpdateTime: number;
+    private lastUpdateTime: number;
 
     oppasscode: string;
     oppasscodeused: boolean;

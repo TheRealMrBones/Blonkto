@@ -11,7 +11,7 @@ const { LOG_PRIORITY } = ServerConfig.LOG;
 class LogManager {
     private static _LogManager: LogManager;
     private fileManager: FileManager | undefined;
-    logs: Log[];
+    private logs: Log[];
 
     private constructor(){
         this.logs = [];
@@ -36,7 +36,7 @@ class LogManager {
     log(message: string, category?: string, priority?: number): void {
         const log = new Log(message, category, priority);
         this.logs.push(log);
-        if(log.priority >= LOG_PRIORITY) console.log(log.getLineFormatted());
+        if(log.getPriority() >= LOG_PRIORITY) console.log(log.getLineFormatted());
     }
 
     /** Logs the given message as priority level info */

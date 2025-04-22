@@ -14,8 +14,8 @@ const datafolders = [
 
 /** Manages the creation and reading of save files for the server */
 class FileManager {
-    logger: Logger;
-    defaultlocation: string;
+    private logger: Logger;
+    private defaultlocation: string;
     
     constructor(){
         this.logger = Logger.getLogger(LOG_CATEGORIES.FILE_MANAGER);

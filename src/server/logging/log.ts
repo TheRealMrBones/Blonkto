@@ -3,10 +3,10 @@ const { LOG_PRIORITIES, LOG_CATEGORIES, CONSOLE_FORMAT } = Constants;
 
 /** An object representation of a single log line */
 class Log {
-    message: string;
-    time: Date;
-    category: string;
-    priority: number;
+    private message: string;
+    private time: Date;
+    private category: string;
+    private priority: number;
 
     constructor(message: string, category?: string, priority?: number){
         this.message = message;
@@ -34,6 +34,11 @@ class Log {
             case LOG_PRIORITIES.ERROR: return "ERROR";
             default: return this.priority.toString();
         }
+    }
+
+    /** Returns the priority value of this log */
+    getPriority(): number {
+        return this.priority;
     }
 }
 
