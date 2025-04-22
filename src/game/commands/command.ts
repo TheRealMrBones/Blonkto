@@ -50,8 +50,10 @@ class Command implements RegistryValue {
 
     /** Tries to run this command with the given args */
     execute(rawargs: any[], player: Player, game: Game): void {
-        if(!this.canExecute(player, game))
+        if(!this.canExecute(player, game)){
             Command.sendNoPermission(player, game);
+            return;
+        }
 
         const args = this.parseArgs(rawargs, game);
         if(typeof args === "string") // string return is a parsing error
