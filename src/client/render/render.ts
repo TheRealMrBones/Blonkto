@@ -1,6 +1,7 @@
 import { getAsset } from "./assets.js";
 import { updateFps } from "./ui.js";
 import { Color } from "../../shared/types.js";
+import { combineColors } from "../../shared/typeOperations.js";
 
 import { playerclient } from "../index.js";
 
@@ -8,13 +9,14 @@ import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
-const { CELLS_HORIZONTAL, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
+const { CELLS_ASPECT_RATIO, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 import ClientConfig from "../../configs/client.js";
-import { combineColors } from "../../shared/typeOperations.js";
-const { HEIGHT_TO_CELL_RATIO, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
+const { RENDER_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
+
+const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 
 // #region init
 
@@ -29,12 +31,15 @@ canvas.height = window.innerHeight;
 rendercanvas.width = window.innerWidth;
 rendercanvas.height = window.innerHeight;
 
+const HEIGHT_TO_CELL_RATIO = CELLS_VERTICAL - RENDER_PADDING;
 let cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
+
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     rendercanvas.width = window.innerWidth;
     rendercanvas.height = window.innerHeight;
+
     cellSize = canvas.height / HEIGHT_TO_CELL_RATIO;
 });
 

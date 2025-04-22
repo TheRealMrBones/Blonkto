@@ -9,7 +9,7 @@ type ClientConfigSchema = {
     },
     RENDER: {
         RENDER_DELAY: number,
-        HEIGHT_TO_CELL_RATIO: number,
+        RENDER_PADDING: number,
         TEXT_FONT: string,
         BACKGROUND_SCALE: number,
         USERNAME_SCALE: number,
@@ -34,7 +34,7 @@ const ClientConfig: ClientConfigSchema = {
     },
     RENDER: {
         RENDER_DELAY: 60,
-        HEIGHT_TO_CELL_RATIO: 15,
+        RENDER_PADDING: 5,
         TEXT_FONT: "Verdana",
         BACKGROUND_SCALE: 1.5,
         USERNAME_SCALE: 0.3,

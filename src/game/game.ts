@@ -24,12 +24,14 @@ const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
-const { CELLS_HORIZONTAL, CELLS_VERTICAL } = SharedConfig.WORLD;
+const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
+
+const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 
 /** The main class that manages the game world and the entities in it */
 class Game {

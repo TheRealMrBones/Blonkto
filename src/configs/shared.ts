@@ -17,7 +17,7 @@ type SharedConfigSchema = {
     WORLD: {
         WORLD_SIZE: number,
         CHUNK_SIZE: number,
-        CELLS_HORIZONTAL: number,
+        CELLS_ASPECT_RATIO: number,
         CELLS_VERTICAL: number,
     },
     INVENTORY: {
@@ -50,7 +50,7 @@ const SharedConfig: SharedConfigSchema = {
     WORLD: {
         WORLD_SIZE: 6,
         CHUNK_SIZE: 32,
-        CELLS_HORIZONTAL: 34,
+        CELLS_ASPECT_RATIO: 1.667,
         CELLS_VERTICAL: 20,
     },
     INVENTORY: {
