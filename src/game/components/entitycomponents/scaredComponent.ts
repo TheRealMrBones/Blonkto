@@ -7,8 +7,8 @@ import { Pos } from "../../../shared/types.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class ScaredComponent extends Component<EntityDefinition> {
-    speedmultiplier: number;
-    distance: number;
+    private speedmultiplier: number;
+    private distance: number;
 
     constructor(speedmultiplier?: number, distance?: number) {
         super();

@@ -6,8 +6,8 @@ import { pathfind } from "../../world/pathfind.js";
 
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
-    distance: number;
-    randomness: number;
+    private distance: number;
+    private randomness: number;
 
     constructor(distance?: number, cellposrandomness?: number) {
         super();

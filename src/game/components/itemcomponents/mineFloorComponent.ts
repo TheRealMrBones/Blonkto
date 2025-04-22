@@ -6,7 +6,7 @@ import ItemStack from "../../items/itemStack.js";
 
 /** An Item Component that allows the item to be used to mine/destroy floors */
 class MineFloorComponent extends Component<Item> {
-    power: number;
+    private power: number;
 
     constructor(power: number){
         super();

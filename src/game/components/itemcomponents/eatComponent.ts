@@ -6,7 +6,7 @@ import ItemStack from "../../items/itemStack.js";
 
 /** An Item Component that allows the item to be consumed by players */
 class EatComponent extends Component<Item> {
-    heal: number;
+    private heal: number;
 
     constructor(heal: number){
         super();

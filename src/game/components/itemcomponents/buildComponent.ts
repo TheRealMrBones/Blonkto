@@ -6,7 +6,7 @@ import ItemStack from "../../items/itemStack.js";
 
 /** An Item Component that allows the item to be used to place blocks */
 class BuildComponent extends Component<Item> {
-    block: string;
+    private block: string;
 
     constructor(block: string){
         super();

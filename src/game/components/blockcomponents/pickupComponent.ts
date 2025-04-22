@@ -9,8 +9,8 @@ import DroppedStack from "../../objects/droppedStack.js";
 
 /** A Block Component that allows the block to be picked up */
 class PickupComponent extends Component<Block> {
-    item: string;
-    amount: number;
+    private item: string;
+    private amount: number;
 
     constructor(item: string, amount: number){
         super();
