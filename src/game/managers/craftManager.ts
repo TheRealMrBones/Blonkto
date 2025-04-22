@@ -6,9 +6,9 @@ const defaultrecipesfolder = "recipes";
 
 /** Manages crafting opeprations on all loaded recipes */
 class CraftManager {
-    game: Game;
-    recipes: Recipe[];
-    playerrecipes: { [playerid: string]: Recipe[] };
+    private game: Game;
+    private recipes: Recipe[];
+    private playerrecipes: { [playerid: string]: Recipe[] };
 
     constructor(game: Game){
         this.game = game;

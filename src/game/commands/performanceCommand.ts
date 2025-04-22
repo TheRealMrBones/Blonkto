@@ -13,7 +13,7 @@ const args = [
 export default (): void => CommandRegistry.register("performance", new Command(true, args, performanceCommand, "Shows the most recent performance log"));
 
 function performanceCommand(args: any[], player: Player, game: Game){
-    for(const message of game.performanceManager.lastperformancelog){
+    for(const message of game.performanceManager.GetLastPerformanceLog()){
         game.chatManager.sendMessageTo(player, message);
     }
 }

@@ -2,8 +2,8 @@ import Game from "../game.js";
 
 /** Manages the list of operators for the server */
 class OpManager {
-    game: Game;
-    oppedplayers: {[key: string]: boolean};
+    private game: Game;
+    private oppedplayers: {[key: string]: boolean};
 
     constructor(game: Game){
         this.game = game;

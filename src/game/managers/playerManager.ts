@@ -14,8 +14,8 @@ const { FILTER_USERNAME } = ServerConfig.PLAYER;
 
 /** Manages the list of players for the server */
 class PlayerManager {
-    game: Game;
-    saveInterval: NodeJS.Timeout;
+    private game: Game;
+    private saveInterval: NodeJS.Timeout;
 
     constructor(game: Game){
         this.game = game;

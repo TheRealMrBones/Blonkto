@@ -7,7 +7,7 @@ import Player from "../objects/player.js";
 
 /** Manages all of the ticking entities/objects for the game */
 class EntityManager {
-    game: Game;
+    private game: Game;
 
     constructor(game: Game){
         this.game = game;

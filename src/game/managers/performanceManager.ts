@@ -10,16 +10,16 @@ const { LOG_PERFORMANCE } = ServerConfig.LOG;
 
 /** Manages performance monitoring for the server */
 class PerformanceManager {
-    logger: Logger;
-    game: Game;
-    loginterval: NodeJS.Timeout | null;
+    private logger: Logger;
+    private game: Game;
+    private loginterval: NodeJS.Timeout | null;
 
-    tickstarttime: number = 0;
-    cummilativetickcount: number = 0;
-    cummilativeticktime: number = 0;
-    maxticktime: number = 0;
+    private tickstarttime: number = 0;
+    private cummilativetickcount: number = 0;
+    private cummilativeticktime: number = 0;
+    private maxticktime: number = 0;
 
-    lastperformancelog: string[] = ["No Performance Log has been generated recently"];
+    private lastperformancelog: string[] = ["No Performance Log has been generated recently"];
 
     constructor(game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.PERFORMANCE);
@@ -43,6 +43,11 @@ class PerformanceManager {
         this.cummilativetickcount++;
         this.cummilativeticktime += ticktime;
         this.maxticktime = Math.max(this.maxticktime, ticktime);
+    }
+
+    /** Returns the last performance log as an array of string messages */
+    GetLastPerformanceLog(): string[] {
+        return this.lastperformancelog;
     }
 
     // #endregion

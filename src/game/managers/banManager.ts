@@ -2,8 +2,8 @@ import Game from "../game.js";
 
 /** Manages the list of banned players for the server */
 class BanManager {
-    game: Game;
-    bannedplayers: {[key: string]: string};
+    private game: Game;
+    private bannedplayers: {[key: string]: string};
 
     constructor(game: Game){
         this.game = game;
