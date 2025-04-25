@@ -121,7 +121,7 @@ class PlayerManager {
     /** Gets the cleaned username for a new/renamed player */
     getUsername(username: string): string {
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
-        if(newUsername.trim().length === 0) newUsername = "Silly Goose";
+        if(newUsername.trim().length === 0) newUsername = "SillyGoose";
     
         if(this.game.entityManager.getPlayerEntities().some(e => e.username === newUsername)){
             let done = false;
