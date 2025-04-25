@@ -7,6 +7,9 @@ import ItemStack from "../../items/itemStack.js";
 import Constants from "../../../shared/constants.js";
 const { MINE_TYPES } = Constants;
 
+import SharedConfig from "../../../configs/shared.js";
+const { BASE_REACH } = SharedConfig.PLAYER;
+
 /** An Item Component that allows the item to be used to mine/destroy blocks */
 class MineComponent extends Component<Item> {
     private power: number;
@@ -26,11 +29,14 @@ class MineComponent extends Component<Item> {
 
     /** Defines the mine use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
+        if(info.dist > BASE_REACH) return;
+
         const cell = game.world.getCell(info.cellpos.x, info.cellpos.y, false);
         if(cell !== null){
             if(cell.block !== null)
                 if(cell.block.minetype != this.minetype) return;
         }
+        
         game.world.breakBlock(info.cellpos.x, info.cellpos.y, true);
     }
 }

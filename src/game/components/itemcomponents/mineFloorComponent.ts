@@ -4,6 +4,9 @@ import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 
+import SharedConfig from "../../../configs/shared.js";
+const { BASE_REACH } = SharedConfig.PLAYER;
+
 /** An Item Component that allows the item to be used to mine/destroy floors */
 class MineFloorComponent extends Component<Item> {
     private power: number;
@@ -21,6 +24,7 @@ class MineFloorComponent extends Component<Item> {
 
     /** Defines the mine use of the item with this component */
     use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
+        if(info.dist > BASE_REACH) return;
         game.world.breakFloor(info.cellpos.x, info.cellpos.y, true);
     }
 }

@@ -22,6 +22,7 @@ import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
+const { BASE_REACH } = SharedConfig.PLAYER;
 const { FAKE_PING } = SharedConfig.UPDATES;
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
@@ -160,6 +161,7 @@ class Game {
             const cell = this.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
             if(cell === null) return;
             if(cell.block === null) return;
+            if(newinfo.dist > BASE_REACH) return;
             cell.block.eventEmitter.emit("interact", this, this.players[socket.id], cell, newinfo);
         }
     }
@@ -169,6 +171,7 @@ class Game {
         return {
             dir: Math.atan2(content.xoffset, content.yoffset),
             cellpos: { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) },
+            dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
         };
     }
 

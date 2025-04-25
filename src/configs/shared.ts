@@ -6,6 +6,7 @@ type SharedConfigSchema = {
     PLAYER: {
         PLAYER_SCALE: number,
         PLAYER_SPEED: number,
+        BASE_REACH: number,
     },
     ATTACK: {
         ATTACK_DELAY: number,
@@ -39,6 +40,7 @@ const SharedConfig: SharedConfigSchema = {
     PLAYER: {
         PLAYER_SCALE: 0.55,
         PLAYER_SPEED: 3,
+        BASE_REACH: 5,
     },
     ATTACK: {
         ATTACK_DELAY: 0.7,
