@@ -9,6 +9,7 @@ import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
+const { BASE_REACH } = SharedConfig.PLAYER;
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
@@ -132,6 +133,7 @@ function render(): void {
     notfallingentities.forEach(renderEntity.bind(null, me));
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
+    renderReach();
 
     // draw frame on render canvas
     rendercontext.drawImage(canvas,0,0);
@@ -296,6 +298,24 @@ function renderPlayerUsername(me: any, player: any): void {
     context.textAlign = "center";
     context.fillText(username, 0, -USERNAME_HANG * cellSize);
     context.restore();
+}
+
+/** Renders the reach outline for the current held item or hovered object */
+function renderReach(): void {
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = BASE_REACH * cellSize;
+    const startAngle = 0;
+    const endAngle = 2 * Math.PI;
+
+    context.save();
+    context.beginPath();
+    context.arc(centerX, centerY, radius, startAngle, endAngle);
+    context.strokeStyle = "rgba(190, 190, 190, 0.35)";
+    
+    context.lineWidth = 10;
+    context.closePath();
+    context.stroke();
 }
 
 // #endregion
