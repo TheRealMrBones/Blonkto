@@ -316,6 +316,7 @@ function renderReach(): void {
     context.lineWidth = 10;
     context.closePath();
     context.stroke();
+    context.restore();
 }
 
 // #endregion
@@ -366,6 +367,7 @@ let updatefpsinterval: string | number | NodeJS.Timeout | undefined;
 
 /** Starts the rendering loop for the client */
 export function startRendering(): void {
+    context.reset();
     updatefpsinterval = setInterval(calculatefps, 500);
     animationFrameRequestId = requestAnimationFrame(render);
 }
