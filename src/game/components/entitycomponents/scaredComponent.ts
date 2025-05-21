@@ -2,7 +2,6 @@ import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../entities/entityDefinition.js";
 import Entity from "../../objects/entity.js";
-import { pathfind } from "../../world/pathfind.js";
 import { Pos } from "../../../shared/types.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
