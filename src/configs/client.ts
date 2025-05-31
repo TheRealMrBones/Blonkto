@@ -6,6 +6,7 @@ type ClientConfigSchema = {
     UPDATE: {
         CLIENT_UPDATE_RATE: number,
         SERVER_RESYNC_THRESHOLD: number,
+        CONNECTION_LOST_THRESHOLD: number,
     },
     RENDER: {
         RENDER_DELAY: number,
@@ -31,6 +32,7 @@ const ClientConfig: ClientConfigSchema = {
     UPDATE: {
         CLIENT_UPDATE_RATE: 50,
         SERVER_RESYNC_THRESHOLD: 50,
+        CONNECTION_LOST_THRESHOLD: 250,
     },
     RENDER: {
         RENDER_DELAY: 60,

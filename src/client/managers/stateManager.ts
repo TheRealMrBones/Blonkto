@@ -5,7 +5,7 @@ import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
-const { SERVER_RESYNC_THRESHOLD } = ClientConfig.UPDATE;
+const { SERVER_RESYNC_THRESHOLD, CONNECTION_LOST_THRESHOLD } = ClientConfig.UPDATE;
 
 // #region init
 
@@ -213,7 +213,7 @@ class StateManager {
 
     /** Checks if connection might have been lost based on the time of the last game update received */
     checkIfConnectionLost(): void {
-        const isconnectionlost = Date.now() - this.lastUpdateTime > RENDER_DELAY * 2;
+        const isconnectionlost = Date.now() - this.lastUpdateTime > CONNECTION_LOST_THRESHOLD;
         toggleConnectionLost(isconnectionlost);
     };
 
