@@ -403,10 +403,9 @@ class InputManager {
     }
 
     /** Pushes the players position the given amounts as determined by the server */
-    serverPush(pushx: number, pushy: number, pushid: number): void {
+    serverPush(pushx: number, pushy: number): void {
         this.x += pushx;
         this.y += pushy;
-        this.pushes.push(pushid);
     }
 
     /** Sets the players position to the given spot */

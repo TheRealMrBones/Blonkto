@@ -43,7 +43,7 @@ class StateManager {
 
         // get fixes
         if(update.fixes.setpos) this.playerclient.inputManager.setPos(update.fixes.setpos);
-        if(update.fixes.pushid) this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy, update.fixes.pushid);
+        if(update.fixes.pushx) this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy);
 
         update.inventoryupdates.forEach((iu: any) => {
             this.playerclient.inventory.setSingleInventorySlot(iu);
