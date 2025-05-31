@@ -22,6 +22,7 @@ export type PlayerInstantiatedContent = {
 /** Defines the format of the game update message */
 export type GameUpdateContent = {
     t: number;
+    lastupdatetime: number | null;
     me: any;
     fixes: any;
     inventoryupdates: any[];
@@ -35,11 +36,11 @@ export type GameUpdateContent = {
 /** Defines the format of the input message */
 export type InputContent = {
     t: number;
+    lastupdatetime: number | null;
     dir: number;
     dx: number;
     dy: number;
     hotbarslot: number;
-    pushes: number[];
 };
 
 /** Defines the format of the click and interact message */

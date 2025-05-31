@@ -113,14 +113,14 @@ class Game {
     handlePlayerInput(socket: Socket, content: InputContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        const { t, dir, dx, dy, hotbarslot } = content;
+        const { t, lastupdatetime, dir, dx, dy, hotbarslot } = content;
         if(this.players[socket.id]){
             this.players[socket.id].update({
                 dir: dir,
                 dx: dx,
                 dy: dy,
                 t: t,
-                pushes: content.pushes,
+                lastupdatetime: lastupdatetime,
             });
             this.players[socket.id].hotbarslot = hotbarslot;
         }
@@ -207,7 +207,6 @@ class Game {
 
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
-        this.lastUpdateTime = now;
         
         // get world updates
         const worldloads: {[key: string]: any } = {};
@@ -224,20 +223,21 @@ class Game {
 
         // send fat update packets
         this.entityManager.getPlayerEntities().forEach(player => {
-            if(FAKE_PING == 0) player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]));
+            if(FAKE_PING == 0) player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(now, player, worldloads[player.id]));
             else setTimeout(() =>
-                player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(player, worldloads[player.id]))
+                player.socket.emit(MSG_TYPES.GAME_UPDATE, this.createUpdate(now, player, worldloads[player.id]))
             , FAKE_PING / 2);
         });
 
         // reset cell updates in loaded chunks
         this.world.resetCellUpdates();
 
+        this.lastUpdateTime = now;
         this.performanceManager.tickEnd();
     }
 
     /** Create an update object to be sent to the specified players client */
-    createUpdate(player: Player, worldload: any): GameUpdateContent {
+    createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
         // Get Tab
         let tab = [];
         if(SHOW_TAB){
@@ -277,7 +277,8 @@ class Game {
 
         // return full update object
         const content: GameUpdateContent = {
-            t: Date.now(),
+            t: t,
+            lastupdatetime: this.lastUpdateTime,
             me: player.serializeForUpdate(),
             fixes: fixescopy,
             inventoryupdates: inventoryupdates,
@@ -294,7 +295,7 @@ class Game {
     createInitialUpdate(player: Player): GameUpdateContent {
         const worldload = this.world.loadPlayerChunks(player);
         player.chunk = worldload.chunk;
-        return this.createUpdate(player, worldload);
+        return this.createUpdate(Date.now(), player, worldload);
     }
 
     // #endregion

@@ -21,6 +21,8 @@ class InputManager {
     private readonly listeners: InputListener[] = [];
     private readonly canvaslisteners: InputListener[] = []; // temp while UI is still in actual html
 
+    private lastupdate = null as number | null;
+
     private dir = 0;
     private x = 0;
     private y = 0;
@@ -43,7 +45,6 @@ class InputManager {
     private lastattackdir = 0;
 
     private falling = false;
-    private pushes: number[] = [];
 
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
@@ -250,21 +251,22 @@ class InputManager {
     private handleInput(): void {
         this.updatePos();
 
+        const t = Date.now();
         const content: InputContent = {
-            t: Date.now(),
+            t: t,
+            lastupdatetime: this.lastupdate,
             dir: this.dir,
             dx: this.dx,
             dy: this.dy,
             hotbarslot: this.selectedslot,
-            pushes: this.pushes,
         };
         this.playerclient.networkingManager.updateInputs(content);
+        this.lastupdate = t;
 
         this.x = this.x + this.dx;
         this.y = this.y + this.dy;
         this.dx = 0;
         this.dy = 0;
-        this.pushes = [];
     }
 
     /** Resets the input reading variables */

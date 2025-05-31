@@ -128,8 +128,19 @@ class Player extends Entity {
         this.x += data.dx;
         this.y += data.dy;
 
+        if(data.lastupdatetime !== null)
+            if(this.lastupdated != data.lastupdatetime) this.resync();
         this.lastupdated = data.t;
         this.serverlastupdated = Date.now();
+    }
+
+    /** Resyncs the players client with the server */
+    resync(){
+        console.log("RESYNC!");
+        this.fixes.setpos = {
+            x: this.x,
+            y: this.y
+        };
     }
 
     /** Heal the player the given amount of health */
