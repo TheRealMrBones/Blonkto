@@ -42,7 +42,6 @@ export function getAsset(assetname: string, scale: number, color?: Color, scaleh
     if(foundasset !== undefined) return foundasset.image;
 
     // create new asset cache
-    console.log(assetname);
     const model = assetsbase[assetname];
     const width = scaleheight ? scale * model.width / model.height : scale;
     const height = scaleheight ? scale : scale * model.height / model.width;
