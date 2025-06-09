@@ -1,3 +1,4 @@
+import { Pos } from "../../shared/types.js";
 import EntityDefinition from "../entities/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
@@ -20,6 +21,10 @@ class NonplayerEntity extends Entity {
         this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
             game.entityManager.removeEntity(this.id);
             this.entitydefinition.eventEmitter.emit("death", this, game);
+        });
+
+        this.eventEmitter.on("collision", (game: Game, entity: Entity, push: Pos) => {
+            this.entitydefinition.eventEmitter.emit("collision", game, this, entity, push);
         });
     }
 

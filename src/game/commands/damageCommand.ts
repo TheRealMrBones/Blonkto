@@ -20,13 +20,13 @@ function damageCommand(args: any[], player: Player, game: Game){
     switch(argIndex){
         case 0: {
             game.chatManager.sendMessageTo(player, `took ${damage} damage`);
-            if(player.takeHit(damage)) player.eventEmitter.emit("death", "the game", null, game);
+            player.takeHit(game, damage, "the game");
             break;
         };
         case 1: {
             const p: Player = args[1];
             game.chatManager.sendMessageTo(player, `made ${p.username} take ${damage} damage`);
-            if(p.takeHit(damage)) p.eventEmitter.emit("death", "the game", null, game);
+            p.takeHit(game, damage, "the game");
             break;
         }
     }

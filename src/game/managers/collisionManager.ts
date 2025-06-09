@@ -26,6 +26,9 @@ class CollisionManager {
             const entity2 = entities[i];
 
             const push = SharedCollisions.entityCollision(entity, { x: entity.x, y: entity.y }, { x: entity2.x, y: entity2.y, scale: entity2.scale });
+            if(push.x == 0 && push.y == 0) continue;
+            entity.eventEmitter.emit("collision", this.game, entity2, push);
+
             entity.push(push.x / 2, push.y / 2);
             entity2.push(-push.x / 2, -push.y / 2);
         }
@@ -113,17 +116,14 @@ class CollisionManager {
             const dist = SharedCollisions.getDistance(attackpos, entity2);
             const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
             if(entity2.id != entity.id && realdist < 0 && !entity2.hit){
-                if(entity2.takeHit(damage, entity)){
-                    let killer = "unknown";
-
-                    if(entity instanceof NonplayerEntity){
-                        killer = entity.entitydefinition.displayname;
-                    }else if(entity instanceof Player){
-                        killer = entity.username;
-                    }
-
-                    entity2.eventEmitter.emit("death", killer, entity, this.game);
+                let killer = "unknown";
+                if(entity instanceof NonplayerEntity){
+                    killer = entity.entitydefinition.displayname;
+                }else if(entity instanceof Player){
+                    killer = entity.username;
                 }
+
+                entity2.takeHit(this.game, damage, killer, entity);
             }
         }
     };

@@ -69,13 +69,17 @@ abstract class Entity extends GameObject {
     // #region hit and swing
 
     /** Removes the given health amount from this entity and returns if it died */
-    takeHit(damage: number, attacker?: Entity): boolean {
+    takeHit(game: Game, damage: number, attackername: string, attacker?: Entity): boolean {
         this.health -= damage;
         this.hit = true;
         this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
         this.lasthitby = attacker;
 
         // tell if died
+        if(this.health <= 0){
+            this.eventEmitter.emit("death", attackername, attacker || null, game);
+        }
+
         return (this.health <= 0);
     }
 

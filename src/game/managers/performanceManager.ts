@@ -46,7 +46,7 @@ class PerformanceManager {
     }
 
     /** Returns the last performance log as an array of string messages */
-    GetLastPerformanceLog(): string[] {
+    getLastPerformanceLog(): string[] {
         return this.lastperformancelog;
     }
 
