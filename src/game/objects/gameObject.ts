@@ -30,7 +30,7 @@ abstract class GameObject {
     startofcurrenttarget: number | null = null;
     blocked: boolean = false;
 
-    eventEmitter: EventEmitter = new EventEmitter();
+    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.id = crypto.randomUUID();
@@ -42,7 +42,7 @@ abstract class GameObject {
         this.scale = scale || 1;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
 
-        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+        this.registerListener("tick", (game: Game, dt: number) => {
             this.checkFalling(game, dt);
             this.moveToTarget(dt);
             if(!this.falling) this.checkCollisions(game);
@@ -211,6 +211,20 @@ abstract class GameObject {
         });
 
         return tiles;
+    }
+
+    // #endregion
+
+    // #region events
+
+    /** Registers a listener to this objects event handler */
+    registerListener(event: string, listener: (...args: any[]) => void): void {
+        this.eventEmitter.on(event, listener);
+    }
+
+    /** Emits an event to this objects event handler */
+    emitEvent(event: string, ...args: any[]): void {
+        this.eventEmitter.emit(event, ...args);
     }
 
     // #endregion

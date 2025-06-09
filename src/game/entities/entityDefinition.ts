@@ -30,8 +30,8 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
 
-        this.eventEmitter.on("death", (entity: NonplayerEntity, game: Game) => {
-            if(entity.scale > 0) this.dropItems(entity, game);
+        this.eventEmitter.on("death", (self: NonplayerEntity, game: Game) => {
+            if(self.scale > 0) this.dropItems(self, game);
         });
     }
 
@@ -41,8 +41,8 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     }
 
     /** Drops this entities types items on an instances death */
-    dropItems(entity: NonplayerEntity, game: Game): void {
-        if(this.drops != null) this.drops.drop(entity.x, entity.y, game);
+    dropItems(self: NonplayerEntity, game: Game): void {
+        if(this.drops != null) this.drops.drop(self.x, self.y, game);
     }
 }
 

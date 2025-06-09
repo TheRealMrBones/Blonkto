@@ -14,17 +14,8 @@ class NonplayerEntity extends Entity {
         this.entitydefinition = EntityRegistry.get(entitydefinition);
         this.basespeed = this.entitydefinition.speed;
 
-        this.eventEmitter.on("tick", (game: Game, dt: number) => {
-            this.entitydefinition.eventEmitter.emit("tick", game, dt, this);
-        });
-
-        this.eventEmitter.on("death", (killedby: string, killer: any, game: Game) => {
+        this.registerListener("death", (game: Game, killedby: string, killer: any) => {
             game.entityManager.removeEntity(this.id);
-            this.entitydefinition.eventEmitter.emit("death", this, game);
-        });
-
-        this.eventEmitter.on("collision", (game: Game, entity: Entity, push: Pos) => {
-            this.entitydefinition.eventEmitter.emit("collision", game, this, entity, push);
         });
     }
 
@@ -32,6 +23,16 @@ class NonplayerEntity extends Entity {
     static readFromSave(data: any): NonplayerEntity {
         return new NonplayerEntity(data.x, data.y, data.dir, data.entitydefinition);
     }
+
+    // #region events
+
+    /** Emits an event to this objects event handler */
+    override emitEvent(event: string, ...args: any[]): void {
+        this.entitydefinition.eventEmitter.emit(event, this, ...args);
+        super.emitEvent(event, ...args);
+    }
+
+    // #endregion
 
     // #region serialization
 

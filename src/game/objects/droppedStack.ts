@@ -24,7 +24,7 @@ class DroppedStack extends GameObject {
         this.despawntime = Date.now() + DROPPED_STACK_TTL * 1000;
 
         // add collision checks
-        this.eventEmitter.on("tick", (game: Game, dt: number) => {
+        this.registerListener("tick", (game: Game, dt: number) => {
             game.collisionManager.itemMergeCheck(this);
             this.tickDespawn(game);
         });
