@@ -14,7 +14,7 @@ class NonplayerEntity extends Entity {
         this.entitydefinition = EntityRegistry.get(entitydefinition);
         this.basespeed = this.entitydefinition.speed;
 
-        this.registerListener("death", (game: Game, killedby: string, killer: any) => {
+        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
             game.entityManager.removeEntity(this.id);
         });
     }
@@ -27,7 +27,7 @@ class NonplayerEntity extends Entity {
     // #region events
 
     /** Emits an event to this objects event handler */
-    override emitEvent(event: string, ...args: any[]): void {
+    protected override emitEvent(event: string, ...args: any[]): void {
         this.entitydefinition.eventEmitter.emit(event, this, ...args);
         super.emitEvent(event, ...args);
     }

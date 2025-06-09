@@ -3,6 +3,7 @@ import EventEmitter from "events";
 
 import Game from "../game.js";
 import { Pos } from "../../shared/types.js";
+import Entity from "./entity.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -218,13 +219,43 @@ abstract class GameObject {
     // #region events
 
     /** Registers a listener to this objects event handler */
-    registerListener(event: string, listener: (...args: any[]) => void): void {
+    private registerListener(event: string, listener: (...args: any[]) => void): void {
         this.eventEmitter.on(event, listener);
     }
 
+    /** Registers a tick event listener to this objects event handler */
+    registerTickListener(listener: (game: Game, dt: number) => void): void {
+        this.registerListener("tick", listener);
+    }
+
+    /** Registers a death event listener to this objects event handler */
+    registerDeathListener(listener: (game: Game, killedby: string, killer: any) => void): void {
+        this.registerListener("death", listener);
+    }
+
+    /** Registers a collision event listener to this objects event handler */
+    registerCollisionListener(listener: (game: Game, entity: Entity, push: Pos) => void): void {
+        this.registerListener("collision", listener);
+    }
+
     /** Emits an event to this objects event handler */
-    emitEvent(event: string, ...args: any[]): void {
+    protected emitEvent(event: string, ...args: any[]): void {
         this.eventEmitter.emit(event, ...args);
+    }
+
+    /** Emits a tick event to this objects event handler */
+    emitTickEvent(game: Game, dt: number): void {
+        this.emitEvent("tick", game, dt);
+    }
+
+    /** Emits a death event to this objects event handler */
+    emitDeathEvent(game: Game, killedby: string, killer: any): void {
+        this.emitEvent("death", game, killedby, killer);
+    }
+
+    /** Emits a collision event to this objects event handler */
+    emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
+        this.emitEvent("collision", game, entity, push);
     }
 
     // #endregion

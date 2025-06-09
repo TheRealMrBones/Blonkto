@@ -27,7 +27,7 @@ class CollisionManager {
 
             const push = SharedCollisions.entityCollision(entity, { x: entity.x, y: entity.y }, { x: entity2.x, y: entity2.y, scale: entity2.scale });
             if(push === null) continue;
-            entity.emitEvent("collision", this.game, entity2, push);
+            entity.emitCollisionEvent(this.game, entity2, push);
 
             entity.push(push.x / 2, push.y / 2);
             entity2.push(-push.x / 2, -push.y / 2);

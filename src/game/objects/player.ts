@@ -58,7 +58,7 @@ class Player extends Entity {
 
         this.resetFixes();
 
-        this.registerListener("death", (game: Game, killedby: string, killer: any) => {
+        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
             game.playerManager.killPlayer(this.socket, killedby);
             if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.x, this.y, game);
         });
@@ -106,7 +106,7 @@ class Player extends Entity {
     /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {
-            this.emitEvent("death", game, "gravity", null);
+            this.emitDeathEvent(game, "gravity", null);
         }, 1000);
     }
 

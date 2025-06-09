@@ -25,12 +25,12 @@ function killCommand(args: any[], player: Player, game: Game){
     // actually run command
     switch(argIndex){
         case 0: {
-            player.emitEvent("death", game, "the Server", null);
+            player.emitDeathEvent(game, "the Server", null);
             break;
         };
         case 1: {
             const p: Player = args[1];
-            p.emitEvent("death", game, "the Server", null);
+            p.emitDeathEvent(game, "the Server", null);
             game.chatManager.sendMessageTo(player, `killed ${p.username}`);
             break;
         };

@@ -40,7 +40,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(!(entity instanceof Player)) return;
 
         if(Date.now() - this.lasthits[self.id] < this.delay) return;
-        entity.takeHit(game, this.damage, this.parent?.displayname || "unknown", self);
+        entity.takeHit(game, this.damage, this.parent?.displayname || "unknown", self as unknown as Entity);
         this.lasthits[self.id] = Date.now();
     }
 

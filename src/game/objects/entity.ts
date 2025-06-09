@@ -26,11 +26,11 @@ abstract class Entity extends GameObject {
         this.health = maxhealth;
         this.basespeed = 1;
 
-        this.registerListener("death", (game: Game, killedby: string, killer: any) => {
+        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
             this.onDeath(killedby, killer, game);
         });
 
-        this.registerListener("tick", (game: Game, dt: number) => {
+        this.registerTickListener((game: Game, dt: number) => {
             if(this.swinging) game.collisionManager.attackHitCheck(game.players[this.id], this.lastattackdir, this.lastattackdamage);
         });
     }
@@ -54,7 +54,7 @@ abstract class Entity extends GameObject {
 
     /** Entity action after falling */
     override onFell(game: Game): void {
-        this.emitEvent("death", game, "gravity", null);
+        this.emitDeathEvent(game, "gravity", null);
     }
 
     /** Entity action after death */
@@ -77,7 +77,7 @@ abstract class Entity extends GameObject {
 
         // tell if died
         if(this.health <= 0){
-            this.emitEvent("death", game, attackername, attacker || null);
+            this.emitDeathEvent(game, attackername, attacker || null);
         }
 
         return (this.health <= 0);
