@@ -87,12 +87,12 @@ class CollisionManager {
 
         for(let i = 0; i < collectables.length; i++){
             const collectable2 = collectables[i];
-            const collectable = collectables[i];
+            if(collectable.id === collectable2.id) continue;
             const push = SharedCollisions.entityCollision(collectable, { x: collectable.x, y: collectable.y }, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
             const collided = (push !== null);
 
             if(collided){
-                if(collectable.id != collectable2.id){
+                if(collectable.itemStack.item.name === collectable2.itemStack.item.name){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
                 }else{
                     collectable.push(push.x / 2, push.y / 2);

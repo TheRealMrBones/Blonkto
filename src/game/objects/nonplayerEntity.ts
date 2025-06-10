@@ -1,4 +1,3 @@
-import { Pos } from "../../shared/types.js";
 import EntityDefinition from "../entities/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
