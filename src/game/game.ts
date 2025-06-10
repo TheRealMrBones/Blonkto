@@ -208,6 +208,9 @@ class Game {
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
         this.world.tickDayCycle();
+
+        // spawns
+        this.entityManager.spawnZombies();
         
         // get world updates
         const worldloads: {[key: string]: any } = {};

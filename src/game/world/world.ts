@@ -38,12 +38,14 @@ class World {
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
+    // #region Time
+
     /** Ticks the day cycle */
     tickDayCycle(): void {
         this.daycycletick++;
         if(this.daycycletick > DAY_LENGTH + NIGHT_LENGTH) this.daycycletick = 0;
 
-        if(this.daycycletick > DAY_LENGTH){
+        if(this.isNight()){
             // night
             const timetime = this.daycycletick - DAY_LENGTH;
 
@@ -63,6 +65,18 @@ class World {
             }
         }
     }
+
+    /** Returns if it is night or not */
+    isNight(): boolean {
+        return (this.daycycletick > DAY_LENGTH);
+    }
+
+    /** Returns if it is night or not */
+    isDay(): boolean {
+        return (!this.isNight());
+    }
+
+    // #endregion
 
     // #region Spawn
 

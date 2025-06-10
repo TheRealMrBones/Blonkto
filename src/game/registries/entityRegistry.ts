@@ -13,7 +13,7 @@ const EntityRegistry = new Registry<EntityDefinition>();
 EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .25, 3))
     .addComponent(new WanderComponent())
     .addComponent(new ScaredComponent(1.8)));
-EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.PIG, 5, 1, .5)
+EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.ZOMBIE, 5, 1, .55)
     .addComponent(new WanderComponent())
     .addComponent(new SimpleAttackComponent(1.8)));
 

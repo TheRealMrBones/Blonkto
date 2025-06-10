@@ -35,6 +35,7 @@ const Constants = Object.freeze({
         SHOVEL: "Shovel.png",
         RAW_PORK: "RawPork.png",
         TREE_TRUNK: "TreeTrunk.png",
+        ZOMBIE: "Zombie.png",
     },
     SHAPES: {
         NONE: 0,

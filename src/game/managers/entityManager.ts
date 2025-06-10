@@ -5,6 +5,11 @@ import GameObject from "../objects/gameObject.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import Player from "../objects/player.js";
 
+import SharedConfig from "../../configs/shared.js";
+const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
+
+const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
+
 /** Manages all of the ticking entities/objects for the game */
 class EntityManager {
     private game: Game;
@@ -12,6 +17,33 @@ class EntityManager {
     constructor(game: Game){
         this.game = game;
     }
+
+    // #region spawning
+
+    spawnZombies(): void {
+        if(this.game.world.isDay()) return;
+
+        this.getPlayerEntities().forEach(p => {
+            if(Math.random() > .01) return;
+
+            const dir = Math.random() * Math.PI * 2;
+            const dist = Math.sqrt(CELLS_HORIZONTAL * CELLS_HORIZONTAL + CELLS_VERTICAL * CELLS_VERTICAL) / 2 + 1;
+            
+            const spawnx = p.x + Math.cos(dir) * dist;
+            const spawny = p.y + Math.sin(dir) * dist;
+            const cellx = Math.floor(spawnx);
+            const celly = Math.floor(spawny);
+
+            const cell = this.game.world.getCell(cellx, celly, false);
+            if(cell === null) return;
+            if(cell.block !== null) return;
+
+            const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
+            this.game.entities[zombie.id] = zombie;
+        });
+    }
+
+    // #endregion
 
     // #region basic getters and setters
 
