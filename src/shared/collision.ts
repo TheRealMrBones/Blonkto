@@ -12,7 +12,7 @@ export function entityCollisions(me: CircleCollisionObject, entities: CircleColl
 
     for(let i = 0; i < entities.length; i++){
         const entity = entities[i];
-        const push = entityCollision(me, newpos, entity);
+        const push = entityCollision({scale: me.scale, x: newpos.x, y: newpos.y}, entity);
         if(push === null) continue;
         newpos.x += push.x;
         newpos.y += push.y;
@@ -25,7 +25,7 @@ export function entityCollisions(me: CircleCollisionObject, entities: CircleColl
 }
 
 /** Returns the push amounts of the object after colliding with the other entity */
-export function entityCollision(me: CircleCollisionObject, newpos: Pos, entity: CircleCollisionObject): Pos | null {
+export function entityCollision(me: CircleCollisionObject, entity: CircleCollisionObject): Pos | null {
     const dist = getDistance(me as Pos, entity as Pos);
     const realdist = dist - (me.scale / 2 + entity.scale / 2);
     if(realdist < 0){

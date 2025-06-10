@@ -25,7 +25,7 @@ class CollisionManager {
         for(let i = 0; i < entities.length; i++){
             const entity2 = entities[i];
 
-            const push = SharedCollisions.entityCollision(entity, { x: entity.x, y: entity.y }, { x: entity2.x, y: entity2.y, scale: entity2.scale });
+            const push = SharedCollisions.entityCollision(entity, { x: entity2.x, y: entity2.y, scale: entity2.scale });
             if(push === null) continue;
             entity.emitCollisionEvent(this.game, entity2, push);
 
@@ -64,7 +64,7 @@ class CollisionManager {
 
         for(let i = 0; i < collectables.length; i++){
             const collectable = collectables[i];
-            const push = SharedCollisions.entityCollision(player, { x: player.x, y: player.y }, { x: collectable.x, y: collectable.y, scale: collectable.scale });
+            const push = SharedCollisions.entityCollision(player, { x: collectable.x, y: collectable.y, scale: collectable.scale });
             const collided = (push !== null);
 
             let removeignore = (collectable.ignore != null);
@@ -88,7 +88,7 @@ class CollisionManager {
         for(let i = 0; i < collectables.length; i++){
             const collectable2 = collectables[i];
             if(collectable.id === collectable2.id) continue;
-            const push = SharedCollisions.entityCollision(collectable, { x: collectable.x, y: collectable.y }, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
+            const push = SharedCollisions.entityCollision(collectable, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
             const collided = (push !== null);
 
             if(collided){
