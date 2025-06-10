@@ -192,20 +192,19 @@ function renderBlocks(firstCell: { x: number; y: number; renderx: number; render
 
 /** Renders the given asset onto the given cell */
 function renderCell(x: number, y: number, asset: string, scale?: number): void {
-    if(scale !== undefined){
-        const renderoffset = ((1 - scale) / 2) * cellSize;
-        x = x + renderoffset;
-        y = y + renderoffset;
-    }
+    if(scale === undefined) scale = 1;
 
-    const renderscale = scale ? scale : 1;
-    const model = getAsset(asset, (cellSize + 1) * renderscale);
+    const renderoffset = ((1 - scale) / 2) * cellSize;
+    x = x + renderoffset - 1;
+    y = y + renderoffset - 1;
+    
+    const model = getAsset(asset, (cellSize) * scale + 2);
     if(model === null) return;
     
     context.drawImage(
         model,
-        x + 1,
-        y + 1,
+        x,
+        y,
     );
 }
 
