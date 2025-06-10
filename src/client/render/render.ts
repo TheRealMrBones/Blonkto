@@ -122,7 +122,7 @@ function render(): void {
     };
 
     // render priority goes low to high
-    renderBackground(me);
+    renderBackground(me, firstCell);
 
     fallingentities.forEach(renderEntity.bind(null, me));
     fallingplayers.forEach(renderPlayer.bind(null, me));
@@ -226,10 +226,9 @@ function renderEntity(me: any, entity: any): void {
     
     // get model
     const model = entity.hit ? getAsset(entity.asset, cellSize * scale, HIT_COLOR) : getAsset(entity.asset, cellSize * scale);
-    if(!model) return;
     
     // draw entity
-    context.drawImage(
+    if(model !== null) context.drawImage(
         model,
         -cellSize * scale / 2,
         -cellSize * scale * model.height / model.width + cellSize * scale / 2,
@@ -256,10 +255,9 @@ function renderPlayer(me: any, player: any): void {
 
     // get player model
     const model = player.hit ? getAsset(player.asset, cellSize * scale, combineColors(player.color, HIT_COLOR)) : getAsset(player.asset, cellSize * scale, player.color);
-    if(model === null) return;
 
     // draw player
-    context.drawImage(
+    if(model !== null) context.drawImage(
         model,
         -cellSize * scale / 2,
         -cellSize * scale * model.height / model.width + cellSize * scale / 2,
@@ -324,7 +322,26 @@ function renderReach(): void {
 // #region Background
 
 /** Renders the background image under the world */
-function renderBackground(me: any): void {
+function renderBackground(me: any, firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
+    // check if need to render background
+    let renderbg = false;
+    for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
+        if(renderbg) break;
+
+        for(let dy = 0; dy < CELLS_VERTICAL; dy++){
+            const cell = playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
+            if(cell.block)
+                if(cell.block.scale == 1 && cell.block.shape == SHAPES.SQUARE) continue;
+            if(cell.floor) continue;
+
+            renderbg = true;
+            break;
+        }
+    }
+
+    if(!renderbg) return;
+
+    // render background
     const worldSize = CHUNK_SIZE * WORLD_SIZE / 2 + HEIGHT_TO_CELL_RATIO * 2;
     const xpercent = -(me.x / worldSize);
     const ypercent = -(me.y / worldSize);
