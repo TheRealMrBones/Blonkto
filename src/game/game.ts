@@ -218,7 +218,7 @@ class Game {
 
         // tick objects
         this.entityManager.getAllObjects().forEach(o => {
-            o.emitEvent("tick", this, dt);
+            o.emitTickEvent(this, dt);
         });
 
         // send fat update packets
