@@ -12,7 +12,7 @@ const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
 const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
-const { CHUNK_UNLOAD_RATE } = ServerConfig.WORLD;
+const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = ServerConfig.WORLD;
 
 const worldsavedir = "world/";
 const entitiessavedir = "entities/";
@@ -24,6 +24,9 @@ class World {
     unloadInterval: NodeJS.Timeout;
     saveInterval: NodeJS.Timeout;
 
+    daycycletick: number = DAY_TRANSITION_LENGTH;
+    darknesspercent: number = 0;
+
     constructor(game: Game){
         this.game = game;
 
@@ -33,6 +36,32 @@ class World {
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
+    }
+
+    /** Ticks the day cycle */
+    tickDayCycle(): void {
+        this.daycycletick++;
+        if(this.daycycletick > DAY_LENGTH + NIGHT_LENGTH) this.daycycletick = 0;
+
+        if(this.daycycletick > DAY_LENGTH){
+            // night
+            const timetime = this.daycycletick - DAY_LENGTH;
+
+            if(timetime >= DAY_TRANSITION_LENGTH){
+                this.darknesspercent = 1;
+            }else{
+                this.darknesspercent = timetime / DAY_TRANSITION_LENGTH;
+            }
+        }else{
+            // day
+            const timetime = this.daycycletick;
+
+            if(timetime >= DAY_TRANSITION_LENGTH){
+                this.darknesspercent = 0;
+            }else{
+                this.darknesspercent = (1 - timetime / DAY_TRANSITION_LENGTH);
+            }
+        }
     }
 
     // #region Spawn

@@ -207,6 +207,7 @@ class Game {
 
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
+        this.world.tickDayCycle();
         
         // get world updates
         const worldloads: {[key: string]: any } = {};
@@ -287,6 +288,7 @@ class Game {
             entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldload,
             tab: tab,
+            darkness: this.world.darknesspercent,
         };
         return content;
     }

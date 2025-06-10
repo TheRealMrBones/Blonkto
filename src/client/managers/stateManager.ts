@@ -125,6 +125,7 @@ class StateManager {
                 self: StateManager.noninterpolateObject(update.me),
                 others: others,
                 entities: StateManager.noninterpolateObjectArray(update.entities),
+                darkness: update.darkness,
             };
         }else{
             const baseUpdate = this.gameUpdates[base];
@@ -134,6 +135,7 @@ class StateManager {
                 self: StateManager.interpolateObject(baseUpdate.me, next.me, ratio),
                 others: others,
                 entities: StateManager.interpolateObjectArray(baseUpdate.entities, next.entities, ratio),
+                darkness: baseUpdate.darkness + (next.darkness - baseUpdate.darkness) * ratio,
             };
         }
     }

@@ -31,6 +31,9 @@ type ServerConfigSchema = {
         SPAWN_SIZE: number,
         CHUNK_UNLOAD_RATE: number,
         AUTOSAVE_RATE: number,
+        DAY_LENGTH: number,
+        NIGHT_LENGTH: number,
+        DAY_TRANSITION_LENGTH: number,
     },
     CHAT: {
         FILTER_CHAT: boolean,
@@ -73,6 +76,9 @@ const ServerConfig: ServerConfigSchema = {
         SPAWN_SIZE: 2,
         CHUNK_UNLOAD_RATE: 1.0,
         AUTOSAVE_RATE: 60.0,
+        DAY_LENGTH: 6000,
+        NIGHT_LENGTH: 3000,
+        DAY_TRANSITION_LENGTH: 250,
     },
     CHAT: {
         FILTER_CHAT: false,

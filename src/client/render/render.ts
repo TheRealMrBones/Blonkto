@@ -91,7 +91,7 @@ function render(): void {
         return;
     }
 
-    const { others = [], self, entities } = state;
+    const { others = [], self, entities, darkness } = state;
     playerclient.inputManager.setSelf(self);
     const me: any = playerclient.inputManager.getSelf();
     me.color = myColor;
@@ -133,7 +133,9 @@ function render(): void {
     notfallingentities.forEach(renderEntity.bind(null, me));
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
+
     renderReach();
+    renderDarkness(darkness);
 
     // draw frame on render canvas
     rendercontext.drawImage(canvas,0,0);
@@ -320,6 +322,16 @@ function renderReach(): void {
 // #endregion
 
 // #region Background
+
+/** Renders darkness overlay on top of the world */
+function renderDarkness(percent: number){
+    if(percent === 0) return;
+
+    context.save();
+    context.fillStyle = `rgba(0, 0, 0, ${(0.25 * percent).toFixed(3)})`;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.restore();
+}
 
 /** Renders the background image under the world */
 function renderBackground(me: any, firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
