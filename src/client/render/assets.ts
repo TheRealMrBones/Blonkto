@@ -48,7 +48,7 @@ export function getAsset(assetname: string, scale: number, color?: Color, scaleh
     
     if(width < 1 || height < 1) return null; // dont draw only subpixels because bug
 
-    const offscreen = new OffscreenCanvas(width, height);
+    const offscreen = new OffscreenCanvas(width + 2, height + 2);
     const ctx = offscreen.getContext("2d")!;
 
     ctx.drawImage(model, 0, 0, width, height);
