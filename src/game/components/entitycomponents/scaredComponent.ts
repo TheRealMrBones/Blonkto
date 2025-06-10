@@ -19,7 +19,7 @@ class ScaredComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.parent?.eventEmitter.on("tick", (self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
+        this.parent?.registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
     }
 
     /** Defines the tick action of an entity with this component */

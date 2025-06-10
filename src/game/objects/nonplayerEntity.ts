@@ -28,7 +28,7 @@ class NonplayerEntity extends Entity {
 
     /** Emits an event to this objects event handler */
     protected override emitEvent(event: string, ...args: any[]): void {
-        this.entitydefinition.eventEmitter.emit(event, this, ...args);
+        this.entitydefinition.emitEvent(event, this, ...args);
         super.emitEvent(event, ...args);
     }
 

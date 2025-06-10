@@ -31,8 +31,8 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.parent?.eventEmitter.on("tick", (self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
-        this.parent?.eventEmitter.on("collision", (self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
+        this.parent?.registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
+        this.parent?.registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
     }
 
     /** Defines the attack action of an entity with this component after colliding with another entity */
