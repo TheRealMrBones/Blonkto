@@ -55,3 +55,5 @@ import setFloorCommand from "../commands/setFloorCommand.js";
 setFloorCommand();
 import setBaseFloorCommand from "../commands/setBaseFloorCommand.js";
 setBaseFloorCommand();
+import setTimeCommand from "../commands/setTimeCommand.js";
+setTimeCommand();
