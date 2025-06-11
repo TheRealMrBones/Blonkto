@@ -21,7 +21,7 @@ const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = S
 const worldsavedir = "world/";
 const entitiessavedir = "entities/";
 
-/** Manages the reading, loading, and unloading of the game world along withe the loading and unloading of ticking entities inside of it */
+/** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
 class World {
     private logger: Logger;
     
