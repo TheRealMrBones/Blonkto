@@ -16,7 +16,7 @@ class EatComponent extends Component<Item> {
     /** Implements this component into its parents functionality */
     override setParent(parent: Item): void {
         super.setParent(parent);
-        this.parent?.eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
+        this.getParent().eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
     }
 
     /** Defines the eat use of the item with this component */

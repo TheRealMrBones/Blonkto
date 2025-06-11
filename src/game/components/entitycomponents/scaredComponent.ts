@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import EntityDefinition from "../../entities/entityDefinition.js";
 import { Pos } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import SimpleAttackComponent from "./simpleAttackComponent.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class ScaredComponent extends Component<EntityDefinition> {
@@ -19,7 +20,7 @@ class ScaredComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.parent?.registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
+        this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
     }
 
     /** Defines the tick action of an entity with this component */

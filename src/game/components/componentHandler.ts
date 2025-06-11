@@ -1,11 +1,28 @@
+import Logger from "../../server/logging/logger.js";
 import Component from "./component.js";
+
+import Constants from "../../shared/constants.js";
+const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionailty for a type to handle its own set of components */
 class ComponentHandler<T> {
+    private logger: Logger;
+
     private components: { [key: string]: Component<T> } = {};
+
+    constructor(){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.COMPONENT_HANDLER);
+    }
 
     /** Builder function to add components */
     addComponent(component: Component<T>): this {
+        for(const requirement of component.getRequirements()){
+            if(!this.hasComponent(requirement)){
+                this.logger.error("Component being added without required components beforehand");
+                throw null;
+            }
+        }
+
         this.components[component.constructor.name] = component;
         component.setParent(this as unknown as T);
         return this;

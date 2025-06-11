@@ -67,6 +67,7 @@ const Constants = Object.freeze({
         GAME: "game",
         PERFORMANCE: "performance",
         CHAT: "chat",
+        COMPONENT_HANDLER: "component handler",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",

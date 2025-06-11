@@ -31,8 +31,8 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.parent?.registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
-        this.parent?.registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
+        this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
+        this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
     }
 
     /** Defines the attack action of an entity with this component after colliding with another entity */
@@ -40,7 +40,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(!(entity instanceof Player)) return;
 
         if(Date.now() - this.lasthits[self.id] < this.delay) return;
-        entity.takeHit(game, this.damage, this.parent?.displayname || "unknown", self as unknown as Entity);
+        entity.takeHit(game, this.damage, this.getParent().displayname || "unknown", self as unknown as Entity);
         this.lasthits[self.id] = Date.now();
     }
 

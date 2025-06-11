@@ -21,7 +21,7 @@ class PickupComponent extends Component<Block> {
     /** Implements this component into its parents functionality */
     override setParent(parent: Block): void {
         super.setParent(parent);
-        this.parent?.eventEmitter.on("interact", (game: Game, player: Player, cell: Cell, info: any) => this.interact(game, player, cell, info));
+        this.getParent().eventEmitter.on("interact", (game: Game, player: Player, cell: Cell, info: any) => this.interact(game, player, cell, info));
     }
 
     /** Defines the pickup interaction of the block with this component */
