@@ -33,6 +33,7 @@ const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
+const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
 
 /** The main class that manages the game world and the entities in it */
 class Game {
@@ -79,12 +80,10 @@ class Game {
         // world
         this.world = new World(this);
 
-        // updates
-        this.lastUpdateTime = Date.now();
-
         // intervals
+        this.lastUpdateTime = Date.now();
         this.starttime = Date.now();
-        setInterval(this.tick.bind(this), 1000 / SERVER_UPDATE_RATE);
+        setTimeout(this.tick.bind(this), CALCULATED_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
         this.oppasscode = crypto.randomUUID();
@@ -212,8 +211,12 @@ class Game {
         this.world.tickDayCycle();
 
         // get delta time
-        const now = Date.now();
+        const now = performance.now();
         const dt = (now - this.lastUpdateTime) / 1000;
+
+        // schedule next tick based on delay
+        setTimeout(this.tick.bind(this), this.lastUpdateTime - now + CALCULATED_UPDATE_RATE * 2);
+        this.lastUpdateTime = now;
 
         // spawns
         this.entityManager.spawnZombies();
@@ -242,7 +245,6 @@ class Game {
         // reset cell updates in loaded chunks
         this.world.resetCellUpdates();
 
-        this.lastUpdateTime = now;
         this.performanceManager.tickEnd();
     }
 
