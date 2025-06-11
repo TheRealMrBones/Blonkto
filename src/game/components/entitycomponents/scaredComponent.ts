@@ -3,7 +3,6 @@ import Game from "../../game.js";
 import EntityDefinition from "../../entities/entityDefinition.js";
 import { Pos } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
-import SimpleAttackComponent from "./simpleAttackComponent.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class ScaredComponent extends Component<EntityDefinition> {
