@@ -4,6 +4,7 @@ import Drop from "../items/drop.js";
 import WanderComponent from "../components/entitycomponents/wanderComponent.js";
 import ScaredComponent from "../components/entitycomponents/scaredComponent.js";
 import SimpleAttackComponent from "../components/entitycomponents/simpleAttackComponent.js";
+import DayDespawnComponent from "../components/entitycomponents/dayDespawnComponent.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -15,6 +16,7 @@ EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5,
     .addComponent(new ScaredComponent(1.8)));
 EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.ZOMBIE, 5, 1, .55)
     .addComponent(new WanderComponent())
-    .addComponent(new SimpleAttackComponent(1.8)));
+    .addComponent(new SimpleAttackComponent(1.8))
+    .addComponent(new DayDespawnComponent()));
 
 export default EntityRegistry;
