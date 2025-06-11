@@ -40,7 +40,7 @@ function setTimeCommand(args: any[], player: Player, game: Game){
     }
 
     if(newtime < 0){
-        game.chatManager.sendMessageTo(player, `New time must either be "day", "night", or a positive number`);
+        game.chatManager.sendMessageTo(player, "New time must either be \"day\", \"night\", or a positive number");
         return;
     }
 

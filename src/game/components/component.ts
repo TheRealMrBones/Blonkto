@@ -1,4 +1,4 @@
-import Logger from "../../server/logging/logger";
+import Logger from "../../server/logging/logger.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
