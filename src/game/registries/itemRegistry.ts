@@ -1,5 +1,7 @@
 import Registry from "./registry.js";
 import Item from "../items/item.js";
+import Logger from "../../server/logging/logger.js";
+
 import AttackComponent from "../components/itemcomponents/attackComponent.js";
 import BuildComponent from "../components/itemcomponents/buildComponent.js";
 import BuildFloorComponent from "../components/itemcomponents/buildFloorComponent.js";
@@ -8,7 +10,10 @@ import MineFloorComponent from "../components/itemcomponents/mineFloorComponent.
 import EatComponent from "../components/itemcomponents/eatComponent.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS, MINE_TYPES } = Constants;
+const { ASSETS, MINE_TYPES, LOG_CATEGORIES } = Constants;
+
+const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
+logger.info("Initializing item registry");
 
 const ItemRegistry = new Registry<Item>();
 

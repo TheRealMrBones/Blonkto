@@ -1,5 +1,12 @@
 import Registry from "./registry.js";
 import Command from "../commands/command.js";
+import Logger from "../../server/logging/logger.js";
+
+import Constants from "../../shared/constants.js";
+const { LOG_CATEGORIES } = Constants;
+
+const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
+logger.info("Initializing command registry");
 
 const CommandRegistry = new Registry<Command>();
 

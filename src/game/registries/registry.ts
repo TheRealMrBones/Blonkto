@@ -1,16 +1,30 @@
 import RegistryValue from "./registryValue.js";
+import Logger from "../../server/logging/logger.js";
+
+import Constants from "../../shared/constants.js";
+const { LOG_CATEGORIES } = Constants;
 
 /** Manages a definition list specific type of class */
 class Registry<T extends RegistryValue> {
+    private logger: Logger;
+    
     private map: { [key: string]: T };
 
     constructor(){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
+
         this.map = {};
     }
 
+    // #region operations
+
     /** Adds the given value to the registry */
     register(key: string, value: T): void {
-        if(key in this.map) throw new Error(`Key "${key}" already registered!`);
+        if(key in this.map){
+            this.logger.error(`Key "${key}" already registered!`);
+            throw null;
+        }
+        
         this.map[key] = value;
         value.mapRegistryKey(key);
     }
@@ -29,6 +43,8 @@ class Registry<T extends RegistryValue> {
     getAll(): T[] {
         return Object.values(this.map);
     }
+
+    // #endregion
 }
 
 export default Registry;

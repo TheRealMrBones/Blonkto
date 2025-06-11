@@ -69,6 +69,7 @@ const Constants = Object.freeze({
         PERFORMANCE: "performance",
         CHAT: "chat",
         COMPONENT_HANDLER: "component handler",
+        REGISTRY: "registry",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",
