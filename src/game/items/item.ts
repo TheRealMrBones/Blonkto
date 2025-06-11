@@ -16,7 +16,7 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     stacksize: number;
     asset: string;
 
-    eventEmitter: EventEmitter = new EventEmitter();
+    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, stacksize: number, asset: string | null){
         super();
@@ -29,6 +29,42 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     mapRegistryKey(key: string): void {
         this.name = key;
     }
+
+    // #region events
+
+    /** Registers a listener to this objects event handler */
+    private registerListener(event: string, listener: (...args: any[]) => void): void {
+        this.eventEmitter.on(event, listener);
+    }
+
+    /** Registers a use event listener to this objects event handler */
+    registerUseListener(listener: (stack: ItemStack, game: Game, player: Player, info: any) => void): void {
+        this.registerListener("use", listener);
+    }
+
+    /** Registers an interact event listener to this objects event handler */
+    registerInteractListener(listener: (stack: ItemStack, game: Game, player: Player, info: any) => void): void {
+        this.registerListener("interact", listener);
+    }
+
+    /** Emits an event to this objects event handler */
+    protected emitEvent(event: string, ...args: any[]): void {
+        this.eventEmitter.emit(event, ...args);
+    }
+
+    /** Emits a use event to this objects event handler and returns if default action */
+    emitUseEvent(stack: ItemStack, game: Game, player: Player, info: any): boolean {
+        this.emitEvent("use", stack, game, player, info);
+        return (this.eventEmitter.listenerCount("use") == 0);
+    }
+
+    /** Emits a interact event to this objects event handler and returns if default action */
+    emitInteractEvent(stack: ItemStack, game: Game, player: Player, info: any): boolean {
+        this.emitEvent("interact", stack, game, player, info);
+        return (this.eventEmitter.listenerCount("interact") == 0);
+    }
+
+    // #endregion
 }
 
 export default Item;

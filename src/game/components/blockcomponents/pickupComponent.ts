@@ -1,5 +1,4 @@
 import Component from "../component.js";
-import Item from "../../items/item.js";
 import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";

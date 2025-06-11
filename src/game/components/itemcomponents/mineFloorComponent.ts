@@ -19,11 +19,11 @@ class MineFloorComponent extends Component<Item> {
     /** Implements this component into its parents functionality */
     override setParent(parent: Item): void {
         super.setParent(parent);
-        this.getParent().eventEmitter.on("use", (game: Game, player: Player, itemStack: ItemStack, info: any) => this.use(game, player, itemStack, info));
+        this.getParent().registerUseListener((stack: ItemStack, game: Game, player: Player, info: any) => this.use(stack, game, player, info));
     }
 
     /** Defines the mine use of the item with this component */
-    use(game: Game, player: Player, itemStack: ItemStack, info: any): void {
+    use(stack: ItemStack, game: Game, player: Player, info: any): void {
         if(info.dist > BASE_REACH) return;
         game.world.breakFloor(info.cellpos.x, info.cellpos.y, true);
     }

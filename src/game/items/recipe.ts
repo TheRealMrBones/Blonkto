@@ -2,7 +2,6 @@ import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import Inventory from "./inventory.js";
-import ItemStack from "./itemStack.js";
 
 class Recipe {
     ingredients: { [item: string]: number };

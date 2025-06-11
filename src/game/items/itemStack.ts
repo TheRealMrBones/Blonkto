@@ -15,14 +15,12 @@ class ItemStack {
 
     /** sends the use event to all listeners for this stacks item type and returns if default action */
     use(game: Game, player: Player, info: any): boolean {
-        this.item.eventEmitter.emit("use", game, player, this, info);
-        return this.item.eventEmitter.listenerCount("use") == 0;
+        return this.item.emitUseEvent(this, game, player, info);
     }
 
     /** sends the interact event to all listeners for this stacks item type and returns if default action */
     interact(game: Game, player: Player, info: any): boolean {
-        this.item.eventEmitter.emit("interact", game, player, this, info);
-        return this.item.eventEmitter.listenerCount("interact") == 0;
+        return this.item.emitInteractEvent(this, game, player, info);
     }
 
     // #region setters
