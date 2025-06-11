@@ -55,6 +55,8 @@ class Game {
     world: World;
 
     private lastUpdateTime: number;
+    lifeticks: number = 0;
+    starttime: number;
 
     oppasscode: string;
     oppasscodeused: boolean;
@@ -81,6 +83,7 @@ class Game {
         this.lastUpdateTime = Date.now();
 
         // intervals
+        this.starttime = Date.now();
         setInterval(this.tick.bind(this), 1000 / SERVER_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
@@ -103,6 +106,7 @@ class Game {
             socket.on(MSG_TYPES.DISCONNECT, () => { this.playerManager.removePlayer(socket as any); });
             socket.on(MSG_TYPES.SEND_MESSAGE, (content) => { this.chatManager.chat(socket as any, content); });
         });
+
 
         this.logger.info("Game initialized");
     }
@@ -204,10 +208,12 @@ class Game {
     /** Tick the game world and all currently loaded objects */
     tick(): void {
         this.performanceManager.tickStart();
+        this.lifeticks++;
+        this.world.tickDayCycle();
 
+        // get delta time
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
-        this.world.tickDayCycle();
 
         // spawns
         this.entityManager.spawnZombies();

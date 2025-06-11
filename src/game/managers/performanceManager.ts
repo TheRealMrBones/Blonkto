@@ -68,6 +68,7 @@ class PerformanceManager {
             `Performance Log - ${new Date().toLocaleTimeString()}`,
             `TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`,
             `Ticking Objects: ${allobjects} total, ${players} players, ${entities} entities, ${objects} objects`,
+            `Life Tick: ${this.game.lifeticks}, Life TPS: ${this.game.lifeticks / ((Date.now() - this.game.starttime) / 1000)}`,
         ];
 
         for(const message of this.lastperformancelog){
