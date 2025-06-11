@@ -6,6 +6,10 @@ import Player from "../objects/player.js";
 import GameObject from "../objects/gameObject.js"; 
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import { Pos } from "../../shared/types.js";
+import Logger from "../../server/logging/logger.js";
+
+import Constants from "../../shared/constants.js";
+const { LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
@@ -19,6 +23,8 @@ const entitiessavedir = "entities/";
 
 /** Manages the reading, loading, and unloading of the game world along withe the loading and unloading of ticking entities inside of it */
 class World {
+    private logger: Logger;
+    
     game: Game;
     loadedchunks: {[key: string]: Chunk};
     unloadInterval: NodeJS.Timeout;
@@ -28,6 +34,9 @@ class World {
     darknesspercent: number = 0;
 
     constructor(game: Game){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
+        this.logger.info("Initializing world");
+
         this.game = game;
 
         // key for each chunk is [x,y].toString()
@@ -36,6 +45,8 @@ class World {
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
+        
+        this.logger.info("World initialized");
     }
 
     // #region Time
@@ -238,9 +249,11 @@ class World {
 
     /** Saves all of the currently loaded world data to the save */
     saveWorld(): void {
+        this.logger.info("Saving world");
         Object.values(this.loadedchunks).forEach(c => {
             this.writeChunkFile(c);
         });
+        this.logger.info("World saved");
     }
 
     // #endregion

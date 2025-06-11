@@ -65,6 +65,7 @@ const Constants = Object.freeze({
         SERVER: "server",
         FILE_MANAGER: "file manager",
         GAME: "game",
+        WORLD: "world",
         PERFORMANCE: "performance",
         CHAT: "chat",
         COMPONENT_HANDLER: "component handler",
