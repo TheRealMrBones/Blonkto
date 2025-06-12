@@ -128,11 +128,12 @@ function render(): void {
     fallingplayers.forEach(renderPlayer.bind(null, me));
 
     renderFloors(firstCell);
-    renderBlocks(firstCell);
 
     notfallingentities.forEach(renderEntity.bind(null, me));
     notfallingplayers.forEach(renderPlayer.bind(null, me));
     others.forEach(renderPlayerUsername.bind(null, me));
+    
+    renderBlocks(firstCell);
 
     renderReach();
     renderDarkness(darkness);
@@ -165,7 +166,7 @@ function renderFloors(firstCell: { x: number; y: number; renderx: number; render
         for(let dy = 0; dy < CELLS_VERTICAL; dy++){
             const cell = playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
             if(cell.block)
-                if(cell.block.scale == 1 && cell.block.shape == SHAPES.SQUARE) continue;
+                if(!cell.block.floorvisible) continue;
             if(cell.floor) renderCell(firstCell.renderx + dx * cellSize, firstCell.rendery + dy * cellSize, cell.floor.asset);
         }
     }

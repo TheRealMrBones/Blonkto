@@ -25,15 +25,16 @@ class CollisionManager {
         const checkcells: CollisionObject[] = [];
         for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){
             const block = this.playerclient.world.getCell(cellpos.x, cellpos.y).block;
-            if(block){
-                const blockobject: CollisionObject = {
-                    shape: block.shape,
-                    scale: block.scale,
-                    x: cellpos.x,
-                    y: cellpos.y
-                };
-                checkcells.push(blockobject);
-            }
+            if(!block) continue;
+            if(block.walkthrough) continue;
+
+            const blockobject: CollisionObject = {
+                shape: block.shape,
+                scale: block.scale,
+                x: cellpos.x,
+                y: cellpos.y
+            };
+            checkcells.push(blockobject);
         }
 
         const push = SharedCollisions.blockCollisions(meobject, checkcells);

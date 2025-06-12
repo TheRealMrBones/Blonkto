@@ -17,7 +17,9 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     minetype: number;
     scale: number;
     shape: number;
+    walkthrough: boolean = false;
     blockscell: boolean = true;
+    floorvisible: boolean = true;
 
     eventEmitter: EventEmitter = new EventEmitter();
 
@@ -29,6 +31,8 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         this.minetype = minetype || MINE_TYPES.NONE;
         this.scale = scale || 1;
         this.shape = shape || SHAPES.SQUARE;
+
+        if(this.shape == SHAPES.SQUARE && this.scale == 1) this.floorvisible = false;
     }
 
     /** Sets this objects identifier to the given key from the registry */
@@ -36,10 +40,36 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         this.name = key;
     }
 
+    // #region builder functions
+
+    /** Sets this blocks walk through property */
+    setWalkThrough(walkthrough: boolean): Block {
+        this.walkthrough = walkthrough;
+        return this;
+    }
+
+    /** Sets this blocks block cell property */
+    setBlockCell(blockscell: boolean): Block {
+        this.blockscell = blockscell;
+        return this;
+    }
+
+    /** Sets this blocks floor visible property */
+    setFloorVisible(floorvisible: boolean): Block {
+        this.floorvisible = floorvisible;
+        return this;
+    }
+
+    // #endregion
+
+    // #region events
+
     /** Drops the item that this block drops on break */
     break(x: number, y: number, drop: boolean, game: Game): void {
         if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);
     }
+
+    // #endregion
 
     // #region serialization
 
@@ -49,6 +79,8 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
             asset: this.asset,
             scale: this.scale,
             shape: this.shape,
+            floorvisible: this.floorvisible,
+            walkthrough: this.walkthrough,
         };
     }
 
