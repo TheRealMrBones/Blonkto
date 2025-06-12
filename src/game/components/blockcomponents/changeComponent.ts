@@ -24,7 +24,9 @@ class ChangeComponent extends Component<Block> {
     /** Defines the pickup interaction of the block with this component */
     interact(game: Game, player: Player, cell: Cell, info: any): void {
         if(!this.cancollide){
-            if(player.tilesOn().some(t => t.x == info.cellpos.x && t.y == info.cellpos.y)) return;
+            for(const object of game.entityManager.getAllObjects()){
+                if(object.tilesOn().some(t => t.x == info.cellpos.x && t.y == info.cellpos.y)) return;
+            }
         }
 
         game.world.setBlock(info.cellpos.x, info.cellpos.y, this.newblock);
