@@ -36,6 +36,8 @@ const Constants = Object.freeze({
         RAW_PORK: "RawPork.png",
         TREE_TRUNK: "TreeTrunk.png",
         ZOMBIE: "Zombie.png",
+        WOOD_DOOR: "WoodDoor.png",
+        WOOD_DOOR_OPEN: "WoodDoor_Open.png",
     },
     SHAPES: {
         NONE: 0,
@@ -51,8 +53,9 @@ const Constants = Object.freeze({
         BOOLEAN: 5,
     },
     MINE_TYPES: {
-        MINE: 0,
-        CHOP: 1,
+        NONE: 0,
+        MINE: 1,
+        CHOP: 2,
     },
     LOG_PRIORITIES: {
         INFO: 10,

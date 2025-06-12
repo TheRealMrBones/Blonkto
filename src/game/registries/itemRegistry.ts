@@ -26,12 +26,16 @@ ItemRegistry.register("axe", new Item("Axe", 1, ASSETS.AXE)
     .addComponent(new AttackComponent(2)));
 ItemRegistry.register("shovel", new Item("Shovel", 1, ASSETS.SHOVEL)
     .addComponent(new MineFloorComponent(1)));
+    
 ItemRegistry.register("stone_block", new Item("Stone Block", 64, ASSETS.STONE_BLOCK)
     .addComponent(new BuildComponent("stone_block")));
 ItemRegistry.register("raw_pork", new Item("Raw Pork", 64, ASSETS.RAW_PORK)
     .addComponent(new EatComponent(1)));
+
+ItemRegistry.register("wood", new Item("Wood", 64, ASSETS.WOOD));
 ItemRegistry.register("wood_floor", new Item("Wood Floor", 64, ASSETS.WOOD_FLOOR)
     .addComponent(new BuildFloorComponent("wood_floor")));
-ItemRegistry.register("wood", new Item("Wood", 64, ASSETS.WOOD));
+ItemRegistry.register("wood_door", new Item("Wood Door", 64, ASSETS.WOOD_DOOR)
+    .addComponent(new BuildComponent("wood_door")));
 
 export default ItemRegistry;

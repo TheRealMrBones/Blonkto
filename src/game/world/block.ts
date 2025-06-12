@@ -26,7 +26,7 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
-        this.minetype = minetype || MINE_TYPES.MINE;
+        this.minetype = minetype || MINE_TYPES.NONE;
         this.scale = scale || 1;
         this.shape = shape || SHAPES.SQUARE;
     }
