@@ -81,12 +81,6 @@ class Game {
         // world
         this.world = new World(this);
 
-        // intervals
-        this.lastUpdateTime = Date.now();
-        this.starttime = Date.now();
-        this.nextUpdateTime = Date.now() + CALCULATED_UPDATE_RATE;
-        setTimeout(this.tick.bind(this), CALCULATED_UPDATE_RATE);
-
         // op passcode (one time use to give owner op)
         this.oppasscode = crypto.randomUUID();
         if(OP_PASSCODE && (this.opManager.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
@@ -108,8 +102,15 @@ class Game {
             socket.on(MSG_TYPES.SEND_MESSAGE, (content) => { this.chatManager.chat(socket as any, content); });
         });
 
-
         this.logger.info("Game initialized");
+
+        // start ticking
+        this.lastUpdateTime = Date.now();
+        this.starttime = Date.now();
+        this.nextUpdateTime = Date.now() + CALCULATED_UPDATE_RATE;
+        
+        this.logger.info("Starting first tick");
+        this.tick();
     }
 
     // #region inputs
