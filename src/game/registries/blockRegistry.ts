@@ -20,6 +20,7 @@ BlockRegistry.register("wood_door", new Block("Wood Door", ASSETS.WOOD_DOOR, new
 BlockRegistry.register("wood_door_open", new Block("Wood Door (Open)", ASSETS.WOOD_DOOR_OPEN, new Drop("wood_door"), MINE_TYPES.CHOP)
     .addComponent(new ChangeComponent("wood_door"))
     .setFloorVisible(true)
-    .setWalkThrough(true));
+    .setWalkThrough(true)
+    .setBlockCell(false));
 
 export default BlockRegistry;

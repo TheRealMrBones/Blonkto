@@ -1,6 +1,7 @@
 {
     "ingredients": {
-        "wood": 4
+        "wood": 1
     },
-    "result": "wood_floor"
+    "result": "wood_floor",
+    "resultCount": 4
 }

@@ -53,7 +53,7 @@ class Recipe {
         const stacksize = ItemRegistry.get(this.result).stacksize;
 
         for(const ingredient in this.ingredients){
-            const removeamount = this.ingredients[ingredient] * craftamount;
+            const removeamount = this.ingredients[ingredient] * craftamount / this.resultcount;
             inventory.removeItem(ingredient, removeamount);
         }
 
