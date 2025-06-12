@@ -56,6 +56,7 @@ class Game {
     world: World;
 
     private lastUpdateTime: number;
+    private nextUpdateTime: number;
     lifeticks: number = 0;
     starttime: number;
 
@@ -83,6 +84,7 @@ class Game {
         // intervals
         this.lastUpdateTime = Date.now();
         this.starttime = Date.now();
+        this.nextUpdateTime = Date.now() + CALCULATED_UPDATE_RATE;
         setTimeout(this.tick.bind(this), CALCULATED_UPDATE_RATE);
 
         // op passcode (one time use to give owner op)
@@ -211,11 +213,18 @@ class Game {
         this.world.tickDayCycle();
 
         // get delta time
-        const now = performance.now();
+        const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
 
         // schedule next tick based on delay
-        setTimeout(this.tick.bind(this), this.lastUpdateTime - now + CALCULATED_UPDATE_RATE * 2);
+        this.nextUpdateTime += CALCULATED_UPDATE_RATE;
+        if(this.nextUpdateTime - now >= 0){
+            setTimeout(this.tick.bind(this), this.nextUpdateTime - now);
+        }else{
+            this.logger.warning(`game ticks falling behind! (by: ${(now - this.nextUpdateTime).toFixed(3)}ms)`);
+            this.nextUpdateTime = now;
+            setTimeout(this.tick.bind(this), 1);
+        }
         this.lastUpdateTime = now;
 
         // spawns
