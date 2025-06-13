@@ -5,7 +5,7 @@ import Item from "./item.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack {
-    item: Item;
+    readonly item: Item;
     private amount: number = 1;
 
     constructor(item: string, amount?: number){
