@@ -25,10 +25,19 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
         this.asset = asset || ASSETS.MISSING_TEXTURE;
     }
 
-    /** Sets this objects identifier to the given key from the registry */
-    mapRegistryKey(key: string): void {
+    // #region registry helpers
+
+    /** Sets this items key in the item registry */
+    setRegistryKey(key: string): void {
         this.name = key;
     }
+
+    /** Returns this items registry key */
+    getRegistryKey(): string {
+        return this.name;
+    }
+
+    // #endregion
 
     // #region getters
 

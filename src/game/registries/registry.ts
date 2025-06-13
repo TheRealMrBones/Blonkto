@@ -23,10 +23,13 @@ class Registry<T extends RegistryValue> {
         if(key in this.map){
             this.logger.error(`Key "${key}" already registered!`);
             throw null;
+        }else if(value.getRegistryKey() !== "unregistered"){
+            this.logger.error(`Registry value already registered under the name: "${value.getRegistryKey()}"!`);
+            throw null;
         }
         
         this.map[key] = value;
-        value.mapRegistryKey(key);
+        value.setRegistryKey(key);
     }
 
     /** Returns if an object exists with the requested key */

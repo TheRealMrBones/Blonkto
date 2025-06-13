@@ -37,10 +37,19 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
         });
     }
 
-    /** Sets this objects identifier to the given key from the registry */
-    mapRegistryKey(key: string): void {
+    // #region registry helpers
+
+    /** Sets this entities key in the entity registry */
+    setRegistryKey(key: string): void {
         this.name = key;
     }
+
+    /** Returns this entities registry key */
+    getRegistryKey(): string {
+        return this.name;
+    }
+
+    // #endregion
 
     /** Drops this entities types items on an instances death */
     dropItems(self: NonplayerEntity, game: Game): void {

@@ -35,10 +35,19 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
         if(this.shape == SHAPES.SQUARE && this.scale == 1) this.floorvisible = false;
     }
 
-    /** Sets this objects identifier to the given key from the registry */
-    mapRegistryKey(key: string): void {
+    // #region registry helpers
+
+    /** Sets this blocks key in the block registry */
+    setRegistryKey(key: string): void {
         this.name = key;
     }
+
+    /** Returns this blocks registry key */
+    getRegistryKey(): string {
+        return this.name;
+    }
+
+    // #endregion
 
     // #region builder functions
 

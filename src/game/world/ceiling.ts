@@ -20,15 +20,28 @@ class Ceiling extends ComponentHandler<Ceiling> implements RegistryValue {
         this.drops = drops || null;
     }
 
-    /** Sets this objects identifier to the given key from the registry */
-    mapRegistryKey(key: string): void {
+    // #region registry helpers
+
+    /** Sets this ceilings key in the ceiling registry */
+    setRegistryKey(key: string): void {
         this.name = key;
     }
+
+    /** Returns this ceilings registry key */
+    getRegistryKey(): string {
+        return this.name;
+    }
+
+    // #endregion
+
+    // #region events
 
     /** Drops the item that this ceiling drops on break */
     break(x: number, y: number, drop: boolean, game: Game): void {
         if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);
     }
+
+    // #endregion
 
     // #region serialization
 

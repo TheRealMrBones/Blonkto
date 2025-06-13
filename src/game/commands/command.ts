@@ -21,20 +21,30 @@ class Command implements RegistryValue {
         this.help = help;
     }
 
-    /** Sets this objects identifier to the given key from the registry */
-    mapRegistryKey(key: string): void {
+    // #region registry helpers
+
+    /** Sets this commands key in the ceiling registry */
+    setRegistryKey(key: string): void {
         this.key = key;
     }
+
+    /** Returns this commands registry key */
+    getRegistryKey(): string {
+        return this.key;
+    }
+
+    // #endregion
+
+    // #region setters
 
     /** Sets the custom can execute to override the default one */
     overrideCanExecute(customCanExecute: (player: Player, game: Game) => boolean): void {
         this.customCanExecute = customCanExecute;
     }
 
-    /** Returns the key of this command */
-    getKey(): string {
-        return this.key;
-    }
+    // #endregion
+
+    // #region getters
 
     /** Returns if this command requires op */
     getOp(): boolean {
@@ -45,6 +55,8 @@ class Command implements RegistryValue {
     getHelp(): string {
         return this.help;
     }
+
+    // #endregion
 
     // #region command execution
 
