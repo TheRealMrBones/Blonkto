@@ -33,15 +33,15 @@ class Drop implements DropBase {
         }
         dropamount = Math.min(dropamount, this.maxamount);
 
-        for(let i = 1; i <= dropamount / this.item.stacksize; i++){
-            this.dropStack(x, y, this.item.stacksize, game);
+        for(let i = 1; i <= dropamount / this.item.getStackSize(); i++){
+            this.dropStack(x, y, this.item.getStackSize(), game);
         }
-        if(dropamount % this.item.stacksize > 0) this.dropStack(x, y, dropamount % this.item.stacksize, game);
+        if(dropamount % this.item.getStackSize() > 0) this.dropStack(x, y, dropamount % this.item.getStackSize(), game);
     }
 
     //** Drops a single stack */
     private dropStack(x: number, y: number, amount: number, game: Game): void {
-        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.name, amount), this.spread);
+        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.getName(), amount), this.spread);
     }
 }
 

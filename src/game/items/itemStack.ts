@@ -27,7 +27,7 @@ class ItemStack {
 
     /** Sets the amount of the item this stack contains */
     setAmount(amount: number): void {
-        this.amount = Math.min(Math.max(amount, 0), this.item.stacksize);
+        this.amount = Math.min(Math.max(amount, 0), this.item.getStackSize());
     }
 
     /** Adds to the amount of the item this stack contains */
@@ -45,7 +45,7 @@ class ItemStack {
 
     /** Merges this stack with another stack if it is of the same item */
     mergeStack(otherstack: ItemStack): boolean {
-        if(otherstack.item.name != this.item.name || this.amount == 0) return false;
+        if(otherstack.item.getName() != this.item.getName() || this.amount == 0) return false;
 
         const oldamount = this.amount;
         this.addAmount(otherstack.amount);
@@ -70,9 +70,9 @@ class ItemStack {
     /** Return an object representing this items data for a game update to the client */
     serializeForUpdate(): any {
         return {
-            displayname: this.item.displayname,
-            name: this.item.name,
-            asset: this.item.asset,
+            displayname: this.item.getDisplayName(),
+            name: this.item.getName(),
+            asset: this.item.getAsset(),
             amount: this.amount,
         };
     }
@@ -80,7 +80,7 @@ class ItemStack {
     /** Return an object representing this items data for writing to the save */
     serializeForWrite(): any {
         return {
-            name: this.item.name,
+            name: this.item.getName(),
             amount: this.amount,
         };
     }

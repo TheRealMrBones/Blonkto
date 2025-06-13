@@ -17,7 +17,7 @@ class DroppedStack extends GameObject {
         super(x, y, undefined, .5);
 
         this.itemStack = itemStack;
-        this.asset = itemStack.item.asset;
+        this.asset = itemStack.item.getAsset();
         if(ignore !== undefined){
             this.ignore = ignore;
         }
@@ -51,7 +51,7 @@ class DroppedStack extends GameObject {
 
     /** Returns an array of dropped stack with a random spread from the spawn point */
     static dropManyWithSpread(game: Game, x: number, y: number, item: string, amount: number, spread: number, ignore?: Player): void {
-        const stacksize = ItemRegistry.get(item).stacksize;
+        const stacksize = ItemRegistry.get(item).getStackSize();
 
         while(amount > 0){
             const itemstack = new ItemStack(item, Math.min(amount, stacksize));

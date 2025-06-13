@@ -11,10 +11,10 @@ const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
 class Item extends ComponentHandler<Item> implements RegistryValue {
-    name: string = "unregistered";
-    displayname: string;
-    stacksize: number;
-    asset: string;
+    private name: string = "unregistered";
+    private readonly displayname: string;
+    private readonly stacksize: number;
+    private readonly asset: string;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -29,6 +29,30 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     mapRegistryKey(key: string): void {
         this.name = key;
     }
+
+    // #region getters
+
+    /** Returns this items name */
+    getName(): string {
+        return this.name;
+    }
+
+    /** Returns this items display name */
+    getDisplayName(): string {
+        return this.displayname;
+    }
+
+    /** Returns this items stack size */
+    getStackSize(): number {
+        return this.stacksize;
+    }
+
+    /** Returns this items asset */
+    getAsset(): string {
+        return this.asset;
+    }
+
+    // #endregion
 
     // #region events
 

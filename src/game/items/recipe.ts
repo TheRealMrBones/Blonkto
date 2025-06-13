@@ -50,7 +50,6 @@ class Recipe {
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
     craftRecipe(game: Game, inventory: Inventory, x: number, y:number, amount?: number): void {
         const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
-        const stacksize = ItemRegistry.get(this.result).stacksize;
 
         for(const ingredient in this.ingredients){
             const removeamount = this.ingredients[ingredient] * craftamount / this.resultcount;
@@ -69,11 +68,11 @@ class Recipe {
             ingredients: Object.entries(this.ingredients).map(([item, amount]) => ({
                 item: item,
                 amount: amount,
-                asset: ItemRegistry.get(item).asset,
+                asset: ItemRegistry.get(item).getAsset(),
             })),
             result: this.result,
             resultcount: this.resultcount,
-            asset: ItemRegistry.get(this.result).asset,
+            asset: ItemRegistry.get(this.result).getAsset(),
         };
     }
 
