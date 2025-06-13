@@ -27,6 +27,7 @@ class World {
     
     game: Game;
     loadedchunks: {[key: string]: Chunk};
+
     unloadInterval: NodeJS.Timeout;
     saveInterval: NodeJS.Timeout;
 
@@ -136,9 +137,8 @@ class World {
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
-        const newChunk = { x: x, y: y };
-
-        const returnobj: any = { chunk: newChunk };
+        const lastchunk = player.lastchunk;
+        player.lastchunk = { x: x, y: y };
 
         // get positions of new and old chunks
         const newChunks = [
@@ -152,16 +152,16 @@ class World {
             { x: x + 1, y: y - 1},
             { x: x + 1, y: y + 1},
         ];
-        const oldChunks = [
-            { x: player.chunk.x, y: player.chunk.y},
-            { x: player.chunk.x, y: player.chunk.y - 1},
-            { x: player.chunk.x, y: player.chunk.y + 1},
-            { x: player.chunk.x - 1, y: player.chunk.y},
-            { x: player.chunk.x - 1, y: player.chunk.y - 1},
-            { x: player.chunk.x - 1, y: player.chunk.y + 1},
-            { x: player.chunk.x + 1, y: player.chunk.y},
-            { x: player.chunk.x + 1, y: player.chunk.y - 1},
-            { x: player.chunk.x + 1, y: player.chunk.y + 1},
+        const oldChunks = lastchunk === undefined ? [] : [
+            { x: lastchunk.x, y: lastchunk.y},
+            { x: lastchunk.x, y: lastchunk.y - 1},
+            { x: lastchunk.x, y: lastchunk.y + 1},
+            { x: lastchunk.x - 1, y: lastchunk.y},
+            { x: lastchunk.x - 1, y: lastchunk.y - 1},
+            { x: lastchunk.x - 1, y: lastchunk.y + 1},
+            { x: lastchunk.x + 1, y: lastchunk.y},
+            { x: lastchunk.x + 1, y: lastchunk.y - 1},
+            { x: lastchunk.x + 1, y: lastchunk.y + 1},
         ];
 
         // get chunks that are in both
@@ -190,56 +190,59 @@ class World {
             }
         });
 
+        // prepare return object
+        const returnobj: any = {};
         returnobj.updatedcells = updatedcells;
 
-        if(x == player.chunk.x && y == player.chunk.y){
-            // no need to load and unload chunks if already loaded
-        }else{
-            // compare new and old chunks to same chunks to find which ones to load and unload
-            const loadChunks: Pos[] = [];
-            const unloadChunks: Pos[] = [];
-            newChunks.forEach(nc => {
-                let isNew = true;
-                sameChunks.forEach(sc => {
-                    if(nc.x == sc.x && nc.y == sc.y) isNew = false;
-                });
-                if(isNew) loadChunks.push(nc);
-            });
-            oldChunks.forEach(oc => {
-                let isOld = true;
-                sameChunks.forEach(sc => {
-                    if(oc.x == sc.x && oc.y == sc.y) isOld = false;
-                });
-                if(isOld) unloadChunks.push(oc);
-            });
+        // if player in same chunk just end here
+        if(lastchunk !== undefined) if(lastchunk.x == x && lastchunk.y == y) return returnobj;
 
-            // load chunks
-            const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
-            loadChunks.forEach(lc => {
-                const chunk = this.getChunk(lc.x, lc.y, true);
-                if(chunk) loadChunksSerialized.push(chunk.serializeForLoad());
+        // compare new and old chunks to same chunks to find which ones to load and unload
+        const loadChunks: Pos[] = [];
+        const unloadChunks: Pos[] = [];
+        newChunks.forEach(nc => {
+            let isNew = true;
+            sameChunks.forEach(sc => {
+                if(nc.x == sc.x && nc.y == sc.y) isNew = false;
             });
+            if(isNew) loadChunks.push(nc);
+        });
+        oldChunks.forEach(oc => {
+            let isOld = true;
+            sameChunks.forEach(sc => {
+                if(oc.x == sc.x && oc.y == sc.y) isOld = false;
+            });
+            if(isOld) unloadChunks.push(oc);
+        });
 
-            // append data to return obj
-            returnobj.loadChunks = loadChunksSerialized;
-            returnobj.unloadChunks = unloadChunks;
-        }
+        // load chunks
+        const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
+        loadChunks.forEach(lc => {
+            const chunk = this.getChunk(lc.x, lc.y, true);
+            if(chunk) loadChunksSerialized.push(chunk.serializeForLoad());
+        });
+
+        // append data to return obj
+        returnobj.loadChunks = loadChunksSerialized;
+        returnobj.unloadChunks = unloadChunks;
 
         return returnobj;
     }
 
     /** Returns the list of chunks the given player has loaded */
     getPlayerChunks(player: Player): Pos[] {
+        const playerchunk = player.getChunk();
+
         return [
-            { x: player.chunk.x, y: player.chunk.y},
-            { x: player.chunk.x, y: player.chunk.y - 1},
-            { x: player.chunk.x, y: player.chunk.y + 1},
-            { x: player.chunk.x - 1, y: player.chunk.y},
-            { x: player.chunk.x - 1, y: player.chunk.y - 1},
-            { x: player.chunk.x - 1, y: player.chunk.y + 1},
-            { x: player.chunk.x + 1, y: player.chunk.y},
-            { x: player.chunk.x + 1, y: player.chunk.y - 1},
-            { x: player.chunk.x + 1, y: player.chunk.y + 1},
+            { x: playerchunk.x, y: playerchunk.y},
+            { x: playerchunk.x, y: playerchunk.y - 1},
+            { x: playerchunk.x, y: playerchunk.y + 1},
+            { x: playerchunk.x - 1, y: playerchunk.y},
+            { x: playerchunk.x - 1, y: playerchunk.y - 1},
+            { x: playerchunk.x - 1, y: playerchunk.y + 1},
+            { x: playerchunk.x + 1, y: playerchunk.y},
+            { x: playerchunk.x + 1, y: playerchunk.y - 1},
+            { x: playerchunk.x + 1, y: playerchunk.y + 1},
         ];
     }
 
@@ -289,8 +292,8 @@ class World {
 
             // unload entities
             const entities = this.game.entityManager.getNonplayers().filter(e =>
-                e.chunk.x == x
-                && e.chunk.y == y
+                e.getChunk().x == x
+                && e.getChunk().y == y
             ).forEach(e => {
                 this.game.entityManager.removeNonplayer(e.id);
             });
@@ -365,8 +368,8 @@ class World {
 
         // save entities (and objects) seperately
         const entities = this.game.entityManager.getNonplayers().filter(o =>
-            o.chunk.x == chunk.chunkx &&
-            o.chunk.y == chunk.chunky
+            o.getChunk().x == chunk.chunkx &&
+            o.getChunk().y == chunk.chunky
         );
 
         const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
@@ -545,7 +548,7 @@ class World {
         
         let empty = true;
         this.game.entityManager.getAllObjects().forEach((e: GameObject) => {
-            if(Math.abs(e.chunk.x - chunk.x) <= 1 && Math.abs(e.chunk.y - chunk.y) <= 1){
+            if(Math.abs(e.getChunk().x - chunk.x) <= 1 && Math.abs(e.getChunk().y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
             }
         });

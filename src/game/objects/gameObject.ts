@@ -20,7 +20,6 @@ abstract class GameObject {
 
     x: number;
     y: number;
-    chunk: Pos;
     dir: number;
     scale: number;
     private readonly asset: string;
@@ -38,7 +37,6 @@ abstract class GameObject {
 
         this.x = x;
         this.y = y;
-        this.chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE)};
         this.dir = dir || 0;
         this.scale = scale || 1;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
@@ -60,6 +58,11 @@ abstract class GameObject {
     /** Returns the current speed of this object */
     getSpeed(): number {
         return 0;
+    }
+
+    /** Returns the current chunk of this object */
+    getChunk(): Pos {
+        return { x: Math.floor(this.x / CHUNK_SIZE), y: Math.floor(this.y / CHUNK_SIZE)};
     }
 
     // #endregion

@@ -50,7 +50,7 @@ class EntityManager {
 
     // #endregion
 
-    // #region basic getters and setters
+    // #region getters and setters
 
     /** Returns all ticking objects loaded in the game world */
     getAllObjects(): GameObject[] {

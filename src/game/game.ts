@@ -235,7 +235,6 @@ class Game {
         const worldloads: {[key: string]: any } = {};
         this.entityManager.getPlayerEntities().forEach(p => {
             const worldload = this.world.loadPlayerChunks(p);
-            p.chunk = worldload.chunk;
             worldloads[p.id] = worldload;
         });
 
@@ -317,7 +316,6 @@ class Game {
     /** Creates the initial update for a client before they have been fully loaded */
     createInitialUpdate(player: Player): GameUpdateContent {
         const worldload = this.world.loadPlayerChunks(player);
-        player.chunk = worldload.chunk;
         return this.createUpdate(Date.now(), player, worldload);
     }
 

@@ -4,7 +4,7 @@ import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
-import { Color } from "../../shared/types.js";
+import { Color, Pos } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -27,14 +27,13 @@ class Player extends Entity {
     inventory: Inventory;
     hotbarslot: number;
     fixes: any;
+    lastchunk: Pos | undefined;
 
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
         this.lastupdated = Date.now();
         this.serverlastupdated = Date.now();
-
-        this.chunk = { x: this.chunk.x + 10, y: this.chunk.y + 10}; // purposefully make chunk off so that first update has load data
 
         this.socket = socket;
         this.username = username;
