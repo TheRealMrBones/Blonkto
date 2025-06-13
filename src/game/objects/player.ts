@@ -87,6 +87,8 @@ class Player extends Entity {
         return player;
     }
 
+    // #region constructor helpers
+
     /** Initializes this players inventory to the starter items */
     starterInventory(): void {
         this.inventory.setSlot(0, new ItemStack("pickaxe"));
@@ -96,6 +98,10 @@ class Player extends Entity {
         this.inventory.setSlot(4, new ItemStack("stone_block", 64));
         this.inventory.setSlot(5, new ItemStack("wood_floor", 64));
     }
+
+    // #endregion
+
+    // #region physics
 
     /** Default player collision checks */
     override checkCollisions(game: Game): void {
@@ -110,6 +116,10 @@ class Player extends Entity {
         }, 1000);
     }
 
+    // #endregion
+
+    // #region death
+
     /** Entity action after death */
     override onDeath(killedby: string, killer: any, game: Game){
         super.onDeath(killedby, killer, game);
@@ -117,6 +127,8 @@ class Player extends Entity {
             killer.kills++;
         }
     }
+
+    // #endregion
 
     // #region setters
 

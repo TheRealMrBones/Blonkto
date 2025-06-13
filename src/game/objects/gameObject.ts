@@ -23,7 +23,7 @@ abstract class GameObject {
     chunk: Pos;
     dir: number;
     scale: number;
-    asset: string;
+    private readonly asset: string;
     falling: boolean = false;
 
     targetposqueue: Pos[] = [];
@@ -50,41 +50,12 @@ abstract class GameObject {
         });
     }
 
-    /** Tries to move to target if there is one */
-    moveToTarget(dt: number): void {
-        if(this.targetposqueue.length == 0){
-            if(this.currenttarget !== null) this.currenttarget = null;
-            if(this.startofcurrenttarget !== null) this.startofcurrenttarget = null;
-            return;
-        }
-
-        let movedist = this.getSpeed() * dt;
-
-        while(this.targetposqueue.length > 0 && movedist > 0){
-            const targetpos = this.targetposqueue[0];
-            if(targetpos !== this.currenttarget){
-                this.currenttarget = targetpos;
-                this.startofcurrenttarget = Date.now();
-                this.blocked = false;
-            }
-
-            this.dir = Math.atan2(targetpos.x - this.x, this.y - targetpos.y);
-            const dist = this.distanceTo(targetpos);
-            
-            if(dist <= movedist){
-                this.x = targetpos.x;
-                this.y = targetpos.y;
-                movedist -= dist;
-                this.targetposqueue.shift();
-            }else{
-                this.x += Math.sin(this.dir) * movedist;
-                this.y -= Math.cos(this.dir) * movedist;
-                movedist = 0;
-            }
-        }
-    }
-
     // #region getters
+
+    /** Returns this objects asset */
+    getAsset(): string {
+        return this.asset;
+    }
 
     /** Returns the current speed of this object */
     getSpeed(): number {
@@ -109,7 +80,7 @@ abstract class GameObject {
 
     // #endregion
 
-    // #region ticks
+    // #region physics
     
     /** Default object collision checks */
     checkCollisions(game: Game): void {
@@ -146,6 +117,40 @@ abstract class GameObject {
     /** Default object action after falling */
     onFell(game: Game): void {
         game.entityManager.removeObject(this.id);
+    }
+
+    /** Tries to move to target if there is one */
+    moveToTarget(dt: number): void {
+        if(this.targetposqueue.length == 0){
+            if(this.currenttarget !== null) this.currenttarget = null;
+            if(this.startofcurrenttarget !== null) this.startofcurrenttarget = null;
+            return;
+        }
+
+        let movedist = this.getSpeed() * dt;
+
+        while(this.targetposqueue.length > 0 && movedist > 0){
+            const targetpos = this.targetposqueue[0];
+            if(targetpos !== this.currenttarget){
+                this.currenttarget = targetpos;
+                this.startofcurrenttarget = Date.now();
+                this.blocked = false;
+            }
+
+            this.dir = Math.atan2(targetpos.x - this.x, this.y - targetpos.y);
+            const dist = this.distanceTo(targetpos);
+            
+            if(dist <= movedist){
+                this.x = targetpos.x;
+                this.y = targetpos.y;
+                movedist -= dist;
+                this.targetposqueue.shift();
+            }else{
+                this.x += Math.sin(this.dir) * movedist;
+                this.y -= Math.cos(this.dir) * movedist;
+                movedist = 0;
+            }
+        }
     }
 
     // #endregion
@@ -267,7 +272,7 @@ abstract class GameObject {
         return {
             static: {
                 id: this.id,
-                asset: this.asset,
+                asset: this.getAsset(),
                 falling: this.falling,
             },
             dynamic: {
@@ -286,7 +291,7 @@ abstract class GameObject {
             y: this.y,
             dir: this.dir,
             scale: this.scale,
-            asset: this.asset,
+            asset: this.getAsset(),
             falling: this.falling,
         };
     }

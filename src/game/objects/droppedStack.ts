@@ -9,7 +9,7 @@ const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
 
 /** A stack of items that has been dropped into the game world and ticking */
 class DroppedStack extends GameObject {
-    itemStack: ItemStack;
+    readonly itemStack: ItemStack;
     ignore: Player | null = null;
     despawntime: number;
 
@@ -17,7 +17,6 @@ class DroppedStack extends GameObject {
         super(x, y, undefined, .5);
 
         this.itemStack = itemStack;
-        this.asset = itemStack.item.getAsset();
         if(ignore !== undefined){
             this.ignore = ignore;
         }
@@ -36,6 +35,8 @@ class DroppedStack extends GameObject {
         droppedstack.despawntime = data.despawntime;
         return droppedstack;
     }
+
+    // #region extra constructors
 
     /** Returns a dropped stack with a random spread from the spawn point */
     static dropWithSpread(game: Game, x: number, y: number, itemStack: ItemStack, spread: number, ignore?: Player): void {
@@ -60,10 +61,25 @@ class DroppedStack extends GameObject {
         }
     }
 
+    // #endregion
+
+    // #region getters
+
+    /** Returns this objects asset */
+    override getAsset(): string {
+        return this.itemStack.item.getAsset();
+    }
+
+    // #endregion
+
+    // #region management
+
     /** Ticks TTL and deletes self if too old */
     tickDespawn(game: Game): void {
         if(Date.now() >= this.despawntime) game.entityManager.removeObject(this.id);
     }
+
+    // #endregion
 
     // #region serialization
 

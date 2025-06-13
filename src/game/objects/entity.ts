@@ -35,12 +35,6 @@ abstract class Entity extends GameObject {
         });
     }
 
-    /** Default entity collision checks */
-    override checkCollisions(game: Game): void {
-        super.checkCollisions(game);
-        game.collisionManager.entityCollisions(this);
-    }
-
     // #region getters
 
     /** Returns the current speed of this object */
@@ -66,7 +60,17 @@ abstract class Entity extends GameObject {
 
     // #endregion
 
-    // #region hit and swing
+    // #region physics
+
+    /** Default entity collision checks */
+    override checkCollisions(game: Game): void {
+        super.checkCollisions(game);
+        game.collisionManager.entityCollisions(this);
+    }
+
+    // #endregion
+
+    // #region attacking
 
     /** Removes the given health amount from this entity and returns if it died */
     takeHit(game: Game, damage: number, attackername: string, attacker?: Entity): boolean {
