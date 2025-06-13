@@ -23,5 +23,9 @@ EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.ZOMBIE, 
     .addComponent(new WanderComponent())
     .addComponent(new SimpleAttackComponent(1.8))
     .addComponent(new DayDespawnComponent()));
+EntityRegistry.register("mega_zombie", new EntityDefinition("Mega Zombie", ASSETS.ZOMBIE, 20, .8, 1.15)
+    .addComponent(new WanderComponent())
+    .addComponent(new SimpleAttackComponent(1.8, 9, 5))
+    .addComponent(new DayDespawnComponent()));
 
 export default EntityRegistry;
