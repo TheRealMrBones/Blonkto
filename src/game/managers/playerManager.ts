@@ -15,17 +15,29 @@ const { FILTER_USERNAME } = ServerConfig.PLAYER;
 /** Manages the list of players for the server */
 class PlayerManager {
     private game: Game;
-    private saveInterval: NodeJS.Timeout;
+    private saveinterval: NodeJS.Timeout;
+    private recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
         this.game = game;
 
-        this.saveInterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
+        this.saveinterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     /** Creates a player for the given user and adds them to the world */
     addPlayer(socket: Socket, username: string): void {
         if(socket.id === undefined) return;
+
+        // update recent logons
+        const now = Date.now();
+        if(this.recentlogons.some(logon => logon.username === username)){
+            const index = this.recentlogons.findIndex(logon => logon.username === username);
+            this.recentlogons[index].time = now;
+            this.recentlogons.sort((a, b) => b.time - a.time);
+        }else{
+            if(this.recentlogons.length >= 10) this.recentlogons.pop();
+            this.recentlogons.unshift({ username, time: now });
+        }
 
         // check if banned
         if(this.game.banManager.isBanned(username)){
@@ -133,6 +145,11 @@ class PlayerManager {
             }
         }
         return newUsername;
+    }
+
+    /** Returns the list of recent logons */
+    getRecentLogons(): { username: string, time: number }[] {
+        return this.recentlogons;
     }
 }
 

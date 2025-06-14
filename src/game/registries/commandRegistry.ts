@@ -64,3 +64,5 @@ import setBaseFloorCommand from "../commands/setBaseFloorCommand.js";
 setBaseFloorCommand();
 import setTimeCommand from "../commands/setTimeCommand.js";
 setTimeCommand();
+import recentLogonsCommand from "../commands/recentLogonsCommand.js";
+recentLogonsCommand();
