@@ -40,6 +40,7 @@ type ServerConfigSchema = {
     },
     PERFORMACE: {
         PERFORMANCE_LOG_RATE: number,
+        IGNORE_MISSED_TICKS: boolean,
     },
 };
 
@@ -85,6 +86,7 @@ const ServerConfig: ServerConfigSchema = {
     },
     PERFORMACE: {
         PERFORMANCE_LOG_RATE: 60,
+        IGNORE_MISSED_TICKS: false,
     },
 };
 

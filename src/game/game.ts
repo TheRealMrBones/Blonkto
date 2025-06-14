@@ -31,6 +31,7 @@ const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
+const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
@@ -107,10 +108,10 @@ class Game {
         // start ticking
         this.lastUpdateTime = Date.now();
         this.starttime = Date.now();
-        this.nextUpdateTime = Date.now() + CALCULATED_UPDATE_RATE;
+        this.nextUpdateTime = Date.now();
         
         this.logger.info("Starting first tick");
-        this.tick();
+        setTimeout(this.tick.bind(this), 1);
     }
 
     // #region inputs
@@ -216,17 +217,17 @@ class Game {
         // get delta time
         const now = Date.now();
         const dt = (now - this.lastUpdateTime) / 1000;
+        this.lastUpdateTime = now;
 
         // schedule next tick based on delay
         this.nextUpdateTime += CALCULATED_UPDATE_RATE;
         if(this.nextUpdateTime - now >= 0){
             setTimeout(this.tick.bind(this), this.nextUpdateTime - now);
         }else{
-            this.logger.warning(`game ticks falling behind! (by: ${(now - this.nextUpdateTime).toFixed(3)}ms)`);
+            if(!IGNORE_MISSED_TICKS) this.logger.warning(`game ticks falling behind! (by: ${now - this.nextUpdateTime}ms)`);
             this.nextUpdateTime = now;
             setTimeout(this.tick.bind(this), 1);
         }
-        this.lastUpdateTime = now;
 
         // spawns
         this.entityManager.spawnZombies();
