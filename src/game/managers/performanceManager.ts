@@ -5,6 +5,7 @@ import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 import ServerConfig from "../../configs/server.js";
+const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { PERFORMANCE_LOG_RATE } = ServerConfig.PERFORMACE;
 const { LOG_PERFORMANCE } = ServerConfig.LOG;
 
@@ -18,6 +19,7 @@ class PerformanceManager {
     private cummilativetickcount: number = 0;
     private cummilativeticktime: number = 0;
     private maxticktime: number = 0;
+    private lastticks: number[] = [];
 
     private lastperformancelog: string[] = ["No Performance Log has been generated recently"];
 
@@ -28,11 +30,30 @@ class PerformanceManager {
         this.loginterval = LOG_PERFORMANCE ? setInterval(() => this.logPerformance(), PERFORMANCE_LOG_RATE * 1000) : null;
     }
 
+    // #region getters
+
+    /** Returns the average tps from last second */
+    getTps(): number {
+        return Math.min(this.lastticks.length, SERVER_UPDATE_RATE);
+    }
+
+    /** Returns the last performance log as an array of string messages */
+    getLastPerformanceLog(): string[] {
+        return this.lastperformancelog;
+    }
+
+    // #endregion
+
     // #region calls
 
     /** Saves the start time of the current tick */
     tickStart(): void {
         this.tickstarttime = performance.now();
+        
+        this.lastticks.push(this.tickstarttime);
+        while(this.tickstarttime - this.lastticks[0] > 1000){
+            this.lastticks.shift();
+        }
     }
 
     /** Saves the end time of the current ticks and uses it for performance data */
@@ -43,11 +64,6 @@ class PerformanceManager {
         this.cummilativetickcount++;
         this.cummilativeticktime += ticktime;
         this.maxticktime = Math.max(this.maxticktime, ticktime);
-    }
-
-    /** Returns the last performance log as an array of string messages */
-    getLastPerformanceLog(): string[] {
-        return this.lastperformancelog;
     }
 
     // #endregion

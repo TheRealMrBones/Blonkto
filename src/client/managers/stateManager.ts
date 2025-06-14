@@ -1,6 +1,6 @@
 import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
-import { toggleConnectionLost, updateHealth, updateKills, updateTab } from "../render/ui.js";
+import { toggleConnectionLost, updateHealth, updateKills, updateTab, updateTps } from "../render/ui.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -20,6 +20,7 @@ class StateManager {
     private newserverdelays: number = 0;
     private newserverdelayscount: number = 0;
     private lastUpdateTime: number = Date.now();
+    private lasttpsupdate: number = 0;
 
     constructor(playerclient: PlayerClient){
         this.playerclient = playerclient;
@@ -55,6 +56,10 @@ class StateManager {
         updateHealth(update.me.static.health);
         updateKills(update.me.static.kills);
         updateTab(update.tab);
+        if(Date.now() - this.lasttpsupdate > 1000){
+            updateTps(update.tps);
+            this.lasttpsupdate = Date.now();
+        }
 
         // if first update set server delay
         if(!this.firstServerTimestamp){

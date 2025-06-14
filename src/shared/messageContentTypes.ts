@@ -32,6 +32,7 @@ export type GameUpdateContent = {
     worldLoad: any
     tab: any[];
     darkness: number;
+    tps: number;
 };
 
 /** Defines the format of the input message */

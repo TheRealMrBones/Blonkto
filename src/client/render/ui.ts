@@ -16,6 +16,7 @@ const coordstext = document.getElementById("coordstext")!;
 const killstext = document.getElementById("killstext")!;
 const fpstext = document.getElementById("fpstext")!;
 const pingtext = document.getElementById("pingtext")!;
+const tpstext = document.getElementById("tpstext")!;
 const connectionlostdiv = document.getElementById("connectionlost")!;
 const tabdiv = document.getElementById("tab")!;
 const hotbardiv = document.getElementById("hotbar")!;
@@ -233,6 +234,11 @@ export function updateFps(fps: number): void {
 /** Updates the ping UI to the given value */
 export function updatePing(ping: number): void {
     pingtext.innerHTML = `Ping: ${Math.round(ping).toString()}`;
+}
+
+/** Updates the TPS UI to the given value */
+export function updateTps(tps: number): void {
+    tpstext.innerHTML = `TPS: ${tps}`;
 }
 
 /** Toggles the connection lost icon to appear or disapear */

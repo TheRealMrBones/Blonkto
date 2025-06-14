@@ -310,6 +310,7 @@ class Game {
             worldLoad: worldload,
             tab: tab,
             darkness: this.world.darknesspercent,
+            tps: this.performanceManager.getTps(),
         };
         return content;
     }
