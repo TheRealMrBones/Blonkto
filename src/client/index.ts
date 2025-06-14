@@ -220,6 +220,9 @@ function onLogin(username: string): void {
     playDiv.style.display = "block";
 
     playButton.focus();
+
+    // TEMP CODE FOR DEV LOGON!!!!!!!!!!
+    document.removeEventListener("keydown", devlogin);
 }
 
 // #endregion
@@ -297,25 +300,21 @@ function devlogin(event: any): void {
                 usernameInput.value = "testuser1";
                 passwordInput.value = "testuser1";
                 sendLogin();
-                document.removeEventListener("keydown", devlogin);
                 break;
             case "2":
                 usernameInput.value = "testuser2";
                 passwordInput.value = "testuser2";
                 sendLogin();
-                document.removeEventListener("keydown", devlogin);
                 break;
             case "3":
                 usernameInput.value = "testuser3";
                 passwordInput.value = "testuser3";
                 sendLogin();
-                document.removeEventListener("keydown", devlogin);
                 break;
             case "4":
                 usernameInput.value = "testuser4";
                 passwordInput.value = "testuser4";
                 sendLogin();
-                document.removeEventListener("keydown", devlogin);
                 break;
         }
     }

@@ -42,6 +42,9 @@ type ServerConfigSchema = {
         PERFORMANCE_LOG_RATE: number,
         IGNORE_MISSED_TICKS: boolean,
     },
+    DEV: {
+        DEV_LOGON: boolean,
+    },
 };
 
 // Initialize configuration with defaults then read saved after
@@ -87,6 +90,9 @@ const ServerConfig: ServerConfigSchema = {
     PERFORMACE: {
         PERFORMANCE_LOG_RATE: 60,
         IGNORE_MISSED_TICKS: false,
+    },
+    DEV: {
+        DEV_LOGON: false,
     },
 };
 

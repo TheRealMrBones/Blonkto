@@ -4,6 +4,9 @@ import validator from "validator";
 
 import userModel from "../models/userModel.js";
 
+import ServerConfig from "../../configs/server.js";
+const { DEV_LOGON } = ServerConfig.DEV;
+
 /** Returns if the requested user is an admin */
 const isAdmin = async (userId: string): Promise<boolean> => {
     try {
@@ -145,6 +148,8 @@ const loginUser = async (username: string, password: string): Promise<any> => {
     // Sanitize inputs
     username = sanitizeInput(username);
     password = sanitizeInput(password);
+
+    if(username.includes("testuser") && !DEV_LOGON) return { error: "Dev logon disabled" };
 
     try {
         const user = await userModel.getUserByUsername(username);
