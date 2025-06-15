@@ -13,11 +13,11 @@ const args = [
 export default (): void => CommandRegistry.register("pardon", new Command(true, args, pardonCommand, "Removes a player from the ban list"));
 
 function pardonCommand(args: any[], player: Player, game: Game){
-    if(!game.banManager.isBanned(args[1])){
+    if(!game.playerManager.banManager.isBanned(args[1])){
         game.chatManager.sendMessageTo(player, `${args[1]} isn't banned`);
         return;
     }
 
-    game.banManager.pardon(args[1]);
+    game.playerManager.banManager.pardon(args[1]);
     game.chatManager.sendMessageTo(player, `pardoned ${args[1]}`);
 }

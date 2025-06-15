@@ -1,6 +1,7 @@
 import { Socket } from "socket.io-client";
 
 import Game from "../game.js";
+import BanManager from "./banManager.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
 import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
@@ -15,14 +16,20 @@ const { FILTER_USERNAME } = ServerConfig.PLAYER;
 /** Manages the list of players for the server */
 class PlayerManager {
     private game: Game;
+
+    readonly banManager: BanManager
+
     private saveinterval: NodeJS.Timeout;
     private recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
         this.game = game;
+        this.banManager = new BanManager(game);
 
         this.saveinterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
+
+    // #region player management
 
     /** Creates a player for the given user and adds them to the world */
     addPlayer(socket: Socket, username: string): void {
@@ -40,8 +47,8 @@ class PlayerManager {
         }
 
         // check if banned
-        if(this.game.banManager.isBanned(username)){
-            const content: FailedConnectionContent = { reason: "Banned", extra: this.game.banManager.banReason(username) };
+        if(this.banManager.isBanned(username)){
+            const content: FailedConnectionContent = { reason: "Banned", extra: this.banManager.banReason(username) };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             return;
         }
@@ -130,6 +137,10 @@ class PlayerManager {
         });
     }
 
+    // #endregion
+
+    // #region misc getters
+
     /** Gets the cleaned username for a new/renamed player */
     getUsername(username: string): string {
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
@@ -151,6 +162,8 @@ class PlayerManager {
     getRecentLogons(): { username: string, time: number }[] {
         return this.recentlogons;
     }
+
+    // #endregion
 }
 
 // #region helpers

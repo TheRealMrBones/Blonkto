@@ -31,7 +31,7 @@ function banCommand(args: any[], player: Player, game: Game){
                 extra: args[2],
             };
             p.socket.emit(MSG_TYPES.BAN, content);
-            game.banManager.ban(p.username, args[2]);
+            game.playerManager.banManager.ban(p.username, args[2]);
             game.playerManager.removePlayer(p.socket);
             game.chatManager.sendMessageTo(player, `banned ${p.username}`);
             
@@ -39,12 +39,12 @@ function banCommand(args: any[], player: Player, game: Game){
         };
         case 2:
         case 3: {
-            if(game.banManager.isBanned(args[1])){
+            if(game.playerManager.banManager.isBanned(args[1])){
                 game.chatManager.sendMessageTo(player, `${args[1]} is already banned`);
                 return;
             }
 
-            game.banManager.ban(args[1], args[2]);
+            game.playerManager.banManager.ban(args[1], args[2]);
             game.chatManager.sendMessageTo(player, `banned ${args[1]}`);
             
             break;

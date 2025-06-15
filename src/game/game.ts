@@ -7,7 +7,6 @@ import FileManager from "../server/fileManager.js";
 import PlayerManager from "./managers/playerManager.js";
 import EntityManager from "./managers/entityManager.js";
 import OpManager from "./managers/opManager.js";
-import BanManager from "./managers/banManager.js";
 import ChatManager from "./managers/chatManager.js";
 import PerformanceManager from "./managers/performanceManager.js";
 import CollisionManager from "./managers/collisionManager.js";
@@ -40,21 +39,20 @@ const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
 class Game {
     private logger: Logger;
 
-    fileManager: FileManager;
-    playerManager: PlayerManager;
-    entityManager: EntityManager;
-    opManager: OpManager;
-    banManager: BanManager;
-    chatManager: ChatManager;
-    performanceManager: PerformanceManager;
-    collisionManager: CollisionManager;
-    craftManager: CraftManager;
+    readonly fileManager: FileManager;
+    readonly playerManager: PlayerManager;
+    readonly entityManager: EntityManager;
+    readonly opManager: OpManager;
+    readonly chatManager: ChatManager;
+    readonly performanceManager: PerformanceManager;
+    readonly collisionManager: CollisionManager;
+    readonly craftManager: CraftManager;
 
-    players: {[key: string]: Player} = {};
-    objects: {[key: string]: GameObject} = {};
-    entities: {[key: string]: NonplayerEntity} = {};
+    readonly players: {[key: string]: Player} = {};
+    readonly objects: {[key: string]: GameObject} = {};
+    readonly entities: {[key: string]: NonplayerEntity} = {};
 
-    world: World;
+    readonly world: World;
 
     private lastUpdateTime: number;
     private nextUpdateTime: number;
@@ -73,7 +71,6 @@ class Game {
         this.playerManager = new PlayerManager(this);
         this.entityManager = new EntityManager(this);
         this.opManager = new OpManager(this);
-        this.banManager = new BanManager(this);
         this.chatManager = new ChatManager(this);
         this.performanceManager = new PerformanceManager(this);
         this.collisionManager = new CollisionManager(this);

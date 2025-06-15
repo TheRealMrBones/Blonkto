@@ -13,6 +13,6 @@ const args = [
 export default (): void => CommandRegistry.register("clearbanlist", new Command(true, args, clearBanListCommand, "Clears the entire list of banned players"));
 
 function clearBanListCommand(args: any[], player: Player, game: Game){
-    game.banManager.clearBanList();
+    game.playerManager.banManager.clearBanList();
     game.chatManager.sendMessageTo(player, "cleared ban list");
 }

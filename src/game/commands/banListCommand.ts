@@ -14,7 +14,7 @@ export default (): void => CommandRegistry.register("banlist", new Command(true,
 
 function banListCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "ban list:");
-    for(const username of game.banManager.banList()){
+    for(const username of game.playerManager.banManager.banList()){
         game.chatManager.sendMessageTo(player, `- ${username}`);
     }
 }
