@@ -9,12 +9,9 @@ import "./main.css";
 // #region init
 
 const startMenu = document.getElementById("startmenu")!;
-const changeLog = document.getElementById("changelog")!;
 
 const playButton = document.getElementById("playbutton")!;
 const logoutButton = document.getElementById("logoutbutton")!;
-const changeLogButton = document.getElementById("changelogbutton")!;
-const hidechangeLogButton = document.getElementById("hidechangelogbutton")!;
 
 const usernameInput = document.getElementById("usernameinput") as HTMLInputElement;
 const passwordInput = document.getElementById("passwordinput") as HTMLInputElement;
@@ -51,15 +48,6 @@ Promise.all([
 
     playButton.onclick = joinGame;
     logoutButton.onclick = sendLogout;
-
-    changeLogButton.onclick = () => {
-        changeLog.style.display = "block";
-        startMenu.style.display = "none";
-    };
-    hidechangeLogButton.onclick = () => {
-        changeLog.style.display = "none";
-        startMenu.style.display = "block";
-    };
     
     // try silent login if have old token
     const token = getCookie("token");
