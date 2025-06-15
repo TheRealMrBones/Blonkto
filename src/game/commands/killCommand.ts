@@ -17,7 +17,7 @@ function killCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
         
     // special op checks
-    if(argIndex == 1 && !game.opManager.isOp(player.username)){
+    if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
         Command.sendNoPermission(player, game);
         return;
     }

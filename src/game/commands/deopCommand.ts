@@ -14,8 +14,8 @@ export default (): void => CommandRegistry.register("deop", new Command(true, ar
 
 function deopCommand(args: any[], player: Player, game: Game){
     const p: Player = args[1];
-    if(game.opManager.isOp(p.username)){
-        game.opManager.deop(p.username);
+    if(game.playerManager.opManager.isOp(p.username)){
+        game.playerManager.opManager.deop(p.username);
         game.chatManager.sendMessageTo(p, "you are no longer opped");
         game.chatManager.sendMessageTo(player, `deopped ${p.username}`);
     }else{

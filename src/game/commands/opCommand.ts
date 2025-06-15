@@ -17,7 +17,7 @@ function opCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     // special op checks
-    if(!game.opManager.isOp(player.username) && !(args[1] == game.oppasscode && !game.oppasscodeused)){
+    if(!game.playerManager.opManager.isOp(player.username) && !(args[1] == game.playerManager.opManager.oppasscode && !game.playerManager.opManager.oppasscodeused)){
         Command.sendNoPermission(player, game);
         return;
     }
@@ -26,18 +26,18 @@ function opCommand(args: any[], player: Player, game: Game){
     switch(argIndex){
         case 0: {
             const p: Player = args[1];
-            if(game.opManager.isOp(p.username)){
+            if(game.playerManager.opManager.isOp(p.username)){
                 game.chatManager.sendMessageTo(player, `${p.username} is already opped`);
             }else{
-                game.opManager.op(p.username);
+                game.playerManager.opManager.op(p.username);
                 game.chatManager.sendMessageTo(p, "you are now opped");
                 game.chatManager.sendMessageTo(player, `opped ${p.username}`);
             }
             break;
         };
         case 1: {
-            game.opManager.op(player.username);
-            game.oppasscodeused = true;
+            game.playerManager.opManager.op(player.username);
+            game.playerManager.opManager.oppasscodeused = true;
             game.chatManager.sendMessageTo(player, "you are now opped");
             break;
         }

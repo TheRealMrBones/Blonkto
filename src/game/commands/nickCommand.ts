@@ -23,7 +23,7 @@ function nickCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     // special op checks
-    if((argIndex == 1 && !game.opManager.isOp(player.username)) || (argIndex == 0 && !game.opManager.isOp(player.username) && !ALLOW_CHANGE_NAME)){
+    if((argIndex == 1 && !game.playerManager.opManager.isOp(player.username)) || (argIndex == 0 && !game.playerManager.opManager.isOp(player.username) && !ALLOW_CHANGE_NAME)){
         Command.sendNoPermission(player, game);
         return;
     }

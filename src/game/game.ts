@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
@@ -6,7 +5,6 @@ import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
 import PlayerManager from "./managers/playerManager.js";
 import EntityManager from "./managers/entityManager.js";
-import OpManager from "./managers/opManager.js";
 import ChatManager from "./managers/chatManager.js";
 import PerformanceManager from "./managers/performanceManager.js";
 import CollisionManager from "./managers/collisionManager.js";
@@ -29,7 +27,6 @@ const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
-const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
@@ -42,7 +39,6 @@ class Game {
     readonly fileManager: FileManager;
     readonly playerManager: PlayerManager;
     readonly entityManager: EntityManager;
-    readonly opManager: OpManager;
     readonly chatManager: ChatManager;
     readonly performanceManager: PerformanceManager;
     readonly collisionManager: CollisionManager;
@@ -59,9 +55,6 @@ class Game {
     lifeticks: number = 0;
     starttime: number;
 
-    oppasscode: string;
-    oppasscodeused: boolean;
-
     constructor(io: SocketIo, fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
@@ -70,7 +63,6 @@ class Game {
         this.fileManager = fileManager;
         this.playerManager = new PlayerManager(this);
         this.entityManager = new EntityManager(this);
-        this.opManager = new OpManager(this);
         this.chatManager = new ChatManager(this);
         this.performanceManager = new PerformanceManager(this);
         this.collisionManager = new CollisionManager(this);
@@ -78,15 +70,6 @@ class Game {
         
         // world
         this.world = new World(this);
-
-        // op passcode (one time use to give owner op)
-        this.oppasscode = crypto.randomUUID();
-        if(OP_PASSCODE && (this.opManager.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
-            this.oppasscodeused = false;
-            this.logger.info(`oppasscode: ${this.oppasscode}`);
-        }else{
-            this.oppasscodeused = true;
-        }
 
         // prepare socket connections
         io.on("connection", socket => {
@@ -100,13 +83,12 @@ class Game {
             socket.on(MSG_TYPES.SEND_MESSAGE, (content) => { this.chatManager.chat(socket as any, content); });
         });
 
-        this.logger.info("Game initialized");
-
         // start ticking
         this.lastUpdateTime = Date.now();
         this.starttime = Date.now();
         this.nextUpdateTime = Date.now();
         
+        this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
         setTimeout(this.tick.bind(this), 1);
     }

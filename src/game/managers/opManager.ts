@@ -1,15 +1,40 @@
+import crypto from "crypto";
+
 import Game from "../game.js";
+import Logger from "../../server/logging/logger.js";
+
+import Constants from "../../shared/constants.js";
+const { LOG_CATEGORIES } = Constants;
+
+import ServerConfig from "../../configs/server.js";
+const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 /** Manages the list of operators for the server */
 class OpManager {
+    private logger: Logger;
+    
     private game: Game;
     private oppedplayers: {[key: string]: boolean};
+    
+    readonly oppasscode: string;
+    oppasscodeused: boolean;
 
     constructor(game: Game){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
+
         this.game = game;
         this.oppedplayers = {};
 
         this.load();
+
+        // op passcode (one time use to give owner op)
+        this.oppasscode = crypto.randomUUID();
+        if(OP_PASSCODE && (this.opCount() == 0 || OP_PASSCODE_WHEN_OPS)){
+            this.oppasscodeused = false;
+            this.logger.info(`oppasscode: ${this.oppasscode}`);
+        }else{
+            this.oppasscodeused = true;
+        }
     }
     
     // #region setters

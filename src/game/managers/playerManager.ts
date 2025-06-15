@@ -2,6 +2,7 @@ import { Socket } from "socket.io-client";
 
 import Game from "../game.js";
 import BanManager from "./banManager.js";
+import OpManager from "./opManager.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
 import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
@@ -18,13 +19,16 @@ class PlayerManager {
     private game: Game;
 
     readonly banManager: BanManager
+    readonly opManager: OpManager;
 
     private saveinterval: NodeJS.Timeout;
     private recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
         this.game = game;
+        
         this.banManager = new BanManager(game);
+        this.opManager = new OpManager(game);
 
         this.saveinterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }

@@ -14,7 +14,7 @@ export default (): void => CommandRegistry.register("oplist", new Command(true, 
 
 function opListCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "op list:");
-    for(const username of game.opManager.opList()){
+    for(const username of game.playerManager.opManager.opList()){
         game.chatManager.sendMessageTo(player, `- ${username}`);
     }
 }

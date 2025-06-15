@@ -17,7 +17,7 @@ function helpCommand(args: any[], player: Player, game: Game){
 
     const commands = CommandRegistry.getAll();
     for(const command of commands){
-        if(command.getOp() && !game.opManager.isOp(player.username)) continue;
+        if(command.getOp() && !game.playerManager.opManager.isOp(player.username)) continue;
         game.chatManager.sendMessageTo(player, `- ${command.getRegistryKey()} - ${command.getHelp()}`);
     }
 }

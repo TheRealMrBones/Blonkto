@@ -17,10 +17,10 @@ function clearOpListCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     if(args[1]){
-        game.opManager.clearOpList();
+        game.playerManager.opManager.clearOpList();
         game.chatManager.sendMessageTo(player, "cleared op list (FORCE)");
     }else{
-        game.opManager.clearOpList(player.username);
+        game.playerManager.opManager.clearOpList(player.username);
         game.chatManager.sendMessageTo(player, "cleared op list");
     }
 }

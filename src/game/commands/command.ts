@@ -82,7 +82,7 @@ class Command implements RegistryValue {
     /** Returns if the requesting player has permission to execute this command */
     canExecute(player: Player, game: Game): boolean {
         if(this.customCanExecute !== null) return this.customCanExecute(player, game);
-        return (!this.op || game.opManager.isOp(player.username));
+        return (!this.op || game.playerManager.opManager.isOp(player.username));
     }
 
     /** Returns the parsed args from the given raw args if they are compatable with this command and returns the error string otherwise */
