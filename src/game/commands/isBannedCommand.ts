@@ -13,7 +13,6 @@ const args = [
 export default (): void => CommandRegistry.register("isbanned", new Command(true, args, isBannedCommand, "Checks if a player is banned"));
 
 function isBannedCommand(args: any[], player: Player, game: Game){
-    const p: Player = args[1];
-    const isbanned = game.playerManager.banManager.isBanned(p.username);
-    game.chatManager.sendMessageTo(player, isbanned ? `${p.username} is banned for reason: ${game.playerManager.banManager.banReason(p.username)}` : `${p.username} is not banned`);
+    const isbanned = game.playerManager.banManager.isBanned(args[1]);
+    game.chatManager.sendMessageTo(player, isbanned ? `${args[1]} is banned for reason: ${game.playerManager.banManager.banReason(args[1])}` : `${args[1]} is not banned`);
 }
