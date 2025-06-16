@@ -191,7 +191,6 @@ class Game {
     tick(): void {
         this.performanceManager.tickStart();
         this.lifeticks++;
-        this.world.tickDayCycle();
 
         // get delta time
         const now = Date.now();
@@ -208,8 +207,8 @@ class Game {
             setTimeout(this.tick.bind(this), 1);
         }
 
-        // spawns
-        this.entityManager.spawnZombies();
+        // tick world
+        this.world.tick();
         
         // get world updates
         const worldloads: {[key: string]: any } = {};
@@ -217,6 +216,9 @@ class Game {
             const worldload = this.world.loadPlayerChunks(p);
             worldloads[p.id] = worldload;
         });
+
+        // spawns
+        this.entityManager.spawnZombies();
 
         // tick objects
         this.entityManager.getAllObjects().forEach(o => {
