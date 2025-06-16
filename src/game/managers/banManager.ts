@@ -10,20 +10,19 @@ class BanManager {
         this.bannedplayers = {};
 
         this.load();
+        this.save();
     }
     
     // #region setters
 
     /** Adds a user to the ban list */
     ban(username: string, reason: string): void {
-        username = username.toLowerCase();
         this.bannedplayers[username] = reason;
         this.save();
     }
 
     /** Removes a user from the ban list */
     pardon(username: string): void {
-        username = username.toLowerCase();
         delete this.bannedplayers[username];
         this.save();
     }
@@ -40,13 +39,11 @@ class BanManager {
 
     /** Checks if a given user is banned */
     isBanned(username: string): boolean{
-        username = username.toLowerCase();
         return this.bannedplayers.hasOwnProperty(username);
     }
 
     /** Gets the reason for a given user's ban */
     banReason(username: string): string {
-        username = username.toLowerCase();
         return this.bannedplayers[username];
     }
 
@@ -67,11 +64,11 @@ class BanManager {
         if(!rawdata) return;
         if(rawdata.length == 0 || rawdata.trim() === "") return;
 
-        const data = rawdata.split("|");
+        const data = rawdata.split("\n");
 
         for(const rawbandata of data){
             const bandata = rawbandata.split(",");
-            this.ban(bandata[0], bandata[1]);
+            this.bannedplayers[bandata[0]] = bandata[1];
         }
     }
 
@@ -80,7 +77,7 @@ class BanManager {
         let data = "";
 
         for (const key of Object.keys(this.bannedplayers)) {
-            data += key + "," + this.bannedplayers[key] + "|";
+            data += key + "," + this.bannedplayers[key] + "\n";
         }
 
         if(data.length > 0) data = data.substring(0, data.length - 1); // remove last |

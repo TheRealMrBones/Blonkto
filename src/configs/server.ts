@@ -6,6 +6,10 @@ type ServerConfigSchema = {
         OP_PASSCODE: boolean,
         OP_PASSCODE_WHEN_OPS: boolean,
     },
+    WHITELIST: {
+        WHITELIST_ENABLED: boolean,
+        OP_BYPASS_WHITELIST: boolean,
+    },
     LOG: {
         LOG_PRIORITY: number,
         LOG_CONNECTIONS: boolean,
@@ -54,6 +58,10 @@ const ServerConfig: ServerConfigSchema = {
     OP_PASSCODE: {
         OP_PASSCODE: true,
         OP_PASSCODE_WHEN_OPS: false,
+    },
+    WHITELIST: {
+        WHITELIST_ENABLED: false,
+        OP_BYPASS_WHITELIST: true,
     },
     LOG: {
         LOG_PRIORITY: 0,

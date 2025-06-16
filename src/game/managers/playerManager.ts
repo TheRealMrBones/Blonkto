@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import Game from "../game.js";
 import BanManager from "./banManager.js";
 import OpManager from "./opManager.js";
+import WhitelistManager from "./whitelistManager.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
 import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
@@ -11,6 +12,7 @@ import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
 
 import ServerConfig from "../../configs/server.js";
+const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { FILTER_USERNAME } = ServerConfig.PLAYER;
 
@@ -20,6 +22,7 @@ class PlayerManager {
 
     readonly banManager: BanManager
     readonly opManager: OpManager;
+    readonly whitelistManager: WhitelistManager;
 
     private saveinterval: NodeJS.Timeout;
     private recentlogons: { username: string, time: number }[] = [];
@@ -29,6 +32,7 @@ class PlayerManager {
         
         this.banManager = new BanManager(game);
         this.opManager = new OpManager(game);
+        this.whitelistManager = new WhitelistManager(game);
 
         this.saveinterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
@@ -50,9 +54,13 @@ class PlayerManager {
             this.recentlogons.unshift({ username, time: now });
         }
 
-        // check if banned
+        // check if banned or not whitelisted
         if(this.banManager.isBanned(username)){
             const content: FailedConnectionContent = { reason: "Banned", extra: this.banManager.banReason(username) };
+            socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
+            return;
+        }else if(WHITELIST_ENABLED && !this.whitelistManager.isWhitelisted(username) && !(OP_BYPASS_WHITELIST && this.opManager.isOp(username))){
+            const content: FailedConnectionContent = { reason: "Not Whitelisted", extra: "" };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             return;
         }

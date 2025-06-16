@@ -26,6 +26,7 @@ class OpManager {
         this.oppedplayers = {};
 
         this.load();
+        this.save();
 
         // op passcode (one time use to give owner op)
         this.oppasscode = crypto.randomUUID();
@@ -92,10 +93,10 @@ class OpManager {
         if(!rawdata) return;
         if(rawdata.length == 0 || rawdata.trim() === "") return;
 
-        const data = rawdata.split("|");
+        const data = rawdata.split("\n");
 
         for(const username of data){
-            this.op(username);
+            this.oppedplayers[username] = true;
         }
     }
 
@@ -104,7 +105,7 @@ class OpManager {
         let data = "";
 
         for (const key of Object.keys(this.oppedplayers)) {
-            data += key + "|";
+            data += key + "\n";
         }
 
         if(data.length > 0) data = data.substring(0, data.length - 1); // remove last |
