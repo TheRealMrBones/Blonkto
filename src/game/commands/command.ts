@@ -125,58 +125,11 @@ class Command implements RegistryValue {
                         parsedargs[j][i] = j;
                         break;
                     }
-                    case COMMAND_ARGUMENTS.PLAYER: {
-                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
-                        if(!p){
-                            error = `Player "${rawargs[i]}" does not exist`;
-                            parsedargs.splice(j, 1);
-                            j--;
-                        }else{
-                            parsedargs[j][i] = p;
-                        }
-                        break;
-                    }
-                    case COMMAND_ARGUMENTS.INT: {
-                        if(isNaN(rawargs[i])){
-                            error = `"${rawargs[i]}" is not an integer`;
-                            parsedargs.splice(j, 1);
-                            j--;
-                        }else{
-                            parsedargs[j][i] = parseInt(rawargs[i]);
-                        }
-                        break;
-                    }
-                    case COMMAND_ARGUMENTS.FLOAT: {
-                        if(isNaN(rawargs[i])){
-                            error = `"${rawargs[i]}" is not a float`;
-                            parsedargs.splice(j, 1);
-                            j--;
-                        }else{
-                            parsedargs[j][i] = parseFloat(rawargs[i]);
-                        }
-                        break;
-                    }
-                    case COMMAND_ARGUMENTS.BOOLEAN: {
-                        switch(rawargs[i]){
-                            case "true":
-                            case "t":
-                            case "1":
-                                parsedargs[j][i] = true;
-                                break;
-                            case "false":
-                            case "f":
-                            case "0":
-                                parsedargs[j][i] = false;
-                                break;
-                            default:
-                                error = `"${rawargs[i]}" is not a boolean`;
-                                parsedargs.splice(j, 1);
-                                j--;
-                                break;
-                        }
-                        break;
-                    }
                     case COMMAND_ARGUMENTS.STRING: {
+                        parsedargs[j][i] = rawargs[i];
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.STRING_LONG: {
                         if((rawargs[i] as string).startsWith("\"")){
                             // try to read string that starts and end in quotes
                             let fullstring = (rawargs[i] as string).slice(1);
@@ -225,6 +178,66 @@ class Command implements RegistryValue {
                             }
                         }else{
                             parsedargs[j][i] = rawargs[i];
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.INT: {
+                        if(isNaN(rawargs[i])){
+                            error = `"${rawargs[i]}" is not an integer`;
+                            parsedargs.splice(j, 1);
+                            j--;
+                        }else{
+                            parsedargs[j][i] = parseInt(rawargs[i]);
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.FLOAT: {
+                        if(isNaN(rawargs[i])){
+                            error = `"${rawargs[i]}" is not a float`;
+                            parsedargs.splice(j, 1);
+                            j--;
+                        }else{
+                            parsedargs[j][i] = parseFloat(rawargs[i]);
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.BOOLEAN: {
+                        switch(rawargs[i]){
+                            case "true":
+                            case "t":
+                            case "1":
+                                parsedargs[j][i] = true;
+                                break;
+                            case "false":
+                            case "f":
+                            case "0":
+                                parsedargs[j][i] = false;
+                                break;
+                            default:
+                                error = `"${rawargs[i]}" is not a boolean`;
+                                parsedargs.splice(j, 1);
+                                j--;
+                                break;
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.USERNAME: {
+                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
+                        if(p){
+                            parsedargs[j][i] = p.username;
+                        }else{
+                            parsedargs[j][i] = rawargs[i]; // fixlater to query account server for accurate username
+                        }
+                        break;
+                    }
+                    case COMMAND_ARGUMENTS.PLAYER: {
+                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
+                        if(!p){
+                            error = `Player "${rawargs[i]}" does not exist`;
+                            parsedargs.splice(j, 1);
+                            j--;
+                        }else{
+                            parsedargs[j][i] = p;
                         }
                         break;
                     }

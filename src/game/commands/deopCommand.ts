@@ -7,18 +7,20 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
-    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
 export default (): void => CommandRegistry.register("deop", new Command(true, args, deopCommand, "Takes away a players operator permissions"));
 
 function deopCommand(args: any[], player: Player, game: Game){
-    const p: Player = args[1];
-    if(game.playerManager.opManager.isOp(p.username)){
-        game.playerManager.opManager.deop(p.username);
-        game.chatManager.sendMessageTo(p, "you are no longer opped");
-        game.chatManager.sendMessageTo(player, `deopped ${p.username}`);
+    if(game.playerManager.opManager.isOp(args[1])){
+        game.playerManager.opManager.deop(args[1]);
+
+        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
+        if(p !== undefined) game.chatManager.sendMessageTo(p, "you are no longer opped");
+
+        game.chatManager.sendMessageTo(player, `deopped ${args[1]}`);
     }else{
-        game.chatManager.sendMessageTo(player, `${p.username} is not opped`);
+        game.chatManager.sendMessageTo(player, `${args[1]} is not opped`);
     }
 }

@@ -8,7 +8,7 @@ const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
     [COMMAND_ARGUMENTS.KEY],
-    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
 export default (): void => CommandRegistry.register("opped", new Command(false, args, oppedCommand, "Checks if you or another play is opped"));
@@ -30,9 +30,8 @@ function oppedCommand(args: any[], player: Player, game: Game){
             break;
         };
         case 1: {
-            const p: Player = args[1];
-            const isop = game.playerManager.opManager.isOp(p.username);
-            game.chatManager.sendMessageTo(player, isop ? `${p.username} is opped` : `${p.username} is not opped`);
+            const isop = game.playerManager.opManager.isOp(args[1]);
+            game.chatManager.sendMessageTo(player, isop ? `${args[1]} is opped` : `${args[1]} is not opped`);
             break;
         };
     }

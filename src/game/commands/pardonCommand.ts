@@ -7,7 +7,7 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
-    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
 export default (): void => CommandRegistry.register("pardon", new Command(true, args, pardonCommand, "Removes a player from the ban list"));

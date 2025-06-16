@@ -9,7 +9,7 @@ const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
 
 const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
-    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.STRING],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.STRING_LONG],
 ];
 
 export default (): void => CommandRegistry.register("kick", new Command(true, args, kickCommand, "Kicks a player from the server"));

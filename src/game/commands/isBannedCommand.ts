@@ -7,7 +7,7 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
-    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
 export default (): void => CommandRegistry.register("isbanned", new Command(true, args, isBannedCommand, "Checks if a player is banned"));

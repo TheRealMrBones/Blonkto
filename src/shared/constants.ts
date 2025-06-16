@@ -46,11 +46,13 @@ const Constants = Object.freeze({
     },
     COMMAND_ARGUMENTS: {
         KEY: 0,
-        PLAYER: 1,
-        STRING: 2,
+        STRING: 1,
+        STRING_LONG: 2,
         INT: 3,
         FLOAT: 4,
         BOOLEAN: 5,
+        USERNAME: 6,
+        PLAYER: 7,
     },
     MINE_TYPES: {
         NONE: 0,
