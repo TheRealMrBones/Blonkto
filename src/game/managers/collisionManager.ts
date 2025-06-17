@@ -119,7 +119,7 @@ class CollisionManager {
             if(entity2.id != entity.id && realdist < 0 && !entity2.hit){
                 let killer = "unknown";
                 if(entity instanceof NonplayerEntity){
-                    killer = entity.entitydefinition.displayname;
+                    killer = entity.definition.displayname;
                 }else if(entity instanceof Player){
                     killer = entity.username;
                 }

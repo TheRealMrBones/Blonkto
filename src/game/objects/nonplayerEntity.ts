@@ -1,17 +1,20 @@
+import ComponentData from "../components/componentData.js";
+import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
 import EntityDefinition from "../entities/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
 import Entity from "./entity.js";
 
 /** The base class for non-player entities loaded in the game world */
-class NonplayerEntity extends Entity {
-    entitydefinition: EntityDefinition;
+class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<EntityDefinition> {
+    definition: EntityDefinition;
+    componentdata: ComponentData[] = [];
 
     constructor(x: number, y: number, dir: number, entitydefinition: string){
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
-        this.entitydefinition = EntityRegistry.get(entitydefinition);
-        this.basespeed = this.entitydefinition.speed;
+        this.definition = EntityRegistry.get(entitydefinition);
+        this.basespeed = this.definition.speed;
 
         this.registerDeathListener((game: Game, killedby: string, killer: any) => {
             game.entityManager.removeEntity(this.id);
@@ -27,7 +30,7 @@ class NonplayerEntity extends Entity {
 
     /** Emits an event to this objects event handler */
     protected override emitEvent(event: string, ...args: any[]): void {
-        this.entitydefinition.emitEvent(event, this, ...args);
+        this.definition.emitEvent(event, this, ...args);
         super.emitEvent(event, ...args);
     }
 
@@ -56,7 +59,7 @@ class NonplayerEntity extends Entity {
         return {
             ...base,
             type: "entity",
-            entitydefinition: this.entitydefinition.name,
+            entitydefinition: this.definition.name,
         };
     }
 

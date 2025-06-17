@@ -4,7 +4,7 @@ import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** An attachable component to add additional data and/or functionality to an object */
-class Component<T> {
+abstract class Component<T> {
     private logger: Logger;
 
     private parent: T | null = null;
