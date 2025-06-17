@@ -7,13 +7,15 @@ import Entity from "./entity.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<EntityDefinition> {
-    definition: EntityDefinition;
-    componentdata: ComponentData[] = [];
+    readonly definition: EntityDefinition;
+    readonly componentdata: { [key: string]: ComponentData } = {};
 
     constructor(x: number, y: number, dir: number, entitydefinition: string){
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
         this.definition = EntityRegistry.get(entitydefinition);
+        this.initComponentData();
+
         this.basespeed = this.definition.speed;
 
         this.registerDeathListener((game: Game, killedby: string, killer: any) => {
@@ -25,6 +27,22 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     static readFromSave(data: any): NonplayerEntity {
         return new NonplayerEntity(data.x, data.y, data.dir, data.entitydefinition);
     }
+
+    // #region component helpers
+
+    /** Initializes this objects required component data instances */
+    initComponentData(data?: any): void {
+        this.definition.getRequiredComponentData().forEach(c => {
+            this.componentdata[c.name] = new c();
+        });
+    }
+
+    /** Returns this objects instance of the requested component data */
+    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+        return this.componentdata[componentDataType.name] as T2;
+    }
+
+    // #endregion
 
     // #region events
 

@@ -5,7 +5,13 @@ import ComponentHandler from "./componentHandler.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
 interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & RegistryValue> extends RegistryDefined<T> {
-    readonly componentdata: ComponentData[];
+    readonly componentdata: { [key: string]: ComponentData };
+
+    /** Initializes this objects required component data instances */
+    initComponentData(data?: any): void;
+
+    /** Returns this objects instance of the requested component data */
+    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2;
 }
 
 export default RegistryDefinedWithComponents;

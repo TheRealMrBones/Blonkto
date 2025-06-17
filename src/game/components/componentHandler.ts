@@ -2,6 +2,7 @@ import Logger from "../../server/logging/logger.js";
 import Component from "./component.js";
 
 import Constants from "../../shared/constants.js";
+import ComponentData from "./componentData.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionailty for a type to handle its own set of components */
@@ -9,10 +10,13 @@ class ComponentHandler<T> {
     private logger: Logger;
 
     private components: { [key: string]: Component<T> } = {};
+    private requiredComponentData: (new (...args: any[]) => ComponentData)[] = [];
 
     constructor(){
         this.logger = Logger.getLogger(LOG_CATEGORIES.COMPONENT_HANDLER);
     }
+
+    // #region components
 
     /** Builder function to add components */
     addComponent(component: Component<T>): this {
@@ -47,6 +51,22 @@ class ComponentHandler<T> {
     getAllComponents(): Component<T>[] {
         return Object.values(this.components);
     }
+
+    // #endregion
+
+    // #region component data
+
+    /** Adds the requested required component data to this handler */
+    addRequiredComponentData(componentdata: new (...args: any[]) => ComponentData): void {
+        this.requiredComponentData.push(componentdata);
+    }
+
+    /** Returns this handlers list of required component data types */
+    getRequiredComponentData(): (new (...args: any[]) => ComponentData)[] {
+        return this.requiredComponentData;
+    }
+
+    // #endregion
 }
 
 export default ComponentHandler;

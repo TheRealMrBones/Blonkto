@@ -5,6 +5,7 @@ import Entity from "../../objects/entity.js";
 import { Pos } from "../../../shared/types.js";
 import Player from "../../objects/player.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import ComponentData from "../componentData.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class SimpleAttackComponent extends Component<EntityDefinition> {
@@ -12,9 +13,6 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     private distance: number;
     private damage: number;
     private delay: number;
-    
-    private targets: {[key: string]: Entity | null};
-    private lasthits: {[key: string]: number};
 
     constructor(speedmultiplier?: number, distance?: number, damage?: number, delay?: number) {
         super();
@@ -23,44 +21,47 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         this.distance = distance || 6;
         this.damage = damage || 1;
         this.delay = delay || 1000;
-
-        this.targets = {};
-        this.lasthits = {};
     }
 
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
+        this.getParent().addRequiredComponentData(SimpleAttackComponentData);
+
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
         this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
     }
 
     /** Defines the attack action of an entity with this component after colliding with another entity */
     attack(self: NonplayerEntity, game: Game, entity: Entity, push: Pos): void {
-        if(!(entity instanceof Player)) return;
+        const data = self.getComponentData<SimpleAttackComponentData>(SimpleAttackComponentData);
 
-        if(Date.now() - this.lasthits[self.id] < this.delay) return;
+        if(!(entity instanceof Player)) return;
+        if(Date.now() - data.lasthit < this.delay) return;
+
         entity.takeHit(game, this.damage, this.getParent().displayname || "unknown", self as unknown as Entity);
-        this.lasthits[self.id] = Date.now();
+        data.lasthit = Date.now();
     }
 
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
-        if(this.targets[self.id] === undefined) this.targets[self.id] = null;
-        if(this.targets[self.id] !== self.lasthitby && self.hit) this.targets[self.id] = self.lasthitby as Entity;
+        const data = self.getComponentData<SimpleAttackComponentData>(SimpleAttackComponentData);
+
+        if(data.target === undefined) data.target = null;
+        if(data.target !== self.lasthitby && self.hit) data.target = self.lasthitby as Entity;
         
-        if(this.targets[self.id] === null){
+        if(data.target === null){
             let mindist = this.distance;
             game.entityManager.getPlayerEntities().forEach(p => {
                 const dist = self.distanceTo(p);
                 if(dist < mindist){
-                    this.targets[self.id] = p;
+                    data.target = p;
                     mindist = dist;
                 }
             });
         }
 
-        const target = this.targets[self.id];
+        const target = data.target;
         if(target === null) return;
 
         if(self.distanceTo(target) >= this.distance * 2){
@@ -79,6 +80,26 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
             x: target.x,
             y: target.y,
         };
+    }
+}
+
+export class SimpleAttackComponentData implements ComponentData {
+    target: Entity | null = null;
+    lasthit: number = 0;
+
+    /** Returns an object representing this component data for writing to the save */
+    readFromSave(data: any): this {
+        throw new Error("Method not implemented.");
+    }
+
+    /** Returns an object representing this component data for a game update to the client */
+    serializeForUpdate() {
+        throw new Error("Method not implemented.");
+    }
+
+    /** Returns an object representing this component data for writing to the save */
+    serializeForWrite() {
+        throw new Error("Method not implemented.");
     }
 }
 
