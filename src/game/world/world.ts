@@ -52,7 +52,8 @@ class World {
 
     // #region ticking
 
-    tick(): void {
+    /** Ticks the entire game world */
+    tick(dt: number): void {
         this.tickDayCycle();
         for(const chunk of Object.entries(this.loadedchunks)){
             const chunkpostext = chunk[0].slice(1, -1).split(",");

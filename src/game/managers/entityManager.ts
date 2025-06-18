@@ -18,8 +18,20 @@ class EntityManager {
         this.game = game;
     }
 
-    // #region spawning
+    // #region ticking
 
+    /** Tick all currently loaded entities and entity spawners */
+    tick(dt: number): void {
+        // new spawns
+        this.spawnZombies();
+
+        // tick loaded entities
+        this.getAllObjects().forEach(o => {
+            o.emitTickEvent(this.game, dt);
+        });
+    }
+
+    /** Spawns new zombies nearby players in the world */
     spawnZombies(): void {
         if(this.game.world.isDay()) return;
 

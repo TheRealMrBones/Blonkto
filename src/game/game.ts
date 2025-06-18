@@ -207,22 +207,15 @@ class Game {
             setTimeout(this.tick.bind(this), 1);
         }
 
-        // tick world
-        this.world.tick();
+        // tick world and managers
+        this.world.tick(dt);
+        this.entityManager.tick(dt);
         
         // get world updates
         const worldloads: {[key: string]: any } = {};
         this.entityManager.getPlayerEntities().forEach(p => {
             const worldload = this.world.loadPlayerChunks(p);
             worldloads[p.id] = worldload;
-        });
-
-        // spawns
-        this.entityManager.spawnZombies();
-
-        // tick objects
-        this.entityManager.getAllObjects().forEach(o => {
-            o.emitTickEvent(this, dt);
         });
 
         // send fat update packets
