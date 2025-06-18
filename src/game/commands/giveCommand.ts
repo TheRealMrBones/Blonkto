@@ -21,9 +21,9 @@ function giveCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     let amount = 1;
-    if(amount % 2 == 1)
+    if(argIndex % 2 == 1)
         amount = argIndex == 1 ? args[3] : args[2];
-    const item = argIndex == 1 ? args[2] : args[1];
+    const item = argIndex < 2 ? args[2] : args[1];
 
     if(!ItemRegistry.has(item)){
         game.chatManager.sendMessageTo(player, `no item of name: ${item}`);
