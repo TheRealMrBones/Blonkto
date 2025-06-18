@@ -87,19 +87,19 @@ export class SimpleAttackComponentData implements ComponentData {
     target: Entity | null = null;
     lasthit: number = 0;
 
-    /** Returns an object representing this component data for writing to the save */
-    readFromSave(data: any): this {
-        throw new Error("Method not implemented.");
+    /** Sets this simple attack component data objects values with the given save data */
+    readFromSave(data: any): void {
+        
     }
 
-    /** Returns an object representing this component data for a game update to the client */
-    serializeForUpdate() {
-        throw new Error("Method not implemented.");
+    /** Returns an object representing this simple attack component data for a game update to the client */
+    serializeForUpdate(): any {
+        return null;
     }
 
-    /** Returns an object representing this component data for writing to the save */
-    serializeForWrite() {
-        throw new Error("Method not implemented.");
+    /** Returns an object representing this simple attack component data for writing to the save */
+    serializeForWrite(): any {
+        return null;
     }
 }
 

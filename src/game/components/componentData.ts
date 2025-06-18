@@ -1,7 +1,7 @@
 /** The base interface for a specific components object instance data structure */
 interface ComponentData {
-    /** Returns the component data object from the given save data */
-    readFromSave(data: any): this;
+    /** Sets this component data objects values with the given save data */
+    readFromSave(data: any): void;
 
     /** Returns an object representing this component data for a game update to the client */
     serializeForUpdate(): any;
