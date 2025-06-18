@@ -107,8 +107,8 @@ class Game {
                 dy: dy,
                 t: t,
                 lastupdatetime: lastupdatetime,
+                hotbarslot: hotbarslot,
             });
-            this.players[socket.id].hotbarslot = hotbarslot;
         }
     }
 

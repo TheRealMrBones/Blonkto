@@ -111,12 +111,12 @@ class Cell {
     // #region getters
 
     /** Returns the world x of this cell */
-    GetWorldX(): number {
+    getWorldX(): number {
         return this.chunk.chunkx * CHUNK_SIZE + this.chunkx;
     }
 
     /** Returns the world y of this cell */
-    GetWorldY(): number {
+    getWorldY(): number {
         return this.chunk.chunky * CHUNK_SIZE + this.chunky;
     }
 

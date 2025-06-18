@@ -32,7 +32,7 @@ class Player extends Entity {
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
-        this.lastupdated = Date.now();
+        this.lastupdated = 0;
         this.serverlastupdated = Date.now();
 
         this.socket = socket;
@@ -135,19 +135,25 @@ class Player extends Entity {
     update(data: any): void {
         const deltatime = data.t - this.lastupdated;
 
+        // only move if valid distance
         const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
-        if(movedist > PLAYER_SPEED * deltatime / 1000 + .05){
+        if(movedist > this.getSpeed() * deltatime / 1000 + .05 && this.lastupdated != 0){
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
             this.resync();
-            return;
+        }else{
+            this.x += data.dx;
+            this.y += data.dy;
         }
 
+        // set other data
         this.dir = data.dir;
-        this.x += data.dx;
-        this.y += data.dy;
+        this.hotbarslot = data.hotbarslot;
 
+        // resync if missed update
         if(data.lastupdatetime !== null)
             if(this.lastupdated != data.lastupdatetime) this.resync();
+
+        // populate last updated
         this.lastupdated = data.t;
         this.serverlastupdated = Date.now();
     }
