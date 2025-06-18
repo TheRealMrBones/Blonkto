@@ -15,6 +15,8 @@ abstract class Component<T> {
         this.logger = Logger.getLogger(LOG_CATEGORIES.COMPONENT_HANDLER);
     }
 
+    // #region parent management
+
     /** Sets the parent of this component */
     setParent(parent: T): void {
         if(this.parent !== null){
@@ -35,6 +37,10 @@ abstract class Component<T> {
         return this.parent;
     }
 
+    // #endregion
+
+    // #region requirement management
+
     /** Sets the requirements of this component */
     protected setRequirements(requirements: (new (...args: any[]) => Component<T>)[]): void {
         if(this.requirements.length > 0){
@@ -49,6 +55,8 @@ abstract class Component<T> {
     getRequirements(): (new (...args: any[]) => Component<T>)[] {
         return this.requirements;
     }
+
+    // #endregion
 }
 
 export default Component;

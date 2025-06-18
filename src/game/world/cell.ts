@@ -5,19 +5,29 @@ import Block from "./block.js";
 import Floor from "./floor.js";
 import Ceiling from "./ceiling.js";
 import Game from "../game.js";
+import Chunk from "./chunk.js";
+
+import SharedConfig from "../../configs/shared.js";
+const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single cell in the game world and its block, floor, and ceiling */
 class Cell {
+    readonly chunk: Chunk;
+    readonly chunkx: number;
+    readonly chunky: number;
+    
     basefloor: Floor | null;
-    block: Block | null;
-    floor: Floor | null;
-    ceiling: Ceiling | null;
+    block: Block | null = null;
+    floor: Floor | null = null;
+    ceiling: Ceiling | null = null;
 
-    constructor(basefloor: string | null, block: string | null, ceiling: string | null, floor?: string){
+    constructor(chunk: Chunk, chunkx: number, chunky: number, basefloor: string | null){
+        this.chunk = chunk;
+        this.chunkx = chunkx;
+        this.chunky = chunky;
+        
         this.basefloor = basefloor ? FloorRegistry.get(basefloor) : null;
-        this.block = block ? BlockRegistry.get(block) : null;
-        this.floor = floor ? FloorRegistry.get(floor) : this.basefloor;
-        this.ceiling = ceiling ? CeilingRegistry.get(ceiling) : null;
+        this.floor = this.basefloor;
     }
 
     // #region setters
@@ -94,6 +104,20 @@ class Cell {
         const floorval = (floor === null) ? null : FloorRegistry.get(floor);
         this.floor = floorval;
         this.basefloor = floorval;
+    }
+
+    // #endregion
+
+    // #region getters
+
+    /** Returns the world x of this cell */
+    GetWorldX(): number {
+        return this.chunk.chunkx * CHUNK_SIZE + this.chunkx;
+    }
+
+    /** Returns the world y of this cell */
+    GetWorldY(): number {
+        return this.chunk.chunky * CHUNK_SIZE + this.chunky;
     }
 
     // #endregion

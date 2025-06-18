@@ -1,15 +1,16 @@
 import Cell from "./cell.js";
 
-import SharedConfig from "../../configs/shared.js";
 import Game from "../game.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
+
+import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single chunk (square collection of cells) in the game world */
 class Chunk {
-    chunkx: number;
-    chunky: number;
-    cells: Cell[][];
+    readonly chunkx: number;
+    readonly chunky: number;
+    readonly cells: Cell[][];
     cellUpdates: any[];
 
     constructor(chunkx: number, chunky: number, generate: boolean, game: Game){
@@ -33,12 +34,12 @@ class Chunk {
                 for(let y = 0; y < CHUNK_SIZE; y++){
                     const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
                     
-                    chunk.cells[x][y] = new Cell(
-                        celldata.basefloor ? celldata.basefloor.name : null,
-                        celldata.block ? celldata.block.name : null,
-                        celldata.ceiling ? celldata.ceiling.name : null,
-                        celldata.floor ? celldata.floor.name : null
-                    );
+                    const cell = new Cell(chunk, x, y, celldata.basefloor ? celldata.basefloor.name : null);
+                    if(celldata.block) cell.setBlock(celldata.block.name);
+                    if(celldata.floor) cell.setFloor(celldata.floor.name);
+                    if(celldata.ceiling) cell.setCeiling(celldata.ceiling.name);
+
+                    chunk.cells[x][y] = cell;
                 }
             }
         }catch(e){
@@ -57,18 +58,18 @@ class Chunk {
         for(let x = 0; x < CHUNK_SIZE; x++){
             this.cells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
-                let block: string | null = null;
+                const cell = new Cell(this, x, y, "grass_floor");
 
                 if(Math.random() < .1){
-                    block = "stone_block";
+                    cell.setBlock("stone_block");
                 }else if(Math.random() < .02){
-                    block = "tree_trunk";
+                    cell.setBlock("tree_trunk");
                 }else if(Math.random() < .005){
                     const pig = new NonplayerEntity(this.chunkx * CHUNK_SIZE + x + .5, this.chunky * CHUNK_SIZE + y + .5, 0, "pig");
                     game.entities[pig.id] = pig;
                 }
                 
-                this.cells[x][y] = new Cell("grass_floor", block, null);
+                this.cells[x][y] = cell;
             }
         }
     }
