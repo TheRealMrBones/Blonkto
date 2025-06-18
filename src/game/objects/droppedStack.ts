@@ -67,7 +67,7 @@ class DroppedStack extends GameObject {
 
     /** Returns this objects asset */
     override getAsset(): string {
-        return this.itemStack.item.getAsset();
+        return this.itemStack.definition.getAsset();
     }
 
     // #endregion

@@ -1,33 +1,86 @@
+import ComponentData from "../components/componentData.js";
+import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import Item from "./item.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
-class ItemStack {
-    readonly item: Item;
+class ItemStack implements RegistryDefinedWithComponents<Item> {
+    readonly definition: Item;
+    readonly componentdata: { [key: string]: ComponentData } = {};
+
     private amount: number = 1;
 
     constructor(item: string, amount?: number){
-        this.item = ItemRegistry.get(item);
+        this.definition = ItemRegistry.get(item);
+        this.initComponentData();
+
         if(amount !== undefined) this.setAmount(amount);
     }
 
-    /** sends the use event to all listeners for this stacks item type and returns if default action */
-    use(game: Game, player: Player, info: any): boolean {
-        return this.item.emitUseEvent(this, game, player, info);
+    /** Returns the item stack from its save data */
+    static readFromSave(data: any): ItemStack {
+        const stack = new ItemStack(data.name, data.amount);
+        stack.loadComponentData(data.componentdata);
+        return stack;
     }
 
-    /** sends the interact event to all listeners for this stacks item type and returns if default action */
-    interact(game: Game, player: Player, info: any): boolean {
-        return this.item.emitInteractEvent(this, game, player, info);
+    // #region component helpers
+
+    /** Initializes this stacks required component data instances */
+    initComponentData(): void {
+        this.definition.getRequiredComponentData().forEach(c => {
+            this.componentdata[c.name] = new c();
+        });
     }
+
+    /** Loads this stacks required component data instances with the given data */
+    loadComponentData(data: { [key: string]: any }): void {
+        if(data === undefined) return;
+        for(const componentdataloaded of Object.entries(data)){
+            this.componentdata[componentdataloaded[0]].readFromSave(componentdataloaded[1]);
+        }
+    }
+
+    /** Returns this stacks instance of the requested component data */
+    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+        return this.componentdata[componentDataType.name] as T2;
+    }
+
+    /** Return an object representing this stacks component data for a game update to the client */
+    serializeComponentDataForUpdate(): any {
+        let data: { [key: string]: any } = {};
+
+        for(const componentdata of Object.values(this.componentdata)){
+            const serialized = componentdata.serializeForUpdate();
+            if(serialized === null) continue;
+            data = { ...data, ...serialized };
+        }
+
+        return data;
+    }
+
+    /** Return an object representing this stacks component data for writing to the save */
+    serializeComponentDataForWrite(): { [key: string]: any } {
+        const data: { [key: string]: any } = {};
+
+        for(const componentdata of Object.entries(this.componentdata)){
+            const serialized = componentdata[1].serializeForWrite();
+            if(serialized === null) continue;
+            data[componentdata[0]] = serialized;
+        }
+
+        return data;
+    }
+
+    // #endregion
 
     // #region setters
 
     /** Sets the amount of the item this stack contains */
     setAmount(amount: number): void {
-        this.amount = Math.min(Math.max(amount, 0), this.item.getStackSize());
+        this.amount = Math.min(Math.max(amount, 0), this.definition.getStackSize());
     }
 
     /** Adds to the amount of the item this stack contains */
@@ -45,7 +98,7 @@ class ItemStack {
 
     /** Merges this stack with another stack if it is of the same item */
     mergeStack(otherstack: ItemStack): boolean {
-        if(otherstack.item.getName() != this.item.getName() || this.amount == 0) return false;
+        if(otherstack.definition.getName() != this.definition.getName() || this.amount == 0) return false;
 
         const oldamount = this.amount;
         this.addAmount(otherstack.amount);
@@ -65,23 +118,43 @@ class ItemStack {
 
     // #endregion
 
+    // #region events
+
+    /** sends the use event to all listeners for this stacks item type and returns if default action */
+    use(game: Game, player: Player, info: any): boolean {
+        return this.definition.emitUseEvent(this, game, player, info);
+    }
+
+    /** sends the interact event to all listeners for this stacks item type and returns if default action */
+    interact(game: Game, player: Player, info: any): boolean {
+        return this.definition.emitInteractEvent(this, game, player, info);
+    }
+
+    // #endregion
+
     // #region serialization
 
     /** Return an object representing this items data for a game update to the client */
     serializeForUpdate(): any {
+        const componentdata = this.serializeComponentDataForUpdate();
+
         return {
-            displayname: this.item.getDisplayName(),
-            name: this.item.getName(),
-            asset: this.item.getAsset(),
+            displayname: this.definition.getDisplayName(),
+            name: this.definition.getName(),
+            asset: this.definition.getAsset(),
             amount: this.amount,
+            ...componentdata,
         };
     }
 
     /** Return an object representing this items data for writing to the save */
     serializeForWrite(): any {
+        const componentdata = this.serializeComponentDataForWrite();
+
         return {
-            name: this.item.getName(),
+            name: this.definition.getName(),
             amount: this.amount,
+            componentdata: componentdata,
         };
     }
 

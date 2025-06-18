@@ -39,7 +39,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         });
     }
 
-    /** Loads this objects required component data instances with the given data */
+    /** Loads this entities required component data instances with the given data */
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
