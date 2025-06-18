@@ -1,12 +1,13 @@
 import crypto from "crypto";
 import EventEmitter from "events";
 
+import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import { Pos } from "../../shared/types.js";
 import Entity from "./entity.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS } = Constants;
+const { ASSETS, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -16,6 +17,8 @@ const { FALL_RATE } = ServerConfig.OBJECT;
 
 /** The base class for any simulated object (something that ticks) in the game world */
 abstract class GameObject {
+    protected logger: Logger;
+
     id: string;
 
     x: number;
@@ -33,6 +36,8 @@ abstract class GameObject {
     private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.ENTITY);
+
         this.id = crypto.randomUUID();
 
         this.x = x;

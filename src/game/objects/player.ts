@@ -135,6 +135,13 @@ class Player extends Entity {
     update(data: any): void {
         const deltatime = data.t - this.lastupdated;
 
+        const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
+        if(movedist > PLAYER_SPEED * deltatime / 1000 + .05){
+            this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
+            this.resync();
+            return;
+        }
+
         this.dir = data.dir;
         this.x += data.dx;
         this.y += data.dy;
