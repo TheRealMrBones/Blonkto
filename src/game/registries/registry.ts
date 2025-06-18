@@ -8,11 +8,13 @@ const { LOG_CATEGORIES } = Constants;
 class Registry<T extends RegistryValue> {
     private logger: Logger;
     
+    name: string;
     private map: { [key: string]: T };
 
-    constructor(){
+    constructor(name: string){
         this.logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 
+        this.name = name;
         this.map = {};
     }
 
@@ -21,10 +23,10 @@ class Registry<T extends RegistryValue> {
     /** Adds the given value to the registry */
     register(key: string, value: T): void {
         if(key in this.map){
-            this.logger.error(`Key "${key}" already registered!`);
+            this.logger.error(`[${this.name}] Key "${key}" already registered!`);
             throw null;
         }else if(value.getRegistryKey() !== "unregistered"){
-            this.logger.error(`Registry value already registered under the name: "${value.getRegistryKey()}"!`);
+            this.logger.error(`[${this.name}] Registry value already registered under the name: "${value.getRegistryKey()}"!`);
             throw null;
         }
         
@@ -39,6 +41,11 @@ class Registry<T extends RegistryValue> {
 
     /** Returns the stored object for the requested key */
     get(key: string): T {
+        if(!this.has(key)){
+            this.logger.error(`[${this.name}] Requested Key "${key}" does not exist in this registry!`);
+            throw null;
+        }
+
         return this.map[key];
     }
 

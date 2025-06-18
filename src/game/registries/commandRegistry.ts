@@ -8,7 +8,7 @@ const { LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing command registry");
 
-const CommandRegistry = new Registry<Command>();
+const CommandRegistry = new Registry<Command>("CommandRegistry");
 
 export default CommandRegistry;
 

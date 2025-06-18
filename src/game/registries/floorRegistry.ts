@@ -9,7 +9,7 @@ const { ASSETS, LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing floor registry");
 
-const FloorRegistry = new Registry<Floor>();
+const FloorRegistry = new Registry<Floor>("FloorRegistry");
 
 FloorRegistry.register("grass_floor", new Floor("Grass Floor", ASSETS.GRASS_FLOOR));
 FloorRegistry.register("wood_floor", new Floor("Wood Floor", ASSETS.WOOD_FLOOR, new Drop("wood_floor")));

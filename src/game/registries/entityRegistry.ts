@@ -14,7 +14,7 @@ const { ASSETS, LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing entity registry");
 
-const EntityRegistry = new Registry<EntityDefinition>();
+const EntityRegistry = new Registry<EntityDefinition>("EntityRegistry");
 
 EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .25, 3))
     .addComponent(new WanderComponent())

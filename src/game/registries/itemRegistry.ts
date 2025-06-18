@@ -15,7 +15,7 @@ const { ASSETS, MINE_TYPES, LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing item registry");
 
-const ItemRegistry = new Registry<Item>();
+const ItemRegistry = new Registry<Item>("ItemRegistry");
 
 ItemRegistry.register("sword", new Item("Sword", 1, ASSETS.SWORD)
     .addComponent(new AttackComponent(3)));

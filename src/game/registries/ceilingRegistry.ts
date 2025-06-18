@@ -8,7 +8,7 @@ const { ASSETS, LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing ceiling registry");
 
-const CeilingRegistry = new Registry<Ceiling>();
+const CeilingRegistry = new Registry<Ceiling>("CeilingRegistry");
 
 
 

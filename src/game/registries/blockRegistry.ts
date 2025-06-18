@@ -11,7 +11,7 @@ const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing block registry");
 
-const BlockRegistry = new Registry<Block>();
+const BlockRegistry = new Registry<Block>("BlockRegistry");
 
 BlockRegistry.register("stone_block", new Block("Stone Block", ASSETS.STONE_BLOCK, new Drop("stone_block"), MINE_TYPES.MINE));
 BlockRegistry.register("tree_trunk", new Block("Tree Trunk", ASSETS.TREE_TRUNK, new Drop("wood", 1, 1, .5, 3), MINE_TYPES.CHOP, .8, SHAPES.CIRCLE));
