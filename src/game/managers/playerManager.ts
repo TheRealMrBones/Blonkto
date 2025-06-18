@@ -20,7 +20,7 @@ const { FILTER_USERNAME } = ServerConfig.PLAYER;
 class PlayerManager {
     private game: Game;
 
-    readonly banManager: BanManager
+    readonly banManager: BanManager;
     readonly opManager: OpManager;
     readonly whitelistManager: WhitelistManager;
 

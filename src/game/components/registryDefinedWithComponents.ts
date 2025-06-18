@@ -1,6 +1,6 @@
 import RegistryDefined from "../registries/registryDefined.js";
-import RegistryValue from "../registries/registryValue";
-import ComponentData from "./componentData";
+import RegistryValue from "../registries/registryValue.js";
+import ComponentData from "./componentData.js";
 import ComponentHandler from "./componentHandler.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
