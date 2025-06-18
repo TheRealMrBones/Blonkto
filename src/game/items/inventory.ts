@@ -21,7 +21,7 @@ class Inventory {
     /** Returns an inventory object with the given itemstacks in it */
     static readFromSave(inventorydata: any[], trackchanges?: boolean): Inventory {
         const inventory = new Inventory(inventorydata.length, trackchanges);
-        inventory.slots = inventorydata.map((stack: { name: string; amount: number | undefined; }) => stack ? new ItemStack(stack.name, stack.amount) : null);
+        inventory.slots = inventorydata.map((data: any) => data ? ItemStack.readFromSave(data) : null);
         return inventory;
     }
 
