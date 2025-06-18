@@ -29,16 +29,8 @@ span {
     border-radius: 25px;
 }
 
-#changelog{
-    font-size: 2.5vh;
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    background-color: dimgray;
-    padding: 20px;
-    border-radius: 25px;
-    display: none;
+#controls{
+    font-size: 16px;
 }
 
 .ui{
