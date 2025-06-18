@@ -133,11 +133,11 @@ class Player extends Entity {
 
     /** Updates this players data with the given new input data */
     update(data: any): void {
-        const deltatime = data.t - this.lastupdated;
+        const deltatime = this.lastupdated == 0 ? 20 : data.t - this.lastupdated;
 
         // only move if valid distance
         const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
-        if(movedist > this.getSpeed() * deltatime / 1000 + .05 && this.lastupdated != 0){
+        if(movedist > this.getSpeed() * deltatime / 1000 + .05){
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
             this.resync();
         }else{
