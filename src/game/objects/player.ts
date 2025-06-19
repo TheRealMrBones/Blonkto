@@ -164,10 +164,7 @@ class Player extends Entity {
 
     /** Resyncs the players client with the server */
     resync(){
-        this.fixes.setpos = {
-            x: this.x,
-            y: this.y
-        };
+        this.setPos(this.x, this.y);
     }
 
     /** Heal the player the given amount of health */
@@ -197,6 +194,7 @@ class Player extends Entity {
             pushx: null,
             pushy: null,
             setpos: null,
+            setcolor: null,
         };
     }
 
@@ -206,6 +204,7 @@ class Player extends Entity {
             pushx: this.fixes.pushx,
             pushy: this.fixes.pushy,
             setpos: this.fixes.setpos,
+            setcolor: this.fixes.setcolor,
         };
         return fixescopy;
     }
@@ -225,6 +224,12 @@ class Player extends Entity {
             y: y
         };
         this.lastsetpos = Date.now();
+    }
+
+    /** Sets the color of the player */
+    setColor(color: Color): void {
+        this.color = color;
+        this.fixes.setcolor = color;
     }
 
     // #endregion

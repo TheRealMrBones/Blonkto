@@ -70,3 +70,5 @@ import recentLogonsCommand from "../commands/recentLogonsCommand.js";
 recentLogonsCommand();
 import whitelistCommand from "../commands/whitelistCommand.js";
 whitelistCommand();
+import setColorCommand from "../commands/setColorCommand.js";
+setColorCommand();
