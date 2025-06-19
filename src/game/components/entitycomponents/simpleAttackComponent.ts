@@ -47,7 +47,6 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const data = self.getComponentData<SimpleAttackComponentData>(SimpleAttackComponentData);
 
-        if(data.target === undefined) data.target = null;
         if(data.target !== self.lasthitby && self.hit) data.target = self.lasthitby as Entity;
         
         if(data.target === null){
@@ -59,6 +58,9 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
                     mindist = dist;
                 }
             });
+        }else{
+            if(game.entityManager.getPlayerEntities().some(p => p.id === data.target?.id))
+                data.target = null;
         }
 
         const target = data.target;
@@ -67,6 +69,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(self.distanceTo(target) >= this.distance * 2){
             self.targetposqueue = [];
             self.speedmultiplier = 1;
+            data.target = null;
             return;
         }
         
