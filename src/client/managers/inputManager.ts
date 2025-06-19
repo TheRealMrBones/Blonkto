@@ -249,9 +249,9 @@ class InputManager {
 
     /** Updates the clients data based on most recent inputs */
     private handleInput(): void {
-        this.updatePos();
-
         const t = Date.now();
+        this.updatePos(t);
+
         const content: InputContent = {
             t: t,
             lastupdatetime: this.lastupdate,
@@ -259,6 +259,7 @@ class InputManager {
             dx: this.dx,
             dy: this.dy,
             hotbarslot: this.selectedslot,
+            lastserverupdate: this.playerclient.stateManager.getLastServerUpdate(),
         };
         this.playerclient.networkingManager.updateInputs(content);
         this.lastupdate = t;
@@ -279,23 +280,26 @@ class InputManager {
     }
 
     /** Updates the current position of the client based on most recent movement inputs */
-    private updatePos(): void {
+    private updatePos(time?: number): void {
+        // get time
+        const t = time === undefined ? Date.now() : time;
+
         // update local position vars
         if(this.startw){
-            this.dy -= (Date.now() - this.startw) * PLAYER_SPEED / 1000;
-            this.startw = Date.now();
+            this.dy -= (t - this.startw) * PLAYER_SPEED / 1000;
+            this.startw = t;
         }
         if(this.starts){
-            this.dy += (Date.now() - this.starts) * PLAYER_SPEED / 1000;
-            this.starts = Date.now();
+            this.dy += (t - this.starts) * PLAYER_SPEED / 1000;
+            this.starts = t;
         }
         if(this.starta){
-            this.dx -= (Date.now() - this.starta) * PLAYER_SPEED / 1000;
-            this.starta = Date.now();
+            this.dx -= (t - this.starta) * PLAYER_SPEED / 1000;
+            this.starta = t;
         }
         if(this.startd){
-            this.dx += (Date.now() - this.startd) * PLAYER_SPEED / 1000;
-            this.startd = Date.now();
+            this.dx += (t - this.startd) * PLAYER_SPEED / 1000;
+            this.startd = t;
         }
 
         // update ui

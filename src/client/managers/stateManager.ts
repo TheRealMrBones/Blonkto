@@ -19,12 +19,15 @@ class StateManager {
     private static serverDelay: number = 0;
     private newserverdelays: number = 0;
     private newserverdelayscount: number = 0;
-    private lastUpdateTime: number = Date.now();
+    private lastupdatetime: number = Date.now();
+    private lastserverupdate: number = 0;
     private lasttpsupdate: number = 0;
 
     constructor(playerclient: PlayerClient){
         this.playerclient = playerclient;
     }
+
+    // #region init
 
     /** Initializes the world state for the client */
     initState(): void {
@@ -32,10 +35,22 @@ class StateManager {
         this.firstServerTimestamp = 0;
     }
 
+    // #endregion
+
+    // #region getters
+
+    /** Returns the last received server update time */
+    getLastServerUpdate(): number {
+        return this.lastserverupdate;
+    }
+
+    // #region get and set state
+
     /** Processes the given game update and adds it to the state queue */
     processGameUpdate(update: GameUpdateContent): void {
         // set lastUpdateTime
-        this.lastUpdateTime = Date.now();
+        this.lastupdatetime = Date.now();
+        this.lastserverupdate = update.t;
 
         // update local world
         if(update.worldLoad.unloadChunks) this.playerclient.world.unloadChunks(update.worldLoad.unloadChunks);
@@ -145,6 +160,8 @@ class StateManager {
         }
     }
 
+    // #endregion
+
     // #region interpolation
 
     /** Interpolates the given object between its two given states with the given ratio */
@@ -220,7 +237,7 @@ class StateManager {
 
     /** Checks if connection might have been lost based on the time of the last game update received */
     checkIfConnectionLost(): void {
-        const isconnectionlost = Date.now() - this.lastUpdateTime > CONNECTION_LOST_THRESHOLD;
+        const isconnectionlost = Date.now() - this.lastupdatetime > CONNECTION_LOST_THRESHOLD;
         toggleConnectionLost(isconnectionlost);
     };
 

@@ -99,16 +99,8 @@ class Game {
     handlePlayerInput(socket: Socket, content: InputContent): void {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
-        const { t, lastupdatetime, dir, dx, dy, hotbarslot } = content;
         if(this.players[socket.id]){
-            this.players[socket.id].update({
-                dir: dir,
-                dx: dx,
-                dy: dy,
-                t: t,
-                lastupdatetime: lastupdatetime,
-                hotbarslot: hotbarslot,
-            });
+            this.players[socket.id].update(content);
         }
     }
 

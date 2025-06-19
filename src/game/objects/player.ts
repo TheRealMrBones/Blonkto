@@ -5,6 +5,7 @@ import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import { Color, Pos } from "../../shared/types.js";
+import { InputContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -27,6 +28,7 @@ class Player extends Entity {
     inventory: Inventory;
     hotbarslot: number;
     fixes: any;
+    lastsetpos: number = 0;
     lastchunk: Pos | undefined;
 
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
@@ -132,12 +134,14 @@ class Player extends Entity {
     // #region setters
 
     /** Updates this players data with the given new input data */
-    update(data: any): void {
+    update(data: InputContent): void {
         const deltatime = this.lastupdated == 0 ? 20 : data.t - this.lastupdated;
 
         // only move if valid distance
         const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
-        if(movedist > this.getSpeed() * deltatime / 1000 + .05){
+        if(this.lastsetpos > data.lastserverupdate){
+            // ignore if setpos happened in future for client
+        }else if(movedist > this.getSpeed() * deltatime / 1000 + .05){
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
             this.resync();
         }else{
@@ -220,6 +224,7 @@ class Player extends Entity {
             x: x,
             y: y
         };
+        this.lastsetpos = Date.now();
     }
 
     // #endregion

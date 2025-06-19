@@ -39,6 +39,7 @@ export type GameUpdateContent = {
 export type InputContent = {
     t: number;
     lastupdatetime: number | null;
+    lastserverupdate: number;
     dir: number;
     dx: number;
     dy: number;
