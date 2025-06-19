@@ -3,7 +3,6 @@ import { throttle } from "throttle-debounce";
 import { Socket } from "socket.io";
 
 import PlayerClient from "../playerClient.js";
-import { startRendering, setColor } from "../render/render.js";
 import { setupUi, updatePing } from "../render/ui.js";
 import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
@@ -115,8 +114,8 @@ class NetworkingManager {
     onInstantiated(content: PlayerInstantiatedContent): void {
         connectionAccepted();
         this.playerclient.inputManager.startCapturingInput(content.x, content.y);
-        setColor(content.color);
-        startRendering();
+        this.playerclient.renderer.setColor(content.color);
+        this.playerclient.renderer.startRendering();
         setupUi();
         this.playerclient.inventory.setInventory(content.inventory);
     }

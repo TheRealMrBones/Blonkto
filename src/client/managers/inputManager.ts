@@ -1,5 +1,4 @@
 import PlayerClient from "../playerClient.js";
-import { getCellSize } from "../render/render.js";
 import { updateCoords } from "../render/ui.js";
 import { Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
@@ -198,8 +197,8 @@ class InputManager {
     private handleMouseDown(e: MouseEvent): void {
         // get position of click compared to current player pos
         const content: ClickContent = {
-            xoffset: (e.clientX - window.innerWidth / 2) / getCellSize(),
-            yoffset: (e.clientY - window.innerHeight / 2) / getCellSize(),
+            xoffset: (e.clientX - window.innerWidth / 2) / this.playerclient.renderer.getCellSize(),
+            yoffset: (e.clientY - window.innerHeight / 2) / this.playerclient.renderer.getCellSize(),
             mex: this.x,
             mey: this.y,
         };

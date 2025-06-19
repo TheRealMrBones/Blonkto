@@ -7,6 +7,7 @@ import CollisionManager from "./managers/collisionManager.js";
 import World from "./world/world.js";
 import Inventory from "./inventory/inventory.js";
 import { onGameOver } from "./index.js";
+import Renderer from "./render/renderer.js";
 
 /** The base class for the client to interact with the game once they are logged in */
 class PlayerClient {
@@ -16,6 +17,7 @@ class PlayerClient {
     readonly collisionManager: CollisionManager;
     readonly world: World;
     readonly inventory: Inventory;
+    readonly renderer: Renderer;
 
     readonly eventEmitter: EventEmitter = new EventEmitter();
 
@@ -27,6 +29,7 @@ class PlayerClient {
 
         this.world = new World(this);
         this.inventory = new Inventory(this);
+        this.renderer = new Renderer(this);
 
         this.eventEmitter.on("gameover", onGameOver);
     }

@@ -1,5 +1,4 @@
 import PlayerClient from "./playerClient.js";
-import { stopRendering } from "./render/render.js";
 import { downloadAssets } from "./render/assets.js";
 import { hideUi } from "./render/ui.js";
 import { FailedConnectionContent, JoinGameContent } from "../shared/messageContentTypes.js";
@@ -245,7 +244,7 @@ export function onGameOver(connectionrefusedinfo: any): void {
     if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
 
     playerclient.inputManager.stopCapturingInput();
-    stopRendering();
+    playerclient.renderer.stopRendering();
     hideUi();
     startMenu.style.display = "block";
     playButton.focus();
