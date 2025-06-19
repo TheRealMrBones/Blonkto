@@ -3,6 +3,7 @@ import PlayerClient from "../playerClient.js";
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
+/** The representation of world data currently loaded by the client */
 class World {
     private readonly playerclient: PlayerClient;
     private readonly chunks: {[key: string]: any} = {};

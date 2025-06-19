@@ -3,8 +3,6 @@ import { throttle } from "throttle-debounce";
 import { Socket } from "socket.io";
 
 import PlayerClient from "../playerClient.js";
-import { setupUi, updatePing } from "../render/ui.js";
-import { receiveChatMessage } from "../render/chat.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
 import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
@@ -14,6 +12,7 @@ const { MSG_TYPES } = Constants;
 import SharedConfig from "../../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
 
+/** Manages sending and receiving messages between the client and the server */
 class NetworkingManager {
     private readonly playerclient: PlayerClient;
     private readonly socket: Socket;
@@ -43,7 +42,7 @@ class NetworkingManager {
             this.addListener(MSG_TYPES.DEAD, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.KICK, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.BAN, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
-            this.addListener(MSG_TYPES.RECEIVE_MESSAGE, receiveChatMessage);
+            this.addListener(MSG_TYPES.RECEIVE_MESSAGE, this.playerclient.renderer.chatManager.receiveChatMessage.bind(this.playerclient.renderer.chatManager));
         });
     }
 
@@ -116,7 +115,7 @@ class NetworkingManager {
         this.playerclient.inputManager.startCapturingInput(content.x, content.y);
         this.playerclient.renderer.setColor(content.color);
         this.playerclient.renderer.startRendering();
-        setupUi();
+        this.playerclient.renderer.uiManager.setupUi();
         this.playerclient.inventory.setInventory(content.inventory);
     }
 
@@ -143,7 +142,7 @@ class NetworkingManager {
     /** Response to the ping message from the server */
     onPing(): void {
         const ping = Date.now() - this.pingsent;
-        updatePing(ping);
+        this.playerclient.renderer.uiManager.updatePing(ping);
         this.pinginterval = setTimeout(this.ping.bind(this), 1000);
     }
 

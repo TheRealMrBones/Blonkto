@@ -2,6 +2,7 @@ import PlayerClient from "../playerClient.js";
 import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
+/** Manages client side collisions between the player and other objects / entities in the world */
 class CollisionManager {
     private readonly playerclient: PlayerClient;
 

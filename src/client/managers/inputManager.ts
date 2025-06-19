@@ -1,5 +1,4 @@
 import PlayerClient from "../playerClient.js";
-import { updateCoords } from "../render/ui.js";
 import { Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
 
@@ -14,6 +13,7 @@ type InputListener = {
     callback: EventListenerOrEventListenerObject;
 };
 
+/** Manages all input listeners and events on the client */
 class InputManager {
     private readonly playerclient: PlayerClient;
     private readonly canvas = document.getElementById("gamecanvas")!;
@@ -302,7 +302,7 @@ class InputManager {
         }
 
         // update ui
-        updateCoords(this.x + this.dx, this.y + this.dy);
+        this.playerclient.renderer.uiManager.updateCoords(this.x + this.dx, this.y + this.dy);
         
         // collisions
         const others = this.playerclient.stateManager.getCurrentState().others!;

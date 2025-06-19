@@ -1,6 +1,7 @@
 import PlayerClient from "../playerClient.js";
-import { getAsset } from "./assets.js";
-import { updateFps } from "./ui.js";
+import AssetManager from "./assetManager.js";
+import ChatManager from "./chatManager.js";
+import UiManager from "./uiManager.js";
 import { Color } from "../../shared/types.js";
 import { combineColors } from "../../shared/typeOperations.js";
 
@@ -19,8 +20,13 @@ const { HIT_COLOR } = ClientConfig.ATTACK;
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 const HEIGHT_TO_CELL_RATIO = CELLS_VERTICAL - RENDER_PADDING;
 
+/** Handles rendering of the client game state to the screen */
 class Renderer {
     private readonly playerclient: PlayerClient;
+
+    readonly assetManager: AssetManager;
+    readonly chatManager: ChatManager;
+    readonly uiManager: UiManager;
 
     private readonly canvas: HTMLCanvasElement = document.createElement("canvas")!;
     private readonly context: CanvasRenderingContext2D = this.canvas.getContext("2d")!;
@@ -40,6 +46,10 @@ class Renderer {
 
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
+
+        this.assetManager = new AssetManager(playerclient);
+        this.chatManager = new ChatManager(playerclient);
+        this.uiManager = new UiManager(playerclient);
 
         // prepare canvas and cell size
         this.onResizeWindow();
@@ -81,7 +91,7 @@ class Renderer {
 
     /** Calculates the current fps being rendered by the client */
     calculatefps(): void {
-        if(this.fpscount == 0) updateFps(0); else updateFps(this.fpstotal / this.fpscount);
+        if(this.fpscount == 0) this.uiManager.updateFps(0); else this.uiManager.updateFps(this.fpstotal / this.fpscount);
         
         this.fpstotal = 0;
         this.fpscount = 0;
@@ -208,7 +218,7 @@ class Renderer {
         x = x + renderoffset - 1;
         y = y + renderoffset - 1;
         
-        const model = getAsset(asset, (this.cellsize) * scale + 2);
+        const model = this.assetManager.getAsset(asset, (this.cellsize) * scale + 2);
         if(model === null) return;
         
         this.context.drawImage(
@@ -236,7 +246,7 @@ class Renderer {
         this.context.rotate(dir);
         
         // get model
-        const model = entity.hit ? getAsset(entity.asset, this.cellsize * scale, HIT_COLOR) : getAsset(entity.asset, this.cellsize * scale);
+        const model = entity.hit ? this.assetManager.getAsset(entity.asset, this.cellsize * scale, HIT_COLOR) : this.assetManager.getAsset(entity.asset, this.cellsize * scale);
         
         // draw entity
         if(model !== null) this.context.drawImage(
@@ -265,7 +275,7 @@ class Renderer {
         this.context.rotate(dir);
 
         // get player model
-        const model = player.hit ? getAsset(player.asset, this.cellsize * scale, combineColors(player.color, HIT_COLOR)) : getAsset(player.asset, this.cellsize * scale, player.color);
+        const model = player.hit ? this.assetManager.getAsset(player.asset, this.cellsize * scale, combineColors(player.color, HIT_COLOR)) : this.assetManager.getAsset(player.asset, this.cellsize * scale, player.color);
 
         // draw player
         if(model !== null) this.context.drawImage(
@@ -372,7 +382,7 @@ class Renderer {
         const xoffset = xpercent * extraspace;
         const yoffset = ypercent * extraspace;
         
-        const model = getAsset(ASSETS.SPACE_BG, scale, undefined, true);
+        const model = this.assetManager.getAsset(ASSETS.SPACE_BG, scale, undefined, true);
         if(model === null) return;
 
         const canvasX = this.canvas.width / 2;

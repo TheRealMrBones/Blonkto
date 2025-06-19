@@ -6,6 +6,7 @@ import { SwapContent } from "../../shared/messageContentTypes.js";
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
+/** The representation of inventory data of the client */
 class Inventory {
     private readonly playerclient: PlayerClient;
     private readonly inventory: (Item | null)[] = new Array(INVENTORY_SIZE).fill(null);

@@ -1,6 +1,5 @@
 import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
-import { toggleConnectionLost, updateHealth, updateKills, updateTab, updateTps } from "../render/ui.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 
 import ClientConfig from "../../configs/client.js";
@@ -9,6 +8,7 @@ const { SERVER_RESYNC_THRESHOLD, CONNECTION_LOST_THRESHOLD } = ClientConfig.UPDA
 
 // #region init
 
+/** Manages client state updates and requests to and from the server */
 class StateManager {
     private readonly playerclient: PlayerClient;
     private readonly gameUpdates: GameUpdateContent[] = [];
@@ -68,11 +68,11 @@ class StateManager {
         this.playerclient.inventory.addRecipes(update.recipes);
 
         // update UI
-        updateHealth(update.me.static.health);
-        updateKills(update.me.static.kills);
-        updateTab(update.tab);
+        this.playerclient.renderer.uiManager.updateHealth(update.me.static.health);
+        this.playerclient.renderer.uiManager.updateKills(update.me.static.kills);
+        this.playerclient.renderer.uiManager.updateTab(update.tab);
         if(Date.now() - this.lasttpsupdate > 1000){
-            updateTps(update.tps);
+            this.playerclient.renderer.uiManager.updateTps(update.tps);
             this.lasttpsupdate = Date.now();
         }
 
@@ -238,7 +238,7 @@ class StateManager {
     /** Checks if connection might have been lost based on the time of the last game update received */
     checkIfConnectionLost(): void {
         const isconnectionlost = Date.now() - this.lastupdatetime > CONNECTION_LOST_THRESHOLD;
-        toggleConnectionLost(isconnectionlost);
+        this.playerclient.renderer.uiManager.toggleConnectionLost(isconnectionlost);
     };
 
     // #endregion

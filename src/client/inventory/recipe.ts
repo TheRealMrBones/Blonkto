@@ -4,6 +4,7 @@ import Item from "./item.js";
 
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 
+/** The representation of a crafting recipe that has been learned on this client */
 class Recipe {
     ingredients: any[];
     result: string;

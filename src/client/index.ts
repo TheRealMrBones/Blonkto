@@ -1,6 +1,4 @@
 import PlayerClient from "./playerClient.js";
-import { downloadAssets } from "./render/assets.js";
-import { hideUi } from "./render/ui.js";
 import { FailedConnectionContent, JoinGameContent } from "../shared/messageContentTypes.js";
 
 import "./main.css";
@@ -30,7 +28,7 @@ export const playerclient = new PlayerClient();
 
 // conect the client to the server
 Promise.all([
-    downloadAssets(),
+    playerclient.renderer.assetManager.downloadAssets(),
 ]).then(() => {
     usernameInput.focus();
     usernameInput.addEventListener("keyup", event => {
@@ -245,7 +243,7 @@ export function onGameOver(connectionrefusedinfo: any): void {
 
     playerclient.inputManager.stopCapturingInput();
     playerclient.renderer.stopRendering();
-    hideUi();
+    playerclient.renderer.uiManager.hideUi();
     startMenu.style.display = "block";
     playButton.focus();
 }
