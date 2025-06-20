@@ -15,6 +15,7 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
     asset: string;
     drops: DropBase | null;
     minetype: number;
+    hardness: number;
     scale: number;
     shape: number;
     walkthrough: boolean = false;
@@ -23,12 +24,13 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
 
     eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, scale?: number, shape?: number){
+    constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, hardness?: number, scale?: number, shape?: number){
         super();
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
         this.minetype = minetype || MINE_TYPES.NONE;
+        this.hardness = hardness || 1;
         this.scale = scale || 1;
         this.shape = shape || SHAPES.SQUARE;
 

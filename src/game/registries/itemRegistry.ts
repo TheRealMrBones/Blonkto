@@ -20,9 +20,9 @@ const ItemRegistry = new Registry<Item>("ItemRegistry");
 ItemRegistry.register("sword", new Item("Sword", 1, ASSETS.SWORD)
     .addComponent(new AttackComponent(3)));
 ItemRegistry.register("pickaxe", new Item("Pickaxe", 1, ASSETS.PICKAXE)
-    .addComponent(new MineComponent(1)));
+    .addComponent(new MineComponent(MINE_TYPES.MINE)));
 ItemRegistry.register("axe", new Item("Axe", 1, ASSETS.AXE)
-    .addComponent(new MineComponent(1, MINE_TYPES.CHOP))
+    .addComponent(new MineComponent(MINE_TYPES.CHOP))
     .addComponent(new AttackComponent(2)));
 ItemRegistry.register("shovel", new Item("Shovel", 1, ASSETS.SHOVEL)
     .addComponent(new MineFloorComponent(1)));
