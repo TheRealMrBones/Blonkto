@@ -7,7 +7,7 @@ const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionailty for a type to handle its own set of components */
 class ComponentHandler<T> {
-    private logger: Logger;
+    private readonly logger: Logger;
 
     private components: { [key: string]: Component<T> } = {};
     private requiredComponentData: (new (...args: any[]) => ComponentData)[] = [];

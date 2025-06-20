@@ -14,7 +14,7 @@ const datafolders = [
 
 /** Manages the creation and reading of save files for the server */
 class FileManager {
-    private logger: Logger;
+    private readonly logger: Logger;
     private defaultlocation: string;
     
     constructor(){

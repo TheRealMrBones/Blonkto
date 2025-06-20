@@ -23,7 +23,7 @@ const entitiessavedir = "entities/";
 
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
 class World {
-    private logger: Logger;
+    private readonly logger: Logger;
     
     game: Game;
     loadedchunks: {[key: string]: Chunk};

@@ -11,7 +11,7 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 /** Manages the list of operators for the server */
 class OpManager {
-    private logger: Logger;
+    private readonly logger: Logger;
     
     private game: Game;
     private oppedplayers: {[key: string]: boolean};

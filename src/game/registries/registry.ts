@@ -6,7 +6,7 @@ const { LOG_CATEGORIES } = Constants;
 
 /** Manages a definition list specific type of class */
 class Registry<T extends RegistryValue> {
-    private logger: Logger;
+    private readonly logger: Logger;
     
     name: string;
     private map: { [key: string]: T };

@@ -6,7 +6,7 @@ const { LOG_CATEGORIES } = Constants;
 
 /** An attachable component to add additional data and/or functionality to an object */
 abstract class Component<T> {
-    private logger: Logger;
+    private readonly logger: Logger;
 
     private parent: T | null = null;
     private requirements: (new (...args: any[]) => Component<T>)[] = [];

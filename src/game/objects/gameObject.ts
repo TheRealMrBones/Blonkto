@@ -17,7 +17,7 @@ const { FALL_RATE } = ServerConfig.OBJECT;
 
 /** The base class for any simulated object (something that ticks) in the game world */
 abstract class GameObject {
-    protected logger: Logger;
+    protected readonly logger: Logger;
 
     id: string;
 

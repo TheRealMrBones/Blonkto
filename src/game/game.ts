@@ -34,7 +34,7 @@ const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
 
 /** The main class that manages the game world and the entities in it */
 class Game {
-    private logger: Logger;
+    private readonly logger: Logger;
 
     readonly fileManager: FileManager;
     readonly playerManager: PlayerManager;

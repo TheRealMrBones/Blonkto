@@ -20,6 +20,7 @@ type ServerConfigSchema = {
     PLAYER: {
         FILTER_USERNAME: boolean,
         ALLOW_CHANGE_NAME: boolean,
+        ALLOW_MULTI_LOGON: boolean,
         RACISM: number,
         RACISM_PERM: boolean,
         KEEP_INVENTORY: boolean,
@@ -73,6 +74,7 @@ const ServerConfig: ServerConfigSchema = {
     PLAYER: {
         FILTER_USERNAME: false,
         ALLOW_CHANGE_NAME: false,
+        ALLOW_MULTI_LOGON: false,
         RACISM: 0.3,
         RACISM_PERM: true,
         KEEP_INVENTORY: true,

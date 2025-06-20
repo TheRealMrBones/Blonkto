@@ -1,5 +1,6 @@
 import { Socket } from "socket.io-client";
 
+import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import BanManager from "./banManager.js";
 import OpManager from "./opManager.js";
@@ -9,15 +10,17 @@ import { filterText } from "../../shared/filter.js";
 import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
-const { MSG_TYPES } = Constants;
+const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import ServerConfig from "../../configs/server.js";
 const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
-const { FILTER_USERNAME } = ServerConfig.PLAYER;
+const { FILTER_USERNAME, ALLOW_MULTI_LOGON } = ServerConfig.PLAYER;
 
 /** Manages the list of players for the server */
 class PlayerManager {
+    private readonly logger: Logger
+
     private game: Game;
 
     readonly banManager: BanManager;
@@ -28,6 +31,8 @@ class PlayerManager {
     private recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.PLAYER_MANAGER);
+
         this.game = game;
         
         this.banManager = new BanManager(game);
@@ -58,10 +63,17 @@ class PlayerManager {
         if(this.banManager.isBanned(username)){
             const content: FailedConnectionContent = { reason: "Banned", extra: this.banManager.banReason(username) };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
+            this.logger.log(`${username} tried to log in but is banned`);
             return;
         }else if(WHITELIST_ENABLED && !this.whitelistManager.isWhitelisted(username) && !(OP_BYPASS_WHITELIST && this.opManager.isOp(username))){
             const content: FailedConnectionContent = { reason: "Not Whitelisted", extra: "" };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
+            this.logger.log(`${username} tried to log in but is not whitelisted`);
+            return;
+        }else if(!ALLOW_MULTI_LOGON && this.game.entityManager.getPlayerEntities().some(p => p.username == username)){
+            const content: FailedConnectionContent = { reason: "User already logged in on another instance", extra: "" };
+            socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
+            this.logger.log(`${username} tried to log in but is already logged in on another instance`);
             return;
         }
 
