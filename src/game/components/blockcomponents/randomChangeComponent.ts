@@ -20,20 +20,20 @@ class RandomChangeComponent extends Component<Block> {
     /** Implements this component into its parents functionality */
     override setParent(parent: Block): void {
         super.setParent(parent);
-        this.getParent().eventEmitter.on("tick", (cell: Cell, pos: Pos, game: Game, dt: number) => this.tick(cell, pos, game, dt));
+        this.getParent().eventEmitter.on("tick", (cell: Cell, game: Game, dt: number) => this.tick(cell, game, dt));
     }
 
     /** Defines the tick action of the block with this component */
-    tick(cell: Cell, pos: Pos, game: Game, dt: number): void {
+    tick(cell: Cell, game: Game, dt: number): void {
         if(Math.random() > this.chance) return;
 
         if(!this.cancollide){
             for(const object of game.entityManager.getAllObjects()){
-                if(object.tilesOn().some(t => t.x == pos.x && t.y == pos.y)) return;
+                if(object.tilesOn().some(t => t.x == cell.getWorldX() && t.y == cell.getWorldY())) return;
             }
         }
 
-        game.world.setBlock(pos.x, pos.y, this.newblock);
+        game.world.setBlock(cell.getWorldX(), cell.getWorldY(), this.newblock);
     }
 }
 

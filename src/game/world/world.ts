@@ -55,17 +55,12 @@ class World {
     /** Ticks the entire game world */
     tick(dt: number): void {
         this.tickDayCycle();
-        for(const chunk of Object.entries(this.loadedchunks)){
-            const chunkpostext = chunk[0].slice(1, -1).split(",");
-            const chunkx = Number(chunkpostext[0]);
-            const chunky = Number(chunkpostext[1]);
-
-            for(let x = 0; x < chunk[1].cells.length; x++){
-                for(let y = 0; y < chunk[1].cells[x].length; y++){
-                    const cell = chunk[1].cells[x][y];
+        for(const chunk of Object.values(this.loadedchunks)){
+            for(const row of chunk.cells){
+                for(const cell of row){
                     if(cell.block === null) continue;
                     if(cell.block.eventEmitter.listenerCount("tick") == 0) continue;
-                    cell.block.eventEmitter.emit("tick", cell, { x: x + chunkx * CHUNK_SIZE, y: y + chunky * CHUNK_SIZE }, this.game, 0);
+                    cell.block.eventEmitter.emit("tick", cell, this.game, dt);
                 }
             }
         }
