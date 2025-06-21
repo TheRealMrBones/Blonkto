@@ -53,8 +53,18 @@ class World {
     // #region ticking
 
     /** Ticks the entire game world */
-    tick(dt: number): void {
+    tick(dt: number): {[key: string]: any } {
+        // tick day cycle
         this.tickDayCycle();
+
+        // get world loads for players
+        const worldloads: {[key: string]: any } = {};
+        this.game.entityManager.getPlayerEntities().forEach(p => {
+            const worldload = this.loadPlayerChunks(p);
+            worldloads[p.id] = worldload;
+        });
+
+        // tick cells that have tick listeners
         for(const chunk of Object.values(this.loadedchunks)){
             for(const row of chunk.cells){
                 for(const cell of row){
@@ -64,6 +74,9 @@ class World {
                 }
             }
         }
+
+        // return the world loads dictionary for the players
+        return worldloads;
     }
 
     // #endregion

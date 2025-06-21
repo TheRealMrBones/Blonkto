@@ -200,15 +200,8 @@ class Game {
         }
 
         // tick world and managers
-        this.world.tick(dt);
+        const worldloads: {[key: string]: any } = this.world.tick(dt);
         this.entityManager.tick(dt);
-        
-        // get world updates
-        const worldloads: {[key: string]: any } = {};
-        this.entityManager.getPlayerEntities().forEach(p => {
-            const worldload = this.world.loadPlayerChunks(p);
-            worldloads[p.id] = worldload;
-        });
 
         // send fat update packets
         this.entityManager.getPlayerEntities().forEach(player => {
