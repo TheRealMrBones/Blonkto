@@ -19,7 +19,7 @@ const { FILTER_USERNAME, ALLOW_MULTI_LOGON } = ServerConfig.PLAYER;
 
 /** Manages the list of players for the server */
 class PlayerManager {
-    private readonly logger: Logger
+    private readonly logger: Logger;
 
     private game: Game;
 
