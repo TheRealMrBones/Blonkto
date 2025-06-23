@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import ComponentData from "../components/componentData.js";
 import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
-import CeilingDefinition from "../definitions/ceilingDefinition";
+import CeilingDefinition from "../definitions/ceilingDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";

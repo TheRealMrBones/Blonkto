@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import ComponentData from "../components/componentData.js";
 import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
-import BlockDefinition from "../definitions/blockDefinition";
+import BlockDefinition from "../definitions/blockDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";

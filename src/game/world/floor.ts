@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import ComponentData from "../components/componentData.js";
 import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
-import FloorDefinition from "../definitions/floorDefinition";
+import FloorDefinition from "../definitions/floorDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import FloorRegistry from "../registries/floorRegistry.js";
