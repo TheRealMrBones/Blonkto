@@ -39,5 +39,7 @@ ItemRegistry.register("wood_floor", new Item("Wood Floor", 64, ASSETS.WOOD_FLOOR
     .addComponent(new BuildFloorComponent("wood_floor")));
 ItemRegistry.register("wood_door", new Item("Wood Door", 64, ASSETS.WOOD_DOOR)
     .addComponent(new BuildComponent("wood_door")));
+ItemRegistry.register("pine_cone", new Item("Pine Cone", 64, ASSETS.PINE_CONE)
+    .addComponent(new BuildComponent("sapling")));
 
 export default ItemRegistry;

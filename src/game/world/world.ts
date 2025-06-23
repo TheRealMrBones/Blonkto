@@ -57,24 +57,23 @@ class World {
         // tick day cycle
         this.tickDayCycle();
 
+        // tick cells that have tick listeners
+        for(const chunk of Object.values(this.loadedchunks)){
+            for(const row of chunk.cells){
+                for(const cell of row){
+                    if(cell.block !== null) cell.block.emitTickEvent(this.game, dt);
+                    if(cell.floor !== null) cell.floor.emitTickEvent(this.game, dt);
+                    if(cell.ceiling !== null) cell.ceiling.emitTickEvent(this.game, dt);
+                }
+            }
+        }
+
         // get world loads for players
         const worldloads: {[key: string]: any } = {};
         this.game.entityManager.getPlayerEntities().forEach(p => {
             const worldload = this.loadPlayerChunks(p);
             worldloads[p.id] = worldload;
         });
-
-        // tick cells that have tick listeners
-        for(const chunk of Object.values(this.loadedchunks)){
-            for(const row of chunk.cells){
-                for(const cell of row){
-                    if(cell.block === null) continue;
-                    cell.block.emitTickEvent(this.game, dt);
-                }
-            }
-        }
-
-        // return the world loads dictionary for the players
         return worldloads;
     }
 

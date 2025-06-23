@@ -13,7 +13,7 @@ class RandomChangeComponent extends Component<BlockDefinition> {
         super();
         this.newblock = newblock;
         this.cancollide = cancollide || false;
-        this.chance = chance || 0.001;
+        this.chance = chance || 0.0003;
     }
 
     /** Implements this component into its parents functionality */
