@@ -140,7 +140,7 @@ class Game {
             if(cell === null) return;
             if(cell.block === null) return;
             if(newinfo.dist > BASE_REACH) return;
-            cell.block.eventEmitter.emit("interact", this, this.players[socket.id], cell, newinfo);
+            cell.block.emitInteractEvent(this, this.players[socket.id], newinfo);
         }
     }
 

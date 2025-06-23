@@ -1,5 +1,5 @@
 import Registry from "./registry.js";
-import EntityDefinition from "../entities/entityDefinition.js";
+import EntityDefinition from "../definitions/entityDefinition.js";
 import Drop from "../items/drop.js";
 import Logger from "../../server/logging/logger.js";
 

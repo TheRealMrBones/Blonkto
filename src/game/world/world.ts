@@ -69,8 +69,7 @@ class World {
             for(const row of chunk.cells){
                 for(const cell of row){
                     if(cell.block === null) continue;
-                    if(cell.block.eventEmitter.listenerCount("tick") == 0) continue;
-                    cell.block.eventEmitter.emit("tick", cell, this.game, dt);
+                    cell.block.emitTickEvent(this.game, dt);
                 }
             }
         }

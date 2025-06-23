@@ -59,7 +59,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     // #region events
 
     /** Registers a listener to this entity definitions event handler */
-    private registerListener(event: string, listener: (...args: any[]) => void): void {
+    private registerListener(event: string, listener: (self: NonplayerEntity, game: Game, ...args: any[]) => void): void {
         this.eventEmitter.on(event, listener);
     }
 
@@ -79,8 +79,8 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     }
 
     /** Emits an event to this entity definitions event handler with the given self entity */
-    emitEvent(event: string, self: NonplayerEntity, ...args: any[]): void {
-        this.eventEmitter.emit(event, self, ...args);
+    emitEvent(event: string, self: NonplayerEntity, game: Game, ...args: any[]): void {
+        this.eventEmitter.emit(event, self, game, ...args);
     }
 
     // #endregion

@@ -232,7 +232,7 @@ abstract class GameObject {
     // #region events
 
     /** Registers a listener to this objects event handler */
-    private registerListener(event: string, listener: (...args: any[]) => void): void {
+    private registerListener(event: string, listener: (game: Game, ...args: any[]) => void): void {
         this.eventEmitter.on(event, listener);
     }
 
@@ -252,8 +252,8 @@ abstract class GameObject {
     }
 
     /** Emits an event to this objects event handler */
-    protected emitEvent(event: string, ...args: any[]): void {
-        this.eventEmitter.emit(event, ...args);
+    protected emitEvent(event: string, game: Game, ...args: any[]): void {
+        this.eventEmitter.emit(event, game, ...args);
     }
 
     /** Emits a tick event to this objects event handler */

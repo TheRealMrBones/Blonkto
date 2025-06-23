@@ -1,6 +1,6 @@
 import Component from "../component.js";
 import Game from "../../game.js";
-import EntityDefinition from "../../entities/entityDefinition.js";
+import EntityDefinition from "../../definitions/entityDefinition.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 
 import SharedConfig from "../../../configs/shared.js";

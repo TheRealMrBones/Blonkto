@@ -44,11 +44,11 @@ class CollisionManager {
             if(!cell) continue;
             const block = cell.block;
             if(block === null) continue;
-            if(block.walkthrough) continue;
+            if(block.definition.walkthrough) continue;
 
             const blockobject: CollisionObject = {
-                shape: block.shape,
-                scale: block.scale,
+                shape: block.definition.shape,
+                scale: block.definition.scale,
                 x: cellpos.x,
                 y: cellpos.y
             };

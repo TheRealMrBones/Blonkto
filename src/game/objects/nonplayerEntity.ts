@@ -1,6 +1,6 @@
 import ComponentData from "../components/componentData.js";
 import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
-import EntityDefinition from "../entities/entityDefinition.js";
+import EntityDefinition from "../definitions/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
 import Entity from "./entity.js";
@@ -87,9 +87,9 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     // #region events
 
     /** Emits an event to this objects event handler */
-    protected override emitEvent(event: string, ...args: any[]): void {
-        this.definition.emitEvent(event, this, ...args);
-        super.emitEvent(event, ...args);
+    protected override emitEvent(event: string, game: Game, ...args: any[]): void {
+        this.definition.emitEvent(event, this, game, ...args);
+        super.emitEvent(event, game, ...args);
     }
 
     // #endregion

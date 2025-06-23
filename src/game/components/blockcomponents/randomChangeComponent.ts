@@ -1,11 +1,10 @@
 import Component from "../component.js";
 import Game from "../../game.js";
+import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
-import Cell from "../../world/cell.js";
-import { Pos } from "../../../shared/types.js";
 
 /** A Block Component that allows the block to be changed after random amount of ticks */
-class RandomChangeComponent extends Component<Block> {
+class RandomChangeComponent extends Component<BlockDefinition> {
     private newblock: string;
     private cancollide: boolean;
     private chance: number;
@@ -18,22 +17,22 @@ class RandomChangeComponent extends Component<Block> {
     }
 
     /** Implements this component into its parents functionality */
-    override setParent(parent: Block): void {
+    override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().eventEmitter.on("tick", (cell: Cell, game: Game, dt: number) => this.tick(cell, game, dt));
+        this.getParent().registerTickListener((block: Block, game: Game, dt: number) => this.tick(block, game, dt));
     }
 
     /** Defines the tick action of the block with this component */
-    tick(cell: Cell, game: Game, dt: number): void {
+    tick(block: Block, game: Game, dt: number): void {
         if(Math.random() > this.chance) return;
 
         if(!this.cancollide){
             for(const object of game.entityManager.getAllObjects()){
-                if(object.tilesOn().some(t => t.x == cell.getWorldX() && t.y == cell.getWorldY())) return;
+                if(object.tilesOn().some(t => t.x == block.cell.getWorldX() && t.y == block.cell.getWorldY())) return;
             }
         }
 
-        game.world.setBlock(cell.getWorldX(), cell.getWorldY(), this.newblock);
+        game.world.setBlock(block.cell.getWorldX(), block.cell.getWorldY(), this.newblock);
     }
 }
 

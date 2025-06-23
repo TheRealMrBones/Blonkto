@@ -31,7 +31,7 @@ class MineComponent extends Component<Item> {
         const cell = game.world.getCell(info.cellpos.x, info.cellpos.y, false);
         if(cell !== null){
             if(cell.block !== null)
-                if(cell.block.minetype != this.minetype || cell.block.hardness > this.power) return;
+                if(cell.block.definition.minetype != this.minetype || cell.block.definition.hardness > this.power) return;
         }
         
         game.world.breakBlock(info.cellpos.x, info.cellpos.y, true);

@@ -1,83 +1,120 @@
 import EventEmitter from "events";
 
-import RegistryValue from "../registries/registryValue.js";
-import ComponentHandler from "../components/componentHandler.js";
+import ComponentData from "../components/componentData.js";
+import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
+import BlockDefinition from "../definitions/blockDefinition";
+import Cell from "./cell.js";
 import Game from "../game.js";
-import DropBase from "../items/dropBase.js";
+import Player from "../objects/player.js";
+import BlockRegistry from "../registries/blockRegistry.js";
 
-import Constants from "../../shared/constants.js";
-const { ASSETS, SHAPES, MINE_TYPES } = Constants;
+/** Represents a placed block in the game world */
+class Block implements RegistryDefinedWithComponents<BlockDefinition> {
+    readonly cell: Cell;
+    readonly definition: BlockDefinition;
+    readonly componentdata: { [key: string]: ComponentData } = {};
+    
+    private eventEmitter: EventEmitter = new EventEmitter();
 
-/** The definition for a type of block with its functionality and base statistics */
-class Block extends ComponentHandler<Block> implements RegistryValue {
-    name: string = "unregistered";
-    displayname: string;
-    asset: string;
-    drops: DropBase | null;
-    minetype: number;
-    hardness: number;
-    scale: number;
-    shape: number;
-    walkthrough: boolean = false;
-    blockscell: boolean = true;
-    floorvisible: boolean = true;
+    constructor(cell: Cell, definition: string){
+        this.cell = cell;
+        this.definition = BlockRegistry.get(definition);
 
-    eventEmitter: EventEmitter = new EventEmitter();
-
-    constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, hardness?: number, scale?: number, shape?: number){
-        super();
-        this.displayname = displayname;
-        this.asset = asset || ASSETS.MISSING_TEXTURE;
-        this.drops = drops || null;
-        this.minetype = minetype || MINE_TYPES.NONE;
-        this.hardness = hardness || 1;
-        this.scale = scale || 1;
-        this.shape = shape || SHAPES.SQUARE;
-
-        if(this.shape == SHAPES.SQUARE && this.scale == 1) this.floorvisible = false;
+        this.initComponentData();
     }
 
-    // #region registry helpers
-
-    /** Sets this blocks key in the block registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
+    /** Returns the block from its save data */
+    static readFromSave(cell: Cell, data: any): Block {
+        const block = new Block(cell, data.blockdefinition);
+        block.loadComponentData(data.componentdata);
+        return block;
     }
 
-    /** Returns this blocks registry key */
-    getRegistryKey(): string {
-        return this.name;
+    // #region component helpers
+
+    /** Initializes this blocks required component data instances */
+    initComponentData(): void {
+        this.definition.getRequiredComponentData().forEach(c => {
+            this.componentdata[c.name] = new c();
+        });
     }
 
-    // #endregion
-
-    // #region builder functions
-
-    /** Sets this blocks walk through property */
-    setWalkThrough(walkthrough: boolean): Block {
-        this.walkthrough = walkthrough;
-        return this;
+    /** Loads this blocks required component data instances with the given data */
+    loadComponentData(data: { [key: string]: any }): void {
+        if(data === undefined) return;
+        for(const componentdataloaded of Object.entries(data)){
+            this.componentdata[componentdataloaded[0]].readFromSave(componentdataloaded[1]);
+        }
     }
 
-    /** Sets this blocks block cell property */
-    setBlockCell(blockscell: boolean): Block {
-        this.blockscell = blockscell;
-        return this;
+    /** Returns this blocks instance of the requested component data */
+    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+        return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Sets this blocks floor visible property */
-    setFloorVisible(floorvisible: boolean): Block {
-        this.floorvisible = floorvisible;
-        return this;
+    /** Return an object representing this blocks component data for a game update to the client */
+    serializeComponentDataForUpdate(): any {
+        const data = {
+            static: {},
+            dynamic: {},
+        };
+
+        for(const componentdata of Object.values(this.componentdata)){
+            const serialized = componentdata.serializeForUpdate();
+            if(serialized === null) continue;
+            data.static = { ...data.static, ...serialized.static };
+            data.dynamic = { ...data.dynamic, ...serialized.dynamic };
+        }
+
+        return data;
+    }
+
+    /** Return an object representing this blocks component data for writing to the save */
+    serializeComponentDataForWrite(): { [key: string]: any } {
+        const data: { [key: string]: any } = {};
+
+        for(const componentdata of Object.entries(this.componentdata)){
+            const serialized = componentdata[1].serializeForWrite();
+            if(serialized === null) continue;
+            data[componentdata[0]] = serialized;
+        }
+
+        return data;
     }
 
     // #endregion
 
     // #region events
 
-    /** Drops the item that this block drops on break */
-    break(x: number, y: number, drop: boolean, game: Game): void {
-        if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);
+    /** Registers a listener to this blocks event handler */
+    private registerListener(event: string, listener: (game: Game, ...args: any[]) => void): void {
+        this.eventEmitter.on(event, listener);
+    }
+
+    /** Registers a tick event listener to this blocks event handler */
+    registerTickListener(listener: (game: Game, dt: number) => void): void {
+        this.registerListener("tick", listener);
+    }
+
+    /** Registers a interact event listener to this blocks event handler */
+    registerInteractListener(listener: (game: Game, player: Player, info: any) => void): void {
+        this.registerListener("interact", listener);
+    }
+
+    /** Emits an event to this blocks event handler */
+    private emitEvent(event: string, game: Game, ...args: any[]): void {
+        this.definition.emitEvent(event, this, game, ...args);
+        this.eventEmitter.emit(event, ...args);
+    }
+
+    /** Emits a tick event to this blocks event handler */
+    emitTickEvent(game: Game, dt: number): void {
+        this.emitEvent("tick", game, dt);
+    }
+
+    /** Emits a interact event to this blocks event handler */
+    emitInteractEvent(game: Game, player: Player, info: any): void {
+        this.emitEvent("interact", game, player, info);
     }
 
     // #endregion
@@ -86,19 +123,25 @@ class Block extends ComponentHandler<Block> implements RegistryValue {
 
     /** Return an object representing this blocks data for loading to the game world */
     serializeForLoad(): any {
+        const componentdata = this.serializeComponentDataForUpdate();
+
         return {
-            asset: this.asset,
-            scale: this.scale,
-            shape: this.shape,
-            floorvisible: this.floorvisible,
-            walkthrough: this.walkthrough,
+            ...componentdata,
+            asset: this.definition.asset,
+            scale: this.definition.scale,
+            shape: this.definition.shape,
+            floorvisible: this.definition.floorvisible,
+            walkthrough: this.definition.walkthrough,
         };
     }
 
     /** Return an object representing this blocks data for writing to the save */
     serializeForWrite(): any {
+        const componentdata = this.serializeComponentDataForWrite();
+
         return {
-            name: this.name,
+            componentdata: componentdata,
+            blockdefinition: this.definition.name,
         };
     }
 

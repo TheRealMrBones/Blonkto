@@ -33,12 +33,7 @@ class Chunk {
                 chunk.cells[x] = [];
                 for(let y = 0; y < CHUNK_SIZE; y++){
                     const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
-                    
-                    const cell = new Cell(chunk, x, y, celldata.basefloor ? celldata.basefloor.name : null);
-                    if(celldata.block) cell.setBlock(celldata.block.name);
-                    if(celldata.floor) cell.setFloor(celldata.floor.name);
-                    if(celldata.ceiling) cell.setCeiling(celldata.ceiling.name);
-
+                    const cell = Cell.readFromSave(chunk, x, y, celldata);
                     chunk.cells[x][y] = cell;
                 }
             }

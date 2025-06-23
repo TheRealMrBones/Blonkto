@@ -97,7 +97,7 @@ function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
 
             const cell = world.getCell(neighbor.x, neighbor.y, false);
             if(cell === null) continue;
-            if(cell.block !== null) if(!cell.block.walkthrough) continue;
+            if(cell.block !== null) if(!cell.block.definition.walkthrough) continue;
 
             if(dx != 0 && dy != 0){
                 const neighborx = { x: pos.x + dx, y: pos.y };
@@ -105,11 +105,11 @@ function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
 
                 const cellx = world.getCell(neighborx.x, neighborx.y, false);
                 if(cellx === null) continue;
-                if(cellx.block !== null) if(!cellx.block.walkthrough) continue;
+                if(cellx.block !== null) if(!cellx.block.definition.walkthrough) continue;
 
                 const celly = world.getCell(neighbory.x, neighbory.y, false);
                 if(celly === null) continue;
-                if(celly.block !== null) if(!celly.block.walkthrough) continue;
+                if(celly.block !== null) if(!celly.block.definition.walkthrough) continue;
             }
 
             neighbors.push(neighbor);
