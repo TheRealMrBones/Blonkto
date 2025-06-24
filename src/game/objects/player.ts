@@ -194,7 +194,7 @@ class Player extends Entity {
         };
     }
 
-    /** Returns the saved update fixes */
+    /** Returns the saved update fixes then resets them */
     getFixes(): any {
         const fixescopy = {
             pushx: this.fixes.pushx,
@@ -202,6 +202,7 @@ class Player extends Entity {
             setpos: this.fixes.setpos,
             setcolor: this.fixes.setcolor,
         };
+        this.resetFixes();
         return fixescopy;
     }
 

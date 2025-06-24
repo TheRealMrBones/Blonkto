@@ -203,7 +203,7 @@ class Inventory {
         if(this.changes !== null) this.changes[slot] = true;
     }
 
-    /** Returns the object representing all changes to this inventory since last reset */
+    /** Returns the object representing all changes to this inventory since last reset then resets them */
     getChanges(): any[] {
         if(this.changes === null) return [];
         const changeslist = [];
@@ -217,6 +217,7 @@ class Inventory {
             }
         }
 
+        this.resetChanges();
         return changeslist;
     }
 

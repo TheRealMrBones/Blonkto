@@ -216,42 +216,14 @@ class Game {
 
     /** Create an update object to be sent to the specified players client */
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
-        // Get Tab
-        let tab = [];
-        if(SHOW_TAB){
-            tab = this.entityManager.getPlayerEntities().map(p => { 
-                const returnobj: any = {
-                    username: p.username,
-                };
-                if(KILLS_TAB) returnobj.kills = p.kills;
-                return returnobj;
-            });
-        }
-
-        // get players
-        const nearbyPlayers = this.entityManager.getPlayerEntities().filter(p => p.id != player.id
-            && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
-            && Math.abs(p.y - player.y) < CELLS_VERTICAL / 2
-        );
-
-        // get fixes
+        // Get update data
+        const tab = SHOW_TAB ? this.playerManager.getTab() : [];
+        const nearbyPlayers = this.entityManager.getPlayerEntitiesNearby(player);
+        const nearbyEntities = this.entityManager.getNonplayersNearby(player);
         const fixescopy = player.getFixes();
-        player.resetFixes();
-
-        // get inventory updates
         const inventoryupdates = player.inventory.getChanges();
-        player.inventory.resetChanges();
-
-        // get entities
-        const nearbyEntities = this.entityManager.getNonplayers().filter(e =>
-            Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
-            && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
-        );
-
-        // get recipes
-        let recipes: any[] = [];
-        if(this.craftManager.playerHasInitialRecipes(player.id) || inventoryupdates.length > 0)
-            recipes = this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id);
+        const recipes: any[] = (this.craftManager.playerHasInitialRecipes(player.id) || inventoryupdates.length > 0) ?
+            this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id) : [];
 
         // return full update object
         const content: GameUpdateContent = {

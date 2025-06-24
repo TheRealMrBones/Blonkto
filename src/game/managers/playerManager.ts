@@ -12,6 +12,9 @@ import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
+import SharedConfig from "../../configs/shared.js";
+const { KILLS_TAB } = SharedConfig.TAB;
+
 import ServerConfig from "../../configs/server.js";
 const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
 const { AUTOSAVE_RATE } = ServerConfig.WORLD;
@@ -180,6 +183,17 @@ class PlayerManager {
             }
         }
         return newUsername;
+    }
+
+    /** Returns the tab list of current players */
+    getTab(): any[] {
+        return this.game.entityManager.getPlayerEntities().map(p => { 
+            const returnobj: any = {
+                username: p.username,
+            };
+            if(KILLS_TAB) returnobj.kills = p.kills;
+            return returnobj;
+        });
     }
 
     /** Returns the list of recent logons */

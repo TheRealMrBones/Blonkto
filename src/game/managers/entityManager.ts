@@ -79,6 +79,14 @@ class EntityManager {
         return [...Object.values(this.game.entities), ...Object.values(this.game.objects)];
     }
 
+    /** Returns all non-player objects nearby the given player */
+    getNonplayersNearby(player: Player): GameObject[] {
+        return this.getNonplayers().filter(e => e.id != player.id
+            && Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
+            && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
+        );
+    }
+
     /** Returns all ticking non-entity objects loaded in the game world */
     getObjects(): GameObject[] {
         return Object.values(this.game.objects);
@@ -87,6 +95,14 @@ class EntityManager {
     /** Returns all ticking players loaded in the game world */
     getPlayerEntities(): Player[] {
         return Object.values(this.game.players);
+    }
+
+    /** Returns all players nearby the given player */
+    getPlayerEntitiesNearby(player: Player): Player[] {
+        return this.getPlayerEntities().filter(p => p.id != player.id
+            && Math.abs(p.x - player.x) < CELLS_HORIZONTAL / 2
+            && Math.abs(p.y - player.y) < CELLS_VERTICAL / 2
+        );
     }
 
     /** Returns all ticking non-player entities loaded in the game world */
