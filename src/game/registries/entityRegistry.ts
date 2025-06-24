@@ -16,7 +16,7 @@ logger.info("Initializing entity registry");
 
 const EntityRegistry = new Registry<EntityDefinition>("EntityRegistry");
 
-EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .25, 3))
+EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .5, 2))
     .addComponent(new WanderComponent())
     .addComponent(new ScaredComponent(1.8)));
 EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.ZOMBIE, 5, 1, .55)
