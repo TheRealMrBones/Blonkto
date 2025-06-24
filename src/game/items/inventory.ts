@@ -147,7 +147,7 @@ class Inventory {
     }
 
     /** Drops an individual stack (or partial stack) from this inventory */
-    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: Player): void {
+    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         if(this.slots[slot] === null) return;
 
         if(amount === undefined){

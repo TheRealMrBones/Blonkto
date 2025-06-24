@@ -71,7 +71,7 @@ class CollisionManager {
             let removeignore = (collectable.ignore != null);
             
             if(collided){
-                if(collectable.ignore === player){
+                if(collectable.ignore === player.id){
                     removeignore = false;
                     continue;
                 }
@@ -96,8 +96,8 @@ class CollisionManager {
                 if(collectable.itemStack.definition.getName() === collectable2.itemStack.definition.getName()){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
                 }else{
-                    collectable.push(push.x / 2, push.y / 2);
-                    collectable2.push(-push.x / 2, -push.y / 2);
+                    //collectable.push(push.x / 2, push.y / 2);
+                    //collectable2.push(-push.x / 2, -push.y / 2);
                 }
             }
         }
