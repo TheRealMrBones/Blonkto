@@ -94,10 +94,6 @@ class Player extends Entity {
     starterInventory(): void {
         this.inventory.setSlot(0, new ItemStack("pickaxe"));
         this.inventory.setSlot(1, new ItemStack("axe"));
-        this.inventory.setSlot(2, new ItemStack("shovel"));
-        this.inventory.setSlot(3, new ItemStack("sword"));
-        this.inventory.setSlot(4, new ItemStack("stone_block", 64));
-        this.inventory.setSlot(5, new ItemStack("wood_floor", 64));
     }
 
     // #endregion
