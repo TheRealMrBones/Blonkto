@@ -67,6 +67,7 @@ class Recipe {
                 });
 
                 const content: CraftContent = {
+                    result: this.result,
                     ingredients: ingredientsdictionary,
                     amount: amount,
                 };

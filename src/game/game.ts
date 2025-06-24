@@ -172,7 +172,7 @@ class Game {
         if(socket.id === undefined || this.players[socket.id] === undefined) return;
         
         const player = this.players[socket.id];
-        this.craftManager.craftRecipe(player.inventory, player.x, player.y, content.ingredients, content.amount);
+        this.craftManager.craftRecipe(player.inventory, player.x, player.y, content);
     }
 
     // #endregion

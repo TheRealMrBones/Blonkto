@@ -68,6 +68,7 @@ export type SwapContent = {
 
 /** Defines the format of the craft message */
 export type CraftContent = {
+    result: string;
     ingredients: { [item: string]: number };
     amount: number;
 };

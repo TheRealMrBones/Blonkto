@@ -150,12 +150,13 @@ class Renderer {
 
         notfallingentities.forEach((e: any) => this.renderEntity(me, e));
         notfallingplayers.forEach((p: any) => this.renderPlayer(me, p));
-        others.forEach((p: any) => this.renderPlayerUsername(me, p));
         
         this.renderBlocks(firstCell);
 
         this.renderReach();
         this.renderDarkness(darkness);
+        
+        others.forEach((p: any) => this.renderPlayerUsername(me, p));
 
         // draw frame on render canvas
         this.rendercontext.drawImage(this.canvas, 0, 0);

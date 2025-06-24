@@ -1,3 +1,4 @@
+import { CraftContent } from "../../shared/messageContentTypes.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
@@ -63,9 +64,9 @@ class CraftManager {
     }
 
     /** Returns the recipe that matches the given ingredients if one exists */
-    getRecipeFromIngredients(ingredients: { [item: string]: number }): Recipe | null {
+    getRecipeFromIngredients(result: string, ingredients: { [item: string]: number }): Recipe | null {
         for(const recipe of this.recipes) {
-            if(recipe.matchesIngredients(ingredients)) return recipe;
+            if(recipe.matchesIngredients(ingredients) && result == recipe.result) return recipe;
         }
         return null;
     }
@@ -105,10 +106,10 @@ class CraftManager {
     // #region crafting
 
     /** Tries to craft whatever recipe takes the given ingredients */
-    craftRecipe(inventory: Inventory, x: number, y: number, ingredients: { [item: string]: number }, amount: number): void {
-        const recipe = this.getRecipeFromIngredients(ingredients);
+    craftRecipe(inventory: Inventory, x: number, y: number, content: CraftContent): void {
+        const recipe = this.getRecipeFromIngredients(content.result, content.ingredients);
         if(recipe === null) return;
-        recipe.craftRecipe(this.game, inventory, x, y, amount);
+        recipe.craftRecipe(this.game, inventory, x, y, content.amount);
     }
 
     // #endregion

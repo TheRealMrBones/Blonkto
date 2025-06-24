@@ -43,7 +43,6 @@ class IndependentObject {
     /** Returns the index for the current times base update (for interpolation) */
     getBaseUpdate(): number {
         const serverTime = StateManager.currentServerTime();
-        console.log(serverTime);
         for(let i = this.updates.length - 1; i >= 0; i--){
             const updatetime = this.updates[i].static.lastupdated;
             console.log(updatetime);
