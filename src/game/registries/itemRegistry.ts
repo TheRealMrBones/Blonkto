@@ -29,19 +29,27 @@ ItemRegistry.register("axe", new Item("Axe", 1, ASSETS.AXE)
 ItemRegistry.register("shovel", new Item("Shovel", 1, ASSETS.SHOVEL)
     .addComponent(new MineFloorComponent(1)));
     
+ItemRegistry.register("stone", new Item("Stone", 64, ASSETS.STONE));
 ItemRegistry.register("stone_block", new Item("Stone Block", 64, ASSETS.STONE_BLOCK)
     .addComponent(new BuildComponent("stone_block")));
-ItemRegistry.register("raw_pork", new Item("Raw Pork", 64, ASSETS.RAW_PORK)
-    .addComponent(new EatComponent(1)));
+ItemRegistry.register("stone_wall", new Item("Stone Wall", 64, ASSETS.STONE_WALL)
+    .addComponent(new BuildComponent("stone_wall")));
+ItemRegistry.register("stone_floor", new Item("Stone Floor", 64, ASSETS.STONE_FLOOR)
+    .addComponent(new BuildFloorComponent("stone_floor")));
 
 ItemRegistry.register("wood", new Item("Wood", 64, ASSETS.WOOD));
 ItemRegistry.register("tree_trunk", new Item("Tree Trunk", 64, ASSETS.TREE_TRUNK)
     .addComponent(new BuildComponent("tree_trunk")));
+ItemRegistry.register("wood_wall", new Item("Wood Wall", 64, ASSETS.WOOD_WALL)
+    .addComponent(new BuildComponent("wood_wall")));
 ItemRegistry.register("wood_floor", new Item("Wood Floor", 64, ASSETS.WOOD_FLOOR)
     .addComponent(new BuildFloorComponent("wood_floor")));
 ItemRegistry.register("wood_door", new Item("Wood Door", 64, ASSETS.WOOD_DOOR)
     .addComponent(new BuildComponent("wood_door")));
 ItemRegistry.register("pine_cone", new Item("Pine Cone", 64, ASSETS.PINE_CONE)
     .addComponent(new BuildComponent("sapling", [OrganicComponent])));
+    
+ItemRegistry.register("raw_pork", new Item("Raw Pork", 64, ASSETS.RAW_PORK)
+    .addComponent(new EatComponent(1)));
 
 export default ItemRegistry;
