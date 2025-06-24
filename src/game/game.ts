@@ -211,9 +211,6 @@ class Game {
             , FAKE_PING / 2);
         });
 
-        // reset cell updates in loaded chunks
-        this.world.resetCellUpdates();
-
         this.performanceManager.tickEnd();
     }
 

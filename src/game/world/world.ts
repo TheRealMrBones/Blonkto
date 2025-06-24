@@ -74,6 +74,9 @@ class World {
             const worldload = this.loadPlayerChunks(p);
             worldloads[p.id] = worldload;
         });
+
+        // cleanup chunk updates and return loads
+        this.resetCellUpdates();
         return worldloads;
     }
 
