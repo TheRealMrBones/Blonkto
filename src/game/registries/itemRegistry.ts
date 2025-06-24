@@ -2,6 +2,8 @@ import Registry from "./registry.js";
 import Item from "../items/item.js";
 import Logger from "../../server/logging/logger.js";
 
+import OrganicComponent from "../components/floorcomponents/organicComponent.js";
+
 import AttackComponent from "../components/itemcomponents/attackComponent.js";
 import BuildComponent from "../components/itemcomponents/buildComponent.js";
 import BuildFloorComponent from "../components/itemcomponents/buildFloorComponent.js";
@@ -40,6 +42,6 @@ ItemRegistry.register("wood_floor", new Item("Wood Floor", 64, ASSETS.WOOD_FLOOR
 ItemRegistry.register("wood_door", new Item("Wood Door", 64, ASSETS.WOOD_DOOR)
     .addComponent(new BuildComponent("wood_door")));
 ItemRegistry.register("pine_cone", new Item("Pine Cone", 64, ASSETS.PINE_CONE)
-    .addComponent(new BuildComponent("sapling")));
+    .addComponent(new BuildComponent("sapling", [OrganicComponent])));
 
 export default ItemRegistry;
