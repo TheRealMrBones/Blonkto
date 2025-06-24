@@ -19,6 +19,7 @@ class Recipe {
         this.asset = asset;
 
         this.div = document.createElement("div");
+        this.div.classList.add("recipe");
 
         const maindiv = document.createElement("div");
         maindiv.className = "craftingslot";
@@ -74,7 +75,6 @@ class Recipe {
         };
 
         craftingmenudiv.appendChild(this.div);
-        craftingmenudiv.appendChild(document.createElement("br"));
     }
 
     /** Returns if the requested inventory can craft this item */
