@@ -86,7 +86,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     }
 }
 
-export class SimpleAttackComponentData implements ComponentData {
+class SimpleAttackComponentData implements ComponentData {
     target: Entity | null = null;
     lasthit: number = 0;
 

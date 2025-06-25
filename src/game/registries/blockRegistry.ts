@@ -6,6 +6,8 @@ import Logger from "../../server/logging/logger.js";
 
 import ChangeComponent from "../components/blockcomponents/changeComponent.js";
 import RandomChangeComponent from "../components/blockcomponents/randomChangeComponent.js";
+import PickupComponent from "../components/blockcomponents/pickupComponent.js";
+import TimeChangeComponent from "../components/blockcomponents/timeChangeComponent.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
@@ -27,7 +29,7 @@ BlockRegistry.register("wood_door_open", new BlockDefinition("Wood Door (Open)",
     .setWalkThrough(true)
     .setBlockCell(false));
 BlockRegistry.register("sapling", new BlockDefinition("Sapling", ASSETS.SAPLING, undefined, MINE_TYPES.ANY)
-    .addComponent(new RandomChangeComponent("tree_trunk"))
+    .addComponent(new TimeChangeComponent("tree_trunk", 9000, 9000))
     .setFloorVisible(true)
     .setWalkThrough(true));
 
