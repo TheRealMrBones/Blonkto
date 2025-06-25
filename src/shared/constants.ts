@@ -44,6 +44,9 @@ const Constants = Object.freeze({
         WOOD_DOOR_OPEN: "WoodDoor_Open.png",
         PINE_CONE: "PineCone.png",
         SAPLING: "Sapling.png",
+        CARROT: "Carrot.png",
+        PLANTED_CARROTS: "PlantedCarrots.png",
+        GROWN_CARROTS: "GrownCarrots.png",
     },
     SHAPES: {
         NONE: 0,

@@ -16,11 +16,11 @@ class EatComponent extends Component<ItemDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: ItemDefinition): void {
         super.setParent(parent);
-        this.getParent().registerUseListener((stack: ItemStack, game: Game, player: Player, info: any) => this.use(stack, game, player, info));
+        this.getParent().registerInteractListener((stack: ItemStack, game: Game, player: Player, info: any) => this.interact(stack, game, player, info));
     }
 
     /** Defines the eat use of the item with this component */
-    use(stack: ItemStack, game: Game, player: Player, info: any): void {
+    interact(stack: ItemStack, game: Game, player: Player, info: any): void {
         if(player.health >= player.maxhealth) return;
 
         player.removeFromCurrentSlot(1);

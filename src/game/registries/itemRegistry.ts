@@ -51,5 +51,8 @@ ItemRegistry.register("pine_cone", new ItemDefinition("Pine Cone", 64, ASSETS.PI
     
 ItemRegistry.register("raw_pork", new ItemDefinition("Raw Pork", 64, ASSETS.RAW_PORK)
     .addComponent(new EatComponent(1)));
+ItemRegistry.register("carrot", new ItemDefinition("Carrot", 64, ASSETS.CARROT)
+    .addComponent(new BuildComponent("planted_carrots", [OrganicComponent]))
+    .addComponent(new EatComponent(2)));
 
 export default ItemRegistry;

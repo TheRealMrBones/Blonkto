@@ -7,6 +7,7 @@ import Logger from "../../server/logging/logger.js";
 import ChangeComponent from "../components/blockcomponents/changeComponent.js";
 import RandomChangeComponent from "../components/blockcomponents/randomChangeComponent.js";
 import PickupComponent from "../components/blockcomponents/pickupComponent.js";
+import PickComponent from "../components/blockcomponents/pickComponent.js";
 import TimeChangeComponent from "../components/blockcomponents/timeChangeComponent.js";
 
 import Constants from "../../shared/constants.js";
@@ -30,6 +31,14 @@ BlockRegistry.register("wood_door_open", new BlockDefinition("Wood Door (Open)",
     .setBlockCell(false));
 BlockRegistry.register("sapling", new BlockDefinition("Sapling", ASSETS.SAPLING, undefined, MINE_TYPES.ANY)
     .addComponent(new TimeChangeComponent("tree_trunk", 9000, 9000))
+    .setFloorVisible(true)
+    .setWalkThrough(true));
+BlockRegistry.register("planted_carrots", new BlockDefinition("Planted Carrots", ASSETS.PLANTED_CARROTS, undefined, MINE_TYPES.ANY)
+    .addComponent(new TimeChangeComponent("grown_carrots", 9000, 9000))
+    .setFloorVisible(true)
+    .setWalkThrough(true));
+BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASSETS.GROWN_CARROTS, new Drop("carrot", 2, 1, .5, 3), MINE_TYPES.ANY)
+    .addComponent(new PickComponent())
     .setFloorVisible(true)
     .setWalkThrough(true));
 
