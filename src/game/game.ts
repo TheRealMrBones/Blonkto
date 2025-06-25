@@ -16,7 +16,7 @@ import World from "./world/world.js";
 import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
-const { MSG_TYPES, LOG_CATEGORIES } = Constants;
+const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
@@ -115,7 +115,18 @@ class Game {
                 if(!hotbarItem.use(this, this.players[socket.id], newinfo)) return;
             }
 
-            // default action
+            // default break action
+            const cell = this.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
+            if(cell !== null){
+                if(cell.block !== null){
+                    if(cell.block.definition.minetype == MINE_TYPES.ANY && cell.block.definition.hardness <= 0){
+                        this.world.breakBlock(newinfo.cellpos.x, newinfo.cellpos.y, true);
+                        return;
+                    }
+                }
+            }
+            
+            // default swing action
             this.players[socket.id].startSwing(newinfo.dir, 1);
         }
     }

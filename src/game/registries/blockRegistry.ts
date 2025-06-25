@@ -29,15 +29,15 @@ BlockRegistry.register("wood_door_open", new BlockDefinition("Wood Door (Open)",
     .setFloorVisible(true)
     .setWalkThrough(true)
     .setBlockCell(false));
-BlockRegistry.register("sapling", new BlockDefinition("Sapling", ASSETS.SAPLING, undefined, MINE_TYPES.ANY)
+BlockRegistry.register("sapling", new BlockDefinition("Sapling", ASSETS.SAPLING, undefined, MINE_TYPES.ANY, 0)
     .addComponent(new TimeChangeComponent("tree_trunk", 9000, 9000))
     .setFloorVisible(true)
     .setWalkThrough(true));
-BlockRegistry.register("planted_carrots", new BlockDefinition("Planted Carrots", ASSETS.PLANTED_CARROTS, undefined, MINE_TYPES.ANY)
+BlockRegistry.register("planted_carrots", new BlockDefinition("Planted Carrots", ASSETS.PLANTED_CARROTS, undefined, MINE_TYPES.ANY, 0)
     .addComponent(new TimeChangeComponent("grown_carrots", 9000, 9000))
     .setFloorVisible(true)
     .setWalkThrough(true));
-BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASSETS.GROWN_CARROTS, new Drop("carrot", 2, 1, .5, 3), MINE_TYPES.ANY)
+BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASSETS.GROWN_CARROTS, new Drop("carrot", 2, 1, .5, 3), MINE_TYPES.ANY, 0)
     .addComponent(new PickComponent())
     .setFloorVisible(true)
     .setWalkThrough(true));

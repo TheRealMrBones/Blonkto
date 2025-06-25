@@ -32,9 +32,9 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
         this.minetype = minetype || MINE_TYPES.NONE;
-        this.hardness = hardness || 1;
-        this.scale = scale || 1;
-        this.shape = shape || SHAPES.SQUARE;
+        this.hardness = hardness === undefined ? 1 : hardness;
+        this.scale = scale === undefined ? 1 : scale;
+        this.shape = shape === undefined ? SHAPES.SQUARE : shape;
 
         if(this.shape == SHAPES.SQUARE && this.scale == 1) this.floorvisible = false;
     }
