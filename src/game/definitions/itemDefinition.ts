@@ -5,6 +5,7 @@ import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
 import ItemStack from "../items/itemStack.js";
 import Player from "../objects/player.js";
+import { ClickContentExpanded } from "../types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -71,12 +72,12 @@ class ItemDefinition extends ComponentHandler<ItemDefinition> implements Registr
     }
 
     /** Registers a use event listener to this objects event handler */
-    registerUseListener(listener: (stack: ItemStack, game: Game, player: Player, info: any) => void): void {
+    registerUseListener(listener: (stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded) => void): void {
         this.registerListener("use", listener);
     }
 
     /** Registers an interact event listener to this objects event handler */
-    registerInteractListener(listener: (stack: ItemStack, game: Game, player: Player, info: any) => void): void {
+    registerInteractListener(listener: (stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded) => void): void {
         this.registerListener("interact", listener);
     }
 
@@ -86,13 +87,13 @@ class ItemDefinition extends ComponentHandler<ItemDefinition> implements Registr
     }
 
     /** Emits a use event to this objects event handler and returns if default action */
-    emitUseEvent(stack: ItemStack, game: Game, player: Player, info: any): boolean {
+    emitUseEvent(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): boolean {
         this.emitEvent("use", stack, game, player, info);
         return (this.eventEmitter.listenerCount("use") == 0);
     }
 
     /** Emits a interact event to this objects event handler and returns if default action */
-    emitInteractEvent(stack: ItemStack, game: Game, player: Player, info: any): boolean {
+    emitInteractEvent(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): boolean {
         this.emitEvent("interact", stack, game, player, info);
         return (this.eventEmitter.listenerCount("interact") == 0);
     }

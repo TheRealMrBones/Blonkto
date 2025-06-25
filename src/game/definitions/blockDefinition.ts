@@ -6,6 +6,7 @@ import Game from "../game.js";
 import DropBase from "../items/dropBase.js";
 import Block from "../world/block.js";
 import Player from "../objects/player.js";
+import { ClickContentExpanded } from "../types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES } = Constants;
@@ -88,7 +89,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     }
 
     /** Registers a interact event listener to this block definitions event handler */
-    registerInteractListener(listener: (self: Block, game: Game, player: Player, info: any) => void): void {
+    registerInteractListener(listener: (self: Block, game: Game, player: Player, info: ClickContentExpanded) => void): void {
         this.registerListener("interact", listener);
     }
 

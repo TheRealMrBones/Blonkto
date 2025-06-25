@@ -40,6 +40,12 @@ export function entityCollision(me: CircleCollisionObject, entity: CircleCollisi
     }
 }
 
+/** Returns if point collides with the given entity */
+export function pointEntityCollision(point: Pos, entity: CircleCollisionObject): boolean {
+    const dist = getDistance(point, entity as Pos);
+    return (dist <= entity.scale / 2);
+}
+
 /** Returns the push amounts of the player after colliding with cell blocks */
 export function blockCollisions(me: CircleCollisionObject, blocks: CollisionObject[]): Pos {
     const oldpos: Pos = { x: me.x, y: me.y };

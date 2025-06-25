@@ -3,6 +3,7 @@ import ItemDefinition from "../../definitions/itemDefinition.js";
 import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
+import { ClickContentExpanded } from "../../types.js";
 
 /** An Item Component that allows the item to be used to attack entities */
 class AttackComponent extends Component<ItemDefinition> {
@@ -16,11 +17,11 @@ class AttackComponent extends Component<ItemDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: ItemDefinition): void {
         super.setParent(parent);
-        this.getParent().registerUseListener((stack: ItemStack, game: Game, player: Player, info: any) => this.use(stack, game, player, info));
+        this.getParent().registerUseListener((stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded) => this.use(stack, game, player, info));
     }
 
     /** Defines the attack use of the item with this component */
-    use(stack: ItemStack, game: Game, player: Player, info: any): void {
+    use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
         player.startSwing(info.dir, this.damage);
     }
 }

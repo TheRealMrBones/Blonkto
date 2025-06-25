@@ -18,6 +18,18 @@ class CollisionManager {
         this.game = game;
     }
 
+    /** Checks if a click is over an entity and returns that entity or null if none exist */
+    clickEntity(x: number, y: number): Entity | null {
+        const entities = this.game.entityManager.getEntities();
+
+        for(let i = 0; i < entities.length; i++){
+            const entity2 = entities[i];
+            if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity2)) return entity2;
+        }
+
+        return null;
+    }
+
     /** Checks collisions between the given player and other nearby players */
     entityCollisions(entity: Entity): void {
         const entities = this.game.entityManager.getEntities();

@@ -14,6 +14,7 @@ import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import World from "./world/world.js";
 import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messageContentTypes.js";
+import { ClickContentExpanded } from "./types.js";
 
 import Constants from "../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
@@ -154,11 +155,12 @@ class Game {
     }
 
     /** Gets formatted click info from the raw click info in a client click message */
-    getClickInfo(content: ClickContent): any {
+    getClickInfo(content: ClickContent): ClickContentExpanded {
         return {
             dir: Math.atan2(content.xoffset, content.yoffset),
             cellpos: { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) },
             dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
+            entity: this.collisionManager.clickEntity(content.mex + content.xoffset, content.mey + content.yoffset),
         };
     }
 

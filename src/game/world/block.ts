@@ -8,6 +8,7 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import BlockRegistry from "../registries/blockRegistry.js";
 import { SerializedWriteBlock } from "../../shared/serializedWriteTypes.js";
+import { ClickContentExpanded } from "../types.js";
 
 /** Represents a placed block in the game world */
 class Block implements RegistryDefinedWithComponents<BlockDefinition> {
@@ -98,7 +99,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     }
 
     /** Registers a interact event listener to this blocks event handler */
-    registerInteractListener(listener: (game: Game, player: Player, info: any) => void): void {
+    registerInteractListener(listener: (game: Game, player: Player, info: ClickContentExpanded) => void): void {
         this.registerListener("interact", listener);
     }
 
@@ -114,7 +115,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     }
 
     /** Emits a interact event to this blocks event handler */
-    emitInteractEvent(game: Game, player: Player, info: any): void {
+    emitInteractEvent(game: Game, player: Player, info: ClickContentExpanded): void {
         this.emitEvent("interact", game, player, info);
     }
 

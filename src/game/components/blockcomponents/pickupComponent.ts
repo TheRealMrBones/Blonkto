@@ -5,6 +5,7 @@ import ItemStack from "../../items/itemStack.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import DroppedStack from "../../objects/droppedStack.js";
 import Block from "../../world/block.js";
+import { ClickContentExpanded } from "../../types.js";
 
 /** A Block Component that allows the block to be picked up */
 class PickupComponent extends Component<BlockDefinition> {
@@ -20,11 +21,11 @@ class PickupComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().registerInteractListener((block: Block, game: Game, player: Player, info: any) => this.interact(block, game, player, info));
+        this.getParent().registerInteractListener((block: Block, game: Game, player: Player, info: ClickContentExpanded) => this.interact(block, game, player, info));
     }
 
     /** Defines the pickup interaction of the block with this component */
-    interact(block: Block, game: Game, player: Player, info: any): void {
+    interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
         block.cell.setBlock(null);
         const itemstack = new ItemStack(this.item, this.amount);
         if(player.inventory.collectStack(itemstack)) return;

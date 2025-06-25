@@ -5,6 +5,7 @@ import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
 import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
+import { ClickContentExpanded } from "../types.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
@@ -122,12 +123,12 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     // #region events
 
     /** sends the use event to all listeners for this stacks item type and returns if default action */
-    use(game: Game, player: Player, info: any): boolean {
+    use(game: Game, player: Player, info: ClickContentExpanded): boolean {
         return this.definition.emitUseEvent(this, game, player, info);
     }
 
     /** sends the interact event to all listeners for this stacks item type and returns if default action */
-    interact(game: Game, player: Player, info: any): boolean {
+    interact(game: Game, player: Player, info: ClickContentExpanded): boolean {
         return this.definition.emitInteractEvent(this, game, player, info);
     }
 
