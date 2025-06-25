@@ -6,6 +6,7 @@ import FloorDefinition from "../definitions/floorDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import FloorRegistry from "../registries/floorRegistry.js";
+import { SerializedWriteFloor } from "../../shared/serializedWriteTypes.js";
 
 /** Represents a placed floor in the game world */
 class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
@@ -121,13 +122,15 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
     }
 
     /** Return an object representing this floors data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteFloor {
         const componentdata = this.serializeComponentDataForWrite();
 
-        return {
-            componentdata: componentdata,
+        const returnobj: SerializedWriteFloor = {
             floordefinition: this.definition.name,
         };
+        if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
+
+        return returnobj;
     }
 
     // #endregion

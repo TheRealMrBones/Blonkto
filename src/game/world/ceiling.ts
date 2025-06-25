@@ -6,6 +6,7 @@ import CeilingDefinition from "../definitions/ceilingDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
+import { SerializedWriteCeiling } from "../../shared/serializedWriteTypes.js";
 
 /** Represents a placed ceiling in the game world */
 class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
@@ -121,13 +122,15 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
     }
 
     /** Return an object representing this ceilings data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteCeiling {
         const componentdata = this.serializeComponentDataForWrite();
 
-        return {
-            componentdata: componentdata,
+        const returnobj: SerializedWriteCeiling = {
             ceilingdefinition: this.definition.name,
         };
+        if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
+
+        return returnobj;
     }
 
     // #endregion

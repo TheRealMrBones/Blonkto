@@ -7,6 +7,7 @@ import Cell from "./cell.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import BlockRegistry from "../registries/blockRegistry.js";
+import { SerializedWriteBlock } from "../../shared/serializedWriteTypes.js";
 
 /** Represents a placed block in the game world */
 class Block implements RegistryDefinedWithComponents<BlockDefinition> {
@@ -136,13 +137,15 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     }
 
     /** Return an object representing this blocks data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteBlock {
         const componentdata = this.serializeComponentDataForWrite();
 
-        return {
-            componentdata: componentdata,
+        const returnobj: SerializedWriteBlock = {
             blockdefinition: this.definition.name,
         };
+        if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
+
+        return returnobj;
     }
 
     // #endregion

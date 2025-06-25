@@ -118,12 +118,14 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         const base = super.serializeForWrite();
         const componentdata = this.serializeComponentDataForWrite();
         
-        return {
+        const returnobj = {
             ...base,
-            componentdata: componentdata,
             type: "entity",
             entitydefinition: this.definition.name,
         };
+        if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
+
+        return returnobj;
     }
 
     // #endregion

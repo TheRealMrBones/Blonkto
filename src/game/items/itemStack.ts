@@ -4,6 +4,7 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
+import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
@@ -148,14 +149,16 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     }
 
     /** Return an object representing this items data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteItemStack {
         const componentdata = this.serializeComponentDataForWrite();
 
-        return {
+        const returnobj: SerializedWriteItemStack = {
             name: this.definition.getName(),
             amount: this.amount,
-            componentdata: componentdata,
         };
+        if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
+
+        return returnobj;
     }
 
     // #endregion
