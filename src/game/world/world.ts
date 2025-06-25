@@ -347,7 +347,11 @@ class World {
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
         if(!data) return null;
-        const chunk = Chunk.readFromSave(x, y, data, this.game);
+        const chunk = Chunk.readFromSave(x, y, data);
+        if(chunk === null){
+            this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
+            return this.generateChunk(x, y);
+        }
         this.loadedchunks[[x,y].toString()] = chunk;
 
         // load entities
@@ -410,7 +414,7 @@ class World {
 
     /** Returns a new generated chunk */
     generateChunk(x: number, y: number): Chunk {
-        const newChunk = new Chunk(x, y, true, this.game);
+        const newChunk = Chunk.generateChunk(x, y, this.game);
         this.loadedchunks[[x,y].toString()] = newChunk;
         return newChunk;
     }

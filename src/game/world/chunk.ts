@@ -13,19 +13,17 @@ class Chunk {
     readonly cells: Cell[][];
     cellUpdates: any[];
 
-    constructor(chunkx: number, chunky: number, generate: boolean, game: Game){
+    private constructor(chunkx: number, chunky: number){
         this.chunkx = chunkx;
         this.chunky = chunky;
         this.cellUpdates = [];
 
         this.cells = [];
-
-        if(generate) this.generateChunk(game);
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(chunkx: number, chunky: number, data: string, game: Game): Chunk {
-        const chunk = new Chunk(chunkx, chunky, false, game);
+    static readFromSave(chunkx: number, chunky: number, data: string): Chunk | null {
+        const chunk = new Chunk(chunkx, chunky);
         const chunkdata = data.split("\n");
 
         try{
@@ -38,35 +36,35 @@ class Chunk {
                 }
             }
         }catch(e){
-            console.log(`Chunk ${chunkx},${chunky} failed to load. File may have been corrupted`);
-
-            // read failed just generate new chunk
-            chunk.generateChunk(game);
-            return chunk;
+            return null;
         }
 
         return chunk;
     }
 
     /** Generates new cell data for the chunk */
-    generateChunk(game: Game){
+    static generateChunk(chunkx: number, chunky: number, game: Game): Chunk {
+        const chunk = new Chunk(chunkx, chunky);
+
         for(let x = 0; x < CHUNK_SIZE; x++){
-            this.cells[x] = [];
+            chunk.cells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
-                const cell = new Cell(this, x, y, "grass_floor");
+                const cell = new Cell(chunk, x, y, "grass_floor");
 
                 if(Math.random() < .1){
                     cell.setBlock("stone_block");
                 }else if(Math.random() < .02){
                     cell.setBlock("tree_trunk");
                 }else if(Math.random() < .005){
-                    const pig = new NonplayerEntity(this.chunkx * CHUNK_SIZE + x + .5, this.chunky * CHUNK_SIZE + y + .5, 0, "pig");
+                    const pig = new NonplayerEntity(chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
                     game.entities[pig.id] = pig;
                 }
                 
-                this.cells[x][y] = cell;
+                chunk.cells[x][y] = cell;
             }
         }
+
+        return chunk;
     }
 
     // #region serialization
