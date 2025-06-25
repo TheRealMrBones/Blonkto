@@ -68,7 +68,7 @@ class CollisionManager {
             const push = SharedCollisions.entityCollision(player, { x: collectable.x, y: collectable.y, scale: collectable.scale });
             const collided = (push !== null);
 
-            let removeignore = (collectable.ignore != null);
+            let removeignore = (collectable.ignore === player.id);
             
             if(collided){
                 if(collectable.ignore === player.id){
