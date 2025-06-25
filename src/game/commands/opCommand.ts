@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -10,12 +10,12 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("op", new Command(false, args, opCommand, "Gives a player operator permissions"));
+export default (): void => CommandRegistry.register("op", new CommandDefinition(false, args, opCommand, "Gives a player operator permissions"));
 
 function opCommand(args: any[], player: Player, game: Game){
     // special op checks
     if(!game.playerManager.opManager.isOp(player.username) && !(args[1] == game.playerManager.opManager.oppasscode && !game.playerManager.opManager.oppasscodeused)){
-        Command.sendNoPermission(player, game);
+        CommandDefinition.sendNoPermission(player, game);
         return;
     }
 

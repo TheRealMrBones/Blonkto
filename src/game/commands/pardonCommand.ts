@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
-export default (): void => CommandRegistry.register("pardon", new Command(true, args, pardonCommand, "Removes a player from the ban list"));
+export default (): void => CommandRegistry.register("pardon", new CommandDefinition(true, args, pardonCommand, "Removes a player from the ban list"));
 
 function pardonCommand(args: any[], player: Player, game: Game){
     if(!game.playerManager.banManager.isBanned(args[1])){

@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("performance", new Command(true, args, performanceCommand, "Shows the most recent performance log"));
+export default (): void => CommandRegistry.register("performance", new CommandDefinition(true, args, performanceCommand, "Shows the most recent performance log"));
 
 function performanceCommand(args: any[], player: Player, game: Game){
     for(const message of game.performanceManager.getLastPerformanceLog()){

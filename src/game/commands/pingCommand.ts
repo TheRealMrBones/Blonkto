@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("ping", new Command(false, args, pingCommand, "Pong!"));
+export default (): void => CommandRegistry.register("ping", new CommandDefinition(false, args, pingCommand, "Pong!"));
 
 function pingCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "pong!");

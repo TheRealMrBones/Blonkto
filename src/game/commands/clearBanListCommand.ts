@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("clearbanlist", new Command(true, args, clearBanListCommand, "Clears the entire list of banned players"));
+export default (): void => CommandRegistry.register("clearbanlist", new CommandDefinition(true, args, clearBanListCommand, "Clears the entire list of banned players"));
 
 function clearBanListCommand(args: any[], player: Player, game: Game){
     game.playerManager.banManager.clearBanList();

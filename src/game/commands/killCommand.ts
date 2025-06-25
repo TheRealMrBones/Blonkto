@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,14 +11,14 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
 ];
 
-export default (): void => CommandRegistry.register("kill", new Command(false, args, killCommand, "Kills yourself or another player"));
+export default (): void => CommandRegistry.register("kill", new CommandDefinition(false, args, killCommand, "Kills yourself or another player"));
 
 function killCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
         
     // special op checks
     if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
-        Command.sendNoPermission(player, game);
+        CommandDefinition.sendNoPermission(player, game);
         return;
     }
 

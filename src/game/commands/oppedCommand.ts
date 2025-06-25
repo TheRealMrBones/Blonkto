@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,14 +11,14 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
-export default (): void => CommandRegistry.register("opped", new Command(false, args, oppedCommand, "Checks if you or another play is opped"));
+export default (): void => CommandRegistry.register("opped", new CommandDefinition(false, args, oppedCommand, "Checks if you or another play is opped"));
 
 function oppedCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
         
     // special op checks
     if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
-        Command.sendNoPermission(player, game);
+        CommandDefinition.sendNoPermission(player, game);
         return;
     }
 

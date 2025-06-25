@@ -3,14 +3,14 @@ import EventEmitter from "events";
 import RegistryValue from "../registries/registryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
-import ItemStack from "./itemStack.js";
+import ItemStack from "../items/itemStack.js";
 import Player from "../objects/player.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
-class Item extends ComponentHandler<Item> implements RegistryValue {
+class ItemDefinition extends ComponentHandler<ItemDefinition> implements RegistryValue {
     private name: string = "unregistered";
     private readonly displayname: string;
     private readonly stacksize: number;
@@ -100,4 +100,4 @@ class Item extends ComponentHandler<Item> implements RegistryValue {
     // #endregion
 }
 
-export default Item;
+export default ItemDefinition;

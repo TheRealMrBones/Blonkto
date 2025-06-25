@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.BOOLEAN],
 ];
 
-export default (): void => CommandRegistry.register("clearoplist", new Command(true, args, clearOpListCommand, "Clears the entire list of oppped players"));
+export default (): void => CommandRegistry.register("clearoplist", new CommandDefinition(true, args, clearOpListCommand, "Clears the entire list of oppped players"));
 
 function clearOpListCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

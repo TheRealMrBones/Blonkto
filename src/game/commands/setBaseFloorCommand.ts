@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("setbasefloor", new Command(true, args, setBaseFloorCommand, "Sets a cells base floor"));
+export default (): void => CommandRegistry.register("setbasefloor", new CommandDefinition(true, args, setBaseFloorCommand, "Sets a cells base floor"));
 
 function setBaseFloorCommand(args: any[], player: Player, game: Game){
     if(!FloorRegistry.has(args[3]) && args[3] != "air"){

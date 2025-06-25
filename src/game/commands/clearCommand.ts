@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
 ];
 
-export default (): void => CommandRegistry.register("clear", new Command(true, args, clearCommand, "Clears a players inventory"));
+export default (): void => CommandRegistry.register("clear", new CommandDefinition(true, args, clearCommand, "Clears a players inventory"));
 
 function clearCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

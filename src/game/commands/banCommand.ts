@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -12,7 +12,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME, COMMAND_ARGUMENTS.STRING_LONG],
 ];
 
-export default (): void => CommandRegistry.register("ban", new Command(true, args, banCommand, "Bans a player from the server"));
+export default (): void => CommandRegistry.register("ban", new CommandDefinition(true, args, banCommand, "Bans a player from the server"));
 
 function banCommand(args: any[], player: Player, game: Game){
     const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());

@@ -1,4 +1,4 @@
-import Command from "./command.js";
+import CommandDefinition from "../definitions/commandDefinition.js";
 import CommandRegistry from "../registries/commandRegistry.js";
 import Player from "../objects/player.js";
 import Game from "../game.js";
@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("setblock", new Command(true, args, setBlockCommand, "Sets a cells block"));
+export default (): void => CommandRegistry.register("setblock", new CommandDefinition(true, args, setBlockCommand, "Sets a cells block"));
 
 function setBlockCommand(args: any[], player: Player, game: Game){
     if(!BlockRegistry.has(args[3]) && args[3] != "air"){

@@ -3,11 +3,11 @@ import RegistryDefinedWithComponents from "../components/registryDefinedWithComp
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
-import Item from "./item.js";
+import ItemDefinition from "../definitions/itemDefinition.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
-class ItemStack implements RegistryDefinedWithComponents<Item> {
-    readonly definition: Item;
+class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
+    readonly definition: ItemDefinition;
     readonly componentdata: { [key: string]: ComponentData } = {};
 
     private amount: number = 1;

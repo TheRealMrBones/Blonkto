@@ -22,14 +22,12 @@ import SharedConfig from "../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
 const { FAKE_PING } = SharedConfig.UPDATES;
 const { ATTACK_DELAY } = SharedConfig.ATTACK;
-const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
-const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
+const { SHOW_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
-const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
 
 /** The main class that manages the game world and the entities in it */

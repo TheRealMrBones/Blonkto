@@ -6,7 +6,7 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 /** Base class for a command that can be run through chat by players in the game */
-class Command implements RegistryValue {
+class CommandDefinition implements RegistryValue {
     private key: string = "unregistered";
     private op: boolean;
     private possibleargs: any[][];
@@ -63,7 +63,7 @@ class Command implements RegistryValue {
     /** Tries to run this command with the given args */
     execute(rawargs: any[], player: Player, game: Game): void {
         if(!this.canExecute(player, game)){
-            Command.sendNoPermission(player, game);
+            CommandDefinition.sendNoPermission(player, game);
             return;
         }
 
@@ -255,4 +255,4 @@ class Command implements RegistryValue {
     // #endregion
 }
 
-export default Command;
+export default CommandDefinition;
