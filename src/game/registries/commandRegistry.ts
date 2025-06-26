@@ -74,3 +74,5 @@ import setColorCommand from "../commands/setColorCommand.js";
 setColorCommand();
 import posCommand from "../commands/posCommand.js";
 posCommand();
+import entityCountCommand from "../commands/entityCountCommand.js";
+entityCountCommand();

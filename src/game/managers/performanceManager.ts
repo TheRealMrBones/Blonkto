@@ -42,6 +42,16 @@ class PerformanceManager {
         return this.lastperformancelog;
     }
 
+    /** Returns the entity count message */
+    getEntityCounts(): string {
+        const allobjects = this.game.entityManager.getAllObjectCount();
+        const players = this.game.entityManager.getPlayerEntityCount();
+        const entities = this.game.entityManager.getNonplayerEntityCount();
+        const objects = this.game.entityManager.getObjectCount();
+
+        return `Ticking Objects: ${allobjects} total, ${players} players, ${entities} entities, ${objects} objects`;
+    }
+
     // #endregion
 
     // #region calls
@@ -75,16 +85,11 @@ class PerformanceManager {
         const tps = this.cummilativetickcount / PERFORMANCE_LOG_RATE;
         const averageticktime = this.cummilativeticktime / this.cummilativetickcount;
 
-        const allobjects = this.game.entityManager.getAllObjectCount();
-        const players = this.game.entityManager.getPlayerEntityCount();
-        const entities = this.game.entityManager.getNonplayerEntityCount();
-        const objects = this.game.entityManager.getObjectCount();
-
         this.lastperformancelog = [
             `Performance Log - ${new Date().toLocaleTimeString()}`,
             `TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`,
-            `Ticking Objects: ${allobjects} total, ${players} players, ${entities} entities, ${objects} objects`,
             `Life Tick: ${this.game.lifeticks}, Life TPS: ${this.game.lifeticks / ((Date.now() - this.game.starttime) / 1000)}`,
+            this.getEntityCounts(),
         ];
 
         for(const message of this.lastperformancelog){
