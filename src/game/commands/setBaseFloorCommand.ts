@@ -16,7 +16,11 @@ export default (): void => CommandRegistry.register("setbasefloor", new CommandD
 
 function setBaseFloorCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
-    if(argIndex == 0) args.push(Math.floor(player.x), Math.floor(player.y));
+    if(argIndex == 0){
+        const originalarg = args[1];
+        args.pop();
+        args.push(Math.floor(player.x), Math.floor(player.y), originalarg);
+    }
 
     if(!FloorRegistry.has(args[3]) && args[3] != "air"){
         game.chatManager.sendMessageTo(player, `no floor of name: ${args[3]}`);
