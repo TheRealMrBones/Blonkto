@@ -14,7 +14,7 @@
         "dev": "npm run dev:pack && npm run dev:start",
         "lint": "eslint \"src/**/*.{js,mjs,cjs,ts}\"",
         "format": "eslint \"src/**/*.{js,mjs,cjs,ts}\" --fix",
-        "resetworld": "rd /s /q data\\world & rd /s /q data\\entities & rd /s /q data\\players"
+        "resetworld": "rd /s /q data\\world & rd /s /q data\\entities & rd /s /q data\\players & rm -rf data\\world & rm -rf data\\entities & rm -rf data\\players"
     },
     "keywords": [],
     "author": "Mr Bones",
