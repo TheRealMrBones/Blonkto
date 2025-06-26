@@ -66,8 +66,8 @@ class WanderComponent extends Component<EntityDefinition> {
 
             let found = false;
             for(let tries = 10; tries > 0; tries--){
-                movex = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
-                movey = Math.floor(Math.random() * this.distance * 2) + 1 - this.distance;
+                movex = Math.floor(Math.random() * (this.distance * 2 + 1)) - this.distance;
+                movey = Math.floor(Math.random() * (this.distance * 2 + 1)) - this.distance;
                 cellx = Math.floor(self.x) + movex;
                 celly = Math.floor(self.y) + movey;
                 const cell = game.world.getCell(cellx, celly, false);
