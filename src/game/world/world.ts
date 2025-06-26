@@ -117,7 +117,7 @@ class World {
 
     /** Returns if it is night or not */
     isDay(): boolean {
-        return (!this.isNight());
+        return !this.isNight();
     }
 
     // #endregion

@@ -4,6 +4,7 @@ import Drop from "../items/drop.js";
 import Logger from "../../server/logging/logger.js";
 
 import WanderComponent from "../components/entitycomponents/wanderComponent.js";
+import PlayerWanderComponent from "../components/entitycomponents/playerWanderComponent.js";
 import ScaredComponent from "../components/entitycomponents/scaredComponent.js";
 import SimpleAttackComponent from "../components/entitycomponents/simpleAttackComponent.js";
 import DayDespawnComponent from "../components/entitycomponents/dayDespawnComponent.js";
@@ -20,11 +21,11 @@ EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5,
     .addComponent(new WanderComponent())
     .addComponent(new ScaredComponent(1.8)));
 EntityRegistry.register("zombie", new EntityDefinition("Zombie", ASSETS.ZOMBIE, 5, 1, .55)
-    .addComponent(new WanderComponent())
+    .addComponent(new PlayerWanderComponent(true))
     .addComponent(new SimpleAttackComponent(1.8))
     .addComponent(new DayDespawnComponent()));
 EntityRegistry.register("mega_zombie", new EntityDefinition("Mega Zombie", ASSETS.ZOMBIE, 20, .8, 1.15)
-    .addComponent(new WanderComponent())
+    .addComponent(new PlayerWanderComponent(true))
     .addComponent(new SimpleAttackComponent(1.8, 9, 5))
     .addComponent(new DayDespawnComponent()));
 
