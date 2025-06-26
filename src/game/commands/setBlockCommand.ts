@@ -8,12 +8,16 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
 export default (): void => CommandRegistry.register("setblock", new CommandDefinition(true, args, setBlockCommand, "Sets a cells block"));
 
 function setBlockCommand(args: any[], player: Player, game: Game){
+    const argIndex = args[0];
+    if(argIndex == 0) args.push(Math.floor(player.x), Math.floor(player.y));
+
     if(!BlockRegistry.has(args[3]) && args[3] != "air"){
         game.chatManager.sendMessageTo(player, `no block of name: ${args[3]}`);
         return;

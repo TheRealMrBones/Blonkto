@@ -8,12 +8,16 @@ import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 const args = [
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
 export default (): void => CommandRegistry.register("setfloor", new CommandDefinition(true, args, setFloorCommand, "Sets a cells floor"));
 
 function setFloorCommand(args: any[], player: Player, game: Game){
+    const argIndex = args[0];
+    if(argIndex == 0) args.push(Math.floor(player.x), Math.floor(player.y));
+    
     if(!FloorRegistry.has(args[3]) && args[3] != "air"){
         game.chatManager.sendMessageTo(player, `no floor of name: ${args[3]}`);
         return;
