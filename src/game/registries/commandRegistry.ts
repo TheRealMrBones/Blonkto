@@ -72,3 +72,5 @@ import whitelistCommand from "../commands/whitelistCommand.js";
 whitelistCommand();
 import setColorCommand from "../commands/setColorCommand.js";
 setColorCommand();
+import posCommand from "../commands/posCommand.js";
+posCommand();
