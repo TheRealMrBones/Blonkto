@@ -59,8 +59,11 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
                 }
             });
         }else{
-            if(game.entityManager.getPlayerEntities().some(p => p.id === data.target?.id))
+            if(!game.entityManager.getPlayerEntities().some(p => p.id === data.target?.id)){
+                self.targetposqueue = [];
+                self.speedmultiplier = 1;
                 data.target = null;
+            }
         }
 
         const target = data.target;
