@@ -29,7 +29,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
 
     /** Defines the tick action of the block with this component */
     tick(block: Block, game: Game, dt: number): void {
-        const data = block.getComponentData<TimeChangeComponentData>(TimeChangeComponentData);
+        const data = block.getComponentData(TimeChangeComponentData);
         if(data.delayleft == -1) data.delayleft = this.delay + Math.round(Math.random() * this.randomdelay);
 
         data.delayleft--;

@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import { pathfind } from "../../world/pathfind.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
 
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
@@ -11,6 +12,7 @@ class WanderComponent extends Component<EntityDefinition> {
 
     constructor(distance?: number, cellposrandomness?: number) {
         super();
+        this.setRequirements([MoveTargetComponent]);
 
         this.distance = distance || 5;
         this.randomness = cellposrandomness || .2;
@@ -24,44 +26,35 @@ class WanderComponent extends Component<EntityDefinition> {
 
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
-        if(self.targetposqueue.length > 0){
-            if(self.startofcurrenttarget === null) return;
+        const targetdata = self.getComponentData(MoveTargetComponentData);
+        
+        if(targetdata.targetposqueue.length > 0 && targetdata.blocked){
+            const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
+            const currenttarget = targetdata.targetposqueue[0];
+
+            const lasttargetcell = {
+                x: Math.floor(lasttarget.x),
+                y: Math.floor(lasttarget.y),
+            };
+            const currenttargetcell = {
+                x: Math.floor(currenttarget.x),
+                y: Math.floor(currenttarget.y),
+            };
             
-            const lasttarget = self.targetposqueue[self.targetposqueue.length - 1];
-            const currenttarget = self.targetposqueue[0];
+            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, game.world, [currenttargetcell]);
 
-            if(self.blocked){
-                self.blocked = false;
-                return;
-            }
-
-            if(Date.now() - self.startofcurrenttarget > self.getSpeed() * 2000){
-                self.blocked = true;
-
-                const lasttargetcell = {
-                    x: Math.floor(lasttarget.x),
-                    y: Math.floor(lasttarget.y),
-                };
-                const currenttargetcell = {
-                    x: Math.floor(currenttarget.x),
-                    y: Math.floor(currenttarget.y),
-                };
-                
-                const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, game.world, [currenttargetcell]);
-
-                self.targetposqueue = [];
-                if(path !== null){
-                    self.targetposqueue.push(...path.map(pos => ({
-                        x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
-                        y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
-                    })));
-                }
+            targetdata.targetposqueue = [];
+            if(path !== null){
+                targetdata.targetposqueue.push(...path.map(pos => ({
+                    x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                    y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                })));
             }
 
             return;
         }
 
-        if(Math.random() < .01){
+        if(Math.random() < .01 && targetdata.targetposqueue.length == 0){
             let movex, movey, cellx = 0, celly = 0;
 
             let found = false;
@@ -83,7 +76,7 @@ class WanderComponent extends Component<EntityDefinition> {
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, game.world);
             if(path === null) return;
 
-            self.targetposqueue.push(...path.map(pos => ({
+            targetdata.targetposqueue.push(...path.map(pos => ({
                 x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
                 y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
             })));

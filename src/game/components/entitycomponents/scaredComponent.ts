@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import { Pos } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
 
 /** An Entity Component that makes this entity type run away from attacking entities */
 class ScaredComponent extends Component<EntityDefinition> {
@@ -11,6 +12,7 @@ class ScaredComponent extends Component<EntityDefinition> {
 
     constructor(speedmultiplier?: number, distance?: number) {
         super();
+        this.setRequirements([MoveTargetComponent]);
 
         this.speedmultiplier = speedmultiplier || 1;
         this.distance = distance || 3;
@@ -24,18 +26,20 @@ class ScaredComponent extends Component<EntityDefinition> {
 
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
-        if(self.targetposqueue.length > 0){
-            if(self.distanceTo(self.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
+        const targetdata = self.getComponentData(MoveTargetComponentData);
+
+        if(targetdata.targetposqueue.length > 0){
+            if(self.distanceTo(targetdata.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
                 if(self.distanceTo(self.lasthitby) < this.distance){
-                    self.targetposqueue = [this.getRunPosition(self)];
+                    targetdata.targetposqueue = [this.getRunPosition(self)];
                 }else{
-                    self.targetposqueue = [];
+                    targetdata.targetposqueue = [];
                     self.speedmultiplier = 1;
                 }
             }
         }
 
-        if(self.hit && self.lasthitby !== undefined) self.targetposqueue = [this.getRunPosition(self)];
+        if(self.hit && self.lasthitby !== undefined) targetdata.targetposqueue = [this.getRunPosition(self)];
     }
 
     /** Returns a new run target postion given the current entity */

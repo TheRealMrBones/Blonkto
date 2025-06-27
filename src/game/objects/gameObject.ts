@@ -23,15 +23,12 @@ abstract class GameObject {
 
     x: number;
     y: number;
+    dx: number = 0;
+    dy: number = 0;
     dir: number;
     scale: number;
     private readonly asset: string;
     falling: boolean = false;
-
-    targetposqueue: Pos[] = [];
-    currenttarget: Pos | null = null;
-    startofcurrenttarget: number | null = null;
-    blocked: boolean = false;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -47,9 +44,7 @@ abstract class GameObject {
         this.asset = asset || ASSETS.MISSING_TEXTURE;
 
         this.registerListener("tick", (game: Game, dt: number) => {
-            this.checkFalling(game, dt);
-            this.moveToTarget(dt);
-            if(!this.falling) this.checkCollisions(game);
+            this.physicsTick(game, dt);
         });
     }
 
@@ -128,37 +123,13 @@ abstract class GameObject {
     }
 
     /** Tries to move to target if there is one */
-    moveToTarget(dt: number): void {
-        if(this.targetposqueue.length == 0){
-            if(this.currenttarget !== null) this.currenttarget = null;
-            if(this.startofcurrenttarget !== null) this.startofcurrenttarget = null;
-            return;
-        }
-
-        let movedist = this.getSpeed() * dt;
-
-        while(this.targetposqueue.length > 0 && movedist > 0){
-            const targetpos = this.targetposqueue[0];
-            if(targetpos !== this.currenttarget){
-                this.currenttarget = targetpos;
-                this.startofcurrenttarget = Date.now();
-                this.blocked = false;
-            }
-
-            this.dir = Math.atan2(targetpos.x - this.x, this.y - targetpos.y);
-            const dist = this.distanceTo(targetpos);
-            
-            if(dist <= movedist){
-                this.x = targetpos.x;
-                this.y = targetpos.y;
-                movedist -= dist;
-                this.targetposqueue.shift();
-            }else{
-                this.x += Math.sin(this.dir) * movedist;
-                this.y -= Math.cos(this.dir) * movedist;
-                movedist = 0;
-            }
-        }
+    physicsTick(game: Game, dt: number): void {
+        this.checkFalling(game, dt);
+        
+        this.x += this.dx * dt;
+        this.y += this.dy * dt;
+        
+        if(!this.falling) this.checkCollisions(game);
     }
 
     // #endregion
