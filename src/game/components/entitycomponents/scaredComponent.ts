@@ -28,18 +28,16 @@ class ScaredComponent extends Component<EntityDefinition> {
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
-        if(targetdata.targetposqueue.length > 0){
-            if(self.distanceTo(targetdata.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
-                if(self.distanceTo(self.lasthitby) < this.distance){
-                    targetdata.targetposqueue = [this.getRunPosition(self)];
-                }else{
-                    targetdata.targetposqueue = [];
-                    self.speedmultiplier = 1;
-                }
+        if(!targetdata.queueEmpty() && self.distanceTo(targetdata.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
+            if(self.distanceTo(self.lasthitby) < this.distance){
+                targetdata.setQueue(10, [this.getRunPosition(self)]);
+            }else{
+                targetdata.clearQueue();
+                self.speedmultiplier = 1;
             }
         }
 
-        if(self.hit && self.lasthitby !== undefined) targetdata.targetposqueue = [this.getRunPosition(self)];
+        if(self.hit && self.lasthitby !== undefined) targetdata.setQueue(10, [this.getRunPosition(self)]);
     }
 
     /** Returns a new run target postion given the current entity */

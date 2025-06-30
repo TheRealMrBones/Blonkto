@@ -28,7 +28,7 @@ class WanderComponent extends Component<EntityDefinition> {
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
         
-        if(targetdata.targetposqueue.length > 0 && targetdata.blocked){
+        if(targetdata.queueBlocked()){
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
             const currenttarget = targetdata.targetposqueue[0];
 
@@ -43,9 +43,9 @@ class WanderComponent extends Component<EntityDefinition> {
             
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, game.world, [currenttargetcell]);
 
-            targetdata.targetposqueue = [];
+            targetdata.clearQueue();
             if(path !== null){
-                targetdata.targetposqueue.push(...path.map(pos => ({
+                targetdata.setQueue(1, path.map(pos => ({
                     x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
                     y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
                 })));
@@ -54,7 +54,7 @@ class WanderComponent extends Component<EntityDefinition> {
             return;
         }
 
-        if(Math.random() < .01 && targetdata.targetposqueue.length == 0){
+        if(Math.random() < .01 && targetdata.queueEmpty()){
             let movex, movey, cellx = 0, celly = 0;
 
             let found = false;
@@ -76,7 +76,7 @@ class WanderComponent extends Component<EntityDefinition> {
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, game.world);
             if(path === null) return;
 
-            targetdata.targetposqueue.push(...path.map(pos => ({
+            targetdata.setQueue(1, path.map(pos => ({
                 x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
                 y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
             })));

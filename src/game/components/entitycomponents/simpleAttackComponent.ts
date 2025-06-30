@@ -63,7 +63,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
             });
         }else{
             if(!game.entityManager.getPlayerEntities().some(p => p.id === data.target?.id)){
-                targetdata.targetposqueue = [];
+                targetdata.clearQueue();
                 self.speedmultiplier = 1;
                 data.target = null;
             }
@@ -73,14 +73,14 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(target === null) return;
 
         if(self.distanceTo(target) >= this.distance * 2){
-            targetdata.targetposqueue = [];
+            targetdata.clearQueue();
             self.speedmultiplier = 1;
             data.target = null;
             return;
         }
         
         self.speedmultiplier = this.speedmultiplier;
-        targetdata.targetposqueue = [this.getRunPosition(target)];
+        targetdata.setQueue(10, [this.getRunPosition(target)]);
     }
 
     /** Returns a new run target postion given the current target */

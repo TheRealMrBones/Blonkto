@@ -22,12 +22,9 @@ class MoveTargetComponent extends Component<EntityDefinition> {
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const data = self.getComponentData<MoveTargetComponentData>(MoveTargetComponentData);
-        
-        self.dx = 0;
-        self.dy = 0;
 
         // make sure all states are null if empty queue
-        if(data.targetposqueue.length == 0){
+        if(data.queueEmpty()){
             if(data.currenttarget !== null) data.currenttarget = null;
             if(data.startofcurrenttarget !== null) data.startofcurrenttarget = null;
             return;
@@ -93,12 +90,28 @@ export class MoveTargetComponentData implements ComponentData {
 
     /** Sets the targetposqueue if priority is higher or equal */
     setQueue(priority: number, queue: Pos[]): boolean {
-        if(priority < this.currentpriotity && this.targetposqueue.length > 0) return false;
+        if(priority < this.currentpriotity && !this.queueEmpty()) return false;
         this.currentpriotity = priority;
 
         this.targetposqueue = queue;
 
         return true;
+    }
+
+    /** Clears the targetposqueue */
+    clearQueue(): void {
+        this.targetposqueue = [];
+        this.currentpriotity = 0;
+    }
+
+    /** Returns if the targetposqueue is empty or not */
+    queueEmpty(): boolean {
+        return this.targetposqueue.length == 0;
+    }
+
+    /** Returns if the targetposqueue is not empty but is blocked */
+    queueBlocked(): boolean {
+        return !this.queueEmpty() && this.blocked;
     }
 }
 
