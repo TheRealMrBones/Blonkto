@@ -10,6 +10,7 @@ import ScaredComponent from "../components/entitycomponents/scaredComponent.js";
 import SimpleAttackComponent from "../components/entitycomponents/simpleAttackComponent.js";
 import DayDespawnComponent from "../components/entitycomponents/dayDespawnComponent.js";
 import TimeChangeComponent from "../components/entitycomponents/timeChangeComponent.js";
+import BreedComponent from "../components/entitycomponents/breedComponent.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
@@ -22,7 +23,8 @@ const EntityRegistry = new Registry<EntityDefinition>("EntityRegistry");
 EntityRegistry.register("pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1, .5, new Drop("raw_pork", 1, 1, .5, 2))
     .addComponent(new MoveTargetComponent())
     .addComponent(new WanderComponent())
-    .addComponent(new ScaredComponent(1.8)));
+    .addComponent(new ScaredComponent(1.8))
+    .addComponent(new BreedComponent("carrot", "baby_pig")));
 EntityRegistry.register("baby_pig", new EntityDefinition("Pig", ASSETS.PIG, 5, 1.5, .4)
     .addComponent(new MoveTargetComponent())
     .addComponent(new WanderComponent())

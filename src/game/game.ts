@@ -140,6 +140,12 @@ class Game {
         if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
 
+            // try to interact with entity
+            if(newinfo.entity !== null){
+                newinfo.entity.emitInteractEvent(this, this.players[socket.id]);
+                return;
+            }
+
             // try to use item
             if(hotbarItem !== null){
                 if(!hotbarItem.interact(this, this.players[socket.id], newinfo)) return;

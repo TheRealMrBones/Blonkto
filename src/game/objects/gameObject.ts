@@ -5,6 +5,7 @@ import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import { Pos } from "../../shared/types.js";
 import Entity from "./entity.js";
+import Player from "./player.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
@@ -222,6 +223,11 @@ abstract class GameObject {
         this.registerListener("collision", listener);
     }
 
+    /** Registers an interact event listener to this objects event handler */
+    registerInteractListener(listener: (game: Game, player: Player) => void): void {
+        this.registerListener("interact", listener);
+    }
+
     /** Emits an event to this objects event handler */
     protected emitEvent(event: string, game: Game, ...args: any[]): void {
         this.eventEmitter.emit(event, game, ...args);
@@ -240,6 +246,11 @@ abstract class GameObject {
     /** Emits a collision event to this objects event handler */
     emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
         this.emitEvent("collision", game, entity, push);
+    }
+
+    /** Emits an interact event to this objects event handler */
+    emitInteractEvent(game: Game, player: Player): void {
+        this.emitEvent("interact", game, player);
     }
 
     // #endregion

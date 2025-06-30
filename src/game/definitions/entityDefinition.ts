@@ -6,6 +6,7 @@ import NonplayerEntity from "../objects/nonplayerEntity.js";
 import RegistryValue from "../registries/registryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Entity from "../objects/entity.js";
+import Player from "../objects/player.js";
 import { Pos } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
@@ -76,6 +77,11 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements Reg
     /** Registers a collision event listener to this entity definitions event handler */
     registerCollisionListener(listener: (self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => void): void {
         this.registerListener("collision", listener);
+    }
+
+    /** Registers an interact event listener to this entity definitions event handler */
+    registerInteractListener(listener: (self: NonplayerEntity, game: Game, player: Player) => void): void {
+        this.registerListener("interact", listener);
     }
 
     /** Emits an event to this entity definitions event handler with the given self entity */
