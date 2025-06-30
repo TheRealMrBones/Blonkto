@@ -73,17 +73,17 @@ export class MoveTargetComponentData implements ComponentData {
     blocked: boolean = false;
     currentpriotity: number = 0;
 
-    /** Sets this simple attack component data objects values with the given save data */
+    /** Sets this move target component data objects values with the given save data */
     readFromSave(data: any): void {
         
     }
 
-    /** Returns an object representing this simple attack component data for a game update to the client */
+    /** Returns an object representing this move target component data for a game update to the client */
     serializeForUpdate(): any {
         return null;
     }
 
-    /** Returns an object representing this simple attack component data for writing to the save */
+    /** Returns an object representing this move target component data for writing to the save */
     serializeForWrite(): any {
         return null;
     }
