@@ -128,7 +128,7 @@ class BreedComponentData implements ComponentData {
 
     /** Sets this breed component data objects values with the given save data */
     readFromSave(data: any): void {
-        this.delayticks = data.delayticks
+        this.delayticks = data.delayticks;
     }
 
     /** Returns an object representing this breed component data for a game update to the client */
