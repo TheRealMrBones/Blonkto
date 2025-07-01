@@ -1,8 +1,8 @@
 import { Server as SocketIo } from "socket.io";
-import { Socket } from "socket.io-client";
 
 import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
+import SocketManager from "./managers/socketManager.js";
 import PlayerManager from "./managers/playerManager.js";
 import EntityManager from "./managers/entityManager.js";
 import ChatManager from "./managers/chatManager.js";
@@ -13,16 +13,13 @@ import Player from "./objects/player.js";
 import NonplayerEntity from "./objects/nonplayerEntity.js";
 import GameObject from "./objects/gameObject.js";
 import World from "./world/world.js";
-import { ClickContent, CraftContent, DropContent, GameUpdateContent, InputContent, SwapContent } from "../shared/messageContentTypes.js";
-import { ClickContentExpanded } from "./types.js";
+import { GameUpdateContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
-const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
+const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
-const { BASE_REACH } = SharedConfig.PLAYER;
 const { FAKE_PING } = SharedConfig.UPDATES;
-const { ATTACK_DELAY } = SharedConfig.ATTACK;
 const { SHOW_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
@@ -36,6 +33,7 @@ class Game {
     private readonly logger: Logger;
 
     readonly fileManager: FileManager;
+    readonly socketManager: SocketManager;
     readonly playerManager: PlayerManager;
     readonly entityManager: EntityManager;
     readonly chatManager: ChatManager;
@@ -60,6 +58,7 @@ class Game {
 
         // managers
         this.fileManager = fileManager;
+        this.socketManager = new SocketManager(io, this);
         this.playerManager = new PlayerManager(this);
         this.entityManager = new EntityManager(this);
         this.chatManager = new ChatManager(this);
@@ -70,18 +69,6 @@ class Game {
         // world
         this.world = new World(this);
 
-        // prepare socket connections
-        io.on("connection", socket => {
-            socket.on(MSG_TYPES.INPUT, (content) => { this.handlePlayerInput(socket as any, content); });
-            socket.on(MSG_TYPES.CLICK, (content) => { this.handlePlayerClick(socket as any, content); });
-            socket.on(MSG_TYPES.INTERACT, (content) => { this.handlePlayerInteract(socket as any, content); });
-            socket.on(MSG_TYPES.DROP, (content) => { this.handlePlayerDrop(socket as any, content); });
-            socket.on(MSG_TYPES.SWAP, (content) => { this.handlePlayerSwap(socket as any, content); });
-            socket.on(MSG_TYPES.CRAFT, (content) => { this.handlePlayerCraft(socket as any, content); });
-            socket.on(MSG_TYPES.DISCONNECT, () => { this.playerManager.removePlayer(socket as any); });
-            socket.on(MSG_TYPES.SEND_MESSAGE, (content) => { this.chatManager.chat(socket as any, content); });
-        });
-
         // start ticking
         this.lastUpdateTime = Date.now();
         this.starttime = Date.now();
@@ -91,108 +78,6 @@ class Game {
         this.logger.info("Starting first tick");
         setTimeout(this.tick.bind(this), 1);
     }
-
-    // #region inputs
-
-    /** Response to the general input message from a client */
-    handlePlayerInput(socket: Socket, content: InputContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        
-        if(this.players[socket.id]){
-            this.players[socket.id].update(content);
-        }
-    }
-
-    /** Response to a click (left click) message from a client */
-    handlePlayerClick(socket: Socket, content: ClickContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        const newinfo = this.getClickInfo(content);
-        
-        if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
-
-            // try to use item
-            if(hotbarItem !== null){
-                if(!hotbarItem.use(this, this.players[socket.id], newinfo)) return;
-            }
-
-            // default break action
-            const cell = this.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
-            if(cell !== null){
-                if(cell.block !== null){
-                    if(cell.block.definition.minetype == MINE_TYPES.ANY && cell.block.definition.hardness <= 0){
-                        this.world.breakBlock(newinfo.cellpos.x, newinfo.cellpos.y, true);
-                        return;
-                    }
-                }
-            }
-            
-            // default swing action
-            this.players[socket.id].startSwing(newinfo.dir, 1);
-        }
-    }
-
-    /** Response to a interaction (right click) message from a client */
-    handlePlayerInteract(socket: Socket, content: ClickContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        const newinfo = this.getClickInfo(content);
-        
-        if(Date.now() - this.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = this.players[socket.id].inventory.getSlot(this.players[socket.id].hotbarslot);
-
-            // try to interact with entity
-            if(newinfo.entity !== null){
-                newinfo.entity.emitInteractEvent(this, this.players[socket.id]);
-                return;
-            }
-
-            // try to use item
-            if(hotbarItem !== null){
-                if(!hotbarItem.interact(this, this.players[socket.id], newinfo)) return;
-            }
-
-            // default action
-            const cell = this.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
-            if(cell === null) return;
-            if(cell.block === null) return;
-            if(newinfo.dist > BASE_REACH) return;
-            cell.block.emitInteractEvent(this, this.players[socket.id], newinfo);
-        }
-    }
-
-    /** Gets formatted click info from the raw click info in a client click message */
-    getClickInfo(content: ClickContent): ClickContentExpanded {
-        return {
-            dir: Math.atan2(content.xoffset, content.yoffset),
-            cellpos: { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) },
-            dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
-            entity: this.collisionManager.clickEntity(content.mex + content.xoffset, content.mey + content.yoffset),
-        };
-    }
-
-    /** Response to a drop message from a client */
-    handlePlayerDrop(socket: Socket, content: DropContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        
-        this.players[socket.id].dropFromSlot(content.slot, this, content.all ? undefined : 1);
-    }
-
-    /** Response to a swap message from a client */
-    handlePlayerSwap(socket: Socket, content: SwapContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        
-        this.players[socket.id].inventory.swapSlots(content.slot1, content.slot2);
-    }
-
-    /** Response to a craft message from a client */
-    handlePlayerCraft(socket: Socket, content: CraftContent): void {
-        if(socket.id === undefined || this.players[socket.id] === undefined) return;
-        
-        const player = this.players[socket.id];
-        this.craftManager.craftRecipe(player.inventory, player.x, player.y, content);
-    }
-
-    // #endregion
 
     // #region tick/update
 

@@ -3,7 +3,7 @@ import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
-import { ClickContentExpanded } from "../../types.js";
+import { ClickContentExpanded } from "../../managers/socketManager.js";
 
 /** A Block Component that allows the block to be picked (aka break on interact) */
 class PickComponent extends Component<BlockDefinition> {

@@ -87,6 +87,7 @@ const Constants = Object.freeze({
         REGISTRY: "registry",
         ENTITY: "entity",
         PLAYER_MANAGER: "player manager",
+        SOCKET_MANAGER: "socket manager",
     },
     CONSOLE_FORMAT: {
         RESET: "\x1b[0m",

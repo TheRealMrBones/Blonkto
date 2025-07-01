@@ -5,7 +5,7 @@ import ItemStack from "../../items/itemStack.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import DroppedStack from "../../objects/droppedStack.js";
 import Block from "../../world/block.js";
-import { ClickContentExpanded } from "../../types.js";
+import { ClickContentExpanded } from "../../managers/socketManager.js";
 
 /** A Block Component that allows the block to be picked up */
 class PickupComponent extends Component<BlockDefinition> {

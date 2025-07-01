@@ -3,7 +3,7 @@ import ItemDefinition from "../../definitions/itemDefinition.js";
 import Game from "../../game.js";
 import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
-import { ClickContentExpanded } from "../../types.js";
+import { ClickContentExpanded } from "../../managers/socketManager.js";
 
 import SharedConfig from "../../../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
