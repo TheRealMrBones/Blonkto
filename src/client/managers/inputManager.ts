@@ -1,5 +1,5 @@
 import PlayerClient from "../playerClient.js";
-import { Pos } from "../../shared/types.js";
+import { CircleCollisionObject, Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
 
 import SharedConfig from "../../configs/shared.js";
@@ -314,7 +314,7 @@ class InputManager {
         
         if(!this.falling){
             //playerCollisions(self, others);
-            this.playerclient.collisionManager.blockCollisions(self);
+            this.playerclient.collisionManager.blockCollisions();
         }
     }
 
@@ -395,6 +395,15 @@ class InputManager {
             lastattackdir: this.lastattackdir,
             falling: this.falling,
         };
+    }
+
+    /** Returns  */
+    GetSelfAsCollisionObject(): CircleCollisionObject {
+        return {
+            scale: this.scale,
+            x: this.x + this.dx,
+            y: this.y + this.dy,
+        }
     }
 
     // #endregion
