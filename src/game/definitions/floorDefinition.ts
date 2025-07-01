@@ -11,10 +11,10 @@ const { ASSETS } = Constants;
 
 /** The definition for a type of floor with its functionality and base statistics */
 class FloorDefinition extends ComponentHandler<FloorDefinition> implements RegistryValue {
-    name: string = "unregistered";
-    displayname: string;
-    asset: string;
-    drops: DropBase | null;
+    private name: string = "unregistered";
+    readonly displayname: string;
+    readonly asset: string;
+    readonly drops: DropBase | null;
     
     private eventEmitter: EventEmitter = new EventEmitter();
 

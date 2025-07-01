@@ -126,7 +126,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteFloor = {
-            floordefinition: this.definition.name,
+            floordefinition: this.definition.getRegistryKey(),
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

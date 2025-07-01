@@ -26,7 +26,7 @@ class Cell {
         this.chunky = chunky;
         
         this.basefloor = basefloor ? FloorRegistry.get(basefloor) : null;
-        this.floor = this.basefloor ? new Floor(this, this.basefloor.name) : null;
+        this.floor = this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null;
     }
 
     /** Returns the chunk from its save data */
@@ -47,7 +47,7 @@ class Cell {
 
     /** Sets the floor for this cell */
     setFloor(floor: string | null): void {
-        this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.name) : null) : new Floor(this, floor);
+        this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null) : new Floor(this, floor);
     }
 
     /** Sets the ceiling for this cell */
@@ -65,9 +65,9 @@ class Cell {
     /** Tries to place the floor for this cell and returns success */
     placeFloor(floor: string): boolean {
         if(this.floor === null) return false;
-        if(this.basefloor !== null) if(this.floor.definition.name !== this.basefloor.name) return false;
+        if(this.basefloor !== null) if(this.floor.definition.getRegistryKey() !== this.basefloor.getRegistryKey()) return false;
         if(this.block !== null)
-            if(this.block.definition.blockscell) return false;
+            if(this.block.definition.getBlockCell()) return false;
         this.floor = new Floor(this, floor);
         return true;
     }
@@ -76,7 +76,7 @@ class Cell {
     placeCeiling(ceiling: string): boolean {
         if(this.ceiling !== null) return false;
         if(this.block !== null)
-            if(this.block.definition.blockscell) return false;
+            if(this.block.definition.getBlockCell()) return false;
         this.ceiling = new Ceiling(this, ceiling);
         return true;
     }
@@ -92,17 +92,17 @@ class Cell {
     breakFloor(x: number, y: number, toggledrop: boolean, game: Game): boolean {
         if(this.floor === this.basefloor) return false;
         if(this.block !== null)
-            if(this.block.definition.blockscell) return false;
+            if(this.block.definition.getBlockCell()) return false;
         this.floor?.definition.break(x, y, toggledrop, game);
         this.floor = null;
-        if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.name);
+        if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.getRegistryKey());
         return true;
     }
 
     /** Tries to break the ceiling for this cell and returns success */
     breakCeiling(x: number, y: number, toggledrop: boolean, game: Game): boolean {
         if(this.block !== null)
-            if(this.block.definition.blockscell) return false;
+            if(this.block.definition.getBlockCell()) return false;
         this.ceiling?.definition.break(x, y, toggledrop, game);
         this.ceiling = null;
         return true;
@@ -111,7 +111,7 @@ class Cell {
     /** Sets the base floor for this cell */
     setBaseFloor(floor: string | null): void {
         const floorval = (floor === null) ? null : FloorRegistry.get(floor);
-        this.floor = floorval ? new Floor(this, floorval.name) : null;
+        this.floor = floorval ? new Floor(this, floorval.getRegistryKey()) : null;
         this.basefloor = floorval;
     }
 
@@ -148,7 +148,7 @@ class Cell {
     serializeForWrite(): any {
         const data: any = {};
 
-        if(this.basefloor) data.basefloor = this.basefloor.name;
+        if(this.basefloor) data.basefloor = this.basefloor.getRegistryKey();
         if(this.block) data.block = this.block.serializeForWrite();
         if(this.floor) data.floor = this.floor.serializeForWrite();
         if(this.ceiling) data.ceiling = this.ceiling.serializeForWrite();

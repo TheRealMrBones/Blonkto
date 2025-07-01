@@ -41,7 +41,7 @@ class Drop implements DropBase {
 
     //** Drops a single stack */
     private dropStack(x: number, y: number, amount: number, game: Game): void {
-        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.getName(), amount), this.spread);
+        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.getRegistryKey(), amount), this.spread);
     }
 }
 

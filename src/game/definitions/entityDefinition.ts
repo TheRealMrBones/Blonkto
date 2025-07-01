@@ -14,13 +14,13 @@ const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
 class EntityDefinition extends ComponentHandler<EntityDefinition> implements RegistryValue {
-    name: string = "unregistered";
-    displayname: string;
-    maxhealth: number;
-    speed: number;
-    scale: number;
-    asset: string;
-    drops: DropBase | null;
+    private name: string = "unregistered";
+    readonly displayname: string;
+    readonly maxhealth: number;
+    readonly speed: number;
+    readonly scale: number;
+    readonly asset: string;
+    readonly drops: DropBase | null;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 

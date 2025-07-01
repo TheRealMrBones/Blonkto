@@ -132,8 +132,8 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
             asset: this.definition.asset,
             scale: this.definition.scale,
             shape: this.definition.shape,
-            floorvisible: this.definition.floorvisible,
-            walkthrough: this.definition.walkthrough,
+            floorvisible: this.definition.getFloorVisible(),
+            walkthrough: this.definition.getWalkThrough(),
         };
     }
 
@@ -142,7 +142,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteBlock = {
-            blockdefinition: this.definition.name,
+            blockdefinition: this.definition.getRegistryKey(),
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

@@ -13,17 +13,18 @@ const { ASSETS, SHAPES, MINE_TYPES } = Constants;
 
 /** The definition for a type of block with its functionality and base statistics */
 class BlockDefinition extends ComponentHandler<BlockDefinition> implements RegistryValue {
-    name: string = "unregistered";
-    displayname: string;
-    asset: string;
-    drops: DropBase | null;
-    minetype: number;
-    hardness: number;
-    scale: number;
-    shape: number;
-    walkthrough: boolean = false;
-    blockscell: boolean = true;
-    floorvisible: boolean = true;
+    private name: string = "unregistered";
+    readonly displayname: string;
+    readonly asset: string;
+    readonly drops: DropBase | null;
+    readonly minetype: number;
+    readonly hardness: number;
+    readonly scale: number;
+    readonly shape: number;
+
+    private walkthrough: boolean = false;
+    private blockcell: boolean = true;
+    private floorvisible: boolean = true;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -64,7 +65,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
 
     /** Sets this blocks block cell property */
     setBlockCell(blockscell: boolean): BlockDefinition {
-        this.blockscell = blockscell;
+        this.blockcell = blockscell;
         return this;
     }
 
@@ -72,6 +73,25 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     setFloorVisible(floorvisible: boolean): BlockDefinition {
         this.floorvisible = floorvisible;
         return this;
+    }
+
+    // #endregion
+
+    // #region getters
+
+    /** Gets this blocks walk through property */
+    getWalkThrough(): boolean {
+        return this.walkthrough;
+    }
+
+    /** Gets this blocks block cell property */
+    getBlockCell(): boolean {
+        return this.blockcell;
+    }
+
+    /** Gets this blocks floor visible property */
+    getFloorVisible(): boolean {
+        return this.floorvisible;
     }
 
     // #endregion

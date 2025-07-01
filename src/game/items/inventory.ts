@@ -66,7 +66,7 @@ class Inventory {
         for(let i = 0; i < this.size && itemamount > 0; i++){
             const itemstack = this.slots[i];
             if(itemstack != null){
-                if(itemstack.definition.getName() == item){
+                if(itemstack.definition.getRegistryKey() == item){
                     const addamount = Math.min(stacksize - itemstack.getAmount(), itemamount);
                     itemstack.addAmount(addamount);
                     itemamount -= addamount;
@@ -108,7 +108,7 @@ class Inventory {
             return true;
         }
 
-        if(this.slots[slot].definition.getName() != itemstack.definition.getName()) return false;
+        if(this.slots[slot].definition.getRegistryKey() != itemstack.definition.getRegistryKey()) return false;
 
         this.toggleChange(slot);
         return this.slots[slot].mergeStack(itemstack);
@@ -132,7 +132,7 @@ class Inventory {
         for(let i = 0; i < this.size && removeamount > 0; i++){
             const itemstack = this.slots[i];
             if(itemstack === null) continue;
-            if(itemstack.definition.getName() != item) continue;
+            if(itemstack.definition.getRegistryKey() != item) continue;
 
             const stackamount = itemstack.getAmount();
             if(stackamount <= removeamount){
@@ -156,7 +156,7 @@ class Inventory {
         }else{
             if(amount > this.slots[slot].getAmount()) amount = this.slots[slot].getAmount();
 
-            DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.slots[slot].definition.getName(), amount), .3, ignore);
+            DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.slots[slot].definition.getRegistryKey(), amount), .3, ignore);
             
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }
@@ -251,7 +251,7 @@ class Inventory {
         for(let i = 0; i < this.size; i++){
             const itemstack = this.slots[i];
             if(itemstack === null) continue;
-            if(itemstack.definition.getName() !== item) continue;
+            if(itemstack.definition.getRegistryKey() !== item) continue;
             count += itemstack.getAmount();
         }
 

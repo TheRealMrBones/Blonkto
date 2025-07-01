@@ -54,7 +54,7 @@ class BreedComponent extends Component<EntityDefinition> {
 
         // look for target
         for(const entity of game.entityManager.getNonplayerEntities()){
-            if(entity.definition.name !== self.definition.name) continue;
+            if(entity.definition.getRegistryKey() !== self.definition.getRegistryKey()) continue;
             if(self.distanceTo(entity) > this.distance) continue;
             if(entity === self) continue;
 

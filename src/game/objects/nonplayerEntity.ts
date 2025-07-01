@@ -121,7 +121,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         const returnobj = {
             ...base,
             type: "entity",
-            entitydefinition: this.definition.name,
+            entitydefinition: this.definition.getRegistryKey(),
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

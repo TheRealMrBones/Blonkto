@@ -540,7 +540,7 @@ class World {
         if(requestdata === null) return false;
         const { cell, chunk } = requestdata;
         if(chunk === null || cell.floor === null) return false;
-        if(cell.basefloor !== null) if(cell.floor.definition.name === cell.basefloor.name) return false;
+        if(cell.basefloor !== null) if(cell.floor.definition.getRegistryKey() === cell.basefloor.getRegistryKey()) return false;
 
         const response = cell.breakFloor(x, y, toggledrop, this.game);
         chunk.cellUpdates.push({

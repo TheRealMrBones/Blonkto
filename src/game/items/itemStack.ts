@@ -100,7 +100,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
 
     /** Merges this stack with another stack if it is of the same item */
     mergeStack(otherstack: ItemStack): boolean {
-        if(otherstack.definition.getName() != this.definition.getName() || this.amount == 0) return false;
+        if(otherstack.definition.getRegistryKey() != this.definition.getRegistryKey() || this.amount == 0) return false;
 
         const oldamount = this.amount;
         this.addAmount(otherstack.amount);
@@ -142,7 +142,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
 
         return {
             displayname: this.definition.getDisplayName(),
-            name: this.definition.getName(),
+            name: this.definition.getRegistryKey(),
             asset: this.definition.getAsset(),
             amount: this.amount,
             ...componentdata,
@@ -154,7 +154,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteItemStack = {
-            name: this.definition.getName(),
+            name: this.definition.getRegistryKey(),
             amount: this.amount,
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;

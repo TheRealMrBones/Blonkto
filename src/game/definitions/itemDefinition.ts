@@ -42,11 +42,6 @@ class ItemDefinition extends ComponentHandler<ItemDefinition> implements Registr
 
     // #region getters
 
-    /** Returns this items name */
-    getName(): string {
-        return this.name;
-    }
-
     /** Returns this items display name */
     getDisplayName(): string {
         return this.displayname;

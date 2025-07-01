@@ -56,7 +56,7 @@ class CollisionManager {
             if(!cell) continue;
             const block = cell.block;
             if(block === null) continue;
-            if(block.definition.walkthrough) continue;
+            if(block.definition.getWalkThrough()) continue;
 
             const blockobject: CollisionObject = {
                 shape: block.definition.shape,
@@ -105,7 +105,7 @@ class CollisionManager {
             const collided = (push !== null);
 
             if(collided){
-                if(collectable.itemStack.definition.getName() === collectable2.itemStack.definition.getName()){
+                if(collectable.itemStack.definition.getRegistryKey() === collectable2.itemStack.definition.getRegistryKey()){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
                 }else{
                     //collectable.push(push.x / 2, push.y / 2);
