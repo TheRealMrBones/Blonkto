@@ -79,17 +79,17 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
 
     // #region getters
 
-    /** Gets this blocks walk through property */
+    /** Returns this blocks walk through property */
     getWalkThrough(): boolean {
         return this.walkthrough;
     }
 
-    /** Gets this blocks block cell property */
+    /** Returns this blocks block cell property */
     getBlockCell(): boolean {
         return this.blockcell;
     }
 
-    /** Gets this blocks floor visible property */
+    /** Returns this blocks floor visible property */
     getFloorVisible(): boolean {
         return this.floorvisible;
     }
