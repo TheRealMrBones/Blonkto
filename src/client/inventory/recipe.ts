@@ -9,13 +9,15 @@ class Recipe {
     ingredients: any[];
     result: string;
     resultcount: number;
+    station: string | null;
     asset: string;
     div: HTMLDivElement;
 
-    constructor(result: string, ingredients: any[], resultcount: number, asset: string, playerclient: PlayerClient) {
+    constructor(result: string, ingredients: any[], resultcount: number, station: string | null, asset: string, playerclient: PlayerClient) {
         this.result = result;
         this.ingredients = ingredients;
         this.resultcount = resultcount;
+        this.station = station;
         this.asset = asset;
 
         this.div = document.createElement("div");
@@ -58,7 +60,7 @@ class Recipe {
         }
 
         maindiv.onclick = (e) => {
-            if(this.canCraft(playerclient.inventory.getInventory())){
+            if(this.canCraft(playerclient.inventory.getInventory(), playerclient.inventory.station)){
                 const amount = e.ctrlKey ? this.canCraftAmount(playerclient.inventory.getInventory()) : 1;
                 
                 const ingredientsdictionary: { [key: string]: number } = {};
@@ -79,7 +81,8 @@ class Recipe {
     }
 
     /** Returns if the requested inventory can craft this item */
-    canCraft(inventory: (Item | null)[]): boolean {
+    canCraft(inventory: (Item | null)[], station: string | null): boolean {
+        if(this.station !== null && this.station != station) return false;
         for(const ingredient of this.ingredients) {
             let ingredientamount = 0;
             for(const item of inventory){
@@ -107,8 +110,8 @@ class Recipe {
     }
 
     /** Toggle visibility of this crafting recipe based on it if is craftable */
-    toggleVisibility(inventory: (Item | null)[]): void {
-        if(this.canCraft(inventory)){
+    toggleVisibility(inventory: (Item | null)[], station: string | null): void {
+        if(this.canCraft(inventory, station)){
             this.div.style.display = "block";
         }else{
             this.div.style.display = "none";

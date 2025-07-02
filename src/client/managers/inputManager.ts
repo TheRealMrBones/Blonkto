@@ -211,6 +211,7 @@ class InputManager {
             if(cell.block){
                 if(cell.block.openinv && e.button == 2){
                     this.playerclient.renderer.uiManager.openInventory();
+                    this.playerclient.inventory.setStation(cell.block.name);
                     this.ignoreDeltas();
                 }
             }
@@ -416,12 +417,12 @@ class InputManager {
     }
 
     /** Returns  */
-    GetSelfAsCollisionObject(): CircleCollisionObject {
+    getSelfAsCollisionObject(): CircleCollisionObject {
         return {
             scale: this.scale,
             x: this.x + this.dx,
             y: this.y + this.dy,
-        }
+        };
     }
 
     // #endregion

@@ -11,6 +11,7 @@ class Inventory {
     private readonly playerclient: PlayerClient;
     private readonly inventory: (Item | null)[] = new Array(INVENTORY_SIZE).fill(null);
     private readonly recipes: Recipe[] = [];
+    station: string | null = null;
 
     constructor(playerclient: PlayerClient){
         this.playerclient = playerclient;
@@ -117,7 +118,7 @@ class Inventory {
     /** Adds new recipes to the saved list */
     addRecipes(recipesdata: any[]): void {
         for(const recipedata of recipesdata){
-            this.recipes.push(new Recipe(recipedata.result, recipedata.ingredients, recipedata.resultcount, recipedata.asset, this.playerclient));
+            this.recipes.push(new Recipe(recipedata.result, recipedata.ingredients, recipedata.resultcount, recipedata.station, recipedata.asset, this.playerclient));
         }
     }
 
@@ -125,7 +126,7 @@ class Inventory {
     getCraftableRecipes(): Recipe[] {
         const craftablerecipes: Recipe[] = [];
         for(const recipe of this.recipes){
-            if(recipe.canCraft(this.inventory)) craftablerecipes.push(recipe);
+            if(recipe.canCraft(this.inventory, this.station)) craftablerecipes.push(recipe);
         }
         return craftablerecipes;
     }
@@ -133,8 +134,14 @@ class Inventory {
     /** Sets recipe visibility based on the current inventory */
     setRecipeVisibility(): void {
         for(const recipe of this.recipes){
-            recipe.toggleVisibility(this.inventory);
+            recipe.toggleVisibility(this.inventory, this.station);
         }
+    }
+
+    /** Sets the current station being used by the player */
+    setStation(station: string | null): void {
+        this.station = station;
+        this.setRecipeVisibility();
     }
 
     // #endregion

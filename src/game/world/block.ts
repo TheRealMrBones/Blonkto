@@ -125,6 +125,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
 
         return {
             ...componentdata,
+            name: this.definition.getRegistryKey(),
             asset: this.definition.asset,
             scale: this.definition.scale,
             shape: this.definition.shape,

@@ -12,7 +12,7 @@ class CollisionManager {
 
     /** Checks collisions between the current player and other nearby players */
     playerCollisions(players: any[]): void {
-        const meobject: CircleCollisionObject = this.playerclient.inputManager.GetSelfAsCollisionObject();
+        const meobject: CircleCollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
         const playerobjects: CircleCollisionObject[] = players as CircleCollisionObject[];
 
         const push = SharedCollisions.entityCollisions(meobject, playerobjects);
@@ -23,7 +23,7 @@ class CollisionManager {
     blockCollisions(): void {
         let push: Pos = { x: 0, y: 0 };
         for(let tries = 0; (tries < 3 && (push.x != 0 || push.y != 0)) || tries == 0; tries++){
-            const meobject: CircleCollisionObject = this.playerclient.inputManager.GetSelfAsCollisionObject();
+            const meobject: CircleCollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
 
             const checkcells: CollisionObject[] = [];
             for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){

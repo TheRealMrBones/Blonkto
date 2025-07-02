@@ -113,6 +113,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
 
         return {
             ...componentdata,
+            name: this.definition.getRegistryKey(),
             asset: this.definition.asset,
         };
     }

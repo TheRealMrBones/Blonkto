@@ -194,6 +194,7 @@ class UiManager {
             case "e": {
                 if(this.inventoryopen){
                     this.closeInventory();
+                    this.playerclient.inventory.setStation(null);
                 }
                 break;
             }

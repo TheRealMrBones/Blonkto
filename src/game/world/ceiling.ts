@@ -113,6 +113,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
 
         return {
             ...componentdata,
+            name: this.definition.getRegistryKey(),
             asset: this.definition.asset,
         };
     }
