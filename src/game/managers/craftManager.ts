@@ -1,4 +1,5 @@
 import { CraftContent } from "../../shared/messageContentTypes.js";
+import { Pos } from "../../shared/types.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
@@ -117,8 +118,18 @@ class CraftManager {
     // #region serialization
 
     /** Return the list of recipe data for all craftable recipes for a game update to the client */
-    serializeCraftableRecipesForUpdate(inventory: Inventory, station: string | null, playerid?: string): any[] {
-        return this.getCraftableRecipes(inventory, station, playerid).map(recipe => recipe.serializeForUpdate());
+    serializeCraftableRecipesForUpdate(inventory: Inventory, station: Pos | null, playerid?: string): any[] {
+        let stationname = null;
+        if(station !== null){
+            const cell = this.game.world.getCell(station.x, station.y, false);
+            if(cell !== null){
+                if(cell.block !== null){
+                    stationname = cell.block.definition.getRegistryKey();
+                }
+            }
+        }
+
+        return this.getCraftableRecipes(inventory, stationname, playerid).map(recipe => recipe.serializeForUpdate());
     }
 
     // #endregion

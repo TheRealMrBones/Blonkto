@@ -27,7 +27,7 @@ class Player extends Entity {
     color: Color;
     inventory: Inventory;
     hotbarslot: number;
-    station: string | null = null;
+    station: Pos | null = null;
     fixes: any;
     lastsetpos: number = 0;
     lastchunk: Pos | undefined;
