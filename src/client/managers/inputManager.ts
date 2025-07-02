@@ -203,6 +203,19 @@ class InputManager {
             mey: this.y,
         };
 
+        // do client side click operations
+        const cellpos: Pos = { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) };
+        const cell = this.playerclient.world.getCell(cellpos.x, cellpos.y);
+        if(cell){
+            console.log(cell);
+            if(cell.block){
+                if(cell.block.openinv && e.button == 2){
+                    this.playerclient.renderer.uiManager.openInventory();
+                    this.ignoreDeltas();
+                }
+            }
+        }
+
         // send appropriate click event
         if(e.button == 0){
             this.playerclient.networkingManager.click(content);
@@ -449,6 +462,16 @@ class InputManager {
         this.swinging = me.swinging;
         this.lastattackdir = me.lastattackdir;
         this.falling = me.falling;
+    }
+
+    /** Ignores / Reverts the latest movement inputs not sent to the server yet */
+    ignoreDeltas(){
+        this.dx = 0;
+        this.dy = 0;
+        this.startw = null;
+        this.starta = null;
+        this.starts = null;
+        this.startd = null;
     }
 
     // #endregion

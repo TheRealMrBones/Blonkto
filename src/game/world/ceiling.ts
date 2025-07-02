@@ -54,16 +54,12 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
 
     /** Return an object representing this ceilings component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
-        const data = {
-            static: {},
-            dynamic: {},
-        };
+        let data: { [key: string]: any } = {};
 
         for(const componentdata of Object.values(this.componentdata)){
             const serialized = componentdata.serializeForUpdate();
             if(serialized === null) continue;
-            data.static = { ...data.static, ...serialized.static };
-            data.dynamic = { ...data.dynamic, ...serialized.dynamic };
+            data = { ...data, ...serialized };
         }
 
         return data;

@@ -166,7 +166,7 @@ class UiManager {
     }
 
     /** Handles the open inventory action */
-    private openInventory(): void {
+    openInventory(): void {
         this.inventoryopen = true;
         this.inventorydiv.style.display = "block";
         this.playerclient.inputManager.pauseCapturingInputs();

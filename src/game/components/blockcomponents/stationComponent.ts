@@ -4,6 +4,7 @@ import Player from "../../objects/player.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import { ClickContentExpanded } from "../../managers/socketManager.js";
+import ComponentData from "../componentData.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class StationComponent extends Component<BlockDefinition> {
@@ -14,12 +15,33 @@ class StationComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
+        this.getParent().addRequiredComponentData(StationComponentData);
+
         this.getParent().registerInteractListener((block: Block, game: Game, player: Player, info: ClickContentExpanded) => this.interact(block, game, player, info));
     }
 
     /** Defines the station open interaction of the block with this component */
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
         player.station = { x: info.cellpos.x, y: info.cellpos.y };
+    }
+}
+
+class StationComponentData implements ComponentData {
+    /** Sets this station component data objects values with the given save data */
+    readFromSave(data: any): void {
+        
+    }
+
+    /** Returns an object representing this station component data for a game update to the client */
+    serializeForUpdate(): any {
+        return {
+            openinv: true,
+        };
+    }
+
+    /** Returns an object representing this station component data for writing to the save */
+    serializeForWrite(): any {
+        return null;
     }
 }
 
