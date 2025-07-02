@@ -249,7 +249,12 @@ class InputManager {
     /** Updates the clients data based on most recent inputs */
     private handleInput(): void {
         const t = Date.now();
+        const dt = this.lastupdate === null ? 1000 / CLIENT_UPDATE_RATE : t - this.lastupdate;
         this.updatePos(t);
+
+        const maxmovedist = PLAYER_SPEED * dt / 1000;
+        this.dx = Math.min(this.dx, maxmovedist);
+        this.dy = Math.min(this.dy, maxmovedist);
 
         const content: InputContent = {
             t: t,
