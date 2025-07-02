@@ -107,10 +107,10 @@ class CraftManager {
     // #region crafting
 
     /** Tries to craft whatever recipe takes the given ingredients */
-    craftRecipe(inventory: Inventory, x: number, y: number, content: CraftContent): void {
+    craftRecipe(inventory: Inventory, station: string | null, x: number, y: number, content: CraftContent): void {
         const recipe = this.getRecipeFromIngredients(content.result, content.ingredients);
         if(recipe === null) return;
-        recipe.craftRecipe(this.game, inventory, x, y, content.amount);
+        recipe.craftRecipe(this.game, station, inventory, x, y, content.amount);
     }
 
     // #endregion
@@ -127,6 +127,11 @@ class CraftManager {
                     stationname = cell.block.definition.getRegistryKey();
                 }
             }
+        }
+
+        if(playerid !== undefined){
+            const player = this.game.players[playerid];
+            player.laststation = player.station;
         }
 
         return this.getCraftableRecipes(inventory, stationname, playerid).map(recipe => recipe.serializeForUpdate());

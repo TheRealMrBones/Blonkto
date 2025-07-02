@@ -9,6 +9,7 @@ import RandomChangeComponent from "../components/blockcomponents/randomChangeCom
 import PickupComponent from "../components/blockcomponents/pickupComponent.js";
 import PickComponent from "../components/blockcomponents/pickComponent.js";
 import TimeChangeComponent from "../components/blockcomponents/timeChangeComponent.js";
+import StationComponent from "../components/blockcomponents/stationComponent.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
@@ -41,6 +42,7 @@ BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASS
     .addComponent(new PickComponent())
     .setFloorVisible(true)
     .setWalkThrough(true));
-BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8));
+BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8)
+    .addComponent(new StationComponent()));
 
 export default BlockRegistry;

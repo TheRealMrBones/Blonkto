@@ -41,7 +41,9 @@ class Recipe {
     }
 
     /** Returns the amount of the given recipe the given inventory can craft */
-    canCraftAmount(inventory: Inventory): number {
+    canCraftAmount(inventory: Inventory, station: string | null): number {
+        if(this.station !== null && this.station != station) return 0;
+
         let amount = Infinity;
         for(const ingredient in this.ingredients){
             amount = Math.min(amount, Math.floor(inventory.containsAmount(ingredient) / this.ingredients[ingredient]));
@@ -51,8 +53,9 @@ class Recipe {
     }
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
-    craftRecipe(game: Game, inventory: Inventory, x: number, y:number, amount?: number): void {
-        const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory)) * this.resultcount;
+    craftRecipe(game: Game, station: string | null, inventory: Inventory, x: number, y:number, amount?: number): void {
+        const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory, station)) * this.resultcount;
+        if(craftamount == 0) return;
 
         for(const ingredient in this.ingredients){
             const removeamount = this.ingredients[ingredient] * craftamount / this.resultcount;

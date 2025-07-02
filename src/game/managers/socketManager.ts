@@ -133,7 +133,18 @@ class SocketManager {
         if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
         
         const player = this.game.players[socket.id];
-        this.game.craftManager.craftRecipe(player.inventory, player.x, player.y, content);
+
+        let stationname = null;
+        if(player.station !== null){
+            const cell = this.game.world.getCell(player.station.x, player.station.y, false);
+            if(cell !== null){
+                if(cell.block !== null){
+                    stationname = cell.block.definition.getRegistryKey();
+                }
+            }
+        } 
+
+        this.game.craftManager.craftRecipe(player.inventory, stationname, player.x, player.y, content);
     }
 
     // #endregion

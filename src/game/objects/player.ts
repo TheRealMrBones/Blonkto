@@ -28,6 +28,7 @@ class Player extends Entity {
     inventory: Inventory;
     hotbarslot: number;
     station: Pos | null = null;
+    laststation: Pos | null = null;
     fixes: any;
     lastsetpos: number = 0;
     lastchunk: Pos | undefined;
@@ -142,8 +143,7 @@ class Player extends Entity {
         if(this.lastsetpos > data.lastserverupdate){
             // ignore if setpos happened in future for client
         }else if(data.dx > maxmovedist || data.dy > maxmovedist){
-            console.log(data.dx - maxmovedist);
-            console.log(data.dy - maxmovedist);
+            // player moved too fast compared to known speed
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
 
             this.x += Math.min(data.dx, maxmovedist);
@@ -153,6 +153,8 @@ class Player extends Entity {
         }else{
             this.x += data.dx;
             this.y += data.dy;
+            
+            if(data.dx != 0 || data.dy != 0) this.station = null;
         }
 
         // set other data
