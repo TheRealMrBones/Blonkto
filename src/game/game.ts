@@ -125,7 +125,7 @@ class Game {
         const fixescopy = player.getFixes();
         const inventoryupdates = player.inventory.getChanges();
         const recipes: any[] = (this.craftManager.playerHasInitialRecipes(player.id) || inventoryupdates.length > 0) ?
-            this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.id) : [];
+            this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.station, player.id) : [];
 
         // return full update object
         const content: GameUpdateContent = {

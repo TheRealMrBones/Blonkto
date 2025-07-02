@@ -72,13 +72,13 @@ class CraftManager {
     }
 
     /** Returns all recipes craftable with the given inventories items */
-    getCraftableRecipes(inventory: Inventory, playerid?: string): Recipe[] {
+    getCraftableRecipes(inventory: Inventory, station: string | null, playerid?: string): Recipe[] {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
             if(playerid !== undefined){
                 if(this.playerrecipes[playerid].includes(recipe)) continue;
             }
-            if(recipe.canCraft(inventory)) recipes.push(recipe);
+            if(recipe.canCraft(inventory, station)) recipes.push(recipe);
         }
 
         if(playerid !== undefined){
@@ -117,8 +117,8 @@ class CraftManager {
     // #region serialization
 
     /** Return the list of recipe data for all craftable recipes for a game update to the client */
-    serializeCraftableRecipesForUpdate(inventory: Inventory, playerid?: string): any[] {
-        return this.getCraftableRecipes(inventory, playerid).map(recipe => recipe.serializeForUpdate());
+    serializeCraftableRecipesForUpdate(inventory: Inventory, station: string | null, playerid?: string): any[] {
+        return this.getCraftableRecipes(inventory, station, playerid).map(recipe => recipe.serializeForUpdate());
     }
 
     // #endregion

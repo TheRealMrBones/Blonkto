@@ -4,20 +4,22 @@ import ItemRegistry from "../registries/itemRegistry.js";
 import Inventory from "./inventory.js";
 
 class Recipe {
-    ingredients: { [item: string]: number };
-    result: string;
-    resultcount: number;
+    readonly ingredients: { [item: string]: number };
+    readonly result: string;
+    readonly resultcount: number;
+    readonly station: string | null;
 
-    constructor(result: string, ingredients: { [item: string]: number }, resultCount?: number) {
+    constructor(result: string, ingredients: { [item: string]: number }, resultCount?: number, station?: string) {
         this.result = result;
         this.ingredients = ingredients;
         this.resultcount = resultCount || 1;
+        this.station = station || null;
     }
 
     /** Returns a recipe object loaded from the data of a json file */
     static readFromJson(data: string): Recipe {
         const recipe = JSON.parse(data);
-        return new Recipe(recipe.result, recipe.ingredients, recipe.resultCount);
+        return new Recipe(recipe.result, recipe.ingredients, recipe.resultCount, recipe.station);
     }
 
     /** Returns if this ingredients list correctly matches this recipes */
@@ -30,7 +32,8 @@ class Recipe {
     }
 
     /** Returns if the requested inventory can craft this item */
-    canCraft(inventory: Inventory): boolean {
+    canCraft(inventory: Inventory, station: string | null): boolean {
+        if(this.station !== null && this.station != station) return false;
         for(const ingredient in this.ingredients) {
             if(!inventory.contains(ingredient, this.ingredients[ingredient])) return false;
         }
@@ -72,6 +75,7 @@ class Recipe {
             })),
             result: this.result,
             resultcount: this.resultcount,
+            station: this.station,
             asset: ItemRegistry.get(this.result).getAsset(),
         };
     }
