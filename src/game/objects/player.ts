@@ -134,11 +134,20 @@ class Player extends Entity {
         const deltatime = this.lastupdated == 0 ? 20 : data.t - this.lastupdated;
 
         // only move if valid distance
-        const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
+        //const movedist = Math.sqrt(data.dx * data.dx + data.dy * data.dy);
+        const allowederror = 0.01;
+        const maxmovedist = (this.getSpeed() * deltatime / 1000) + allowederror;
+
         if(this.lastsetpos > data.lastserverupdate){
             // ignore if setpos happened in future for client
-        }else if(movedist > this.getSpeed() * deltatime / 1000 + .05){
+        }else if(data.dx > maxmovedist || data.dy > maxmovedist){
+            console.log(data.dx - maxmovedist);
+            console.log(data.dy - maxmovedist);
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);
+
+            this.x += Math.min(data.dx, maxmovedist);
+            this.y += Math.min(data.dy, maxmovedist);
+
             this.resync();
         }else{
             this.x += data.dx;
