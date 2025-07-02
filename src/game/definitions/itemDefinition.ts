@@ -5,7 +5,7 @@ import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
 import ItemStack from "../items/itemStack.js";
 import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../types.js";
+import { ClickContentExpanded } from "../managers/socketManager.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;

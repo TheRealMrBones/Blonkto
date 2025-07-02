@@ -6,7 +6,7 @@ import Game from "../game.js";
 import DropBase from "../items/dropBase.js";
 import Block from "../world/block.js";
 import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../types.js";
+import { ClickContentExpanded } from "../managers/socketManager.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES } = Constants;

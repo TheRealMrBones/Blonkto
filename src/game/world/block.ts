@@ -8,7 +8,7 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import BlockRegistry from "../registries/blockRegistry.js";
 import { SerializedWriteBlock } from "../../shared/serializedWriteTypes.js";
-import { ClickContentExpanded } from "../types.js";
+import { ClickContentExpanded } from "../managers/socketManager.js";
 
 /** Represents a placed block in the game world */
 class Block implements RegistryDefinedWithComponents<BlockDefinition> {
