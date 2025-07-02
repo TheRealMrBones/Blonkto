@@ -54,5 +54,8 @@ ItemRegistry.register("raw_pork", new ItemDefinition("Raw Pork", 64, ASSETS.RAW_
 ItemRegistry.register("carrot", new ItemDefinition("Carrot", 64, ASSETS.CARROT)
     .addComponent(new BuildComponent("planted_carrots", [OrganicComponent]))
     .addComponent(new EatComponent(2)));
+    
+ItemRegistry.register("work_bench", new ItemDefinition("Work Bench", 64, ASSETS.WORK_BENCH)
+    .addComponent(new BuildComponent("work_bench")));
 
 export default ItemRegistry;

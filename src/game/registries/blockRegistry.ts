@@ -41,5 +41,6 @@ BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASS
     .addComponent(new PickComponent())
     .setFloorVisible(true)
     .setWalkThrough(true));
+BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8));
 
 export default BlockRegistry;
