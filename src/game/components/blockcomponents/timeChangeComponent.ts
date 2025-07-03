@@ -22,7 +22,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(TimeChangeComponentData);
+        this.getParent().addRequiredComponentData(TimeChangeComponentData, this);
                 
         this.getParent().registerTickListener((block: Block, game: Game, dt: number) => this.tick(block, game, dt));
     }
@@ -46,7 +46,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
     }
 }
 
-class TimeChangeComponentData implements ComponentData {
+class TimeChangeComponentData extends ComponentData<TimeChangeComponent> {
     delayleft: number = -1;
 
     /** Sets this time change component data objects values with the given save data */

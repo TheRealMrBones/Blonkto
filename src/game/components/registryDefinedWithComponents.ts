@@ -5,7 +5,7 @@ import ComponentHandler from "./componentHandler.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
 interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & RegistryValue> extends RegistryDefined<T> {
-    readonly componentdata: { [key: string]: ComponentData };
+    readonly componentdata: { [key: string]: ComponentData<any> };
 
     /** Initializes this objects required component data instances */
     initComponentData(): void;
@@ -14,7 +14,7 @@ interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & Registry
     loadComponentData(data: { [key: string]: any }): void;
 
     /** Returns this objects instance of the requested component data */
-    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2;
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2;
 
     /** Return an object representing this objects component data for a game update to the client */
     serializeComponentDataForUpdate(): any;

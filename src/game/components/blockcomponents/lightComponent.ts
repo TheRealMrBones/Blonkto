@@ -15,11 +15,11 @@ class LightComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(LightComponentData);
+        this.getParent().addRequiredComponentData(LightComponentData, this);
     }
 }
 
-class LightComponentData implements ComponentData {
+class LightComponentData extends ComponentData<LightComponent> {
     /** Sets this light component data objects values with the given save data */
     readFromSave(data: any): void {
         
@@ -28,7 +28,7 @@ class LightComponentData implements ComponentData {
     /** Returns an object representing this light component data for a game update to the client */
     serializeForUpdate(): any {
         return {
-            light: true,
+            light: this.parent.distance,
         };
     }
 

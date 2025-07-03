@@ -12,7 +12,7 @@ import { SerializedWriteFloor } from "../../shared/serializedWriteTypes.js";
 class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
     readonly cell: Cell;
     readonly definition: FloorDefinition;
-    readonly componentdata: { [key: string]: ComponentData } = {};
+    readonly componentdata: { [key: string]: ComponentData<any> } = {};
     
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -35,7 +35,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
     /** Initializes this floors required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.name] = new c();
+            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
         });
     }
 
@@ -48,7 +48,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
     }
 
     /** Returns this floors instance of the requested component data */
-    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
         return this.componentdata[componentDataType.name] as T2;
     }
 

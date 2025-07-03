@@ -14,7 +14,7 @@ class MoveTargetComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(MoveTargetComponentData);
+        this.getParent().addRequiredComponentData(MoveTargetComponentData, this);
 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
     }
@@ -66,7 +66,7 @@ class MoveTargetComponent extends Component<EntityDefinition> {
     }
 }
 
-export class MoveTargetComponentData implements ComponentData {
+export class MoveTargetComponentData extends ComponentData<MoveTargetComponent> {
     targetposqueue: Pos[] = [];
     currenttarget: Pos | null = null;
     startofcurrenttarget: number | null = null;

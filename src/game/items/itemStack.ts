@@ -10,7 +10,7 @@ import { ClickContentExpanded } from "../managers/socketManager.js";
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     readonly definition: ItemDefinition;
-    readonly componentdata: { [key: string]: ComponentData } = {};
+    readonly componentdata: { [key: string]: ComponentData<any> } = {};
 
     private amount: number = 1;
 
@@ -33,7 +33,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     /** Initializes this stacks required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.name] = new c();
+            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
         });
     }
 
@@ -46,7 +46,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     }
 
     /** Returns this stacks instance of the requested component data */
-    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
         return this.componentdata[componentDataType.name] as T2;
     }
 

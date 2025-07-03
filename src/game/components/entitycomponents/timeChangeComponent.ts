@@ -20,7 +20,7 @@ class TimeChangeComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(TimeChangeComponentData);
+        this.getParent().addRequiredComponentData(TimeChangeComponentData, this);
                 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
     }
@@ -41,7 +41,7 @@ class TimeChangeComponent extends Component<EntityDefinition> {
     }
 }
 
-class TimeChangeComponentData implements ComponentData {
+class TimeChangeComponentData extends ComponentData<TimeChangeComponent> {
     delayleft: number = -1;
 
     /** Sets this time change component data objects values with the given save data */

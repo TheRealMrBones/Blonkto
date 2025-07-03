@@ -28,7 +28,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(SimpleAttackComponentData);
+        this.getParent().addRequiredComponentData(SimpleAttackComponentData, this);
 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
         this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
@@ -92,7 +92,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
     }
 }
 
-class SimpleAttackComponentData implements ComponentData {
+class SimpleAttackComponentData extends ComponentData<SimpleAttackComponent> {
     target: Entity | null = null;
     lasthit: number = 0;
 

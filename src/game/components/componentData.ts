@@ -1,13 +1,21 @@
-/** The base interface for a specific components object instance data structure */
-interface ComponentData {
+import Component from "./component.js";
+
+/** The base class for a specific components object instance data structure */
+abstract class ComponentData<T extends Component<any>> {
+    readonly parent: T;
+
+    constructor(parent: T){
+        this.parent = parent;
+    }
+
     /** Sets this component data objects values with the given save data */
-    readFromSave(data: any): void;
+    abstract readFromSave(data: any): void;
 
     /** Returns an object representing this component data for a game update to the client */
-    serializeForUpdate(): any;
+    abstract serializeForUpdate(): any;
 
     /** Returns an object representing this component data for writing to the save */
-    serializeForWrite(): any;
+    abstract serializeForWrite(): any;
 }
 
 export default ComponentData;

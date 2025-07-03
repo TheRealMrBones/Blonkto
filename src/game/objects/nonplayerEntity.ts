@@ -8,7 +8,7 @@ import Entity from "./entity.js";
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<EntityDefinition> {
     readonly definition: EntityDefinition;
-    readonly componentdata: { [key: string]: ComponentData } = {};
+    readonly componentdata: { [key: string]: ComponentData<any> } = {};
 
     constructor(x: number, y: number, dir: number, entitydefinition: string){
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
@@ -35,7 +35,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     /** Initializes this entities required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.name] = new c();
+            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
         });
     }
 
@@ -48,7 +48,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     }
 
     /** Returns this entities instance of the requested component data */
-    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
         return this.componentdata[componentDataType.name] as T2;
     }
 

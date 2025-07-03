@@ -15,7 +15,7 @@ class StationComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(StationComponentData);
+        this.getParent().addRequiredComponentData(StationComponentData, this);
 
         this.getParent().registerInteractListener((block: Block, game: Game, player: Player, info: ClickContentExpanded) => this.interact(block, game, player, info));
     }
@@ -26,7 +26,7 @@ class StationComponent extends Component<BlockDefinition> {
     }
 }
 
-class StationComponentData implements ComponentData {
+class StationComponentData extends ComponentData<StationComponent> {
     /** Sets this station component data objects values with the given save data */
     readFromSave(data: any): void {
         

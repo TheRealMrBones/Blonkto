@@ -14,7 +14,7 @@ import { ClickContentExpanded } from "../managers/socketManager.js";
 class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     readonly cell: Cell;
     readonly definition: BlockDefinition;
-    readonly componentdata: { [key: string]: ComponentData } = {};
+    readonly componentdata: { [key: string]: ComponentData<any> } = {};
     
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -37,7 +37,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     /** Initializes this blocks required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.name] = new c();
+            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
         });
     }
 
@@ -50,7 +50,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     }
 
     /** Returns this blocks instance of the requested component data */
-    getComponentData<T2 extends ComponentData>(componentDataType: new (...args: any[]) => T2): T2 {
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
         return this.componentdata[componentDataType.name] as T2;
     }
 

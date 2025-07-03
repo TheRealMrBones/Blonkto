@@ -32,7 +32,7 @@ class BreedComponent extends Component<EntityDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(BreedComponentData);
+        this.getParent().addRequiredComponentData(BreedComponentData, this);
 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
         this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.breed(self, game, entity, push));
@@ -120,7 +120,7 @@ class BreedComponent extends Component<EntityDefinition> {
     }
 }
 
-class BreedComponentData implements ComponentData {
+class BreedComponentData extends ComponentData<BreedComponent> {
     lastfed: number = 0;
     target: NonplayerEntity | null = null;
     breedstart: number = 0;

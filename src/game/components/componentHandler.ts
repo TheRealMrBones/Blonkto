@@ -10,7 +10,7 @@ class ComponentHandler<T> {
     private readonly logger: Logger;
 
     private components: { [key: string]: Component<T> } = {};
-    private requiredComponentData: (new (...args: any[]) => ComponentData)[] = [];
+    private requiredComponentData: { componentdata: (new (...args: any[]) => ComponentData<any>), parent: Component<T> }[] = [];
 
     constructor(){
         this.logger = Logger.getLogger(LOG_CATEGORIES.COMPONENT_HANDLER);
@@ -57,12 +57,12 @@ class ComponentHandler<T> {
     // #region component data
 
     /** Adds the requested required component data to this handler */
-    addRequiredComponentData(componentdata: new (...args: any[]) => ComponentData): void {
-        this.requiredComponentData.push(componentdata);
+    addRequiredComponentData(componentdata: new (...args: any[]) => ComponentData<any>, parent: Component<T>): void {
+        this.requiredComponentData.push({ componentdata: componentdata, parent: parent });
     }
 
     /** Returns this handlers list of required component data types */
-    getRequiredComponentData(): (new (...args: any[]) => ComponentData)[] {
+    getRequiredComponentData(): { componentdata: (new (...args: any[]) => ComponentData<any>), parent: Component<T> }[] {
         return this.requiredComponentData;
     }
 
