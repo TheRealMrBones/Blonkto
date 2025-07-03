@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import ComponentData from "../componentData.js";
+import SerializableForWrite from "../../serialization/serializableForWrite.js";
 
 /** A Block Component that allows the block to be changed after a set amount of ticks have passed */
 class TimeChangeComponent extends Component<BlockDefinition> {
@@ -46,17 +47,12 @@ class TimeChangeComponent extends Component<BlockDefinition> {
     }
 }
 
-class TimeChangeComponentData extends ComponentData<TimeChangeComponent> {
+class TimeChangeComponentData extends ComponentData<TimeChangeComponent> implements SerializableForWrite {
     delayleft: number = -1;
 
     /** Sets this time change component data objects values with the given save data */
     readFromSave(data: any): void {
         this.delayleft = data.delayleft;
-    }
-
-    /** Returns an object representing this time change component data for a game update to the client */
-    serializeForUpdate(): any {
-        return null;
     }
 
     /** Returns an object representing this time change component data for writing to the save */

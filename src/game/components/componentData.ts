@@ -7,15 +7,6 @@ abstract class ComponentData<T extends Component<any>> {
     constructor(parent: T){
         this.parent = parent;
     }
-
-    /** Sets this component data objects values with the given save data */
-    abstract readFromSave(data: any): void;
-
-    /** Returns an object representing this component data for a game update to the client */
-    abstract serializeForUpdate(): any;
-
-    /** Returns an object representing this component data for writing to the save */
-    abstract serializeForWrite(): any;
 }
 
 export default ComponentData;

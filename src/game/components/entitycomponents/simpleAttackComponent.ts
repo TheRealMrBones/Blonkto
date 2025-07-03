@@ -95,21 +95,6 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
 class SimpleAttackComponentData extends ComponentData<SimpleAttackComponent> {
     target: Entity | null = null;
     lasthit: number = 0;
-
-    /** Sets this simple attack component data objects values with the given save data */
-    readFromSave(data: any): void {
-        
-    }
-
-    /** Returns an object representing this simple attack component data for a game update to the client */
-    serializeForUpdate(): any {
-        return null;
-    }
-
-    /** Returns an object representing this simple attack component data for writing to the save */
-    serializeForWrite(): any {
-        return null;
-    }
 }
 
 export default SimpleAttackComponent;

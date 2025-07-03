@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import ComponentData from "../componentData.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import SerializableForWrite from "../../serialization/serializableForWrite.js";
 
 /** A Entity Component that allows the entity to be changed after a set amount of ticks have passed */
 class TimeChangeComponent extends Component<EntityDefinition> {
@@ -41,17 +42,12 @@ class TimeChangeComponent extends Component<EntityDefinition> {
     }
 }
 
-class TimeChangeComponentData extends ComponentData<TimeChangeComponent> {
+class TimeChangeComponentData extends ComponentData<TimeChangeComponent> implements SerializableForWrite {
     delayleft: number = -1;
 
     /** Sets this time change component data objects values with the given save data */
     readFromSave(data: any): void {
         this.delayleft = data.delayleft;
-    }
-
-    /** Returns an object representing this time change component data for a game update to the client */
-    serializeForUpdate(): any {
-        return null;
     }
 
     /** Returns an object representing this time change component data for writing to the save */

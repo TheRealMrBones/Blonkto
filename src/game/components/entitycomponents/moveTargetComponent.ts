@@ -73,21 +73,6 @@ export class MoveTargetComponentData extends ComponentData<MoveTargetComponent> 
     blocked: boolean = false;
     currentpriotity: number = 0;
 
-    /** Sets this move target component data objects values with the given save data */
-    readFromSave(data: any): void {
-        
-    }
-
-    /** Returns an object representing this move target component data for a game update to the client */
-    serializeForUpdate(): any {
-        return null;
-    }
-
-    /** Returns an object representing this move target component data for writing to the save */
-    serializeForWrite(): any {
-        return null;
-    }
-
     /** Sets the targetposqueue if priority is higher or equal */
     setQueue(priority: number, queue: Pos[]): boolean {
         if(priority < this.currentpriotity && !this.queueEmpty()) return false;

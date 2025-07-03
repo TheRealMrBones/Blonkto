@@ -3,6 +3,8 @@ import RegistryDefinedWithComponents from "../components/registryDefinedWithComp
 import EntityDefinition from "../definitions/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
+import SerializableForUpdate from "../serialization/serializableForUpdate.js";
+import SerializableForWrite from "../serialization/serializableForWrite.js";
 import Entity from "./entity.js";
 
 /** The base class for non-player entities loaded in the game world */
@@ -43,7 +45,9 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            this.componentdata[componentdataloaded[0]].readFromSave(componentdataloaded[1]);
+            const cd = this.componentdata[componentdataloaded[0]] as unknown as SerializableForWrite;
+            if(cd.readFromSave !== undefined)
+                cd.readFromSave(componentdataloaded[1]);
         }
     }
 
@@ -60,7 +64,10 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         };
 
         for(const componentdata of Object.values(this.componentdata)){
-            const serialized = componentdata.serializeForUpdate();
+            const cd = componentdata as unknown as SerializableForUpdate;
+            if(cd.serializeForUpdate === undefined) continue;
+
+            const serialized = cd.serializeForUpdate();
             if(serialized === null) continue;
             data.static = { ...data.static, ...serialized.static };
             data.dynamic = { ...data.dynamic, ...serialized.dynamic };
@@ -74,7 +81,10 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         const data: { [key: string]: any } = {};
 
         for(const componentdata of Object.entries(this.componentdata)){
-            const serialized = componentdata[1].serializeForWrite();
+            const cd = componentdata[1] as unknown as SerializableForWrite;
+            if(cd.serializeForWrite === undefined) continue;
+
+            const serialized = cd.serializeForWrite();
             if(serialized === null) continue;
             data[componentdata[0]] = serialized;
         }
