@@ -1,4 +1,5 @@
 import { Server as SocketIo } from "socket.io";
+import sizeof from "object-sizeof";
 
 import Logger from "../server/logging/logger.js";
 import FileManager from "../server/fileManager.js";
@@ -142,6 +143,11 @@ class Game {
             darkness: this.world.darknesspercent,
             tps: this.performanceManager.getTps(),
         };
+
+        // uncomment to check size of packets
+        const packetsize = sizeof(content);
+        //console.log(packetsize);
+
         return content;
     }
 
