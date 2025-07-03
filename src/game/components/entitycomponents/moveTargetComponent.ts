@@ -31,6 +31,7 @@ class MoveTargetComponent extends Component<EntityDefinition> {
         }
 
         // check for blocked status
+        data.blocked = false;
         if(data.startofcurrenttarget !== null){
             if(Date.now() - data.startofcurrenttarget > self.getSpeed() * 2000){
                 data.blocked = true;
@@ -46,7 +47,6 @@ class MoveTargetComponent extends Component<EntityDefinition> {
             if(targetpos !== data.currenttarget){
                 data.currenttarget = targetpos;
                 data.startofcurrenttarget = Date.now();
-                data.blocked = false;
             }
 
             self.dir = Math.atan2(targetpos.x - self.x, self.y - targetpos.y);
