@@ -76,3 +76,5 @@ import posCommand from "../commands/posCommand.js";
 posCommand();
 import entityCountCommand from "../commands/entityCountCommand.js";
 entityCountCommand();
+import healCommand from "../commands/healCommand.js";
+healCommand();
