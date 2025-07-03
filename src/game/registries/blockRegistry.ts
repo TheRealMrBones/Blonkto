@@ -12,6 +12,7 @@ import TimeChangeComponent from "../components/blockcomponents/timeChangeCompone
 import StationComponent from "../components/blockcomponents/stationComponent.js";
 
 import Constants from "../../shared/constants.js";
+import LightComponent from "../components/blockcomponents/lightComponent.js";
 const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
@@ -44,5 +45,9 @@ BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASS
     .setWalkThrough(true));
 BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8)
     .addComponent(new StationComponent()));
+BlockRegistry.register("torch", new BlockDefinition("Torch", ASSETS.TORCH, new Drop("torch"), MINE_TYPES.ANY, 0, .8)
+    .addComponent(new LightComponent(8))
+    .setFloorVisible(true)
+    .setWalkThrough(true));
 
 export default BlockRegistry;

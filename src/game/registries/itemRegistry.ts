@@ -57,5 +57,7 @@ ItemRegistry.register("carrot", new ItemDefinition("Carrot", 64, ASSETS.CARROT)
     
 ItemRegistry.register("work_bench", new ItemDefinition("Work Bench", 64, ASSETS.WORK_BENCH)
     .addComponent(new BuildComponent("work_bench")));
+ItemRegistry.register("torch", new ItemDefinition("Torch", 64, ASSETS.TORCH)
+    .addComponent(new BuildComponent("torch")));
 
 export default ItemRegistry;
