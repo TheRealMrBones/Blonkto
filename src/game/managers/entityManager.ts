@@ -50,6 +50,8 @@ class EntityManager {
             if(cell === null) return;
             if(cell.block !== null) return;
 
+            if(this.game.world.light[[cellx,celly].toString()] !== undefined) return;
+
             if(Math.random() > .05){
                 const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
                 this.game.entities[zombie.id] = zombie;

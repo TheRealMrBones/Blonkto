@@ -27,6 +27,7 @@ class World {
     
     game: Game;
     loadedchunks: {[key: string]: Chunk};
+    light: {[key: string]: number} = {};
 
     unloadInterval: NodeJS.Timeout;
     saveInterval: NodeJS.Timeout;
