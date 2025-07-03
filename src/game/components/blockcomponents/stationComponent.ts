@@ -5,7 +5,7 @@ import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import { ClickContentExpanded } from "../../managers/socketManager.js";
 import ComponentData from "../componentData.js";
-import SerializableForUpdate from "../../serialization/serializableForUpdate.js";
+import SerializableForUpdate from "../serializableForUpdate.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class StationComponent extends Component<BlockDefinition> {

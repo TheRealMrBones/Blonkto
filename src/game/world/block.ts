@@ -9,8 +9,8 @@ import Player from "../objects/player.js";
 import BlockRegistry from "../registries/blockRegistry.js";
 import { SerializedWriteBlock } from "../../shared/serializedWriteTypes.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
-import SerializableForWrite from "../serialization/serializableForWrite.js";
-import SerializableForUpdate from "../serialization/serializableForUpdate.js";
+import SerializableForWrite from "../components/serializableForWrite.js";
+import SerializableForUpdate from "../components/serializableForUpdate.js";
 
 /** Represents a placed block in the game world */
 class Block implements RegistryDefinedWithComponents<BlockDefinition> {

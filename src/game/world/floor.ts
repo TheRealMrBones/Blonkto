@@ -7,8 +7,8 @@ import Cell from "./cell.js";
 import Game from "../game.js";
 import FloorRegistry from "../registries/floorRegistry.js";
 import { SerializedWriteFloor } from "../../shared/serializedWriteTypes.js";
-import SerializableForWrite from "../serialization/serializableForWrite.js";
-import SerializableForUpdate from "../serialization/serializableForUpdate.js";
+import SerializableForWrite from "../components/serializableForWrite.js";
+import SerializableForUpdate from "../components/serializableForUpdate.js";
 
 /** Represents a placed floor in the game world */
 class Floor implements RegistryDefinedWithComponents<FloorDefinition> {

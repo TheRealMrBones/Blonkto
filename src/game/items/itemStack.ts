@@ -6,8 +6,8 @@ import ItemRegistry from "../registries/itemRegistry.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
 import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
-import SerializableForWrite from "../serialization/serializableForWrite.js";
-import SerializableForUpdate from "../serialization/serializableForUpdate.js";
+import SerializableForWrite from "../components/serializableForWrite.js";
+import SerializableForUpdate from "../components/serializableForUpdate.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {

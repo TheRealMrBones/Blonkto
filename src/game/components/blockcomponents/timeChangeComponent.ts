@@ -3,7 +3,7 @@ import Game from "../../game.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import ComponentData from "../componentData.js";
-import SerializableForWrite from "../../serialization/serializableForWrite.js";
+import SerializableForWrite from "../serializableForWrite.js";
 
 /** A Block Component that allows the block to be changed after a set amount of ticks have passed */
 class TimeChangeComponent extends Component<BlockDefinition> {

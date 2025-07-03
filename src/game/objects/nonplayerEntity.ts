@@ -3,8 +3,8 @@ import RegistryDefinedWithComponents from "../components/registryDefinedWithComp
 import EntityDefinition from "../definitions/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
-import SerializableForUpdate from "../serialization/serializableForUpdate.js";
-import SerializableForWrite from "../serialization/serializableForWrite.js";
+import SerializableForUpdate from "../components/serializableForUpdate.js";
+import SerializableForWrite from "../components/serializableForWrite.js";
 import Entity from "./entity.js";
 
 /** The base class for non-player entities loaded in the game world */

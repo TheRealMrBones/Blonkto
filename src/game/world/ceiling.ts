@@ -7,8 +7,8 @@ import Cell from "./cell.js";
 import Game from "../game.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
 import { SerializedWriteCeiling } from "../../shared/serializedWriteTypes.js";
-import SerializableForWrite from "../serialization/serializableForWrite.js";
-import SerializableForUpdate from "../serialization/serializableForUpdate.js";
+import SerializableForWrite from "../components/serializableForWrite.js";
+import SerializableForUpdate from "../components/serializableForUpdate.js";
 
 /** Represents a placed ceiling in the game world */
 class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {

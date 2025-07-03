@@ -1,7 +1,7 @@
 import Component from "../component.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import ComponentData from "../componentData.js";
-import SerializableForUpdate from "../../serialization/serializableForUpdate.js";
+import SerializableForUpdate from "../serializableForUpdate.js";
 
 /** A Block Component that allows the block to be opened as a light */
 class LightComponent extends Component<BlockDefinition> {
