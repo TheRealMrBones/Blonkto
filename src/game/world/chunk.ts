@@ -22,7 +22,7 @@ class Chunk {
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(chunkx: number, chunky: number, data: string): Chunk | null {
+    static readFromSave(chunkx: number, chunky: number, data: string, game: Game): Chunk | null {
         const chunk = new Chunk(chunkx, chunky);
         const chunkdata = data.split("\n");
 
@@ -31,7 +31,7 @@ class Chunk {
                 chunk.cells[x] = [];
                 for(let y = 0; y < CHUNK_SIZE; y++){
                     const celldata = JSON.parse(chunkdata[x * CHUNK_SIZE + y]);
-                    const cell = Cell.readFromSave(chunk, x, y, celldata);
+                    const cell = Cell.readFromSave(chunk, x, y, celldata, game);
                     chunk.cells[x][y] = cell;
                 }
             }

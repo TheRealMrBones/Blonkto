@@ -30,11 +30,14 @@ class Cell {
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(chunk: Chunk, chunkx: number, chunky: number, data: any): Cell {
+    static readFromSave(chunk: Chunk, chunkx: number, chunky: number, data: any, game: Game): Cell {
         const cell = new Cell(chunk, chunkx, chunky, data.basefloor ? data.basefloor : null);
         if(data.block) cell.block = Block.readFromSave(cell, data.block);
         if(data.floor) cell.floor = Floor.readFromSave(cell, data.floor);
         if(data.ceiling) cell.ceiling = Ceiling.readFromSave(cell, data.ceiling);
+        if(cell.block !== null) cell.block.emitInstantiateEvent(game);
+        if(cell.floor !== null) cell.floor.emitInstantiateEvent(game);
+        if(cell.ceiling !== null) cell.ceiling.emitInstantiateEvent(game);
         return cell;
     }
 

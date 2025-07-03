@@ -347,7 +347,7 @@ class World {
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
         if(!data) return null;
-        const chunk = Chunk.readFromSave(x, y, data);
+        const chunk = Chunk.readFromSave(x, y, data, this.game);
         if(chunk === null){
             this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
             return this.generateChunk(x, y);
