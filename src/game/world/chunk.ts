@@ -52,11 +52,11 @@ class Chunk {
                 const cell = new Cell(chunk, x, y, "grass_floor");
 
                 if(Math.random() < .1){
-                    cell.setBlock("stone_block");
+                    cell.setBlock("stone_block", game);
                 }else if(Math.random() < .02){
-                    cell.setBlock("tree_trunk");
+                    cell.setBlock("tree_trunk", game);
                 }else if(Math.random() < .005){
-                    cell.setBlock("grown_carrots");
+                    cell.setBlock("grown_carrots", game);
                 }else if(Math.random() < .0051){
                     const pig = new NonplayerEntity(chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
                     game.entities[pig.id] = pig;

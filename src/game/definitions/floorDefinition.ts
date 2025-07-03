@@ -46,6 +46,11 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements Regis
         this.eventEmitter.on(event, listener);
     }
 
+    /** Registers a instantiate event listener to this floor definitions event handler */
+    registerInstantiateListener(listener: (self: Floor, game: Game, dt: number) => void): void {
+        this.registerListener("instantiate", listener);
+    }
+
     /** Registers a tick event listener to this floor definitions event handler */
     registerTickListener(listener: (self: Floor, game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);

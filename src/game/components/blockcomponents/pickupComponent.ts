@@ -26,7 +26,7 @@ class PickupComponent extends Component<BlockDefinition> {
 
     /** Defines the pickup interaction of the block with this component */
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
-        block.cell.setBlock(null);
+        block.cell.setBlock(null, game);
         const itemstack = new ItemStack(this.item, this.amount);
         if(player.inventory.collectStack(itemstack)) return;
         DroppedStack.dropWithSpread(game, info.cellpos.x, info.cellpos.y, itemstack, .3, player.id);

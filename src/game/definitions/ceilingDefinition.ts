@@ -46,6 +46,11 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
         this.eventEmitter.on(event, listener);
     }
 
+    /** Registers a instantiate event listener to this ceiling definitions event handler */
+    registerInstantiateListener(listener: (self: Ceiling, game: Game, dt: number) => void): void {
+        this.registerListener("instantiate", listener);
+    }
+
     /** Registers a tick event listener to this ceiling definitions event handler */
     registerTickListener(listener: (self: Ceiling, game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);

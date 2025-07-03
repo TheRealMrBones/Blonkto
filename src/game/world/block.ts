@@ -99,6 +99,11 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         this.eventEmitter.on(event, listener);
     }
 
+    /** Registers a instantiate event listener to this blocks event handler */
+    registerInstantiateListener(listener: (game: Game) => void): void {
+        this.registerListener("instantiate", listener);
+    }
+
     /** Registers a tick event listener to this blocks event handler */
     registerTickListener(listener: (game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
@@ -113,6 +118,11 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
     private emitEvent(event: string, game: Game, ...args: any[]): void {
         this.definition.emitEvent(event, this, game, ...args);
         this.eventEmitter.emit(event, ...args);
+    }
+
+    /** Emits a instantiate event to this blocks event handler */
+    emitInstantiateEvent(game: Game): void {
+        this.emitEvent("instantiate", game);
     }
 
     /** Emits a tick event to this blocks event handler */

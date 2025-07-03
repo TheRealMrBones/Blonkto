@@ -41,43 +41,49 @@ class Cell {
     // #region setters
 
     /** Sets the block for this cell */
-    setBlock(block: string | null): void {
+    setBlock(block: string | null, game: Game): void {
         this.block = (block === null) ? null : new Block(this, block);
+        if(this.block !== null) this.block.emitInstantiateEvent(game);
     }
 
     /** Sets the floor for this cell */
-    setFloor(floor: string | null): void {
+    setFloor(floor: string | null, game: Game): void {
         this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null) : new Floor(this, floor);
+        if(this.floor !== null) this.floor.emitInstantiateEvent(game);
     }
 
     /** Sets the ceiling for this cell */
-    setCeiling(ceiling: string | null): void {
+    setCeiling(ceiling: string | null, game: Game): void {
         this.ceiling = (ceiling === null) ? null : new Ceiling(this, ceiling);
+        if(this.ceiling !== null) this.ceiling.emitInstantiateEvent(game);
     }
 
     /** Tries to place the block for this cell and returns success */
-    placeBlock(block: string): boolean {
+    placeBlock(block: string, game: Game): boolean {
         if(this.block !== null) return false;
         this.block = new Block(this, block);
+        if(this.block !== null) this.block.emitInstantiateEvent(game);
         return true;
     }
 
     /** Tries to place the floor for this cell and returns success */
-    placeFloor(floor: string): boolean {
+    placeFloor(floor: string, game: Game): boolean {
         if(this.floor === null) return false;
         if(this.basefloor !== null) if(this.floor.definition.getRegistryKey() !== this.basefloor.getRegistryKey()) return false;
         if(this.block !== null)
             if(this.block.definition.getBlockCell()) return false;
         this.floor = new Floor(this, floor);
+        if(this.floor !== null) this.floor.emitInstantiateEvent(game);
         return true;
     }
 
     /** Tries to place the ceiling for this cell and returns success */
-    placeCeiling(ceiling: string): boolean {
+    placeCeiling(ceiling: string, game: Game): boolean {
         if(this.ceiling !== null) return false;
         if(this.block !== null)
             if(this.block.definition.getBlockCell()) return false;
         this.ceiling = new Ceiling(this, ceiling);
+        if(this.ceiling !== null) this.ceiling.emitInstantiateEvent(game);
         return true;
     }
 
@@ -96,6 +102,7 @@ class Cell {
         this.floor?.definition.break(x, y, toggledrop, game);
         this.floor = null;
         if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.getRegistryKey());
+        if(this.floor !== null) this.floor.emitInstantiateEvent(game);
         return true;
     }
 
@@ -109,9 +116,10 @@ class Cell {
     }
 
     /** Sets the base floor for this cell */
-    setBaseFloor(floor: string | null): void {
+    setBaseFloor(floor: string | null, game: Game): void {
         const floorval = (floor === null) ? null : FloorRegistry.get(floor);
         this.floor = floorval ? new Floor(this, floorval.getRegistryKey()) : null;
+        if(this.floor !== null) this.floor.emitInstantiateEvent(game);
         this.basefloor = floorval;
     }
 

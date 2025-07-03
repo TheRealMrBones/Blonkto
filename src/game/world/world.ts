@@ -478,7 +478,7 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk === null) return;
 
-        cell.setBlock(block);
+        cell.setBlock(block, this.game);
         chunk.cellUpdates.push({
             x, y
         });
@@ -511,7 +511,7 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk === null) return false;
         
-        const response = cell.placeBlock(block);
+        const response = cell.placeBlock(block, this.game);
         chunk.cellUpdates.push({
             x, y
         });
@@ -525,7 +525,7 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk === null) return;
 
-        cell.setFloor(floor);
+        cell.setFloor(floor, this.game);
         chunk.cellUpdates.push({
             x, y
         });
@@ -559,7 +559,7 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk === null) return false;
         
-        const response = cell.placeFloor(floor);
+        const response = cell.placeFloor(floor, this.game);
         chunk.cellUpdates.push({
             x, y
         });
@@ -573,7 +573,7 @@ class World {
         const { cell, chunk } = requestdata;
         if(chunk === null) return;
 
-        cell.setBaseFloor(floor);
+        cell.setBaseFloor(floor, this.game);
         chunk.cellUpdates.push({
             x, y
         });

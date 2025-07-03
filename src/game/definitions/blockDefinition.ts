@@ -103,6 +103,11 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
         this.eventEmitter.on(event, listener);
     }
 
+    /** Registers a instantiate event listener to this block definitions event handler */
+    registerInstantiateListener(listener: (self: Block, game: Game, dt: number) => void): void {
+        this.registerListener("instantiate", listener);
+    }
+
     /** Registers a tick event listener to this block definitions event handler */
     registerTickListener(listener: (self: Block, game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
