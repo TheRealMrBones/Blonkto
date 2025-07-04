@@ -5,6 +5,8 @@ import ComponentHandler from "../components/componentHandler.js";
 import DropBase from "../items/dropBase.js";
 import Game from "../game.js";
 import Ceiling from "../world/ceiling.js";
+import Player from "../objects/player.js";
+import { ClickContentExpanded } from "../managers/socketManager.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -47,13 +49,28 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
     }
 
     /** Registers a instantiate event listener to this ceiling definitions event handler */
-    registerInstantiateListener(listener: (self: Ceiling, game: Game, dt: number) => void): void {
+    registerInstantiateListener(listener: (self: Ceiling, game: Game) => void): void {
         this.registerListener("instantiate", listener);
+    }
+
+    /** Registers an unload event listener to this ceiling definitions event handler */
+    registerUnloadListener(listener: (self: Ceiling, game: Game) => void): void {
+        this.registerListener("unload", listener);
     }
 
     /** Registers a tick event listener to this ceiling definitions event handler */
     registerTickListener(listener: (self: Ceiling, game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
+    }
+
+    /** Registers a break event listener to this ceiling definitions event handler */
+    registerBreakListener(listener: (self: Ceiling, game: Game) => void): void {
+        this.registerListener("break", listener);
+    }
+
+    /** Registers a interact event listener to this ceiling definitions event handler */
+    registerInteractListener(listener: (self: Ceiling, game: Game, player: Player, info: ClickContentExpanded) => void): void {
+        this.registerListener("interact", listener);
     }
 
     /** Emits an event to this ceiling definitions event handler with the given self ceiling */

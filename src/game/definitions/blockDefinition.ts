@@ -104,13 +104,23 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     }
 
     /** Registers a instantiate event listener to this block definitions event handler */
-    registerInstantiateListener(listener: (self: Block, game: Game, dt: number) => void): void {
+    registerInstantiateListener(listener: (self: Block, game: Game) => void): void {
         this.registerListener("instantiate", listener);
+    }
+
+    /** Registers an unload event listener to this block definitions event handler */
+    registerUnloadListener(listener: (self: Block, game: Game) => void): void {
+        this.registerListener("unload", listener);
     }
 
     /** Registers a tick event listener to this block definitions event handler */
     registerTickListener(listener: (self: Block, game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
+    }
+
+    /** Registers a break event listener to this block definitions event handler */
+    registerBreakListener(listener: (self: Block, game: Game) => void): void {
+        this.registerListener("break", listener);
     }
 
     /** Registers a interact event listener to this block definitions event handler */

@@ -92,17 +92,23 @@ class Cell {
 
     /** Tries to break the block for this cell and returns success */
     breakBlock(x: number, y: number, toggledrop: boolean, game: Game): boolean {
-        this.block?.definition.break(x, y, toggledrop, game);
+        if(this.block === null) return false;
+
+        this.block.emitBreakEvent(game);
+        this.block.definition.break(x, y, toggledrop, game);
         this.block = null;
         return true;
     }
 
     /** Tries to break the floor for this cell and returns success */
     breakFloor(x: number, y: number, toggledrop: boolean, game: Game): boolean {
-        if(this.floor === this.basefloor) return false;
+        if(this.floor === null) return false;
+        if(this.floor.definition === this.basefloor) return false;
         if(this.block !== null)
             if(this.block.definition.getBlockCell()) return false;
-        this.floor?.definition.break(x, y, toggledrop, game);
+
+        this.floor.emitBreakEvent(game);
+        this.floor.definition.break(x, y, toggledrop, game);
         this.floor = null;
         if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.getRegistryKey());
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
@@ -111,9 +117,12 @@ class Cell {
 
     /** Tries to break the ceiling for this cell and returns success */
     breakCeiling(x: number, y: number, toggledrop: boolean, game: Game): boolean {
+        if(this.ceiling === null) return false;
         if(this.block !== null)
             if(this.block.definition.getBlockCell()) return false;
-        this.ceiling?.definition.break(x, y, toggledrop, game);
+
+        this.ceiling.emitBreakEvent(game);
+        this.ceiling.definition.break(x, y, toggledrop, game);
         this.ceiling = null;
         return true;
     }

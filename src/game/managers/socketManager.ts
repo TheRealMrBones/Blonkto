@@ -97,10 +97,16 @@ class SocketManager {
 
             // default action
             const cell = this.game.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
-            if(cell === null) return;
-            if(cell.block === null) return;
             if(newinfo.dist > BASE_REACH) return;
-            cell.block.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+            if(cell === null) return;
+            
+            if(cell.block !== null){
+                cell.block.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+            }else if(cell.floor !== null){
+                cell.floor.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+            }else if(cell.ceiling !== null){
+                cell.ceiling.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+            }
         }
     }
 
