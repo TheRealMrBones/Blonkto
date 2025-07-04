@@ -158,7 +158,7 @@ class Renderer {
         this.renderBlocks(firstCell);
 
         this.renderReach();
-        this.renderDarkness(darkness);
+        this.renderDarkness(darkness, firstCell);
         
         others.forEach((p: any) => this.renderPlayerUsername(me, p));
 
@@ -348,13 +348,40 @@ class Renderer {
     // #region Background
 
     /** Renders darkness overlay on top of the world */
-    private renderDarkness(percent: number){
+    private renderDarkness(percent: number, firstCell: { x: number; y: number; renderx: number; rendery: number; }){
         if(percent === 0) return;
 
         // draw base darkness
         this.darknesscontext.clearRect(0, 0, this.darknesscanvas.width, this.darknesscanvas.height);
         this.darknesscontext.fillStyle = `rgba(0, 0, 0, ${(0.25 * percent).toFixed(3)})`;
         this.darknesscontext.fillRect(0, 0, this.darknesscanvas.width, this.darknesscanvas.height);
+
+        // remove darkness around light sources
+        const canvasX = this.darknesscanvas.width / 2;
+        const canvasY = this.darknesscanvas.height / 2;
+        this.darknesscontext.save();
+        this.darknesscontext.translate(canvasX, canvasY);
+        this.darknesscontext.globalCompositeOperation = "destination-out";
+        this.darknesscontext.fillStyle = "rgba(0, 0, 0, 1.0)";
+        
+        const padding = 10;
+        for(let dx = -padding; dx < CELLS_HORIZONTAL + padding; dx++){
+            for(let dy = -padding; dy < CELLS_VERTICAL + padding; dy++){
+                const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
+                if(!cell.block) continue;
+                if(!cell.block.light) continue;
+
+                const x = firstCell.renderx + (dx + .5) * this.cellsize;
+                const y = firstCell.rendery + (dy + .5) * this.cellsize;
+                const radius = cell.block.light * this.cellsize;
+
+                this.darknesscontext.beginPath();
+                this.darknesscontext.arc(x, y, radius, 0, 2 * Math.PI, false);
+                this.darknesscontext.fill();
+            }
+        }
+
+        this.darknesscontext.restore();
 
         // draw darkness on render canvas
         this.context.drawImage(this.darknesscanvas, 0, 0);

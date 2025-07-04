@@ -46,7 +46,7 @@ BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASS
 BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8)
     .addComponent(new StationComponent()));
 BlockRegistry.register("torch", new BlockDefinition("Torch", ASSETS.TORCH, new Drop("torch"), MINE_TYPES.ANY, 0, .8)
-    .addComponent(new LightComponent(8))
+    .addComponent(new LightComponent(5))
     .setFloorVisible(true)
     .setWalkThrough(true));
 

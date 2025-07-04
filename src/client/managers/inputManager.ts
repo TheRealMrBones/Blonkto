@@ -207,7 +207,6 @@ class InputManager {
         const cellpos: Pos = { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) };
         const cell = this.playerclient.world.getCell(cellpos.x, cellpos.y);
         if(cell){
-            console.log(cell);
             if(cell.block){
                 if(cell.block.openinv && e.button == 2){
                     this.playerclient.renderer.uiManager.openInventory();
