@@ -41,23 +41,25 @@ class EntityManager {
             const dir = Math.random() * Math.PI * 2;
             const dist = Math.sqrt(CELLS_HORIZONTAL * CELLS_HORIZONTAL + CELLS_VERTICAL * CELLS_VERTICAL) / 2 + 1;
             
-            const spawnx = p.x + Math.cos(dir) * dist;
-            const spawny = p.y + Math.sin(dir) * dist;
-            const cellx = Math.floor(spawnx);
-            const celly = Math.floor(spawny);
+            for(let triesdist = 0; triesdist < 5; triesdist++){
+                const spawnx = p.x + Math.cos(dir) * (dist + triesdist);
+                const spawny = p.y + Math.sin(dir) * (dist + triesdist);
+                const cellx = Math.floor(spawnx);
+                const celly = Math.floor(spawny);
 
-            const cell = this.game.world.getCell(cellx, celly, false);
-            if(cell === null) return;
-            if(cell.block !== null) return;
+                const cell = this.game.world.getCell(cellx, celly, false);
+                if(cell === null) continue;
+                if(cell.block !== null) continue;
 
-            if(this.game.world.light[[cellx,celly].toString()] !== undefined) return;
+                if(this.game.world.light[[cellx,celly].toString()] !== undefined) continue;
 
-            if(Math.random() > .05){
-                const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
-                this.game.entities[zombie.id] = zombie;
-            }else{
-                const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
-                this.game.entities[megazombie.id] = megazombie;
+                if(Math.random() > .05){
+                    const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
+                    this.game.entities[zombie.id] = zombie;
+                }else{
+                    const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
+                    this.game.entities[megazombie.id] = megazombie;
+                }
             }
         });
     }
