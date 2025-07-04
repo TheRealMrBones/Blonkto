@@ -20,6 +20,8 @@ abstract class Entity extends GameObject {
     lastattackdir: number = 0;
     lastattackdamage: number = 0;
 
+    godmode: boolean = false;
+
     constructor(x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
         super(x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
@@ -74,6 +76,8 @@ abstract class Entity extends GameObject {
 
     /** Removes the given health amount from this entity and returns if it died */
     takeHit(game: Game, damage: number, attackername: string, attacker?: Entity): boolean {
+        if(this.godmode) return false;
+
         this.health -= damage;
         this.hit = true;
         this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);

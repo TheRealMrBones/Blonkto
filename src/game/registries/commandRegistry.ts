@@ -78,3 +78,5 @@ import entityCountCommand from "../commands/entityCountCommand.js";
 entityCountCommand();
 import healCommand from "../commands/healCommand.js";
 healCommand();
+import godModeCommand from "../commands/godModeCommand.js";
+godModeCommand();
