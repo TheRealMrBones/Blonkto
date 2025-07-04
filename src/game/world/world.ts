@@ -43,7 +43,6 @@ class World {
 
         // key for each chunk is [x,y].toString()
         this.loadedchunks = {};
-        this.generateSpawn();
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);

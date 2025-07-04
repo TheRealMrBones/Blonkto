@@ -69,6 +69,7 @@ class Game {
         
         // world
         this.world = new World(this);
+        this.world.generateSpawn();
 
         // start ticking
         this.lastUpdateTime = Date.now();

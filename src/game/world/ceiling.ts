@@ -64,7 +64,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
 
         for(const componentdata of Object.values(this.componentdata)){
             const cd = componentdata as unknown as SerializableForUpdate;
-            if(cd.serializeForUpdate() === undefined) continue;
+            if(cd.serializeForUpdate === undefined) continue;
 
             const serialized = cd.serializeForUpdate();
             if(serialized === null) continue;
