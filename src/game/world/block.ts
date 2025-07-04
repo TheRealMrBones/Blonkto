@@ -104,9 +104,19 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         this.registerListener("instantiate", listener);
     }
 
+    /** Registers a unload event listener to this blocks event handler */
+    registerUnloadListener(listener: (game: Game) => void): void {
+        this.registerListener("unload", listener);
+    }
+
     /** Registers a tick event listener to this blocks event handler */
     registerTickListener(listener: (game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
+    }
+
+    /** Registers a break event listener to this blocks event handler */
+    registerBreakListener(listener: (game: Game) => void): void {
+        this.registerListener("break", listener);
     }
 
     /** Registers a interact event listener to this blocks event handler */
@@ -125,9 +135,19 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         this.emitEvent("instantiate", game);
     }
 
+    /** Emits a unload event to this blocks event handler */
+    emitUnloadEvent(game: Game): void {
+        this.emitEvent("unload", game);
+    }
+
     /** Emits a tick event to this blocks event handler */
     emitTickEvent(game: Game, dt: number): void {
         this.emitEvent("tick", game, dt);
+    }
+
+    /** Emits a break event to this blocks event handler */
+    emitBreakEvent(game: Game): void {
+        this.emitEvent("break", game);
     }
 
     /** Emits a interact event to this blocks event handler */

@@ -151,7 +151,7 @@ class World {
 
             // check if valid spawn
             const cell = this.getCell(x, y, true);
-            if(!cell) continue;
+            if(cell === null) continue;
             if(cell.block === null){
                 return {
                     pos: pos,
@@ -209,10 +209,10 @@ class World {
         const updatedcells: { data: any; x: number; y: number; }[] = [];
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc.x, sc.y, false);
-            if(chunk){
+            if(chunk !== null){
                 chunk.cellUpdates.forEach(cellupdate => {
                     const cell = this.getCell(cellupdate.x, cellupdate.y, false);
-                    if(!cell) return;
+                    if(cell === null) return;
 
                     updatedcells.push({
                         data: cell.serializeForLoad(),
@@ -252,7 +252,7 @@ class World {
         const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
         loadChunks.forEach(lc => {
             const chunk = this.getChunk(lc.x, lc.y, true);
-            if(chunk) loadChunksSerialized.push(chunk.serializeForLoad());
+            if(chunk !== null) loadChunksSerialized.push(chunk.serializeForLoad());
         });
 
         // append data to return obj
@@ -299,7 +299,7 @@ class World {
     /** Returns the requested chunk object if possible or null otherwise */
     getChunk(x: number, y: number, canloadnew: boolean): Chunk | null {
         const chunk = this.loadedchunks[[x,y].toString()];
-        if(chunk){
+        if(chunk !== undefined){
             return chunk;
         }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
             // load chunk
@@ -318,8 +318,9 @@ class World {
     /** Unloads and saves the requested chunk if it is currently loaded */
     unloadChunk(x: number, y: number): void {
         const chunk = this.loadedchunks[[x,y].toString()];
-        if(chunk){
+        if(chunk !== undefined){
             // unload chunk
+            chunk.unload(this.game);
             this.writeChunkFile(chunk);
             delete this.loadedchunks[[x,y].toString()];
 
@@ -347,7 +348,7 @@ class World {
 
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
-        if(!data) return null;
+        if(data === null) return null;
         const chunk = Chunk.readFromSave(x, y, data, this.game);
         if(chunk === null){
             this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
@@ -383,7 +384,7 @@ class World {
                 const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
 
                 const cell = this.getCell(cellx, celly, false);
-                if(!cell) continue;
+                if(cell === null) continue;
                 if(cell.block != null) continue;
 
                 const pig = new NonplayerEntity(cellx + .5, celly + .5, 0, "pig");
@@ -462,7 +463,7 @@ class World {
         const chunky = Math.floor(y / CHUNK_SIZE);
 
         const cell = this.getCell(x, y, canloadnew);
-        if(cell){
+        if(cell !== null){
             return {
                 cell: cell,
                 chunk: this.getChunk(chunkx, chunky, false)!,
@@ -488,7 +489,7 @@ class World {
     /** Tries to break the requested block and returns success */
     breakBlock(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data) return false;
+        if(data === null) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
         if(requestdata === null) return false;
@@ -505,7 +506,7 @@ class World {
     /** Tries to place the requested block in the requested cell and returns success */
     placeBlock(x: number, y: number, block: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data) return false;
+        if(data === null) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
         if(requestdata === null) return false;
@@ -535,7 +536,7 @@ class World {
     /** Tries to break the requested floor and returns success */
     breakFloor(x: number, y: number, toggledrop: boolean): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data) return false;
+        if(data === null) return false;
         
         const requestdata = this.getCellAndChunk(x, y, false);
         if(requestdata === null) return false;
@@ -553,7 +554,7 @@ class World {
     /** Tries to place the requested floor in the requested cell and returns success */
     placeFloor(x: number, y: number, floor: any): boolean {
         const data = this.getCellAndChunk(x, y, false);
-        if(!data) return false;
+        if(data === null) return false;
 
         const requestdata = this.getCellAndChunk(x, y, false);
         if(requestdata === null) return false;

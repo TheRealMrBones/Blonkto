@@ -9,6 +9,8 @@ import CeilingRegistry from "../registries/ceilingRegistry.js";
 import { SerializedWriteCeiling } from "../../shared/serializedWriteTypes.js";
 import SerializableForWrite from "../components/serializableForWrite.js";
 import SerializableForUpdate from "../components/serializableForUpdate.js";
+import Player from "../objects/player.js";
+import { ClickContentExpanded } from "../managers/socketManager.js";
 
 /** Represents a placed ceiling in the game world */
 class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
@@ -102,9 +104,24 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         this.registerListener("instantiate", listener);
     }
 
+    /** Registers a unload event listener to this ceilings event handler */
+    registerUnloadListener(listener: (game: Game) => void): void {
+        this.registerListener("unload", listener);
+    }
+
     /** Registers a tick event listener to this ceilings event handler */
     registerTickListener(listener: (game: Game, dt: number) => void): void {
         this.registerListener("tick", listener);
+    }
+
+    /** Registers a break event listener to this ceilings event handler */
+    registerBreakListener(listener: (game: Game) => void): void {
+        this.registerListener("break", listener);
+    }
+
+    /** Registers a interact event listener to this ceilings event handler */
+    registerInteractListener(listener: (game: Game, player: Player, info: ClickContentExpanded) => void): void {
+        this.registerListener("interact", listener);
     }
 
     /** Emits an event to this ceilings event handler */
@@ -118,9 +135,24 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         this.emitEvent("instantiate", game);
     }
 
+    /** Emits a unload event to this ceilings event handler */
+    emitUnloadEvent(game: Game): void {
+        this.emitEvent("unload", game);
+    }
+
     /** Emits a tick event to this ceilings event handler */
     emitTickEvent(game: Game, dt: number): void {
         this.emitEvent("tick", game, dt);
+    }
+
+    /** Emits a break event to this ceilings event handler */
+    emitBreakEvent(game: Game): void {
+        this.emitEvent("break", game);
+    }
+
+    /** Emits a interact event to this ceilings event handler */
+    emitInteractEvent(game: Game, player: Player, info: ClickContentExpanded): void {
+        this.emitEvent("interact", game, player, info);
     }
 
     // #endregion

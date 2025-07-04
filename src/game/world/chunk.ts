@@ -42,6 +42,8 @@ class Chunk {
         return chunk;
     }
 
+    // #region world generation
+
     /** Generates new cell data for the chunk */
     static generateChunk(chunkx: number, chunky: number, game: Game): Chunk {
         const chunk = new Chunk(chunkx, chunky);
@@ -68,6 +70,21 @@ class Chunk {
 
         return chunk;
     }
+
+    // #endregion
+
+    // #region unloading
+
+    /** Unloads this chunk and all of its cells */
+    unload(game: Game): void {
+        for(let x = 0; x < CHUNK_SIZE; x++){
+            for(let y = 0; y < CHUNK_SIZE; y++){
+                this.cells[x][y].unload(game);
+            }
+        }
+    }
+
+    // #endregion
 
     // #region serialization
 

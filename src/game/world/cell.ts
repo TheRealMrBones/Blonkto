@@ -142,6 +142,16 @@ class Cell {
 
     // #endregion
 
+    // #region events
+
+    unload(game: Game): void {
+        if(this.block !== null) this.block.emitUnloadEvent(game);
+        if(this.floor !== null) this.floor.emitUnloadEvent(game);
+        if(this.ceiling !== null) this.ceiling.emitUnloadEvent(game);
+    }
+
+    // #endregion
+
     // #region serialization
 
     /** Return an object representing this cells data for loading to the game world */
