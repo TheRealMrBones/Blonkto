@@ -28,10 +28,12 @@ class Renderer {
     readonly chatManager: ChatManager;
     readonly uiManager: UiManager;
 
-    private readonly canvas: HTMLCanvasElement = document.createElement("canvas")!;
-    private readonly context: CanvasRenderingContext2D = this.canvas.getContext("2d")!;
     private readonly rendercanvas: HTMLCanvasElement = document.getElementById("gamecanvas")! as HTMLCanvasElement;
     private readonly rendercontext: CanvasRenderingContext2D = this.rendercanvas.getContext("2d")!;
+    private readonly canvas: HTMLCanvasElement = document.createElement("canvas")!;
+    private readonly context: CanvasRenderingContext2D = this.canvas.getContext("2d")!;
+    private readonly darknesscanvas: HTMLCanvasElement = document.createElement("canvas")!;
+    private readonly darknesscontext: CanvasRenderingContext2D = this.darknesscanvas.getContext("2d")!;
 
     private cellsize: number = 0;
     private mycolor: Color = { r: 0, g: 0, b: 0 };
@@ -64,6 +66,8 @@ class Renderer {
         this.canvas.height = window.innerHeight;
         this.rendercanvas.width = window.innerWidth;
         this.rendercanvas.height = window.innerHeight;
+        this.darknesscanvas.width = window.innerWidth;
+        this.darknesscanvas.height = window.innerHeight;
         this.cellsize = this.canvas.height / HEIGHT_TO_CELL_RATIO;
     }
 
@@ -347,10 +351,13 @@ class Renderer {
     private renderDarkness(percent: number){
         if(percent === 0) return;
 
-        this.context.save();
-        this.context.fillStyle = `rgba(0, 0, 0, ${(0.25 * percent).toFixed(3)})`;
-        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.restore();
+        // draw base darkness
+        this.darknesscontext.clearRect(0, 0, this.darknesscanvas.width, this.darknesscanvas.height);
+        this.darknesscontext.fillStyle = `rgba(0, 0, 0, ${(0.25 * percent).toFixed(3)})`;
+        this.darknesscontext.fillRect(0, 0, this.darknesscanvas.width, this.darknesscanvas.height);
+
+        // draw darkness on render canvas
+        this.context.drawImage(this.darknesscanvas, 0, 0);
     }
 
     /** Renders the background image under the world */
