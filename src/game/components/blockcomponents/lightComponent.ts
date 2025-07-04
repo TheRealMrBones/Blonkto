@@ -21,10 +21,45 @@ class LightComponent extends Component<BlockDefinition> {
         this.getParent().addRequiredComponentData(LightComponentData, this);
 
         this.getParent().registerInstantiateListener((block: Block, game: Game) => this.instantiate(block, game));
+        this.getParent().registerBreakListener((block: Block, game: Game) => this.break(block, game));
+        this.getParent().registerUnloadListener((block: Block, game: Game) => this.unload(block, game));
     }
 
     /** Defines the instantiate event of the block with this component */
     instantiate(block: Block, game: Game): void {
+        const keys = this.getCellKeysInRange(block);
+        for(const key of keys){
+            if(game.world.light[key] === undefined){
+                game.world.light[key] = 1;
+            }else{
+                game.world.light[key] += 1;
+            }
+        }
+    }
+
+    /** Defines the break event of the block with this component */
+    break(block: Block, game: Game): void {
+        const keys = this.getCellKeysInRange(block);
+        for(const key of keys){
+            if(game.world.light[key] === undefined) return;
+            game.world.light[key]--;
+            if(game.world.light[key] == 0) delete game.world.light[key];
+        }
+    }
+
+    /** Defines the unload event of the block with this component */
+    unload(block: Block, game: Game): void {
+        const keys = this.getCellKeysInRange(block);
+        for(const key of keys){
+            if(game.world.light[key] === undefined) return;
+            game.world.light[key]--;
+            if(game.world.light[key] == 0) delete game.world.light[key];
+        }
+    }
+
+    /** Returns strings representing each cell within this light blocks range */
+    private getCellKeysInRange(block: Block): string[] {
+        const keys: string[] = [];
         for(let dx = -this.distance; dx <= this.distance; dx++){
             for(let dy = -this.distance; dy <= this.distance; dy++){
                 if(Math.sqrt(dx * dx + dy * dy) > this.distance) continue;
@@ -32,14 +67,10 @@ class LightComponent extends Component<BlockDefinition> {
                 const x = block.cell.getWorldX() + dx;
                 const y = block.cell.getWorldY() + dy;
 
-                const key = [x,y].toString();
-                if(game.world.light[key] === undefined){
-                    game.world.light[key] = 1;
-                }else{
-                    game.world.light[key] += 1;
-                }
+                keys.push([x,y].toString());
             }
         }
+        return keys;
     }
 }
 
