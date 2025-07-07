@@ -18,7 +18,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements Regis
     readonly asset: string;
     readonly drops: DropBase | null;
     
-    private eventEmitter: EventEmitter = new EventEmitter();
+    eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase){
         super();

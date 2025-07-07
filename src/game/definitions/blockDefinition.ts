@@ -26,7 +26,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     private blockcell: boolean = true;
     private floorvisible: boolean = true;
 
-    private eventEmitter: EventEmitter = new EventEmitter();
+    eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, hardness?: number, scale?: number, shape?: number){
         super();

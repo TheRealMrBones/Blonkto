@@ -18,7 +18,7 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
     readonly asset: string;
     readonly drops: DropBase | null;
 
-    private eventEmitter: EventEmitter = new EventEmitter();
+    eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase){
         super();

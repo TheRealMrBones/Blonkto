@@ -61,9 +61,11 @@ class World {
         for(const chunk of Object.values(this.loadedchunks)){
             for(const row of chunk.cells){
                 for(const cell of row){
-                    if(cell.block !== null) cell.block.emitTickEvent(this.game, dt);
-                    if(cell.floor !== null) cell.floor.emitTickEvent(this.game, dt);
-                    if(cell.ceiling !== null) cell.ceiling.emitTickEvent(this.game, dt);
+                    if(cell.ticks){
+                        if(cell.block !== null) cell.block.emitTickEvent(this.game, dt);
+                        if(cell.floor !== null) cell.floor.emitTickEvent(this.game, dt);
+                        if(cell.ceiling !== null) cell.ceiling.emitTickEvent(this.game, dt);
+                    }
                 }
             }
         }

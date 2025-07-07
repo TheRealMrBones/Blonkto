@@ -20,6 +20,8 @@ class Cell {
     floor: Floor | null = null;
     ceiling: Ceiling | null = null;
 
+    ticks: boolean = false;
+
     constructor(chunk: Chunk, chunkx: number, chunky: number, basefloor: string | null){
         this.chunk = chunk;
         this.chunkx = chunkx;
@@ -32,33 +34,54 @@ class Cell {
     /** Returns the chunk from its save data */
     static readFromSave(chunk: Chunk, chunkx: number, chunky: number, data: any, game: Game): Cell {
         const cell = new Cell(chunk, chunkx, chunky, data.basefloor ? data.basefloor : null);
+
         if(data.block) cell.block = Block.readFromSave(cell, data.block);
         if(data.floor) cell.floor = Floor.readFromSave(cell, data.floor);
         if(data.ceiling) cell.ceiling = Ceiling.readFromSave(cell, data.ceiling);
         if(cell.block !== null) cell.block.emitInstantiateEvent(game);
         if(cell.floor !== null) cell.floor.emitInstantiateEvent(game);
         if(cell.ceiling !== null) cell.ceiling.emitInstantiateEvent(game);
+
+        cell.setTicks();
+
         return cell;
     }
 
     // #region setters
 
+    /** Sets the ticks boolean based on if any of the parts of this cell listen to ticks */
+    setTicks(): void {
+        this.ticks = false;
+        if(this.block !== null) if(this.block.definition.eventEmitter.listenerCount("tick") > 0)
+            this.ticks = true;
+        if(this.floor !== null) if(this.floor.definition.eventEmitter.listenerCount("tick") > 0)
+            this.ticks = true;
+        if(this.ceiling !== null) if(this.ceiling.definition.eventEmitter.listenerCount("tick") > 0)
+            this.ticks = true;
+    }
+
     /** Sets the block for this cell */
     setBlock(block: string | null, game: Game): void {
         this.block = (block === null) ? null : new Block(this, block);
         if(this.block !== null) this.block.emitInstantiateEvent(game);
+
+        this.setTicks();
     }
 
     /** Sets the floor for this cell */
     setFloor(floor: string | null, game: Game): void {
         this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null) : new Floor(this, floor);
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
+
+        this.setTicks();
     }
 
     /** Sets the ceiling for this cell */
     setCeiling(ceiling: string | null, game: Game): void {
         this.ceiling = (ceiling === null) ? null : new Ceiling(this, ceiling);
         if(this.ceiling !== null) this.ceiling.emitInstantiateEvent(game);
+
+        this.setTicks();
     }
 
     /** Tries to place the block for this cell and returns success */
@@ -66,6 +89,8 @@ class Cell {
         if(this.block !== null) return false;
         this.block = new Block(this, block);
         if(this.block !== null) this.block.emitInstantiateEvent(game);
+
+        this.setTicks();
         return true;
     }
 
@@ -77,6 +102,8 @@ class Cell {
             if(this.block.definition.getBlockCell()) return false;
         this.floor = new Floor(this, floor);
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
+
+        this.setTicks();
         return true;
     }
 
@@ -87,6 +114,8 @@ class Cell {
             if(this.block.definition.getBlockCell()) return false;
         this.ceiling = new Ceiling(this, ceiling);
         if(this.ceiling !== null) this.ceiling.emitInstantiateEvent(game);
+
+        this.setTicks();
         return true;
     }
 
@@ -97,6 +126,8 @@ class Cell {
         this.block.emitBreakEvent(game);
         this.block.definition.break(x, y, toggledrop, game);
         this.block = null;
+
+        this.setTicks();
         return true;
     }
 
@@ -112,6 +143,8 @@ class Cell {
         this.floor = null;
         if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.getRegistryKey());
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
+
+        this.setTicks();
         return true;
     }
 
@@ -124,6 +157,8 @@ class Cell {
         this.ceiling.emitBreakEvent(game);
         this.ceiling.definition.break(x, y, toggledrop, game);
         this.ceiling = null;
+
+        this.setTicks();
         return true;
     }
 
@@ -133,6 +168,8 @@ class Cell {
         this.floor = floorval ? new Floor(this, floorval.getRegistryKey()) : null;
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
         this.basefloor = floorval;
+
+        this.setTicks();
     }
 
     // #endregion
