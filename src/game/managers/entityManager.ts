@@ -60,6 +60,7 @@ class EntityManager {
                     const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
                     this.game.entities[megazombie.id] = megazombie;
                 }
+                break;
             }
         });
     }
