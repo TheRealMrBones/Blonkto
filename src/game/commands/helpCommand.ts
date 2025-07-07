@@ -16,7 +16,9 @@ export default (): void => CommandRegistry.register("help", new CommandDefinitio
 function helpCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
-    const commands = CommandRegistry.getAll().filter(c => !(c.getOp() && !game.playerManager.opManager.isOp(player.username)));
+    const commands = CommandRegistry.getAll()
+        .filter(c => !(c.getOp() && !game.playerManager.opManager.isOp(player.username)))
+        .sort((a: CommandDefinition, b: CommandDefinition) => a.getRegistryKey().localeCompare(b.getRegistryKey()));
 
     const perpage = 10;
     const pages = Math.ceil(commands.length / perpage);
