@@ -25,7 +25,7 @@ const entitiessavedir = "entities/";
 class World {
     private readonly logger: Logger;
     
-    game: Game;
+    private game: Game;
     loadedchunks: {[key: string]: Chunk};
     light: {[key: string]: number} = {};
 
@@ -224,7 +224,7 @@ class World {
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc.x, sc.y, false);
             if(chunk !== null){
-                chunk.cellUpdates.forEach(cellupdate => {
+                chunk.cellupdates.forEach(cellupdate => {
                     const cell = this.getCell(cellupdate.x, cellupdate.y, false);
                     if(cell === null) return;
 
@@ -452,7 +452,7 @@ class World {
     /** Resets the current list of pending client cell updates */
     resetCellUpdates(): void {
         Object.values(this.loadedchunks).forEach(chunk => {
-            chunk.cellUpdates = [];
+            chunk.cellupdates = [];
         });
     }
 
@@ -495,7 +495,7 @@ class World {
         if(chunk === null) return;
 
         cell.setBlock(block, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
     }
@@ -511,7 +511,7 @@ class World {
         if(chunk === null || cell.block === null) return false;
 
         const response = cell.breakBlock(x, y, toggledrop, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
         return response;
@@ -528,7 +528,7 @@ class World {
         if(chunk === null) return false;
         
         const response = cell.placeBlock(block, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
         return response;
@@ -542,7 +542,7 @@ class World {
         if(chunk === null) return;
 
         cell.setFloor(floor, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
     }
@@ -559,7 +559,7 @@ class World {
         if(cell.basefloor !== null) if(cell.floor.definition.getRegistryKey() === cell.basefloor.getRegistryKey()) return false;
 
         const response = cell.breakFloor(x, y, toggledrop, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
         return response;
@@ -576,7 +576,7 @@ class World {
         if(chunk === null) return false;
         
         const response = cell.placeFloor(floor, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
         return response;
@@ -590,7 +590,7 @@ class World {
         if(chunk === null) return;
 
         cell.setBaseFloor(floor, this.game);
-        chunk.cellUpdates.push({
+        chunk.cellupdates.push({
             x, y
         });
     }

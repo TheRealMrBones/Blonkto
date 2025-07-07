@@ -48,8 +48,8 @@ class Game {
 
     readonly world: World;
 
-    private lastUpdateTime: number;
-    private nextUpdateTime: number;
+    private lastupdatetime: number;
+    private nextupdatetime: number;
     lifeticks: number = 0;
     starttime: number;
 
@@ -72,9 +72,9 @@ class Game {
         this.world.generateSpawn();
 
         // start ticking
-        this.lastUpdateTime = Date.now();
+        this.lastupdatetime = Date.now();
         this.starttime = Date.now();
-        this.nextUpdateTime = Date.now();
+        this.nextupdatetime = Date.now();
         
         this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
@@ -90,16 +90,16 @@ class Game {
 
         // get delta time
         const now = Date.now();
-        const dt = (now - this.lastUpdateTime) / 1000;
-        this.lastUpdateTime = now;
+        const dt = (now - this.lastupdatetime) / 1000;
+        this.lastupdatetime = now;
 
         // schedule next tick based on delay
-        this.nextUpdateTime += CALCULATED_UPDATE_RATE;
-        if(this.nextUpdateTime - now >= 0){
-            setTimeout(this.tick.bind(this), this.nextUpdateTime - now);
+        this.nextupdatetime += CALCULATED_UPDATE_RATE;
+        if(this.nextupdatetime - now >= 0){
+            setTimeout(this.tick.bind(this), this.nextupdatetime - now);
         }else{
-            if(!IGNORE_MISSED_TICKS) this.logger.warning(`game ticks falling behind! (by: ${now - this.nextUpdateTime}ms)`);
-            this.nextUpdateTime = now;
+            if(!IGNORE_MISSED_TICKS) this.logger.warning(`game ticks falling behind! (by: ${now - this.nextupdatetime}ms)`);
+            this.nextupdatetime = now;
             setTimeout(this.tick.bind(this), 1);
         }
 
@@ -132,7 +132,7 @@ class Game {
         // return full update object
         const content: GameUpdateContent = {
             t: t,
-            lastupdatetime: this.lastUpdateTime,
+            lastupdatetime: this.lastupdatetime,
             me: player.serializeForUpdate(),
             fixes: fixescopy,
             inventoryupdates: inventoryupdates,

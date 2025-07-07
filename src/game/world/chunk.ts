@@ -11,12 +11,12 @@ class Chunk {
     readonly chunkx: number;
     readonly chunky: number;
     readonly cells: Cell[][];
-    cellUpdates: any[];
+    cellupdates: any[];
 
     private constructor(chunkx: number, chunky: number){
         this.chunkx = chunkx;
         this.chunky = chunky;
-        this.cellUpdates = [];
+        this.cellupdates = [];
 
         this.cells = [];
     }
