@@ -26,7 +26,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     private blockcell: boolean = true;
     private floorvisible: boolean = true;
 
-    eventEmitter: EventEmitter = new EventEmitter();
+    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, hardness?: number, scale?: number, shape?: number){
         super();
@@ -131,6 +131,11 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     /** Emits an event to this block definitions event handler with the given self block */
     emitEvent(event: string, self: Block, game: Game, ...args: any[]): void {
         this.eventEmitter.emit(event, self, game, ...args);
+    }
+
+    /** Returns if this block definitions tick event has any listeners */
+    ticks(): boolean {
+        return (this.eventEmitter.listenerCount("tick") > 0);
     }
 
     // #endregion

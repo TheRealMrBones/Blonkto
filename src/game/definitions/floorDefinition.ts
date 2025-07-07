@@ -18,7 +18,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements Regis
     readonly asset: string;
     readonly drops: DropBase | null;
     
-    eventEmitter: EventEmitter = new EventEmitter();
+    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase){
         super();
@@ -74,6 +74,11 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements Regis
     /** Emits an event to this floor definitions event handler with the given self floor */
     emitEvent(event: string, self: Floor, game: Game, ...args: any[]): void {
         this.eventEmitter.emit(event, self, game, ...args);
+    }
+
+    /** Returns if this floor definitions tick event has any listeners */
+    ticks(): boolean {
+        return (this.eventEmitter.listenerCount("tick") > 0);
     }
 
     // #endregion

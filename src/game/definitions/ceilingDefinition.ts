@@ -18,7 +18,7 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
     readonly asset: string;
     readonly drops: DropBase | null;
 
-    eventEmitter: EventEmitter = new EventEmitter();
+    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(displayname: string, asset: string | null, drops?: DropBase){
         super();
@@ -76,6 +76,11 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
     /** Emits an event to this ceiling definitions event handler with the given self ceiling */
     emitEvent(event: string, self: Ceiling, game: Game, ...args: any[]): void {
         this.eventEmitter.emit(event, self, game, ...args);
+    }
+
+    /** Returns if this ceiling definitions tick event has any listeners */
+    ticks(): boolean {
+        return (this.eventEmitter.listenerCount("tick") > 0);
     }
 
     // #endregion

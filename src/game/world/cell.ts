@@ -52,12 +52,9 @@ class Cell {
     /** Sets the ticks boolean based on if any of the parts of this cell listen to ticks */
     setTicks(): void {
         this.ticks = false;
-        if(this.block !== null) if(this.block.definition.eventEmitter.listenerCount("tick") > 0)
-            this.ticks = true;
-        if(this.floor !== null) if(this.floor.definition.eventEmitter.listenerCount("tick") > 0)
-            this.ticks = true;
-        if(this.ceiling !== null) if(this.ceiling.definition.eventEmitter.listenerCount("tick") > 0)
-            this.ticks = true;
+        if(this.block !== null) if(this.block.definition.ticks()) this.ticks = true;
+        if(this.floor !== null) if(this.floor.definition.ticks()) this.ticks = true;
+        if(this.ceiling !== null) if(this.ceiling.definition.ticks()) this.ticks = true;
     }
 
     /** Sets the block for this cell */
