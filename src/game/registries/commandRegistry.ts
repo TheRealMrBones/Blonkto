@@ -80,3 +80,5 @@ import healCommand from "../commands/healCommand.js";
 healCommand();
 import godModeCommand from "../commands/godModeCommand.js";
 godModeCommand();
+import cycleDayCommand from "../commands/cycleDayCommand.js";
+cycleDayCommand();

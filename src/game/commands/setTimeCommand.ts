@@ -44,6 +44,7 @@ function setTimeCommand(args: any[], player: Player, game: Game){
         return;
     }
 
-    game.world.daycycletick = newtime % (DAY_LENGTH + NIGHT_LENGTH);
-    game.chatManager.sendMessageTo(player, `New time set to: ${game.world.daycycletick}`);
+    const daycycletick = newtime % (DAY_LENGTH + NIGHT_LENGTH);
+    game.world.setDayTick(daycycletick);
+    game.chatManager.sendMessageTo(player, `New time set to: ${daycycletick}`);
 }

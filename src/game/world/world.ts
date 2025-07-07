@@ -32,8 +32,9 @@ class World {
     unloadInterval: NodeJS.Timeout;
     saveInterval: NodeJS.Timeout;
 
-    daycycletick: number = DAY_TRANSITION_LENGTH;
+    private daycycletick: number = DAY_TRANSITION_LENGTH;
     darknesspercent: number = 0;
+    cycleday: boolean = true;
 
     constructor(game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
@@ -88,7 +89,14 @@ class World {
 
     /** Ticks the day cycle */
     tickDayCycle(): void {
-        this.daycycletick++;
+        if(!this.cycleday) return;
+
+        this.setDayTick(this.daycycletick + 1);
+    }
+
+    /** Sets the day tick to the new value */
+    setDayTick(val: number): void {
+        this.daycycletick = val;
         if(this.daycycletick > DAY_LENGTH + NIGHT_LENGTH) this.daycycletick = 0;
 
         if(this.isNight()){
