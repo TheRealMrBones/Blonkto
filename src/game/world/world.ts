@@ -120,6 +120,11 @@ class World {
         }
     }
 
+    /** Returns the current day tick */
+    getDayTick(): number {
+        return this.daycycletick;
+    }
+
     /** Returns if it is night or not */
     isNight(): boolean {
         return (this.daycycletick > DAY_LENGTH);

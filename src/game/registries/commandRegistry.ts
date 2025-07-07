@@ -82,3 +82,5 @@ import godModeCommand from "../commands/godModeCommand.js";
 godModeCommand();
 import cycleDayCommand from "../commands/cycleDayCommand.js";
 cycleDayCommand();
+import getTimeCommand from "../commands/getTimeCommand.js";
+getTimeCommand();
