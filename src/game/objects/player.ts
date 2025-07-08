@@ -4,6 +4,7 @@ import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
+import Recipe from "../items/recipe.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 
@@ -32,6 +33,7 @@ class Player extends Entity {
     fixes: any;
     lastsetpos: number = 0;
     lastchunk: Pos | undefined;
+    recipes: Recipe[] = [];
 
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);

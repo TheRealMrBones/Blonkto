@@ -10,12 +10,10 @@ const defaultrecipesfolder = "recipes";
 class CraftManager {
     private game: Game;
     private recipes: Recipe[];
-    private playerrecipes: { [playerid: string]: Recipe[] };
 
     constructor(game: Game){
         this.game = game;
         this.recipes = [];
-        this.playerrecipes = {};
 
         this.loadRecipes();
     }
@@ -77,29 +75,18 @@ class CraftManager {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
             if(playerid !== undefined){
-                if(this.playerrecipes[playerid].includes(recipe)) continue;
+                if(this.game.players[playerid].recipes.includes(recipe)) continue;
             }
             if(recipe.canCraft(inventory, station)) recipes.push(recipe);
         }
 
         if(playerid !== undefined){
             for(const recipe of recipes) {
-                this.playerrecipes[playerid].push(recipe);
+                this.game.players[playerid].recipes.push(recipe);
             }
         }
 
         return recipes;
-    }
-
-    // #endregion
-
-    // #region player recipes
-
-    /** Returns if this player is yet to get initial recipes */
-    playerHasInitialRecipes(playerid: string): boolean {
-        if(this.playerrecipes[playerid] !== undefined) return false;
-        this.playerrecipes[playerid] = [];
-        return true;
     }
 
     // #endregion

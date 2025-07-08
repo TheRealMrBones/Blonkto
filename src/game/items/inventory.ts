@@ -14,7 +14,7 @@ class Inventory {
         this.size = size;
         this.slots = Array(size).fill(null);
 
-        if(trackchanges) this.changes = Array(size).fill(false);
+        if(trackchanges) this.changes = Array(size).fill(true);
         else this.changes = null;
     }
 

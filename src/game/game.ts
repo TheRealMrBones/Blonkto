@@ -126,7 +126,7 @@ class Game {
         const nearbyEntities = this.entityManager.getNonplayersNearby(player);
         const fixescopy = player.getFixes();
         const inventoryupdates = player.inventory.getChanges();
-        const recipes: any[] = (this.craftManager.playerHasInitialRecipes(player.id) || inventoryupdates.length > 0 || player.laststation != player.station) ?
+        const recipes: any[] = (inventoryupdates.length > 0 || player.laststation != player.station) ?
             this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.station, player.id) : [];
 
         // return full update object
