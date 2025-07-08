@@ -16,10 +16,10 @@ interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & Registry
     /** Returns this objects instance of the requested component data */
     getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2;
 
-    /** Return an object representing this objects component data for a game update to the client */
+    /** Returns an object representing this objects component data for a game update to the client */
     serializeComponentDataForUpdate(): any;
 
-    /** Return an object representing this objects component data for writing to the save */
+    /** Returns an object representing this objects component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any };
 }
 

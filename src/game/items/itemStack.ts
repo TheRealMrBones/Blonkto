@@ -54,7 +54,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Return an object representing this stacks component data for a game update to the client */
+    /** Returns an object representing this stacks component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
         let data: { [key: string]: any } = {};
 
@@ -69,7 +69,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         return data;
     }
 
-    /** Return an object representing this stacks component data for writing to the save */
+    /** Returns an object representing this stacks component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
@@ -145,7 +145,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
 
     // #region serialization
 
-    /** Return an object representing this items data for a game update to the client */
+    /** Returns an object representing this items data for a game update to the client */
     serializeForUpdate(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
@@ -158,7 +158,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         };
     }
 
-    /** Return an object representing this items data for writing to the save */
+    /** Returns an object representing this items data for writing to the save */
     serializeForWrite(): SerializedWriteItemStack {
         const componentdata = this.serializeComponentDataForWrite();
 

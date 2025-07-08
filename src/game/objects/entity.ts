@@ -116,7 +116,7 @@ abstract class Entity extends GameObject {
 
     // #region serialization
 
-    /** Return an object representing this entities data for a game update to the client */
+    /** Returns an object representing this entities data for a game update to the client */
     override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 

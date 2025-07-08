@@ -104,7 +104,7 @@ class CraftManager {
 
     // #region serialization
 
-    /** Return the list of recipe data for all craftable recipes for a game update to the client */
+    /** Returns the list of recipe data for all craftable recipes for a game update to the client */
     serializeCraftableRecipesForUpdate(inventory: Inventory, station: Pos | null, playerid?: string): any[] {
         let stationname = null;
         if(station !== null){

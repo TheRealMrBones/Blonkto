@@ -257,7 +257,7 @@ abstract class GameObject {
 
     // #region serialization
 
-    /** Return an object representing this objects data for a game update to the client */
+    /** Returns an object representing this objects data for a game update to the client */
     serializeForUpdate(): any {
         return {
             static: {
@@ -274,7 +274,7 @@ abstract class GameObject {
         };
     }
 
-    /** Return an object representing this objects data for writing to the save */
+    /** Returns an object representing this objects data for writing to the save */
     serializeForWrite(): any {
         return {
             x: this.x,

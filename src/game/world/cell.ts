@@ -197,7 +197,7 @@ class Cell {
 
     // #region serialization
 
-    /** Return an object representing this cells data for loading to the game world */
+    /** Returns an object representing this cells data for loading to the game world */
     serializeForLoad(): any {
         const data: any = {};
 
@@ -208,7 +208,7 @@ class Cell {
         return data;
     }
 
-    /** Return an object representing this cells data for writing to the save */
+    /** Returns an object representing this cells data for writing to the save */
     serializeForWrite(): any {
         const data: any = {};
 

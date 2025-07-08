@@ -58,7 +58,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Return an object representing this blocks component data for a game update to the client */
+    /** Returns an object representing this blocks component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
         let data: { [key: string]: any } = {};
 
@@ -74,7 +74,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         return data;
     }
 
-    /** Return an object representing this blocks component data for writing to the save */
+    /** Returns an object representing this blocks component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
@@ -159,7 +159,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
 
     // #region serialization
 
-    /** Return an object representing this blocks data for loading to the game world */
+    /** Returns an object representing this blocks data for loading to the game world */
     serializeForLoad(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
@@ -175,7 +175,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
         };
     }
 
-    /** Return an object representing this blocks data for writing to the save */
+    /** Returns an object representing this blocks data for writing to the save */
     serializeForWrite(): SerializedWriteBlock {
         const componentdata = this.serializeComponentDataForWrite();
 

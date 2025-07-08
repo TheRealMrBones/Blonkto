@@ -56,7 +56,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Return an object representing this entities component data for a game update to the client */
+    /** Returns an object representing this entities component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
         const data = {
             static: {},
@@ -76,7 +76,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         return data;
     }
 
-    /** Return an object representing this entities component data for writing to the save */
+    /** Returns an object representing this entities component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
@@ -106,7 +106,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
 
     // #region serialization
 
-    /** Return an object representing this nonplayer entities data for a game update to the client */
+    /** Returns an object representing this nonplayer entities data for a game update to the client */
     override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
         const componentdata = this.serializeComponentDataForUpdate();
@@ -123,7 +123,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         };
     }
 
-    /** Return an object representing this nonplayer entities data for writing to the save */
+    /** Returns an object representing this nonplayer entities data for writing to the save */
     override serializeForWrite(): any {
         const base = super.serializeForWrite();
         const componentdata = this.serializeComponentDataForWrite();

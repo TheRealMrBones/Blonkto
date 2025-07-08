@@ -247,7 +247,7 @@ class Player extends Entity {
 
     // #region serialization
 
-    /** Return an object representing this players data for a game update to the client */
+    /** Returns an object representing this players data for a game update to the client */
     override serializeForUpdate(): any {
         const base = super.serializeForUpdate();
 
@@ -265,7 +265,7 @@ class Player extends Entity {
         };
     }
 
-    /** Return an object representing this players data for writing to the save */
+    /** Returns an object representing this players data for writing to the save */
     override serializeForWrite(): any {
         return JSON.stringify({
             dead: false,
@@ -279,7 +279,7 @@ class Player extends Entity {
         });
     }
 
-    /** Return an object representing this players kept data for writing to the save after they have died */
+    /** Returns an object representing this players kept data for writing to the save after they have died */
     serializeAfterKilled(): any {
         const base: any = {
             dead: true,

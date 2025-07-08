@@ -150,10 +150,6 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
         return (this.eventEmitter.listenerCount("tick") > 0);
     }
 
-    // #endregion
-
-    // #region events
-
     /** Drops the item that this block drops on break */
     break(x: number, y: number, drop: boolean, game: Game): void {
         if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);

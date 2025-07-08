@@ -68,7 +68,7 @@ class Recipe {
 
     // #region serialization
 
-    /** Return an object representing this recipes data for a game update to the client */
+    /** Returns an object representing this recipes data for a game update to the client */
     serializeForUpdate(): any {
         return {
             ingredients: Object.entries(this.ingredients).map(([item, amount]) => ({

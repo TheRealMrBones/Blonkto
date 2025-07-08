@@ -58,7 +58,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
         return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Return an object representing this floors component data for a game update to the client */
+    /** Returns an object representing this floors component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
         let data: { [key: string]: any } = {};
 
@@ -74,7 +74,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
         return data;
     }
 
-    /** Return an object representing this floors component data for writing to the save */
+    /** Returns an object representing this floors component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
@@ -159,7 +159,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
 
     // #region serialization
 
-    /** Return an object representing this floors data for loading to the game world */
+    /** Returns an object representing this floors data for loading to the game world */
     serializeForLoad(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
@@ -170,7 +170,7 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
         };
     }
 
-    /** Return an object representing this floors data for writing to the save */
+    /** Returns an object representing this floors data for writing to the save */
     serializeForWrite(): SerializedWriteFloor {
         const componentdata = this.serializeComponentDataForWrite();
 

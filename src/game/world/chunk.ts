@@ -88,7 +88,7 @@ class Chunk {
 
     // #region serialization
 
-    /** Return an object representing this chunks data for loading to the game world */
+    /** Returns an object representing this chunks data for loading to the game world */
     serializeForLoad(): any {
         const serializedCells: any[][] = [];
         for(let x = 0; x < CHUNK_SIZE; x++){
@@ -105,7 +105,7 @@ class Chunk {
         };
     }
 
-    /** Return an object representing this chunks data for writing to the save */
+    /** Returns an object representing this chunks data for writing to the save */
     serializeForWrite(): any {
         let data = "";
         for(let x = 0; x < CHUNK_SIZE; x++){

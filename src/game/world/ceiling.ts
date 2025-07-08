@@ -58,7 +58,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         return this.componentdata[componentDataType.name] as T2;
     }
 
-    /** Return an object representing this ceilings component data for a game update to the client */
+    /** Returns an object representing this ceilings component data for a game update to the client */
     serializeComponentDataForUpdate(): any {
         let data: { [key: string]: any } = {};
 
@@ -74,7 +74,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         return data;
     }
 
-    /** Return an object representing this ceilings component data for writing to the save */
+    /** Returns an object representing this ceilings component data for writing to the save */
     serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
@@ -159,7 +159,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
 
     // #region serialization
 
-    /** Return an object representing this ceilings data for loading to the game world */
+    /** Returns an object representing this ceilings data for loading to the game world */
     serializeForLoad(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
@@ -170,7 +170,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         };
     }
 
-    /** Return an object representing this ceilings data for writing to the save */
+    /** Returns an object representing this ceilings data for writing to the save */
     serializeForWrite(): SerializedWriteCeiling {
         const componentdata = this.serializeComponentDataForWrite();
 
