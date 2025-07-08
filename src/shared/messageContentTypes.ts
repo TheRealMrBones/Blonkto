@@ -16,7 +16,6 @@ export type PlayerInstantiatedContent = {
     x: number;
     y: number;
     color: Color;
-    inventory: any;
 };
 
 /** Defines the format of the game update message */

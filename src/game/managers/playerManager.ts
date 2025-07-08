@@ -102,7 +102,6 @@ class PlayerManager {
             x: this.game.players[socket.id].x,
             y: this.game.players[socket.id].y,
             color: this.game.players[socket.id].color,
-            inventory: this.game.players[socket.id].inventory.serializeForUpdate(),
         };
         socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, content);
 

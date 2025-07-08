@@ -116,7 +116,6 @@ class NetworkingManager {
         this.playerclient.renderer.setColor(content.color);
         this.playerclient.renderer.startRendering();
         this.playerclient.renderer.uiManager.setupUi();
-        this.playerclient.inventory.setInventory(content.inventory);
     }
 
     // #endregion
