@@ -8,9 +8,33 @@ class World {
     private readonly playerclient: PlayerClient;
     private readonly chunks: {[key: string]: any} = {};
 
+    private readonly blockdefinitions: {[key: string]: any} = {};
+    private readonly floordefinitions: {[key: string]: any} = {};
+    private readonly ceilingdefinitions: {[key: string]: any} = {};
+
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
     }
+
+    // #region definitions
+
+    /** Saves the requested definitions to the client if not already there */
+    saveDefinitions(blockdefinitions: any[], floordefinitions: any[], ceilingdefinitions: any[]): void {
+        for(const blockdefinition of blockdefinitions){
+            if(blockdefinition.name in this.blockdefinitions) continue;
+            this.blockdefinitions[blockdefinition.name] = blockdefinition;
+        }
+        for(const floordefinition of floordefinitions){
+            if(floordefinition.name in this.floordefinitions) continue;
+            this.floordefinitions[floordefinition.name] = floordefinition;
+        }
+        for(const ceilingdefinition of ceilingdefinitions){
+            if(ceilingdefinition.name in this.ceilingdefinitions) continue;
+            this.ceilingdefinitions[ceilingdefinition.name] = ceilingdefinition;
+        }
+    }
+
+    // #endregion
 
     // #region chunks
 
@@ -71,7 +95,14 @@ class World {
         if(!chunk){
             return this.getDefaultCell();
         }else{
-            return chunk.cells[cellx][celly];
+            const cell = chunk.cells[cellx][celly];
+            const returnobj: any = {};
+
+            if(cell.block) returnobj.block = this.blockdefinitions[cell.block];
+            if(cell.floor) returnobj.floor = this.floordefinitions[cell.floor];
+            if(cell.ceiling) returnobj.ceiling = this.ceilingdefinitions[cell.ceiling];
+
+            return returnobj;
         }
     }
 

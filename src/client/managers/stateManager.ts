@@ -53,9 +53,10 @@ class StateManager {
         this.lastserverupdate = update.t;
 
         // update local world
-        if(update.worldLoad.unloadChunks) this.playerclient.world.unloadChunks(update.worldLoad.unloadChunks);
-        if(update.worldLoad.loadChunks) this.playerclient.world.loadChunks(update.worldLoad.loadChunks);
-        if(update.worldLoad.updatedcells) this.playerclient.world.updateCells(update.worldLoad.updatedcells);
+        this.playerclient.world.unloadChunks(update.worldLoad.unloadChunks);
+        this.playerclient.world.saveDefinitions(update.worldLoad.usedblocks, update.worldLoad.usedfloors, update.worldLoad.usedceilings);
+        this.playerclient.world.loadChunks(update.worldLoad.loadChunks);
+        this.playerclient.world.updateCells(update.worldLoad.updatedcells);
 
         // get fixes
         if(update.fixes.setpos) this.playerclient.inputManager.setPos(update.fixes.setpos);

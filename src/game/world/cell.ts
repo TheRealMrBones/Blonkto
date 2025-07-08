@@ -197,13 +197,13 @@ class Cell {
 
     // #region serialization
 
-    /** Returns an object representing this cells data for loading to the game world */
+    /** Returns an object representing this cells data for loading to the client */
     serializeForLoad(): any {
         const data: any = {};
 
-        if(this.block) data.block = this.block.definition.serializeForInit();
-        if(this.floor) data.floor = this.floor.definition.serializeForInit();
-        if(this.ceiling) data.ceiling = this.ceiling.definition.serializeForInit();
+        if(this.block) data.block = this.block.definition.getRegistryKey();
+        if(this.floor) data.floor = this.floor.definition.getRegistryKey();
+        if(this.ceiling) data.ceiling = this.ceiling.definition.getRegistryKey();
 
         return data;
     }

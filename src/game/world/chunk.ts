@@ -88,13 +88,22 @@ class Chunk {
 
     // #region serialization
 
-    /** Returns an object representing this chunks data for loading to the game world */
+    /** Returns an object representing this chunks data for loading to the client */
     serializeForLoad(): any {
         const serializedCells: any[][] = [];
+        const usedblocks: string[] = [];
+        const usedfloors: string[] = [];
+        const usedceilings: string[] = [];
+
         for(let x = 0; x < CHUNK_SIZE; x++){
             serializedCells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
-                serializedCells[x][y] = this.cells[x][y].serializeForLoad();
+                const serializedcell = this.cells[x][y].serializeForLoad();
+                serializedCells[x][y] = serializedcell;
+
+                if(serializedcell.block) if(!usedblocks.includes(serializedcell.block)) usedblocks.push(serializedcell.block);
+                if(serializedcell.floor) if(!usedfloors.includes(serializedcell.floor)) usedfloors.push(serializedcell.floor);
+                if(serializedcell.ceiling) if(!usedceilings.includes(serializedcell.ceiling)) usedceilings.push(serializedcell.ceiling);
             }
         }
         
@@ -102,6 +111,9 @@ class Chunk {
             x: this.chunkx,
             y: this.chunky,
             cells: serializedCells,
+            usedblocks: usedblocks,
+            usedfloors: usedfloors,
+            usedceilings: usedceilings,
         };
     }
 

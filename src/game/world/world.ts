@@ -1,3 +1,4 @@
+import Logger from "../../server/logging/logger.js";
 import Chunk from "./chunk.js";
 import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
@@ -5,8 +6,10 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import GameObject from "../objects/gameObject.js"; 
 import NonplayerEntity from "../objects/nonplayerEntity.js";
+import BlockRegistry from "../registries/blockRegistry.js";
+import FloorRegistry from "../registries/floorRegistry.js";
+import CeilingRegistry from "../registries/ceilingRegistry.js";
 import { Pos } from "../../shared/types.js";
-import Logger from "../../server/logging/logger.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -181,6 +184,14 @@ class World {
 
     /** Returns chunk data for an update to the given players client and handles new chunk loading as needed */
     loadPlayerChunks(player: Player): any {
+        // prepare used lists
+        const usedblocks: string[] = [];
+        const usedfloors: string[] = [];
+        const usedceilings: string[] = [];
+        const usedblocksserialized: any[] = [];
+        const usedfloorsserialized: any[] = [];
+        const usedceilingsserialized: any[] = [];
+
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
@@ -227,26 +238,28 @@ class World {
                 chunk.cellupdates.forEach(cellupdate => {
                     const cell = this.getCell(cellupdate.x, cellupdate.y, false);
                     if(cell === null) return;
+                    const cellserialized = cell.serializeForLoad();
 
                     updatedcells.push({
-                        data: cell.serializeForLoad(),
+                        data: cellserialized,
                         x: cellupdate.x,
                         y: cellupdate.y,
                     });
+
+                    if(cellserialized.block) if(!usedblocks.includes(cellserialized.block))
+                        usedblocks.push(cellserialized.block);
+                    if(cellserialized.floor) if(!usedfloors.includes(cellserialized.floor))
+                        usedfloors.push(cellserialized.floor);
+                    if(cellserialized.ceiling) if(!usedceilings.includes(cellserialized.ceiling))
+                        usedceilings.push(cellserialized.ceiling);
                 });
             }
         });
 
-        // prepare return object
-        const returnobj: any = {};
-        returnobj.updatedcells = updatedcells;
-
-        // if player in same chunk just end here
-        if(lastchunk !== undefined) if(lastchunk.x == x && lastchunk.y == y) return returnobj;
-
         // compare new and old chunks to same chunks to find which ones to load and unload
         const loadChunks: Pos[] = [];
         const unloadChunks: Pos[] = [];
+
         newChunks.forEach(nc => {
             let isNew = true;
             sameChunks.forEach(sc => {
@@ -264,16 +277,48 @@ class World {
 
         // load chunks
         const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
+
         loadChunks.forEach(lc => {
             const chunk = this.getChunk(lc.x, lc.y, true);
-            if(chunk !== null) loadChunksSerialized.push(chunk.serializeForLoad());
+            if(chunk !== null){
+                const serializedchunk = chunk.serializeForLoad();
+                loadChunksSerialized.push(serializedchunk);
+
+                for(const usedblock of serializedchunk.usedblocks){
+                    if(!usedblocks.includes(usedblock))
+                        usedblocks.push(usedblock);
+                }
+                for(const usedfloor of serializedchunk.usedfloors){
+                    if(!usedfloors.includes(usedfloor))
+                        usedfloors.push(usedfloor);
+                }
+                for(const usedceiling of serializedchunk.usedceilings){
+                    if(!usedceilings.includes(usedceiling))
+                        usedceilings.push(usedceiling);
+                }
+            }
         });
 
-        // append data to return obj
-        returnobj.loadChunks = loadChunksSerialized;
-        returnobj.unloadChunks = unloadChunks;
+        // serialize used definitions
+        for(const usedblock of usedblocks){
+            usedblocksserialized.push(BlockRegistry.get(usedblock).serializeForInit());
+        }
+        for(const usedfloor of usedfloors){
+            usedfloorsserialized.push(FloorRegistry.get(usedfloor).serializeForInit());
+        }
+        for(const usedceiling of usedceilings){
+            usedceilingsserialized.push(CeilingRegistry.get(usedceiling).serializeForInit());
+        }
 
-        return returnobj;
+        // return final data
+        return {
+            updatedcells: updatedcells,
+            unloadChunks: unloadChunks,
+            loadChunks: loadChunksSerialized,
+            usedblocks: usedblocksserialized,
+            usedfloors: usedfloorsserialized,
+            usedceilings: usedceilingsserialized,
+        };
     }
 
     /** Returns the list of chunks the given player has loaded */
