@@ -201,9 +201,9 @@ class Cell {
     serializeForLoad(): any {
         const data: any = {};
 
-        if(this.block) data.block = this.block.serializeForLoad();
-        if(this.floor) data.floor = this.floor.serializeForLoad();
-        if(this.ceiling) data.ceiling = this.ceiling.serializeForLoad();
+        if(this.block) data.block = this.block.definition.serializeForInit();
+        if(this.floor) data.floor = this.floor.definition.serializeForInit();
+        if(this.ceiling) data.ceiling = this.ceiling.definition.serializeForInit();
 
         return data;
     }

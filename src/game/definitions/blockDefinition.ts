@@ -156,6 +156,26 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     }
 
     // #endregion
+
+    // #region serialization
+
+    /** Returns an object representing this block definitions data for saving to the client */
+    serializeForInit(): any {
+        const componentdata = this.serializeComponentDataForInit();
+
+        return {
+            name: this.getRegistryKey(),
+            asset: this.asset,
+            scale: this.scale,
+            shape: this.shape,
+            floorvisible: this.getFloorVisible(),
+            walkthrough: this.getWalkThrough(),
+            underentities: this.getUnderEntities(),
+            ...componentdata,
+        };
+    }
+
+    // #endregion
 }
 
 export default BlockDefinition;

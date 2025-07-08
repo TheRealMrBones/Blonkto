@@ -159,14 +159,12 @@ class Floor implements RegistryDefinedWithComponents<FloorDefinition> {
 
     // #region serialization
 
-    /** Returns an object representing this floors data for loading to the game world */
-    serializeForLoad(): any {
+    /** Returns an object representing this floors data for a game update to the client */
+    serializeForUpdate(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
             ...componentdata,
-            name: this.definition.getRegistryKey(),
-            asset: this.definition.asset,
         };
     }
 

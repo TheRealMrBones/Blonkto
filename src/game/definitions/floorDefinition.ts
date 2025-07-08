@@ -91,6 +91,21 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements Regis
     }
 
     // #endregion
+
+    // #region serialization
+
+    /** Returns an object representing this ceiling definitions data for saving to the client */
+    serializeForInit(): any {
+        const componentdata = this.serializeComponentDataForInit();
+
+        return {
+            name: this.getRegistryKey(),
+            asset: this.asset,
+            ...componentdata,
+        };
+    }
+
+    // #endregion
 }
 
 export default FloorDefinition;

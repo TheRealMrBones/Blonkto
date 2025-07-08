@@ -1,12 +1,11 @@
 import Component from "../component.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
-import ComponentData from "../componentData.js";
-import SerializableForUpdate from "../serializableForUpdate.js";
+import SerializableForInit from "../serializableForInit.js";
 import Block from "../../world/block.js";
 import Game from "../../game.js";
 
 /** A Block Component that allows the block to be opened as a light */
-class LightComponent extends Component<BlockDefinition> {
+class LightComponent extends Component<BlockDefinition> implements SerializableForInit {
     distance: number;
 
     constructor(distance: number){
@@ -18,7 +17,6 @@ class LightComponent extends Component<BlockDefinition> {
     /** Implements this component into its parents functionality */
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
-        this.getParent().addRequiredComponentData(LightComponentData, this);
 
         this.getParent().registerInstantiateListener((block: Block, game: Game) => this.instantiate(block, game));
         this.getParent().registerBreakListener((block: Block, game: Game) => this.break(block, game));
@@ -72,13 +70,11 @@ class LightComponent extends Component<BlockDefinition> {
         }
         return keys;
     }
-}
 
-class LightComponentData extends ComponentData<LightComponent> implements SerializableForUpdate {
-    /** Returns an object representing this light component data for a game update to the client */
-    serializeForUpdate(): any {
+    /** Returns an object representing this light component data for saving to the client */
+    serializeForInit(): any {
         return {
-            light: this.parent.distance,
+            light: this.distance,
         };
     }
 }

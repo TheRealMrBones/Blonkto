@@ -159,19 +159,12 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
 
     // #region serialization
 
-    /** Returns an object representing this blocks data for loading to the game world */
-    serializeForLoad(): any {
+    /** Returns an object representing this blocks data for a game update to the client */
+    serializeForUpdate(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
             ...componentdata,
-            name: this.definition.getRegistryKey(),
-            asset: this.definition.asset,
-            scale: this.definition.scale,
-            shape: this.definition.shape,
-            floorvisible: this.definition.getFloorVisible(),
-            walkthrough: this.definition.getWalkThrough(),
-            underentities: this.definition.getUnderEntities(),
         };
     }
 

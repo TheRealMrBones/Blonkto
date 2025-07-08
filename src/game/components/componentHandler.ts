@@ -1,8 +1,9 @@
 import Logger from "../../server/logging/logger.js";
 import Component from "./component.js";
+import ComponentData from "./componentData.js";
+import SerializableForInit from "./serializableForInit.js";
 
 import Constants from "../../shared/constants.js";
-import ComponentData from "./componentData.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionailty for a type to handle its own set of components */
@@ -64,6 +65,26 @@ class ComponentHandler<T> {
     /** Returns this handlers list of required component data types */
     getRequiredComponentData(): { componentdata: (new (...args: any[]) => ComponentData<any>), parent: Component<T> }[] {
         return this.requiredComponentData;
+    }
+
+    // #endregion
+
+    // #region serialization
+
+    /** Returns an object representing this objects component data for saving to the client */
+    serializeComponentDataForInit(): any {
+        let data: { [key: string]: any } = {};
+
+        for(const component of Object.values(this.components)){
+            const c = component as unknown as SerializableForInit;
+            if(c.serializeForInit === undefined) continue;
+
+            const serialized = c.serializeForInit();
+            if(serialized === null) continue;
+            data = { ...data, ...serialized };
+        }
+
+        return data;
     }
 
     // #endregion

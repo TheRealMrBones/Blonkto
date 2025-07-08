@@ -159,14 +159,12 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
 
     // #region serialization
 
-    /** Returns an object representing this ceilings data for loading to the game world */
-    serializeForLoad(): any {
+    /** Returns an object representing this ceilings data for a game update to the client */
+    serializeForUpdate(): any {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
             ...componentdata,
-            name: this.definition.getRegistryKey(),
-            asset: this.definition.asset,
         };
     }
 
