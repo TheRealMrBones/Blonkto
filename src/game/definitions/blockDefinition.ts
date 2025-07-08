@@ -25,6 +25,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     private walkthrough: boolean = false;
     private blockcell: boolean = true;
     private floorvisible: boolean = true;
+    private underentities: boolean = false;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -75,6 +76,12 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
         return this;
     }
 
+    /** Sets this blocks under entities property */
+    setUnderEntities(underentities: boolean): BlockDefinition {
+        this.underentities = underentities;
+        return this;
+    }
+
     // #endregion
 
     // #region getters
@@ -92,6 +99,11 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
     /** Returns this blocks floor visible property */
     getFloorVisible(): boolean {
         return this.floorvisible;
+    }
+
+    /** Returns this blocks underentities property */
+    getUnderEntities(): boolean {
+        return this.underentities;
     }
 
     // #endregion

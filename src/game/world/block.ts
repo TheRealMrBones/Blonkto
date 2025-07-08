@@ -171,6 +171,7 @@ class Block implements RegistryDefinedWithComponents<BlockDefinition> {
             shape: this.definition.shape,
             floorvisible: this.definition.getFloorVisible(),
             walkthrough: this.definition.getWalkThrough(),
+            underentities: this.definition.getUnderEntities(),
         };
     }
 

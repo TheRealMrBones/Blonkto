@@ -151,11 +151,12 @@ class Renderer {
         fallingplayers.forEach((p: any) => this.renderPlayer(me, p));
 
         this.renderFloors(firstCell);
+        this.renderBlocks(firstCell, true);
 
         notfallingentities.forEach((e: any) => this.renderEntity(me, e));
         notfallingplayers.forEach((p: any) => this.renderPlayer(me, p));
         
-        this.renderBlocks(firstCell);
+        this.renderBlocks(firstCell, false);
 
         this.renderReach();
         this.renderDarkness(darkness, firstCell);
@@ -199,7 +200,7 @@ class Renderer {
     }
 
     /** Renders the blocks of each cell within client view */
-    private renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
+    private renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }, underentities: boolean): void {
         const canvasX = this.canvas.width / 2;
         const canvasY = this.canvas.height / 2;
         this.context.save();
@@ -208,7 +209,12 @@ class Renderer {
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){
                 const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
-                if(cell.block) this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.block.asset, cell.block.scale);
+
+                if(cell.block){
+                    if(cell.block.underentities == underentities){
+                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.block.asset, cell.block.scale);
+                    }
+                }
             }
         }
 

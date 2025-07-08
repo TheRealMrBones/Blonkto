@@ -34,20 +34,24 @@ BlockRegistry.register("wood_door_open", new BlockDefinition("Wood Door (Open)",
 BlockRegistry.register("sapling", new BlockDefinition("Sapling", ASSETS.SAPLING, undefined, MINE_TYPES.ANY, 0)
     .addComponent(new TimeChangeComponent("tree_trunk", 9000, 9000))
     .setFloorVisible(true)
-    .setWalkThrough(true));
+    .setWalkThrough(true)
+    .setUnderEntities(true));
 BlockRegistry.register("planted_carrots", new BlockDefinition("Planted Carrots", ASSETS.PLANTED_CARROTS, undefined, MINE_TYPES.ANY, 0)
     .addComponent(new TimeChangeComponent("grown_carrots", 9000, 9000))
     .setFloorVisible(true)
-    .setWalkThrough(true));
+    .setWalkThrough(true)
+    .setUnderEntities(true));
 BlockRegistry.register("grown_carrots", new BlockDefinition("Grown Carrots", ASSETS.GROWN_CARROTS, new Drop("carrot", 2, 1, .5, 3), MINE_TYPES.ANY, 0)
     .addComponent(new PickComponent())
     .setFloorVisible(true)
-    .setWalkThrough(true));
+    .setWalkThrough(true)
+    .setUnderEntities(true));
 BlockRegistry.register("work_bench", new BlockDefinition("Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8)
     .addComponent(new StationComponent()));
 BlockRegistry.register("torch", new BlockDefinition("Torch", ASSETS.TORCH, new Drop("torch"), MINE_TYPES.ANY, 0, .8)
     .addComponent(new LightComponent(5))
     .setFloorVisible(true)
-    .setWalkThrough(true));
+    .setWalkThrough(true)
+    .setUnderEntities(true));
 
 export default BlockRegistry;
