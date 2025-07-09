@@ -159,9 +159,9 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
 
     // #region serialization
 
-    /** Returns an object representing this block definitions data for saving to the client */
+    /** Returns an object representing this block definition for saving to the client */
     serializeForInit(): any {
-        const componentdata = this.serializeComponentDataForInit();
+        const componentdata = this.serializeComponentsForInit();
 
         return {
             name: this.getRegistryKey(),

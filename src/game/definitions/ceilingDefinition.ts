@@ -96,9 +96,9 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements R
 
     // #region serialization
 
-    /** Returns an object representing this ceiling definitions data for saving to the client */
+    /** Returns an object representing this ceiling definition for saving to the client */
     serializeForInit(): any {
-        const componentdata = this.serializeComponentDataForInit();
+        const componentdata = this.serializeComponentsForInit();
 
         return {
             name: this.getRegistryKey(),

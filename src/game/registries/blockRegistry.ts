@@ -10,9 +10,10 @@ import PickupComponent from "../components/blockcomponents/pickupComponent.js";
 import PickComponent from "../components/blockcomponents/pickComponent.js";
 import TimeChangeComponent from "../components/blockcomponents/timeChangeComponent.js";
 import StationComponent from "../components/blockcomponents/stationComponent.js";
+import LightComponent from "../components/blockcomponents/lightComponent.js";
+import ContainerComponent from "../components/blockcomponents/containerComponent.js";
 
 import Constants from "../../shared/constants.js";
-import LightComponent from "../components/blockcomponents/lightComponent.js";
 const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
@@ -53,5 +54,8 @@ BlockRegistry.register("torch", new BlockDefinition("Torch", ASSETS.TORCH, new D
     .setFloorVisible(true)
     .setWalkThrough(true)
     .setUnderEntities(true));
+BlockRegistry.register("chest", new BlockDefinition("Chest", ASSETS.CHEST, new Drop("chest"), MINE_TYPES.CHOP, 1, .8)
+    .addComponent(new StationComponent())
+    .addComponent(new ContainerComponent(27)));
 
 export default BlockRegistry;

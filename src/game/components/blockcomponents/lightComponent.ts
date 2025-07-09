@@ -71,7 +71,7 @@ class LightComponent extends Component<BlockDefinition> implements SerializableF
         return keys;
     }
 
-    /** Returns an object representing this light component data for saving to the client */
+    /** Returns an object representing this light component for saving to the client */
     serializeForInit(): any {
         return {
             light: this.distance,

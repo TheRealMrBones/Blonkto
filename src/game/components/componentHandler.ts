@@ -71,8 +71,8 @@ class ComponentHandler<T> {
 
     // #region serialization
 
-    /** Returns an object representing this objects component data for saving to the client */
-    serializeComponentDataForInit(): any {
+    /** Returns an object representing this objects component for saving to the client */
+    serializeComponentsForInit(): any {
         let data: { [key: string]: any } = {};
 
         for(const component of Object.values(this.components)){

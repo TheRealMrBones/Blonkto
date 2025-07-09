@@ -24,7 +24,7 @@ class StationComponent extends Component<BlockDefinition> implements Serializabl
         player.station = { x: info.cellpos.x, y: info.cellpos.y };
     }
 
-    /** Returns an object representing this station component data for saving to the client */
+    /** Returns an object representing this station component for saving to the client */
     serializeForInit(): any {
         return {
             openinv: true,
