@@ -29,11 +29,11 @@ class Player extends Entity {
     inventory: Inventory;
     hotbarslot: number;
     station: Pos | null = null;
-    laststation: Pos | null = null;
     fixes: any;
     lastsetpos: number = 0;
     lastchunk: Pos | undefined;
     recipes: Recipe[] = [];
+    moving: boolean = false;
 
     constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
         super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
@@ -156,7 +156,7 @@ class Player extends Entity {
             this.x += data.dx;
             this.y += data.dy;
             
-            if(data.dx != 0 || data.dy != 0) this.station = null;
+            this.moving = (data.dx != 0 || data.dy != 0);
         }
 
         // set other data

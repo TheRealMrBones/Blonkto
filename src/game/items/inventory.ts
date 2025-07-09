@@ -204,7 +204,7 @@ class Inventory {
     }
 
     /** Returns the object representing all changes to this inventory since last reset then resets them */
-    getChanges(): any[] {
+    getChanges(resetchanges?: boolean): any[] {
         if(this.changes === null) return [];
         const changeslist = [];
         for(let i = 0; i < this.size; i++){
@@ -217,8 +217,14 @@ class Inventory {
             }
         }
 
-        this.resetChanges();
+        if(resetchanges) this.resetChanges();
         return changeslist;
+    }
+
+    /** Returns if there are any pending changes */
+    anyChanges(): boolean {
+        if(this.changes === null) return false;
+        return this.changes.some(c => c === true);
     }
 
     resetChanges(): void {

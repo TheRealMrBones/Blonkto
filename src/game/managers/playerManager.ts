@@ -14,6 +14,7 @@ const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { KILLS_TAB } = SharedConfig.TAB;
+const { SHOW_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../../configs/server.js";
 const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
@@ -186,6 +187,8 @@ class PlayerManager {
 
     /** Returns the tab list of current players */
     getTab(): any[] {
+        if(!SHOW_TAB) return [];
+
         return this.game.entityManager.getPlayerEntities().map(p => { 
             const returnobj: any = {
                 username: p.username,

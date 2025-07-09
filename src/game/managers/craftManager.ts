@@ -1,8 +1,8 @@
 import { CraftContent } from "../../shared/messageContentTypes.js";
-import { Pos } from "../../shared/types.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
+import Player from "../objects/player.js";
 
 const defaultrecipesfolder = "recipes";
 
@@ -71,19 +71,10 @@ class CraftManager {
     }
 
     /** Returns all recipes craftable with the given inventories items */
-    getCraftableRecipes(inventory: Inventory, station: string | null, playerid?: string): Recipe[] {
+    getCraftableRecipes(inventory: Inventory, station: string | null): Recipe[] {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
-            if(playerid !== undefined){
-                if(this.game.players[playerid].recipes.includes(recipe)) continue;
-            }
             if(recipe.canCraft(inventory, station)) recipes.push(recipe);
-        }
-
-        if(playerid !== undefined){
-            for(const recipe of recipes) {
-                this.game.players[playerid].recipes.push(recipe);
-            }
         }
 
         return recipes;
@@ -105,10 +96,12 @@ class CraftManager {
     // #region serialization
 
     /** Returns the list of recipe data for all craftable recipes for a game update to the client */
-    serializeCraftableRecipesForUpdate(inventory: Inventory, station: Pos | null, playerid?: string): any[] {
+    serializeCraftableRecipesForUpdate(player: Player): any[] {
+        if(!player.inventory.anyChanges() && player.station === null) return [];
+
         let stationname = null;
-        if(station !== null){
-            const cell = this.game.world.getCell(station.x, station.y, false);
+        if(player.station !== null){
+            const cell = this.game.world.getCell(player.station.x, player.station.y, false);
             if(cell !== null){
                 if(cell.block !== null){
                     stationname = cell.block.definition.getRegistryKey();
@@ -116,12 +109,18 @@ class CraftManager {
             }
         }
 
-        if(playerid !== undefined){
-            const player = this.game.players[playerid];
-            player.laststation = player.station;
+        const allrecipes = this.getCraftableRecipes(player.inventory, stationname);
+        for(let i = 0; i < allrecipes.length; i++){
+            const recipe = allrecipes[i];
+            if(player.recipes.includes(recipe)){
+                allrecipes.splice(i, 1);
+                i--;
+            }else{
+                player.recipes.push(recipe);
+            }
         }
 
-        return this.getCraftableRecipes(inventory, stationname, playerid).map(recipe => recipe.serializeForUpdate());
+        return allrecipes.map(recipe => recipe.serializeForUpdate());
     }
 
     // #endregion

@@ -21,7 +21,6 @@ const { MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
-const { SHOW_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
@@ -121,13 +120,12 @@ class Game {
     /** Create an update object to be sent to the specified players client */
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
         // Get update data
-        const tab = SHOW_TAB ? this.playerManager.getTab() : [];
+        const tab = this.playerManager.getTab();
         const nearbyPlayers = this.entityManager.getPlayerEntitiesNearby(player);
         const nearbyEntities = this.entityManager.getNonplayersNearby(player);
         const fixescopy = player.getFixes();
-        const inventoryupdates = player.inventory.getChanges();
-        const recipes: any[] = (inventoryupdates.length > 0 || player.laststation != player.station) ?
-            this.craftManager.serializeCraftableRecipesForUpdate(player.inventory, player.station, player.id) : [];
+        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
+        const inventoryupdates = player.inventory.getChanges(true);
 
         // return full update object
         const content: GameUpdateContent = {
