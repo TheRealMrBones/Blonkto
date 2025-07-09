@@ -33,7 +33,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
-        if(targetdata.queueBlocked()){
+        if(targetdata.queueBlocked() && targetdata.currentpriotity == 1){
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
             const currenttarget = targetdata.targetposqueue[0];
 
@@ -54,6 +54,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
                     x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
                     y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
                 })));
+                targetdata.startofcurrenttarget = Date.now();
             }
 
             return;
