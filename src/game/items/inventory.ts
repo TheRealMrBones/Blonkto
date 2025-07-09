@@ -1,6 +1,5 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
-import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemStack from "./itemStack.js";
 

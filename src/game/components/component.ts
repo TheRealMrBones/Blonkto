@@ -27,7 +27,7 @@ abstract class Component<T> {
     }
 
     //** Returns the parent of this component */
-    protected getParent(): T {
+    getParent(): T {
         if(this.parent === null){
             this.logger.error("Cannot access parent before component is initialized");
             throw null;

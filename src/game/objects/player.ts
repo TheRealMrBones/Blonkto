@@ -5,6 +5,7 @@ import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import Inventory from "../items/inventory.js";
 import Recipe from "../items/recipe.js";
+import Station from "../items/station.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 
@@ -28,7 +29,7 @@ class Player extends Entity {
     color: Color;
     inventory: Inventory;
     hotbarslot: number;
-    station: Pos | null = null;
+    station: Station | null = null;
     fixes: any;
     lastsetpos: number = 0;
     lastchunk: Pos | undefined;
