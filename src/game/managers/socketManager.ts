@@ -140,15 +140,7 @@ class SocketManager {
         
         const player = this.game.players[socket.id];
 
-        let stationname = null;
-        if(player.station !== null){
-            const cell = this.game.world.getCell(player.station.x, player.station.y, false);
-            if(cell !== null){
-                if(cell.block !== null){
-                    stationname = cell.block.definition.getRegistryKey();
-                }
-            }
-        } 
+        const stationname = player.station !== null ? player.station.name : null;
 
         this.game.craftManager.craftRecipe(player.inventory, stationname, player.x, player.y, content);
     }
