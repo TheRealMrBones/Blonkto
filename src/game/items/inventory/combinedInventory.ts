@@ -1,5 +1,5 @@
-import Game from "../../game";
-import ItemStack from "../itemStack";
+import Game from "../../game.js";
+import ItemStack from "../itemStack.js";
 import IInventory from "./IInventory.js";
 
 class CombinedInventory implements IInventory {

@@ -3,7 +3,7 @@ import EventEmitter from "events";
 import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
-import IDrop from "../items/IDrop.js";
+import IDrop from "../items/drops/IDrop.js";
 import Block from "../world/block.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
