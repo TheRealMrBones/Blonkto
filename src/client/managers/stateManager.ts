@@ -88,6 +88,7 @@ class StateManager {
 
         // recipe updates
         if(update.inventoryupdates.length > 0) this.playerclient.inventory.setRecipeVisibility();
+        else if(update.stationupdates !== null) if(update.stationupdates.isnew) this.playerclient.inventory.setRecipeVisibility();
         this.playerclient.inventory.addRecipes(update.recipes);
 
         // update UI
