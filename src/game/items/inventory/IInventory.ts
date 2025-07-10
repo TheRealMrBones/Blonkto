@@ -37,8 +37,8 @@ interface IInventory {
     /** Removes the given amount from the given slot in this inventory */
     removeFromSlot(slot: number, amount: number): boolean;
 
-    /** Removes the requested amount of the requested item from this inventory */
-    removeItem(item: string, amount?: number): void;
+    /** Removes the requested amount of the requested item from this inventory and returns leftovers */
+    removeItem(item: string, amount?: number): number;
 
     /** Drops an individual stack (or partial stack) from this inventory */
     dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void;
@@ -47,20 +47,20 @@ interface IInventory {
     swapSlots(slot1: number, slot2: number): void;
 
     /** Clears this entire inventory */
-    clear(): void
+    clear(): void;
 
     // #endregion
 
     // #region helpers
 
     /** Returns the next open slot in this players inventory or -1 if there is none */
-    nextOpenSlot(): number
+    nextOpenSlot(): number;
 
     /** Returns if this inventory contains at least the specified amount of an item */
-    contains(item: string, amount: number): boolean
+    contains(item: string, amount: number): boolean;
 
     /** Returns the amount of the given item that this inventory contains */
-    containsAmount(item: string): number
+    containsAmount(item: string): number;
 
     // #endregion
 }

@@ -129,8 +129,8 @@ class Inventory implements IInventory {
         return true;
     }
 
-    /** Removes the requested amount of the requested item from this inventory */
-    removeItem(item: string, amount?: number): void {
+    /** Removes the requested amount of the requested item from this inventory and returns leftovers */
+    removeItem(item: string, amount?: number): number {
         let removeamount = amount || 1;
 
         for(let i = 0; i < this.size && removeamount > 0; i++){
@@ -148,6 +148,8 @@ class Inventory implements IInventory {
             }
             this.toggleChange(i);
         }
+
+        return removeamount;
     }
 
     /** Drops an individual stack (or partial stack) from this inventory */
@@ -174,9 +176,6 @@ class Inventory implements IInventory {
         
         this.setSlot(slot2, item1);
         this.setSlot(slot1, item2);
-        
-        this.toggleChange(slot1);
-        this.toggleChange(slot2);
     }
 
     /** Clears this entire inventory */
