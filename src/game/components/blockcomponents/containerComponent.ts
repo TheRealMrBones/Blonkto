@@ -1,10 +1,8 @@
 import Component from "../component.js";
 import Game from "../../game.js";
-import Player from "../../objects/player.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
-import { ClickContentExpanded } from "../../managers/socketManager.js";
-import StationComponent from "./stationComponent.js";
+import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
 import SerializableForWrite from "../serializableForWrite.js";
 import Inventory from "../../items/inventory.js";
@@ -25,6 +23,16 @@ class ContainerComponent extends Component<BlockDefinition> implements Serializa
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
         this.getParent().addRequiredComponentData(ContainerComponentData, this);
+
+        this.getParent().registerInstantiateListener((block: Block, game: Game) => this.instantiate(block, game));
+    }
+
+    /** Defines the instantiate of the block with this component */
+    instantiate(block: Block, game: Game): void {
+        const data = block.getComponentData(ContainerComponentData);
+        const stationdata = block.getComponentData(StationComponentData);
+
+        stationdata.station.inventories.push(data.inventory);
     }
 
     /** Returns an object representing this container component for saving to the client */
@@ -42,6 +50,7 @@ class ContainerComponentData extends ComponentData<ContainerComponent> implement
         super(parent);
 
         this.inventory = new Inventory(parent.slotcount, true);
+        this.inventory.resetChanges();
     }
 
     /** Sets this container component data objects values with the given save data */

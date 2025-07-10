@@ -46,7 +46,7 @@ class StationComponent extends Component<BlockDefinition> implements Serializabl
     }
 }
 
-class StationComponentData extends ComponentData<StationComponent> {
+export class StationComponentData extends ComponentData<StationComponent> {
     station: Station;
 
     constructor(parent: StationComponent){
