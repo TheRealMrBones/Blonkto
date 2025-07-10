@@ -5,7 +5,7 @@ import Block from "../../world/block.js";
 import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
 import ISerializableForWrite from "../ISerializableForWrite.js";
-import Inventory from "../../items/inventory.js";
+import Inventory from "../../items/inventory/inventory.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class ContainerComponent extends Component<BlockDefinition> {

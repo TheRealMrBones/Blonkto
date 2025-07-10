@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 
-import IDrop from "../items/IDrop.js";
+import IDrop from "../items/drops/IDrop.js";
 import Game from "../game.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import IRegistryValue from "../registries/IRegistryValue.js";

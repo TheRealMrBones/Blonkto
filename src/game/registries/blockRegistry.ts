@@ -1,7 +1,7 @@
 import Registry from "./registry.js";
 import BlockDefinition from "../definitions/blockDefinition.js";
-import Drop from "../items/drop.js";
-import Drops from "../items/drops.js";
+import Drop from "../items/drops/drop.js";
+import Drops from "../items/drops/drops.js";
 import Logger from "../../server/logging/logger.js";
 
 import ChangeComponent from "../components/blockcomponents/changeComponent.js";

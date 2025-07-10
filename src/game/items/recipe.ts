@@ -1,7 +1,7 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
-import Inventory from "./inventory.js";
+import IInventory from "./inventory/IInventory.js";
 
 class Recipe {
     readonly ingredients: { [item: string]: number };
@@ -32,7 +32,7 @@ class Recipe {
     }
 
     /** Returns if the requested inventory can craft this item */
-    canCraft(inventory: Inventory, station: string | null): boolean {
+    canCraft(inventory: IInventory, station: string | null): boolean {
         if(this.station !== null && this.station != station) return false;
         for(const ingredient in this.ingredients) {
             if(!inventory.contains(ingredient, this.ingredients[ingredient])) return false;
@@ -41,7 +41,7 @@ class Recipe {
     }
 
     /** Returns the amount of the given recipe the given inventory can craft */
-    canCraftAmount(inventory: Inventory, station: string | null): number {
+    canCraftAmount(inventory: IInventory, station: string | null): number {
         if(this.station !== null && this.station != station) return 0;
 
         let amount = Infinity;
@@ -53,7 +53,7 @@ class Recipe {
     }
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
-    craftRecipe(game: Game, station: string | null, inventory: Inventory, x: number, y:number, amount?: number): void {
+    craftRecipe(game: Game, station: string | null, inventory: IInventory, x: number, y:number, amount?: number): void {
         const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory, station)) * this.resultcount;
         if(craftamount == 0) return;
 

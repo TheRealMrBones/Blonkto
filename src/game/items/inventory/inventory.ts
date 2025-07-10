@@ -1,10 +1,11 @@
-import Game from "../game.js";
-import DroppedStack from "../objects/droppedStack.js";
-import ItemRegistry from "../registries/itemRegistry.js";
-import ItemStack from "./itemStack.js";
+import Game from "../../game.js";
+import DroppedStack from "../../objects/droppedStack.js";
+import ItemRegistry from "../../registries/itemRegistry.js";
+import ItemStack from "../itemStack.js";
+import IInventory from "./IInventory.js";
 
 /** A managable collection of item stacks */
-class Inventory {
+class Inventory implements IInventory {
     private size: number;
     private slots: (ItemStack | null)[];
     private changes: null | boolean[];
@@ -24,10 +25,19 @@ class Inventory {
         return inventory;
     }
 
+    // #region getters
+
     /** Returns the amount of slots this inventory can have */
     getSize(): number {
         return this.size;
     }
+
+    /** Returns the itemstack in the requested slot */
+    getSlot(slot: number): ItemStack | null {
+        return this.slots[slot];
+    }
+
+    // #endregion
 
     // #region inventory operations
     
@@ -87,11 +97,6 @@ class Inventory {
     // #endregion
 
     // #region slot operations
-
-    /** Returns the itemstack in the requested slot */
-    getSlot(slot: number): ItemStack | null {
-        return this.slots[slot];
-    }
 
     /** Sets the itemstack in the requested slot to the given itemstack */
     setSlot(slot: number, stack: ItemStack | null): void {
@@ -174,16 +179,10 @@ class Inventory {
         this.toggleChange(slot2);
     }
 
-    /** Clears the requested slot in this inventory */
-    clearSlot(slot: number): void {
-        this.slots[slot] = null;
-        this.toggleChange(slot);
-    }
-
     /** Clears this entire inventory */
     clear(): void {
         for(let i = 0; i < this.size; i++){
-            this.clearSlot(i);
+            this.setSlot(i, null);
         }
     }
 

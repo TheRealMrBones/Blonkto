@@ -1,6 +1,6 @@
 import Registry from "./registry.js";
 import FloorDefinition from "../definitions/floorDefinition.js";
-import Drop from "../items/drop.js";
+import Drop from "../items/drops/drop.js";
 import Logger from "../../server/logging/logger.js";
 
 import OrganicComponent from "../components/floorcomponents/organicComponent.js";

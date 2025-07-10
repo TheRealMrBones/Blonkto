@@ -1,9 +1,9 @@
-import Game from "../game.js";
-import DroppedStack from "../objects/droppedStack.js";
-import ItemRegistry from "../registries/itemRegistry.js";
+import Game from "../../game.js";
+import DroppedStack from "../../objects/droppedStack.js";
+import ItemRegistry from "../../registries/itemRegistry.js";
 import IDrop from "./IDrop.js";
-import ItemDefinition from "../definitions/itemDefinition.js";
-import ItemStack from "./itemStack.js";
+import ItemDefinition from "../../definitions/itemDefinition.js";
+import ItemStack from "../itemStack.js";
 
 /** The base drop class for creating dropped items */
 class Drop implements IDrop {

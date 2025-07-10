@@ -1,4 +1,4 @@
-import Game from "../game.js";
+import Game from "../../game.js";
 import IDrop from "./IDrop.js";
 
 /** Drop composed of multiple other drops */

@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
-import IDrop from "../items/IDrop.js";
+import IDrop from "../items/drops/IDrop.js";
 import Game from "../game.js";
 import Floor from "../world/floor.js";
 import Player from "../objects/player.js";

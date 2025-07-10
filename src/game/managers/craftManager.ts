@@ -1,6 +1,6 @@
 import { CraftContent } from "../../shared/messageContentTypes.js";
 import Game from "../game.js";
-import Inventory from "../items/inventory.js";
+import IInventory from "../items/inventory/IInventory.js";
 import Recipe from "../items/recipe.js";
 import Player from "../objects/player.js";
 
@@ -71,7 +71,7 @@ class CraftManager {
     }
 
     /** Returns all recipes craftable with the given inventories items */
-    getCraftableRecipes(inventory: Inventory, station: string | null): Recipe[] {
+    getCraftableRecipes(inventory: IInventory, station: string | null): Recipe[] {
         const recipes: Recipe[] = [];
         for(const recipe of this.recipes) {
             if(recipe.canCraft(inventory, station)) recipes.push(recipe);
@@ -85,7 +85,7 @@ class CraftManager {
     // #region crafting
 
     /** Tries to craft whatever recipe takes the given ingredients */
-    craftRecipe(inventory: Inventory, station: string | null, x: number, y: number, content: CraftContent): void {
+    craftRecipe(inventory: IInventory, station: string | null, x: number, y: number, content: CraftContent): void {
         const recipe = this.getRecipeFromIngredients(content.result, content.ingredients);
         if(recipe === null) return;
         recipe.craftRecipe(this.game, station, inventory, x, y, content.amount);

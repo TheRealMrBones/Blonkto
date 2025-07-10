@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import Inventory from "../items/inventory.js";
+import Inventory from "../items/inventory/inventory.js";
 import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import { Color, Pos } from "../../shared/types.js";
