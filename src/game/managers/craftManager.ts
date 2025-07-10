@@ -97,17 +97,9 @@ class CraftManager {
 
     /** Returns the list of recipe data for all craftable recipes for a game update to the client */
     serializeCraftableRecipesForUpdate(player: Player): any[] {
-        if(!player.inventory.anyChanges() && player.station === null) return [];
-
-        let stationname = null;
-        if(player.station !== null){
-            const cell = this.game.world.getCell(player.station.x, player.station.y, false);
-            if(cell !== null){
-                if(cell.block !== null){
-                    stationname = cell.block.definition.getRegistryKey();
-                }
-            }
-        }
+        if(!this.playerNeedsRecipeUpdate(player)) return [];
+        
+        const stationname = player.station !== null ? player.station.name : null;
 
         const allrecipes = this.getCraftableRecipes(player.inventory, stationname);
         for(let i = 0; i < allrecipes.length; i++){
@@ -121,6 +113,19 @@ class CraftManager {
         }
 
         return allrecipes.map(recipe => recipe.serializeForUpdate());
+    }
+
+    /** Returns if this player needs a recipe update */
+    playerNeedsRecipeUpdate(player: Player): boolean {
+        let recipesneeded = false;
+
+        if(player.inventory.anyChanges()) recipesneeded = true;
+        if(player.station !== null) if(player.station.openers[player.id].isnew){
+            recipesneeded = true;
+            player.station.clearIsNew(player);
+        }
+
+        return recipesneeded;
     }
 
     // #endregion

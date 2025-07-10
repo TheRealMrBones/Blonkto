@@ -33,7 +33,8 @@ class StationComponent extends Component<BlockDefinition> implements Serializabl
     tick(block: Block, game: Game, dt: number): void {
         const data = block.getComponentData(StationComponentData);
         for(const opener of Object.values(data.station.openers)){
-            if(opener.player.moving) data.station.closeStation(opener.player);
+            if(opener.player.moving || game.players[opener.player.id] === undefined)
+                data.station.closeStation(opener.player);
         }
     }
 
