@@ -6,6 +6,8 @@ import Game from "../game.js";
 import Inventory from "../items/inventory/inventory.js";
 import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
+import IInventory from "../items/inventory/IInventory.js";
+import CombinedInventory from "../items/inventory/combinedInventory.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 
@@ -27,7 +29,7 @@ class Player extends Entity {
     username: string;
     kills: number;
     color: Color;
-    inventory: Inventory;
+    private inventory: Inventory;
     hotbarslot: number;
     station: Station | null = null;
     fixes: any;
@@ -132,6 +134,20 @@ class Player extends Entity {
 
     // #endregion
 
+    // #region getters
+
+    getCombinedInventory(): IInventory {
+        const inventory = this.station === null ? this.inventory :
+            new CombinedInventory([this.inventory, ...this.station.inventories]);
+        return inventory;
+    }
+
+    getInventory(): Inventory {
+        return this.inventory;
+    }
+
+    // #endregion
+
     // #region setters
 
     /** Updates this players data with the given new input data */
@@ -191,8 +207,9 @@ class Player extends Entity {
 
     /** Drops the given amount from the given slot in this players inventory */
     dropFromSlot(slot: number, game: Game, amount?: number): void {
-        this.inventory.dropStack(this.x, this.y, slot, game, amount, this.id);
-        const stack = this.inventory.getSlot(slot);
+        const inventory = this.getInventory();
+        inventory.dropStack(this.x, this.y, slot, game, amount, this.id);
+        const stack = inventory.getSlot(slot);
     }
 
     // #endregion

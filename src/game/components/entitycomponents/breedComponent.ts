@@ -46,7 +46,7 @@ class BreedComponent extends Component<EntityDefinition> {
 
         if(Date.now() - data.lastfed < this.fedtime || data.breedstart > 0 || data.target !== null || data.delayticks > 0) return;
 
-        const hotbarItem = player.inventory.getSlot(player.hotbarslot);
+        const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
         if(hotbarItem === null) return;
         if(hotbarItem.definition.getRegistryKey() != this.food) return;
 

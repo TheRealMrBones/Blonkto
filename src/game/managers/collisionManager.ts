@@ -87,7 +87,7 @@ class CollisionManager {
                     removeignore = false;
                     continue;
                 }
-                if(player.inventory.collectStack(collectable.itemStack)) this.game.entityManager.removeObject(collectable.id);
+                if(player.getInventory().collectStack(collectable.itemStack)) this.game.entityManager.removeObject(collectable.id);
             }
 
             if(removeignore) collectable.ignore = null;

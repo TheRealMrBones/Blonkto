@@ -54,7 +54,7 @@ class SocketManager {
         const newinfo = this.getClickInfo(content);
         
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = player.inventory.getSlot(player.hotbarslot);
+            const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
 
             // try to use item
             if(hotbarItem !== null){
@@ -85,7 +85,7 @@ class SocketManager {
         const newinfo = this.getClickInfo(content);
         
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = player.inventory.getSlot(player.hotbarslot);
+            const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
 
             // try to interact with entity
             if(newinfo.entity !== null){
@@ -135,8 +135,10 @@ class SocketManager {
     handlePlayerSwap(socket: Socket, content: SwapContent): void {
         const player = this.game.players[socket.id as string];
         if(player === undefined) return;
+
+        const inventory = player.getCombinedInventory();
         
-        player.inventory.swapSlots(content.slot1, content.slot2);
+        inventory.swapSlots(content.slot1, content.slot2);
     }
 
     /** Response to a craft message from a client */
@@ -145,8 +147,9 @@ class SocketManager {
         if(player === undefined) return;
 
         const stationname = player.station !== null ? player.station.name : null;
+        const inventory = player.getCombinedInventory();
 
-        this.game.craftManager.craftRecipe(player.inventory, stationname, player.x, player.y, content);
+        this.game.craftManager.craftRecipe(inventory, stationname, player.x, player.y, content);
     }
 
     // #endregion

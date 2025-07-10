@@ -34,7 +34,7 @@ function giveCommand(args: any[], player: Player, game: Game){
         case 0:
         case 1: {
             const p: Player = args[1];
-            const leftover = p.inventory.collectItem(item, amount);
+            const leftover = p.getInventory().collectItem(item, amount);
             if(leftover > 0) DroppedStack.dropManyWithSpread(game, p.x, p.y, item, leftover, .3);
 
             game.chatManager.sendMessageTo(player, `gave ${p.username} ${amount} ${item}`);
@@ -42,7 +42,7 @@ function giveCommand(args: any[], player: Player, game: Game){
         };
         case 2:
         case 3: {
-            const leftover = player.inventory.collectItem(item, amount);
+            const leftover = player.getInventory().collectItem(item, amount);
             if(leftover > 0) DroppedStack.dropManyWithSpread(game, player.x, player.y, item, leftover, .3);
 
             game.chatManager.sendMessageTo(player, `gave you ${amount} ${item}`);

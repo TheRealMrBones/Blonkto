@@ -18,13 +18,13 @@ function clearCommand(args: any[], player: Player, game: Game){
 
     switch(argIndex){
         case 0: {
-            player.inventory.clear();
+            player.getInventory().clear();
             game.chatManager.sendMessageTo(player, "cleared your inventory");
             break;
         };
         case 1: {
             const p: Player = args[1];
-            player.inventory.clear();
+            player.getInventory().clear();
             game.chatManager.sendMessageTo(player, `cleared ${p.username}'s inventory`);
             break;
         }

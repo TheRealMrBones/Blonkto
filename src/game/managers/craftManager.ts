@@ -101,7 +101,7 @@ class CraftManager {
         
         const stationname = player.station !== null ? player.station.name : null;
 
-        const allrecipes = this.getCraftableRecipes(player.inventory, stationname);
+        const allrecipes = this.getCraftableRecipes(player.getCombinedInventory(), stationname);
         for(let i = 0; i < allrecipes.length; i++){
             const recipe = allrecipes[i];
             if(player.recipes.includes(recipe)){
@@ -119,7 +119,7 @@ class CraftManager {
     playerNeedsRecipeUpdate(player: Player): boolean {
         let recipesneeded = false;
 
-        if(player.inventory.anyChanges()) recipesneeded = true;
+        if(player.getInventory().anyChanges()) recipesneeded = true;
         if(player.station !== null) if(player.station.openers[player.id].isnew) recipesneeded = true;
 
         return recipesneeded;
