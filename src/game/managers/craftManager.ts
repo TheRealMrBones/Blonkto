@@ -120,10 +120,7 @@ class CraftManager {
         let recipesneeded = false;
 
         if(player.inventory.anyChanges()) recipesneeded = true;
-        if(player.station !== null) if(player.station.openers[player.id].isnew){
-            recipesneeded = true;
-            player.station.clearIsNew(player);
-        }
+        if(player.station !== null) if(player.station.openers[player.id].isnew) recipesneeded = true;
 
         return recipesneeded;
     }

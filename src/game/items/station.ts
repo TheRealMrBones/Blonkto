@@ -38,6 +38,27 @@ class Station {
         // this is just used in craft manager to make sure clients arent spammed with recipes
         this.openers[player.id].isnew = false;
     }
+
+    // #region serialization
+
+    /** Returns an object representing this station for a game update to the given players client */
+    serializeForUpdate(player: Player): any {
+        const isnew = this.openers[player.id].isnew;
+        const returnobj: any = {
+            isnew: isnew,
+        };
+        
+        if(this.inventories.length > 0){
+            returnobj.updates = isnew ?
+                this.inventories.map(inventory => inventory.serializeForUpdate()) :
+                this.inventories.map(inventory => inventory.getChanges());
+        }
+
+        if(isnew) this.clearIsNew(player);
+        return returnobj;
+    }
+
+    // #endregion
 }
 
 export default Station;

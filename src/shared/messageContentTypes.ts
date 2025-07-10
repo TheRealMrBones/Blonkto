@@ -25,6 +25,7 @@ export type GameUpdateContent = {
     me: any;
     fixes: any;
     inventoryupdates: any[];
+    stationupdates: any | null;
     recipes: any[];
     others: any[];
     entities: any[];
