@@ -207,7 +207,7 @@ class Player extends Entity {
 
     /** Drops the given amount from the given slot in this players inventory */
     dropFromSlot(slot: number, game: Game, amount?: number): void {
-        const inventory = this.getInventory();
+        const inventory = this.getCombinedInventory();
         inventory.dropStack(this.x, this.y, slot, game, amount, this.id);
         const stack = inventory.getSlot(slot);
     }
