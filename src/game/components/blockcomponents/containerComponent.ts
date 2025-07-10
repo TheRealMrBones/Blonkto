@@ -6,10 +6,9 @@ import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
 import SerializableForWrite from "../serializableForWrite.js";
 import Inventory from "../../items/inventory.js";
-import SerializableForInit from "../serializableForInit.js";
 
 /** A Block Component that allows the block to be opened as a station */
-class ContainerComponent extends Component<BlockDefinition> implements SerializableForInit {
+class ContainerComponent extends Component<BlockDefinition> {
     readonly slotcount: number;
 
     constructor(slotcount: number){
@@ -33,13 +32,6 @@ class ContainerComponent extends Component<BlockDefinition> implements Serializa
         const stationdata = block.getComponentData(StationComponentData);
 
         stationdata.station.inventories.push(data.inventory);
-    }
-
-    /** Returns an object representing this container component for saving to the client */
-    serializeForInit(): any {
-        return {
-            slotcount: this.slotcount,
-        };
     }
 }
 

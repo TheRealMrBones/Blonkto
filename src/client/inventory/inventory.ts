@@ -9,7 +9,7 @@ const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 /** The representation of inventory data of the client */
 class Inventory {
     private readonly playerclient: PlayerClient;
-    private readonly inventory: (Item | null)[] = new Array(INVENTORY_SIZE).fill(null);
+    private readonly inventory: (Item | null)[] = new Array(INVENTORY_SIZE + 27).fill(null);
     private readonly recipes: Recipe[] = [];
     station: string | null = null;
 
@@ -138,14 +138,45 @@ class Inventory {
         }
     }
 
+    // #endregion
+
+    // #region station
+    
     /** Sets the current station being used by the player */
     setStation(station: string | null): void {
         this.station = station;
+        if(station === null) this.clearStationInventory();
         this.setRecipeVisibility();
     }
 
-    // #endregion
+    /** Clears the closed stations inventory data */
+    clearStationInventory(): void {
+        for(let i = 0; i < 27; i++){
+            this.clearInventorySlot(i + 36);
+        }
+    }
 
+    /** Sets the station inventory slots */
+    setStationInventory(data: any[]): void {
+        for(let i = 0; i < 27; i++){
+            const itemdata = data[i];
+            if(itemdata){
+                this.setInventorySlot(i + 36, new Item(itemdata.name, itemdata.asset, itemdata.amount));
+            }else{
+                this.clearInventorySlot(i + 36);
+            }
+        }
+    }
+
+    /** Updates the station inventory slots */
+    updateStationInventory(data: any[]): void {
+        data.forEach((iu: any) => {
+            iu.slot += 36;
+            this.playerclient.inventory.setSingleInventorySlot(iu);
+        });
+    }
+
+    // #endregion
 }
 
 export default Inventory;

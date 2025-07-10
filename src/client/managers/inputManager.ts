@@ -203,19 +203,6 @@ class InputManager {
             mey: this.y,
         };
 
-        // do client side click operations
-        const cellpos: Pos = { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) };
-        const cell = this.playerclient.world.getCell(cellpos.x, cellpos.y);
-        if(cell){
-            if(cell.block){
-                if(cell.block.openinv && e.button == 2){
-                    this.playerclient.renderer.uiManager.openInventory();
-                    this.playerclient.inventory.setStation(cell.block.name);
-                    this.ignoreDeltas();
-                }
-            }
-        }
-
         // send appropriate click event
         if(e.button == 0){
             this.playerclient.networkingManager.click(content);

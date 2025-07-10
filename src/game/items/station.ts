@@ -45,6 +45,7 @@ class Station {
     serializeForUpdate(player: Player): any {
         const isnew = this.openers[player.id].isnew;
         const returnobj: any = {
+            name: this.name,
             isnew: isnew,
         };
         

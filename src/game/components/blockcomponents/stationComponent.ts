@@ -4,12 +4,11 @@ import Player from "../../objects/player.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import { ClickContentExpanded } from "../../managers/socketManager.js";
-import SerializableForInit from "../serializableForInit.js";
 import Station from "../../items/station.js";
 import ComponentData from "../componentData.js";
 
 /** A Block Component that allows the block to be opened as a station */
-class StationComponent extends Component<BlockDefinition> implements SerializableForInit {
+class StationComponent extends Component<BlockDefinition> {
     constructor(){
         super();
     }
@@ -36,13 +35,6 @@ class StationComponent extends Component<BlockDefinition> implements Serializabl
             if(opener.player.moving || game.players[opener.player.id] === undefined)
                 data.station.closeStation(opener.player);
         }
-    }
-
-    /** Returns an object representing this station component for saving to the client */
-    serializeForInit(): any {
-        return {
-            openinv: true,
-        };
     }
 }
 

@@ -21,6 +21,7 @@ class UiManager {
     private readonly tabdiv: HTMLElement = document.getElementById("tab")!;
     private readonly hotbardiv: HTMLElement = document.getElementById("hotbar")!;
     private readonly inventorydiv: HTMLElement = document.getElementById("inventory")!;
+    private readonly stationdiv: HTMLElement = document.getElementById("station")!;
 
     private keyDownChecksListener: ((event: any) => void) = this.keyDownChecks.bind(this);
     private keyUpChecksListener: ((event: any) => void) = this.keyUpChecks.bind(this);
@@ -37,7 +38,7 @@ class UiManager {
         this.playerclient = playerclient;
 
         // prepare event listeners
-        for(let i = 0; i < 36; i++){
+        for(let i = 0; i < 63; i++){
             const hotbarslot = document.getElementById("slot" + (i + 1))!;
             hotbarslot.addEventListener("click", function() {
                 playerclient.inputManager.selectSlot(i);
@@ -176,10 +177,17 @@ class UiManager {
         this.playerclient.inputManager.pauseHotbar();
     }
 
+    /** Handles the open station action */
+    openStation(): void {
+        this.stationdiv.style.display = "block";
+        this.openInventory();
+    }
+
     /** Handles the close inventory action */
     private closeInventory(): void {
         this.inventoryopen = false;
         this.inventorydiv.style.display = "none";
+        this.stationdiv.style.display = "none";
         this.playerclient.inputManager.resumeCapturingInputs();
         window.addEventListener("keydown", this.keyDownChecksListener);
         window.addEventListener("keyup", this.keyUpChecksListener);

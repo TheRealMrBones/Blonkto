@@ -63,9 +63,32 @@ class StateManager {
         if(update.fixes.pushx) this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy);
         if(update.fixes.setcolor) this.playerclient.renderer.setColor(update.fixes.setcolor);
 
+        // inventory updates
         update.inventoryupdates.forEach((iu: any) => {
             this.playerclient.inventory.setSingleInventorySlot(iu);
         });
+
+        // station updates
+        if(update.stationupdates !== null){
+            this.playerclient.inventory.setStation(update.stationupdates.name);
+
+            if(update.stationupdates.updates !== undefined){
+                const stationinventoryupdates = update.stationupdates.updates[0];
+
+                if(update.stationupdates.isnew){
+                    this.playerclient.inventory.setStation(update.stationupdates.name);
+                    this.playerclient.renderer.uiManager.openStation();
+
+                    this.playerclient.inventory.setStationInventory(stationinventoryupdates);
+                }else{
+                    this.playerclient.inventory.updateStationInventory(stationinventoryupdates);
+                }
+            }else if(update.stationupdates.isnew){
+                this.playerclient.renderer.uiManager.openInventory();
+            }
+        }
+
+        // recipe updates
         if(update.inventoryupdates.length > 0) this.playerclient.inventory.setRecipeVisibility();
         this.playerclient.inventory.addRecipes(update.recipes);
 
