@@ -40,24 +40,25 @@ class SocketManager {
 
     /** Response to the general input message from a client */
     handlePlayerInput(socket: Socket, content: InputContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
         
-        if(this.game.players[socket.id]){
-            this.game.players[socket.id].update(content);
-        }
+        player.update(content);
     }
 
     /** Response to a click (left click) message from a client */
     handlePlayerClick(socket: Socket, content: ClickContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
+
         const newinfo = this.getClickInfo(content);
         
-        if(Date.now() - this.game.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = this.game.players[socket.id].inventory.getSlot(this.game.players[socket.id].hotbarslot);
+        if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
+            const hotbarItem = player.inventory.getSlot(player.hotbarslot);
 
             // try to use item
             if(hotbarItem !== null){
-                if(!hotbarItem.use(this.game, this.game.players[socket.id], newinfo)) return;
+                if(!hotbarItem.use(this.game, player, newinfo)) return;
             }
 
             // default break action
@@ -72,27 +73,29 @@ class SocketManager {
             }
             
             // default swing action
-            this.game.players[socket.id].startSwing(newinfo.dir, 1);
+            player.startSwing(newinfo.dir, 1);
         }
     }
 
     /** Response to a interaction (right click) message from a client */
     handlePlayerInteract(socket: Socket, content: ClickContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
+
         const newinfo = this.getClickInfo(content);
         
-        if(Date.now() - this.game.players[socket.id].lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = this.game.players[socket.id].inventory.getSlot(this.game.players[socket.id].hotbarslot);
+        if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
+            const hotbarItem = player.inventory.getSlot(player.hotbarslot);
 
             // try to interact with entity
             if(newinfo.entity !== null){
-                newinfo.entity.emitInteractEvent(this.game, this.game.players[socket.id]);
+                newinfo.entity.emitInteractEvent(this.game, player);
                 return;
             }
 
             // try to use item
             if(hotbarItem !== null){
-                if(!hotbarItem.interact(this.game, this.game.players[socket.id], newinfo)) return;
+                if(!hotbarItem.interact(this.game, player, newinfo)) return;
             }
 
             // default action
@@ -101,11 +104,11 @@ class SocketManager {
             if(cell === null) return;
             
             if(cell.block !== null){
-                cell.block.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+                cell.block.emitInteractEvent(this.game, player, newinfo);
             }else if(cell.floor !== null){
-                cell.floor.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+                cell.floor.emitInteractEvent(this.game, player, newinfo);
             }else if(cell.ceiling !== null){
-                cell.ceiling.emitInteractEvent(this.game, this.game.players[socket.id], newinfo);
+                cell.ceiling.emitInteractEvent(this.game, player, newinfo);
             }
         }
     }
@@ -122,23 +125,24 @@ class SocketManager {
 
     /** Response to a drop message from a client */
     handlePlayerDrop(socket: Socket, content: DropContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
         
-        this.game.players[socket.id].dropFromSlot(content.slot, this.game, content.all ? undefined : 1);
+        player.dropFromSlot(content.slot, this.game, content.all ? undefined : 1);
     }
 
     /** Response to a swap message from a client */
     handlePlayerSwap(socket: Socket, content: SwapContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
         
-        this.game.players[socket.id].inventory.swapSlots(content.slot1, content.slot2);
+        player.inventory.swapSlots(content.slot1, content.slot2);
     }
 
     /** Response to a craft message from a client */
     handlePlayerCraft(socket: Socket, content: CraftContent): void {
-        if(socket.id === undefined || this.game.players[socket.id] === undefined) return;
-        
-        const player = this.game.players[socket.id];
+        const player = this.game.players[socket.id as string];
+        if(player === undefined) return;
 
         const stationname = player.station !== null ? player.station.name : null;
 
