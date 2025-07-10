@@ -1,19 +1,19 @@
 import EventEmitter from "events";
 
 import ComponentData from "../components/componentData.js";
-import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
+import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
 import CeilingDefinition from "../definitions/ceilingDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
 import { SerializedWriteCeiling } from "../../shared/serializedWriteTypes.js";
-import SerializableForWrite from "../components/serializableForWrite.js";
-import SerializableForUpdate from "../components/serializableForUpdate.js";
+import ISerializableForWrite from "../components/ISerializableForWrite.js";
+import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
 
 /** Represents a placed ceiling in the game world */
-class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
+class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     readonly cell: Cell;
     readonly definition: CeilingDefinition;
     readonly componentdata: { [key: string]: ComponentData<any> } = {};
@@ -47,7 +47,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as SerializableForWrite;
+            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -63,7 +63,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         let data: { [key: string]: any } = {};
 
         for(const componentdata of Object.values(this.componentdata)){
-            const cd = componentdata as unknown as SerializableForUpdate;
+            const cd = componentdata as unknown as ISerializableForUpdate;
             if(cd.serializeForUpdate === undefined) continue;
 
             const serialized = cd.serializeForUpdate();
@@ -79,7 +79,7 @@ class Ceiling implements RegistryDefinedWithComponents<CeilingDefinition> {
         const data: { [key: string]: any } = {};
 
         for(const componentdata of Object.entries(this.componentdata)){
-            const cd = componentdata[1] as unknown as SerializableForWrite;
+            const cd = componentdata[1] as unknown as ISerializableForWrite;
             if(cd.serializeForWrite === undefined) continue;
 
             const serialized = cd.serializeForWrite();

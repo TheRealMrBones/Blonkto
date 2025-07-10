@@ -1,5 +1,5 @@
 /** The interface to define an object that serializes data to write */
-interface SerializableForWrite {
+interface ISerializableForWrite {
     /** Sets this objects values with the given save data */
     readFromSave(data: any): void;
 
@@ -7,4 +7,4 @@ interface SerializableForWrite {
     serializeForWrite(): any;
 }
 
-export default SerializableForWrite;
+export default ISerializableForWrite;

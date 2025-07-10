@@ -1,11 +1,11 @@
 import Component from "../component.js";
 import BlockDefinition from "../../definitions/blockDefinition.js";
-import SerializableForInit from "../serializableForInit.js";
+import ISerializableForInit from "../ISerializableForInit.js";
 import Block from "../../world/block.js";
 import Game from "../../game.js";
 
 /** A Block Component that allows the block to be opened as a light */
-class LightComponent extends Component<BlockDefinition> implements SerializableForInit {
+class LightComponent extends Component<BlockDefinition> implements ISerializableForInit {
     distance: number;
 
     constructor(distance: number){

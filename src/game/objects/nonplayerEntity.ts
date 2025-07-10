@@ -1,14 +1,14 @@
 import ComponentData from "../components/componentData.js";
-import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
+import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
 import EntityDefinition from "../definitions/entityDefinition.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
-import SerializableForUpdate from "../components/serializableForUpdate.js";
-import SerializableForWrite from "../components/serializableForWrite.js";
+import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
+import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
 
 /** The base class for non-player entities loaded in the game world */
-class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<EntityDefinition> {
+class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
     readonly definition: EntityDefinition;
     readonly componentdata: { [key: string]: ComponentData<any> } = {};
 
@@ -45,7 +45,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as SerializableForWrite;
+            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -64,7 +64,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         };
 
         for(const componentdata of Object.values(this.componentdata)){
-            const cd = componentdata as unknown as SerializableForUpdate;
+            const cd = componentdata as unknown as ISerializableForUpdate;
             if(cd.serializeForUpdate === undefined) continue;
 
             const serialized = cd.serializeForUpdate();
@@ -81,7 +81,7 @@ class NonplayerEntity extends Entity implements RegistryDefinedWithComponents<En
         const data: { [key: string]: any } = {};
 
         for(const componentdata of Object.entries(this.componentdata)){
-            const cd = componentdata[1] as unknown as SerializableForWrite;
+            const cd = componentdata[1] as unknown as ISerializableForWrite;
             if(cd.serializeForWrite === undefined) continue;
 
             const serialized = cd.serializeForWrite();

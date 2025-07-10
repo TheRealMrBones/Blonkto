@@ -1,8 +1,8 @@
 import EventEmitter from "events";
 
-import RegistryValue from "../registries/registryValue.js";
+import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
-import DropBase from "../items/dropBase.js";
+import IDrop from "../items/IDrop.js";
 import Game from "../game.js";
 import Ceiling from "../world/ceiling.js";
 import Player from "../objects/player.js";
@@ -12,15 +12,15 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of ceiling with its functionality and base statistics */
-class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements RegistryValue {
+class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements IRegistryValue {
     private name: string = "unregistered";
     readonly displayname: string;
     readonly asset: string;
-    readonly drops: DropBase | null;
+    readonly drops: IDrop | null;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: DropBase){
+    constructor(displayname: string, asset: string | null, drops?: IDrop){
         super();
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;

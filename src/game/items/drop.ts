@@ -1,12 +1,12 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
-import DropBase from "./dropBase.js";
+import IDrop from "./IDrop.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
 import ItemStack from "./itemStack.js";
 
 /** The base drop class for creating dropped items */
-class Drop implements DropBase {
+class Drop implements IDrop {
     item: ItemDefinition;
     amount: number;
     spread: number = .3;

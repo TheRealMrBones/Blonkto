@@ -1,9 +1,9 @@
 import EventEmitter from "events";
 
-import RegistryValue from "../registries/registryValue.js";
+import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
-import DropBase from "../items/dropBase.js";
+import IDrop from "../items/IDrop.js";
 import Block from "../world/block.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
@@ -12,11 +12,11 @@ import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES } = Constants;
 
 /** The definition for a type of block with its functionality and base statistics */
-class BlockDefinition extends ComponentHandler<BlockDefinition> implements RegistryValue {
+class BlockDefinition extends ComponentHandler<BlockDefinition> implements IRegistryValue {
     private name: string = "unregistered";
     readonly displayname: string;
     readonly asset: string;
-    readonly drops: DropBase | null;
+    readonly drops: IDrop | null;
     readonly minetype: number;
     readonly hardness: number;
     readonly scale: number;
@@ -29,7 +29,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements Regis
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: DropBase, minetype?: number, hardness?: number, scale?: number, shape?: number){
+    constructor(displayname: string, asset: string | null, drops?: IDrop, minetype?: number, hardness?: number, scale?: number, shape?: number){
         super();
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;

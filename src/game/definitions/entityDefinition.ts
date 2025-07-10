@@ -1,9 +1,9 @@
 import EventEmitter from "events";
 
-import DropBase from "../items/dropBase.js";
+import IDrop from "../items/IDrop.js";
 import Game from "../game.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
-import RegistryValue from "../registries/registryValue.js";
+import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Entity from "../objects/entity.js";
 import Player from "../objects/player.js";
@@ -13,18 +13,18 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
-class EntityDefinition extends ComponentHandler<EntityDefinition> implements RegistryValue {
+class EntityDefinition extends ComponentHandler<EntityDefinition> implements IRegistryValue {
     private name: string = "unregistered";
     readonly displayname: string;
     readonly maxhealth: number;
     readonly speed: number;
     readonly scale: number;
     readonly asset: string;
-    readonly drops: DropBase | null;
+    readonly drops: IDrop | null;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, maxhealth: number, speed: number, scale: number, drops?: DropBase){
+    constructor(displayname: string, asset: string | null, maxhealth: number, speed: number, scale: number, drops?: IDrop){
         super();
         this.displayname = displayname;
         this.maxhealth = maxhealth;

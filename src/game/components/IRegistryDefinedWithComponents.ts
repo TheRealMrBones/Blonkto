@@ -1,10 +1,10 @@
-import RegistryDefined from "../registries/registryDefined.js";
-import RegistryValue from "../registries/registryValue.js";
+import IRegistryDefined from "../registries/IRegistryDefined.js";
+import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentData from "./componentData.js";
 import ComponentHandler from "./componentHandler.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
-interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & RegistryValue> extends RegistryDefined<T> {
+interface IRegistryDefinedWithComponents<T extends ComponentHandler<T> & IRegistryValue> extends IRegistryDefined<T> {
     readonly componentdata: { [key: string]: ComponentData<any> };
 
     /** Initializes this objects required component data instances */
@@ -23,4 +23,4 @@ interface RegistryDefinedWithComponents<T extends ComponentHandler<T> & Registry
     serializeComponentDataForWrite(): { [key: string]: any };
 }
 
-export default RegistryDefinedWithComponents;
+export default IRegistryDefinedWithComponents;

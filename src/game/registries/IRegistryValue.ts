@@ -1,5 +1,5 @@
 /** The base interface for a type that can added to a registry */
-interface RegistryValue {
+interface IRegistryValue {
     /** Sets this registry values key in the registry */
     setRegistryKey(key: string): void;
 
@@ -7,4 +7,4 @@ interface RegistryValue {
     getRegistryKey(): string;
 }
 
-export default RegistryValue;
+export default IRegistryValue;

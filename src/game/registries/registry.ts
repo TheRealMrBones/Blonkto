@@ -1,11 +1,11 @@
-import RegistryValue from "./registryValue.js";
+import IRegistryValue from "./IRegistryValue.js";
 import Logger from "../../server/logging/logger.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Manages a definition list specific type of class */
-class Registry<T extends RegistryValue> {
+class Registry<T extends IRegistryValue> {
     private readonly logger: Logger;
     
     name: string;

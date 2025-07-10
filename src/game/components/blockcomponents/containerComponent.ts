@@ -4,7 +4,7 @@ import BlockDefinition from "../../definitions/blockDefinition.js";
 import Block from "../../world/block.js";
 import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
-import SerializableForWrite from "../serializableForWrite.js";
+import ISerializableForWrite from "../ISerializableForWrite.js";
 import Inventory from "../../items/inventory.js";
 
 /** A Block Component that allows the block to be opened as a station */
@@ -35,7 +35,7 @@ class ContainerComponent extends Component<BlockDefinition> {
     }
 }
 
-class ContainerComponentData extends ComponentData<ContainerComponent> implements SerializableForWrite {
+class ContainerComponentData extends ComponentData<ContainerComponent> implements ISerializableForWrite {
     inventory: Inventory;
 
     constructor(parent: ContainerComponent){

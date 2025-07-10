@@ -1,12 +1,12 @@
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import RegistryValue from "../registries/registryValue.js";
+import IRegistryValue from "../registries/IRegistryValue.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 /** Base class for a command that can be run through chat by players in the game */
-class CommandDefinition implements RegistryValue {
+class CommandDefinition implements IRegistryValue {
     private key: string = "unregistered";
     private op: boolean;
     private possibleargs: any[][];

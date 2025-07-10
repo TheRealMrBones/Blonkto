@@ -1,11 +1,11 @@
 import Game from "../game.js";
-import DropBase from "./dropBase.js";
+import IDrop from "./IDrop.js";
 
 /** Drop composed of multiple other drops */
-class Drops implements DropBase {
-    drops: DropBase[];
+class Drops implements IDrop {
+    drops: IDrop[];
 
-    constructor(...drops: DropBase[]){
+    constructor(...drops: IDrop[]){
         this.drops = drops;
     }
 
@@ -15,7 +15,7 @@ class Drops implements DropBase {
     }
 
     /** Adds a new drop to this drop collection */
-    addDrop(drop: DropBase): void {
+    addDrop(drop: IDrop): void {
         this.drops.push(drop);
     }
 }

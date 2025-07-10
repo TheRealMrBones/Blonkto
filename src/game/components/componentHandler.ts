@@ -1,7 +1,7 @@
 import Logger from "../../server/logging/logger.js";
 import Component from "./component.js";
 import ComponentData from "./componentData.js";
-import SerializableForInit from "./serializableForInit.js";
+import ISerializableForInit from "./ISerializableForInit.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -76,7 +76,7 @@ class ComponentHandler<T> {
         let data: { [key: string]: any } = {};
 
         for(const component of Object.values(this.components)){
-            const c = component as unknown as SerializableForInit;
+            const c = component as unknown as ISerializableForInit;
             if(c.serializeForInit === undefined) continue;
 
             const serialized = c.serializeForInit();

@@ -7,7 +7,7 @@ import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import ComponentData from "../componentData.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
 import Player from "../../objects/player.js";
-import SerializableForWrite from "../serializableForWrite.js";
+import ISerializableForWrite from "../ISerializableForWrite.js";
 
 /** An Entity Component that makes this entity type breed with others when fed */
 class BreedComponent extends Component<EntityDefinition> {
@@ -121,7 +121,7 @@ class BreedComponent extends Component<EntityDefinition> {
     }
 }
 
-class BreedComponentData extends ComponentData<BreedComponent> implements SerializableForWrite {
+class BreedComponentData extends ComponentData<BreedComponent> implements ISerializableForWrite {
     lastfed: number = 0;
     target: NonplayerEntity | null = null;
     breedstart: number = 0;

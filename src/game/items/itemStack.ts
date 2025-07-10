@@ -1,16 +1,16 @@
 import ComponentData from "../components/componentData.js";
-import RegistryDefinedWithComponents from "../components/registryDefinedWithComponents.js";
+import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
 import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
-import SerializableForWrite from "../components/serializableForWrite.js";
-import SerializableForUpdate from "../components/serializableForUpdate.js";
+import ISerializableForWrite from "../components/ISerializableForWrite.js";
+import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
-class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
+class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     readonly definition: ItemDefinition;
     readonly componentdata: { [key: string]: ComponentData<any> } = {};
 
@@ -43,7 +43,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as SerializableForWrite;
+            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -59,7 +59,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         let data: { [key: string]: any } = {};
 
         for(const componentdata of Object.values(this.componentdata)){
-            const cd = componentdata as unknown as SerializableForUpdate;
+            const cd = componentdata as unknown as ISerializableForUpdate;
             if(cd.serializeForUpdate === undefined) continue;
 
             const serialized = cd.serializeForUpdate();
@@ -74,7 +74,7 @@ class ItemStack implements RegistryDefinedWithComponents<ItemDefinition> {
         const data: { [key: string]: any } = {};
 
         for(const componentdata of Object.entries(this.componentdata)){
-            const cd = componentdata[1] as unknown as SerializableForWrite;
+            const cd = componentdata[1] as unknown as ISerializableForWrite;
             if(cd.serializeForWrite === undefined) continue;
 
             const serialized = cd.serializeForWrite();
