@@ -70,15 +70,13 @@ class StateManager {
 
         // station updates
         if(update.stationupdates !== null){
-            this.playerclient.inventory.setStation(update.stationupdates.name);
+            if(update.stationupdates.isnew) this.playerclient.inventory.setStation(update.stationupdates.name);
 
             if(update.stationupdates.updates !== undefined){
                 const stationinventoryupdates = update.stationupdates.updates[0];
 
                 if(update.stationupdates.isnew){
-                    this.playerclient.inventory.setStation(update.stationupdates.name);
                     this.playerclient.renderer.uiManager.openStation();
-
                     this.playerclient.inventory.setStationInventory(stationinventoryupdates);
                 }else{
                     this.playerclient.inventory.updateStationInventory(stationinventoryupdates);
