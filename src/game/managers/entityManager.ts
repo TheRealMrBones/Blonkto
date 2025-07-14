@@ -98,7 +98,7 @@ class EntityManager {
 
     /** Returns all ticking non-entity objects loaded in the game world */
     getObjects(): GameObject[] {
-        return Object.values(this.objects);
+        return [...this.objects.values()];
     }
 
     /** Returns all ticking players loaded in the game world */
