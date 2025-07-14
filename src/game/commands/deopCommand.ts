@@ -16,7 +16,7 @@ function deopCommand(args: any[], player: Player, game: Game){
     if(game.playerManager.opManager.isOp(args[1])){
         game.playerManager.opManager.deop(args[1]);
 
-        const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
+        const p = game.playerManager.getPlayerByUsername(args[1]);
         if(p !== undefined) game.chatManager.sendMessageTo(p, "you are no longer opped");
 
         game.chatManager.sendMessageTo(player, `deopped ${args[1]}`);

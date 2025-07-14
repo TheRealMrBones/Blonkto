@@ -165,6 +165,11 @@ class PlayerManager {
         }
     }
 
+    /** Returns the player with the given username if they exist */
+    getPlayerByUsername(username: string): Player | undefined {
+        return [...this.game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
+    }
+
     // #endregion
 
     // #region misc getters
