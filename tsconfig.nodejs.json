@@ -2,6 +2,8 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "module": "NodeNext",
+        "target": "ESNext",
+        "moduleResolution": "NodeNext",
         "outDir": "./dist/nodejs",
     },
     "include": ["src/**/*"],

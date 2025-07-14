@@ -2,9 +2,9 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "module": "ESNext",
-        "target": "ES5",
+        "target": "ES6",
+        "moduleResolution": "Node",
         "outDir": "./dist/webpack",
-        "moduleResolution": "node",
     },
     "include": ["src/**/*"],
     "exclude": ["src/game/**", "src/server/**"],
