@@ -14,6 +14,6 @@ export default (): void => CommandRegistry.register("cycleday", new CommandDefin
 
 function cycleDayCommand(args: any[], player: Player, game: Game){
     const toggle = args[1];
-    game.world.cycleday = toggle;
+    game.world.setCycleDay(toggle);
     game.chatManager.sendMessageTo(player, `set cycle day to: ${toggle}`);
 }

@@ -23,13 +23,13 @@ export type GameUpdateContent = {
     t: number;
     lastupdatetime: number | null;
     me: any;
+    others: any[];
+    entities: any[];
     fixes: any;
     inventoryupdates: any[];
     stationupdates: any | null;
     recipes: any[];
-    others: any[];
-    entities: any[];
-    worldLoad: any
+    worldLoad: any;
     tab: any[];
     darkness: number;
     tps: number;

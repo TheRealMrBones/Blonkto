@@ -29,15 +29,15 @@ class World {
     private readonly logger: Logger;
     
     private game: Game;
-    loadedchunks: {[key: string]: Chunk};
-    light: {[key: string]: number} = {};
+    loadedchunks: {[key: string]: Chunk} = {}; // key for each chunk is [x,y].toString()
+    readonly light: {[key: string]: number} = {};
 
-    unloadInterval: NodeJS.Timeout;
-    saveInterval: NodeJS.Timeout;
+    private readonly unloadInterval: NodeJS.Timeout;
+    private readonly saveInterval: NodeJS.Timeout;
 
     private daycycletick: number = DAY_TRANSITION_LENGTH;
-    darknesspercent: number = 0;
-    cycleday: boolean = true;
+    private darknesspercent: number = 0;
+    private cycleday: boolean = true;
 
     constructor(game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
@@ -45,13 +45,8 @@ class World {
 
         this.game = game;
 
-        // key for each chunk is [x,y].toString()
-        this.loadedchunks = {};
-
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
-        
-        this.logger.info("World initialized");
     }
 
     // #region ticking
@@ -128,6 +123,21 @@ class World {
         return this.daycycletick;
     }
 
+    /** Returns the current darkness percent */
+    getDarknessPercent(): number {
+        return this.darknesspercent;
+    }
+
+    /** Returns the if cycle day is true */
+    getCycleDay(): boolean {
+        return this.cycleday;
+    }
+
+    /** Sets cycle day */
+    setCycleDay(val: boolean): void {
+        this.cycleday = val;
+    }
+
     /** Returns if it is night or not */
     isNight(): boolean {
         return (this.daycycletick > DAY_LENGTH);
@@ -150,6 +160,8 @@ class World {
                 this.unloadChunk(x, y);
             }
         }
+        
+        this.logger.info("World initialized");
     }
 
     /** Returns a random spawn location for a player */

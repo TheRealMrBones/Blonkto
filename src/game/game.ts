@@ -120,29 +120,32 @@ class Game {
     /** Create an update object to be sent to the specified players client */
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
         // Get update data
-        const tab = this.playerManager.getTab();
-        const nearbyPlayers = this.entityManager.getPlayerEntitiesNearby(player);
-        const nearbyEntities = this.entityManager.getNonplayersNearby(player);
-        const fixescopy = player.getFixes();
-        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
+        const me = player.serializeForUpdate();
+        const nearbyPlayers = this.entityManager.getPlayerEntitiesNearby(player).map(p => p.serializeForUpdate());
+        const nearbyEntities = this.entityManager.getNonplayersNearby(player).map(e => e.serializeForUpdate());
+        const fixes = player.getFixes();
         const inventoryupdates = player.getInventory().getChanges(true);
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
+        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
+        const tab = this.playerManager.getTab();
+        const darkness = this.world.getDarknessPercent();
+        const tps = this.performanceManager.getTps();
 
         // return full update object
         const content: GameUpdateContent = {
             t: t,
             lastupdatetime: this.lastupdatetime,
-            me: player.serializeForUpdate(),
-            fixes: fixescopy,
+            me: me,
+            others: nearbyPlayers,
+            entities: nearbyEntities,
+            fixes: fixes,
             inventoryupdates: inventoryupdates,
             stationupdates: stationupdates,
             recipes: recipes,
-            others: nearbyPlayers.map(p => p.serializeForUpdate()),
-            entities: nearbyEntities.map(e => e.serializeForUpdate()),
             worldLoad: worldload,
             tab: tab,
-            darkness: this.world.darknesspercent,
-            tps: this.performanceManager.getTps(),
+            darkness: darkness,
+            tps: tps,
         };
 
         // uncomment to check size of packets
