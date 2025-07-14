@@ -115,8 +115,8 @@ class Game {
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
         // Get update data
         const me = player.serializeForUpdate();
-        const nearbyPlayers = this.entityManager.getPlayerEntitiesNearby(player).map(p => p.serializeForUpdate());
-        const nearbyEntities = this.entityManager.getNonplayersNearby(player).map(e => e.serializeForUpdate());
+        const nearbyPlayers = this.entityManager.filterToNearby(player, this.entityManager.getPlayerEntities()).map(p => p.serializeForUpdate());
+        const nearbyEntities = this.entityManager.filterToNearby(player, this.entityManager.getNonplayers()).map(e => e.serializeForUpdate());
         const fixes = player.getFixes();
         const inventoryupdates = player.getInventory().getChanges(true);
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
