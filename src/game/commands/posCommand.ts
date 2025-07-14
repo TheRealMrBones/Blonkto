@@ -14,7 +14,7 @@ export default (): void => CommandRegistry.register("pos", new CommandDefinition
 
 function posCommand(args: any[], player: Player, game: Game){
     const username = args[1];
-    const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
+    const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
 
     if(p !== undefined){
         game.chatManager.sendMessageTo(player, `${p.username} is at ${Math.floor(p.x)}, ${Math.floor(p.y)}`);

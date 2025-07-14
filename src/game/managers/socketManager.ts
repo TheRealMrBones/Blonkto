@@ -40,7 +40,7 @@ class SocketManager {
 
     /** Response to the general input message from a client */
     handlePlayerInput(socket: Socket, content: InputContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
         
         player.update(content);
@@ -48,7 +48,7 @@ class SocketManager {
 
     /** Response to a click (left click) message from a client */
     handlePlayerClick(socket: Socket, content: ClickContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(content);
@@ -79,7 +79,7 @@ class SocketManager {
 
     /** Response to a interaction (right click) message from a client */
     handlePlayerInteract(socket: Socket, content: ClickContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(content);
@@ -125,7 +125,7 @@ class SocketManager {
 
     /** Response to a drop message from a client */
     handlePlayerDrop(socket: Socket, content: DropContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
         
         player.dropFromSlot(content.slot, this.game, content.all ? undefined : 1);
@@ -133,7 +133,7 @@ class SocketManager {
 
     /** Response to a swap message from a client */
     handlePlayerSwap(socket: Socket, content: SwapContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
         const inventory = player.getCombinedInventory();
@@ -143,7 +143,7 @@ class SocketManager {
 
     /** Response to a craft message from a client */
     handlePlayerCraft(socket: Socket, content: CraftContent): void {
-        const player = this.game.players[socket.id as string];
+        const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
         const stationname = player.station !== null ? player.station.name : null;

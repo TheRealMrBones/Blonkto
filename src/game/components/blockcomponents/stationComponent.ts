@@ -32,7 +32,7 @@ class StationComponent extends Component<BlockDefinition> {
     tick(block: Block, game: Game, dt: number): void {
         const data = block.getComponentData(StationComponentData);
         for(const opener of Object.values(data.station.openers)){
-            if(opener.player.moving || game.players[opener.player.id] === undefined)
+            if(opener.player.moving || game.entityManager.players.get(opener.player.id) === undefined)
                 data.station.closeStation(opener.player);
         }
     }

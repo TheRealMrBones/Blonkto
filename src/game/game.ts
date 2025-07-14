@@ -11,8 +11,6 @@ import PerformanceManager from "./managers/performanceManager.js";
 import CollisionManager from "./managers/collisionManager.js";
 import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
-import NonplayerEntity from "./objects/nonplayerEntity.js";
-import GameObject from "./objects/gameObject.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
 
@@ -40,10 +38,6 @@ class Game {
     readonly performanceManager: PerformanceManager;
     readonly collisionManager: CollisionManager;
     readonly craftManager: CraftManager;
-
-    readonly players: {[key: string]: Player} = {};
-    readonly objects: {[key: string]: GameObject} = {};
-    readonly entities: {[key: string]: NonplayerEntity} = {};
 
     readonly world: World;
 

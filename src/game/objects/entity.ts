@@ -33,7 +33,8 @@ abstract class Entity extends GameObject {
         });
 
         this.registerTickListener((game: Game, dt: number) => {
-            if(this.swinging) game.collisionManager.attackHitCheck(game.players[this.id], this.lastattackdir, this.lastattackdamage);
+            const player = game.entityManager.players.get(this.id)!;
+            if(this.swinging) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.lastattackdamage);
         });
     }
 

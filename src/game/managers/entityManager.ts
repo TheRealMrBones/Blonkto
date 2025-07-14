@@ -14,6 +14,10 @@ const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 class EntityManager {
     private game: Game;
 
+    readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
+    readonly entities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
+    readonly players: Map<string, Player> = new Map<string, Player>();
+
     constructor(game: Game){
         this.game = game;
     }
@@ -55,10 +59,10 @@ class EntityManager {
 
                 if(Math.random() > .05){
                     const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
-                    this.game.entities[zombie.id] = zombie;
+                    this.entities.set(zombie.id, zombie);
                 }else{
                     const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
-                    this.game.entities[megazombie.id] = megazombie;
+                    this.entities.set(megazombie.id, megazombie);
                 }
                 break;
             }
@@ -71,17 +75,17 @@ class EntityManager {
 
     /** Returns all ticking objects loaded in the game world */
     getAllObjects(): GameObject[] {
-        return [...Object.values(this.game.players), ...Object.values(this.game.entities), ...Object.values(this.game.objects)];
+        return [...this.players.values(), ...this.entities.values(), ...this.objects.values()];
     }
 
     /** Returns all ticking entities loaded in the game world */
     getEntities(): Entity[] {
-        return [...Object.values(this.game.players), ...Object.values(this.game.entities)];
+        return [...this.players.values(), ...this.entities.values()];
     }
 
     /** Returns all ticking non-player objects loaded in the game world */
     getNonplayers(): GameObject[] {
-        return [...Object.values(this.game.entities), ...Object.values(this.game.objects)];
+        return [...this.entities.values(), ...this.objects.values()];
     }
 
     /** Returns all non-player objects nearby the given player */
@@ -94,12 +98,12 @@ class EntityManager {
 
     /** Returns all ticking non-entity objects loaded in the game world */
     getObjects(): GameObject[] {
-        return Object.values(this.game.objects);
+        return Object.values(this.objects);
     }
 
     /** Returns all ticking players loaded in the game world */
     getPlayerEntities(): Player[] {
-        return Object.values(this.game.players);
+        return [...this.players.values()];
     }
 
     /** Returns all players nearby the given player */
@@ -112,7 +116,7 @@ class EntityManager {
 
     /** Returns all ticking non-player entities loaded in the game world */
     getNonplayerEntities(): NonplayerEntity[] {
-        return Object.values(this.game.entities);
+        return [...this.entities.values()];
     }
 
     /** Returns all ticking dropped stacks loaded in the game world */
@@ -122,38 +126,38 @@ class EntityManager {
 
     /** Removes and unloads the non-player object with the given id from the game world */
     removeNonplayer(id: string): void {
-        delete this.game.objects[id];
-        delete this.game.entities[id];
+        this.objects.delete(id);
+        this.entities.delete(id);
     }
 
     /** Removes and unloads the non-entity object with the given id from the game world */
     removeObject(id: string): void {
-        delete this.game.objects[id];
+        this.objects.delete(id);
     }
 
     /** Removes and unloads the non-player entity with the given id from the game world */
     removeEntity(id: string): void {
-        delete this.game.entities[id];
+        this.entities.delete(id);
     }
 
     /** Returns the count of all ticking objects loaded in the game world */
     getAllObjectCount(): number {
-        return this.getAllObjects().length;
+        return this.objects.size + this.entities.size + this.players.size;
     }
 
     /** Returns the count of all ticking non-entity objects loaded in the game world */
     getObjectCount(): number {
-        return this.getObjects().length;
+        return this.objects.size;
     }
 
     /** Returns the count of all ticking non-player entities loaded in the game world */
     getNonplayerEntityCount(): number {
-        return this.getNonplayerEntities().length;
+        return this.entities.size;
     }
 
     /** Returns the count of all ticking player entities loaded in the game world */
     getPlayerEntityCount(): number {
-        return this.getPlayerEntities().length;
+        return this.players.size;
     }
     
     // #endregion

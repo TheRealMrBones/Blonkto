@@ -434,12 +434,12 @@ class World {
                 switch(entitydata.type){
                     case "dropped_stack": {
                         const droppedstack = DroppedStack.readFromSave(entitydata);
-                        this.game.objects[droppedstack.id] = droppedstack;
+                        this.game.entityManager.objects.set(droppedstack.id, droppedstack);
                         break;
                     }
                     case "entity": {
                         const entity = NonplayerEntity.readFromSave(entitydata);
-                        this.game.entities[entity.id] = entity;
+                        this.game.entityManager.entities.set(entity.id, entity);
                         break;
                     }
                     default: {
@@ -459,7 +459,7 @@ class World {
                 if(cell.block != null) continue;
 
                 const pig = new NonplayerEntity(cellx + .5, celly + .5, 0, "pig");
-                this.game.entities[pig.id] = pig;
+                this.game.entityManager.entities.set(pig.id, pig);
             }
         }
 

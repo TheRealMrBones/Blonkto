@@ -15,7 +15,7 @@ const args = [
 export default (): void => CommandRegistry.register("ban", new CommandDefinition(true, args, banCommand, "Bans a player from the server"));
 
 function banCommand(args: any[], player: Player, game: Game){
-    const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
+    const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
     if(args[2] === undefined) args[2] = "";
 
     if(p !== undefined){

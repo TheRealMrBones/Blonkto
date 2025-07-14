@@ -30,16 +30,17 @@ class ChatManager {
     /** Handles a chat message from a player */
     chat(socket: Socket, message: SendMessageContent): void {
         if(socket.id === undefined) return;
+        const player = this.game.entityManager.players.get(socket.id)!
 
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
             // empty message
         }else if(text[0] == "/"){
             // command
-            this.excecuteCommand(this.game, this.game.players[socket.id], text.substring(1));
+            this.excecuteCommand(this.game, player, text.substring(1));
         }else{
             // normal message
-            const newText = `<${this.game.players[socket.id].username}> ${text}`;
+            const newText = `<${player.username}> ${text}`;
             this.sendMessage(newText);
         }
     }
@@ -72,9 +73,9 @@ class ChatManager {
         const message = this.createMessage(text);
         if(LOG_CHAT) this.logger.info(text);
 
-        Object.values(this.game.players).forEach(player => {
-            player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
-        });
+        for(const p of this.game.entityManager.players.values()){
+            p.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
+        }
     }
 
     /** Sends a message to a specific player */

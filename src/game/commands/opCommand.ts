@@ -25,7 +25,7 @@ function opCommand(args: any[], player: Player, game: Game){
         game.playerManager.opManager.oppasscodeused = true;
         game.chatManager.sendMessageTo(player, "you are now opped");
     }else{
-        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
+        const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == args[1].toLowerCase());
         const username = p !== undefined ? p.username : args[1];
 
         if(game.playerManager.opManager.isOp(username)){

@@ -46,7 +46,7 @@ class DroppedStack extends GameObject {
         const ymovement = Math.sin(angle) * magnitude;
 
         const droppedstack = new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
-        game.objects[droppedstack.id] = droppedstack;
+        game.entityManager.objects.set(droppedstack.id, droppedstack);
     }
 
     /** Returns an array of dropped stack with a random spread from the spawn point */

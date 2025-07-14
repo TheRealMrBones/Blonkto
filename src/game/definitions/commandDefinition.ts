@@ -222,7 +222,7 @@ class CommandDefinition implements IRegistryValue {
                         break;
                     }
                     case COMMAND_ARGUMENTS.USERNAME: {
-                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
+                        const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
                         if(p){
                             parsedargs[j][i] = p.username;
                         }else{
@@ -231,7 +231,7 @@ class CommandDefinition implements IRegistryValue {
                         break;
                     }
                     case COMMAND_ARGUMENTS.PLAYER: {
-                        const p = Object.values(game.players).find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
+                        const p = [...game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == rawargs[i].toLowerCase());
                         if(!p){
                             error = `Player "${rawargs[i]}" does not exist`;
                             parsedargs.splice(j, 1);
