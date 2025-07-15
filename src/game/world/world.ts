@@ -28,9 +28,10 @@ const entitiessavedir = "entities/";
 class World {
     private readonly logger: Logger;
     
-    private game: Game;
-    loadedchunks: {[key: string]: Chunk} = {}; // key for each chunk is [x,y].toString()
-    readonly light: {[key: string]: number} = {};
+    private readonly game: Game;
+
+    private readonly loadedchunks: Map<string, Chunk> = new Map<string, Chunk>();
+    readonly light: Map<string, number> = new Map<string, number>();
 
     private readonly unloadInterval: NodeJS.Timeout;
     private readonly saveInterval: NodeJS.Timeout;
@@ -57,7 +58,7 @@ class World {
         this.tickDayCycle();
 
         // tick cells that have tick listeners
-        for(const chunk of Object.values(this.loadedchunks)){
+        for(const chunk of this.loadedchunks.values()){
             for(const row of chunk.cells){
                 for(const cell of row){
                     if(cell.ticks){
@@ -357,9 +358,9 @@ class World {
     /** Saves all of the currently loaded world data to the save */
     saveWorld(): void {
         this.logger.info("Saving world");
-        Object.values(this.loadedchunks).forEach(c => {
+        for(const c of this.loadedchunks.values()){
             this.writeChunkFile(c);
-        });
+        }
         this.logger.info("World saved");
     }
 
@@ -369,7 +370,9 @@ class World {
 
     /** Returns the requested chunk object if possible or null otherwise */
     getChunk(x: number, y: number, canloadnew: boolean): Chunk | null {
-        const chunk = this.loadedchunks[[x,y].toString()];
+        const chunkkey = World.getChunkKey(x, y);
+        const chunk = this.loadedchunks.get(chunkkey);
+
         if(chunk !== undefined){
             return chunk;
         }else if(x >= -WORLD_SIZE / 2 && x < WORLD_SIZE / 2 && y >= -WORLD_SIZE / 2 && y < WORLD_SIZE / 2 && canloadnew){
@@ -388,12 +391,14 @@ class World {
 
     /** Unloads and saves the requested chunk if it is currently loaded */
     unloadChunk(x: number, y: number): void {
-        const chunk = this.loadedchunks[[x,y].toString()];
+        const chunkkey = World.getChunkKey(x, y);
+        const chunk = this.loadedchunks.get(chunkkey);
+
         if(chunk !== undefined){
             // unload chunk
             chunk.unload(this.game);
             this.writeChunkFile(chunk);
-            delete this.loadedchunks[[x,y].toString()];
+            this.loadedchunks.delete(chunkkey);
 
             // unload entities
             const entities = this.game.entityManager.getNonplayers().filter(e =>
@@ -425,7 +430,7 @@ class World {
             this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
             return this.generateChunk(x, y);
         }
-        this.loadedchunks[[x,y].toString()] = chunk;
+        this.loadedchunks.set(World.getChunkKey(x, y), chunk);
 
         // load entities
         if(this.game.fileManager.fileExists(entitiesfilelocation)){
@@ -488,7 +493,7 @@ class World {
     /** Returns a new generated chunk */
     generateChunk(x: number, y: number): Chunk {
         const newChunk = Chunk.generateChunk(x, y, this.game);
-        this.loadedchunks[[x,y].toString()] = newChunk;
+        this.loadedchunks.set(World.getChunkKey(x, y), newChunk);
         return newChunk;
     }
     
@@ -499,18 +504,17 @@ class World {
             activeChunks.push(...this.getPlayerChunks(p));
         });
 
-        Object.values(this.loadedchunks).forEach(c => {
-            if(!activeChunks.find(ac => ac.x == c.chunkx && ac.y == c.chunky)){
+        for(const c of this.loadedchunks.values()){
+            if(!activeChunks.find(ac => ac.x == c.chunkx && ac.y == c.chunky))
                 this.unloadChunk(c.chunkx, c.chunky);
-            }
-        });
+        }
     }
 
     /** Resets the current list of pending client cell updates */
     resetCellUpdates(): void {
-        Object.values(this.loadedchunks).forEach(chunk => {
-            chunk.cellupdates = [];
-        });
+        for(const c of this.loadedchunks.values()){
+            c.cellupdates = [];
+        }
     }
 
     // #endregion
@@ -667,6 +671,15 @@ class World {
     }
 
     // #endregion
+
+    // #region helpers
+    
+    /** Returns the key of the given chunk based on its x and y */
+    static getChunkKey(x: number, y: number): string {
+        return [x,y].toString();
+    }
+
+    // #endregin
 }
 
 export default World;

@@ -27,10 +27,12 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
     instantiate(block: Block, game: Game): void {
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            if(game.world.light[key] === undefined){
-                game.world.light[key] = 1;
+            const light = game.world.light.get(key);
+
+            if(light === undefined){
+                game.world.light.set(key, 1);
             }else{
-                game.world.light[key] += 1;
+                game.world.light.set(key, light + 1);
             }
         }
     }
@@ -39,9 +41,11 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
     break(block: Block, game: Game): void {
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            if(game.world.light[key] === undefined) return;
-            game.world.light[key]--;
-            if(game.world.light[key] == 0) delete game.world.light[key];
+            const light = game.world.light.get(key);
+            if(light === undefined) return;
+
+            if(light == 1) game.world.light.delete(key);
+            else game.world.light.set(key, light - 1);
         }
     }
 
@@ -49,9 +53,11 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
     unload(block: Block, game: Game): void {
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            if(game.world.light[key] === undefined) return;
-            game.world.light[key]--;
-            if(game.world.light[key] == 0) delete game.world.light[key];
+            const light = game.world.light.get(key);
+            if(light === undefined) return;
+
+            if(light == 1) game.world.light.delete(key);
+            else game.world.light.set(key, light - 1);
         }
     }
 
