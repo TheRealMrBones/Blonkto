@@ -5,7 +5,7 @@ import ComponentHandler from "./componentHandler.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
 interface IRegistryDefinedWithComponents<T extends ComponentHandler<T> & IRegistryValue> extends IRegistryDefined<T> {
-    readonly componentdata: { [key: string]: ComponentData<any> };
+    readonly componentdata: Map<string, ComponentData<any>>;
 
     /** Initializes this objects required component data instances */
     initComponentData(): void;

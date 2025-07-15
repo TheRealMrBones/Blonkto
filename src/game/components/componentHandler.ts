@@ -10,7 +10,7 @@ const { LOG_CATEGORIES } = Constants;
 class ComponentHandler<T> {
     private readonly logger: Logger;
 
-    private components: { [key: string]: Component<T> } = {};
+    private components: Map<string, Component<T>> = new Map<string, Component<T>>();
     private requiredComponentData: { componentdata: (new (...args: any[]) => ComponentData<any>), parent: Component<T> }[] = [];
 
     constructor(){
@@ -28,29 +28,29 @@ class ComponentHandler<T> {
             }
         }
 
-        this.components[component.constructor.name] = component;
+        this.components.set(component.constructor.name, component);
         component.setParent(this as unknown as T);
         return this;
     }
 
     /** Returns if this handler has an instance of the given component type */
     hasComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): boolean {
-        return this.components[componentType.name] !== undefined;
+        return this.components.has(componentType.name);
     }
 
     /** Gets the component type specified if it exists */
     getComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): T2 | undefined {
-        return this.components[componentType.name] as T2;
+        return this.components.get(componentType.name) as T2;
     }
 
     /** Removes the given component type if it exists in this handler */
     removeComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): void {
-        if(this.components[componentType.name]) delete this.components[componentType.name];
+        this.components.delete(componentType.name);
     }
 
     /** Gets all components held in this handler */
     getAllComponents(): Component<T>[] {
-        return Object.values(this.components);
+        return [...this.components.values()];
     }
 
     // #endregion
@@ -75,7 +75,7 @@ class ComponentHandler<T> {
     serializeComponentsForInit(): any {
         let data: { [key: string]: any } = {};
 
-        for(const component of Object.values(this.components)){
+        for(const component of this.components.values()){
             const c = component as unknown as ISerializableForInit;
             if(c.serializeForInit === undefined) continue;
 
