@@ -8,21 +8,20 @@ const { LOG_CATEGORIES } = Constants;
 class Registry<T extends IRegistryValue> {
     private readonly logger: Logger;
     
-    name: string;
-    private map: { [key: string]: T };
+    readonly name: string;
+    private readonly map: Map<string, T> = new Map<string, T>();
 
     constructor(name: string){
         this.logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 
         this.name = name;
-        this.map = {};
     }
 
     // #region operations
 
     /** Adds the given value to the registry */
     register(key: string, value: T): void {
-        if(key in this.map){
+        if(this.has(key)){
             this.logger.error(`[${this.name}] Key "${key}" already registered!`);
             throw null;
         }else if(value.getRegistryKey() !== "unregistered"){
@@ -30,13 +29,13 @@ class Registry<T extends IRegistryValue> {
             throw null;
         }
         
-        this.map[key] = value;
+        this.map.set(key, value);
         value.setRegistryKey(key);
     }
 
     /** Returns if an object exists with the requested key */
     has(key: string): boolean {
-        return (this.map[key] !== undefined);
+        return this.map.has(key);
     }
 
     /** Returns the stored object for the requested key */
@@ -46,12 +45,12 @@ class Registry<T extends IRegistryValue> {
             throw null;
         }
 
-        return this.map[key];
+        return this.map.get(key)!;
     }
 
     /** Returns all of the registered objects */
     getAll(): T[] {
-        return Object.values(this.map);
+        return [...this.map.values()];
     }
 
     // #endregion
