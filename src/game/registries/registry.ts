@@ -49,8 +49,8 @@ class Registry<T extends IRegistryValue> {
     }
 
     /** Returns all of the registered objects */
-    getAll(): T[] {
-        return [...this.map.values()];
+    getAll(): MapIterator<T> {
+        return this.map.values();
     }
 
     // #endregion

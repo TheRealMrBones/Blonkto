@@ -76,8 +76,8 @@ class OpManager {
     }
 
     /** Gets the list of all operators */
-    opList(): string[] {
-        return [...this.oppedplayers.values()];
+    opList(): MapIterator<string> {
+        return this.oppedplayers.values();
     }
 
     // #endregion

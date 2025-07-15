@@ -42,8 +42,8 @@ class WhitelistManager {
     }
 
     /** Gets the list of all whitelisted players */
-    whitelistList(): string[] {
-        return [...this.whitelistedplayers.values()];
+    whitelistList(): MapIterator<string> {
+        return this.whitelistedplayers.values();
     }
 
     // #endregion

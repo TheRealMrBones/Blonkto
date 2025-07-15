@@ -52,8 +52,8 @@ class BanManager {
     }
 
     /** Gets the list of all banned players */
-    banList(): string[] {
-        return [...this.bannedplayers.values()];
+    banList(): MapIterator<string> {
+        return this.bannedplayers.keys();
     }
 
     // #endregion
