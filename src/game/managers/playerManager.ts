@@ -74,7 +74,7 @@ class PlayerManager {
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             this.logger.log(`${username} tried to log in but is not whitelisted`);
             return;
-        }else if(!ALLOW_MULTI_LOGON && this.game.entityManager.getPlayerEntities().some(p => p.username == username)){
+        }else if(!ALLOW_MULTI_LOGON && [...this.game.entityManager.getPlayerEntities()].some(p => p.username == username)){
             const content: FailedConnectionContent = { reason: "User already logged in on another instance", extra: "" };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             this.logger.log(`${username} tried to log in but is already logged in on another instance`);
@@ -178,11 +178,13 @@ class PlayerManager {
     getUsername(username: string): string {
         let newUsername = FILTER_USERNAME ? filterText(username.replace(/\s+/g, "")) : username.replace(/\s+/g, "");
         if(newUsername.trim().length === 0) newUsername = "SillyGoose";
+
+        const playerlist = [...this.game.entityManager.getPlayerEntities()];
     
-        if(this.game.entityManager.getPlayerEntities().some(e => e.username === newUsername)){
+        if(playerlist.some(e => e.username === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
-                if(!this.game.entityManager.getPlayerEntities().some(e => e.username === newUsername + `${i}`)){
+                if(!playerlist.some(e => e.username === newUsername + `${i}`)){
                     done = true;
                     newUsername += `${i}`;
                 }
@@ -195,7 +197,7 @@ class PlayerManager {
     getTab(): any[] {
         if(!SHOW_TAB) return [];
 
-        return this.game.entityManager.getPlayerEntities().map(p => { 
+        return [...this.game.entityManager.getPlayerEntities()].map(p => { 
             const returnobj: any = {
                 username: p.username,
             };

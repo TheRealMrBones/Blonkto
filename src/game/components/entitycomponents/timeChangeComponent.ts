@@ -37,7 +37,7 @@ class TimeChangeComponent extends Component<EntityDefinition> {
         if(data.delayleft == 0){
             game.entityManager.removeEntity(self.id);
             const newentity = new NonplayerEntity(self.x, self.y, self.dir, this.newentity);
-            game.entityManager.entities.set(newentity.id, newentity);
+            game.entityManager.nonplayerentities.set(newentity.id, newentity);
         }
     }
 }

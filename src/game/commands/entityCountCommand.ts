@@ -23,7 +23,7 @@ function entityCountCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const definition = args[1];
-            const count = game.entityManager.getNonplayerEntities().filter(e => e.definition.getRegistryKey() == definition).length;
+            const count = [...game.entityManager.getNonplayerEntities()].filter(e => e.definition.getRegistryKey() == definition).length;
             game.chatManager.sendMessageTo(player, `Entities of type "${definition}": ${count}`);
             break;
         };

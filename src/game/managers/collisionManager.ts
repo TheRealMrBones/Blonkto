@@ -22,8 +22,7 @@ class CollisionManager {
     clickEntity(x: number, y: number): Entity | null {
         const entities = this.game.entityManager.getEntities();
 
-        for(let i = 0; i < entities.length; i++){
-            const entity2 = entities[i];
+        for(const entity2 of entities){
             if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity2)) return entity2;
         }
 
@@ -34,9 +33,7 @@ class CollisionManager {
     entityCollisions(entity: Entity): void {
         const entities = this.game.entityManager.getEntities();
 
-        for(let i = 0; i < entities.length; i++){
-            const entity2 = entities[i];
-
+        for(const entity2 of entities){
             const push = SharedCollisions.entityCollision(entity, { x: entity2.x, y: entity2.y, scale: entity2.scale });
             if(push === null) continue;
             entity.emitCollisionEvent(this.game, entity2, push);
@@ -124,8 +121,7 @@ class CollisionManager {
             y: entity.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
         };
 
-        for(let i = 0; i < entities.length; i++){
-            const entity2 = entities[i];
+        for(const entity2 of entities){
             const dist = SharedCollisions.getDistance(attackpos, entity2);
             const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
             if(entity2.id != entity.id && realdist < 0 && !entity2.hit){

@@ -45,6 +45,6 @@ function spawnCommand(args: any[], player: Player, game: Game){
     }
 
     const entity = new NonplayerEntity(x, y, 0, args[1]);
-    game.entityManager.entities.set(entity.id, entity);
+    game.entityManager.nonplayerentities.set(entity.id, entity);
     game.chatManager.sendMessageTo(player, `spawned ${args[1]} at: ${Math.floor(x)}, ${Math.floor(y)}`);
 }

@@ -86,7 +86,7 @@ class BreedComponent extends Component<EntityDefinition> {
             const x = (self.x + data.target.x) / 2;
             const y = (self.y + data.target.y) / 2;
             const newentity = new NonplayerEntity(x, y, 0, this.newentity);
-            game.entityManager.entities.set(newentity.id, newentity);
+            game.entityManager.nonplayerentities.set(newentity.id, newentity);
 
             const otherdata = data.target.getComponentData(BreedComponentData);
             const othertargetdata = data.target.getComponentData(MoveTargetComponentData);

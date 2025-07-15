@@ -61,7 +61,7 @@ class Chunk {
                     cell.setBlock("grown_carrots", game);
                 }else if(Math.random() < .0051){
                     const pig = new NonplayerEntity(chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
-                    game.entityManager.entities.set(pig.id, pig);
+                    game.entityManager.nonplayerentities.set(pig.id, pig);
                 }
                 
                 chunk.cells[x][y] = cell;

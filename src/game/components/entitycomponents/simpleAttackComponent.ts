@@ -54,15 +54,15 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         
         if(data.target === null){
             let mindist = this.distance;
-            game.entityManager.getPlayerEntities().forEach(p => {
+            for(const p of game.entityManager.getPlayerEntities()){
                 const dist = self.distanceTo(p);
                 if(dist < mindist){
                     data.target = p;
                     mindist = dist;
                 }
-            });
+            }
         }else{
-            if(!game.entityManager.getPlayerEntities().some(p => p.id === data.target?.id)){
+            if(![...game.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
                 targetdata.clearQueue();
                 self.speedmultiplier = 1;
                 data.target = null;

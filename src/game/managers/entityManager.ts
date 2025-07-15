@@ -15,8 +15,12 @@ class EntityManager {
     private readonly game: Game;
 
     readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
-    readonly entities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
+    readonly nonplayerentities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
     readonly players: Map<string, Player> = new Map<string, Player>();
+    
+    private readonly allobjects: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities, this.players]);
+    private readonly entities: CombinedMapIterator<Entity> = new CombinedMapIterator<Entity>([this.nonplayerentities, this.players]);
+    private readonly nonplayers: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities]);
 
     constructor(game: Game){
         this.game = game;
@@ -30,16 +34,16 @@ class EntityManager {
         this.spawnZombies();
 
         // tick loaded entities
-        this.getAllObjects().forEach(o => {
+        for(const o of this.getAllObjects()){
             o.emitTickEvent(this.game, dt);
-        });
+        }
     }
 
     /** Spawns new zombies nearby players in the world */
     spawnZombies(): void {
         if(this.game.world.isDay()) return;
 
-        this.getPlayerEntities().forEach(p => {
+        for(const p of this.getPlayerEntities()){
             if(Math.random() > .01) return;
 
             const dir = Math.random() * Math.PI * 2;
@@ -59,14 +63,14 @@ class EntityManager {
 
                 if(Math.random() > .05){
                     const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
-                    this.entities.set(zombie.id, zombie);
+                    this.nonplayerentities.set(zombie.id, zombie);
                 }else{
                     const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
-                    this.entities.set(megazombie.id, megazombie);
+                    this.nonplayerentities.set(megazombie.id, megazombie);
                 }
                 break;
             }
-        });
+        }
     }
 
     // #endregion
@@ -74,44 +78,44 @@ class EntityManager {
     // #region getters and setters
 
     /** Returns all ticking objects loaded in the game world */
-    getAllObjects(): GameObject[] {
-        return [...this.players.values(), ...this.entities.values(), ...this.objects.values()];
+    getAllObjects(): CombinedMapIterator<GameObject> {
+        return this.allobjects;
     }
 
     /** Returns all ticking entities loaded in the game world */
-    getEntities(): Entity[] {
-        return [...this.players.values(), ...this.entities.values()];
+    getEntities(): CombinedMapIterator<Entity> {
+        return this.entities;
     }
 
     /** Returns all ticking non-player objects loaded in the game world */
-    getNonplayers(): GameObject[] {
-        return [...this.entities.values(), ...this.objects.values()];
+    getNonplayers(): CombinedMapIterator<GameObject> {
+        return this.nonplayers;
     }
 
     /** Returns all ticking non-entity objects loaded in the game world */
-    getObjects(): GameObject[] {
-        return [...this.objects.values()];
+    getObjects(): MapIterator<GameObject> {
+        return this.objects.values();
     }
 
     /** Returns all ticking players loaded in the game world */
-    getPlayerEntities(): Player[] {
-        return [...this.players.values()];
+    getPlayerEntities(): MapIterator<Player> {
+        return this.players.values();
     }
 
     /** Returns all ticking non-player entities loaded in the game world */
-    getNonplayerEntities(): NonplayerEntity[] {
-        return [...this.entities.values()];
+    getNonplayerEntities(): MapIterator<NonplayerEntity> {
+        return this.nonplayerentities.values();
     }
 
     /** Returns all ticking dropped stacks loaded in the game world */
     getDroppedStacks(): DroppedStack[] {
-        return this.getObjects().filter(o => o instanceof DroppedStack);
+        return [...this.getObjects()].filter(o => o instanceof DroppedStack);
     }
 
     /** Removes and unloads the non-player object with the given id from the game world */
     removeNonplayer(id: string): void {
         this.objects.delete(id);
-        this.entities.delete(id);
+        this.nonplayerentities.delete(id);
     }
 
     /** Removes and unloads the non-entity object with the given id from the game world */
@@ -121,12 +125,12 @@ class EntityManager {
 
     /** Removes and unloads the non-player entity with the given id from the game world */
     removeEntity(id: string): void {
-        this.entities.delete(id);
+        this.nonplayerentities.delete(id);
     }
 
     /** Returns the count of all ticking objects loaded in the game world */
     getAllObjectCount(): number {
-        return this.objects.size + this.entities.size + this.players.size;
+        return this.objects.size + this.nonplayerentities.size + this.players.size;
     }
 
     /** Returns the count of all ticking non-entity objects loaded in the game world */
@@ -136,7 +140,7 @@ class EntityManager {
 
     /** Returns the count of all ticking non-player entities loaded in the game world */
     getNonplayerEntityCount(): number {
-        return this.entities.size;
+        return this.nonplayerentities.size;
     }
 
     /** Returns the count of all ticking player entities loaded in the game world */
@@ -157,6 +161,25 @@ class EntityManager {
     }
 
     // #endregion
+}
+
+/** Iterator class for combined MapIterators of multiple Maps values */
+class CombinedMapIterator<T> {
+    private readonly maps: Map<any, T>[];
+
+    constructor(maps: Map<any, T>[]) {
+        this.maps = maps;
+    }
+
+    *[Symbol.iterator](): Iterator<T> {
+        for(let m = 0; m < this.maps.length; m++){
+            const map = this.maps[m];
+            
+            for(const v of map.values()){
+                yield v;
+            }
+        }
+    }
 }
 
 export default EntityManager;
