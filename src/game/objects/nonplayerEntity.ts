@@ -10,7 +10,7 @@ import Entity from "./entity.js";
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
     readonly definition: EntityDefinition;
-    readonly componentdata: { [key: string]: ComponentData<any> } = {};
+    readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
     constructor(x: number, y: number, dir: number, entitydefinition: string){
         super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
@@ -37,7 +37,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     /** Initializes this entities required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
+            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
         });
     }
 
@@ -45,7 +45,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
+            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -53,7 +53,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
 
     /** Returns this entities instance of the requested component data */
     getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
-        return this.componentdata[componentDataType.name] as T2;
+        return this.componentdata.get(componentDataType.name) as T2;
     }
 
     /** Returns an object representing this entities component data for a game update to the client */

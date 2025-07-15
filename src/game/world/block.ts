@@ -16,7 +16,7 @@ import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     readonly cell: Cell;
     readonly definition: BlockDefinition;
-    readonly componentdata: { [key: string]: ComponentData<any> } = {};
+    readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
     
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -39,7 +39,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     /** Initializes this blocks required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
+            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
         });
     }
 
@@ -47,7 +47,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
+            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -55,7 +55,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
 
     /** Returns this blocks instance of the requested component data */
     getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
-        return this.componentdata[componentDataType.name] as T2;
+        return this.componentdata.get(componentDataType.name) as T2;
     }
 
     /** Returns an object representing this blocks component data for a game update to the client */

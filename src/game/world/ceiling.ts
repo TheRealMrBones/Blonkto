@@ -16,7 +16,7 @@ import { ClickContentExpanded } from "../managers/socketManager.js";
 class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     readonly cell: Cell;
     readonly definition: CeilingDefinition;
-    readonly componentdata: { [key: string]: ComponentData<any> } = {};
+    readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
     
     private eventEmitter: EventEmitter = new EventEmitter();
 
@@ -37,9 +37,11 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     // #region component helpers
 
     /** Initializes this ceilings required component data instances */
+
+    /** Initializes this ceilings required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
+            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
         });
     }
 
@@ -47,7 +49,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
+            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -55,7 +57,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
 
     /** Returns this ceilings instance of the requested component data */
     getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
-        return this.componentdata[componentDataType.name] as T2;
+        return this.componentdata.get(componentDataType.name) as T2;
     }
 
     /** Returns an object representing this ceilings component data for a game update to the client */

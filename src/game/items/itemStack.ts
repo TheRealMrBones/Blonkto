@@ -12,7 +12,7 @@ import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     readonly definition: ItemDefinition;
-    readonly componentdata: { [key: string]: ComponentData<any> } = {};
+    readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
     private amount: number = 1;
 
@@ -35,7 +35,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     /** Initializes this stacks required component data instances */
     initComponentData(): void {
         this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata[c.componentdata.name] = new c.componentdata(c.parent);
+            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
         });
     }
 
@@ -43,7 +43,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     loadComponentData(data: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata[componentdataloaded[0]] as unknown as ISerializableForWrite;
+            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
             if(cd.readFromSave !== undefined)
                 cd.readFromSave(componentdataloaded[1]);
         }
@@ -51,7 +51,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
 
     /** Returns this stacks instance of the requested component data */
     getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
-        return this.componentdata[componentDataType.name] as T2;
+        return this.componentdata.get(componentDataType.name) as T2;
     }
 
     /** Returns an object representing this stacks component data for a game update to the client */
