@@ -13,8 +13,8 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 class OpManager {
     private readonly logger: Logger;
     
-    private game: Game;
-    private oppedplayers: {[key: string]: boolean};
+    private readonly game: Game;
+    private readonly oppedplayers: Set<string> = new Set<string>();
     
     readonly oppasscode: string;
     oppasscodeused: boolean;
@@ -23,7 +23,6 @@ class OpManager {
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
 
         this.game = game;
-        this.oppedplayers = {};
 
         this.load();
         this.save();
@@ -42,22 +41,22 @@ class OpManager {
 
     /** Adds a user to the operator list */
     op(username: string): void {
-        this.oppedplayers[username] = true;
+        this.oppedplayers.add(username);
         this.save();
     }
 
     /** Removes a user from the operator list */
     deop(username: string): void {
-        delete this.oppedplayers[username];
+        this.oppedplayers.delete(username);
         this.save();
     }
 
     /** Clears the entire operator list */
     clearOpList(username?: string): void {
-        this.oppedplayers = {};
+        this.oppedplayers.clear();
         
         // if username given keep that user opped
-        if(username !== undefined) this.oppedplayers[username] = true;
+        if(username !== undefined) this.oppedplayers.add(username);
         
         this.save();
     }
@@ -68,17 +67,17 @@ class OpManager {
 
     /** Checks if a given user is an operator */
     isOp(username: string): boolean {
-        return this.oppedplayers.hasOwnProperty(username);
+        return this.oppedplayers.has(username);
     }
 
     /** Gets the number of operators on the server */
     opCount(): number {
-        return Object.keys(this.oppedplayers).length;
+        return this.oppedplayers.size;
     }
 
     /** Gets the list of all operators */
     opList(): string[] {
-        return Object.keys(this.oppedplayers);
+        return [...this.oppedplayers.values()];
     }
 
     // #endregion
@@ -96,7 +95,7 @@ class OpManager {
         const data = rawdata.split("\n");
 
         for(const username of data){
-            this.oppedplayers[username] = true;
+            this.oppedplayers.add(username);
         }
     }
 
@@ -104,7 +103,7 @@ class OpManager {
     save(): void {
         let data = "";
 
-        for (const key of Object.keys(this.oppedplayers)) {
+        for (const key of this.oppedplayers.values()) {
             data += key + "\n";
         }
 

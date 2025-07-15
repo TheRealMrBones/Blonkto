@@ -25,14 +25,14 @@ const { FILTER_USERNAME, ALLOW_MULTI_LOGON } = ServerConfig.PLAYER;
 class PlayerManager {
     private readonly logger: Logger;
 
-    private game: Game;
+    private readonly game: Game;
 
     readonly banManager: BanManager;
     readonly opManager: OpManager;
     readonly whitelistManager: WhitelistManager;
 
-    private saveinterval: NodeJS.Timeout;
-    private recentlogons: { username: string, time: number }[] = [];
+    private readonly saveinterval: NodeJS.Timeout;
+    private readonly recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.PLAYER_MANAGER);

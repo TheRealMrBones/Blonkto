@@ -12,7 +12,7 @@ const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 
 /** Manages all of the ticking entities/objects for the game */
 class EntityManager {
-    private game: Game;
+    private readonly game: Game;
 
     readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
     readonly entities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();

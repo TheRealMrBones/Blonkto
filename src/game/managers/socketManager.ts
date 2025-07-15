@@ -17,7 +17,7 @@ const { ATTACK_DELAY } = SharedConfig.ATTACK;
 /** Manages socket connections and inputs on the server */
 class SocketManager {
     private readonly logger: Logger;
-    private game: Game;
+    private readonly game: Game;
 
     constructor(io: SocketIo, game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.SOCKET_MANAGER);

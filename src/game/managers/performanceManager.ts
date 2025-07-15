@@ -12,8 +12,8 @@ const { LOG_PERFORMANCE } = ServerConfig.LOG;
 /** Manages performance monitoring for the server */
 class PerformanceManager {
     private readonly logger: Logger;
-    private game: Game;
-    private loginterval: NodeJS.Timeout | null;
+    private readonly game: Game;
+    private readonly loginterval: NodeJS.Timeout | null;
 
     private tickstarttime: number = 0;
     private cummilativetickcount: number = 0;

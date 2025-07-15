@@ -12,7 +12,7 @@ const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 /** Manages Collision detection for all elements in the game world */
 class CollisionManager {
-    private game: Game;
+    private readonly game: Game;
 
     constructor(game: Game){
         this.game = game;

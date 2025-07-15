@@ -18,7 +18,7 @@ const { LOG_CHAT, LOG_COMMANDS } = ServerConfig.LOG;
 /** Manages chat storage and interaction for the server */
 class ChatManager {
     private readonly logger: Logger;
-    private game: Game;
+    private readonly game: Game;
 
     constructor(game: Game){
         this.logger = Logger.getLogger(LOG_CATEGORIES.CHAT);

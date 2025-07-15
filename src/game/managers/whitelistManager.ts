@@ -2,12 +2,11 @@ import Game from "../game.js";
 
 /** Manages the player whitelist for the server */
 class WhitelistManager {
-    private game: Game;
-    private whitelistedplayers: {[key: string]: boolean};
+    private readonly game: Game;
+    private readonly whitelistedplayers: Set<string> = new Set<string>();
 
     constructor(game: Game){
         this.game = game;
-        this.whitelistedplayers = {};
 
         this.load();
         this.save();
@@ -17,14 +16,14 @@ class WhitelistManager {
 
     /** Adds or removes a user on the whitelist */
     whitelist(username: string, toggle: boolean): void {
-        this.whitelistedplayers[username] = toggle;
-        if(!toggle) delete this.whitelistedplayers[username];
+        if(toggle) this.whitelistedplayers.add(username);
+        else this.whitelistedplayers.delete(username);
         this.save();
     }
 
     /** Clears the entire whitelist */
     clearWhitelist(): void {
-        this.whitelistedplayers = {};
+        this.whitelistedplayers.clear();
         this.save();
     }
 
@@ -34,12 +33,17 @@ class WhitelistManager {
 
     /** Checks if a given user is whitelisted */
     isWhitelisted(username: string): boolean{
-        return this.whitelistedplayers.hasOwnProperty(username);
+        return this.whitelistedplayers.has(username);
+    }
+
+    /** Gets the number of whitelisted players on the server */
+    whitelistCount(): number {
+        return this.whitelistedplayers.size;
     }
 
     /** Gets the list of all whitelisted players */
     whitelistList(): string[] {
-        return Object.keys(this.whitelistedplayers);
+        return [...this.whitelistedplayers.values()];
     }
 
     // #endregion
@@ -57,7 +61,7 @@ class WhitelistManager {
         const data = rawdata.split("\n");
 
         for(const username of data){
-            this.whitelistedplayers[username] = true;
+            this.whitelistedplayers.add(username);
         }
     }
 
@@ -65,7 +69,7 @@ class WhitelistManager {
     save(): void {
         let data = "";
 
-        for (const key of Object.keys(this.whitelistedplayers)) {
+        for (const key of this.whitelistedplayers.values()) {
             data += key + "\n";
         }
 

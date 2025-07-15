@@ -2,12 +2,11 @@ import Game from "../game.js";
 
 /** Manages the list of banned players for the server */
 class BanManager {
-    private game: Game;
-    private bannedplayers: {[key: string]: string};
+    private readonly game: Game;
+    private readonly bannedplayers: Map<string, string> = new Map<string, string>();
 
     constructor(game: Game){
         this.game = game;
-        this.bannedplayers = {};
 
         this.load();
         this.save();
@@ -17,19 +16,19 @@ class BanManager {
 
     /** Adds a user to the ban list */
     ban(username: string, reason: string): void {
-        this.bannedplayers[username] = reason;
+        this.bannedplayers.set(username, reason);
         this.save();
     }
 
     /** Removes a user from the ban list */
     pardon(username: string): void {
-        delete this.bannedplayers[username];
+        this.bannedplayers.delete(username);
         this.save();
     }
 
     /** Clears the entire ban list */
     clearBanList(): void {
-        this.bannedplayers = {};
+        this.bannedplayers.clear();
         this.save();
     }
 
@@ -39,17 +38,22 @@ class BanManager {
 
     /** Checks if a given user is banned */
     isBanned(username: string): boolean{
-        return this.bannedplayers.hasOwnProperty(username);
+        return this.bannedplayers.has(username);
     }
 
     /** Gets the reason for a given user's ban */
     banReason(username: string): string {
-        return this.bannedplayers[username];
+        return this.bannedplayers.get(username)!;
+    }
+
+    /** Gets the number of banned players on the server */
+    banCount(): number {
+        return this.bannedplayers.size;
     }
 
     /** Gets the list of all banned players */
     banList(): string[] {
-        return Object.keys(this.bannedplayers);
+        return [...this.bannedplayers.values()];
     }
 
     // #endregion
@@ -68,7 +72,7 @@ class BanManager {
 
         for(const rawbandata of data){
             const bandata = rawbandata.split(",");
-            this.bannedplayers[bandata[0]] = bandata[1];
+            this.bannedplayers.set(bandata[0], bandata[1]);
         }
     }
 
@@ -76,8 +80,8 @@ class BanManager {
     save(): void {
         let data = "";
 
-        for (const key of Object.keys(this.bannedplayers)) {
-            data += key + "," + this.bannedplayers[key] + "\n";
+        for (const key of this.bannedplayers.keys()) {
+            data += key + "," + this.bannedplayers.get(key) + "\n";
         }
 
         if(data.length > 0) data = data.substring(0, data.length - 1); // remove last |

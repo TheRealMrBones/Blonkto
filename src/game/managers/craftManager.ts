@@ -8,12 +8,11 @@ const defaultrecipesfolder = "recipes";
 
 /** Manages crafting opeprations on all loaded recipes */
 class CraftManager {
-    private game: Game;
-    private recipes: Recipe[];
+    private readonly game: Game;
+    private readonly recipes: Recipe[] = [];
 
     constructor(game: Game){
         this.game = game;
-        this.recipes = [];
 
         this.loadRecipes();
     }
