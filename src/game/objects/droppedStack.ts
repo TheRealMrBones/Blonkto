@@ -20,12 +20,6 @@ class DroppedStack extends GameObject {
             this.ignore = ignore;
         }
         this.despawntime = Date.now() + DROPPED_STACK_TTL * 1000;
-
-        // add collision checks
-        this.registerTickListener((game: Game, dt: number) => {
-            game.collisionManager.itemMergeCheck(this);
-            this.tickDespawn(game);
-        });
     }
 
     /** Returns the dropped stack from its save data */
@@ -71,10 +65,22 @@ class DroppedStack extends GameObject {
 
     // #endregion
 
+    // #region events
+
+    /** Emits a tick event to this object */
+    override emitTickEvent(game: Game, dt: number): void {
+        super.emitTickEvent(game, dt);
+
+        game.collisionManager.itemMergeCheck(this);
+        this.tickDespawn(game);
+    }
+
+    // #endregion
+
     // #region management
 
     /** Ticks TTL and deletes self if too old */
-    tickDespawn(game: Game): void {
+    private tickDespawn(game: Game): void {
         if(Date.now() >= this.despawntime) game.entityManager.removeObject(this.id);
     }
 

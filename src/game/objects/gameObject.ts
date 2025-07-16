@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import EventEmitter from "events";
 
 import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
@@ -31,8 +30,6 @@ abstract class GameObject {
     private readonly asset: string;
     falling: boolean = false;
 
-    private eventEmitter: EventEmitter = new EventEmitter();
-
     constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.logger = Logger.getLogger(LOG_CATEGORIES.ENTITY);
 
@@ -43,10 +40,6 @@ abstract class GameObject {
         this.dir = dir || 0;
         this.scale = scale || 1;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
-
-        this.registerListener("tick", (game: Game, dt: number) => {
-            this.physicsTick(game, dt);
-        });
     }
 
     // #region getters
@@ -84,15 +77,49 @@ abstract class GameObject {
 
     // #endregion
 
+    // #region events
+
+    /** Emits a tick event to this object */
+    emitTickEvent(game: Game, dt: number): void {
+        this.physicsTick(game, dt);
+    }
+
+    /** Emits a death event to this object */
+    emitDeathEvent(game: Game, killedby: string, killer: any): void {
+
+    }
+
+    /** Emits a collision event to this object */
+    emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
+
+    }
+
+    /** Emits an interact event to this object */
+    emitInteractEvent(game: Game, player: Player): void {
+
+    }
+
+    // #endregion
+
     // #region physics
+
+    /** Tries to move to target if there is one */
+    private physicsTick(game: Game, dt: number): void {
+        this.checkFalling(game, dt);
+        
+        this.x += this.dx * dt;
+        this.y += this.dy * dt;
+        
+        if(!this.falling) this.checkCollisions(game);
+    }
     
     /** Default object collision checks */
-    checkCollisions(game: Game): void {
+    protected checkCollisions(game: Game): void {
         game.collisionManager.blockCollisions(this);
     }
 
     /** Check for falling */
-    checkFalling(game: Game, dt: number): void {
+    private checkFalling(game: Game, dt: number): void {
         if(this.scale <= 0) return;
         
         if(!this.falling){
@@ -119,18 +146,8 @@ abstract class GameObject {
     }
 
     /** Default object action after falling */
-    onFell(game: Game): void {
+    protected onFell(game: Game): void {
         game.entityManager.removeObject(this.id);
-    }
-
-    /** Tries to move to target if there is one */
-    physicsTick(game: Game, dt: number): void {
-        this.checkFalling(game, dt);
-        
-        this.x += this.dx * dt;
-        this.y += this.dy * dt;
-        
-        if(!this.falling) this.checkCollisions(game);
     }
 
     // #endregion
@@ -197,60 +214,6 @@ abstract class GameObject {
         });
 
         return tiles;
-    }
-
-    // #endregion
-
-    // #region events
-
-    /** Registers a listener to this objects event handler */
-    private registerListener(event: string, listener: (game: Game, ...args: any[]) => void): void {
-        this.eventEmitter.on(event, listener);
-    }
-
-    /** Registers a tick event listener to this objects event handler */
-    registerTickListener(listener: (game: Game, dt: number) => void): void {
-        this.registerListener("tick", listener);
-    }
-
-    /** Registers a death event listener to this objects event handler */
-    registerDeathListener(listener: (game: Game, killedby: string, killer: any) => void): void {
-        this.registerListener("death", listener);
-    }
-
-    /** Registers a collision event listener to this objects event handler */
-    registerCollisionListener(listener: (game: Game, entity: Entity, push: Pos) => void): void {
-        this.registerListener("collision", listener);
-    }
-
-    /** Registers an interact event listener to this objects event handler */
-    registerInteractListener(listener: (game: Game, player: Player) => void): void {
-        this.registerListener("interact", listener);
-    }
-
-    /** Emits an event to this objects event handler */
-    protected emitEvent(event: string, game: Game, ...args: any[]): void {
-        this.eventEmitter.emit(event, game, ...args);
-    }
-
-    /** Emits a tick event to this objects event handler */
-    emitTickEvent(game: Game, dt: number): void {
-        this.emitEvent("tick", game, dt);
-    }
-
-    /** Emits a death event to this objects event handler */
-    emitDeathEvent(game: Game, killedby: string, killer: any): void {
-        this.emitEvent("death", game, killedby, killer);
-    }
-
-    /** Emits a collision event to this objects event handler */
-    emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
-        this.emitEvent("collision", game, entity, push);
-    }
-
-    /** Emits an interact event to this objects event handler */
-    emitInteractEvent(game: Game, player: Player): void {
-        this.emitEvent("interact", game, player);
     }
 
     // #endregion

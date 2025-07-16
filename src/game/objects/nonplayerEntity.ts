@@ -6,6 +6,8 @@ import EntityRegistry from "../registries/entityRegistry.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
+import { Pos } from "../../shared/types.js";
+import Player from "./player.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
@@ -19,10 +21,6 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         this.initComponentData();
 
         this.basespeed = this.definition.speed;
-
-        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
-            game.entityManager.removeEntity(this.id);
-        });
     }
 
     /** Returns the nonplayer entity from its save data */
@@ -96,10 +94,30 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
 
     // #region events
 
-    /** Emits an event to this objects event handler */
-    protected override emitEvent(event: string, game: Game, ...args: any[]): void {
-        this.definition.emitEvent(event, this, game, ...args);
-        super.emitEvent(event, game, ...args);
+    /** Emits a tick event to this object */
+    override emitTickEvent(game: Game, dt: number): void {
+        super.emitTickEvent(game, dt);
+        this.definition.emitEvent("tick", this, game, dt);
+    }
+
+    /** Emits a death event to this object */
+    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
+        super.emitDeathEvent(game, killedby, killer);
+        this.definition.emitEvent("death", this, game, killedby, killer);
+
+        game.entityManager.removeEntity(this.id);
+    }
+
+    /** Emits a collision event to this object */
+    override emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
+        super.emitCollisionEvent(game, entity, push);
+        this.definition.emitEvent("collision", this, game, entity, push);
+    }
+
+    /** Emits an interact event to this object */
+    override emitInteractEvent(game: Game, player: Player): void {
+        super.emitInteractEvent(game, player);
+        this.definition.emitEvent("interact", this, game, player);
     }
 
     // #endregion

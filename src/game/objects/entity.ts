@@ -1,6 +1,5 @@
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
-import Player from "./player.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -27,15 +26,6 @@ abstract class Entity extends GameObject {
         this.maxhealth = maxhealth;
         this.health = maxhealth;
         this.basespeed = 1;
-
-        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
-            this.onDeath(killedby, killer, game);
-        });
-
-        this.registerTickListener((game: Game, dt: number) => {
-            const player = game.entityManager.players.get(this.id)!;
-            if(this.swinging) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.lastattackdamage);
-        });
     }
 
     // #region getters
@@ -54,11 +44,16 @@ abstract class Entity extends GameObject {
         this.emitDeathEvent(game, "gravity", null);
     }
 
-    /** Entity action after death */
-    onDeath(killedby: string, killer: any, game: Game){
-        if(killer instanceof Player){
-            //killer.kills++;
-        }
+    // #endregion
+
+    // #region events
+
+    /** Emits a tick event to this object */
+    override emitTickEvent(game: Game, dt: number): void {
+        super.emitTickEvent(game, dt);
+
+        const player = game.entityManager.players.get(this.id)!;
+        if(this.swinging) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.lastattackdamage);
     }
 
     // #endregion
@@ -93,7 +88,7 @@ abstract class Entity extends GameObject {
     }
 
     /** Ends the hit animation on this entity */
-    endHit(): void {
+    private endHit(): void {
         this.hit = false;
         if(this.hitinterval != null) clearInterval(this.hitinterval);
     }
@@ -108,7 +103,7 @@ abstract class Entity extends GameObject {
     }
 
     /** Ends the current attack swing if it is going on */
-    endSwing(): void {
+    private endSwing(): void {
         this.swinging = false;
         if(this.swinginginterval != null) clearInterval(this.swinginginterval);
     }

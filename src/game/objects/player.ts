@@ -65,11 +65,6 @@ class Player extends Entity {
         if(starter == true) this.starterInventory();
 
         this.resetFixes();
-
-        this.registerDeathListener((game: Game, killedby: string, killer: any) => {
-            game.playerManager.killPlayer(this.socket, killedby);
-            if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.x, this.y, game);
-        });
     }
 
     /** Returns the player from its save data */
@@ -105,6 +100,20 @@ class Player extends Entity {
 
     // #endregion
 
+    // #region events
+
+    /** Emits a death event to this object */
+    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
+        super.emitDeathEvent(game, killedby, killer);
+
+        if(killer instanceof Player) killer.kills++;
+
+        game.playerManager.killPlayer(this.socket, killedby);
+        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.x, this.y, game);
+    }
+
+    // #endregion
+
     // #region physics
 
     /** Default player collision checks */
@@ -118,18 +127,6 @@ class Player extends Entity {
         setTimeout(() => {
             this.emitDeathEvent(game, "gravity", null);
         }, 1000);
-    }
-
-    // #endregion
-
-    // #region death
-
-    /** Entity action after death */
-    override onDeath(killedby: string, killer: any, game: Game){
-        super.onDeath(killedby, killer, game);
-        if(killer instanceof Player){
-            killer.kills++;
-        }
     }
 
     // #endregion
