@@ -52,7 +52,6 @@
         "express": "^4.21.2",
         "html-webpack-plugin": "^5.6.3",
         "jsonwebtoken": "^9.0.2",
-        "object-sizeof": "^2.6.5",
         "socket.io": "^4.8.1",
         "socket.io-client": "^4.8.1",
         "throttle-debounce": "^5.0.2",
