@@ -24,7 +24,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
         this.getParent().addRequiredComponentData(TimeChangeComponentData, this);
-                
+
         this.getParent().registerTickListener((block: Block, game: Game, dt: number) => this.tick(block, game, dt));
     }
 
