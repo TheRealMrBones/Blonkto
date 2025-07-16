@@ -35,8 +35,7 @@ class Station {
 
     /** Clears the given players new status on this station */
     clearIsNew(player: Player): void {
-        // this is just used in craft manager to make sure clients arent spammed with recipes
-        this.openers[player.id].isnew = false;
+        if(this.openers[player.id].isnew) this.openers[player.id].isnew = false;
     }
 
     // #region serialization
@@ -55,7 +54,6 @@ class Station {
                 this.inventories.map(inventory => inventory.getChanges());
         }
 
-        if(isnew) this.clearIsNew(player);
         return returnobj;
     }
 

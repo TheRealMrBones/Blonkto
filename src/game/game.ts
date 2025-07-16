@@ -126,6 +126,7 @@ class Game {
 
         // reset data
         player.getInventory().resetChanges();
+        if(player.station !== null) player.station.clearIsNew(player);
 
         // return full update object
         const content: GameUpdateContent = {
