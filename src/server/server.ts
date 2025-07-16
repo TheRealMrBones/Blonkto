@@ -2,7 +2,6 @@ import express from "express";
 import webpack from "webpack";
 import webpackDevMiddleware from "webpack-dev-middleware";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
 import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
@@ -44,7 +43,6 @@ if(process.env.NODE_ENV === "development"){
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 // Including routes
 import userRoutes from "./routes/user.js";
