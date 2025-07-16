@@ -112,7 +112,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     private serializeComponentDataForUpdate(): any {
         let data: { [key: string]: any } = {};
 
-        for(const componentdata of Object.values(this.componentdata)){
+        for(const componentdata of this.componentdata.values()){
             const cd = componentdata as unknown as ISerializableForUpdate;
             if(cd.serializeForUpdate === undefined) continue;
 
@@ -128,7 +128,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     private serializeComponentDataForWrite(): { [key: string]: any } {
         const data: { [key: string]: any } = {};
 
-        for(const componentdata of Object.entries(this.componentdata)){
+        for(const componentdata of this.componentdata.entries()){
             const cd = componentdata[1] as unknown as ISerializableForWrite;
             if(cd.serializeForWrite === undefined) continue;
 
