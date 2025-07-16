@@ -87,6 +87,15 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
 
     // #endregion
 
+    // #region getters
+
+    /** Get the amount of the item this stack contains */
+    getAmount(): number{
+        return this.amount;
+    }
+
+    // #endregion
+
     // #region setters
 
     /** Sets the amount of the item this stack contains */
@@ -116,15 +125,6 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
         const diff = this.amount - oldamount;
 
         return otherstack.removeAmount(diff);
-    }
-
-    // #endregion
-
-    // #region getters
-
-    /** Get the amount of the item this stack contains */
-    getAmount(): number{
-        return this.amount;
     }
 
     // #endregion
