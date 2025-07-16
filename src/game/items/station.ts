@@ -1,10 +1,11 @@
+import Game from "../game.js";
 import Player from "../objects/player.js";
 import Inventory from "./inventory/inventory.js";
 
 /** A station (menu) with various components that can be opened and viewed by players */
 class Station {
     readonly name: string;
-    readonly openers: {[key: string]: { player: Player, isnew: boolean }} = {};
+    private readonly openers: {[key: string]: { player: Player, isnew: boolean }} = {};
     readonly multiopen: boolean = true;
 
     readonly inventories: Inventory[] = [];
@@ -27,6 +28,14 @@ class Station {
         return true;
     }
 
+    /** Checks for openers that are moving or gone and removes them */
+    checkOpeners(game: Game): void {
+        for(const opener of Object.values(this.openers)){
+            if(opener.player.moving || game.entityManager.players.get(opener.player.id) === undefined)
+                this.closeStation(opener.player);
+        }
+    }
+
     /** Has the given player close this station */
     closeStation(player: Player): void {
         delete this.openers[player.id];
@@ -36,6 +45,11 @@ class Station {
     /** Clears the given players new status on this station */
     clearIsNew(player: Player): void {
         if(this.openers[player.id].isnew) this.openers[player.id].isnew = false;
+    }
+
+    /** Checks if the given player needs a recipe update because of this station */
+    playerNeedsRecipeUpdate(player: Player): boolean {
+        return (this.openers[player.id].isnew || this.inventories.some(i => i.anyChanges()));
     }
 
     // #region serialization
