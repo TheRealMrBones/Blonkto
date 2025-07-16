@@ -195,8 +195,9 @@ class Inventory implements IInventory {
     }
 
     /** Returns the object representing all changes to this inventory since last reset then resets them */
-    getChanges(resetchanges?: boolean): any[] {
+    getChanges(): any[] {
         if(this.changes === null) return [];
+        
         const changeslist = [];
         for(let i = 0; i < this.size; i++){
             if(this.changes[i]){
@@ -208,7 +209,6 @@ class Inventory implements IInventory {
             }
         }
 
-        if(resetchanges) this.resetChanges();
         return changeslist;
     }
 

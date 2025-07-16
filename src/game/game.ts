@@ -117,12 +117,15 @@ class Game {
         const nearbyPlayers = this.entityManager.filterToNearby(player, [...this.entityManager.getPlayerEntities()]).map(p => p.serializeForUpdate());
         const nearbyEntities = this.entityManager.filterToNearby(player, [...this.entityManager.getNonplayers()]).map(e => e.serializeForUpdate());
         const fixes = player.getFixes();
-        const inventoryupdates = player.getInventory().getChanges(true);
+        const inventoryupdates = player.getInventory().getChanges();
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
         const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
         const tab = this.playerManager.getTab();
         const darkness = this.world.getDarknessPercent();
         const tps = this.performanceManager.getTps();
+
+        // reset data
+        player.getInventory().resetChanges();
 
         // return full update object
         const content: GameUpdateContent = {
@@ -140,7 +143,7 @@ class Game {
             darkness: darkness,
             tps: tps,
         };
-        
+
         return content;
     }
 
