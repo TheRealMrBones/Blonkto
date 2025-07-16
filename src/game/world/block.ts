@@ -1,5 +1,3 @@
-import EventEmitter from "events";
-
 import ComponentData from "../components/componentData.js";
 import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
 import BlockDefinition from "../definitions/blockDefinition.js";
@@ -17,8 +15,6 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     readonly cell: Cell;
     readonly definition: BlockDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
-    
-    private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(cell: Cell, definition: string){
         this.cell = cell;
@@ -36,65 +32,29 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
 
     // #region events
 
-    /** Registers a listener to this blocks event handler */
-    private registerListener(event: string, listener: (game: Game, ...args: any[]) => void): void {
-        this.eventEmitter.on(event, listener);
-    }
-
-    /** Registers a instantiate event listener to this blocks event handler */
-    registerInstantiateListener(listener: (game: Game) => void): void {
-        this.registerListener("instantiate", listener);
-    }
-
-    /** Registers a unload event listener to this blocks event handler */
-    registerUnloadListener(listener: (game: Game) => void): void {
-        this.registerListener("unload", listener);
-    }
-
-    /** Registers a tick event listener to this blocks event handler */
-    registerTickListener(listener: (game: Game, dt: number) => void): void {
-        this.registerListener("tick", listener);
-    }
-
-    /** Registers a break event listener to this blocks event handler */
-    registerBreakListener(listener: (game: Game) => void): void {
-        this.registerListener("break", listener);
-    }
-
-    /** Registers a interact event listener to this blocks event handler */
-    registerInteractListener(listener: (game: Game, player: Player, info: ClickContentExpanded) => void): void {
-        this.registerListener("interact", listener);
-    }
-
-    /** Emits an event to this blocks event handler */
-    private emitEvent(event: string, game: Game, ...args: any[]): void {
-        this.definition.emitEvent(event, this, game, ...args);
-        this.eventEmitter.emit(event, ...args);
-    }
-
-    /** Emits a instantiate event to this blocks event handler */
+    /** Emits a instantiate event to this block */
     emitInstantiateEvent(game: Game): void {
-        this.emitEvent("instantiate", game);
+        this.definition.emitEvent("instantiate", this, game);
     }
 
-    /** Emits a unload event to this blocks event handler */
+    /** Emits a unload event to this block */
     emitUnloadEvent(game: Game): void {
-        this.emitEvent("unload", game);
+        this.definition.emitEvent("unload", this, game);
     }
 
-    /** Emits a tick event to this blocks event handler */
+    /** Emits a tick event to this block */
     emitTickEvent(game: Game, dt: number): void {
-        this.emitEvent("tick", game, dt);
+        this.definition.emitEvent("tick", this, game, dt);
     }
 
-    /** Emits a break event to this blocks event handler */
+    /** Emits a break event to this block */
     emitBreakEvent(game: Game): void {
-        this.emitEvent("break", game);
+        this.definition.emitEvent("break", this, game);
     }
 
-    /** Emits a interact event to this blocks event handler */
+    /** Emits a interact event to this block */
     emitInteractEvent(game: Game, player: Player, info: ClickContentExpanded): void {
-        this.emitEvent("interact", game, player, info);
+        this.definition.emitEvent("interact", this, game, player, info);
     }
 
     // #endregion
