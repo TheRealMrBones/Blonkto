@@ -59,15 +59,7 @@ class World {
 
         // tick cells that have tick listeners
         for(const chunk of this.loadedchunks.values()){
-            for(const row of chunk.cells){
-                for(const cell of row){
-                    if(cell.ticks){
-                        if(cell.block !== null) cell.block.emitTickEvent(this.game, dt);
-                        if(cell.floor !== null) cell.floor.emitTickEvent(this.game, dt);
-                        if(cell.ceiling !== null) cell.ceiling.emitTickEvent(this.game, dt);
-                    }
-                }
-            }
+            chunk.tick(this.game, dt);
         }
 
         // get world loads for players

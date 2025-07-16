@@ -75,11 +75,20 @@ class Chunk {
 
     // #region unloading
 
+    /** Ticks this chunk and all of its cells */
+    tick(game: Game, dt: number): void {
+        for(let x = 0; x < CHUNK_SIZE; x++){
+            for(let y = 0; y < CHUNK_SIZE; y++){
+                this.cells[x][y].emitTickEvent(game, dt);
+            }
+        }
+    }
+
     /** Unloads this chunk and all of its cells */
     unload(game: Game): void {
         for(let x = 0; x < CHUNK_SIZE; x++){
             for(let y = 0; y < CHUNK_SIZE; y++){
-                this.cells[x][y].unload(game);
+                this.cells[x][y].emitUnloadEvent(game);
             }
         }
     }

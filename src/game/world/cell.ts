@@ -20,7 +20,7 @@ class Cell {
     floor: Floor | null = null;
     ceiling: Ceiling | null = null;
 
-    ticks: boolean = false;
+    private ticks: boolean = false;
 
     constructor(chunk: Chunk, chunkx: number, chunky: number, basefloor: string | null){
         this.chunk = chunk;
@@ -187,7 +187,17 @@ class Cell {
 
     // #region events
 
-    unload(game: Game): void {
+    /** Emits a tick event to this cell */
+    emitTickEvent(game: Game, dt: number): void {
+        if(!this.ticks) return;
+
+        if(this.block !== null) this.block.emitTickEvent(game, dt);
+        if(this.floor !== null) this.floor.emitTickEvent(game, dt);
+        if(this.ceiling !== null) this.ceiling.emitTickEvent(game, dt);
+    }
+
+    /** Emits an unload event to this cell */
+    emitUnloadEvent(game: Game): void {
         if(this.block !== null) this.block.emitUnloadEvent(game);
         if(this.floor !== null) this.floor.emitUnloadEvent(game);
         if(this.ceiling !== null) this.ceiling.emitUnloadEvent(game);
