@@ -30,68 +30,6 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         return entity;
     }
 
-    // #region component helpers
-
-    /** Initializes this entities required component data instances */
-    initComponentData(): void {
-        this.definition.getRequiredComponentData().forEach(c => {
-            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
-        });
-    }
-
-    /** Loads this entities required component data instances with the given data */
-    loadComponentData(data: { [key: string]: any }): void {
-        if(data === undefined) return;
-        for(const componentdataloaded of Object.entries(data)){
-            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
-            if(cd.readFromSave !== undefined)
-                cd.readFromSave(componentdataloaded[1]);
-        }
-    }
-
-    /** Returns this entities instance of the requested component data */
-    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
-        return this.componentdata.get(componentDataType.name) as T2;
-    }
-
-    /** Returns an object representing this entities component data for a game update to the client */
-    serializeComponentDataForUpdate(): any {
-        const data = {
-            static: {},
-            dynamic: {},
-        };
-
-        for(const componentdata of Object.values(this.componentdata)){
-            const cd = componentdata as unknown as ISerializableForUpdate;
-            if(cd.serializeForUpdate === undefined) continue;
-
-            const serialized = cd.serializeForUpdate();
-            if(serialized === null) continue;
-            data.static = { ...data.static, ...serialized.static };
-            data.dynamic = { ...data.dynamic, ...serialized.dynamic };
-        }
-
-        return data;
-    }
-
-    /** Returns an object representing this entities component data for writing to the save */
-    serializeComponentDataForWrite(): { [key: string]: any } {
-        const data: { [key: string]: any } = {};
-
-        for(const componentdata of Object.entries(this.componentdata)){
-            const cd = componentdata[1] as unknown as ISerializableForWrite;
-            if(cd.serializeForWrite === undefined) continue;
-
-            const serialized = cd.serializeForWrite();
-            if(serialized === null) continue;
-            data[componentdata[0]] = serialized;
-        }
-
-        return data;
-    }
-
-    // #endregion
-
     // #region events
 
     /** Emits a tick event to this object */
@@ -154,6 +92,68 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 
         return returnobj;
+    }
+
+    // #endregion
+
+    // #region component helpers
+
+    /** Returns this entities instance of the requested component data */
+    getComponentData<T2 extends ComponentData<any>>(componentDataType: new (...args: any[]) => T2): T2 {
+        return this.componentdata.get(componentDataType.name) as T2;
+    }
+
+    /** Initializes this entities required component data instances */
+    private initComponentData(): void {
+        this.definition.getRequiredComponentData().forEach(c => {
+            this.componentdata.set(c.componentdata.name, new c.componentdata(c.parent));
+        });
+    }
+
+    /** Loads this entities required component data instances with the given data */
+    private loadComponentData(data: { [key: string]: any }): void {
+        if(data === undefined) return;
+        for(const componentdataloaded of Object.entries(data)){
+            const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
+            if(cd.readFromSave !== undefined)
+                cd.readFromSave(componentdataloaded[1]);
+        }
+    }
+
+    /** Returns an object representing this entities component data for a game update to the client */
+    private serializeComponentDataForUpdate(): any {
+        const data = {
+            static: {},
+            dynamic: {},
+        };
+
+        for(const componentdata of Object.values(this.componentdata)){
+            const cd = componentdata as unknown as ISerializableForUpdate;
+            if(cd.serializeForUpdate === undefined) continue;
+
+            const serialized = cd.serializeForUpdate();
+            if(serialized === null) continue;
+            data.static = { ...data.static, ...serialized.static };
+            data.dynamic = { ...data.dynamic, ...serialized.dynamic };
+        }
+
+        return data;
+    }
+
+    /** Returns an object representing this entities component data for writing to the save */
+    private serializeComponentDataForWrite(): { [key: string]: any } {
+        const data: { [key: string]: any } = {};
+
+        for(const componentdata of Object.entries(this.componentdata)){
+            const cd = componentdata[1] as unknown as ISerializableForWrite;
+            if(cd.serializeForWrite === undefined) continue;
+
+            const serialized = cd.serializeForWrite();
+            if(serialized === null) continue;
+            data[componentdata[0]] = serialized;
+        }
+
+        return data;
     }
 
     // #endregion
