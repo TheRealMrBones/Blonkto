@@ -7,7 +7,7 @@ import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionality for a type to handle its own set of components */
-class ComponentHandler<T> {
+abstract class ComponentHandler<T> {
     private readonly logger: Logger;
 
     private components: Map<string, Component<T>> = new Map<string, Component<T>>();
@@ -25,7 +25,7 @@ class ComponentHandler<T> {
             this.logger.error("Component being added without required components beforehand");
             throw null;
         }else if(this.components.has(component.constructor.name)){
-            this.logger.error("This component type is already used in this handler");
+            this.logger.error("This component type is already used in this component handler");
             throw null;
         }
 
@@ -40,8 +40,15 @@ class ComponentHandler<T> {
     }
 
     /** Gets the component type specified if it exists */
-    getComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): T2 | undefined {
-        return this.components.get(componentType.name) as T2;
+    getComponent<T2 extends Component<T>>(componentType: new (...args: any[]) => T2): T2 {
+        const component = this.components.get(componentType.name);
+
+        if(component === undefined){
+            this.logger.error(`Requested component "${componentType.name}" does not exist in this component handler!`);
+            throw null;
+        }
+
+        return component as T2;
     }
 
     /** Removes the given component type if it exists in this handler */

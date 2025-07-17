@@ -43,7 +43,7 @@ class Registry<T extends IRegistryValue> {
         const value = this.map.get(key);
 
         if(value === undefined){
-            this.logger.error(`[${this.name}] Requested Key "${key}" does not exist in this registry!`);
+            this.logger.error(`[${this.name}] Requested key "${key}" does not exist in this registry!`);
             throw null;
         }
 
