@@ -60,34 +60,6 @@ class CombinedInventory implements IInventory {
         return itemamount;
     }
 
-    // #endregion
-
-    // #region slot operations
-
-    /** Sets the itemstack in the requested slot to the given itemstack */
-    setSlot(slot: number, stack: ItemStack | null): void {
-        const realslot = this.getRealSlot(slot);
-        if(realslot === null) return;
-
-        realslot.inventory.setSlot(realslot.slot, stack);
-    }
-
-    /** Adds the given stack to the requested slot as much as possible */
-    addToSlot(slot: number, itemstack: ItemStack): boolean {
-        const realslot = this.getRealSlot(slot);
-        if(realslot === null) return false;
-
-        return realslot.inventory.addToSlot(realslot.slot, itemstack);
-    }
-
-    /** Removes the given amount from the given slot in this inventory */
-    removeFromSlot(slot: number, amount: number): boolean {
-        const realslot = this.getRealSlot(slot);
-        if(realslot === null) return false;
-
-        return realslot.inventory.removeFromSlot(realslot.slot, amount);
-    }
-
     /** Removes the requested amount of the requested item from this inventory and returns leftovers */
     removeItem(item: string, amount?: number): number {
         let removeamount = amount || 1;
@@ -100,12 +72,55 @@ class CombinedInventory implements IInventory {
         return removeamount;
     }
 
-    /** Drops an individual stack (or partial stack) from this inventory */
-    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+    /** Clears this entire inventory */
+    clear(): void {
+        for(const inventory of this.inventories){
+            inventory.clear();
+        }
+    }
+
+    // #endregion
+
+    // #region slot operations
+
+    /** Sets the itemstack in the requested slot to the given itemstack */
+    setSlot(slot: number, stack: ItemStack | null): void {
         const realslot = this.getRealSlot(slot);
         if(realslot === null) return;
 
-        realslot.inventory.dropStack(x, y, realslot.slot, game, amount, ignore);
+        realslot.inventory.setSlot(realslot.slot, stack);
+    }
+
+    /** Adds the given amount to the requested slot as much as possible */
+    addToSlot(slot: number, amount: number): boolean {
+        const realslot = this.getRealSlot(slot);
+        if(realslot === null) return false;
+
+        return realslot.inventory.addToSlot(realslot.slot, amount);
+    }
+
+    /** Adds the given stack to the requested slot as much as possible */
+    addStackToSlot(slot: number, itemstack: ItemStack): boolean {
+        const realslot = this.getRealSlot(slot);
+        if(realslot === null) return false;
+
+        return realslot.inventory.addStackToSlot(realslot.slot, itemstack);
+    }
+
+    /** Removes the given amount from the given slot in this inventory */
+    removeFromSlot(slot: number, amount: number): boolean {
+        const realslot = this.getRealSlot(slot);
+        if(realslot === null) return false;
+
+        return realslot.inventory.removeFromSlot(realslot.slot, amount);
+    }
+
+    /** Drops the given amount from the given slot in this inventory */
+    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+        const realslot = this.getRealSlot(slot);
+        if(realslot === null) return;
+
+        realslot.inventory.dropFromSlot(x, y, realslot.slot, game, amount, ignore);
     }
 
     /** Swaps the item stacks between two slots */
@@ -119,13 +134,6 @@ class CombinedInventory implements IInventory {
 
         realslot2.inventory.setSlot(realslot2.slot, stack1);
         realslot1.inventory.setSlot(realslot1.slot, stack2);
-    }
-
-    /** Clears this entire inventory */
-    clear(): void {
-        for(const inventory of this.inventories){
-            inventory.clear();
-        }
     }
 
     // #endregion

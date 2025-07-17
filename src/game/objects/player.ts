@@ -3,7 +3,7 @@ import { Socket } from "socket.io-client";
 import Entity from "./entity.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import Inventory from "../items/inventory/inventory.js";
+import ChangesInventory from "../items/inventory/changesInventory.js";
 import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
@@ -29,7 +29,7 @@ class Player extends Entity {
     username: string;
     kills: number;
     color: Color;
-    private inventory: Inventory;
+    private inventory: ChangesInventory;
     hotbarslot: number;
     station: Station | null = null;
     fixes: any;
@@ -60,7 +60,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = new Inventory(INVENTORY_SIZE, true);
+        this.inventory = new ChangesInventory(INVENTORY_SIZE);
         this.hotbarslot = 0;
         if(starter == true) this.starterInventory();
 
@@ -77,14 +77,14 @@ class Player extends Entity {
             // Respawn
             if(RACISM_PERM) player.color = data.color;
 
-            if(KEEP_INVENTORY) player.inventory = Inventory.readFromSave(data.inventory, true);
+            if(KEEP_INVENTORY) player.inventory = ChangesInventory.readFromSave(data.inventory);
         }else{
             // Load Exact
             player.x = data.x;
             player.y = data.y;
             player.health = data.health;
             player.color = data.color;
-            player.inventory = Inventory.readFromSave(data.inventory, true);
+            player.inventory = ChangesInventory.readFromSave(data.inventory);
         }
 
         return player;
@@ -139,7 +139,7 @@ class Player extends Entity {
         return inventory;
     }
 
-    getInventory(): Inventory {
+    getInventory(): ChangesInventory {
         return this.inventory;
     }
 
@@ -205,7 +205,7 @@ class Player extends Entity {
     /** Drops the given amount from the given slot in this players inventory */
     dropFromSlot(slot: number, game: Game, amount?: number): void {
         const inventory = this.getCombinedInventory();
-        inventory.dropStack(this.x, this.y, slot, game, amount, this.id);
+        inventory.dropFromSlot(this.x, this.y, slot, game, amount, this.id);
         const stack = inventory.getSlot(slot);
     }
 

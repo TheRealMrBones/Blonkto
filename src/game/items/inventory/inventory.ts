@@ -6,22 +6,24 @@ import IInventory from "./IInventory.js";
 
 /** A managable collection of item stacks */
 class Inventory implements IInventory {
-    private size: number;
-    private slots: (ItemStack | null)[];
-    private changes: null | boolean[];
+    protected readonly size: number;
+    protected readonly slots: (ItemStack | null)[];
 
-    constructor(size: number, trackchanges?: boolean){
+    constructor(size: number){
         this.size = size;
         this.slots = Array(size).fill(null);
-
-        if(trackchanges) this.changes = Array(size).fill(true);
-        else this.changes = null;
     }
 
     /** Returns an inventory object with the given itemstacks in it */
-    static readFromSave(inventorydata: any[], trackchanges?: boolean): Inventory {
-        const inventory = new Inventory(inventorydata.length, trackchanges);
-        inventory.slots = inventorydata.map((data: any) => data ? ItemStack.readFromSave(data) : null);
+    static readFromSave(inventorydata: any[]): Inventory {
+        const inventory = new Inventory(inventorydata.length);
+
+        for(let i = 0; i < inventory.getSize(); i++){
+            const stackdata = inventorydata[i];
+            const stack = stackdata ? ItemStack.readFromSave(stackdata) : null;
+            inventory.setSlot(i, stack);
+        }
+
         return inventory;
     }
 
@@ -44,17 +46,15 @@ class Inventory implements IInventory {
     /** Drops this entire inventory onto the ground */
     dropInventory(x: number, y: number, game: Game): void {
         for(let i = 0; i < this.size; i++){
-            this.dropStack(x, y, i, game);
+            this.dropFromSlot(x, y, i, game);
         }
     }
 
     /** Tries to collect the given item stack and returns if fully take */
     collectStack(itemstack: ItemStack): boolean {
         for(let i = 0; i < this.size; i++){
-            const itemstack2 = this.slots[i];
-            if(itemstack2 != null){
-                const done = itemstack2.mergeStack(itemstack);
-                this.toggleChange(i);
+            if(this.slots[i] != null){
+                const done = this.addStackToSlot(i, itemstack);
                 if(done) return true;
             }
         }
@@ -62,8 +62,7 @@ class Inventory implements IInventory {
         const slot = this.nextOpenSlot();
         if(slot == -1) return false;
 
-        this.slots[slot] = itemstack;
-        this.toggleChange(slot);
+        this.setSlot(slot, itemstack);
         return true;
     }
 
@@ -77,56 +76,19 @@ class Inventory implements IInventory {
             if(itemstack != null){
                 if(itemstack.definition.getRegistryKey() == item){
                     const addamount = Math.min(stacksize - itemstack.getAmount(), itemamount);
-                    itemstack.addAmount(addamount);
+                    this.addToSlot(i, addamount);
                     itemamount -= addamount;
-                    this.toggleChange(i);
                 }
             }
         }
 
         for(let nextslot = this.nextOpenSlot(); itemamount > 0 && nextslot != -1; nextslot = this.nextOpenSlot()){
             const addamount = Math.min(stacksize, itemamount);
-            this.slots[nextslot] = new ItemStack(item, addamount);
+            this.setSlot(nextslot, new ItemStack(item, addamount));
             itemamount -= addamount;
-            this.toggleChange(nextslot);
         }
 
         return itemamount;
-    }
-
-    // #endregion
-
-    // #region slot operations
-
-    /** Sets the itemstack in the requested slot to the given itemstack */
-    setSlot(slot: number, stack: ItemStack | null): void {
-        this.slots[slot] = stack;
-        this.toggleChange(slot);
-    }
-
-    /** Adds the given stack to the requested slot as much as possible */
-    addToSlot(slot: number, itemstack: ItemStack): boolean {
-        if(this.slots[slot] === null){
-            this.slots[slot] = itemstack;
-            this.toggleChange(slot);
-            return true;
-        }
-
-        if(this.slots[slot].definition.getRegistryKey() != itemstack.definition.getRegistryKey()) return false;
-
-        this.toggleChange(slot);
-        return this.slots[slot].mergeStack(itemstack);
-    }
-
-    /** Removes the given amount from the given slot in this inventory */
-    removeFromSlot(slot: number, amount: number): boolean {
-        if(this.slots[slot] === null) return false;
-        if(amount > this.slots[slot].getAmount()) return false;
-
-        if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
-        this.toggleChange(slot);
-
-        return true;
     }
 
     /** Removes the requested amount of the requested item from this inventory and returns leftovers */
@@ -140,20 +102,64 @@ class Inventory implements IInventory {
 
             const stackamount = itemstack.getAmount();
             if(stackamount <= removeamount){
-                this.slots[i] = null;
+                this.setSlot(i, null);
                 removeamount -= stackamount;
             }else{
-                itemstack.removeAmount(removeamount);
+                this.removeFromSlot(i, removeamount);
                 removeamount = 0;
             }
-            this.toggleChange(i);
         }
 
         return removeamount;
     }
 
-    /** Drops an individual stack (or partial stack) from this inventory */
-    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+    /** Clears this entire inventory */
+    clear(): void {
+        for(let i = 0; i < this.size; i++){
+            this.setSlot(i, null);
+        }
+    }
+
+    // #endregion
+
+    // #region slot operations
+
+    /** Sets the itemstack in the requested slot to the given itemstack */
+    setSlot(slot: number, stack: ItemStack | null): void {
+        this.slots[slot] = stack;
+    }
+
+    /** Adds the given amount to the requested slot as much as possible */
+    addToSlot(slot: number, amount: number): boolean {
+        if(this.slots[slot] === null) return false;
+
+        return this.slots[slot].addAmount(amount);
+    }
+
+    /** Adds the given stack to the requested slot as much as possible */
+    addStackToSlot(slot: number, itemstack: ItemStack): boolean {
+        if(this.slots[slot] === null){
+            this.slots[slot] = itemstack;
+            return true;
+        }
+
+        if(this.slots[slot].definition.getRegistryKey() != itemstack.definition.getRegistryKey()) return false;
+
+        return this.slots[slot].mergeStack(itemstack);
+    }
+
+    /** Removes the given amount from the given slot in this inventory */
+    removeFromSlot(slot: number, amount: number): boolean {
+        if(this.slots[slot] === null) return false;
+        if(amount > this.slots[slot].getAmount()) return false;
+
+        if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
+
+        return true;
+    }
+
+    /** Drops the given amount from the given slot in this inventory */
+    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         if(this.slots[slot] === null) return;
 
         if(amount === undefined){
@@ -166,7 +172,6 @@ class Inventory implements IInventory {
             
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }
-        this.toggleChange(slot);
     }
 
     /** Swaps the item stacks between two slots */
@@ -176,53 +181,6 @@ class Inventory implements IInventory {
         
         this.setSlot(slot2, item1);
         this.setSlot(slot1, item2);
-    }
-
-    /** Clears this entire inventory */
-    clear(): void {
-        for(let i = 0; i < this.size; i++){
-            this.setSlot(i, null);
-        }
-    }
-
-    // #endregion
-
-    // #region changes
-
-    /** Toggles the changed indicator for the requested slot */
-    toggleChange(slot: number): void {
-        if(this.changes !== null) this.changes[slot] = true;
-    }
-
-    /** Returns the object representing all changes to this inventory since last reset then resets them */
-    getChanges(): any[] {
-        if(this.changes === null) return [];
-        
-        const changeslist = [];
-        for(let i = 0; i < this.size; i++){
-            if(this.changes[i]){
-                const itemstack = this.slots[i];
-                changeslist.push({
-                    slot: i,
-                    itemstack: itemstack !== null ? itemstack.serializeForUpdate() : null,
-                });
-            }
-        }
-
-        return changeslist;
-    }
-
-    /** Returns if there are any pending changes */
-    anyChanges(): boolean {
-        if(this.changes === null) return false;
-        return this.changes.some(c => c === true);
-    }
-
-    resetChanges(): void {
-        if(this.changes === null) return;
-        for(let i = 0; i < this.size; i++){
-            this.changes[i] = false;
-        }
     }
 
     // #endregion

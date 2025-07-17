@@ -5,7 +5,7 @@ import Block from "../../world/block.js";
 import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
 import ISerializableForWrite from "../ISerializableForWrite.js";
-import Inventory from "../../items/inventory/inventory.js";
+import ChangesInventory from "../../items/inventory/changesInventory.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class ContainerComponent extends Component<BlockDefinition> {
@@ -36,18 +36,18 @@ class ContainerComponent extends Component<BlockDefinition> {
 }
 
 class ContainerComponentData extends ComponentData<ContainerComponent> implements ISerializableForWrite {
-    inventory: Inventory;
+    inventory: ChangesInventory;
 
     constructor(parent: ContainerComponent){
         super(parent);
 
-        this.inventory = new Inventory(parent.slotcount, true);
+        this.inventory = new ChangesInventory(parent.slotcount);
         this.inventory.resetChanges();
     }
 
     /** Sets this container component data objects values with the given save data */
     readFromSave(data: any): void {
-        this.inventory = Inventory.readFromSave(data.inventory, true);
+        this.inventory = ChangesInventory.readFromSave(data.inventory);
     }
 
     /** Returns an object representing this container component data for writing to the save */

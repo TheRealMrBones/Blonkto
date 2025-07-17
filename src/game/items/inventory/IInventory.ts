@@ -24,6 +24,12 @@ interface IInventory {
     /** Tries to collect the given item and returns the amount leftover */
     collectItem(item: string, amount?: number): number;
 
+    /** Removes the requested amount of the requested item from this inventory and returns leftovers */
+    removeItem(item: string, amount?: number): number;
+
+    /** Clears this entire inventory */
+    clear(): void;
+
     // #endregion
 
     // #region slot operations
@@ -31,23 +37,20 @@ interface IInventory {
     /** Sets the itemstack in the requested slot to the given itemstack */
     setSlot(slot: number, stack: ItemStack | null): void;
 
+    /** Adds the given amount to the requested slot as much as possible */
+    addToSlot(slot: number, amount: number): boolean;
+
     /** Adds the given stack to the requested slot as much as possible */
-    addToSlot(slot: number, itemstack: ItemStack): boolean;
+    addStackToSlot(slot: number, itemstack: ItemStack): boolean;
 
     /** Removes the given amount from the given slot in this inventory */
     removeFromSlot(slot: number, amount: number): boolean;
 
-    /** Removes the requested amount of the requested item from this inventory and returns leftovers */
-    removeItem(item: string, amount?: number): number;
-
-    /** Drops an individual stack (or partial stack) from this inventory */
-    dropStack(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void;
+    /** Drops the given amount from the given slot in this inventory */
+    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void;
 
     /** Swaps the item stacks between two slots */
     swapSlots(slot1: number, slot2: number): void;
-
-    /** Clears this entire inventory */
-    clear(): void;
 
     // #endregion
 

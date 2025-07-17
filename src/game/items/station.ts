@@ -1,6 +1,6 @@
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import Inventory from "./inventory/inventory.js";
+import ChangesInventory from "./inventory/changesInventory.js";
 
 /** A station (menu) with various components that can be opened and viewed by players */
 class Station {
@@ -8,7 +8,7 @@ class Station {
     private readonly openers: {[key: string]: { player: Player, isnew: boolean }} = {};
     readonly multiopen: boolean = true;
 
-    readonly inventories: Inventory[] = [];
+    readonly inventories: ChangesInventory[] = [];
 
     constructor(name: string, multiopen?: boolean){
         this.name = name;
