@@ -21,11 +21,14 @@ class ComponentHandler<T> {
 
     /** Builder function to add components */
     addComponent(component: Component<T>): this {
-        for(const requirement of component.getRequirements()){
-            if(!this.hasComponent(requirement)){
-                this.logger.error("Component being added without required components beforehand");
-                throw null;
-            }
+        if(component.getRequirements().some(r => !this.hasComponent(r))){
+            this.logger.error("Component being added without required components beforehand");
+            throw null;
+        }
+
+        if(this.components.has(component.constructor.name)){
+            this.logger.error("This component type is already used in this handler");
+            throw null;
         }
 
         this.components.set(component.constructor.name, component);
