@@ -231,12 +231,12 @@ class InputManager {
         return this.selectedslot;
     }
 
-    /** Pauses the hotbar selection functionailty */
+    /** Pauses the hotbar selection functionality */
     pauseHotbar(): void {
         this.hotbarpaused = true;
     }
 
-    /** Unpauses the hotbar selection functionailty */
+    /** Unpauses the hotbar selection functionality */
     unpauseHotbar(): void {
         this.hotbarpaused = false;
         this.selectSlot(this.hotbarslot);

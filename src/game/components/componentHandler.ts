@@ -6,7 +6,7 @@ import ISerializableForInit from "./ISerializableForInit.js";
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
-/** Defines functionailty for a type to handle its own set of components */
+/** Defines functionality for a type to handle its own set of components */
 class ComponentHandler<T> {
     private readonly logger: Logger;
 
