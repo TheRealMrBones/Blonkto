@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.BOOLEAN],
 ];
 
-export default (): void => CommandRegistry.register("clearoplist", new CommandDefinition(true, args, clearOpListCommand, "Clears the entire list of oppped players"));
+export default (): void => CommandRegistry.register(new CommandDefinition("clearoplist", true, args, clearOpListCommand, "Clears the entire list of oppped players"));
 
 function clearOpListCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

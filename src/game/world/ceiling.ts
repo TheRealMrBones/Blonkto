@@ -75,7 +75,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteCeiling = {
-            ceilingdefinition: this.definition.getRegistryKey(),
+            ceilingdefinition: this.definition.key,
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

@@ -1,39 +1,26 @@
 import Game from "../game.js";
 import Player from "../objects/player.js";
-import IRegistryValue from "../registries/IRegistryValue.js";
+import RegistryValue from "../registries/registryValue.js";
 
 import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 /** Base class for a command that can be run through chat by players in the game */
-class CommandDefinition implements IRegistryValue {
-    private key: string = "unregistered";
+class CommandDefinition extends RegistryValue {
     private op: boolean;
     private possibleargs: any[][];
     private executeParsed: (args: any[], player: Player, game: Game) => void;
     private help: string;
     private customCanExecute: ((player: Player, game: Game) => boolean) | null = null;
 
-    constructor(op: boolean, possibleargs: any[][], executeParsed: (args: any[], player: Player, game: Game) => void, help: string){
+    constructor(key: string, op: boolean, possibleargs: any[][], executeParsed: (args: any[], player: Player, game: Game) => void, help: string){
+        super(key);
+
         this.op = op;
         this.possibleargs = possibleargs;
         this.executeParsed = executeParsed;
         this.help = help;
     }
-
-    // #region registry helpers
-
-    /** Sets this commands key in the ceiling registry */
-    setRegistryKey(key: string): void {
-        this.key = key;
-    }
-
-    /** Returns this commands registry key */
-    getRegistryKey(): string {
-        return this.key;
-    }
-
-    // #endregion
 
     // #region setters
 

@@ -12,7 +12,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME, COMMAND_ARGUMENTS.STRING_LONG],
 ];
 
-export default (): void => CommandRegistry.register("ban", new CommandDefinition(true, args, banCommand, "Bans a player from the server"));
+export default (): void => CommandRegistry.register(new CommandDefinition("ban", true, args, banCommand, "Bans a player from the server"));
 
 function banCommand(args: any[], player: Player, game: Game){
     const p = game.playerManager.getPlayerByUsername(args[1]);

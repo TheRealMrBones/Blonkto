@@ -75,7 +75,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteFloor = {
-            floordefinition: this.definition.getRegistryKey(),
+            floordefinition: this.definition.key,
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

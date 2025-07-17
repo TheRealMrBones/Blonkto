@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
-export default (): void => CommandRegistry.register("pos", new CommandDefinition(true, args, posCommand, "Gets a players position in the world"));
+export default (): void => CommandRegistry.register(new CommandDefinition("pos", true, args, posCommand, "Gets a players position in the world"));
 
 function posCommand(args: any[], player: Player, game: Game){
     const username = args[1];

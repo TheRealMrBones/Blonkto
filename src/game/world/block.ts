@@ -75,7 +75,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
         const componentdata = this.serializeComponentDataForWrite();
 
         const returnobj: SerializedWriteBlock = {
-            blockdefinition: this.definition.getRegistryKey(),
+            blockdefinition: this.definition.key,
         };
         if(Object.keys(componentdata).length > 0) returnobj.componentdata = componentdata;
 

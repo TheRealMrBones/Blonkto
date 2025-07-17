@@ -102,7 +102,7 @@ class CollisionManager {
             const collided = (push !== null);
 
             if(collided){
-                if(collectable.itemStack.definition.getRegistryKey() === collectable2.itemStack.definition.getRegistryKey()){
+                if(collectable.itemStack.definition.key === collectable2.itemStack.definition.key){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
                 }else{
                     //collectable.push(push.x / 2, push.y / 2);

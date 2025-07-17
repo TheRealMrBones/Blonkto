@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("op", new CommandDefinition(false, args, opCommand, "Gives a player operator permissions"));
+export default (): void => CommandRegistry.register(new CommandDefinition("op", false, args, opCommand, "Gives a player operator permissions"));
 
 function opCommand(args: any[], player: Player, game: Game){
     // special op checks

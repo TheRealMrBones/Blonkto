@@ -1,6 +1,5 @@
 import EventEmitter from "events";
 
-import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
 import IDrop from "../items/drops/IDrop.js";
@@ -12,8 +11,7 @@ import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES } = Constants;
 
 /** The definition for a type of block with its functionality and base statistics */
-class BlockDefinition extends ComponentHandler<BlockDefinition> implements IRegistryValue {
-    private name: string = "unregistered";
+class BlockDefinition extends ComponentHandler<BlockDefinition> {
     readonly displayname: string;
     readonly asset: string;
     readonly drops: IDrop | null;
@@ -29,8 +27,8 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements IRegi
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: IDrop, minetype?: number, hardness?: number, scale?: number, shape?: number){
-        super();
+    constructor(key: string, displayname: string, asset: string | null, drops?: IDrop, minetype?: number, hardness?: number, scale?: number, shape?: number){
+        super(key);
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
@@ -41,20 +39,6 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements IRegi
 
         if(this.shape == SHAPES.SQUARE && this.scale == 1) this.floorvisible = false;
     }
-
-    // #region registry helpers
-
-    /** Sets this blocks key in the block registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
-    }
-
-    /** Returns this blocks registry key */
-    getRegistryKey(): string {
-        return this.name;
-    }
-
-    // #endregion
 
     // #region builder functions
 
@@ -164,7 +148,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> implements IRegi
         const componentdata = this.serializeComponentsForInit();
 
         return {
-            name: this.getRegistryKey(),
+            name: this.key,
             asset: this.asset,
             scale: this.scale,
             shape: this.shape,

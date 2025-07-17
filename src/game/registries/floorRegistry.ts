@@ -13,9 +13,9 @@ logger.info("Initializing floor registry");
 
 const FloorRegistry = new Registry<FloorDefinition>("FloorRegistry");
 
-FloorRegistry.register("grass_floor", new FloorDefinition("Grass Floor", ASSETS.GRASS_FLOOR)
+FloorRegistry.register(new FloorDefinition("grass_floor", "Grass Floor", ASSETS.GRASS_FLOOR)
     .addComponent(new OrganicComponent()));
-FloorRegistry.register("stone_floor", new FloorDefinition("Stone Floor", ASSETS.STONE_FLOOR, new Drop("stone_floor")));
-FloorRegistry.register("wood_floor", new FloorDefinition("Wood Floor", ASSETS.WOOD_FLOOR, new Drop("wood_floor")));
+FloorRegistry.register(new FloorDefinition("stone_floor", "Stone Floor", ASSETS.STONE_FLOOR, new Drop("stone_floor")));
+FloorRegistry.register(new FloorDefinition("wood_floor", "Wood Floor", ASSETS.WOOD_FLOOR, new Drop("wood_floor")));
 
 export default FloorRegistry;

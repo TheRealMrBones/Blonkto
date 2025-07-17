@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("whitelist", new CommandDefinition(true, args, whitelistCommand, "Manages the servers player whitelist"));
+export default (): void => CommandRegistry.register(new CommandDefinition("whitelist", true, args, whitelistCommand, "Manages the servers player whitelist"));
 
 function whitelistCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

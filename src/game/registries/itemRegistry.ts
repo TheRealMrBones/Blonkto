@@ -19,47 +19,47 @@ logger.info("Initializing item registry");
 
 const ItemRegistry = new Registry<ItemDefinition>("ItemRegistry");
 
-ItemRegistry.register("sword", new ItemDefinition("Sword", 1, ASSETS.SWORD)
+ItemRegistry.register(new ItemDefinition("sword", "Sword", 1, ASSETS.SWORD)
     .addComponent(new AttackComponent(3)));
-ItemRegistry.register("pickaxe", new ItemDefinition("Pickaxe", 1, ASSETS.PICKAXE)
+ItemRegistry.register(new ItemDefinition("pickaxe", "Pickaxe", 1, ASSETS.PICKAXE)
     .addComponent(new MineComponent(MINE_TYPES.MINE)));
-ItemRegistry.register("axe", new ItemDefinition("Axe", 1, ASSETS.AXE)
+ItemRegistry.register(new ItemDefinition("axe", "Axe", 1, ASSETS.AXE)
     .addComponent(new MineComponent(MINE_TYPES.CHOP))
     .addComponent(new AttackComponent(2)));
-ItemRegistry.register("shovel", new ItemDefinition("Shovel", 1, ASSETS.SHOVEL)
+ItemRegistry.register(new ItemDefinition("shovel", "Shovel", 1, ASSETS.SHOVEL)
     .addComponent(new MineFloorComponent(1)));
     
-ItemRegistry.register("stone", new ItemDefinition("Stone", 64, ASSETS.STONE));
-ItemRegistry.register("stone_block", new ItemDefinition("Stone Block", 64, ASSETS.STONE_BLOCK)
+ItemRegistry.register(new ItemDefinition("stone", "Stone", 64, ASSETS.STONE));
+ItemRegistry.register(new ItemDefinition("stone_block", "Stone Block", 64, ASSETS.STONE_BLOCK)
     .addComponent(new BuildComponent("stone_block")));
-ItemRegistry.register("stone_wall", new ItemDefinition("Stone Wall", 64, ASSETS.STONE_WALL)
+ItemRegistry.register(new ItemDefinition("stone_wall", "Stone Wall", 64, ASSETS.STONE_WALL)
     .addComponent(new BuildComponent("stone_wall")));
-ItemRegistry.register("stone_floor", new ItemDefinition("Stone Floor", 64, ASSETS.STONE_FLOOR)
+ItemRegistry.register(new ItemDefinition("stone_floor", "Stone Floor", 64, ASSETS.STONE_FLOOR)
     .addComponent(new BuildFloorComponent("stone_floor")));
 
-ItemRegistry.register("wood", new ItemDefinition("Wood", 64, ASSETS.WOOD));
-ItemRegistry.register("tree_trunk", new ItemDefinition("Tree Trunk", 64, ASSETS.TREE_TRUNK)
+ItemRegistry.register(new ItemDefinition("wood", "Wood", 64, ASSETS.WOOD));
+ItemRegistry.register(new ItemDefinition("tree_trunk", "Tree Trunk", 64, ASSETS.TREE_TRUNK)
     .addComponent(new BuildComponent("tree_trunk")));
-ItemRegistry.register("wood_wall", new ItemDefinition("Wood Wall", 64, ASSETS.WOOD_WALL)
+ItemRegistry.register(new ItemDefinition("wood_wall", "Wood Wall", 64, ASSETS.WOOD_WALL)
     .addComponent(new BuildComponent("wood_wall")));
-ItemRegistry.register("wood_floor", new ItemDefinition("Wood Floor", 64, ASSETS.WOOD_FLOOR)
+ItemRegistry.register(new ItemDefinition("wood_floor", "Wood Floor", 64, ASSETS.WOOD_FLOOR)
     .addComponent(new BuildFloorComponent("wood_floor")));
-ItemRegistry.register("wood_door", new ItemDefinition("Wood Door", 64, ASSETS.WOOD_DOOR)
+ItemRegistry.register(new ItemDefinition("wood_door", "Wood Door", 64, ASSETS.WOOD_DOOR)
     .addComponent(new BuildComponent("wood_door")));
-ItemRegistry.register("pine_cone", new ItemDefinition("Pine Cone", 64, ASSETS.PINE_CONE)
+ItemRegistry.register(new ItemDefinition("pine_cone", "Pine Cone", 64, ASSETS.PINE_CONE)
     .addComponent(new BuildComponent("sapling", [OrganicComponent])));
     
-ItemRegistry.register("raw_pork", new ItemDefinition("Raw Pork", 64, ASSETS.RAW_PORK)
+ItemRegistry.register(new ItemDefinition("raw_pork", "Raw Pork", 64, ASSETS.RAW_PORK)
     .addComponent(new EatComponent(1)));
-ItemRegistry.register("carrot", new ItemDefinition("Carrot", 64, ASSETS.CARROT)
+ItemRegistry.register(new ItemDefinition("carrot", "Carrot", 64, ASSETS.CARROT)
     .addComponent(new BuildComponent("planted_carrots", [OrganicComponent]))
     .addComponent(new EatComponent(2)));
     
-ItemRegistry.register("work_bench", new ItemDefinition("Work Bench", 64, ASSETS.WORK_BENCH)
+ItemRegistry.register(new ItemDefinition("work_bench", "Work Bench", 64, ASSETS.WORK_BENCH)
     .addComponent(new BuildComponent("work_bench")));
-ItemRegistry.register("torch", new ItemDefinition("Torch", 64, ASSETS.TORCH)
+ItemRegistry.register(new ItemDefinition("torch", "Torch", 64, ASSETS.TORCH)
     .addComponent(new BuildComponent("torch")));
-ItemRegistry.register("chest", new ItemDefinition("Chest", 64, ASSETS.CHEST)
+ItemRegistry.register(new ItemDefinition("chest", "Chest", 64, ASSETS.CHEST)
     .addComponent(new BuildComponent("chest")));
 
 export default ItemRegistry;

@@ -41,7 +41,7 @@ class Drop implements IDrop {
 
     //** Drops a single stack */
     private dropStack(x: number, y: number, amount: number, game: Game): void {
-        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.getRegistryKey(), amount), this.spread);
+        DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.item.key, amount), this.spread);
     }
 }
 

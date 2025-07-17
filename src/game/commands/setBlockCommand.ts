@@ -13,7 +13,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("setblock", new CommandDefinition(true, args, setBlockCommand, "Sets a cells block"));
+export default (): void => CommandRegistry.register(new CommandDefinition("setblock", true, args, setBlockCommand, "Sets a cells block"));
 
 function setBlockCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

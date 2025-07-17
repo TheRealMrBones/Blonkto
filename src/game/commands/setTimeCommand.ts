@@ -14,7 +14,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("settime", new CommandDefinition(true, args, setTimeCommand, "Sets the time of the world"));
+export default (): void => CommandRegistry.register(new CommandDefinition("settime", true, args, setTimeCommand, "Sets the time of the world"));
 
 function setTimeCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

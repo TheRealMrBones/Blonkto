@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.INT],
 ];
 
-export default (): void => CommandRegistry.register("damage", new CommandDefinition(true, args, damageCommand, "Makes a player take damage"));
+export default (): void => CommandRegistry.register(new CommandDefinition("damage", true, args, damageCommand, "Makes a player take damage"));
 
 function damageCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

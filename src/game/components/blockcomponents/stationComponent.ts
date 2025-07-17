@@ -42,7 +42,7 @@ export class StationComponentData extends ComponentData<StationComponent> {
     constructor(parent: StationComponent){
         super(parent);
 
-        this.station = new Station(parent.getParent().getRegistryKey());
+        this.station = new Station(parent.getParent().key);
     }
 }
 

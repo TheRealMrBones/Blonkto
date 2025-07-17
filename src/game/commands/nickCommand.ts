@@ -16,7 +16,7 @@ const args = [
 
 export default (): void => {
     if(ALLOW_CHANGE_NAME)
-        CommandRegistry.register("nick", new CommandDefinition(false, args, nickCommand, "Changes your name or another players"));
+        CommandRegistry.register(new CommandDefinition("nick", false, args, nickCommand, "Changes your name or another players"));
 };
 
 function nickCommand(args: any[], player: Player, game: Game){

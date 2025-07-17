@@ -13,7 +13,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("gettime", new CommandDefinition(true, args, getTimeCommand, "Gets what time it is currently in the game world"));
+export default (): void => CommandRegistry.register(new CommandDefinition("gettime", true, args, getTimeCommand, "Gets what time it is currently in the game world"));
 
 function getTimeCommand(args: any[], player: Player, game: Game){
     const time = game.world.getDayTick();

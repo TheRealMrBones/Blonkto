@@ -1,4 +1,5 @@
 import Logger from "../../server/logging/logger.js";
+import RegistryValue from "../registries/registryValue.js";
 import Component from "./component.js";
 import ComponentData from "./componentData.js";
 import ISerializableForInit from "./ISerializableForInit.js";
@@ -7,13 +8,15 @@ import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionality for a type to handle its own set of components */
-abstract class ComponentHandler<T> {
+abstract class ComponentHandler<T> extends RegistryValue {
     private readonly logger: Logger;
 
     private components: Map<string, Component<T>> = new Map<string, Component<T>>();
     private requiredComponentData: { componentdata: (new (...args: any[]) => ComponentData<any>), parent: Component<T> }[] = [];
 
-    constructor(){
+    constructor(key: string){
+        super(key);
+
         this.logger = Logger.getLogger(LOG_CATEGORIES.COMPONENT_HANDLER);
     }
 
@@ -22,10 +25,10 @@ abstract class ComponentHandler<T> {
     /** Builder function to add components */
     addComponent(component: Component<T>): this {
         if(component.getRequirements().some(r => !this.hasComponent(r))){
-            this.logger.error("Component being added without required components beforehand");
+            this.logger.error(`[${this.key}] Component being added without required components beforehand`);
             throw null;
         }else if(this.components.has(component.constructor.name)){
-            this.logger.error("This component type is already used in this component handler");
+            this.logger.error(`[${this.key}] This component type is already used in this component handler`);
             throw null;
         }
 
@@ -44,7 +47,7 @@ abstract class ComponentHandler<T> {
         const component = this.components.get(componentType.name);
 
         if(component === undefined){
-            this.logger.error(`Requested component "${componentType.name}" does not exist in this component handler!`);
+            this.logger.error(`[${this.key}] Requested component "${componentType.name}" does not exist in this component handler!`);
             throw null;
         }
 

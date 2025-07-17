@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("entitycount", new CommandDefinition(true, args, entityCountCommand, "Gets the amount of entities currently loaded in the world"));
+export default (): void => CommandRegistry.register(new CommandDefinition("entitycount", true, args, entityCountCommand, "Gets the amount of entities currently loaded in the world"));
 
 function entityCountCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
@@ -23,7 +23,7 @@ function entityCountCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const definition = args[1];
-            const count = [...game.entityManager.getNonplayerEntities()].filter(e => e.definition.getRegistryKey() == definition).length;
+            const count = [...game.entityManager.getNonplayerEntities()].filter(e => e.definition.key == definition).length;
             game.chatManager.sendMessageTo(player, `Entities of type "${definition}": ${count}`);
             break;
         };

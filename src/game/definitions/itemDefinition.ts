@@ -1,6 +1,5 @@
 import EventEmitter from "events";
 
-import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Game from "../game.js";
 import ItemStack from "../items/itemStack.js";
@@ -11,34 +10,20 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
-class ItemDefinition extends ComponentHandler<ItemDefinition> implements IRegistryValue {
-    private name: string = "unregistered";
+class ItemDefinition extends ComponentHandler<ItemDefinition> {
     private readonly displayname: string;
     private readonly stacksize: number;
     private readonly asset: string;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, stacksize: number, asset: string | null){
-        super();
+    constructor(key: string, displayname: string, stacksize: number, asset: string | null){
+        super(key);
+
         this.displayname = displayname;
         this.stacksize = stacksize;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
     }
-
-    // #region registry helpers
-
-    /** Sets this items key in the item registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
-    }
-
-    /** Returns this items registry key */
-    getRegistryKey(): string {
-        return this.name;
-    }
-
-    // #endregion
 
     // #region getters
 

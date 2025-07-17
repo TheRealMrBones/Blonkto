@@ -13,7 +13,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.PLAYER ],
 ];
 
-export default (): void => CommandRegistry.register("tp", new CommandDefinition(true, args, tpCommand, "Teleports a player"));
+export default (): void => CommandRegistry.register(new CommandDefinition("tp", true, args, tpCommand, "Teleports a player"));
 
 function tpCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

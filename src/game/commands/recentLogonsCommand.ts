@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("recentlogons", new CommandDefinition(true, args, recentLogonsCommand, "Gets the list of recent logons"));
+export default (): void => CommandRegistry.register(new CommandDefinition("recentlogons", true, args, recentLogonsCommand, "Gets the list of recent logons"));
 
 function recentLogonsCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "recent logons:");

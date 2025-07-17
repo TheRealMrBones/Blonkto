@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
 ];
 
-export default (): void => CommandRegistry.register("clear", new CommandDefinition(true, args, clearCommand, "Clears a players inventory"));
+export default (): void => CommandRegistry.register(new CommandDefinition("clear", true, args, clearCommand, "Clears a players inventory"));
 
 function clearCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

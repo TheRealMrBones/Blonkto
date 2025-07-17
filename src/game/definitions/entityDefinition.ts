@@ -3,7 +3,6 @@ import EventEmitter from "events";
 import IDrop from "../items/drops/IDrop.js";
 import Game from "../game.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
-import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Entity from "../objects/entity.js";
 import Player from "../objects/player.js";
@@ -13,8 +12,7 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */
-class EntityDefinition extends ComponentHandler<EntityDefinition> implements IRegistryValue {
-    private name: string = "unregistered";
+class EntityDefinition extends ComponentHandler<EntityDefinition> {
     readonly displayname: string;
     readonly maxhealth: number;
     readonly speed: number;
@@ -24,8 +22,9 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements IRe
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, maxhealth: number, speed: number, scale: number, drops?: IDrop){
-        super();
+    constructor(key: string, displayname: string, asset: string | null, maxhealth: number, speed: number, scale: number, drops?: IDrop){
+        super(key);
+
         this.displayname = displayname;
         this.maxhealth = maxhealth;
         this.speed = speed;
@@ -37,20 +36,6 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> implements IRe
             if(self.scale > 0) this.dropItems(self, game);
         });
     }
-
-    // #region registry helpers
-
-    /** Sets this entities key in the entity registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
-    }
-
-    /** Returns this entities registry key */
-    getRegistryKey(): string {
-        return this.name;
-    }
-
-    // #endregion
 
     /** Drops this entities types items on an instances death */
     dropItems(self: NonplayerEntity, game: Game): void {

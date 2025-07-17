@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.BOOLEAN],
 ];
 
-export default (): void => CommandRegistry.register("godmode", new CommandDefinition(true, args, godModeCommand, "Makes a player invulnerable to damage"));
+export default (): void => CommandRegistry.register(new CommandDefinition("godmode", true, args, godModeCommand, "Makes a player invulnerable to damage"));
 
 function godModeCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

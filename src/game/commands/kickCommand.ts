@@ -12,7 +12,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.STRING_LONG],
 ];
 
-export default (): void => CommandRegistry.register("kick", new CommandDefinition(true, args, kickCommand, "Kicks a player from the server"));
+export default (): void => CommandRegistry.register(new CommandDefinition("kick", true, args, kickCommand, "Kicks a player from the server"));
 
 function kickCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

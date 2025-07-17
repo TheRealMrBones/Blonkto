@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
-export default (): void => CommandRegistry.register("deop", new CommandDefinition(true, args, deopCommand, "Takes away a players operator permissions"));
+export default (): void => CommandRegistry.register(new CommandDefinition("deop", true, args, deopCommand, "Takes away a players operator permissions"));
 
 function deopCommand(args: any[], player: Player, game: Game){
     if(game.playerManager.opManager.isOp(args[1])){

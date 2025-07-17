@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.INT],
 ];
 
-export default (): void => CommandRegistry.register("heal", new CommandDefinition(true, args, healCommand, "Heals a player's health"));
+export default (): void => CommandRegistry.register(new CommandDefinition("heal", true, args, healCommand, "Heals a player's health"));
 
 function healCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

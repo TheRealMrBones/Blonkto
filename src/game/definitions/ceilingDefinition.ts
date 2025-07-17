@@ -1,6 +1,5 @@
 import EventEmitter from "events";
 
-import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import IDrop from "../items/drops/IDrop.js";
 import Game from "../game.js";
@@ -12,34 +11,20 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of ceiling with its functionality and base statistics */
-class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements IRegistryValue {
-    private name: string = "unregistered";
+class CeilingDefinition extends ComponentHandler<CeilingDefinition> {
     readonly displayname: string;
     readonly asset: string;
     readonly drops: IDrop | null;
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: IDrop){
-        super();
+    constructor(key: string, displayname: string, asset: string | null, drops?: IDrop){
+        super(key);
+
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
     }
-
-    // #region registry helpers
-
-    /** Sets this ceilings key in the ceiling registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
-    }
-
-    /** Returns this ceilings registry key */
-    getRegistryKey(): string {
-        return this.name;
-    }
-
-    // #endregion
 
     // #region events
 
@@ -101,7 +86,7 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> implements I
         const componentdata = this.serializeComponentsForInit();
 
         return {
-            name: this.getRegistryKey(),
+            name: this.key,
             asset: this.asset,
             ...componentdata,
         };

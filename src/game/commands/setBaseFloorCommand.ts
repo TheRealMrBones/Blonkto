@@ -13,7 +13,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.STRING],
 ];
 
-export default (): void => CommandRegistry.register("setbasefloor", new CommandDefinition(true, args, setBaseFloorCommand, "Sets a cells base floor"));
+export default (): void => CommandRegistry.register(new CommandDefinition("setbasefloor", true, args, setBaseFloorCommand, "Sets a cells base floor"));
 
 function setBaseFloorCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

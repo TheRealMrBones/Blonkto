@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("banlist", new CommandDefinition(true, args, banListCommand, "Gets a list of all banned players"));
+export default (): void => CommandRegistry.register(new CommandDefinition("banlist", true, args, banListCommand, "Gets a list of all banned players"));
 
 function banListCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "ban list:");

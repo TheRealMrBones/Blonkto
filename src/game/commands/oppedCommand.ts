@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.USERNAME],
 ];
 
-export default (): void => CommandRegistry.register("opped", new CommandDefinition(false, args, oppedCommand, "Checks if you or another play is opped"));
+export default (): void => CommandRegistry.register(new CommandDefinition("opped", false, args, oppedCommand, "Checks if you or another play is opped"));
 
 function oppedCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

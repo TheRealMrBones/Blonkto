@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.FLOAT, COMMAND_ARGUMENTS.FLOAT, COMMAND_ARGUMENTS.FLOAT],
 ];
 
-export default (): void => CommandRegistry.register("setcolor", new CommandDefinition(true, args, setColorCommand, "Sets a players character color in rgb (1-0 values)"));
+export default (): void => CommandRegistry.register(new CommandDefinition("setcolor", true, args, setColorCommand, "Sets a players character color in rgb (1-0 values)"));
 
 function setColorCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

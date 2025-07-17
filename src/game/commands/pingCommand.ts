@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("ping", new CommandDefinition(false, args, pingCommand, "Pong!"));
+export default (): void => CommandRegistry.register(new CommandDefinition("ping", false, args, pingCommand, "Pong!"));
 
 function pingCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessageTo(player, "pong!");

@@ -48,14 +48,14 @@ class BreedComponent extends Component<EntityDefinition> {
 
         const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
         if(hotbarItem === null) return;
-        if(hotbarItem.definition.getRegistryKey() != this.food) return;
+        if(hotbarItem.definition.key != this.food) return;
 
         data.lastfed = Date.now();
         player.removeFromCurrentSlot(1);
 
         // look for target
         for(const entity of game.entityManager.getNonplayerEntities()){
-            if(entity.definition.getRegistryKey() !== self.definition.getRegistryKey()) continue;
+            if(entity.definition.key !== self.definition.key) continue;
             if(self.distanceTo(entity) > this.distance) continue;
             if(entity === self) continue;
 

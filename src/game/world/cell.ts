@@ -28,7 +28,7 @@ class Cell {
         this.chunky = chunky;
         
         this.basefloor = basefloor ? FloorRegistry.get(basefloor) : null;
-        this.floor = this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null;
+        this.floor = this.basefloor ? new Floor(this, this.basefloor.key) : null;
     }
 
     /** Returns the chunk from its save data */
@@ -67,7 +67,7 @@ class Cell {
 
     /** Sets the floor for this cell */
     setFloor(floor: string | null, game: Game): void {
-        this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.getRegistryKey()) : null) : new Floor(this, floor);
+        this.floor = (floor === null) ? (this.basefloor ? new Floor(this, this.basefloor.key) : null) : new Floor(this, floor);
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
 
         this.setTicks();
@@ -94,7 +94,7 @@ class Cell {
     /** Tries to place the floor for this cell and returns success */
     placeFloor(floor: string, game: Game): boolean {
         if(this.floor === null) return false;
-        if(this.basefloor !== null) if(this.floor.definition.getRegistryKey() !== this.basefloor.getRegistryKey()) return false;
+        if(this.basefloor !== null) if(this.floor.definition.key !== this.basefloor.key) return false;
         if(this.block !== null)
             if(this.block.definition.getBlockCell()) return false;
         this.floor = new Floor(this, floor);
@@ -138,7 +138,7 @@ class Cell {
         this.floor.emitBreakEvent(game);
         this.floor.definition.break(x, y, toggledrop, game);
         this.floor = null;
-        if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.getRegistryKey());
+        if(this.basefloor !== null) this.floor = new Floor(this, this.basefloor.key);
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
 
         this.setTicks();
@@ -162,7 +162,7 @@ class Cell {
     /** Sets the base floor for this cell */
     setBaseFloor(floor: string | null, game: Game): void {
         const floorval = (floor === null) ? null : FloorRegistry.get(floor);
-        this.floor = floorval ? new Floor(this, floorval.getRegistryKey()) : null;
+        this.floor = floorval ? new Floor(this, floorval.key) : null;
         if(this.floor !== null) this.floor.emitInstantiateEvent(game);
         this.basefloor = floorval;
 
@@ -211,9 +211,9 @@ class Cell {
     serializeForLoad(): any {
         const data: any = {};
 
-        if(this.block) data.block = this.block.definition.getRegistryKey();
-        if(this.floor) data.floor = this.floor.definition.getRegistryKey();
-        if(this.ceiling) data.ceiling = this.ceiling.definition.getRegistryKey();
+        if(this.block) data.block = this.block.definition.key;
+        if(this.floor) data.floor = this.floor.definition.key;
+        if(this.ceiling) data.ceiling = this.ceiling.definition.key;
 
         return data;
     }
@@ -222,7 +222,7 @@ class Cell {
     serializeForWrite(): any {
         const data: any = {};
 
-        if(this.basefloor) data.basefloor = this.basefloor.getRegistryKey();
+        if(this.basefloor) data.basefloor = this.basefloor.key;
         if(this.block) data.block = this.block.serializeForWrite();
         if(this.floor) data.floor = this.floor.serializeForWrite();
         if(this.ceiling) data.ceiling = this.ceiling.serializeForWrite();

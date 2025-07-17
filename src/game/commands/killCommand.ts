@@ -11,7 +11,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER],
 ];
 
-export default (): void => CommandRegistry.register("kill", new CommandDefinition(false, args, killCommand, "Kills yourself or another player"));
+export default (): void => CommandRegistry.register(new CommandDefinition("kill", false, args, killCommand, "Kills yourself or another player"));
 
 function killCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

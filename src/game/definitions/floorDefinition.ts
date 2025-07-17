@@ -1,6 +1,5 @@
 import EventEmitter from "events";
 
-import IRegistryValue from "../registries/IRegistryValue.js";
 import ComponentHandler from "../components/componentHandler.js";
 import IDrop from "../items/drops/IDrop.js";
 import Game from "../game.js";
@@ -12,34 +11,20 @@ import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of floor with its functionality and base statistics */
-class FloorDefinition extends ComponentHandler<FloorDefinition> implements IRegistryValue {
-    private name: string = "unregistered";
+class FloorDefinition extends ComponentHandler<FloorDefinition> {
     readonly displayname: string;
     readonly asset: string;
     readonly drops: IDrop | null;
     
     private eventEmitter: EventEmitter = new EventEmitter();
 
-    constructor(displayname: string, asset: string | null, drops?: IDrop){
-        super();
+    constructor(key: string, displayname: string, asset: string | null, drops?: IDrop){
+        super(key);
+
         this.displayname = displayname;
         this.asset = asset || ASSETS.MISSING_TEXTURE;
         this.drops = drops || null;
     }
-
-    // #region registry helpers
-
-    /** Sets this floors key in the floor registry */
-    setRegistryKey(key: string): void {
-        this.name = key;
-    }
-
-    /** Returns this floors registry key */
-    getRegistryKey(): string {
-        return this.name;
-    }
-
-    // #endregion
 
     /** Registers a listener to this floor definitions event handler */
     private registerListener(event: string, listener: (self: Floor, game: Game, ...args: any[]) => void): void {
@@ -99,7 +84,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> implements IRegi
         const componentdata = this.serializeComponentsForInit();
 
         return {
-            name: this.getRegistryKey(),
+            name: this.key,
             asset: this.asset,
             ...componentdata,
         };

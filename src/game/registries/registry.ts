@@ -1,11 +1,11 @@
-import IRegistryValue from "./IRegistryValue.js";
+import RegistryValue from "./registryValue.js";
 import Logger from "../../server/logging/logger.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Manages a definition list specific type of class */
-class Registry<T extends IRegistryValue> {
+class Registry<T extends RegistryValue> {
     private readonly logger: Logger;
     
     readonly name: string;
@@ -20,17 +20,13 @@ class Registry<T extends IRegistryValue> {
     // #region operations
 
     /** Adds the given value to the registry */
-    register(key: string, value: T): void {
-        if(this.has(key)){
-            this.logger.error(`[${this.name}] Key "${key}" already registered!`);
-            throw null;
-        }else if(value.getRegistryKey() !== "unregistered"){
-            this.logger.error(`[${this.name}] Registry value already registered under the name: "${value.getRegistryKey()}"!`);
+    register(value: T): void {
+        if(this.has(value.key)){
+            this.logger.error(`[${this.name}] Key "${value.key}" already registered!`);
             throw null;
         }
         
-        this.map.set(key, value);
-        value.setRegistryKey(key);
+        this.map.set(value.key, value);
     }
 
     /** Returns if an object exists with the requested key */

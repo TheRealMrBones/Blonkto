@@ -11,14 +11,14 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT],
 ];
 
-export default (): void => CommandRegistry.register("help", new CommandDefinition(false, args, helpCommand, "Gives list of commands"));
+export default (): void => CommandRegistry.register(new CommandDefinition("help", false, args, helpCommand, "Gives list of commands"));
 
 function helpCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     const commands = [...CommandRegistry.getAll()]
         .filter(c => !(c.getOp() && !game.playerManager.opManager.isOp(player.username)))
-        .sort((a: CommandDefinition, b: CommandDefinition) => a.getRegistryKey().localeCompare(b.getRegistryKey()));
+        .sort((a: CommandDefinition, b: CommandDefinition) => a.key.localeCompare(b.key));
 
     const perpage = 10;
     const pages = Math.ceil(commands.length / perpage);
@@ -28,6 +28,6 @@ function helpCommand(args: any[], player: Player, game: Game){
 
     for(let i = (page - 1) * perpage; i < page * perpage && i < commands.length; i++){
         const command = commands[i];
-        game.chatManager.sendMessageTo(player, `- ${command.getRegistryKey()} - ${command.getHelp()}`);
+        game.chatManager.sendMessageTo(player, `- ${command.key} - ${command.getHelp()}`);
     }
 }

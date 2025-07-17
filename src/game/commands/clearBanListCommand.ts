@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register("clearbanlist", new CommandDefinition(true, args, clearBanListCommand, "Clears the entire list of banned players"));
+export default (): void => CommandRegistry.register(new CommandDefinition("clearbanlist", true, args, clearBanListCommand, "Clears the entire list of banned players"));
 
 function clearBanListCommand(args: any[], player: Player, game: Game){
     game.playerManager.banManager.clearBanList();

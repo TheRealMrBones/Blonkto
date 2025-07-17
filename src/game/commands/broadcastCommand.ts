@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING_LONG],
 ];
 
-export default (): void => CommandRegistry.register("broadcast", new CommandDefinition(true, args, broadcastCommand, "Sends a message in the game chat"));
+export default (): void => CommandRegistry.register(new CommandDefinition("broadcast", true, args, broadcastCommand, "Sends a message in the game chat"));
 
 function broadcastCommand(args: any[], player: Player, game: Game){
     game.chatManager.sendMessage(args[1]);

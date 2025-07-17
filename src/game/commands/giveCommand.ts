@@ -15,7 +15,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING, COMMAND_ARGUMENTS.INT],
 ];
 
-export default (): void => CommandRegistry.register("give", new CommandDefinition(true, args, giveCommand, "Gives an item to a player"));
+export default (): void => CommandRegistry.register(new CommandDefinition("give", true, args, giveCommand, "Gives an item to a player"));
 
 function giveCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];

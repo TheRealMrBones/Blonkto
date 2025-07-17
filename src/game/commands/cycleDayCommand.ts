@@ -10,7 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.BOOLEAN],
 ];
 
-export default (): void => CommandRegistry.register("cycleday", new CommandDefinition(true, args, cycleDayCommand, "Sets whether the day cycle will move or not"));
+export default (): void => CommandRegistry.register(new CommandDefinition("cycleday", true, args, cycleDayCommand, "Sets whether the day cycle will move or not"));
 
 function cycleDayCommand(args: any[], player: Player, game: Game){
     const toggle = args[1];
