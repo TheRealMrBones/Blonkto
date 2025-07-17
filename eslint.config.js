@@ -23,6 +23,7 @@ export default [
             "semi": ["error", "always"],
             "quotes": ["error", "double"],
             "import/extensions": ["error", "always"],
+            "eol-last": ["error", "always"],
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/naming-convention": [
