@@ -24,9 +24,7 @@ class ComponentHandler<T> {
         if(component.getRequirements().some(r => !this.hasComponent(r))){
             this.logger.error("Component being added without required components beforehand");
             throw null;
-        }
-
-        if(this.components.has(component.constructor.name)){
+        }else if(this.components.has(component.constructor.name)){
             this.logger.error("This component type is already used in this handler");
             throw null;
         }
