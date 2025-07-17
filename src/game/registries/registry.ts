@@ -40,12 +40,14 @@ class Registry<T extends IRegistryValue> {
 
     /** Returns the stored object for the requested key */
     get(key: string): T {
-        if(!this.has(key)){
+        const value = this.map.get(key);
+
+        if(value === undefined){
             this.logger.error(`[${this.name}] Requested Key "${key}" does not exist in this registry!`);
             throw null;
         }
 
-        return this.map.get(key)!;
+        return value;
     }
 
     /** Returns all of the registered objects */
