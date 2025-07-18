@@ -66,8 +66,8 @@ class Cell {
     /** Pushes this cell in its chunks cell updates */
     private pushCellUpdate(): void {
         this.chunk.cellupdates.push({
-            x: this.chunkx,
-            y: this.chunky,
+            x: this.getWorldX(),
+            y: this.getWorldY(),
         });
     }
 
