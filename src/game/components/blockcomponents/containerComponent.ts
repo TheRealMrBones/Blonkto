@@ -24,6 +24,7 @@ class ContainerComponent extends Component<BlockDefinition> {
         this.getParent().addRequiredComponentData(ContainerComponentData, this);
 
         this.getParent().registerInstantiateListener((block: Block, game: Game) => this.instantiate(block, game));
+        this.getParent().registerBreakListener((block: Block, game: Game, drop: boolean) => this.drop(block, game, drop));
     }
 
     /** Defines the instantiate of the block with this component */
@@ -32,6 +33,13 @@ class ContainerComponent extends Component<BlockDefinition> {
         const stationdata = block.getComponentData(StationComponentData);
 
         stationdata.station.inventories.push(data.inventory);
+    }
+
+    /** Defines the drop event of the block with this component */
+    drop(block: Block, game: Game, drop: boolean){
+        const data = block.getComponentData(ContainerComponentData);
+
+        if(drop) data.inventory.dropInventory(block.cell.getWorldX() + .5, block.cell.getWorldY() + .5, game);
     }
 }
 
