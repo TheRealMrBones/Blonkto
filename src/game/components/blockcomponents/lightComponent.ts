@@ -25,39 +25,45 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
 
     /** Defines the instantiate event of the block with this component */
     instantiate(block: Block, game: Game): void {
+        const layer = game.world.getLayer(block.cell.chunk.layer);
+
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            const light = game.world.light.get(key);
+            const light = layer.light.get(key);
 
             if(light === undefined){
-                game.world.light.set(key, 1);
+                layer.light.set(key, 1);
             }else{
-                game.world.light.set(key, light + 1);
+                layer.light.set(key, light + 1);
             }
         }
     }
 
     /** Defines the break event of the block with this component */
     break(block: Block, game: Game): void {
+        const layer = game.world.getLayer(block.cell.chunk.layer);
+
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            const light = game.world.light.get(key);
+            const light = layer.light.get(key);
             if(light === undefined) return;
 
-            if(light == 1) game.world.light.delete(key);
-            else game.world.light.set(key, light - 1);
+            if(light == 1) layer.light.delete(key);
+            else layer.light.set(key, light - 1);
         }
     }
 
     /** Defines the unload event of the block with this component */
     unload(block: Block, game: Game): void {
+        const layer = game.world.getLayer(block.cell.chunk.layer);
+
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
-            const light = game.world.light.get(key);
+            const light = layer.light.get(key);
             if(light === undefined) return;
 
-            if(light == 1) game.world.light.delete(key);
-            else game.world.light.set(key, light - 1);
+            if(light == 1) layer.light.delete(key);
+            else layer.light.set(key, light - 1);
         }
     }
 

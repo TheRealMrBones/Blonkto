@@ -8,12 +8,14 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single chunk (square collection of cells) in the game world */
 class Chunk {
+    readonly layer: number;
     readonly chunkx: number;
     readonly chunky: number;
     readonly cells: Cell[][];
     cellupdates: any[];
 
-    private constructor(chunkx: number, chunky: number){
+    private constructor(layer: number, chunkx: number, chunky: number){
+        this.layer = layer;
         this.chunkx = chunkx;
         this.chunky = chunky;
         this.cellupdates = [];
@@ -22,8 +24,8 @@ class Chunk {
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(chunkx: number, chunky: number, data: string, game: Game): Chunk | null {
-        const chunk = new Chunk(chunkx, chunky);
+    static readFromSave(layer: number, chunkx: number, chunky: number, data: string, game: Game): Chunk | null {
+        const chunk = new Chunk(layer, chunkx, chunky);
         const chunkdata = data.split("\n");
 
         try{
@@ -45,8 +47,8 @@ class Chunk {
     // #region world generation
 
     /** Generates new cell data for the chunk */
-    static generateChunk(chunkx: number, chunky: number, game: Game): Chunk {
-        const chunk = new Chunk(chunkx, chunky);
+    static generateChunk(layer: number, chunkx: number, chunky: number, game: Game): Chunk {
+        const chunk = new Chunk(layer, chunkx, chunky);
 
         for(let x = 0; x < CHUNK_SIZE; x++){
             chunk.cells[x] = [];

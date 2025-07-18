@@ -45,11 +45,12 @@ class CollisionManager {
 
     /** Checks for non-player objects colliding on blocks */
     blockCollisions(object: GameObject): void {
+        const layer = this.game.world.getLayer(object.layer);
         const meobject: CircleCollisionObject = object as CircleCollisionObject;
         
         const checkcells: CollisionObject[] = [];
         for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){
-            const cell = this.game.world.getCell(cellpos.x, cellpos.y, false);
+            const cell = layer.getCell(cellpos.x, cellpos.y, false);
             if(!cell) continue;
             const block = cell.block;
             if(block === null) continue;

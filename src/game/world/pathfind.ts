@@ -1,9 +1,9 @@
 import { equalPos } from "../../shared/typeOperations.js";
 import { Pos } from "../../shared/types.js";
-import World from "./world.js";
+import Layer from "./layer.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
-export function pathfind(start: Pos, end: Pos, world: World, ghostblocked?: Pos[]): Pos[] | null {
+export function pathfind(start: Pos, end: Pos, layer: Layer, ghostblocked?: Pos[]): Pos[] | null {
     if(equalPos(start, end)) return null;
 
     ghostblocked = ghostblocked || [];
@@ -32,7 +32,7 @@ export function pathfind(start: Pos, end: Pos, world: World, ghostblocked?: Pos[
         openset.delete(currentkey);
         closedset.add(currentkey);
 
-        for(const neighbor of getNeighbors(current, world, ghostblocked)){
+        for(const neighbor of getNeighbors(current, layer, ghostblocked)){
             const neighborkey = posToKey(neighbor);
             if(closedset.has(neighborkey)) continue;
             if(maxdistfromstart < Math.max(Math.abs(start.x - neighbor.x), Math.abs(start.y - neighbor.y))) continue;
@@ -85,7 +85,7 @@ export function getParentsInOrder(camefrom: Map<string, Pos>, startkey: string, 
 }
 
 /** Returns all neighbors of a cell that are not blocked (8 directional) */
-function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
+function getNeighbors(pos: Pos, layer: Layer, ghostblocked: Pos[]): Pos[] {
     const neighbors: Pos[] = [];
 
     for(let dx = -1; dx <= 1; dx++){
@@ -95,7 +95,7 @@ function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
             const neighbor = { x: pos.x + dx, y: pos.y + dy };
             if(ghostblocked.some(gb => equalPos(gb, neighbor))) continue;
 
-            const cell = world.getCell(neighbor.x, neighbor.y, false);
+            const cell = layer.getCell(neighbor.x, neighbor.y, false);
             if(cell === null) continue;
             if(cell.block !== null) if(!cell.block.definition.getWalkThrough()) continue;
 
@@ -103,11 +103,11 @@ function getNeighbors(pos: Pos, world: World, ghostblocked: Pos[]): Pos[] {
                 const neighborx = { x: pos.x + dx, y: pos.y };
                 const neighbory = { x: pos.x, y: pos.y + dy };
 
-                const cellx = world.getCell(neighborx.x, neighborx.y, false);
+                const cellx = layer.getCell(neighborx.x, neighborx.y, false);
                 if(cellx === null) continue;
                 if(cellx.block !== null) if(!cellx.block.definition.getWalkThrough()) continue;
 
-                const celly = world.getCell(neighbory.x, neighbory.y, false);
+                const celly = layer.getCell(neighbory.x, neighbory.y, false);
                 if(celly === null) continue;
                 if(celly.block !== null) if(!celly.block.definition.getWalkThrough()) continue;
             }

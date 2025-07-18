@@ -28,10 +28,12 @@ class BuildComponent extends Component<ItemDefinition> {
 
     /** Defines the build use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        if(!game.world.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
+        const layer = game.world.getLayer(player.layer);
+
+        if(!layer.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
         if(info.dist > BASE_REACH) return;
 
-        const cell = game.world.getCell(info.cellpos.x, info.cellpos.y, false);
+        const cell = layer.getCell(info.cellpos.x, info.cellpos.y, false);
         if(cell === null) return;
         if(cell.floor === null) return;
         if(this.floorrequirements.length > 0){
@@ -40,7 +42,7 @@ class BuildComponent extends Component<ItemDefinition> {
             }
         }
 
-        if(game.world.placeBlock(info.cellpos.x, info.cellpos.y, this.block)) player.removeFromCurrentSlot(1);
+        if(layer.placeBlock(info.cellpos.x, info.cellpos.y, this.block)) player.removeFromCurrentSlot(1);
     }
 }
 

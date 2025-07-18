@@ -30,7 +30,7 @@ class ChangeComponent extends Component<BlockDefinition> {
             }
         }
 
-        game.world.setBlock(info.cellpos.x, info.cellpos.y, this.newblock);
+        block.cell.setBlock(this.newblock, game);
     }
 }
 

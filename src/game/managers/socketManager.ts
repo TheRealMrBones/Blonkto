@@ -62,11 +62,12 @@ class SocketManager {
             }
 
             // default break action
-            const cell = this.game.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
+            const layer = this.game.world.getLayer(player.layer);
+            const cell = layer.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
             if(cell !== null){
                 if(cell.block !== null){
                     if(cell.block.definition.minetype == MINE_TYPES.ANY && cell.block.definition.hardness <= 0){
-                        this.game.world.breakBlock(newinfo.cellpos.x, newinfo.cellpos.y, true);
+                        layer.breakBlock(newinfo.cellpos.x, newinfo.cellpos.y, true);
                         return;
                     }
                 }
@@ -99,7 +100,8 @@ class SocketManager {
             }
 
             // default action
-            const cell = this.game.world.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
+            const layer = this.game.world.getLayer(player.layer);
+            const cell = layer.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
             if(newinfo.dist > BASE_REACH) return;
             if(cell === null) return;
             

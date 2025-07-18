@@ -32,7 +32,7 @@ class RandomChangeComponent extends Component<BlockDefinition> {
             }
         }
 
-        game.world.setBlock(block.cell.getWorldX(), block.cell.getWorldY(), this.newblock);
+        block.cell.setBlock(this.newblock, game);
     }
 }
 

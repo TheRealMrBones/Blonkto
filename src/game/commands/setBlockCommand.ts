@@ -30,14 +30,16 @@ function setBlockCommand(args: any[], player: Player, game: Game){
     }
     if(val == "air") val = null;
 
+    const layer = game.world.getLayer(player.layer);
+
     if(argIndex < 2){
-        const cell = game.world.getCell(args[1], args[2], true);
+        const cell = layer.getCell(args[1], args[2], true);
         if(!cell){
             game.chatManager.sendMessageTo(player, "invalid block location");
             return;
         }
 
-        game.world.setBlock(args[1], args[2], val);
+        layer.setBlock(args[1], args[2], val);
         
         game.chatManager.sendMessageTo(player, `set block ${args[1]}, ${args[2]} to ${val}`);
     }else{
@@ -48,13 +50,13 @@ function setBlockCommand(args: any[], player: Player, game: Game){
 
         for(let x = startx; x < endx; x++){
             for(let y = starty; y < endy; y++){
-                const cell = game.world.getCell(x, y, true);
+                const cell = layer.getCell(x, y, true);
                 if(!cell){
                     game.chatManager.sendMessageTo(player, "invalid block location");
                     return;
                 }
 
-                game.world.setBlock(x, y, val);
+                layer.setBlock(x, y, val);
             }
         }
 

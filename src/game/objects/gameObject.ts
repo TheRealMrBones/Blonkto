@@ -21,6 +21,7 @@ abstract class GameObject {
 
     id: string;
 
+    layer: number = 0;
     x: number;
     y: number;
     dx: number = 0;
@@ -126,8 +127,10 @@ abstract class GameObject {
             const tilesOn = this.tilesOn();
             let notair = 0;
 
+            const layer = game.world.getLayer(this.layer);
+
             tilesOn.forEach(tile => {
-                const cell = game.world.getCell(tile.x, tile.y, false);
+                const cell = layer.getCell(tile.x, tile.y, false);
                 if(cell){
                     if(cell.floor) notair++;
                 }

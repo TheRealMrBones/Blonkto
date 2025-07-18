@@ -43,7 +43,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
         }
 
         if(data.delayleft == 0)
-            game.world.setBlock(block.cell.getWorldX(), block.cell.getWorldY(), this.newblock);
+            block.cell.setBlock(this.newblock, game);
     }
 }
 
