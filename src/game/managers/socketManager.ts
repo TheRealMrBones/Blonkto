@@ -3,7 +3,8 @@ import { Socket } from "socket.io-client";
 
 import Game from "../game.js";
 import Logger from "../../server/logging/logger.js";
-import { Pos } from "../../shared/types.js";
+import Player from "../objects/player.js";
+import Cell from "../world/cell.js";
 import Entity from "../objects/entity.js";
 import { ClickContent, CraftContent, DropContent, InputContent, SwapContent } from "../../shared/messageContentTypes.js";
 
@@ -51,7 +52,7 @@ class SocketManager {
         const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
-        const newinfo = this.getClickInfo(content);
+        const newinfo = this.getClickInfo(player, content);
         
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
@@ -62,12 +63,10 @@ class SocketManager {
             }
 
             // default break action
-            const layer = this.game.world.getLayer(player.layer);
-            const cell = layer.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
-            if(cell !== null){
-                if(cell.block !== null){
-                    if(cell.block.definition.minetype == MINE_TYPES.ANY && cell.block.definition.hardness <= 0){
-                        layer.breakBlock(newinfo.cellpos.x, newinfo.cellpos.y, true);
+            if(newinfo.cell !== null){
+                if(newinfo.cell.block !== null){
+                    if(newinfo.cell.block.definition.minetype == MINE_TYPES.ANY && newinfo.cell.block.definition.hardness <= 0){
+                        newinfo.cell.breakBlock(true, this.game);
                         return;
                     }
                 }
@@ -83,7 +82,7 @@ class SocketManager {
         const player = this.game.entityManager.players.get(socket.id as string);
         if(player === undefined) return;
 
-        const newinfo = this.getClickInfo(content);
+        const newinfo = this.getClickInfo(player, content);
         
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
@@ -101,25 +100,27 @@ class SocketManager {
 
             // default action
             const layer = this.game.world.getLayer(player.layer);
-            const cell = layer.getCell(newinfo.cellpos.x, newinfo.cellpos.y, false);
             if(newinfo.dist > BASE_REACH) return;
-            if(cell === null) return;
+            if(newinfo.cell === null) return;
             
-            if(cell.block !== null){
-                cell.block.emitInteractEvent(this.game, player, newinfo);
-            }else if(cell.floor !== null){
-                cell.floor.emitInteractEvent(this.game, player, newinfo);
-            }else if(cell.ceiling !== null){
-                cell.ceiling.emitInteractEvent(this.game, player, newinfo);
+            if(newinfo.cell.block !== null){
+                newinfo.cell.block.emitInteractEvent(this.game, player, newinfo);
+            }else if(newinfo.cell.floor !== null){
+                newinfo.cell.floor.emitInteractEvent(this.game, player, newinfo);
+            }else if(newinfo.cell.ceiling !== null){
+                newinfo.cell.ceiling.emitInteractEvent(this.game, player, newinfo);
             }
         }
     }
 
     /** Gets formatted click info from the raw click info in a client click message */
-    getClickInfo(content: ClickContent): ClickContentExpanded {
+    getClickInfo(player: Player, content: ClickContent): ClickContentExpanded {
+        const cellx = Math.floor(content.mex + content.xoffset);
+        const celly = Math.floor(content.mey + content.yoffset);
+
         return {
             dir: Math.atan2(content.xoffset, content.yoffset),
-            cellpos: { x: Math.floor(content.mex + content.xoffset), y: Math.floor(content.mey + content.yoffset) },
+            cell: this.game.world.getLayer(player.layer).getCell(cellx, celly, false),
             dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
             entity: this.game.collisionManager.clickEntity(content.mex + content.xoffset, content.mey + content.yoffset),
         };
@@ -160,7 +161,7 @@ class SocketManager {
 /** Defines the format of the click and interact message after being parsed */
 export type ClickContentExpanded = {
     dir: number;
-    cellpos: Pos;
+    cell: Cell | null;
     dist: number;
     entity: Entity | null;
 };

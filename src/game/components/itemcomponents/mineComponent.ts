@@ -30,18 +30,15 @@ class MineComponent extends Component<ItemDefinition> {
 
     /** Defines the mine use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        const layer = game.world.getLayer(player.layer);
-
         if(info.dist > BASE_REACH) return;
 
-        const cell = layer.getCell(info.cellpos.x, info.cellpos.y, false);
-        if(cell !== null){
-            if(cell.block !== null)
-                if((cell.block.definition.minetype !== MINE_TYPES.ANY && cell.block.definition.minetype != this.minetype)
-                    || cell.block.definition.hardness > this.power) return;
+        if(info.cell !== null){
+            if(info.cell.block !== null)
+                if((info.cell.block.definition.minetype !== MINE_TYPES.ANY && info.cell.block.definition.minetype != this.minetype)
+                    || info.cell.block.definition.hardness > this.power) return;
+
+            info.cell.breakBlock(true, game);
         }
-        
-        layer.breakBlock(info.cellpos.x, info.cellpos.y, true);
     }
 }
 

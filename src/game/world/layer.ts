@@ -16,10 +16,6 @@ const { LOG_CATEGORIES } = Constants;
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
-import ServerConfig from "../../configs/server.js";
-const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
-const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = ServerConfig.WORLD;
-
 const worldsavedir = "world/";
 const entitiessavedir = "entities/";
 
@@ -375,136 +371,13 @@ class Layer {
         return chunk ? chunk.cells[cellx][celly] : null;
     }
 
-    /** Returns the requested cell and its containing chunk if it is loaded and null otherwise */
-    getCellAndChunk(x: number, y: number, canloadnew: boolean): { cell: Cell, chunk: Chunk } | null {
-        const chunkx = Math.floor(x / CHUNK_SIZE);
-        const chunky = Math.floor(y / CHUNK_SIZE);
-
-        const cell = this.getCell(x, y, canloadnew);
-        if(cell !== null){
-            return {
-                cell: cell,
-                chunk: this.getChunk(chunkx, chunky, false)!,
-            };
-        }else{
-            return null;
-        }
-    }
-
-    /** Sets the block at the requested postion to the requested value */
-    setBlock(x: number, y: number, block: string | null): void {
-        const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata === null) return;
-        const { cell, chunk } = requestdata;
-        if(chunk === null) return;
-
-        cell.setBlock(block, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-    }
-
-    /** Tries to break the requested block and returns success */
-    breakBlock(x: number, y: number, toggledrop: boolean): boolean {
-        const data = this.getCellAndChunk(x, y, false);
-        if(data === null) return false;
-        
-        const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata === null) return false;
-        const { cell, chunk } = requestdata;
-        if(chunk === null || cell.block === null) return false;
-
-        const response = cell.breakBlock(x, y, toggledrop, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-        return response;
-    }
-
-    /** Tries to place the requested block in the requested cell and returns success */
-    placeBlock(x: number, y: number, block: any): boolean {
-        const data = this.getCellAndChunk(x, y, false);
-        if(data === null) return false;
-
-        const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata === null) return false;
-        const { cell, chunk } = requestdata;
-        if(chunk === null) return false;
-        
-        const response = cell.placeBlock(block, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-        return response;
-    }
-
-    /** Sets the floor at the requested postion to the requested value */
-    setFloor(x: number, y: number, floor: string | null): void {
-        const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata === null) return;
-        const { cell, chunk } = requestdata;
-        if(chunk === null) return;
-
-        cell.setFloor(floor, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-    }
-
-    /** Tries to break the requested floor and returns success */
-    breakFloor(x: number, y: number, toggledrop: boolean): boolean {
-        const data = this.getCellAndChunk(x, y, false);
-        if(data === null) return false;
-        
-        const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata === null) return false;
-        const { cell, chunk } = requestdata;
-        if(chunk === null || cell.floor === null) return false;
-        if(cell.basefloor !== null) if(cell.floor.definition.key === cell.basefloor.key) return false;
-
-        const response = cell.breakFloor(x, y, toggledrop, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-        return response;
-    }
-
-    /** Tries to place the requested floor in the requested cell and returns success */
-    placeFloor(x: number, y: number, floor: any): boolean {
-        const data = this.getCellAndChunk(x, y, false);
-        if(data === null) return false;
-
-        const requestdata = this.getCellAndChunk(x, y, false);
-        if(requestdata === null) return false;
-        const { cell, chunk } = requestdata;
-        if(chunk === null) return false;
-        
-        const response = cell.placeFloor(floor, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-        return response;
-    }
-
-    /** Sets the base floor at the requested postion to the requested value */
-    setBaseFloor(x: number, y: number, floor: string | null): void {
-        const requestdata = this.getCellAndChunk(x, y, true);
-        if(requestdata === null) return;
-        const { cell, chunk } = requestdata;
-        if(chunk === null) return;
-
-        cell.setBaseFloor(floor, this.game);
-        chunk.cellupdates.push({
-            x, y
-        });
-    }
-
     /** Returns if the requested cell is empty (has no blocks or objects on it) */
-    cellEmpty(x: number, y: number, ignoreobjects?: boolean): boolean {
+    cellEmpty(x: number, y: number): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
         for(const e of this.game.entityManager.getAllObjects()){
+            if(e.layer != this.z) continue;
             if(Math.abs(e.getChunk().x - chunk.x) <= 1 && Math.abs(e.getChunk().y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
             }

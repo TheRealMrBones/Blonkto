@@ -49,7 +49,7 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> {
     }
 
     /** Registers a break event listener to this ceiling definitions event handler */
-    registerBreakListener(listener: (self: Ceiling, game: Game) => void): void {
+    registerBreakListener(listener: (self: Ceiling, game: Game, drop: boolean) => void): void {
         this.registerListener("break", listener);
     }
 
@@ -66,15 +66,6 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> {
     /** Returns if this ceiling definitions tick event has any listeners */
     ticks(): boolean {
         return (this.eventEmitter.listenerCount("tick") > 0);
-    }
-
-    // #endregion
-
-    // #region events
-
-    /** Drops the item that this ceiling drops on break */
-    break(x: number, y: number, drop: boolean, game: Game): void {
-        if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);
     }
 
     // #endregion

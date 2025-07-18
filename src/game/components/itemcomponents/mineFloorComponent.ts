@@ -25,10 +25,8 @@ class MineFloorComponent extends Component<ItemDefinition> {
 
     /** Defines the mine use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        const layer = game.world.getLayer(player.layer);
-
         if(info.dist > BASE_REACH) return;
-        layer.breakFloor(info.cellpos.x, info.cellpos.y, true);
+        if(info.cell !== null) info.cell.breakFloor(true, game);
     }
 }
 

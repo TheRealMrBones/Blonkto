@@ -19,7 +19,7 @@ class PickComponent extends Component<BlockDefinition> {
 
     /** Defines the pickup interaction of the block with this component */
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
-        block.cell.breakBlock(info.cellpos.x, info.cellpos.y, true, game);
+        block.cell.breakBlock(true, game);
     }
 }
 

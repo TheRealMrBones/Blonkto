@@ -47,7 +47,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> {
     }
 
     /** Registers a break event listener to this floor definitions event handler */
-    registerBreakListener(listener: (self: Floor, game: Game) => void): void {
+    registerBreakListener(listener: (self: Floor, game: Game, drop: boolean) => void): void {
         this.registerListener("break", listener);
     }
 
@@ -64,15 +64,6 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> {
     /** Returns if this floor definitions tick event has any listeners */
     ticks(): boolean {
         return (this.eventEmitter.listenerCount("tick") > 0);
-    }
-
-    // #endregion
-
-    // #region events
-
-    /** Drops the item that this floor drops on break */
-    break(x: number, y: number, drop: boolean, game: Game): void {
-        if(drop && this.drops != null) this.drops.drop(x + .5, y + .5, game);
     }
 
     // #endregion

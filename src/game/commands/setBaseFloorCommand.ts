@@ -39,7 +39,7 @@ function setBaseFloorCommand(args: any[], player: Player, game: Game){
             return;
         }
 
-        layer.setBaseFloor(args[1], args[2], val);
+        cell.setBaseFloor(val, game);
         
         game.chatManager.sendMessageTo(player, `set base floor ${args[1]}, ${args[2]} to ${val}`);
     }else{
@@ -56,7 +56,7 @@ function setBaseFloorCommand(args: any[], player: Player, game: Game){
                     return;
                 }
 
-                layer.setBaseFloor(x, y, val);
+                cell.setBaseFloor(val, game);
             }
         }
 

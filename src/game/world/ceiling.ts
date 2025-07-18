@@ -48,8 +48,15 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     }
 
     /** Emits a break event to this ceiling */
-    emitBreakEvent(game: Game): void {
-        this.definition.emitEvent("break", this, game);
+    emitBreakEvent(game: Game, drop: boolean): void {
+        this.definition.emitEvent("break", this, game, drop);
+
+        // actually drop items
+        if(drop && this.definition.drops !== null){
+            const dropx = this.cell.getWorldX() + .5;
+            const dropy = this.cell.getWorldY() + .5;
+            this.definition.drops.drop(dropx, dropy, game);
+        }
     }
 
     /** Emits a interact event to this ceiling */

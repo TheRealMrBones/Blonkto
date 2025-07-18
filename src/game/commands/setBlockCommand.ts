@@ -39,7 +39,7 @@ function setBlockCommand(args: any[], player: Player, game: Game){
             return;
         }
 
-        layer.setBlock(args[1], args[2], val);
+        cell.setBlock(val, game);
         
         game.chatManager.sendMessageTo(player, `set block ${args[1]}, ${args[2]} to ${val}`);
     }else{
@@ -56,7 +56,7 @@ function setBlockCommand(args: any[], player: Player, game: Game){
                     return;
                 }
 
-                layer.setBlock(x, y, val);
+                cell.setBlock(val, game);
             }
         }
 

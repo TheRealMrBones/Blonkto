@@ -39,7 +39,7 @@ function setFloorCommand(args: any[], player: Player, game: Game){
             return;
         }
 
-        layer.setFloor(args[1], args[2], val);
+        cell.setFloor(val, game);
 
         game.chatManager.sendMessageTo(player, `set floor ${args[1]}, ${args[2]} to ${val}`);
     }else{
@@ -56,7 +56,7 @@ function setFloorCommand(args: any[], player: Player, game: Game){
                     return;
                 }
 
-                layer.setFloor(x, y, val);
+                cell.setFloor(val, game);
             }
         }
 

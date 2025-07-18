@@ -30,19 +30,19 @@ class BuildComponent extends Component<ItemDefinition> {
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
         const layer = game.world.getLayer(player.layer);
 
-        if(!layer.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
+        if(info.cell !== null) if(!layer.cellEmpty(info.cell.getWorldX(), info.cell.getWorldY())) return;
         if(info.dist > BASE_REACH) return;
 
-        const cell = layer.getCell(info.cellpos.x, info.cellpos.y, false);
-        if(cell === null) return;
-        if(cell.floor === null) return;
+        if(info.cell === null) return;
+        if(info.cell.floor === null) return;
+        
         if(this.floorrequirements.length > 0){
             for(const requirement of this.floorrequirements){
-                if(!cell.floor.definition.hasComponent(requirement)) return;
+                if(!info.cell.floor.definition.hasComponent(requirement)) return;
             }
         }
 
-        if(layer.placeBlock(info.cellpos.x, info.cellpos.y, this.block)) player.removeFromCurrentSlot(1);
+        if(info.cell.placeBlock(this.block, game)) player.removeFromCurrentSlot(1);
     }
 }
 

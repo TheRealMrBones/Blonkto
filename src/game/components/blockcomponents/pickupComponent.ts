@@ -29,7 +29,7 @@ class PickupComponent extends Component<BlockDefinition> {
         block.cell.setBlock(null, game);
         const itemstack = new ItemStack(this.item, this.amount);
         if(player.getInventory().collectStack(itemstack)) return;
-        DroppedStack.dropWithSpread(game, info.cellpos.x, info.cellpos.y, itemstack, .3, player.id);
+        DroppedStack.dropWithSpread(game, block.cell.getWorldX() + .5, block.cell.getWorldY() + .5, itemstack, .3, player.id);
     }
 }
 

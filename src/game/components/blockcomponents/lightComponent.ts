@@ -19,7 +19,7 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
         super.setParent(parent);
 
         this.getParent().registerInstantiateListener((block: Block, game: Game) => this.instantiate(block, game));
-        this.getParent().registerBreakListener((block: Block, game: Game) => this.break(block, game));
+        this.getParent().registerBreakListener((block: Block, game: Game, drop: boolean) => this.break(block, game, drop));
         this.getParent().registerUnloadListener((block: Block, game: Game) => this.unload(block, game));
     }
 
@@ -40,7 +40,7 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
     }
 
     /** Defines the break event of the block with this component */
-    break(block: Block, game: Game): void {
+    break(block: Block, game: Game, drop: boolean): void {
         const layer = game.world.getLayer(block.cell.chunk.layer);
 
         const keys = this.getCellKeysInRange(block);

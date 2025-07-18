@@ -25,12 +25,12 @@ class BuildFloorComponent extends Component<ItemDefinition> {
 
     /** Defines the build use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        const layer = game.world.getLayer(player.layer);
-
         //if(!game.world.cellEmpty(info.cellpos.x, info.cellpos.y)) return;
         if(info.dist > BASE_REACH) return;
 
-        if(layer.placeFloor(info.cellpos.x, info.cellpos.y, this.floor)) player.removeFromCurrentSlot(1);
+        if(info.cell !== null){
+            if(info.cell.placeFloor(this.floor, game)) player.removeFromCurrentSlot(1);
+        }
     }
 }
 
