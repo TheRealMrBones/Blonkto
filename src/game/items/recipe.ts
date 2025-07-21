@@ -1,6 +1,7 @@
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
+import Layer from "../world/layer.js";
 import IInventory from "./inventory/IInventory.js";
 
 class Recipe {
@@ -53,7 +54,7 @@ class Recipe {
     }
 
     /** Crafts the requested recipe and either adds it to the inventory or drops it at the given position */
-    craftRecipe(game: Game, station: string | null, inventory: IInventory, x: number, y:number, amount?: number): void {
+    craftRecipe(game: Game, station: string | null, inventory: IInventory, layer: Layer, x: number, y:number, amount?: number): void {
         const craftamount = Math.min(amount || 1, this.canCraftAmount(inventory, station)) * this.resultcount;
         if(craftamount == 0) return;
 
@@ -63,7 +64,7 @@ class Recipe {
         }
 
         const leftover = inventory.collectItem(this.result, craftamount);
-        if(leftover > 0) DroppedStack.dropManyWithSpread(game, x, y, this.result, leftover, .3);
+        if(leftover > 0) DroppedStack.dropManyWithSpread(game, layer, x, y, this.result, leftover, .3);
     }
 
     // #region serialization

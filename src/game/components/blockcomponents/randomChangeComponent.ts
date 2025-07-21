@@ -27,7 +27,7 @@ class RandomChangeComponent extends Component<BlockDefinition> {
         if(Math.random() > this.chance) return;
 
         if(!this.cancollide){
-            for(const object of game.entityManager.getAllObjects()){
+            for(const object of block.cell.chunk.layer.entityManager.getAllObjects()){
                 if(object.tilesOn().some(t => t.x == block.cell.getWorldX() && t.y == block.cell.getWorldY())) return;
             }
         }

@@ -1,4 +1,5 @@
 import GameObject from "./gameObject.js";
+import Layer from "../world/layer.js";
 import Game from "../game.js";
 
 import SharedConfig from "../../configs/shared.js";
@@ -21,8 +22,8 @@ abstract class Entity extends GameObject {
 
     godmode: boolean = false;
 
-    constructor(x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
-        super(x, y, dir, scale, asset);
+    constructor(layer: Layer, x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
+        super(layer, x, y, dir, scale, asset);
         this.maxhealth = maxhealth;
         this.health = maxhealth;
         this.basespeed = 1;
@@ -52,7 +53,7 @@ abstract class Entity extends GameObject {
     override emitTickEvent(game: Game, dt: number): void {
         super.emitTickEvent(game, dt);
 
-        const player = game.entityManager.players.get(this.id)!;
+        const player = this.layer.entityManager.getPlayer(this.id)!;
         if(this.swinging) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.lastattackdamage);
     }
 

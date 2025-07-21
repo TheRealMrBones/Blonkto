@@ -1,4 +1,6 @@
 import Logger from "../../server/logging/logger.js";
+import EntityManager from "../managers/entityManager.js";
+import World from "./world.js";
 import Chunk from "./chunk.js";
 import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
@@ -21,6 +23,7 @@ class Layer {
     private readonly logger: Logger;
     
     private readonly game: Game;
+    private readonly world: World;
 
     readonly z: number;
     private readonly savedir: string;
@@ -29,12 +32,18 @@ class Layer {
     private readonly loadedchunks: Map<string, Chunk> = new Map<string, Chunk>();
     readonly light: Map<string, number> = new Map<string, number>();
 
-    constructor(game: Game, z: number){
+    readonly entityManager: EntityManager;
+
+    constructor(game: Game, world: World, z: number){
         this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
 
         this.game = game;
+        this.world = world;
 
         this.z = z;
+
+        this.entityManager = new EntityManager(this.game, this.game.entityManager);
+        this.game.entityManager.addChild(this.entityManager);
 
         // initialize save directories
         this.savedir = `world/${z}/`;
@@ -261,7 +270,7 @@ class Layer {
             this.loadedchunks.delete(chunkkey);
 
             // unload entities
-            const entities = [...this.game.entityManager.getNonplayers()].filter(e =>
+            const entities = [...this.entityManager.getNonplayers()].filter(e =>
                 e.getChunk().x == x
                 && e.getChunk().y == y
             ).forEach(e => {
@@ -285,7 +294,7 @@ class Layer {
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
         if(data === null) return null;
-        const chunk = Chunk.readFromSave(this.z, x, y, data, this.game);
+        const chunk = Chunk.readFromSave(this, x, y, data, this.game);
         if(chunk === null){
             this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
             return this.generateChunk(x, y);
@@ -298,13 +307,13 @@ class Layer {
             for(const entitydata of entitiesdata){
                 switch(entitydata.type){
                     case "dropped_stack": {
-                        const droppedstack = DroppedStack.readFromSave(entitydata);
-                        this.game.entityManager.objects.set(droppedstack.id, droppedstack);
+                        const droppedstack = DroppedStack.readFromSave(this, entitydata);
+                        this.entityManager.addObject(droppedstack);
                         break;
                     }
                     case "entity": {
-                        const entity = NonplayerEntity.readFromSave(entitydata);
-                        this.game.entityManager.nonplayerentities.set(entity.id, entity);
+                        const entity = NonplayerEntity.readFromSave(this, entitydata);
+                        this.entityManager.addEntity(entity);
                         break;
                     }
                     default: {
@@ -323,8 +332,8 @@ class Layer {
                 if(cell === null) continue;
                 if(cell.block != null) continue;
 
-                const pig = new NonplayerEntity(cellx + .5, celly + .5, 0, "pig");
-                this.game.entityManager.nonplayerentities.set(pig.id, pig);
+                const pig = new NonplayerEntity(this, cellx + .5, celly + .5, 0, "pig");
+                this.entityManager.addEntity(pig);
             }
         }
 
@@ -341,7 +350,7 @@ class Layer {
         this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
 
         // save entities (and objects) seperately
-        const entities = [...this.game.entityManager.getNonplayers()].filter(o =>
+        const entities = [...this.entityManager.getNonplayers()].filter(o =>
             o.getChunk().x == chunk.chunkx &&
             o.getChunk().y == chunk.chunky
         );
@@ -352,7 +361,7 @@ class Layer {
 
     /** Returns a new generated chunk */
     generateChunk(x: number, y: number): Chunk {
-        const newChunk = Chunk.generateChunk(this.z, x, y, this.game);
+        const newChunk = Chunk.generateChunk(this, x, y, this.game);
         this.loadedchunks.set(Layer.getChunkKey(x, y), newChunk);
         return newChunk;
     }
@@ -384,8 +393,7 @@ class Layer {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
         
         let empty = true;
-        for(const e of this.game.entityManager.getAllObjects()){
-            if(e.layer != this.z) continue;
+        for(const e of this.entityManager.getAllObjects()){
             if(Math.abs(e.getChunk().x - chunk.x) <= 1 && Math.abs(e.getChunk().y - chunk.y) <= 1){
                 if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
             }

@@ -1,6 +1,5 @@
 import Game from "../../game.js";
-import DroppedStack from "../../objects/droppedStack.js";
-import ItemRegistry from "../../registries/itemRegistry.js";
+import Layer from "../../world/layer.js";
 import ItemStack from "../itemStack.js";
 import Inventory from "./inventory.js";
 
@@ -54,9 +53,9 @@ class ChangesInventory extends Inventory {
     }
 
     /** Drops the given amount from the given slot in this inventory */
-    override dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+    override dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         this.toggleChange(slot);
-        super.dropFromSlot(x, y, slot, game, amount, ignore);
+        super.dropFromSlot(layer, x, y, slot, game, amount, ignore);
     }
 
     // #endregion

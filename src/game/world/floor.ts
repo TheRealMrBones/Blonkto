@@ -55,7 +55,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
         if(drop && this.definition.drops !== null){
             const dropx = this.cell.getWorldX() + .5;
             const dropy = this.cell.getWorldY() + .5;
-            this.definition.drops.drop(dropx, dropy, game);
+            this.definition.drops.drop(this.cell.chunk.layer, dropx, dropy, game);
         }
     }
 

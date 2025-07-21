@@ -27,7 +27,6 @@ class WanderComponent extends Component<EntityDefinition> {
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
-        const layer = game.world.getLayer(self.layer);
         
         if(targetdata.queueBlocked() && targetdata.currentpriotity == 1){
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
@@ -42,7 +41,7 @@ class WanderComponent extends Component<EntityDefinition> {
                 y: Math.floor(currenttarget.y),
             };
             
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, layer, [currenttargetcell]);
+            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, self.layer, [currenttargetcell]);
 
             targetdata.clearQueue();
             if(path !== null){
@@ -65,7 +64,7 @@ class WanderComponent extends Component<EntityDefinition> {
                 movey = Math.floor(Math.random() * (this.distance * 2 + 1)) - this.distance;
                 cellx = Math.floor(self.x) + movex;
                 celly = Math.floor(self.y) + movey;
-                const cell = layer.getCell(cellx, celly, false);
+                const cell = self.layer.getCell(cellx, celly, false);
                 if(cell !== null){
                     if(cell.block === null){
                         found = true;
@@ -75,7 +74,7 @@ class WanderComponent extends Component<EntityDefinition> {
             }
             if(!found) return;
             
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, layer);
+            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, self.layer);
             if(path === null) return;
 
             targetdata.setQueue(1, path.map(pos => ({

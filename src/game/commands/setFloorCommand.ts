@@ -30,7 +30,7 @@ function setFloorCommand(args: any[], player: Player, game: Game){
     }
     if(val == "air") val = null;
 
-    const layer = game.world.getLayer(player.layer);
+    const layer = player.layer;
 
     if(argIndex < 2){
         const cell = layer.getCell(args[1], args[2], true);

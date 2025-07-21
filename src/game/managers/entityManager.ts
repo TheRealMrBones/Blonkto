@@ -14,17 +14,31 @@ const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);
 class EntityManager {
     private readonly game: Game;
 
-    readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
-    readonly nonplayerentities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
-    readonly players: Map<string, Player> = new Map<string, Player>();
+    private readonly parent: EntityManager | null;
+    private readonly children: EntityManager[] = [];
+
+    private readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
+    private readonly nonplayerentities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
+    private readonly players: Map<string, Player> = new Map<string, Player>();
     
     private readonly allobjects: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities, this.players]);
     private readonly entities: CombinedMapIterator<Entity> = new CombinedMapIterator<Entity>([this.nonplayerentities, this.players]);
     private readonly nonplayers: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities]);
 
-    constructor(game: Game){
+    constructor(game: Game, parent?: EntityManager){
         this.game = game;
+
+        this.parent = parent || null;
     }
+
+    // #region children
+
+    /** Adds a child EntityManager to this manager */
+    addChild(child: EntityManager): void {
+        this.children.push(child);
+    }
+
+    // #endregion
 
     // #region ticking
 
@@ -55,18 +69,19 @@ class EntityManager {
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);
 
-                const cell = this.game.world.getLayer(0).getCell(cellx, celly, false);
+                const layer = this.game.world.getLayer(0);
+                const cell = layer.getCell(cellx, celly, false);
                 if(cell === null) continue;
                 if(cell.block !== null) continue;
 
-                if(this.game.world.getLayer(0).light.get([cellx,celly].toString()) !== undefined) continue;
+                if(layer.light.get([cellx,celly].toString()) !== undefined) continue;
 
                 if(Math.random() > .05){
-                    const zombie = new NonplayerEntity(spawnx, spawny, 0, "zombie");
-                    this.nonplayerentities.set(zombie.id, zombie);
+                    const zombie = new NonplayerEntity(layer, spawnx, spawny, 0, "zombie");
+                    layer.entityManager.addEntity(zombie);
                 }else{
-                    const megazombie = new NonplayerEntity(spawnx, spawny, 0, "mega_zombie");
-                    this.nonplayerentities.set(megazombie.id, megazombie);
+                    const megazombie = new NonplayerEntity(layer, spawnx, spawny, 0, "mega_zombie");
+                    layer.entityManager.addEntity(megazombie);
                 }
                 break;
             }
@@ -75,7 +90,22 @@ class EntityManager {
 
     // #endregion
 
-    // #region getters and setters
+    // #region getters
+
+    /** Returns the requested object if it exists */
+    getObject(id: string): GameObject | undefined {
+        return this.objects.get(id);
+    }
+
+    /** Returns the requested non-player entity if it exists */
+    getEntity(id: string): NonplayerEntity | undefined {
+        return this.nonplayerentities.get(id);
+    }
+
+    /** Returns the requested player if it exists */
+    getPlayer(id: string): Player | undefined {
+        return this.players.get(id);
+    }
 
     /** Returns all ticking objects loaded in the game world */
     getAllObjects(): CombinedMapIterator<GameObject> {
@@ -112,22 +142,6 @@ class EntityManager {
         return [...this.getObjects()].filter(o => o instanceof DroppedStack);
     }
 
-    /** Removes and unloads the non-player object with the given id from the game world */
-    removeNonplayer(id: string): void {
-        this.objects.delete(id);
-        this.nonplayerentities.delete(id);
-    }
-
-    /** Removes and unloads the non-entity object with the given id from the game world */
-    removeObject(id: string): void {
-        this.objects.delete(id);
-    }
-
-    /** Removes and unloads the non-player entity with the given id from the game world */
-    removeEntity(id: string): void {
-        this.nonplayerentities.delete(id);
-    }
-
     /** Returns the count of all ticking objects loaded in the game world */
     getAllObjectCount(): number {
         return this.objects.size + this.nonplayerentities.size + this.players.size;
@@ -150,12 +164,73 @@ class EntityManager {
     
     // #endregion
 
+    // #region setters
+
+    /** Adds the given object to the game world */
+    addObject(object: GameObject): void {
+        this.objects.set(object.id, object);
+
+        if(this.parent !== null) this.parent.addObject(object);
+    }
+
+    /** Adds the given non-player entity to the game world */
+    addEntity(entity: NonplayerEntity): void {
+        this.nonplayerentities.set(entity.id, entity);
+
+        if(this.parent !== null) this.parent.addEntity(entity);
+    }
+
+    /** Adds the given player to the game world */
+    addPlayer(player: Player): void {
+        this.players.set(player.id, player);
+
+        if(this.parent !== null) this.parent.addPlayer(player);
+    }
+
+    /** Removes and unloads the non-player object with the given id from the game world */
+    removeNonplayer(id: string): void {
+        this.objects.delete(id);
+        this.nonplayerentities.delete(id);
+
+        for(const child of this.children){
+            child.removeNonplayer(id);
+        }
+    }
+
+    /** Removes and unloads the non-entity object with the given id from the game world */
+    removeObject(id: string): void {
+        this.objects.delete(id);
+
+        for(const child of this.children){
+            child.removeObject(id);
+        }
+    }
+
+    /** Removes and unloads the non-player entity with the given id from the game world */
+    removeEntity(id: string): void {
+        this.nonplayerentities.delete(id);
+
+        for(const child of this.children){
+            child.removeEntity(id);
+        }
+    }
+
+    /** Removes and unloads the player object with the given id from the game world */
+    removePlayer(id: string): void {
+        this.players.delete(id);
+
+        for(const child of this.children){
+            child.removePlayer(id);
+        }
+    }
+
+    // #endregion
+
     // #region helpers
 
     /** Returns the filtered list of gameobjects to only those nearby the given player */
     filterToNearby<T extends GameObject>(player: Player, objects: T[]): T[] {
         return objects.filter(e => e.id != player.id
-            && e.layer == player.layer
             && Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );

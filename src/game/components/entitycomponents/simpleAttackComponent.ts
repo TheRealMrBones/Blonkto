@@ -54,8 +54,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         
         if(data.target === null){
             let mindist = this.distance;
-            for(const p of game.entityManager.getPlayerEntities()){
-                if(p.layer != self.layer) continue;
+            for(const p of self.layer.entityManager.getPlayerEntities()){
                 const dist = self.distanceTo(p);
                 if(dist < mindist){
                     data.target = p;
@@ -63,7 +62,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
                 }
             }
         }else{
-            if(![...game.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id && p.layer == self.layer)){
+            if(![...self.layer.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
                 targetdata.clearQueue();
                 self.speedmultiplier = 1;
                 data.target = null;

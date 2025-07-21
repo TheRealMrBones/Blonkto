@@ -91,14 +91,14 @@ class PlayerManager {
             // load existing player from data
             const data = this.game.fileManager.readFile(getPlayerFilePath(username));
             if(!data) return;
-            this.game.entityManager.players.set(socket.id, Player.readFromSave(socket, spawn.pos.x, spawn.pos.y, JSON.parse(data)));
+            spawn.layer.entityManager.addPlayer(Player.readFromSave(socket, spawn.layer, spawn.pos.x, spawn.pos.y, JSON.parse(data)));
         }else{
             // create new player
-            this.game.entityManager.players.set(socket.id, new Player(socket, username, spawn.pos.x, spawn.pos.y, true));
+            spawn.layer.entityManager.addPlayer(new Player(socket, username, spawn.layer, spawn.pos.x, spawn.pos.y, true));
         }
         
         // send info to client
-        const player = this.game.entityManager.players.get(socket.id)!;
+        const player = this.game.entityManager.getPlayer(socket.id)!;
         player.socket.emit(MSG_TYPES.GAME_UPDATE, this.game.createInitialUpdate(player));
         const content: PlayerInstantiatedContent = {
             x: player.x,
@@ -123,14 +123,14 @@ class PlayerManager {
         if(this.game.fileManager.fileExists(getPlayerFilePath(player.username)))
             this.game.fileManager.deleteFile(getPlayerFilePath(player.username));
 
-        this.game.entityManager.players.delete(player.id);
+        this.game.entityManager.removePlayer(player.id);
     }
 
     /** Kills the given player and saves their post death data */
     killPlayer(socket: Socket, killedby: string): void {
         if(socket.id === undefined) return;
 
-        const player = this.game.entityManager.players.get(socket.id)!;
+        const player = this.game.entityManager.getPlayer(socket.id)!;
 
         this.game.chatManager.sendMessage(`${player.username} was killed by ${killedby}`);
         
@@ -140,34 +140,34 @@ class PlayerManager {
 
         this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
 
-        this.game.entityManager.players.delete(player.id);
+        this.game.entityManager.removePlayer(player.id);
     }
 
     /** Removes the player from the world and saves their data */
     removePlayer(socket: Socket): void {
         if(socket.id === undefined) return;
 
-        const player = this.game.entityManager.players.get(socket.id)!;
+        const player = this.game.entityManager.getPlayer(socket.id)!;
 
         if(player != null){
             this.game.chatManager.sendMessage(`${player.username} has disconnected`);
 
             this.savePlayer(player);
 
-            this.game.entityManager.players.delete(player.id);
+            this.game.entityManager.removePlayer(player.id);
         }
     }
 
     /** Saves all players to their own files */
     savePlayers(): void {
-        for(const p of this.game.entityManager.players.values()){
+        for(const p of this.game.entityManager.getPlayerEntities()){
             this.savePlayer(p);
         }
     }
 
     /** Returns the player with the given username if they exist */
     getPlayerByUsername(username: string): Player | undefined {
-        return [...this.game.entityManager.players.values()].find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
+        return [...this.game.entityManager.getPlayerEntities()].find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
     }
 
     // #endregion

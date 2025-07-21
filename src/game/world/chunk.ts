@@ -1,5 +1,5 @@
 import Cell from "./cell.js";
-
+import Layer from "./layer.js";
 import Game from "../game.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 
@@ -8,13 +8,13 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single chunk (square collection of cells) in the game world */
 class Chunk {
-    readonly layer: number;
+    readonly layer: Layer;
     readonly chunkx: number;
     readonly chunky: number;
     readonly cells: Cell[][];
     cellupdates: any[];
 
-    private constructor(layer: number, chunkx: number, chunky: number){
+    private constructor(layer: Layer, chunkx: number, chunky: number){
         this.layer = layer;
         this.chunkx = chunkx;
         this.chunky = chunky;
@@ -24,7 +24,7 @@ class Chunk {
     }
 
     /** Returns the chunk from its save data */
-    static readFromSave(layer: number, chunkx: number, chunky: number, data: string, game: Game): Chunk | null {
+    static readFromSave(layer: Layer, chunkx: number, chunky: number, data: string, game: Game): Chunk | null {
         const chunk = new Chunk(layer, chunkx, chunky);
         const chunkdata = data.split("\n");
 
@@ -47,7 +47,7 @@ class Chunk {
     // #region world generation
 
     /** Generates new cell data for the chunk */
-    static generateChunk(layer: number, chunkx: number, chunky: number, game: Game): Chunk {
+    static generateChunk(layer: Layer, chunkx: number, chunky: number, game: Game): Chunk {
         const chunk = new Chunk(layer, chunkx, chunky);
 
         for(let x = 0; x < CHUNK_SIZE; x++){
@@ -62,8 +62,8 @@ class Chunk {
                 }else if(Math.random() < .005){
                     cell.setBlock("grown_carrots", game);
                 }else if(Math.random() < .0051){
-                    const pig = new NonplayerEntity(chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
-                    game.entityManager.nonplayerentities.set(pig.id, pig);
+                    const pig = new NonplayerEntity(layer, chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
+                    layer.entityManager.addEntity(pig);
                 }
                 
                 chunk.cells[x][y] = cell;

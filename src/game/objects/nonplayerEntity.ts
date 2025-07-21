@@ -1,6 +1,7 @@
 import ComponentData from "../components/componentData.js";
 import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
 import EntityDefinition from "../definitions/entityDefinition.js";
+import Layer from "../world/layer.js";
 import Game from "../game.js";
 import EntityRegistry from "../registries/entityRegistry.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
@@ -14,8 +15,8 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     readonly definition: EntityDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    constructor(x: number, y: number, dir: number, entitydefinition: string){
-        super(x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
+    constructor(layer: Layer, x: number, y: number, dir: number, entitydefinition: string){
+        super(layer, x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
         this.definition = EntityRegistry.get(entitydefinition);
         this.initComponentData();
@@ -24,8 +25,8 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Returns the nonplayer entity from its save data */
-    static readFromSave(data: any): NonplayerEntity {
-        const entity = new NonplayerEntity(data.x, data.y, data.dir, data.entitydefinition);
+    static readFromSave(layer: Layer, data: any): NonplayerEntity {
+        const entity = new NonplayerEntity(layer, data.x, data.y, data.dir, data.entitydefinition);
         entity.loadComponentData(data.componentdata);
         return entity;
     }

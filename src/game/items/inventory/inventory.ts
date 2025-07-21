@@ -1,6 +1,7 @@
 import Game from "../../game.js";
 import DroppedStack from "../../objects/droppedStack.js";
 import ItemRegistry from "../../registries/itemRegistry.js";
+import Layer from "../../world/layer.js";
 import ItemStack from "../itemStack.js";
 import IInventory from "./IInventory.js";
 
@@ -44,9 +45,9 @@ class Inventory implements IInventory {
     // #region inventory operations
     
     /** Drops this entire inventory onto the ground */
-    dropInventory(x: number, y: number, game: Game): void {
+    dropInventory(layer: Layer, x: number, y: number, game: Game): void {
         for(let i = 0; i < this.size; i++){
-            this.dropFromSlot(x, y, i, game);
+            this.dropFromSlot(layer, x, y, i, game);
         }
     }
 
@@ -159,16 +160,16 @@ class Inventory implements IInventory {
     }
 
     /** Drops the given amount from the given slot in this inventory */
-    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+    dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         if(this.slots[slot] === null) return;
 
         if(amount === undefined){
-            DroppedStack.dropWithSpread(game, x, y, this.slots[slot], .3, ignore);
+            DroppedStack.dropWithSpread(game, layer, x, y, this.slots[slot], .3, ignore);
             this.slots[slot] = null;
         }else{
             if(amount > this.slots[slot].getAmount()) amount = this.slots[slot].getAmount();
 
-            DroppedStack.dropWithSpread(game, x, y, new ItemStack(this.slots[slot].definition.key, amount), .3, ignore);
+            DroppedStack.dropWithSpread(game, layer, x, y, new ItemStack(this.slots[slot].definition.key, amount), .3, ignore);
             
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }

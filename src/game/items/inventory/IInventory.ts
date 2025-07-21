@@ -1,4 +1,5 @@
 import Game from "../../game.js";
+import Layer from "../../world/layer.js";
 import ItemStack from "../itemStack.js";
 
 /** The base interface for objects that hold itemstacks in the game world */
@@ -16,7 +17,7 @@ interface IInventory {
     // #region inventory operations
     
     /** Drops this entire inventory onto the ground */
-    dropInventory(x: number, y: number, game: Game): void;
+    dropInventory(layer: Layer, x: number, y: number, game: Game): void;
 
     /** Tries to collect the given item stack and returns if fully take */
     collectStack(itemstack: ItemStack): boolean;
@@ -47,7 +48,7 @@ interface IInventory {
     removeFromSlot(slot: number, amount: number): boolean;
 
     /** Drops the given amount from the given slot in this inventory */
-    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void;
+    dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void;
 
     /** Swaps the item stacks between two slots */
     swapSlots(slot1: number, slot2: number): void;

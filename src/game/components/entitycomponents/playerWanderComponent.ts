@@ -32,7 +32,6 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
-        const layer = game.world.getLayer(self.layer);
 
         if(targetdata.queueBlocked() && targetdata.currentpriotity == 1){
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
@@ -47,7 +46,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
                 y: Math.floor(currenttarget.y),
             };
             
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, layer, [currenttargetcell]);
+            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, self.layer, [currenttargetcell]);
 
             targetdata.clearQueue();
             if(path !== null){
@@ -63,7 +62,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
 
         if(Math.random() < .01 && targetdata.queueEmpty()){
             // get skew to player
-            const players = [...game.entityManager.getPlayerEntities()].filter(p => p.layer == self.layer).sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
+            const players = [...self.layer.entityManager.getPlayerEntities()].sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
             if(players.length == 0) return;
 
             const target = players[0];
@@ -85,7 +84,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
                 movey += Math.floor(Math.random() * (this.distance * 2 + 1)) - this.distance;
                 cellx = Math.floor(self.x) + movex;
                 celly = Math.floor(self.y) + movey;
-                const cell = layer.getCell(cellx, celly, false);
+                const cell = self.layer.getCell(cellx, celly, false);
                 if(cell !== null){
                     if(cell.block === null){
                         found = true;
@@ -95,7 +94,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
             }
             if(!found) return;
             
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, layer);
+            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, self.layer);
             if(path === null) return;
 
             targetdata.setQueue(1, path.map(pos => ({

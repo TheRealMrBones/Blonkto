@@ -34,7 +34,7 @@ class World {
 
         this.game = game;
 
-        this.layers = [new Layer(this.game, 0)];
+        this.layers = [new Layer(this.game, this, 0)];
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
@@ -55,8 +55,7 @@ class World {
         // get world loads for all players
         const loaddata: {[key: string]: any } = {};
         for(const p of this.game.entityManager.getPlayerEntities()){
-            const layer = this.layers[p.layer];
-            loaddata[p.id] = layer.loadPlayerChunks(p);
+            loaddata[p.id] = p.layer.loadPlayerChunks(p);
         }
 
         // cleanup chunk updates and return player loads
@@ -76,8 +75,7 @@ class World {
 
         // get active chunks for all players
         for(const p of this.game.entityManager.getPlayerEntities()){
-            const layer = this.layers[p.layer];
-            activechunks[p.layer].push(...layer.getPlayerChunks(p));
+            activechunks[p.layer.z].push(...p.layer.getPlayerChunks(p));
         }
 
         // unload non-active chunks in each layer
@@ -195,6 +193,7 @@ class World {
                 return {
                     pos: pos,
                     chunk: chunk,
+                    layer: layer,
                 };
             }
         }
@@ -215,8 +214,7 @@ class World {
 
     /** Returns chunk data for an update to the given players client and handles new chunk loading as needed */
     loadPlayerChunks(player: Player): any {
-        const layer = this.layers[player.layer];
-        return layer.loadPlayerChunks(player);
+        return player.layer.loadPlayerChunks(player);
     }
 
     // #endregion

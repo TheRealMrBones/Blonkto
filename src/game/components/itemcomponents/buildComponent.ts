@@ -28,9 +28,7 @@ class BuildComponent extends Component<ItemDefinition> {
 
     /** Defines the build use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        const layer = game.world.getLayer(player.layer);
-
-        if(info.cell !== null) if(!layer.cellEmpty(info.cell.getWorldX(), info.cell.getWorldY())) return;
+        if(info.cell !== null) if(!player.layer.cellEmpty(info.cell.getWorldX(), info.cell.getWorldY())) return;
         if(info.dist > BASE_REACH) return;
 
         if(info.cell === null) return;

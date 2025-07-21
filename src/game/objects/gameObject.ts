@@ -2,6 +2,7 @@ import crypto from "crypto";
 
 import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
+import Layer from "../world/layer.js";
 import { Pos } from "../../shared/types.js";
 import Entity from "./entity.js";
 import Player from "./player.js";
@@ -21,7 +22,7 @@ abstract class GameObject {
 
     id: string;
 
-    layer: number = 0;
+    layer: Layer;
     x: number;
     y: number;
     dx: number = 0;
@@ -31,11 +32,12 @@ abstract class GameObject {
     private readonly asset: string;
     falling: boolean = false;
 
-    constructor(x: number, y: number, dir?: number, scale?: number, asset?: string){
+    constructor(layer: Layer, x: number, y: number, dir?: number, scale?: number, asset?: string){
         this.logger = Logger.getLogger(LOG_CATEGORIES.ENTITY);
 
         this.id = crypto.randomUUID();
 
+        this.layer = layer;
         this.x = x;
         this.y = y;
         this.dir = dir || 0;
@@ -127,10 +129,8 @@ abstract class GameObject {
             const tilesOn = this.tilesOn();
             let notair = 0;
 
-            const layer = game.world.getLayer(this.layer);
-
             tilesOn.forEach(tile => {
-                const cell = layer.getCell(tile.x, tile.y, false);
+                const cell = this.layer.getCell(tile.x, tile.y, false);
                 if(cell){
                     if(cell.floor) notair++;
                 }

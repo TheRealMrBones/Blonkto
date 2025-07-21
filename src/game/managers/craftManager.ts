@@ -3,6 +3,7 @@ import Game from "../game.js";
 import IInventory from "../items/inventory/IInventory.js";
 import Recipe from "../items/recipe.js";
 import Player from "../objects/player.js";
+import Layer from "../world/layer.js";
 
 const defaultrecipesfolder = "recipes";
 
@@ -84,10 +85,10 @@ class CraftManager {
     // #region crafting
 
     /** Tries to craft whatever recipe takes the given ingredients */
-    craftRecipe(inventory: IInventory, station: string | null, x: number, y: number, content: CraftContent): void {
+    craftRecipe(inventory: IInventory, station: string | null, layer: Layer, x: number, y: number, content: CraftContent): void {
         const recipe = this.getRecipeFromIngredients(content.result, content.ingredients);
         if(recipe === null) return;
-        recipe.craftRecipe(this.game, station, inventory, x, y, content.amount);
+        recipe.craftRecipe(this.game, station, inventory, layer, x, y, content.amount);
     }
 
     // #endregion

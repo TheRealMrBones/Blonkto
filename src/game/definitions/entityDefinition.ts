@@ -39,7 +39,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> {
 
     /** Drops this entities types items on an instances death */
     dropItems(self: NonplayerEntity, game: Game): void {
-        if(this.drops != null) this.drops.drop(self.x, self.y, game);
+        if(this.drops != null) this.drops.drop(self.layer, self.x, self.y, game);
     }
     
     // #region events

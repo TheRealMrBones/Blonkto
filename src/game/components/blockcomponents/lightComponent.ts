@@ -25,7 +25,7 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
 
     /** Defines the instantiate event of the block with this component */
     instantiate(block: Block, game: Game): void {
-        const layer = game.world.getLayer(block.cell.chunk.layer);
+        const layer = block.cell.chunk.layer;
 
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
@@ -41,7 +41,7 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
 
     /** Defines the break event of the block with this component */
     break(block: Block, game: Game, drop: boolean): void {
-        const layer = game.world.getLayer(block.cell.chunk.layer);
+        const layer = block.cell.chunk.layer;
 
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){
@@ -55,7 +55,7 @@ class LightComponent extends Component<BlockDefinition> implements ISerializable
 
     /** Defines the unload event of the block with this component */
     unload(block: Block, game: Game): void {
-        const layer = game.world.getLayer(block.cell.chunk.layer);
+        const layer = block.cell.chunk.layer;
 
         const keys = this.getCellKeysInRange(block);
         for(const key of keys){

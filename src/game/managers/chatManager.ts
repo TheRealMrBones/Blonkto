@@ -30,7 +30,7 @@ class ChatManager {
     /** Handles a chat message from a player */
     chat(socket: Socket, message: SendMessageContent): void {
         if(socket.id === undefined) return;
-        const player = this.game.entityManager.players.get(socket.id)!;
+        const player = this.game.entityManager.getPlayer(socket.id)!;
 
         const text = FILTER_CHAT ? filterText(message.text.trim()) : message.text.trim();
         if(text.length == 0){
@@ -73,7 +73,7 @@ class ChatManager {
         const message = this.createMessage(text);
         if(LOG_CHAT) this.logger.info(text);
 
-        for(const p of this.game.entityManager.players.values()){
+        for(const p of this.game.entityManager.getPlayerEntities()){
             p.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
         }
     }

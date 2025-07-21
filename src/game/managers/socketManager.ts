@@ -41,7 +41,7 @@ class SocketManager {
 
     /** Response to the general input message from a client */
     handlePlayerInput(socket: Socket, content: InputContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
         
         player.update(content);
@@ -49,7 +49,7 @@ class SocketManager {
 
     /** Response to a click (left click) message from a client */
     handlePlayerClick(socket: Socket, content: ClickContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(player, content);
@@ -79,7 +79,7 @@ class SocketManager {
 
     /** Response to a interaction (right click) message from a client */
     handlePlayerInteract(socket: Socket, content: ClickContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(player, content);
@@ -99,7 +99,6 @@ class SocketManager {
             }
 
             // default action
-            const layer = this.game.world.getLayer(player.layer);
             if(newinfo.dist > BASE_REACH) return;
             if(newinfo.cell === null) return;
             
@@ -120,7 +119,7 @@ class SocketManager {
 
         return {
             dir: Math.atan2(content.xoffset, content.yoffset),
-            cell: this.game.world.getLayer(player.layer).getCell(cellx, celly, false),
+            cell: player.layer.getCell(cellx, celly, false),
             dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
             entity: this.game.collisionManager.clickEntity(player.layer, content.mex + content.xoffset, content.mey + content.yoffset),
         };
@@ -128,7 +127,7 @@ class SocketManager {
 
     /** Response to a drop message from a client */
     handlePlayerDrop(socket: Socket, content: DropContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
         
         player.dropFromSlot(content.slot, this.game, content.all ? undefined : 1);
@@ -136,7 +135,7 @@ class SocketManager {
 
     /** Response to a swap message from a client */
     handlePlayerSwap(socket: Socket, content: SwapContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
         const inventory = player.getCombinedInventory();
@@ -146,13 +145,13 @@ class SocketManager {
 
     /** Response to a craft message from a client */
     handlePlayerCraft(socket: Socket, content: CraftContent): void {
-        const player = this.game.entityManager.players.get(socket.id as string);
+        const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
         const stationname = player.station !== null ? player.station.name : null;
         const inventory = player.getCombinedInventory();
 
-        this.game.craftManager.craftRecipe(inventory, stationname, player.x, player.y, content);
+        this.game.craftManager.craftRecipe(inventory, stationname, player.layer, player.x, player.y, content);
     }
 
     // #endregion

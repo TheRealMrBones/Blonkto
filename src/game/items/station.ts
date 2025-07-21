@@ -31,7 +31,7 @@ class Station {
     /** Checks for openers that are moving or gone and removes them */
     checkOpeners(game: Game): void {
         for(const opener of Object.values(this.openers)){
-            if(opener.player.moving || game.entityManager.players.get(opener.player.id) === undefined)
+            if(opener.player.moving || opener.player.layer.entityManager.getPlayer(opener.player.id) === undefined)
                 this.closeStation(opener.player);
         }
     }

@@ -54,8 +54,7 @@ class BreedComponent extends Component<EntityDefinition> {
         player.removeFromCurrentSlot(1);
 
         // look for target
-        for(const entity of game.entityManager.getNonplayerEntities()){
-            if(entity.layer != self.layer) continue;
+        for(const entity of self.layer.entityManager.getNonplayerEntities()){
             if(entity.definition.key !== self.definition.key) continue;
             if(self.distanceTo(entity) > this.distance) continue;
             if(entity === self) continue;
@@ -86,8 +85,8 @@ class BreedComponent extends Component<EntityDefinition> {
         if(data.breedstart > 0 && Date.now() - data.breedstart > this.breedtime && data.target !== null){
             const x = (self.x + data.target.x) / 2;
             const y = (self.y + data.target.y) / 2;
-            const newentity = new NonplayerEntity(x, y, 0, this.newentity);
-            game.entityManager.nonplayerentities.set(newentity.id, newentity);
+            const newentity = new NonplayerEntity(self.layer, x, y, 0, this.newentity);
+            self.layer.entityManager.addEntity(newentity);
 
             const otherdata = data.target.getComponentData(BreedComponentData);
             const othertargetdata = data.target.getComponentData(MoveTargetComponentData);

@@ -39,7 +39,7 @@ class ContainerComponent extends Component<BlockDefinition> {
     drop(block: Block, game: Game, drop: boolean){
         const data = block.getComponentData(ContainerComponentData);
 
-        if(drop) data.inventory.dropInventory(block.cell.getWorldX() + .5, block.cell.getWorldY() + .5, game);
+        if(drop) data.inventory.dropInventory(block.cell.chunk.layer, block.cell.getWorldX() + .5, block.cell.getWorldY() + .5, game);
     }
 }
 

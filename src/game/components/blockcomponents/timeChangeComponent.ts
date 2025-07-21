@@ -37,7 +37,7 @@ class TimeChangeComponent extends Component<BlockDefinition> {
         if(data.delayleft == -1) data.delayleft++;
 
         if(!this.cancollide){
-            for(const object of game.entityManager.getAllObjects()){
+            for(const object of block.cell.chunk.layer.entityManager.getAllObjects()){
                 if(object.tilesOn().some(t => t.x == block.cell.getWorldX() && t.y == block.cell.getWorldY())) return;
             }
         }

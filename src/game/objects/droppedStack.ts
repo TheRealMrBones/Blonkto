@@ -1,3 +1,4 @@
+import Layer from "../world/layer.js";
 import ItemStack from "../items/itemStack.js";
 import GameObject from "./gameObject.js";
 import Game from "../game.js";
@@ -12,8 +13,8 @@ class DroppedStack extends GameObject {
     ignore: string | null = null;
     despawntime: number;
 
-    constructor(x: number, y: number, itemStack: ItemStack, ignore?: string){
-        super(x, y, undefined, .5);
+    constructor(layer: Layer, x: number, y: number, itemStack: ItemStack, ignore?: string){
+        super(layer, x, y, undefined, .5);
 
         this.itemStack = itemStack;
         if(ignore !== undefined){
@@ -23,8 +24,8 @@ class DroppedStack extends GameObject {
     }
 
     /** Returns the dropped stack from its save data */
-    static readFromSave(data: any): DroppedStack {
-        const droppedstack = new DroppedStack(data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
+    static readFromSave(layer: Layer, data: any): DroppedStack {
+        const droppedstack = new DroppedStack(layer, data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
         droppedstack.despawntime = data.despawntime;
         return droppedstack;
     }
@@ -32,24 +33,24 @@ class DroppedStack extends GameObject {
     // #region extra constructors
 
     /** Returns a dropped stack with a random spread from the spawn point */
-    static dropWithSpread(game: Game, x: number, y: number, itemStack: ItemStack, spread: number, ignore?: string): void {
+    static dropWithSpread(game: Game, layer: Layer, x: number, y: number, itemStack: ItemStack, spread: number, ignore?: string): void {
         const angle = Math.random() * 2 * Math.PI;
         const magnitude = Math.random() * spread;
 
         const xmovement = Math.cos(angle) * magnitude;
         const ymovement = Math.sin(angle) * magnitude;
 
-        const droppedstack = new DroppedStack(x + xmovement, y + ymovement, itemStack, ignore);
-        game.entityManager.objects.set(droppedstack.id, droppedstack);
+        const droppedstack = new DroppedStack(layer, x + xmovement, y + ymovement, itemStack, ignore);
+        layer.entityManager.addObject(droppedstack);
     }
 
     /** Returns an array of dropped stack with a random spread from the spawn point */
-    static dropManyWithSpread(game: Game, x: number, y: number, item: string, amount: number, spread: number, ignore?: string): void {
+    static dropManyWithSpread(game: Game, layer: Layer, x: number, y: number, item: string, amount: number, spread: number, ignore?: string): void {
         const stacksize = ItemRegistry.get(item).getStackSize();
 
         while(amount > 0){
             const itemstack = new ItemStack(item, Math.min(amount, stacksize));
-            DroppedStack.dropWithSpread(game, x, y, itemstack, spread, ignore);
+            DroppedStack.dropWithSpread(game, layer, x, y, itemstack, spread, ignore);
             amount -= itemstack.getAmount();
         }
     }

@@ -1,4 +1,5 @@
 import Game from "../../game.js";
+import Layer from "../../world/layer.js";
 import ItemStack from "../itemStack.js";
 import IInventory from "./IInventory.js";
 
@@ -33,9 +34,9 @@ class CombinedInventory implements IInventory {
     // #region inventory operations
     
     /** Drops this entire inventory onto the ground */
-    dropInventory(x: number, y: number, game: Game): void {
+    dropInventory(layer: Layer, x: number, y: number, game: Game): void {
         for(const inventory of this.inventories){
-            inventory.dropInventory(x, y, game);
+            inventory.dropInventory(layer, x, y, game);
         }
     }
 
@@ -116,11 +117,11 @@ class CombinedInventory implements IInventory {
     }
 
     /** Drops the given amount from the given slot in this inventory */
-    dropFromSlot(x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
+    dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         const realslot = this.getRealSlot(slot);
         if(realslot === null) return;
 
-        realslot.inventory.dropFromSlot(x, y, realslot.slot, game, amount, ignore);
+        realslot.inventory.dropFromSlot(layer, x, y, realslot.slot, game, amount, ignore);
     }
 
     /** Swaps the item stacks between two slots */

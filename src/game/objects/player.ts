@@ -1,6 +1,7 @@
 import { Socket } from "socket.io-client";
 
 import Entity from "./entity.js";
+import Layer from "../world/layer.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
 import ChangesInventory from "../items/inventory/changesInventory.js";
@@ -38,8 +39,8 @@ class Player extends Entity {
     recipes: Recipe[] = [];
     moving: boolean = false;
 
-    constructor(socket: Socket, username: string, x: number, y: number, starter: boolean){
-        super(x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
+    constructor(socket: Socket, username: string, layer: Layer, x: number, y: number, starter: boolean){
+        super(layer, x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
         this.lastupdated = 0;
         this.serverlastupdated = Date.now();
@@ -68,8 +69,8 @@ class Player extends Entity {
     }
 
     /** Returns the player from its save data */
-    static readFromSave(socket: Socket, x: number, y: number, data: any): Player {
-        const player = new Player(socket, data.username, x, y, (data.dead && !KEEP_INVENTORY));
+    static readFromSave(socket: Socket, layer: Layer, x: number, y: number, data: any): Player {
+        const player = new Player(socket, data.username, layer, x, y, (data.dead && !KEEP_INVENTORY));
 
         player.kills = data.kills;
 
@@ -109,7 +110,7 @@ class Player extends Entity {
         if(killer instanceof Player) killer.kills++;
 
         game.playerManager.killPlayer(this.socket, killedby);
-        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.x, this.y, game);
+        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.layer, this.x, this.y, game);
     }
 
     // #endregion
@@ -205,7 +206,7 @@ class Player extends Entity {
     /** Drops the given amount from the given slot in this players inventory */
     dropFromSlot(slot: number, game: Game, amount?: number): void {
         const inventory = this.getCombinedInventory();
-        inventory.dropFromSlot(this.x, this.y, slot, game, amount, this.id);
+        inventory.dropFromSlot(this.layer, this.x, this.y, slot, game, amount, this.id);
         const stack = inventory.getSlot(slot);
     }
 
