@@ -286,6 +286,7 @@ class Player extends Entity {
         return JSON.stringify({
             dead: false,
             username: this.username,
+            layer: this.layer.z,
             x: this.x,
             y: this.y,
             health: this.health,

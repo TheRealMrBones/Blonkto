@@ -91,7 +91,10 @@ class PlayerManager {
             // load existing player from data
             const data = this.game.fileManager.readFile(getPlayerFilePath(username));
             if(!data) return;
-            spawn.layer.entityManager.addPlayer(Player.readFromSave(socket, spawn.layer, spawn.pos.x, spawn.pos.y, JSON.parse(data)));
+
+            const parseddata = JSON.parse(data);
+            const layer = (parseddata.layer !== undefined) ? this.game.world.getLayer(parseddata.layer) : spawn.layer;
+            layer.entityManager.addPlayer(Player.readFromSave(socket, layer, spawn.pos.x, spawn.pos.y, parseddata));
         }else{
             // create new player
             spawn.layer.entityManager.addPlayer(new Player(socket, username, spawn.layer, spawn.pos.x, spawn.pos.y, true));
