@@ -4,6 +4,7 @@ import Entity from "../objects/entity.js";
 import GameObject from "../objects/gameObject.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import Player from "../objects/player.js";
+import { Pos } from "../../shared/types.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
@@ -229,10 +230,18 @@ class EntityManager {
     // #region helpers
 
     /** Returns the filtered list of gameobjects to only those nearby the given player */
-    filterToNearby<T extends GameObject>(player: Player, objects: T[]): T[] {
+    static filterToNearby<T extends GameObject>(player: Player, objects: T[]): T[] {
         return objects.filter(e => e.id != player.id
             && Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
+        );
+    }
+
+    /** Returns the filtered list of gameobjects to only those in the given chunk */
+    static filterToChunk<T extends GameObject>(chunk: Pos, objects: T[]): T[] {
+        return objects.filter(o =>
+            o.getChunk().x == chunk.x &&
+            o.getChunk().y == chunk.y
         );
     }
 

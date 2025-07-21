@@ -270,10 +270,7 @@ class Layer {
             this.loadedchunks.delete(chunkkey);
 
             // unload entities
-            const entities = [...this.entityManager.getNonplayers()].filter(e =>
-                e.getChunk().x == x
-                && e.getChunk().y == y
-            ).forEach(e => {
+            EntityManager.filterToChunk({x: x, y: y }, [...this.entityManager.getNonplayers()]).forEach(e => {
                 this.game.entityManager.removeNonplayer(e.id);
             });
         }
@@ -350,10 +347,7 @@ class Layer {
         this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
 
         // save entities (and objects) seperately
-        const entities = [...this.entityManager.getNonplayers()].filter(o =>
-            o.getChunk().x == chunk.chunkx &&
-            o.getChunk().y == chunk.chunky
-        );
+        const entities = EntityManager.filterToChunk({x: chunk.chunkx, y: chunk.chunky }, [...this.entityManager.getNonplayers()]);
 
         const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
         this.game.fileManager.writeFile(entitiesfilelocation, entitiesdata);
