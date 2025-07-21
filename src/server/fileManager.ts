@@ -46,7 +46,7 @@ class FileManager {
 
     /** Creates a new directory */
     createDirectory(dirname: string, location?: string): void {
-        const newdir = this.getFullFolderPath(dirname, location)
+        const newdir = this.getFullFolderPath(dirname, location);
         if(!fs.existsSync(newdir)) fs.mkdirSync(newdir, { recursive: true });
     }
 
