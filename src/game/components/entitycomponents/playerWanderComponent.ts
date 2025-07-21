@@ -63,7 +63,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
 
         if(Math.random() < .01 && targetdata.queueEmpty()){
             // get skew to player
-            const players = [...game.entityManager.getPlayerEntities()].sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
+            const players = [...game.entityManager.getPlayerEntities()].filter(p => p.layer == self.layer).sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
             if(players.length == 0) return;
 
             const target = players[0];

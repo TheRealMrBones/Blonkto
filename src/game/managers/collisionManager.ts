@@ -19,11 +19,12 @@ class CollisionManager {
     }
 
     /** Checks if a click is over an entity and returns that entity or null if none exist */
-    clickEntity(x: number, y: number): Entity | null {
+    clickEntity(layer: number, x: number, y: number): Entity | null {
         const entities = this.game.entityManager.getEntities();
 
-        for(const entity2 of entities){
-            if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity2)) return entity2;
+        for(const entity of entities){
+            if(entity.layer != layer) continue;
+            if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity)) return entity;
         }
 
         return null;
@@ -34,6 +35,9 @@ class CollisionManager {
         const entities = this.game.entityManager.getEntities();
 
         for(const entity2 of entities){
+            if(entity.layer != entity2.layer) continue;
+            if(entity.id === entity2.id) continue;
+
             const push = SharedCollisions.entityCollision(entity, { x: entity2.x, y: entity2.y, scale: entity2.scale });
             if(push === null) continue;
             entity.emitCollisionEvent(this.game, entity2, push);
@@ -73,8 +77,9 @@ class CollisionManager {
     collectCheck(player: Player): void {
         const collectables = this.game.entityManager.getDroppedStacks();
 
-        for(let i = 0; i < collectables.length; i++){
-            const collectable = collectables[i];
+        for(const collectable of collectables){
+            if(player.layer != collectable.layer) continue;
+
             const push = SharedCollisions.entityCollision(player, { x: collectable.x, y: collectable.y, scale: collectable.scale });
             const collided = (push !== null);
 
@@ -96,9 +101,10 @@ class CollisionManager {
     itemMergeCheck(collectable: DroppedStack): void {
         const collectables = this.game.entityManager.getDroppedStacks();
 
-        for(let i = 0; i < collectables.length; i++){
-            const collectable2 = collectables[i];
+        for(const collectable2 of collectables){
+            if(collectable.layer != collectable2.layer) continue;
             if(collectable.id === collectable2.id) continue;
+
             const push = SharedCollisions.entityCollision(collectable, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
             const collided = (push !== null);
 
@@ -123,6 +129,8 @@ class CollisionManager {
         };
 
         for(const entity2 of entities){
+            if(entity.layer != entity2.layer) continue;
+
             const dist = SharedCollisions.getDistance(attackpos, entity2);
             const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
             if(entity2.id != entity.id && realdist < 0 && !entity2.hit){

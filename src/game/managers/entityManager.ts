@@ -155,6 +155,7 @@ class EntityManager {
     /** Returns the filtered list of gameobjects to only those nearby the given player */
     filterToNearby<T extends GameObject>(player: Player, objects: T[]): T[] {
         return objects.filter(e => e.id != player.id
+            && e.layer == player.layer
             && Math.abs(e.x - player.x) < CELLS_HORIZONTAL / 2
             && Math.abs(e.y - player.y) < CELLS_VERTICAL / 2
         );

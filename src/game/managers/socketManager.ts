@@ -122,7 +122,7 @@ class SocketManager {
             dir: Math.atan2(content.xoffset, content.yoffset),
             cell: this.game.world.getLayer(player.layer).getCell(cellx, celly, false),
             dist: Math.sqrt(content.xoffset * content.xoffset + content.yoffset * content.yoffset),
-            entity: this.game.collisionManager.clickEntity(content.mex + content.xoffset, content.mey + content.yoffset),
+            entity: this.game.collisionManager.clickEntity(player.layer, content.mex + content.xoffset, content.mey + content.yoffset),
         };
     }
 
