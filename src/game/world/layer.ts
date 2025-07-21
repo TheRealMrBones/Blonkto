@@ -16,9 +16,6 @@ const { LOG_CATEGORIES } = Constants;
 import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
-const worldsavedir = "world/";
-const entitiessavedir = "entities/";
-
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
 class Layer {
     private readonly logger: Logger;
@@ -26,6 +23,8 @@ class Layer {
     private readonly game: Game;
 
     readonly z: number;
+    private readonly savedir: string;
+    private readonly entitysavedir: string;
 
     private readonly loadedchunks: Map<string, Chunk> = new Map<string, Chunk>();
     readonly light: Map<string, number> = new Map<string, number>();
@@ -36,6 +35,15 @@ class Layer {
         this.game = game;
 
         this.z = z;
+
+        // initialize save directories
+        this.savedir = `world/${z}/`;
+        this.entitysavedir = `${this.savedir}entities/`;
+
+        if(!this.game.fileManager.directoryExists(this.savedir))
+            this.game.fileManager.createDirectory(this.savedir);
+        if(!this.game.fileManager.directoryExists(this.entitysavedir))
+            this.game.fileManager.createDirectory(this.entitysavedir);
     }
 
     // #region ticking
@@ -264,15 +272,15 @@ class Layer {
 
     /** Returns if the requested chunks save file exists */
     chunkFileExists(x: number, y: number): boolean {
-        const fileLocation = worldsavedir + [x,y].toString();
+        const fileLocation = this.savedir + [x,y].toString();
 
         return this.game.fileManager.fileExists(fileLocation);
     }
 
     /** Returns the chunk object or null otherwise */
     loadChunk(x: number, y: number): Chunk | null {
-        const chunkfilelocation = worldsavedir + [x,y].toString();
-        const entitiesfilelocation = entitiessavedir + [x,y].toString();
+        const chunkfilelocation = this.savedir + [x,y].toString();
+        const entitiesfilelocation = this.entitysavedir + [x,y].toString();
 
         // read chunk data
         const data = this.game.fileManager.readFile(chunkfilelocation);
@@ -326,8 +334,8 @@ class Layer {
 
     /** Saves the given chunks data */
     writeChunkFile(chunk: Chunk): void {
-        const chunkfilelocation = worldsavedir + [chunk.chunkx,chunk.chunky].toString();
-        const entitiesfilelocation = entitiessavedir + [chunk.chunkx,chunk.chunky].toString();
+        const chunkfilelocation = this.savedir + [chunk.chunkx,chunk.chunky].toString();
+        const entitiesfilelocation = this.entitysavedir + [chunk.chunkx,chunk.chunky].toString();
 
         const chunkdata = chunk.serializeForWrite();
         this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
