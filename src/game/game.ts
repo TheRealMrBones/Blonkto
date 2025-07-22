@@ -20,8 +20,6 @@ import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
 
 import ServerConfig from "../configs/server.js";
-import SeededRandom from "../shared/random/seededRandom.js";
-import PerlinNoise from "../shared/random/perlinNoise.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
