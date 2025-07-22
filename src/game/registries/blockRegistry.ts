@@ -12,6 +12,7 @@ import TimeChangeComponent from "../components/blockcomponents/timeChangeCompone
 import StationComponent from "../components/blockcomponents/stationComponent.js";
 import LightComponent from "../components/blockcomponents/lightComponent.js";
 import ContainerComponent from "../components/blockcomponents/containerComponent.js";
+import StairsComponent from "../components/blockcomponents/stairsComponent.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
@@ -27,7 +28,7 @@ BlockRegistry.register(new BlockDefinition("tree_trunk", "Tree Trunk", ASSETS.TR
 BlockRegistry.register(new BlockDefinition("wood_wall", "Wood Wall", ASSETS.WOOD_WALL, new Drop("wood_wall"), MINE_TYPES.CHOP));
 BlockRegistry.register(new BlockDefinition("wood_door", "Wood Door", ASSETS.WOOD_DOOR, new Drop("wood_door"), MINE_TYPES.CHOP)
     .addComponent(new ChangeComponent("wood_door_open", true)));
-BlockRegistry.register(new BlockDefinition("wood_door_open", "Wood Door (Open)", ASSETS.WOOD_DOOR_OPEN, new Drop("wood_door"), MINE_TYPES.CHOP)
+BlockRegistry.register(new BlockDefinition("wood_door_open", "Wood Door", ASSETS.WOOD_DOOR_OPEN, new Drop("wood_door"), MINE_TYPES.CHOP)
     .addComponent(new ChangeComponent("wood_door"))
     .setFloorVisible(true)
     .setWalkThrough(true)
@@ -57,5 +58,13 @@ BlockRegistry.register(new BlockDefinition("torch", "Torch", ASSETS.TORCH, new D
 BlockRegistry.register(new BlockDefinition("chest", "Chest", ASSETS.CHEST, new Drop("chest"), MINE_TYPES.CHOP, 1, .8)
     .addComponent(new StationComponent())
     .addComponent(new ContainerComponent(27)));
+BlockRegistry.register(new BlockDefinition("wood_stairs_down", "Wood Stairs", ASSETS.WOOD_STAIRS_DOWN, new Drop("wood_stairs"), MINE_TYPES.CHOP)
+    .addComponent(new StairsComponent(true, "wood_stairs_up"))
+    .setWalkThrough(true)
+    .setUnderEntities(true));
+BlockRegistry.register(new BlockDefinition("wood_stairs_up", "Wood Stairs", ASSETS.WOOD_STAIRS_UP)
+    .addComponent(new StairsComponent(false, "wood_stairs_down"))
+    .setWalkThrough(true)
+    .setUnderEntities(true));
 
 export default BlockRegistry;

@@ -34,7 +34,7 @@ class World {
 
         this.game = game;
 
-        this.layers = [new Layer(this.game, this, 0)];
+        this.layers = [new Layer(this.game, this, 0), new Layer(this.game, this, 1)];
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
@@ -203,8 +203,8 @@ class World {
 
     // #region layers
 
-    /** Returns the requested layer of this world */
-    getLayer(z: number): Layer {
+    /** Returns the requested layer of this world or undefined if there is no layer for that z */
+    getLayer(z: number): Layer | undefined {
         return this.layers[z];
     }
 

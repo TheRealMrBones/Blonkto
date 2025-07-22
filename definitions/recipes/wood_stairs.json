@@ -1,0 +1,7 @@
+{
+    "ingredients": {
+        "wood": 10
+    },
+    "result": "wood_stairs",
+    "station": "work_bench"
+}
