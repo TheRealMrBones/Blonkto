@@ -1,6 +1,6 @@
-import { equalPos } from "../../shared/typeOperations.js";
-import { Pos } from "../../shared/types.js";
-import Layer from "./layer.js";
+import { equalPos } from "../../../shared/typeOperations.js";
+import { Pos } from "../../../shared/types.js";
+import Layer from "../layer.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
 export function pathfind(start: Pos, end: Pos, layer: Layer, ghostblocked?: Pos[]): Pos[] | null {

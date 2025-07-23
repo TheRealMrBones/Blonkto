@@ -1,7 +1,7 @@
 import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
-import { pathfind } from "../../world/pathfind.js";
+import { pathfind } from "../../world/helpers/pathfind.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import Player from "../../objects/player.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
