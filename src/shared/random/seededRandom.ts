@@ -3,7 +3,7 @@ class SeededRandom {
     private readonly startseed: number;
     private seed: number;
     
-    private readonly modulus: number = 2 ** 31;
+    readonly modulus: number = 2 ** 31;
     private readonly multiplier: number = 1103515245;
     private readonly increment: number = 12345;
     
@@ -34,7 +34,7 @@ class SeededRandom {
 
     // #region random
 
-    /** Generates the next random number in [0, 1) */
+    /** Returns the next random number in [0, 1) */
     next(): number {
         this.seed = (this.multiplier * this.seed + this.increment) % this.modulus;
         return this.seed / this.modulus;
