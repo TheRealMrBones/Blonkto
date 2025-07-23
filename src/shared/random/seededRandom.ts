@@ -6,6 +6,9 @@ class SeededRandom {
     private readonly modulus: number = 2 ** 31;
     private readonly multiplier: number = 1103515245;
     private readonly increment: number = 12345;
+    
+    private readonly xhash: number = 1836311903;
+    private readonly yhash: number = 2971215073;
 
     constructor(startseed: number) {
         this.startseed = startseed % this.modulus;
@@ -17,6 +20,14 @@ class SeededRandom {
     /** Returns the seed used to start this randomizer */
     getSeed(): number {
         return this.startseed;
+    }
+
+    /** Returns a reproducable subseed of this seed given 1-2 subseed values and the main seed value */
+    getSubSeed(x: number, y?: number): number {
+        const hash = y !== undefined ? 
+            (x * this.xhash) ^ (y * this.yhash) ^ this.startseed :
+            (x * this.xhash) ^ this.startseed;
+        return hash;
     }
 
     // #endregion

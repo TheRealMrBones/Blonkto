@@ -3,8 +3,8 @@ import SeededRandom from "./seededRandom.js";
 /** A custom randomomizer class for generating grid gradiants */
 class PerlinNoise {
     private readonly rng: SeededRandom;
-    private readonly xhash: number = 1836311903;
-    private readonly yhash: number = 2971215073;
+    private readonly xhash: number;
+    private readonly yhash: number;
 
     constructor(seed: number) {
         this.rng = new SeededRandom(seed);
