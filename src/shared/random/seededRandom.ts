@@ -12,6 +12,17 @@ class SeededRandom {
         this.seed = this.startseed;
     }
 
+    // #region seed
+    
+    /** Returns the seed used to start this randomizer */
+    getSeed(): number {
+        return this.startseed;
+    }
+
+    // #endregion
+
+    // #region random
+
     /** Generates the next random number in [0, 1) */
     next(): number {
         this.seed = (this.multiplier * this.seed + this.increment) % this.modulus;
@@ -27,6 +38,8 @@ class SeededRandom {
     nextFloat(min: number, max: number): number {
         return this.next() * (max - min) + min;
     }
+
+    // #endregion
 }
 
 export default SeededRandom;

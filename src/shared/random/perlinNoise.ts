@@ -3,9 +3,13 @@ import SeededRandom from "./seededRandom.js";
 /** A custom randomomizer class for generating grid gradiants */
 class PerlinNoise {
     private readonly rng: SeededRandom;
+    private readonly xhash: number = 1836311903;
+    private readonly yhash: number = 2971215073;
 
-    constructor(rng: SeededRandom) {
-        this.rng = rng;
+    constructor(seed: number) {
+        this.rng = new SeededRandom(seed);
+        this.xhash = this.rng.nextInt(0, 2 ** 31);
+        this.yhash = this.rng.nextInt(0, 2 ** 31);
     }
 
     /** Returns the given linear sloped value as a new non-linear sloped value */
@@ -21,7 +25,7 @@ class PerlinNoise {
     /** Returns a gradient vector procedurally generated based on grid coordinates */
     private gradient(ix: number, iy: number): [number, number] {
         // Create a reproducible hash based on grid coordinates
-        const hash = (ix * 1836311903) ^ (iy * 2971215073);
+        const hash = (ix * this.xhash) ^ (iy * this.yhash);
 
         // Seed a temporary RNG with this hash
         const temprng = new SeededRandom(hash >>> 0);
