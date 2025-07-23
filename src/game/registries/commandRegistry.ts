@@ -84,3 +84,5 @@ import cycleDayCommand from "../commands/cycleDayCommand.js";
 cycleDayCommand();
 import getTimeCommand from "../commands/getTimeCommand.js";
 getTimeCommand();
+import seedCommand from "../commands/seedCommand.js";
+seedCommand();
