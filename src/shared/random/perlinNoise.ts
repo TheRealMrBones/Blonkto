@@ -2,37 +2,35 @@ import SeededRandom from "./seededRandom.js";
 
 /** A custom randomomizer class for generating grid gradiants */
 class PerlinNoise {
-    private rng: SeededRandom;
+    private readonly rng: SeededRandom;
 
     constructor(rng: SeededRandom) {
         this.rng = rng;
     }
 
+    /** Returns the given linear sloped value as a new non-linear sloped value */
     private fade(t: number): number {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
+    /** Returns the interpolation between the two given values with the given ratio */
     private lerp(a: number, b: number, t: number): number {
         return a + t * (b - a);
     }
 
-    /**
-     * Generate a gradient vector procedurally based on grid coordinates
-     */
+    /** Returns a gradient vector procedurally generated based on grid coordinates */
     private gradient(ix: number, iy: number): [number, number] {
         // Create a reproducible hash based on grid coordinates
         const hash = (ix * 1836311903) ^ (iy * 2971215073);
 
-        // Seed a temporary RNG with this hash (note: use unsigned 32-bit wrapping)
-        const tempRNG = new SeededRandom(hash >>> 0);
-        const angle = tempRNG.next() * 2 * Math.PI;
+        // Seed a temporary RNG with this hash
+        const temprng = new SeededRandom(hash >>> 0);
+        const angle = temprng.next() * 2 * Math.PI;
 
         return [Math.cos(angle), Math.sin(angle)];
     }
 
-    /**
-     * Compute dot product of gradient and distance vectors
-     */
+    /** Returns dot product of gradient and distance vectors */
     private dotGridGradient(ix: number, iy: number, x: number, y: number): number {
         const [gx, gy] = this.gradient(ix, iy);
         const dx = x - ix;
@@ -40,6 +38,7 @@ class PerlinNoise {
         return dx * gx + dy * gy;
     }
 
+    /** Returns the noise value at the given coordinate of the gradient */
     public noise(x: number, y: number): number {
         // Integer grid cell coordinates
         const x0 = Math.floor(x);
@@ -62,10 +61,11 @@ class PerlinNoise {
         const ix1 = this.lerp(n01, n11, sx);
         const value = this.lerp(ix0, ix1, sy);
 
-        return value; // Typically in [-1, 1]
+        return value;
     }
 
-    public generateGrid(width: number, height: number, scale: number = 0.1): number[][] {
+    /** Returns the perlin noise grid of the given properties from this perlin noise object with values in [-1, 1] */
+    public generateGrid(width: number, height: number, scale: number): number[][] {
         const grid: number[][] = [];
 
         for (let y = 0; y < height; y++) {
