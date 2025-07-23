@@ -6,7 +6,7 @@ import Chunk from "./chunk.js";
 import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
 import Game from "../game.js";
-import SeededRandom from "../../shared/random/seededRandom.js";
+import multiNumberHash from "../../shared/random/multiNumberHash.js";
 import Player from "../objects/player.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import BlockRegistry from "../registries/blockRegistry.js";
@@ -28,9 +28,7 @@ class Layer {
     private readonly world: World;
 
     readonly z: number;
-    
     readonly seed: number;
-    readonly rng: SeededRandom;
     readonly layergenerator: ILayerGenerator;
 
     private readonly savedir: string;
@@ -48,8 +46,7 @@ class Layer {
         this.world = world;
         this.z = z;
 
-        this.seed = this.world.rng.getSubSeed(this.z + 54321);
-        this.rng = new SeededRandom(this.seed);
+        this.seed = multiNumberHash(this.z, this.world.seed);
         this.layergenerator = layergenerator;
 
         this.entityManager = new EntityManager(this.game, this.game.entityManager);

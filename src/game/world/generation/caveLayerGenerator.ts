@@ -2,6 +2,7 @@ import ILayerGenerator from "./ILayerGenerator.js";
 import Game from "../../game.js";
 import Chunk from "../chunk.js";
 import Layer from "../layer.js";
+import multiNumberHash from "../../../shared/random/multiNumberHash.js";
 import SeededRandom from "../../../shared/random/seededRandom.js";
 import Cell from "../cell.js";
 
@@ -16,7 +17,7 @@ class CaveLayerGenerator implements ILayerGenerator {
 
     /** Generates a new chunk at the given coordinates */
     generateChunk(layer: Layer, chunkx: number, chunky: number, game: Game): Chunk {
-        const seed = layer.rng.getSubSeed(chunkx + 123456789, chunky + 987654321);
+        const seed = multiNumberHash(chunkx, chunky, layer.seed);
         const rng = new SeededRandom(seed);
 
         const chunk = new Chunk(layer, chunkx, chunky);

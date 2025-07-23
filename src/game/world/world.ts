@@ -24,7 +24,6 @@ class World {
     private readonly game: Game;
 
     readonly seed: number;
-    readonly rng: SeededRandom;
 
     private readonly layers: Layer[];
 
@@ -49,8 +48,6 @@ class World {
             this.seed = SEED == 0 ? Math.floor(Math.random() * SeededRandom.modulus) : SEED;
             this.daycycletick = DAY_TRANSITION_LENGTH;
         }
-
-        this.rng = new SeededRandom(this.seed);
         
         this.layers = [
             new Layer(this.game, this, 0, new LayerGenerator()),
