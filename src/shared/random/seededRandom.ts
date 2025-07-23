@@ -27,7 +27,7 @@ class SeededRandom {
         const hash = y !== undefined ? 
             (x * SeededRandom.xhash) ^ (y * SeededRandom.yhash) ^ this.startseed :
             (x * SeededRandom.xhash) ^ this.startseed;
-        return hash;
+        return hash >>> 0;
     }
 
     // #endregion
