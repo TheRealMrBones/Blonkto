@@ -7,8 +7,7 @@ class SeededRandom {
     private static readonly multiplier: number = 1103515245;
     private static readonly increment: number = 12345;
     
-    private static readonly xhash: number = 1836311903;
-    private static readonly yhash: number = 2971215073;
+    private static readonly hashseed: number = 1836311903;
 
     constructor(startseed: number) {
         this.startseed = startseed % SeededRandom.modulus;
@@ -22,11 +21,16 @@ class SeededRandom {
         return this.startseed;
     }
 
-    /** Returns a reproducable subseed of this seed given 1-2 subseed values and the main seed value */
-    getSubSeed(x: number, y?: number): number {
-        const hash = y !== undefined ? 
-            (x * SeededRandom.xhash) ^ (y * SeededRandom.yhash) ^ this.startseed :
-            (x * SeededRandom.xhash) ^ this.startseed;
+    /** Returns a reproducable subseed of this seed given a variable amount of subseed values and the main seed value */
+    getSubSeed(...subseeds: number[]): number {
+        const rng = new SeededRandom(SeededRandom.hashseed);
+
+        let hash = subseeds[0] * rng.nextInt(0, SeededRandom.modulus);
+        for(let i = 1; i < subseeds.length; i++){
+            hash = hash ^ subseeds[i] * rng.nextInt(0, SeededRandom.modulus);
+        }
+
+        hash = hash ^ this.startseed;
         return hash >>> 0;
     }
 
