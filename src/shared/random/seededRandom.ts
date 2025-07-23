@@ -3,15 +3,15 @@ class SeededRandom {
     private readonly startseed: number;
     private seed: number;
     
-    readonly modulus: number = 2 ** 31;
-    private readonly multiplier: number = 1103515245;
-    private readonly increment: number = 12345;
+    static readonly modulus: number = 2 ** 31;
+    private static readonly multiplier: number = 1103515245;
+    private static readonly increment: number = 12345;
     
-    private readonly xhash: number = 1836311903;
-    private readonly yhash: number = 2971215073;
+    private static readonly xhash: number = 1836311903;
+    private static readonly yhash: number = 2971215073;
 
     constructor(startseed: number) {
-        this.startseed = startseed % this.modulus;
+        this.startseed = startseed % SeededRandom.modulus;
         this.seed = this.startseed;
     }
 
@@ -25,8 +25,8 @@ class SeededRandom {
     /** Returns a reproducable subseed of this seed given 1-2 subseed values and the main seed value */
     getSubSeed(x: number, y?: number): number {
         const hash = y !== undefined ? 
-            (x * this.xhash) ^ (y * this.yhash) ^ this.startseed :
-            (x * this.xhash) ^ this.startseed;
+            (x * SeededRandom.xhash) ^ (y * SeededRandom.yhash) ^ this.startseed :
+            (x * SeededRandom.xhash) ^ this.startseed;
         return hash;
     }
 
@@ -36,8 +36,8 @@ class SeededRandom {
 
     /** Returns the next random number in [0, 1) */
     next(): number {
-        this.seed = (this.multiplier * this.seed + this.increment) % this.modulus;
-        return this.seed / this.modulus;
+        this.seed = (SeededRandom.multiplier * this.seed + SeededRandom.increment) % SeededRandom.modulus;
+        return this.seed / SeededRandom.modulus;
     }
 
     /** Returns a random integer between min (inclusive) and max (exclusive) */

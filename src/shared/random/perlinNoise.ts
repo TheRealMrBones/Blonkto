@@ -8,8 +8,8 @@ class PerlinNoise {
 
     constructor(seed: number) {
         this.rng = new SeededRandom(seed);
-        this.xhash = this.rng.nextInt(0, 2 ** 31);
-        this.yhash = this.rng.nextInt(0, 2 ** 31);
+        this.xhash = this.rng.nextInt(0, SeededRandom.modulus);
+        this.yhash = this.rng.nextInt(0, SeededRandom.modulus);
     }
 
     /** Returns the given linear sloped value as a new non-linear sloped value */
