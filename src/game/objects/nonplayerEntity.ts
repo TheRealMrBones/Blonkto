@@ -31,6 +31,17 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         return entity;
     }
 
+    // #region setters
+
+    /** Sets the nonplayer entities layer to the given layer */
+    override setLayer(newlayer: Layer): void {
+        this.layer.entityManager.removeEntity(this.id);
+        this.layer = newlayer;
+        newlayer.entityManager.addEntity(this);
+    }
+
+    // #endregion
+
     // #region events
 
     /** Emits a tick event to this object */

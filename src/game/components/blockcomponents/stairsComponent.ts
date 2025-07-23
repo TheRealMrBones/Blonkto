@@ -43,9 +43,7 @@ class StairsComponent extends Component<BlockDefinition> {
             newcell.setBlock(this.partnerblock, game);
         }
 
-        player.layer.entityManager.removePlayer(player.id);
-        player.layer = newlayer;
-        newlayer.entityManager.addPlayer(player);
+        player.setLayer(newlayer);
         player.lastchunk = undefined; // force chunk reload
     }
 }

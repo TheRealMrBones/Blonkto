@@ -192,6 +192,13 @@ class Player extends Entity {
         this.setPos(this.x, this.y);
     }
 
+    /** Sets the players layer to the given layer */
+    override setLayer(newlayer: Layer): void {
+        this.layer.entityManager.removePlayer(this.id);
+        this.layer = newlayer;
+        newlayer.entityManager.addPlayer(this);
+    }
+
     /** Heal the player the given amount of health */
     heal(amount: number, ignoremax?: boolean): void {
         this.health += amount;

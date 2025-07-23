@@ -78,6 +78,13 @@ abstract class GameObject {
         this.y = y;
     }
 
+    /** Sets the objects layer to the given layer */
+    setLayer(newlayer: Layer): void {
+        this.layer.entityManager.removeObject(this.id);
+        this.layer = newlayer;
+        newlayer.entityManager.addObject(this);
+    }
+
     // #endregion
 
     // #region events
