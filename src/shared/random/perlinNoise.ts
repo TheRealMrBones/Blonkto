@@ -77,12 +77,12 @@ class PerlinNoise {
     }
 
     /** Returns the perlin noise grid of the given properties from this perlin noise object with values in [-1, 1] */
-    public generateGrid(width: number, height: number): number[][] {
+    public generateGrid(width: number, height: number, startx: number = 0, starty: number = 0): number[][] {
         const grid: number[][] = [];
 
-        for (let y = 0; y < height; y++) {
+        for (let y = starty; y < starty + height; y++) {
             const row: number[] = [];
-            for (let x = 0; x < width; x++) {
+            for (let x = startx; x < startx + width; x++) {
                 const value = this.noise(x, y);
                 row.push(value);
             }
