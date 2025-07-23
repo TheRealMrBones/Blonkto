@@ -70,7 +70,7 @@ class EntityManager {
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);
 
-                const layer = this.game.world.getLayer(0);
+                const layer = this.game.world.getLayer(0)!;
                 const cell = layer.getCell(cellx, celly, false);
                 if(cell === null) continue;
                 if(cell.block !== null) continue;
