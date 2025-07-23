@@ -5,11 +5,15 @@ class PerlinNoise {
     private readonly rng: SeededRandom;
     private readonly xhash: number;
     private readonly yhash: number;
+    
+    private readonly scale: number;
 
-    constructor(seed: number) {
+    constructor(seed: number, scale: number) {
         this.rng = new SeededRandom(seed);
         this.xhash = this.rng.nextInt(0, SeededRandom.modulus);
         this.yhash = this.rng.nextInt(0, SeededRandom.modulus);
+
+        this.scale = scale;
     }
 
     /** Returns the given linear sloped value as a new non-linear sloped value */
@@ -43,7 +47,11 @@ class PerlinNoise {
     }
 
     /** Returns the noise value at the given coordinate of the gradient */
-    public noise(x: number, y: number): number {
+    public noise(ex: number, ey: number): number {
+        // get float versions of x and y
+        const x = ex / this.scale;
+        const y = ey / this.scale;
+
         // Integer grid cell coordinates
         const x0 = Math.floor(x);
         const x1 = x0 + 1;
@@ -69,13 +77,13 @@ class PerlinNoise {
     }
 
     /** Returns the perlin noise grid of the given properties from this perlin noise object with values in [-1, 1] */
-    public generateGrid(width: number, height: number, scale: number): number[][] {
+    public generateGrid(width: number, height: number): number[][] {
         const grid: number[][] = [];
 
         for (let y = 0; y < height; y++) {
             const row: number[] = [];
             for (let x = 0; x < width; x++) {
-                const value = this.noise(x * scale, y * scale);
+                const value = this.noise(x, y);
                 row.push(value);
             }
             grid.push(row);
