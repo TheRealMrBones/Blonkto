@@ -34,7 +34,7 @@ class LayerGenerator implements ILayerGenerator {
                     cell.setBlock("stone_block", game);
                 }else if(rng.next() < .01){
                     cell.setBlock("grown_carrots", game);
-                }else if(rng.next() < .005){
+                }else if(rng.next() < .0051){
                     const pig = new NonplayerEntity(layer, chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
                     layer.entityManager.addEntity(pig);
                 }
