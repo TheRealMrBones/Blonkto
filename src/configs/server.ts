@@ -33,6 +33,7 @@ type ServerConfigSchema = {
         SERVER_UPDATE_RATE: number,
     },
     WORLD: {
+        SEED: number, 
         SPAWN_SIZE: number,
         CHUNK_UNLOAD_RATE: number,
         AUTOSAVE_RATE: number,
@@ -87,6 +88,7 @@ const ServerConfig: ServerConfigSchema = {
         SERVER_UPDATE_RATE: 50,
     },
     WORLD: {
+        SEED: 0,
         SPAWN_SIZE: 2,
         CHUNK_UNLOAD_RATE: 1.0,
         AUTOSAVE_RATE: 60.0,

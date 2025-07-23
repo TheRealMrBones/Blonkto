@@ -11,7 +11,7 @@ import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
-const { SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
+const { SEED, SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = ServerConfig.WORLD;
 
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
@@ -41,7 +41,7 @@ class World {
             this.seed = data.seed;
             this.daycycletick = data.daycycletick;
         }else{
-            this.seed = Math.floor(Math.random() * SeededRandom.modulus);
+            this.seed = SEED == 0 ? Math.floor(Math.random() * SeededRandom.modulus) : SEED;
             this.daycycletick = DAY_TRANSITION_LENGTH;
         }
         
