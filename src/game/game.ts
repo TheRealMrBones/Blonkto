@@ -121,7 +121,7 @@ class Game {
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
         const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
         const tab = this.playerManager.getTab();
-        const darkness = this.world.getDarknessPercent();
+        const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
         const tps = this.performanceManager.getTps();
 
         // reset data
