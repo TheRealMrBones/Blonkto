@@ -27,7 +27,7 @@ class SeededRandom {
 
         let hash = subseeds[0] * rng.nextInt(0, SeededRandom.modulus);
         for(let i = 1; i < subseeds.length; i++){
-            hash = hash ^ subseeds[i] * rng.nextInt(0, SeededRandom.modulus);
+            hash = hash ^ (subseeds[i] * rng.nextInt(0, SeededRandom.modulus));
         }
 
         hash = hash ^ this.startseed;
