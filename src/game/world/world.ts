@@ -2,6 +2,7 @@ import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import Layer from "./layer.js";
 import Player from "../objects/player.js";
+import SeededRandom from "../../shared/random/seededRandom.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -19,12 +20,13 @@ class World {
     
     private readonly game: Game;
 
+    readonly seed: number;
     private readonly layers: Layer[];
 
     private readonly unloadInterval: NodeJS.Timeout;
     private readonly saveInterval: NodeJS.Timeout;
 
-    private daycycletick: number = DAY_TRANSITION_LENGTH;
+    private daycycletick: number;
     private darknesspercent: number = 0;
     private cycleday: boolean = true;
 
@@ -34,7 +36,18 @@ class World {
 
         this.game = game;
 
+        if(this.game.fileManager.fileExists("world")){
+            const data = JSON.parse(this.game.fileManager.readFile("world")!);
+            this.seed = data.seed;
+            this.daycycletick = data.daycycletick;
+        }else{
+            this.seed = Math.floor(Math.random() * SeededRandom.modulus);
+            this.daycycletick = DAY_TRANSITION_LENGTH;
+        }
+        
         this.layers = [new Layer(this.game, this, 0), new Layer(this.game, this, 1)];
+
+        this.saveWorld();
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 / CHUNK_UNLOAD_RATE);
         this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
@@ -224,7 +237,15 @@ class World {
     /** Saves all of the currently loaded world data to the save */
     saveWorld(): void {
         this.logger.info("Saving world");
+        
+        // save global world data
+        const worlddata = {
+            seed: this.seed,
+            daycycletick: this.daycycletick,
+        }
+        this.game.fileManager.writeFile("world", JSON.stringify(worlddata));
 
+        // save all layers
         for(const layer of this.layers){
             layer.saveLayer();
         }
