@@ -242,7 +242,7 @@ class World {
         const worlddata = {
             seed: this.seed,
             daycycletick: this.daycycletick,
-        }
+        };
         this.game.fileManager.writeFile("world", JSON.stringify(worlddata));
 
         // save all layers
