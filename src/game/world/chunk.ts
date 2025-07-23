@@ -1,7 +1,6 @@
 import Cell from "./cell.js";
 import Layer from "./layer.js";
 import Game from "../game.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -14,7 +13,7 @@ class Chunk {
     readonly cells: Cell[][];
     cellupdates: any[];
 
-    private constructor(layer: Layer, chunkx: number, chunky: number){
+    constructor(layer: Layer, chunkx: number, chunky: number){
         this.layer = layer;
         this.chunkx = chunkx;
         this.chunky = chunky;
@@ -43,37 +42,6 @@ class Chunk {
 
         return chunk;
     }
-
-    // #region world generation
-
-    /** Generates new cell data for the chunk */
-    static generateChunk(layer: Layer, chunkx: number, chunky: number, game: Game): Chunk {
-        const chunk = new Chunk(layer, chunkx, chunky);
-
-        for(let x = 0; x < CHUNK_SIZE; x++){
-            chunk.cells[x] = [];
-            for(let y = 0; y < CHUNK_SIZE; y++){
-                const cell = new Cell(chunk, x, y, "grass_floor");
-
-                if(Math.random() < .1){
-                    cell.setBlock("stone_block", game);
-                }else if(Math.random() < .02){
-                    cell.setBlock("tree_trunk", game);
-                }else if(Math.random() < .005){
-                    cell.setBlock("grown_carrots", game);
-                }else if(Math.random() < .0051){
-                    const pig = new NonplayerEntity(layer, chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
-                    layer.entityManager.addEntity(pig);
-                }
-                
-                chunk.cells[x][y] = cell;
-            }
-        }
-
-        return chunk;
-    }
-
-    // #endregion
 
     // #region unloading
 

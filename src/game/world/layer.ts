@@ -1,6 +1,7 @@
 import Logger from "../../server/logging/logger.js";
 import EntityManager from "../managers/entityManager.js";
 import World from "./world.js";
+import ILayerGenerator from "./generation/ILayerGenerator.js";
 import Chunk from "./chunk.js";
 import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
@@ -26,6 +27,8 @@ class Layer {
     private readonly world: World;
 
     readonly z: number;
+    readonly layergenerator: ILayerGenerator;
+
     private readonly savedir: string;
     private readonly entitysavedir: string;
 
@@ -34,13 +37,14 @@ class Layer {
 
     readonly entityManager: EntityManager;
 
-    constructor(game: Game, world: World, z: number){
+    constructor(game: Game, world: World, z: number, layergenerator: ILayerGenerator){
         this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
 
         this.game = game;
         this.world = world;
 
         this.z = z;
+        this.layergenerator = layergenerator;
 
         this.entityManager = new EntityManager(this.game, this.game.entityManager);
         this.game.entityManager.addChild(this.entityManager);
@@ -355,7 +359,7 @@ class Layer {
 
     /** Returns a new generated chunk */
     generateChunk(x: number, y: number): Chunk {
-        const newChunk = Chunk.generateChunk(this, x, y, this.game);
+        const newChunk = this.layergenerator.generateChunk(this, x, y, this.game);
         this.loadedchunks.set(Layer.getChunkKey(x, y), newChunk);
         return newChunk;
     }

@@ -4,6 +4,9 @@ import Layer from "./layer.js";
 import Player from "../objects/player.js";
 import SeededRandom from "../../shared/random/seededRandom.js";
 
+import LayerGenerator from "./generation/layerGenerator.js";
+import CaveLayerGenerator from "./generation/caveLayerGenerator.js";
+
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
@@ -45,7 +48,10 @@ class World {
             this.daycycletick = DAY_TRANSITION_LENGTH;
         }
         
-        this.layers = [new Layer(this.game, this, 0), new Layer(this.game, this, 1)];
+        this.layers = [
+            new Layer(this.game, this, 0, new LayerGenerator()),
+            new Layer(this.game, this, 1, new CaveLayerGenerator())
+        ];
 
         this.saveWorld();
 
