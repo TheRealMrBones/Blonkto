@@ -3,6 +3,7 @@ import Game from "../../game.js";
 import Chunk from "../chunk.js";
 import Layer from "../layer.js";
 import multiNumberHash from "../../../shared/random/multiNumberHash.js";
+import PerlinNoise from "../../../shared/random/perlinNoise.js";
 import SeededRandom from "../../../shared/random/seededRandom.js";
 import Cell from "../cell.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
@@ -18,6 +19,10 @@ class LayerGenerator implements ILayerGenerator {
 
     /** Generates a new chunk at the given coordinates */
     generateChunk(layer: Layer, chunkx: number, chunky: number, game: Game): Chunk {
+        const layerrng = new SeededRandom(layer.seed);
+        const layerperlinnoise = new PerlinNoise(layerrng.nextInt(0, SeededRandom.modulus), CHUNK_SIZE);
+        const forestgrid = layerperlinnoise.generateGrid(32, 32, chunkx * CHUNK_SIZE, chunky * CHUNK_SIZE);
+
         const seed = multiNumberHash(chunkx, chunky, layer.seed);
         const rng = new SeededRandom(seed);
 
@@ -28,7 +33,7 @@ class LayerGenerator implements ILayerGenerator {
             for(let y = 0; y < CHUNK_SIZE; y++){
                 const cell = new Cell(chunk, x, y, "grass_floor");
 
-                if(rng.next() < .05){
+                if(forestgrid[x][y] > 0 && rng.next() < .1){
                     cell.setBlock("tree_trunk", game);
                 }else if(rng.next() < .005){
                     cell.setBlock("stone_block", game);
