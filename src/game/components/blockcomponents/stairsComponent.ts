@@ -21,9 +21,10 @@ class StairsComponent extends Component<BlockDefinition> {
     override setParent(parent: BlockDefinition): void {
         super.setParent(parent);
         this.getParent().registerInteractListener((block: Block, game: Game, player: Player, info: ClickContentExpanded) => this.interact(block, game, player, info));
+        this.getParent().registerBreakListener((block: Block, game: Game, drop: boolean) => this.break(block, game, drop));
     }
 
-    /** Defines the pickup interaction of the block with this component */
+    /** Defines the interaction event of the block with this component */
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
         if(Math.floor(player.x) != block.cell.getWorldX() || Math.floor(player.y) != block.cell.getWorldY()) return;
 
@@ -45,6 +46,21 @@ class StairsComponent extends Component<BlockDefinition> {
 
         player.setLayer(newlayer);
         player.lastchunk = undefined; // force chunk reload
+    }
+
+    /** Defines the break event of the block with this component */
+    break(block: Block, game: Game, drop: boolean): void {
+        if(!this.down) return;
+
+        const newz = block.cell.chunk.layer.z + (this.down ? 1 : -1);
+        const newlayer = game.world.getLayer(newz);
+        if(newlayer === undefined) return;
+
+        const newcell = newlayer.getCell(block.cell.getWorldX(), block.cell.getWorldY(), true);
+        if(newcell === null) return;
+
+        if(newcell.block !== null)
+            if(newcell.block.definition.key == this.partnerblock) newcell.breakBlock(drop, game);
     }
 }
 
