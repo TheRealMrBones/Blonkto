@@ -22,9 +22,9 @@ logger.info("Initializing block registry");
 
 const BlockRegistry = new Registry<BlockDefinition>("BlockRegistry");
 
-BlockRegistry.register(new BlockDefinition("stone_block", "Stone Block", ASSETS.STONE_BLOCK, new Drop("stone", 4), MINE_TYPES.MINE));
+BlockRegistry.register(new BlockDefinition("stone_block", "Stone Block", ASSETS.STONE_BLOCK, new Drop("stone", 2), MINE_TYPES.MINE));
 BlockRegistry.register(new BlockDefinition("stone_wall", "Stone Wall", ASSETS.STONE_WALL, new Drop("stone_wall"), MINE_TYPES.MINE));
-BlockRegistry.register(new BlockDefinition("tree_trunk", "Tree Trunk", ASSETS.TREE_TRUNK, new Drops(new Drop("wood", 2, 1, .66, 5), new Drop("pine_cone", 1, 1, .33, 3)), MINE_TYPES.CHOP, 1, .8, SHAPES.CIRCLE));
+BlockRegistry.register(new BlockDefinition("tree_trunk", "Tree Trunk", ASSETS.TREE_TRUNK, new Drops(new Drop("wood", 1, 1, .66, 3), new Drop("pine_cone", 1, 1, .5, 2)), MINE_TYPES.CHOP, 1, .8, SHAPES.CIRCLE));
 BlockRegistry.register(new BlockDefinition("wood_wall", "Wood Wall", ASSETS.WOOD_WALL, new Drop("wood_wall"), MINE_TYPES.CHOP));
 BlockRegistry.register(new BlockDefinition("wood_door", "Wood Door", ASSETS.WOOD_DOOR, new Drop("wood_door"), MINE_TYPES.CHOP)
     .addComponent(new ChangeComponent("wood_door_open", true)));
