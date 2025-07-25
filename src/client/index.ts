@@ -241,6 +241,8 @@ export function connectionAccepted(): void {
 export function onGameOver(connectionrefusedinfo: any): void {
     if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
 
+    playerclient.inventory.clearInventory();
+    playerclient.inventory.clearRecipes();
     playerclient.inputManager.stopCapturingInput();
     playerclient.renderer.stopRendering();
     playerclient.renderer.uiManager.hideUi();

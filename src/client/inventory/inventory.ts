@@ -138,6 +138,14 @@ class Inventory {
         }
     }
 
+    /** Clears the entire recipe list in this client */
+    clearRecipes(): void {
+        this.recipes.splice(0, this.recipes.length);
+
+        const craftingmenu = document.getElementById("craftingmenu")!;
+        craftingmenu.innerHTML = "";
+    }
+
     // #endregion
 
     // #region station
