@@ -327,17 +327,19 @@ class Layer {
             }
 
             // spawn new entities if there are too few
-            const minentities = 1;
-            for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
-                const cellx = x * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
-                const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
+            if(this.z == 0){
+                const minentities = 1;
+                for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
+                    const cellx = x * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
+                    const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
 
-                const cell = this.getCell(cellx, celly, false);
-                if(cell === null) continue;
-                if(cell.block != null) continue;
+                    const cell = this.getCell(cellx, celly, false);
+                    if(cell === null) continue;
+                    if(cell.block != null) continue;
 
-                const pig = new NonplayerEntity(this, cellx + .5, celly + .5, 0, "pig");
-                this.entityManager.addEntity(pig);
+                    const pig = new NonplayerEntity(this, cellx + .5, celly + .5, 0, "pig");
+                    this.entityManager.addEntity(pig);
+                }
             }
         }
 
