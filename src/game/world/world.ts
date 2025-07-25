@@ -7,6 +7,9 @@ import SeededRandom from "../../shared/random/seededRandom.js";
 import LayerGenerator from "./generation/layerGenerator.js";
 import CaveLayerGenerator from "./generation/caveLayerGenerator.js";
 
+import LayerSpawner from "./spawning/layerSpawner.js";
+import CaveLayerSpawner from "./spawning/caveLayerSpawner.js";
+
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
@@ -49,8 +52,8 @@ class World {
         }
         
         this.layers = [
-            new Layer(this.game, this, 0, new LayerGenerator()),
-            new Layer(this.game, this, 1, new CaveLayerGenerator())
+            new Layer(this.game, this, 0, new LayerGenerator(), new LayerSpawner()),
+            new Layer(this.game, this, 1, new CaveLayerGenerator(), new CaveLayerSpawner())
         ];
 
         this.saveWorld();

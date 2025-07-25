@@ -43,54 +43,10 @@ class EntityManager {
 
     // #region ticking
 
-    /** Tick all currently loaded entities and entity spawners */
+    /** Tick all currently loaded entities */
     tick(dt: number): void {
-        // new spawns
-        this.spawnZombies();
-
-        // tick loaded entities
         for(const o of this.getAllObjects()){
             o.emitTickEvent(this.game, dt);
-        }
-    }
-
-    /** Spawns new zombies nearby players in the world */
-    spawnZombies(): void {
-        if(this.game.world.isDay()) return;
-
-        const players = [...this.getPlayerEntities()];
-
-        for(const p of players){
-            if(Math.random() > .01) return;
-
-            const dir = Math.random() * Math.PI * 2;
-            const dist = Math.sqrt(CELLS_HORIZONTAL * CELLS_HORIZONTAL + CELLS_VERTICAL * CELLS_VERTICAL) / 2 + 1;
-            
-            for(let triesdist = 0; triesdist < 5; triesdist++){
-                const spawnx = p.x + Math.cos(dir) * (dist + triesdist);
-                const spawny = p.y + Math.sin(dir) * (dist + triesdist);
-
-                if(players.some(p2 => p2.id != p.id && p2.distanceTo({ x: spawnx, y: spawny }) < dist)) continue;
-
-                const cellx = Math.floor(spawnx);
-                const celly = Math.floor(spawny);
-
-                const layer = this.game.world.getLayer(0)!;
-                const cell = layer.getCell(cellx, celly, false);
-                if(cell === null) continue;
-                if(cell.block !== null) continue;
-
-                if(layer.light.get([cellx,celly].toString()) !== undefined) continue;
-
-                if(Math.random() > .05){
-                    const zombie = new NonplayerEntity(layer, spawnx, spawny, 0, "zombie");
-                    layer.entityManager.addEntity(zombie);
-                }else{
-                    const megazombie = new NonplayerEntity(layer, spawnx, spawny, 0, "mega_zombie");
-                    layer.entityManager.addEntity(megazombie);
-                }
-                break;
-            }
         }
     }
 

@@ -6,7 +6,6 @@ import multiNumberHash from "../../../shared/random/multiNumberHash.js";
 import PerlinNoise from "../../../shared/random/perlinNoise.js";
 import SeededRandom from "../../../shared/random/seededRandom.js";
 import Cell from "../cell.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
 
 import SharedConfig from "../../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -39,9 +38,6 @@ class LayerGenerator implements ILayerGenerator {
                     cell.setBlock("stone_block", game);
                 }else if(rng.next() < .01){
                     cell.setBlock("grown_carrots", game);
-                }else if(rng.next() < .0051){
-                    const pig = new NonplayerEntity(layer, chunkx * CHUNK_SIZE + x + .5, chunky * CHUNK_SIZE + y + .5, 0, "pig");
-                    layer.entityManager.addEntity(pig);
                 }
                 
                 chunk.cells[x][y] = cell;

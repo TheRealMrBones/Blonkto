@@ -2,6 +2,7 @@ import Logger from "../../server/logging/logger.js";
 import EntityManager from "../managers/entityManager.js";
 import World from "./world.js";
 import ILayerGenerator from "./generation/ILayerGenerator.js";
+import ILayerSpawner from "./spawning/ILayerSpawner.js";
 import Chunk from "./chunk.js";
 import Cell from "./cell.js";
 import DroppedStack from "../objects/droppedStack.js";
@@ -25,11 +26,13 @@ class Layer {
     private readonly logger: Logger;
     
     private readonly game: Game;
-    private readonly world: World;
+    readonly world: World;
 
     readonly z: number;
     readonly seed: number;
+    
     readonly layergenerator: ILayerGenerator;
+    readonly layerspawner: ILayerSpawner;
 
     private readonly savedir: string;
     private readonly entitysavedir: string;
@@ -39,7 +42,7 @@ class Layer {
 
     readonly entityManager: EntityManager;
 
-    constructor(game: Game, world: World, z: number, layergenerator: ILayerGenerator){
+    constructor(game: Game, world: World, z: number, layergenerator: ILayerGenerator, layerspawner: ILayerSpawner){
         this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
 
         this.game = game;
@@ -47,7 +50,9 @@ class Layer {
         this.z = z;
 
         this.seed = multiNumberHash(this.z, this.world.seed);
+        
         this.layergenerator = layergenerator;
+        this.layerspawner = layerspawner;
 
         this.entityManager = new EntityManager(this.game, this.game.entityManager);
         this.game.entityManager.addChild(this.entityManager);
@@ -70,6 +75,9 @@ class Layer {
         for(const chunk of this.loadedchunks.values()){
             chunk.tick(this.game, dt);
         }
+        
+        // tick layer spawning
+        this.layerspawner.tickSpawning(this, this.game);
     }
     
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
@@ -327,20 +335,7 @@ class Layer {
             }
 
             // spawn new entities if there are too few
-            if(this.z == 0){
-                const minentities = 1;
-                for(let i = minentities - entitiesdata.filter((e: any) => e.type == "entity").length; i > 0; i--){
-                    const cellx = x * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
-                    const celly = y * CHUNK_SIZE + Math.floor(Math.random() * CHUNK_SIZE);
-
-                    const cell = this.getCell(cellx, celly, false);
-                    if(cell === null) continue;
-                    if(cell.block != null) continue;
-
-                    const pig = new NonplayerEntity(this, cellx + .5, celly + .5, 0, "pig");
-                    this.entityManager.addEntity(pig);
-                }
-            }
+            this.layerspawner.repopulateChunk(chunk, this.game, entitiesdata);
         }
 
         // finally return the chunk
@@ -364,9 +359,12 @@ class Layer {
 
     /** Returns a new generated chunk */
     generateChunk(x: number, y: number): Chunk {
-        const newChunk = this.layergenerator.generateChunk(this, x, y, this.game);
-        this.loadedchunks.set(Layer.getChunkKey(x, y), newChunk);
-        return newChunk;
+        const newchunk = this.layergenerator.generateChunk(this, x, y, this.game);
+        this.loadedchunks.set(Layer.getChunkKey(x, y), newchunk);
+
+        this.layerspawner.populateChunk(newchunk, this.game);
+
+        return newchunk;
     }
 
     /** Resets the current list of pending client cell updates */
