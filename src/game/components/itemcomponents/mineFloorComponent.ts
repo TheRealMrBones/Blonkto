@@ -12,9 +12,9 @@ const { BASE_REACH } = SharedConfig.PLAYER;
 class MineFloorComponent extends Component<ItemDefinition> {
     private power: number;
 
-    constructor(power: number){
+    constructor(power?: number){
         super();
-        this.power = power;
+        this.power = power || 1;
     }
 
     /** Implements this component into its parents functionality */
@@ -26,7 +26,10 @@ class MineFloorComponent extends Component<ItemDefinition> {
     /** Defines the mine use of the item with this component */
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
         if(info.dist > BASE_REACH) return;
-        if(info.cell !== null) info.cell.breakFloor(true, game);
+        if(info.cell === null) return;
+        if(info.cell.floor === null) return;
+        
+        info.cell.breakFloor(true, game);
     }
 }
 
