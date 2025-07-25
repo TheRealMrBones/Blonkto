@@ -22,7 +22,7 @@ class DayDespawnComponent extends Component<EntityDefinition> {
 
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
-        if(game.world.isNight()) return;
+        if(game.world.isNight() || self.layer.z > 0) return;
 
         for(const p of self.layer.entityManager.getPlayerEntities()){
             if(Math.abs(p.x - self.x) < CELLS_HORIZONTAL / 2 && Math.abs(p.y - self.y) < CELLS_VERTICAL / 2) return;
