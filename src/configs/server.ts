@@ -90,8 +90,8 @@ const ServerConfig: ServerConfigSchema = {
     WORLD: {
         SEED: 0,
         SPAWN_SIZE: 2,
-        CHUNK_UNLOAD_RATE: 1.0,
-        AUTOSAVE_RATE: 60.0,
+        CHUNK_UNLOAD_RATE: 10,
+        AUTOSAVE_RATE: 60,
         DAY_LENGTH: 6000,
         NIGHT_LENGTH: 3000,
         DAY_TRANSITION_LENGTH: 250,
