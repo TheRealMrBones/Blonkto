@@ -84,12 +84,11 @@ class PerformanceManager {
     logPerformance(): void {
         const tps = this.cummilativetickcount / PERFORMANCE_LOG_RATE;
         const averageticktime = this.cummilativeticktime / this.cummilativetickcount;
-        const lifetps = this.game.lifeticks / ((Date.now() - this.game.starttime) / 1000);
 
         this.lastperformancelog = [
             `Performance Log - ${new Date().toLocaleTimeString()}`,
             `TPS: ${tps.toFixed(3)}, Average Tick Time: ${averageticktime.toFixed(3)}ms, Max Tick Time: ${this.maxticktime.toFixed(3)}ms`,
-            `Life Tick: ${this.game.lifeticks}, Life TPS: ${lifetps.toFixed(3)}`,
+            `Life Tick: ${this.game.lifeticks}`,
             this.getEntityCounts(),
         ];
 
