@@ -20,7 +20,7 @@ class CaveLayerSpawner implements ILayerSpawner {
         const players = [...layer.entityManager.getPlayerEntities()];
 
         for(const p of players){
-            if(Math.random() > .1) return;
+            if(Math.random() > .01) return;
 
             const dir = Math.random() * Math.PI * 2;
             const dist = Math.sqrt(CELLS_HORIZONTAL * CELLS_HORIZONTAL + CELLS_VERTICAL * CELLS_VERTICAL) / 2 + 1;
@@ -33,8 +33,6 @@ class CaveLayerSpawner implements ILayerSpawner {
 
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);
-
-                const layer = game.world.getLayer(0)!;
                 const cell = layer.getCell(cellx, celly, false);
                 
                 if(cell === null) continue;
@@ -44,7 +42,6 @@ class CaveLayerSpawner implements ILayerSpawner {
 
                 const zombie = new NonplayerEntity(layer, spawnx, spawny, 0, "zombie");
                 layer.entityManager.addEntity(zombie);
-                console.log("zombie spawned");
 
                 break;
             }
