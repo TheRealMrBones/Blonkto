@@ -70,7 +70,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
             let movey = this.toplayerskew * (target.y - self.y > 0 ? 1 : -1);
 
             // reverse in day
-            if(this.reverseinday && game.world.isDay()){
+            if(this.reverseinday && game.world.isDay() && self.layer.z <= 0){
                 movex *= -1;
                 movey *= -1;
             }
