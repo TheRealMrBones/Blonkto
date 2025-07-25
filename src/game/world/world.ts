@@ -14,7 +14,7 @@ import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
-const { SEED, SPAWN_SIZE, AUTOSAVE_RATE } = ServerConfig.WORLD;
+const { SEED, SPAWN_SIZE } = ServerConfig.WORLD;
 const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = ServerConfig.WORLD;
 
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
@@ -28,7 +28,6 @@ class World {
     private readonly layers: Layer[];
 
     private readonly unloadInterval: NodeJS.Timeout;
-    private readonly saveInterval: NodeJS.Timeout;
 
     private daycycletick: number;
     private darknesspercent: number = 0;
@@ -57,7 +56,6 @@ class World {
         this.saveWorld();
 
         this.unloadInterval = setInterval(this.tickChunkUnloader.bind(this), 1000 * CHUNK_UNLOAD_RATE);
-        this.saveInterval = setInterval(this.saveWorld.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     // #region ticking
@@ -86,7 +84,7 @@ class World {
     }
     
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
-    tickChunkUnloader(): void {
+    private tickChunkUnloader(): void {
         // prepare active chunks array
         const activechunks: { x: number; y: number; }[][] = [];
         for(let i = 0; i < this.layers.length; i++){

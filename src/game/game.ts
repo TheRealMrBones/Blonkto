@@ -21,6 +21,7 @@ const { FAKE_PING } = SharedConfig.UPDATES;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
+const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
 const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
@@ -37,12 +38,14 @@ class Game {
     readonly performanceManager: PerformanceManager;
     readonly collisionManager: CollisionManager;
     readonly craftManager: CraftManager;
+    
+    private readonly saveinterval: NodeJS.Timeout;
 
     readonly world: World;
 
     private lastupdatetime: number;
     private nextupdatetime: number;
-    lifeticks: number = 0;
+    lifeticks: number;
     starttime: number;
 
     constructor(io: SocketIo, fileManager: FileManager){
@@ -58,6 +61,14 @@ class Game {
         this.performanceManager = new PerformanceManager(this);
         this.collisionManager = new CollisionManager(this);
         this.craftManager = new CraftManager(this);
+
+        // read game save data
+        if(this.fileManager.fileExists("game")){
+            const data = JSON.parse(this.fileManager.readFile("game")!);
+            this.lifeticks = data.lifeticks;
+        }else{
+            this.lifeticks = 0;
+        }
         
         // world
         this.world = new World(this);
@@ -71,6 +82,8 @@ class Game {
         this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
         setTimeout(this.tick.bind(this), 1);
+
+        this.saveinterval = setInterval(this.saveGame.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     // #region tick/update
@@ -152,6 +165,26 @@ class Game {
     createInitialUpdate(player: Player): GameUpdateContent {
         const worldload = this.world.loadPlayerChunks(player);
         return this.createUpdate(Date.now(), player, worldload);
+    }
+
+    // #endregion
+
+    // #region serialization
+
+    /** Saves all of the currently loaded world data to the save */
+    saveGame(): void {
+        this.logger.info("Saving game");
+        
+        // save global game data
+        const gamedata = {
+            lifeticks: this.lifeticks,
+        };
+        this.fileManager.writeFile("game", JSON.stringify(gamedata));
+
+        // saves the world data
+        this.world.saveWorld();
+        
+        this.logger.info("Game saved");
     }
 
     // #endregion

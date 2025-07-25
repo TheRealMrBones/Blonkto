@@ -13,7 +13,7 @@ const args = [
 export default (): void => CommandRegistry.register(new CommandDefinition("saveworld", true, args, saveWorldCommand, "Saves the world"));
 
 function saveWorldCommand(args: any[], player: Player, game: Game){
-    game.world.saveWorld();
+    game.saveGame();
     game.playerManager.savePlayers();
     game.chatManager.sendMessageTo(player, "saved the world!");
 }
