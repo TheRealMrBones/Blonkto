@@ -32,13 +32,12 @@ class MineComponent extends Component<ItemDefinition> {
     use(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
         if(info.dist > BASE_REACH) return;
 
-        if(info.cell !== null){
-            if(info.cell.block !== null)
-                if((info.cell.block.definition.minetype !== MINE_TYPES.ANY && info.cell.block.definition.minetype != this.minetype)
-                    || info.cell.block.definition.hardness > this.power) return;
+        if(info.cell === null) return;
+        if(info.cell.block === null) return;
+        if(info.cell.block.definition.hardness > this.power) return;
+        if(info.cell.block.definition.minetype !== MINE_TYPES.ANY && info.cell.block.definition.minetype != this.minetype) return;
 
-            info.cell.breakBlock(true, game);
-        }
+        info.cell.breakBlock(true, game);
     }
 }
 
