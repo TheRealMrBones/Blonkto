@@ -58,7 +58,9 @@ class EntityManager {
     spawnZombies(): void {
         if(this.game.world.isDay()) return;
 
-        for(const p of this.getPlayerEntities()){
+        const players = [...this.getPlayerEntities()];
+
+        for(const p of players){
             if(Math.random() > .01) return;
 
             const dir = Math.random() * Math.PI * 2;
@@ -67,6 +69,9 @@ class EntityManager {
             for(let triesdist = 0; triesdist < 5; triesdist++){
                 const spawnx = p.x + Math.cos(dir) * (dist + triesdist);
                 const spawny = p.y + Math.sin(dir) * (dist + triesdist);
+
+                if(players.some(p2 => p2.id != p.id && p2.distanceTo({ x: spawnx, y: spawny }) < dist)) continue;
+
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);
 
