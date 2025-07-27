@@ -19,6 +19,9 @@ class CaveLayerSpawner implements ILayerSpawner {
     tickSpawning(layer: Layer, game: Game): void {
         const players = [...layer.entityManager.getPlayerEntities()];
 
+        if([...layer.entityManager.getNonplayerEntities()]
+            .filter(e => e.definition.key == "zombie").length >= 15 * players.length) return
+
         for(const p of players){
             if(Math.random() > .01) return;
 
