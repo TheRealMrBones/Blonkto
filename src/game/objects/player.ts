@@ -13,7 +13,7 @@ import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS } = Constants;
+const { ASSETS, GAME_MODES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
@@ -21,6 +21,7 @@ const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 import ServerConfig from "../../configs/server.js";
 const { RACISM, RACISM_PERM, KEEP_INVENTORY } = ServerConfig.PLAYER;
+const { DEFAULT_GAME_MODE, FORCE_GAME_MODE } = ServerConfig.GAME_MODE;
 
 /** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
@@ -28,6 +29,7 @@ class Player extends Entity {
     lastupdated: number;
     serverlastupdated: number;
     username: string;
+    gamemode: string = GAME_MODES.SURVIVAL;
     kills: number;
     color: Color;
     private inventory: ChangesInventory;
@@ -47,6 +49,7 @@ class Player extends Entity {
 
         this.socket = socket;
         this.username = username;
+        this.setGamemode(DEFAULT_GAME_MODE, true);
         this.kills = 0;
         this.scale = PLAYER_SCALE;
         this.health = 10;
@@ -72,6 +75,7 @@ class Player extends Entity {
     static readFromSave(socket: Socket, layer: Layer, x: number, y: number, data: any): Player {
         const player = new Player(socket, data.username, layer, x, y, (data.dead && !KEEP_INVENTORY));
 
+        if(!FORCE_GAME_MODE) player.setGamemode(data.gamemode, true);
         player.kills = data.kills;
 
         if(data.dead){
@@ -147,6 +151,23 @@ class Player extends Entity {
     // #endregion
 
     // #region setters
+
+    /** Sets the gamemode of this player */
+    setGamemode(gamemode: string, ordefault?: boolean): void {
+        if(!Object.values(GAME_MODES).includes(gamemode)){
+            this.logger.warning(`Player "${this.username}" gamemode tried to be set to invalid gamemode "${gamemode}"`);
+            if(ordefault){
+                if(!Object.values(GAME_MODES).includes(DEFAULT_GAME_MODE)){
+                    this.logger.warning(`Default gamemode set to invalid gamemode "${DEFAULT_GAME_MODE}", defaulting to survival...`);
+                    this.gamemode = GAME_MODES.SURVIVAL;
+                }else{
+                    this.gamemode = DEFAULT_GAME_MODE;
+                }
+            }
+        }else{
+            this.gamemode = gamemode;
+        }
+    }
 
     /** Updates this players data with the given new input data */
     update(data: InputContent): void {
@@ -293,6 +314,7 @@ class Player extends Entity {
         return JSON.stringify({
             dead: false,
             username: this.username,
+            gamemode: this.gamemode,
             layer: this.layer.z,
             x: this.x,
             y: this.y,
@@ -308,6 +330,7 @@ class Player extends Entity {
         const base: any = {
             dead: true,
             username: this.username,
+            gamemode: this.gamemode,
             kills: this.kills,
             color: this.color,
         };

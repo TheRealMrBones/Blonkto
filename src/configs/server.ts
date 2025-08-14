@@ -1,5 +1,8 @@
 import fs from "fs";
 
+import Constants from "../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 /** Definition for the server configuration schema */
 type ServerConfigSchema = {
     OP_PASSCODE: {
@@ -24,6 +27,10 @@ type ServerConfigSchema = {
         RACISM: number,
         RACISM_PERM: boolean,
         KEEP_INVENTORY: boolean,
+    },
+    GAME_MODE: {
+        DEFAULT_GAME_MODE: string,
+        FORCE_GAME_MODE: boolean,
     },
     OBJECT: {
         FALL_RATE: number,
@@ -79,6 +86,10 @@ const ServerConfig: ServerConfigSchema = {
         RACISM: 0.3,
         RACISM_PERM: true,
         KEEP_INVENTORY: true,
+    },
+    GAME_MODE: {
+        DEFAULT_GAME_MODE: GAME_MODES.SURVIVAL,
+        FORCE_GAME_MODE: false,
     },
     OBJECT: {
         FALL_RATE: 0.5,

@@ -74,6 +74,11 @@ const Constants = Object.freeze({
         MINE: 2,
         CHOP: 3,
     },
+    GAME_MODES: {
+        SURVIVAL: "survival",
+        CREATIVE: "creative",
+        SPECTATOR: "spectator",
+    },
     LOG_PRIORITIES: {
         INFO: 10,
         DEBUG: 20,
