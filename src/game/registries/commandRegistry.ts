@@ -86,3 +86,5 @@ import getTimeCommand from "../commands/getTimeCommand.js";
 getTimeCommand();
 import seedCommand from "../commands/seedCommand.js";
 seedCommand();
+import gameModeCommand from "../commands/gameModeCommand.js";
+gameModeCommand();
