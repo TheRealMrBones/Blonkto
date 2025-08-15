@@ -62,6 +62,7 @@ class StateManager {
         if(update.fixes.setpos) this.playerclient.inputManager.setPos(update.fixes.setpos);
         if(update.fixes.pushx) this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy);
         if(update.fixes.setcolor) this.playerclient.renderer.setColor(update.fixes.setcolor);
+        if(update.fixes.gamemode) this.playerclient.setGamemode(update.fixes.gamemode);
 
         // inventory updates
         update.inventoryupdates.forEach((iu: any) => {

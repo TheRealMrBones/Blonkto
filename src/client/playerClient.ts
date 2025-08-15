@@ -9,6 +9,9 @@ import Inventory from "./inventory/inventory.js";
 import { onGameOver } from "./index.js";
 import Renderer from "./render/renderer.js";
 
+import Constants from "../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 /** The base class for the client to interact with the game once they are logged in */
 class PlayerClient {
     readonly networkingManager: NetworkingManager;
@@ -21,6 +24,8 @@ class PlayerClient {
 
     readonly eventEmitter: EventEmitter = new EventEmitter();
 
+    private gamemode: string = GAME_MODES.SURVIVAL;
+
     constructor(){
         this.networkingManager = new NetworkingManager(this);
         this.stateManager = new StateManager(this);
@@ -32,6 +37,16 @@ class PlayerClient {
         this.renderer = new Renderer(this);
 
         this.eventEmitter.on("gameover", onGameOver);
+    }
+
+    /** Sets the gamemode of this client */
+    setGamemode(gamemode: string): void {
+        this.gamemode = gamemode;
+    }
+
+    /** Returns the gamemode of this client */
+    getGamemode(): string {
+        return this.gamemode;
     }
 }
 

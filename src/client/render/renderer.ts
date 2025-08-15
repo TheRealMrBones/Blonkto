@@ -6,7 +6,7 @@ import { Color } from "../../shared/types.js";
 import { combineColors } from "../../shared/typeOperations.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS, SHAPES } = Constants;
+const { ASSETS, SHAPES, GAME_MODES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
@@ -123,10 +123,13 @@ class Renderer {
         // get object states (for deciding rendering order)
         const fallingplayers = others.filter((o: any) => o.falling);
         const notfallingplayers = others.filter((o: any) => !o.falling);
-        if(me.falling){
-            fallingplayers.push(me);
-        }else{
-            notfallingplayers.push(me);
+        
+        if(this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
+            if(me.falling){
+                fallingplayers.push(me);
+            }else{
+                notfallingplayers.push(me);
+            }
         }
 
         const fallingentities = entities.filter((e: any) => e.falling);

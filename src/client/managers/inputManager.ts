@@ -2,6 +2,9 @@ import PlayerClient from "../playerClient.js";
 import { CircleCollisionObject, Pos } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
 
+import Constants from "../../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 
@@ -317,7 +320,7 @@ class InputManager {
             scale: this.scale,
         };
         
-        if(!this.falling){
+        if(!this.falling && this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
             //playerCollisions(self, others);
             this.playerclient.collisionManager.blockCollisions();
         }

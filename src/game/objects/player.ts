@@ -123,6 +123,8 @@ class Player extends Entity {
 
     /** Default player collision checks */
     override checkCollisions(game: Game): void {
+        if(this.gamemode == GAME_MODES.SPECTATOR) return;
+
         super.checkCollisions(game);
         game.collisionManager.collectCheck(this);
     }
@@ -154,6 +156,8 @@ class Player extends Entity {
 
     /** Sets the gamemode of this player */
     setGamemode(gamemode: string, ordefault?: boolean): void {
+        const oldgamemode = this.gamemode;
+
         if(!Object.values(GAME_MODES).includes(gamemode)){
             this.logger.warning(`Player "${this.username}" gamemode tried to be set to invalid gamemode "${gamemode}"`);
             if(ordefault){
@@ -167,6 +171,8 @@ class Player extends Entity {
         }else{
             this.gamemode = gamemode;
         }
+
+        if(oldgamemode != this.gamemode) this.fixes.gamemode = this.gamemode;
     }
 
     /** Updates this players data with the given new input data */
@@ -249,6 +255,7 @@ class Player extends Entity {
             pushy: null,
             setpos: null,
             setcolor: null,
+            gamemode: null,
         };
     }
 
@@ -259,6 +266,7 @@ class Player extends Entity {
             pushy: this.fixes.pushy,
             setpos: this.fixes.setpos,
             setcolor: this.fixes.setcolor,
+            gamemode: this.fixes.gamemode,
         };
         this.resetFixes();
         return fixescopy;
