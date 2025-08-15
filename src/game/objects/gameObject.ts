@@ -120,12 +120,17 @@ abstract class GameObject {
         this.x += this.dx * dt;
         this.y += this.dy * dt;
         
-        if(!this.falling) this.checkCollisions(game);
+        if(this.canCollide()) this.checkCollisions(game);
     }
     
     /** Default object collision checks */
     protected checkCollisions(game: Game): void {
         game.collisionManager.blockCollisions(this);
+    }
+
+    /** Returns if this object can be collided with */
+    canCollide(): boolean {
+        return (!this.falling);
     }
 
     /** Check for falling */

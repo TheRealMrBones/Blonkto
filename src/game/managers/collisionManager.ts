@@ -24,6 +24,7 @@ class CollisionManager {
         const entities = layer.entityManager.getEntities();
 
         for(const entity of entities){
+            if(!entity.canCollide()) continue;
             if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity)) return entity;
         }
 
@@ -36,6 +37,7 @@ class CollisionManager {
 
         for(const entity2 of entities){
             if(entity.id === entity2.id) continue;
+            if(!entity2.canCollide()) continue;
 
             const push = SharedCollisions.entityCollision(entity, { x: entity2.x, y: entity2.y, scale: entity2.scale });
             if(push === null) continue;
@@ -76,6 +78,8 @@ class CollisionManager {
         const collectables = player.layer.entityManager.getDroppedStacks();
 
         for(const collectable of collectables){
+            if(!collectable.canCollide()) continue;
+
             const push = SharedCollisions.entityCollision(player, { x: collectable.x, y: collectable.y, scale: collectable.scale });
             const collided = (push !== null);
 
@@ -99,6 +103,7 @@ class CollisionManager {
 
         for(const collectable2 of collectables){
             if(collectable.id === collectable2.id) continue;
+            if(!collectable2.canCollide()) continue;
 
             const push = SharedCollisions.entityCollision(collectable, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
             const collided = (push !== null);
@@ -124,6 +129,8 @@ class CollisionManager {
         };
 
         for(const entity2 of entities){
+            if(!entity2.canCollide()) continue;
+
             const dist = SharedCollisions.getDistance(attackpos, entity2);
             const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
             if(entity2.id != entity.id && realdist < 0 && !entity2.hit){

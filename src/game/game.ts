@@ -14,7 +14,7 @@ import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
 
 import Constants from "../shared/constants.js";
-const { MSG_TYPES, LOG_CATEGORIES } = Constants;
+const { GAME_MODES, MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
@@ -127,8 +127,11 @@ class Game {
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
         // Get update data
         const me = player.serializeForUpdate();
-        const nearbyPlayers = EntityManager.filterToNearby(player, [...player.layer.entityManager.getPlayerEntities()]).map(p => p.serializeForUpdate());
-        const nearbyEntities = EntityManager.filterToNearby(player, [...player.layer.entityManager.getNonplayers()]).map(e => e.serializeForUpdate());
+        const nearbyPlayers = EntityManager.filterToNearby(player, [...player.layer.entityManager.getPlayerEntities()])
+            .filter(p => p.gamemode != GAME_MODES.SPECTATOR)
+            .map(p => p.serializeForUpdate());
+        const nearbyEntities = EntityManager.filterToNearby(player, [...player.layer.entityManager.getNonplayers()])
+            .map(e => e.serializeForUpdate());
         const fixes = player.getFixes();
         const inventoryupdates = player.getInventory().getChanges();
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;

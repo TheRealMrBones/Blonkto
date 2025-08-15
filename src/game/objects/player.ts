@@ -129,6 +129,11 @@ class Player extends Entity {
         game.collisionManager.collectCheck(this);
     }
 
+    /** Returns if this player can be collided with */
+    override canCollide(): boolean {
+        return (this.gamemode != GAME_MODES.SPECTATOR && super.canCollide());
+    }
+
     /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {
