@@ -20,7 +20,7 @@ abstract class Entity extends GameObject {
     lastattackdir: number = 0;
     lastattackdamage: number = 0;
 
-    godmode: boolean = false;
+    private godmode: boolean = false;
 
     constructor(layer: Layer, x: number, y: number, maxhealth: number, dir?: number, scale?: number, asset?: string){
         super(layer, x, y, dir, scale, asset);
@@ -43,6 +43,11 @@ abstract class Entity extends GameObject {
     /** Entity action after falling */
     override onFell(game: Game): void {
         this.emitDeathEvent(game, "gravity", null);
+    }
+
+    /** Sets godmode status of this entity */
+    setGodmode(godmode: boolean): void {
+        this.godmode = godmode;
     }
 
     // #endregion
@@ -71,9 +76,19 @@ abstract class Entity extends GameObject {
 
     // #region attacking
 
+    /** Returns if this entity can be targeted for attacks / AI */
+    isValidTarget(): boolean {
+        return !this.falling;
+    }
+
+    /** Returns if this entity can be hit */
+    canHit(): boolean {
+        return !this.godmode;
+    }
+
     /** Removes the given health amount from this entity and returns if it died */
     takeHit(game: Game, damage: number, attackername: string, attacker?: Entity): boolean {
-        if(this.godmode) return false;
+        if(!this.canHit()) return false;
 
         this.health -= damage;
         this.hit = true;

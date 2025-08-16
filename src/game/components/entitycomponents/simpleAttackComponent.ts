@@ -51,21 +51,25 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
         if(data.target !== self.lasthitby && self.hit) data.target = self.lasthitby as Entity;
+
+        if(data.target !== null){
+            if(![...self.layer.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
+                this.resetTarget(self, data, targetdata);
+            }
+
+            if(!data.target?.isValidTarget()){
+                this.resetTarget(self, data, targetdata);
+            }
+        }
         
         if(data.target === null){
             let mindist = this.distance;
             for(const p of self.layer.entityManager.getPlayerEntities()){
                 const dist = self.distanceTo(p);
-                if(dist < mindist){
+                if(dist < mindist && p.isValidTarget()){
                     data.target = p;
                     mindist = dist;
                 }
-            }
-        }else{
-            if(![...self.layer.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
-                targetdata.clearQueue();
-                self.speedmultiplier = 1;
-                data.target = null;
             }
         }
 
@@ -73,22 +77,27 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(target === null) return;
 
         if(self.distanceTo(target) >= this.distance * 2){
-            targetdata.clearQueue();
-            self.speedmultiplier = 1;
-            data.target = null;
+            this.resetTarget(self, data, targetdata);
             return;
         }
         
         self.speedmultiplier = this.speedmultiplier;
-        targetdata.setQueue(10, [this.getRunPosition(target)]);
+        this.setRunQueue(target, targetdata);
     }
 
-    /** Returns a new run target postion given the current target */
-    getRunPosition(target: Entity): Pos {
-        return {
+    /** Resets the current target */
+    resetTarget(self: NonplayerEntity, data: SimpleAttackComponentData, targetdata: MoveTargetComponentData): void {
+        targetdata.clearQueue();
+        self.speedmultiplier = 1;
+        data.target = null;
+    }
+
+    /** Sets the run queue to move towards the targeted entity */
+    setRunQueue(target: Entity, targetdata: MoveTargetComponentData): void {
+        targetdata.setQueue(10, [{
             x: target.x,
             y: target.y,
-        };
+        }]);
     }
 }
 

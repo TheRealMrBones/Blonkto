@@ -20,13 +20,13 @@ function godModeCommand(args: any[], player: Player, game: Game){
     switch(argIndex){
         case 0: {
             game.chatManager.sendMessageTo(player, `made you ${toggle ? "god mode" : "not god mode"}`);
-            player.godmode = toggle;
+            player.setGodmode(toggle);
             break;
         };
         case 1: {
             const p: Player = args[1];
             game.chatManager.sendMessageTo(player, `made ${p.username} ${toggle ? "god mode" : "not god mode"}`);
-            p.godmode = toggle;
+            p.setGodmode(toggle);
             break;
         }
     }

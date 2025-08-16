@@ -105,44 +105,6 @@ class Player extends Entity {
 
     // #endregion
 
-    // #region events
-
-    /** Emits a death event to this object */
-    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
-        super.emitDeathEvent(game, killedby, killer);
-
-        if(killer instanceof Player) killer.kills++;
-
-        game.playerManager.killPlayer(this.socket, killedby);
-        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.layer, this.x, this.y, game);
-    }
-
-    // #endregion
-
-    // #region physics
-
-    /** Default player collision checks */
-    override checkCollisions(game: Game): void {
-        if(this.gamemode == GAME_MODES.SPECTATOR) return;
-
-        super.checkCollisions(game);
-        game.collisionManager.collectCheck(this);
-    }
-
-    /** Returns if this player can be collided with */
-    override canCollide(): boolean {
-        return (this.gamemode != GAME_MODES.SPECTATOR && super.canCollide());
-    }
-
-    /** Player action after falling */
-    override onFell(game: Game): void {
-        setTimeout(() => {
-            this.emitDeathEvent(game, "gravity", null);
-        }, 1000);
-    }
-
-    // #endregion
-
     // #region getters
 
     getCombinedInventory(): IInventory {
@@ -247,6 +209,58 @@ class Player extends Entity {
         const inventory = this.getCombinedInventory();
         inventory.dropFromSlot(this.layer, this.x, this.y, slot, game, amount, this.id);
         const stack = inventory.getSlot(slot);
+    }
+
+    // #endregion
+
+    // #region events
+
+    /** Emits a death event to this object */
+    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
+        super.emitDeathEvent(game, killedby, killer);
+
+        if(killer instanceof Player) killer.kills++;
+
+        game.playerManager.killPlayer(this.socket, killedby);
+        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.layer, this.x, this.y, game);
+    }
+
+    // #endregion
+
+    // #region physics
+
+    /** Default player collision checks */
+    override checkCollisions(game: Game): void {
+        if(this.gamemode == GAME_MODES.SPECTATOR) return;
+
+        super.checkCollisions(game);
+        game.collisionManager.collectCheck(this);
+    }
+
+    /** Returns if this player can be collided with */
+    override canCollide(): boolean {
+        return (this.gamemode != GAME_MODES.SPECTATOR && super.canCollide());
+    }
+
+    /** Player action after falling */
+    override onFell(game: Game): void {
+        setTimeout(() => {
+            this.emitDeathEvent(game, "gravity", null);
+        }, 1000);
+    }
+
+    // #endregion
+
+    // #region attacking
+
+    /** Returns if this entity can be targeted for attacks / AI */
+    override isValidTarget(): boolean {
+        return (this.gamemode == GAME_MODES.SURVIVAL && super.isValidTarget());
+    }
+
+    /** Returns if this entity can be hit */
+    override canHit(): boolean {
+        return (this.gamemode == GAME_MODES.SURVIVAL && super.canHit());
     }
 
     // #endregion
