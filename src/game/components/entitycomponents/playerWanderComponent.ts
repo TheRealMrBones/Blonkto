@@ -62,12 +62,18 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
 
         if(Math.random() < .01 && targetdata.queueEmpty()){
             // get skew to player
-            const players = [...self.layer.entityManager.getPlayerEntities()].sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
-            if(players.length == 0) return;
+            const players = [...self.layer.entityManager.getPlayerEntities()]
+                .filter(p => p.isValidTarget())
+                .sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
+            
+            let movex = 0;
+            let movey = 0;
 
-            const target = players[0];
-            let movex = this.toplayerskew * (target.x - self.x > 0 ? 1 : -1);
-            let movey = this.toplayerskew * (target.y - self.y > 0 ? 1 : -1);
+            if(players.length > 0){
+                const target = players[0];
+                movex = this.toplayerskew * (target.x - self.x > 0 ? 1 : -1);
+                movey = this.toplayerskew * (target.y - self.y > 0 ? 1 : -1);
+            }
 
             // reverse in day
             if(this.reverseinday && game.world.isDay() && self.layer.z <= 0){
