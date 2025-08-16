@@ -5,6 +5,9 @@ import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 import { ClickContentExpanded } from "../../managers/socketManager.js";
 
+import Constants from "../../../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 import SharedConfig from "../../../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
 
@@ -29,7 +32,8 @@ class BuildFloorComponent extends Component<ItemDefinition> {
         if(info.dist > BASE_REACH) return;
 
         if(info.cell !== null){
-            if(info.cell.placeFloor(this.floor, game)) player.removeFromCurrentSlot(1);
+            if(info.cell.placeFloor(this.floor, game))
+                if(player.gamemode != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
         }
     }
 }

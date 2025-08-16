@@ -9,6 +9,9 @@ import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetCompon
 import Player from "../../objects/player.js";
 import ISerializableForWrite from "../ISerializableForWrite.js";
 
+import Constants from "../../../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 /** An Entity Component that makes this entity type breed with others when fed */
 class BreedComponent extends Component<EntityDefinition> {
     private food: string;
@@ -51,7 +54,7 @@ class BreedComponent extends Component<EntityDefinition> {
         if(hotbarItem.definition.key != this.food) return;
 
         data.lastfed = Date.now();
-        player.removeFromCurrentSlot(1);
+        if(player.gamemode != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
 
         // look for target
         for(const entity of self.layer.entityManager.getNonplayerEntities()){

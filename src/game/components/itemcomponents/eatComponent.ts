@@ -5,6 +5,9 @@ import Player from "../../objects/player.js";
 import ItemStack from "../../items/itemStack.js";
 import { ClickContentExpanded } from "../../managers/socketManager.js";
 
+import Constants from "../../../shared/constants.js";
+const { GAME_MODES } = Constants;
+
 /** An Item Component that allows the item to be consumed by players */
 class EatComponent extends Component<ItemDefinition> {
     private heal: number;
@@ -24,7 +27,7 @@ class EatComponent extends Component<ItemDefinition> {
     interact(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
         if(player.health >= player.maxhealth) return;
 
-        player.removeFromCurrentSlot(1);
+        if(player.gamemode != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
         player.heal(this.heal);
     }
 }
