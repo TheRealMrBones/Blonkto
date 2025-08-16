@@ -242,6 +242,11 @@ class Player extends Entity {
         return (this.gamemode != GAME_MODES.SPECTATOR && super.canCollide());
     }
 
+    /** Returns if this object can start falling */
+    override canFall(): boolean {
+        return (this.gamemode == GAME_MODES.SURVIVAL && super.canFall());
+    }
+
     /** Player action after falling */
     override onFell(game: Game): void {
         setTimeout(() => {

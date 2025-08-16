@@ -133,11 +133,18 @@ abstract class GameObject {
         return (!this.falling);
     }
 
+    /** Returns if this object can start falling */
+    canFall(): boolean {
+        return true;
+    }
+
     /** Check for falling */
     private checkFalling(game: Game, dt: number): void {
         if(this.scale <= 0) return;
         
         if(!this.falling){
+            if(!this.canFall()) return;
+
             const tilesOn = this.tilesOn();
             let notair = 0;
 
