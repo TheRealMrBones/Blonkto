@@ -83,7 +83,7 @@ abstract class Entity extends GameObject {
 
     /** Returns if this entity can be hit */
     canHit(): boolean {
-        return !this.godmode;
+        return !this.godmode && !this.falling;
     }
 
     /** Removes the given health amount from this entity and returns if it died */
