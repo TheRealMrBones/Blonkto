@@ -136,6 +136,10 @@ class Player extends Entity {
             x: x,
             y: y
         };
+
+        this.pushx = 0;
+        this.pushy = 0;
+
         this.lastsetpos = Date.now();
     }
 
@@ -313,19 +317,19 @@ class Player extends Entity {
     getOneTimeMessages(): OneTimeMessageContent[] {
         const onetimemessages: OneTimeMessageContent[] = [];
 
+        if(this.setpos !== null){
+            onetimemessages.push(createOneTimeMessage<SetPosContent>(ONE_TIME_MSG_TYPES.SET_POS,
+                {
+                    pos: this.setpos,
+                }
+            ));
+        }
+
         if(this.pushx != 0 || this.pushy != 0){
             onetimemessages.push(createOneTimeMessage<PushContent>(ONE_TIME_MSG_TYPES.PUSH,
                 {
                     pushx: this.pushx,
                     pushy: this.pushy,
-                }
-            ));
-        }
-
-        if(this.setpos !== null){
-            onetimemessages.push(createOneTimeMessage<SetPosContent>(ONE_TIME_MSG_TYPES.SET_POS,
-                {
-                    pos: this.setpos,
                 }
             ));
         }
