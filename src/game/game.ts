@@ -12,6 +12,7 @@ import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
+import { OneTimeMessageContent } from "../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../shared/constants.js";
 const { GAME_MODES, MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -125,20 +126,24 @@ class Game {
 
     /** Create an update object to be sent to the specified players client */
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
-        // Get update data
+        // Get base update data
         const me = player.serializeForUpdate();
         const nearbyPlayers = EntityManager.filterToNearby(player, [...player.layer.entityManager.getPlayerEntities()])
             .filter(p => p.gamemode != GAME_MODES.SPECTATOR)
             .map(p => p.serializeForUpdate());
         const nearbyEntities = EntityManager.filterToNearby(player, [...player.layer.entityManager.getNonplayers()])
             .map(e => e.serializeForUpdate());
-        const fixes = player.getFixes();
         const inventoryupdates = player.getInventory().getChanges();
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
         const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
         const tab = this.playerManager.getTab();
         const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
         const tps = this.performanceManager.getTps();
+
+        // get one time update data
+        const onetimemessages: OneTimeMessageContent[] = [
+            ...player.getOneTimeMessages(),
+        ];
 
         // reset data
         player.getInventory().resetChanges();
@@ -151,7 +156,6 @@ class Game {
             me: me,
             others: nearbyPlayers,
             entities: nearbyEntities,
-            fixes: fixes,
             inventoryupdates: inventoryupdates,
             stationupdates: stationupdates,
             recipes: recipes,
@@ -159,6 +163,7 @@ class Game {
             tab: tab,
             darkness: darkness,
             tps: tps,
+            onetimemessages: onetimemessages,
         };
 
         return content;

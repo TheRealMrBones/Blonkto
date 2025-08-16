@@ -1,3 +1,4 @@
+import { OneTimeMessageContent } from "./oneTimeMessageContentTypes.js";
 import { Color } from "./types.js";
 
 /** Defines the format of the failed connection / kicked messages */
@@ -25,7 +26,6 @@ export type GameUpdateContent = {
     me: any;
     others: any[];
     entities: any[];
-    fixes: any;
     inventoryupdates: any[];
     stationupdates: any | null;
     recipes: any[];
@@ -33,6 +33,7 @@ export type GameUpdateContent = {
     tab: any[];
     darkness: number;
     tps: number;
+    onetimemessages: OneTimeMessageContent[];
 };
 
 /** Defines the format of the input message */

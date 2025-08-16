@@ -1,6 +1,10 @@
 import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
+import { PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
+
+import Constants from "../../shared/constants.js";
+const { ONE_TIME_MSG_TYPES } = Constants;
 
 import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
@@ -58,11 +62,28 @@ class StateManager {
         this.playerclient.world.loadChunks(update.worldLoad.loadChunks);
         this.playerclient.world.updateCells(update.worldLoad.updatedcells);
 
-        // get fixes
-        if(update.fixes.setpos) this.playerclient.inputManager.setPos(update.fixes.setpos);
-        if(update.fixes.pushx) this.playerclient.inputManager.serverPush(update.fixes.pushx, update.fixes.pushy);
-        if(update.fixes.setcolor) this.playerclient.renderer.setColor(update.fixes.setcolor);
-        if(update.fixes.gamemode) this.playerclient.setGamemode(update.fixes.gamemode);
+        // read one time messages
+        for(const otm of update.onetimemessages){
+            if(otm.type == ONE_TIME_MSG_TYPES.PUSH){
+                const pushcontent: PushContent = otm.value;
+                this.playerclient.inputManager.serverPush(pushcontent.pushx, pushcontent.pushy);
+            }
+            
+            if(otm.type == ONE_TIME_MSG_TYPES.SET_POS){
+                const setposcontent: SetPosContent = otm.value;
+                this.playerclient.inputManager.setPos(setposcontent.pos);
+            }
+            
+            if(otm.type == ONE_TIME_MSG_TYPES.SET_GAMEMODE){
+                const setgamemodecontent: SetGamemodeContent = otm.value;
+                this.playerclient.setGamemode(setgamemodecontent.gamemode);
+            }
+            
+            if(otm.type == ONE_TIME_MSG_TYPES.SET_COLOR){
+                const setcolorcontent: SetColorContent = otm.value;
+                this.playerclient.renderer.setColor(setcolorcontent.color);
+            }
+        }
 
         // inventory updates
         update.inventoryupdates.forEach((iu: any) => {

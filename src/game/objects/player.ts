@@ -11,9 +11,10 @@ import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
+import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS, GAME_MODES } = Constants;
+const { ASSETS, GAME_MODES, ONE_TIME_MSG_TYPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
@@ -26,31 +27,34 @@ const { DEFAULT_GAME_MODE, FORCE_GAME_MODE } = ServerConfig.GAME_MODE;
 /** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
     socket: Socket;
-    lastupdated: number;
+    lastupdated: number = 0;
     serverlastupdated: number;
     username: string;
     gamemode: string = GAME_MODES.SURVIVAL;
-    kills: number;
+    kills: number = 0;
     color: Color;
     private inventory: ChangesInventory;
-    hotbarslot: number;
+    hotbarslot: number = 0;
     station: Station | null = null;
-    fixes: any;
-    lastsetpos: number = 0;
     lastchunk: Pos | undefined;
     recipes: Recipe[] = [];
     moving: boolean = false;
 
+    pushx: number = 0;
+    pushy: number = 0;
+    setpos: Pos | null = null;
+    lastsetpos: number = 0;
+    setgamemode: boolean = false;
+    setcolor: boolean = false;
+
     constructor(socket: Socket, username: string, layer: Layer, x: number, y: number, starter: boolean){
         super(layer, x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
         this.id = socket.id!;
-        this.lastupdated = 0;
         this.serverlastupdated = Date.now();
 
         this.socket = socket;
         this.username = username;
         this.setGamemode(DEFAULT_GAME_MODE, true);
-        this.kills = 0;
         this.scale = PLAYER_SCALE;
         this.health = 10;
         this.basespeed = PLAYER_SPEED;
@@ -65,10 +69,7 @@ class Player extends Entity {
 
         // inventory
         this.inventory = new ChangesInventory(INVENTORY_SIZE);
-        this.hotbarslot = 0;
         if(starter == true) this.starterInventory();
-
-        this.resetFixes();
     }
 
     /** Returns the player from its save data */
@@ -121,6 +122,30 @@ class Player extends Entity {
 
     // #region setters
 
+    /** Pushes the player the given distances */
+    override push(x: number, y: number): void {
+        super.push(x, y);
+        this.pushx += x;
+        this.pushy += y;
+    }
+
+    /** Sets the players position to the given values */
+    override setPos(x: number, y: number): void {
+        super.setPos(x, y);
+        this.setpos = {
+            x: x,
+            y: y
+        };
+        this.lastsetpos = Date.now();
+    }
+
+    /** Sets the players layer to the given layer */
+    override setLayer(newlayer: Layer): void {
+        this.layer.entityManager.removePlayer(this.id);
+        this.layer = newlayer;
+        newlayer.entityManager.addPlayer(this);
+    }
+
     /** Sets the gamemode of this player */
     setGamemode(gamemode: string, ordefault?: boolean): void {
         const oldgamemode = this.gamemode;
@@ -139,8 +164,50 @@ class Player extends Entity {
             this.gamemode = gamemode;
         }
 
-        if(oldgamemode != this.gamemode) this.fixes.gamemode = this.gamemode;
+        if(oldgamemode != this.gamemode) this.setgamemode = true;
     }
+
+    /** Sets the color of the player */
+    setColor(color: Color): void {
+        this.color = color;
+        this.setcolor = true;
+    }
+
+    /** Heal the player the given amount of health */
+    heal(amount: number, ignoremax?: boolean): void {
+        this.health += amount;
+        if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
+    }
+
+    /** Rempoves the given amount from the players current slot */
+    removeFromCurrentSlot(amount: number): boolean {
+        return this.inventory.removeFromSlot(this.hotbarslot, amount);
+    }
+
+    /** Drops the given amount from the given slot in this players inventory */
+    dropFromSlot(slot: number, game: Game, amount?: number): void {
+        const inventory = this.getCombinedInventory();
+        inventory.dropFromSlot(this.layer, this.x, this.y, slot, game, amount, this.id);
+        const stack = inventory.getSlot(slot);
+    }
+
+    // #endregion
+
+    // #region events
+
+    /** Emits a death event to this object */
+    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
+        super.emitDeathEvent(game, killedby, killer);
+
+        if(killer instanceof Player) killer.kills++;
+
+        game.playerManager.killPlayer(this.socket, killedby);
+        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.layer, this.x, this.y, game);
+    }
+
+    // #endregion
+
+    // #region update
 
     /** Updates this players data with the given new input data */
     update(data: InputContent): void {
@@ -184,45 +251,6 @@ class Player extends Entity {
     /** Resyncs the players client with the server */
     resync(){
         this.setPos(this.x, this.y);
-    }
-
-    /** Sets the players layer to the given layer */
-    override setLayer(newlayer: Layer): void {
-        this.layer.entityManager.removePlayer(this.id);
-        this.layer = newlayer;
-        newlayer.entityManager.addPlayer(this);
-    }
-
-    /** Heal the player the given amount of health */
-    heal(amount: number, ignoremax?: boolean): void {
-        this.health += amount;
-        if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
-    }
-
-    /** Rempoves the given amount from the players current slot */
-    removeFromCurrentSlot(amount: number): boolean {
-        return this.inventory.removeFromSlot(this.hotbarslot, amount);
-    }
-
-    /** Drops the given amount from the given slot in this players inventory */
-    dropFromSlot(slot: number, game: Game, amount?: number): void {
-        const inventory = this.getCombinedInventory();
-        inventory.dropFromSlot(this.layer, this.x, this.y, slot, game, amount, this.id);
-        const stack = inventory.getSlot(slot);
-    }
-
-    // #endregion
-
-    // #region events
-
-    /** Emits a death event to this object */
-    override emitDeathEvent(game: Game, killedby: string, killer: any): void {
-        super.emitDeathEvent(game, killedby, killer);
-
-        if(killer instanceof Player) killer.kills++;
-
-        game.playerManager.killPlayer(this.socket, killedby);
-        if(!KEEP_INVENTORY && this.scale > 0) this.inventory.dropInventory(this.layer, this.x, this.y, game);
     }
 
     // #endregion
@@ -270,53 +298,56 @@ class Player extends Entity {
 
     // #endregion
 
-    // #region fixes
+    // #region one time messages
 
     /** Resets the saved update fixes */
-    resetFixes(): void {
-        this.fixes = {
-            pushx: null,
-            pushy: null,
-            setpos: null,
-            setcolor: null,
-            gamemode: null,
-        };
+    private resetOneTimeMessages(): void {
+        this.pushx = 0;
+        this.pushy = 0;
+        this.setpos = null;
+        this.setcolor = false;
+        this.setgamemode = false;
     }
 
     /** Returns the saved update fixes then resets them */
-    getFixes(): any {
-        const fixescopy = {
-            pushx: this.fixes.pushx,
-            pushy: this.fixes.pushy,
-            setpos: this.fixes.setpos,
-            setcolor: this.fixes.setcolor,
-            gamemode: this.fixes.gamemode,
-        };
-        this.resetFixes();
-        return fixescopy;
-    }
+    getOneTimeMessages(): OneTimeMessageContent[] {
+        const onetimemessages: OneTimeMessageContent[] = [];
 
-    /** Pushes the player the given distances */
-    override push(x: number, y: number): void {
-        super.push(x, y);
-        this.fixes.pushx += x;
-        this.fixes.pushy += y;
-    }
+        if(this.pushx != 0 || this.pushy != 0){
+            onetimemessages.push(createOneTimeMessage<PushContent>(ONE_TIME_MSG_TYPES.PUSH,
+                {
+                    pushx: this.pushx,
+                    pushy: this.pushy,
+                }
+            ));
+        }
 
-    /** Sets the players position to the given values */
-    override setPos(x: number, y: number): void {
-        super.setPos(x, y);
-        this.fixes.setpos = {
-            x: x,
-            y: y
-        };
-        this.lastsetpos = Date.now();
-    }
+        if(this.setpos !== null){
+            onetimemessages.push(createOneTimeMessage<SetPosContent>(ONE_TIME_MSG_TYPES.SET_POS,
+                {
+                    pos: this.setpos,
+                }
+            ));
+        }
 
-    /** Sets the color of the player */
-    setColor(color: Color): void {
-        this.color = color;
-        this.fixes.setcolor = color;
+        if(this.setgamemode){
+            onetimemessages.push(createOneTimeMessage<SetGamemodeContent>(ONE_TIME_MSG_TYPES.SET_GAMEMODE,
+                {
+                    gamemode: this.gamemode,
+                }
+            ));
+        }
+
+        if(this.setcolor){
+            onetimemessages.push(createOneTimeMessage<SetColorContent>(ONE_TIME_MSG_TYPES.SET_COLOR,
+                {
+                    color: this.color,
+                }
+            ));
+        }
+
+        this.resetOneTimeMessages();
+        return onetimemessages;
     }
 
     // #endregion

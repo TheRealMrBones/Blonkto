@@ -19,6 +19,12 @@ const Constants = Object.freeze({
         KICK: "kick",
         BAN: "ban",
     },
+    ONE_TIME_MSG_TYPES: {
+        PUSH: "push",
+        SET_POS: "set_pos",
+        SET_COLOR: "set_color",
+        SET_GAMEMODE: "set_gamemode",
+    },
     ASSETS: {
         MISSING_TEXTURE: "MissingTexture.png",
         PLAYER: "BlonktoPlayer.png",
