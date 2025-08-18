@@ -1,5 +1,7 @@
 import { Color, Pos } from "./types.js";
 
+// #region base one time message
+
 /** Returns a new one time message of the requested type */
 export function createOneTimeMessage<T>(type: string, value: T): OneTimeMessageContent {
     return {
@@ -13,6 +15,10 @@ export type OneTimeMessageContent = {
     type: string;
     value: any;
 };
+
+// #endregion
+
+// #region player updates
 
 /** Defines the format of the push one time message */
 export type PushContent = {
@@ -34,3 +40,14 @@ export type SetGamemodeContent = {
 export type SetColorContent = {
     color: Color;
 };
+
+// #endregion
+
+// #region player updates
+
+/** Defines the format of the set color one time message */
+export type RecipesContent = {
+    recipes: any[];
+};
+
+// #endregion

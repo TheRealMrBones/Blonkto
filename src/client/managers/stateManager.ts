@@ -1,7 +1,7 @@
 import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
-import { PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
+import { PushContent, RecipesContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { ONE_TIME_MSG_TYPES } = Constants;
@@ -83,6 +83,11 @@ class StateManager {
                 const setcolorcontent: SetColorContent = otm.value;
                 this.playerclient.renderer.setColor(setcolorcontent.color);
             }
+            
+            if(otm.type == ONE_TIME_MSG_TYPES.RECIPES){
+                const recipescontent: RecipesContent = otm.value;
+                this.playerclient.inventory.addRecipes(recipescontent.recipes);
+            }
         }
 
         // inventory updates
@@ -108,10 +113,9 @@ class StateManager {
             }
         }
 
-        // recipe updates
+        // update recipe visibility
         if(update.inventoryupdates.length > 0) this.playerclient.inventory.setRecipeVisibility();
         else if(update.stationupdates !== null) if(update.stationupdates.isnew) this.playerclient.inventory.setRecipeVisibility();
-        this.playerclient.inventory.addRecipes(update.recipes);
 
         // update UI
         this.playerclient.renderer.uiManager.updateHealth(update.me.static.health);

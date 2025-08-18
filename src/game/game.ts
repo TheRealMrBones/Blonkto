@@ -12,10 +12,10 @@ import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
-import { OneTimeMessageContent } from "../shared/oneTimeMessageContentTypes.js";
+import { createOneTimeMessage, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../shared/constants.js";
-const { GAME_MODES, MSG_TYPES, LOG_CATEGORIES } = Constants;
+const { GAME_MODES, MSG_TYPES, ONE_TIME_MSG_TYPES, LOG_CATEGORIES } = Constants;
 
 import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
@@ -135,7 +135,6 @@ class Game {
             .map(e => e.serializeForUpdate());
         const inventoryupdates = player.getInventory().getChanges();
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
-        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
         const tab = this.playerManager.getTab();
         const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
         const tps = this.performanceManager.getTps();
@@ -144,6 +143,15 @@ class Game {
         const onetimemessages: OneTimeMessageContent[] = [
             ...player.getOneTimeMessages(),
         ];
+
+        const recipes = this.craftManager.serializeCraftableRecipesForUpdate(player);
+        if(recipes.length > 0){
+            onetimemessages.push(createOneTimeMessage<RecipesContent>(ONE_TIME_MSG_TYPES.RECIPES,
+                {
+                    recipes: recipes,
+                }
+            ));
+        }
 
         // reset data
         player.getInventory().resetChanges();
@@ -158,7 +166,6 @@ class Game {
             entities: nearbyEntities,
             inventoryupdates: inventoryupdates,
             stationupdates: stationupdates,
-            recipes: recipes,
             worldLoad: worldload,
             tab: tab,
             darkness: darkness,

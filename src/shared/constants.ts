@@ -24,6 +24,7 @@ const Constants = Object.freeze({
         SET_POS: "set_pos",
         SET_COLOR: "set_color",
         SET_GAMEMODE: "set_gamemode",
+        RECIPES: "recipes",
     },
     ASSETS: {
         MISSING_TEXTURE: "MissingTexture.png",
