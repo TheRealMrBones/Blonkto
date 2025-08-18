@@ -35,10 +35,17 @@ class FileManager {
         });
     }
 
+    /** Copies the given file to the new location */
+    copyFile(source: string, destination: string, location?: string): void {
+        fs.copyFile(this.getFullFilePath(source, location), this.getFullFilePath(destination, location), (error) => {
+            if(error) this.logger.error(`An error occurred while copying the file: ${error}`);
+        });
+    }
+
     /** Deletes the given file from save if it exists */
     deleteFile(filename: string, location?: string): void {
         try{
-            fs.unlinkSync(this.getFullFilePath(filename, location));
+            fs.rmSync(this.getFullFilePath(filename, location));
         } catch (error) {
             this.logger.error(`An error occurred while deleting the file: ${error}`);
         }
@@ -48,6 +55,24 @@ class FileManager {
     createDirectory(dirname: string, location?: string): void {
         const newdir = this.getFullFolderPath(dirname, location);
         if(!fs.existsSync(newdir)) fs.mkdirSync(newdir, { recursive: true });
+    }
+
+    /** Recursivly copies the given directory to the new location */
+    copyDirectory(source: string, destination: string, location?: string): void {
+        const sourcedir = this.getFullFolderPath(source, location);
+        const destdir = this.getFullFolderPath(destination, location);
+        fs.cp(sourcedir, destdir, { recursive: true }, (error) => {
+            if(error) this.logger.error(`An error occurred while copying the directory: ${error}`);
+        });
+    }
+
+    /** Deletes the given directory from save if it exists */
+    deleteDirectory(dirname: string, location?: string): void {
+        try{
+            fs.rmSync(this.getFullFolderPath(dirname, location));
+        } catch (error) {
+            this.logger.error(`An error occurred while deleting the directory: ${error}`);
+        }
     }
 
     // #endregion
