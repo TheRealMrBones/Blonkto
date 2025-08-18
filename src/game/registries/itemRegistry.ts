@@ -63,8 +63,9 @@ ItemRegistry.register(new ItemDefinition("chest", "Chest", 64, ASSETS.CHEST)
 ItemRegistry.register(new ItemDefinition("wood_stairs", "Wood Stairs", 64, ASSETS.WOOD_STAIRS_DOWN)
     .addComponent(new BuildComponent("wood_stairs_down")));
 
-ItemRegistry.register(new ItemDefinition("copper_ore", "Copper Ore", 64, ASSETS.COPPER_ORE));
-ItemRegistry.register(new ItemDefinition("copper_ore_block", "Copper Ore Block", 64, ASSETS.COPPER_ORE)
+ItemRegistry.register(new ItemDefinition("copper_ore_block", "Copper Ore Block", 64, ASSETS.COPPER_ORE_BLOCK)
     .addComponent(new BuildComponent("copper_ore_block")));
+ItemRegistry.register(new ItemDefinition("copper_ore", "Copper Ore", 64, ASSETS.COPPER_ORE));
+ItemRegistry.register(new ItemDefinition("copper_bar", "Copper Bar", 64, ASSETS.COPPER_BAR));
 
 export default ItemRegistry;
