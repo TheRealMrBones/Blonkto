@@ -10,9 +10,9 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
 ];
 
-export default (): void => CommandRegistry.register(new CommandDefinition("saveworld", true, args, saveWorldCommand, "Saves the world"));
+export default (): void => CommandRegistry.register(new CommandDefinition("backupworld", true, args, backupWorldCommand, "Backs up the world"));
 
-function saveWorldCommand(args: any[], player: Player, game: Game){
-    game.saveGame();
-    game.chatManager.sendMessageTo(player, "saved the world!");
+function backupWorldCommand(args: any[], player: Player, game: Game){
+    game.backupWorld();
+    game.chatManager.sendMessageTo(player, "backed up the world!");
 }

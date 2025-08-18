@@ -32,6 +32,8 @@ import killCommand from "../commands/killCommand.js";
 killCommand();
 import saveWorldCommand from "../commands/saveWorldCommand.js";
 saveWorldCommand();
+import backupWorldCommand from "../commands/backupWorldCommand.js";
+backupWorldCommand();
 import kickCommand from "../commands/kickCommand.js";
 kickCommand();
 import banCommand from "../commands/banCommand.js";

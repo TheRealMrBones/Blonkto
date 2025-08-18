@@ -9,6 +9,7 @@ const datadirs = [
     "accounts",
     "players",
     "world",
+    "backups",
 ];
 
 /** Manages the creation and reading of save files for the server */

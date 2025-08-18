@@ -22,7 +22,7 @@ const { FAKE_PING } = SharedConfig.UPDATES;
 
 import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
-const { AUTOSAVE_RATE } = ServerConfig.WORLD;
+const { AUTOSAVE_RATE, BACKUP_RATE } = ServerConfig.WORLD;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
 const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
@@ -41,6 +41,7 @@ class Game {
     readonly craftManager: CraftManager;
     
     private readonly saveinterval: NodeJS.Timeout;
+    private readonly backupinterval: NodeJS.Timeout;
 
     readonly world: World;
 
@@ -85,6 +86,7 @@ class Game {
         setTimeout(this.tick.bind(this), 1);
 
         this.saveinterval = setInterval(this.saveGame.bind(this), 1000 * AUTOSAVE_RATE);
+        this.backupinterval = setInterval(this.backupWorld.bind(this), 1000 * 60 * 60 * BACKUP_RATE);
     }
 
     // #region tick/update
@@ -198,8 +200,27 @@ class Game {
 
         // saves the world data
         this.world.saveWorld();
+
+        // saves all of the players data
+        this.playerManager.savePlayers();
         
         this.logger.info("Game saved");
+    }
+
+    /** Backs up the currently loaded world to a seperate save */
+    backupWorld(): void {
+        this.logger.info("Backing up game");
+
+        // create backup directory
+        const backupDir = `backups/${Date.now()}`;
+        this.fileManager.createDirectory(backupDir);
+
+        // copy data to backup directory
+        this.fileManager.copyFile("game", `${backupDir}/game`);
+        this.fileManager.copyDirectory("world", `${backupDir}/world`);
+        this.fileManager.copyDirectory("players", `${backupDir}/players`);
+        
+        this.logger.info("Game backed up");
     }
 
     // #endregion

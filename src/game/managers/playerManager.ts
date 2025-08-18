@@ -31,7 +31,6 @@ class PlayerManager {
     readonly opManager: OpManager;
     readonly whitelistManager: WhitelistManager;
 
-    private readonly saveinterval: NodeJS.Timeout;
     private readonly recentlogons: { username: string, time: number }[] = [];
 
     constructor(game: Game){
@@ -42,8 +41,6 @@ class PlayerManager {
         this.banManager = new BanManager(game);
         this.opManager = new OpManager(game);
         this.whitelistManager = new WhitelistManager(game);
-
-        this.saveinterval = setInterval(this.savePlayers.bind(this), 1000 * AUTOSAVE_RATE);
     }
 
     // #region player management
