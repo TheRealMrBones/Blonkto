@@ -66,5 +66,6 @@ BlockRegistry.register(new BlockDefinition("wood_stairs_up", "Wood Stairs", ASSE
     .addComponent(new StairsComponent(false, "wood_stairs_down"))
     .setWalkThrough(true)
     .setUnderEntities(true));
+BlockRegistry.register(new BlockDefinition("copper_ore_block", "Copper Ore Block", ASSETS.COPPER_ORE, new Drop("copper_ore", 1), MINE_TYPES.MINE));
 
 export default BlockRegistry;

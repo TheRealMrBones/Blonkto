@@ -26,7 +26,12 @@ class CaveLayerGenerator implements ILayerGenerator {
             chunk.cells[x] = [];
             for(let y = 0; y < CHUNK_SIZE; y++){
                 const cell = new Cell(chunk, x, y, "stone_floor");
-                cell.setBlock("stone_block", game);
+
+                if(rng.next() < .05){
+                    cell.setBlock("copper_ore_block", game);
+                }else{
+                    cell.setBlock("stone_block", game);
+                }
                 
                 chunk.cells[x][y] = cell;
             }
