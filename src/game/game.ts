@@ -12,7 +12,7 @@ import CraftManager from "./managers/craftManager.js";
 import Player from "./objects/player.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
-import { createOneTimeMessage, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
+import { createOneTimeMessage, DarknessContent, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../shared/constants.js";
 const { GAME_MODES, MSG_TYPES, ONE_TIME_MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -49,6 +49,8 @@ class Game {
     private nextupdatetime: number;
     lifeticks: number;
     starttime: number;
+
+    private lastdarkness: number = 0;
 
     constructor(io: SocketIo, fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
@@ -138,7 +140,6 @@ class Game {
         const inventoryupdates = player.getInventory().getChanges();
         const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
         const tab = this.playerManager.getTab();
-        const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
         const tps = this.performanceManager.getTps();
 
         // get one time update data
@@ -151,6 +152,16 @@ class Game {
             onetimemessages.push(createOneTimeMessage<RecipesContent>(ONE_TIME_MSG_TYPES.RECIPES,
                 {
                     recipes: recipes,
+                }
+            ));
+        }
+
+        const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
+        if(darkness != this.lastdarkness){
+            this.lastdarkness = darkness;
+            onetimemessages.push(createOneTimeMessage<DarknessContent>(ONE_TIME_MSG_TYPES.DARKNESS,
+                {
+                    darkness: darkness,
                 }
             ));
         }
@@ -170,7 +181,6 @@ class Game {
             stationupdates: stationupdates,
             worldLoad: worldload,
             tab: tab,
-            darkness: darkness,
             tps: tps,
             onetimemessages: onetimemessages,
         };

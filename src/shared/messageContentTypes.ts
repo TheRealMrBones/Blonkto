@@ -30,7 +30,7 @@ export type GameUpdateContent = {
     stationupdates: any | null;
     worldLoad: any;
     tab: any[];
-    darkness: number;
+    darkness?: number;
     tps: number;
     onetimemessages: OneTimeMessageContent[];
 };

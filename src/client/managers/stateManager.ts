@@ -1,7 +1,7 @@
 import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
-import { PushContent, RecipesContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
+import { DarknessContent, PushContent, RecipesContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { ONE_TIME_MSG_TYPES } = Constants;
@@ -87,6 +87,11 @@ class StateManager {
             if(otm.type == ONE_TIME_MSG_TYPES.RECIPES){
                 const recipescontent: RecipesContent = otm.value;
                 this.playerclient.inventory.addRecipes(recipescontent.recipes);
+            }
+            
+            if(otm.type == ONE_TIME_MSG_TYPES.DARKNESS){
+                const darknesscontent: DarknessContent = otm.value;
+                update.darkness = darknesscontent.darkness;
             }
         }
 
@@ -205,7 +210,7 @@ class StateManager {
                 self: StateManager.interpolateObject(baseUpdate.me, next.me, ratio),
                 others: others,
                 entities: StateManager.interpolateObjectArray(baseUpdate.entities, next.entities, ratio),
-                darkness: baseUpdate.darkness + (next.darkness - baseUpdate.darkness) * ratio,
+                darkness: baseUpdate.darkness! + (next.darkness! - baseUpdate.darkness!) * ratio,
             };
         }
     }

@@ -43,11 +43,16 @@ export type SetColorContent = {
 
 // #endregion
 
-// #region player updates
+// #region game updates
 
 /** Defines the format of the set color one time message */
 export type RecipesContent = {
     recipes: any[];
+};
+
+/** Defines the format of the set darkness one time message */
+export type DarknessContent = {
+    darkness: number;
 };
 
 // #endregion
