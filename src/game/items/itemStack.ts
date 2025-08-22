@@ -4,7 +4,6 @@ import Game from "../game.js";
 import Player from "../objects/player.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 import ItemDefinition from "../definitions/itemDefinition.js";
-import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
@@ -173,5 +172,12 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
 
     // #endregion
 }
+
+/** Defines the format for serialized writes of an item stack */
+export type SerializedWriteItemStack = {
+    name: string,
+    amount: number,
+    componentdata?: any,
+};
 
 export default ItemStack;

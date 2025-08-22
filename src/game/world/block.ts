@@ -5,7 +5,6 @@ import Cell from "./cell.js";
 import Game from "../game.js";
 import Player from "../objects/player.js";
 import BlockRegistry from "../registries/blockRegistry.js";
-import { SerializedWriteBlock } from "../../shared/serializedWriteTypes.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
@@ -24,7 +23,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     }
 
     /** Returns the block from its save data */
-    static readFromSave(cell: Cell, data: any): Block {
+    static readFromSave(cell: Cell, data: SerializedWriteBlock): Block {
         const block = new Block(cell, data.blockdefinition);
         block.loadComponentData(data.componentdata);
         return block;
@@ -149,5 +148,12 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
 
     // #endregion
 }
+
+/** Defines the format for serialized writes of a block */
+export type SerializedWriteBlock = {
+    blockdefinition: string,
+    componentdata?: any,
+};
+
 
 export default Block;

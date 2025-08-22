@@ -9,7 +9,7 @@ import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
 import { Pos } from "../../shared/types.js";
 import Player from "./player.js";
-import { SerializedGameObject } from "./gameObject.js";
+import { SerializedWriteGameObject } from "./gameObject.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
@@ -26,7 +26,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Returns the nonplayer entity from its save data */
-    static readFromSave(layer: Layer, data: SerializedNonplayerEntity): NonplayerEntity {
+    static readFromSave(layer: Layer, data: SerializedWriteNonplayerEntity): NonplayerEntity {
         const entity = new NonplayerEntity(layer, data.x, data.y, data.dir, data.entitydefinition);
         entity.loadComponentData(data.componentdata);
         return entity;
@@ -93,11 +93,11 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Returns an object representing this nonplayer entities data for writing to the save */
-    override serializeForWrite(): SerializedNonplayerEntity {
+    override serializeForWrite(): SerializedWriteNonplayerEntity {
         const base = super.serializeForWrite();
         const componentdata = this.serializeComponentDataForWrite();
         
-        const returnobj: SerializedNonplayerEntity = {
+        const returnobj: SerializedWriteNonplayerEntity = {
             ...base,
             type: "entity",
             entitydefinition: this.definition.key,
@@ -172,7 +172,8 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     // #endregion
 }
 
-export type SerializedNonplayerEntity = SerializedGameObject & {
+/** Defines the format for serialized writes of a nonplayer entity */
+export type SerializedWriteNonplayerEntity = SerializedWriteGameObject & {
     type: string,
     entitydefinition: string,
     componentdata?: { [key: string]: any },

@@ -9,7 +9,7 @@ import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
-import { SerializedGameObject } from "./gameObject.js";
+import { SerializedWriteGameObject } from "./gameObject.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
@@ -76,7 +76,7 @@ class Player extends Entity {
     }
 
     /** Returns the player from its save data */
-    static readFromSave(socket: Socket, layer: Layer, x: number, y: number, data: any): Player {
+    static readFromSave(socket: Socket, layer: Layer, x: number, y: number, data: SerializedWritePlayer | SerializedWriteDeadPlayer): Player {
         const player = new Player(socket, data.username, layer, x, y, (data.dead && !KEEP_INVENTORY));
 
         if(!FORCE_GAME_MODE) player.setGamemode(data.gamemode, true);
@@ -381,7 +381,7 @@ class Player extends Entity {
     }
 
     /** Returns an object representing this players data for writing to the save */
-    serializePlayerForWrite(): SerializedPlayer {
+    serializePlayerForWrite(): SerializedWritePlayer {
         return {
             dead: false,
             username: this.username,
@@ -397,8 +397,8 @@ class Player extends Entity {
     }
 
     /** Returns an object representing this players kept data for writing to the save after they have died */
-    serializePlayerAfterKilled(): SerializedDeadPlayer {
-        const returnobj: SerializedDeadPlayer = {
+    serializePlayerAfterKilled(): SerializedWriteDeadPlayer {
+        const returnobj: SerializedWriteDeadPlayer = {
             dead: true,
             username: this.username,
             gamemode: this.gamemode,
@@ -414,7 +414,8 @@ class Player extends Entity {
     // #endregion
 }
 
-export type SerializedPlayer = {
+/** Defines the format for serialized writes of a player */
+export type SerializedWritePlayer = {
     dead: false,
     username: string,
     gamemode: string,
@@ -427,7 +428,8 @@ export type SerializedPlayer = {
     inventory: any,
 }
 
-export type SerializedDeadPlayer = {
+/** Defines the format for serialized writes of a dead player */
+export type SerializedWriteDeadPlayer = {
     dead: true,
     username: string,
     gamemode: string,

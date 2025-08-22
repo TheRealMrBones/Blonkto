@@ -4,7 +4,6 @@ import FloorDefinition from "../definitions/floorDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import FloorRegistry from "../registries/floorRegistry.js";
-import { SerializedWriteFloor } from "../../shared/serializedWriteTypes.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import Player from "../objects/player.js";
@@ -24,7 +23,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     }
 
     /** Returns the floor from its save data */
-    static readFromSave(cell: Cell, data: any): Floor {
+    static readFromSave(cell: Cell, data: SerializedWriteFloor): Floor {
         const floor = new Floor(cell, data.floordefinition);
         floor.loadComponentData(data.componentdata);
         return floor;
@@ -149,5 +148,11 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
 
     // #endregion
 }
+
+/** Defines the format for serialized writes of a floor */
+export type SerializedWriteFloor = {
+    floordefinition: string,
+    componentdata?: any,
+};
 
 export default Floor;

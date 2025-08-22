@@ -4,7 +4,6 @@ import CeilingDefinition from "../definitions/ceilingDefinition.js";
 import Cell from "./cell.js";
 import Game from "../game.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
-import { SerializedWriteCeiling } from "../../shared/serializedWriteTypes.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import Player from "../objects/player.js";
@@ -24,7 +23,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     }
 
     /** Returns the ceiling from its save data */
-    static readFromSave(cell: Cell, data: any): Ceiling {
+    static readFromSave(cell: Cell, data: SerializedWriteCeiling): Ceiling {
         const ceiling = new Ceiling(cell, data.ceilingdefinition);
         ceiling.loadComponentData(data.componentdata);
         return ceiling;
@@ -149,5 +148,11 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
 
     // #endregion
 }
+
+/** Defines the format for serialized writes of a ceiling */
+export type SerializedWriteCeiling = {
+    ceilingdefinition: string,
+    componentdata?: any,
+};
 
 export default Ceiling;
