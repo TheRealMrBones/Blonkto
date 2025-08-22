@@ -52,9 +52,13 @@ class IndependentObject {
     }
 
     /** Clears all old state data to save room */
-    purgeUpdates(): void {
-        const base = this.getBaseUpdate();
-        if(base > 0) this.updates.splice(0, base);
+    purgeUpdates(statereset: boolean): void {
+        if(statereset){
+            this.updates.splice(0, this.updates.length - 1);
+        }else{
+            const base = this.getBaseUpdate();
+            if(base > 0) this.updates.splice(0, base);
+        }
     }
 
     // #endregion

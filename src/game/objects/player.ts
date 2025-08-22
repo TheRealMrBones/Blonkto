@@ -39,6 +39,7 @@ class Player extends Entity {
     lastchunk: Pos | undefined;
     recipes: Recipe[] = [];
     moving: boolean = false;
+    statereset: boolean = false;
 
     pushx: number = 0;
     pushy: number = 0;
@@ -46,6 +47,7 @@ class Player extends Entity {
     lastsetpos: number = 0;
     setgamemode: boolean = false;
     setcolor: boolean = false;
+    lastdarkness: number = 0;
 
     constructor(socket: Socket, username: string, layer: Layer, x: number, y: number, starter: boolean){
         super(layer, x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
@@ -148,6 +150,7 @@ class Player extends Entity {
         this.layer.entityManager.removePlayer(this.id);
         this.layer = newlayer;
         newlayer.entityManager.addPlayer(this);
+        this.statereset = true;
     }
 
     /** Sets the gamemode of this player */

@@ -95,6 +95,15 @@ class StateManager {
             }
         }
 
+        // fill in missing update data (usually from one time messages)
+        if(update.darkness === undefined){
+            if(this.gameUpdates.length > 0){
+                update.darkness = this.gameUpdates[this.gameUpdates.length - 1].darkness;
+            }else{
+                update.darkness = 0;
+            }
+        }
+
         // inventory updates
         update.inventoryupdates.forEach((iu: any) => {
             this.playerclient.inventory.setSingleInventorySlot(iu);
@@ -171,9 +180,9 @@ class StateManager {
         });
         
         // keep only one update before the current server/player time
-        this.purgeUpdates();
+        this.purgeUpdates(update.statereset);
         Object.values(this.independentObjects).forEach(o => {
-            o.purgeUpdates();
+            o.purgeUpdates(update.statereset);
         });
     }
 
@@ -285,9 +294,13 @@ class StateManager {
     }
 
     /** Clears all old state data to save room */
-    purgeUpdates(): void {
-        const base = this.getBaseUpdate();
-        if(base > 0) this.gameUpdates.splice(0, base);
+    purgeUpdates(statereset: boolean): void {
+        if(statereset){
+            this.gameUpdates.splice(0, this.gameUpdates.length - 1);
+        }else{
+            const base = this.getBaseUpdate();
+            if(base > 0) this.gameUpdates.splice(0, base);
+        }
     }
 
     /** Checks if connection might have been lost based on the time of the last game update received */

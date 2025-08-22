@@ -50,8 +50,6 @@ class Game {
     lifeticks: number;
     starttime: number;
 
-    private lastdarkness: number = 0;
-
     constructor(io: SocketIo, fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
@@ -156,9 +154,9 @@ class Game {
             ));
         }
 
-        const darkness = player.layer.z < 1 ? this.world.getDarknessPercent() : 1;
-        if(darkness != this.lastdarkness){
-            this.lastdarkness = darkness;
+        const darkness = this.world.getDarknessPercent(player.layer.z);
+        if(darkness != player.lastdarkness){
+            player.lastdarkness = darkness;
             onetimemessages.push(createOneTimeMessage<DarknessContent>(ONE_TIME_MSG_TYPES.DARKNESS,
                 {
                     darkness: darkness,
@@ -182,16 +180,25 @@ class Game {
             worldLoad: worldload,
             tab: tab,
             tps: tps,
+            statereset: player.statereset,
             onetimemessages: onetimemessages,
         };
 
+        // untoggle state reset if needed
+        if(player.statereset) player.statereset = false;
+
+        // return final update content
         return content;
     }
 
     /** Creates the initial update for a client before they have been fully loaded */
     createInitialUpdate(player: Player): GameUpdateContent {
         const worldload = this.world.loadPlayerChunks(player);
-        return this.createUpdate(Date.now(), player, worldload);
+
+        const gameupdate = this.createUpdate(Date.now(), player, worldload);
+        gameupdate.darkness = this.world.getDarknessPercent(player.layer.z);
+
+        return gameupdate;
     }
 
     // #endregion

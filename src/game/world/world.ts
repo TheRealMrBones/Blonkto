@@ -149,8 +149,8 @@ class World {
     }
 
     /** Returns the current darkness percent */
-    getDarknessPercent(): number {
-        return this.darknesspercent;
+    getDarknessPercent(z?: number): number {
+        return (z === undefined || z < 1) ? this.darknesspercent : 1;
     }
 
     /** Returns the if cycle day is true */

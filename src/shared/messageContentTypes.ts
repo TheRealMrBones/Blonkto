@@ -32,6 +32,7 @@ export type GameUpdateContent = {
     tab: any[];
     darkness?: number;
     tps: number;
+    statereset: boolean;
     onetimemessages: OneTimeMessageContent[];
 };
 
