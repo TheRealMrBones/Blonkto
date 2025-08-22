@@ -260,7 +260,7 @@ abstract class GameObject {
     }
 
     /** Returns an object representing this objects data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedGameObject {
         return {
             x: this.x,
             y: this.y,
@@ -272,6 +272,15 @@ abstract class GameObject {
     }
 
     // #endregion
+}
+
+export type SerializedGameObject = {
+    x: number,
+    y: number,
+    dir: number,
+    scale: number,
+    asset: string,
+    falling: boolean,
 }
 
 export default GameObject;

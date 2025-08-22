@@ -106,7 +106,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     }
 
     /** Loads this ceilings required component data instances with the given data */
-    private loadComponentData(data: { [key: string]: any }): void {
+    private loadComponentData(data?: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
             const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;

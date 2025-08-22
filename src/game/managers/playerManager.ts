@@ -18,7 +18,6 @@ const { SHOW_TAB } = SharedConfig.TAB;
 
 import ServerConfig from "../../configs/server.js";
 const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
-const { AUTOSAVE_RATE } = ServerConfig.WORLD;
 const { FILTER_USERNAME, ALLOW_MULTI_LOGON } = ServerConfig.PLAYER;
 
 /** Manages the list of players for the server */
@@ -113,7 +112,7 @@ class PlayerManager {
 
     /** Saves the given player to their own file */
     savePlayer(player: Player): void {
-        const data = player.serializeForWrite();
+        const data = JSON.stringify(player.serializePlayerForWrite());
 
         this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
     }
@@ -136,7 +135,7 @@ class PlayerManager {
         
         socket.emit(MSG_TYPES.DEAD);
 
-        const data = player.serializeAfterKilled();
+        const data = JSON.stringify(player.serializePlayerAfterKilled());
 
         this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
 

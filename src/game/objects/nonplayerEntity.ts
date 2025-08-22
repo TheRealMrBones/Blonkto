@@ -9,6 +9,7 @@ import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
 import { Pos } from "../../shared/types.js";
 import Player from "./player.js";
+import { SerializedGameObject } from "./gameObject.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
@@ -25,7 +26,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Returns the nonplayer entity from its save data */
-    static readFromSave(layer: Layer, data: any): NonplayerEntity {
+    static readFromSave(layer: Layer, data: SerializedNonplayerEntity): NonplayerEntity {
         const entity = new NonplayerEntity(layer, data.x, data.y, data.dir, data.entitydefinition);
         entity.loadComponentData(data.componentdata);
         return entity;
@@ -92,11 +93,11 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Returns an object representing this nonplayer entities data for writing to the save */
-    override serializeForWrite(): any {
+    override serializeForWrite(): SerializedNonplayerEntity {
         const base = super.serializeForWrite();
         const componentdata = this.serializeComponentDataForWrite();
         
-        const returnobj = {
+        const returnobj: SerializedNonplayerEntity = {
             ...base,
             type: "entity",
             entitydefinition: this.definition.key,
@@ -123,7 +124,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Loads this entities required component data instances with the given data */
-    private loadComponentData(data: { [key: string]: any }): void {
+    private loadComponentData(data?: { [key: string]: any }): void {
         if(data === undefined) return;
         for(const componentdataloaded of Object.entries(data)){
             const cd = this.componentdata.get(componentdataloaded[0]) as unknown as ISerializableForWrite;
@@ -169,6 +170,12 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     // #endregion
+}
+
+export type SerializedNonplayerEntity = SerializedGameObject & {
+    type: string,
+    entitydefinition: string,
+    componentdata?: { [key: string]: any },
 }
 
 export default NonplayerEntity;

@@ -1,10 +1,11 @@
 import Layer from "../world/layer.js";
 import ItemStack from "../items/itemStack.js";
-import GameObject from "./gameObject.js";
+import GameObject, { SerializedGameObject } from "./gameObject.js";
 import Game from "../game.js";
 import ItemRegistry from "../registries/itemRegistry.js";
 
 import ServerConfig from "../../configs/server.js";
+import { SerializedWriteItemStack } from "../../shared/serializedWriteTypes.js";
 const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
 
 /** A stack of items that has been dropped into the game world and ticking */
@@ -24,7 +25,7 @@ class DroppedStack extends GameObject {
     }
 
     /** Returns the dropped stack from its save data */
-    static readFromSave(layer: Layer, data: any): DroppedStack {
+    static readFromSave(layer: Layer, data: SerializedDroppedStack): DroppedStack {
         const droppedstack = new DroppedStack(layer, data.x, data.y, new ItemStack(data.itemStack.name, data.itemStack.amount));
         droppedstack.despawntime = data.despawntime;
         return droppedstack;
@@ -104,7 +105,7 @@ class DroppedStack extends GameObject {
     }
 
     /** Returns an object representing this dropped stacks data for writing to the save */
-    override serializeForWrite(): any {
+    override serializeForWrite(): SerializedDroppedStack {
         const base = super.serializeForWrite();
         
         return {
@@ -116,6 +117,12 @@ class DroppedStack extends GameObject {
     }
 
     // #endregion
+}
+
+export type SerializedDroppedStack = SerializedGameObject & {
+    type: string,
+    itemStack: SerializedWriteItemStack,
+    despawntime: number,
 }
 
 export default DroppedStack;

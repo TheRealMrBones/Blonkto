@@ -9,6 +9,7 @@ import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
+import { SerializedGameObject } from "./gameObject.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
@@ -380,8 +381,8 @@ class Player extends Entity {
     }
 
     /** Returns an object representing this players data for writing to the save */
-    override serializeForWrite(): any {
-        return JSON.stringify({
+    serializePlayerForWrite(): SerializedPlayer {
+        return {
             dead: false,
             username: this.username,
             gamemode: this.gamemode,
@@ -392,12 +393,12 @@ class Player extends Entity {
             kills: this.kills,
             color: this.color,
             inventory: this.inventory.serializeForWrite(),
-        });
+        };
     }
 
     /** Returns an object representing this players kept data for writing to the save after they have died */
-    serializeAfterKilled(): any {
-        const base: any = {
+    serializePlayerAfterKilled(): SerializedDeadPlayer {
+        const returnobj: SerializedDeadPlayer = {
             dead: true,
             username: this.username,
             gamemode: this.gamemode,
@@ -405,12 +406,34 @@ class Player extends Entity {
             color: this.color,
         };
 
-        if(KEEP_INVENTORY) base.inventory = this.inventory.serializeForWrite();
+        if(KEEP_INVENTORY) returnobj.inventory = this.inventory.serializeForWrite();
     
-        return JSON.stringify(base);
+        return returnobj;
     }
 
     // #endregion
+}
+
+export type SerializedPlayer = {
+    dead: false,
+    username: string,
+    gamemode: string,
+    layer: number,
+    x: number,
+    y: number,
+    health: number,
+    kills: number,
+    color: Color,
+    inventory: any,
+}
+
+export type SerializedDeadPlayer = {
+    dead: true,
+    username: string,
+    gamemode: string,
+    kills: number,
+    color: Color,
+    inventory?: any,
 }
 
 export default Player;
