@@ -23,7 +23,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     }
 
     /** Returns the item stack from its save data */
-    static readFromSave(data: any): ItemStack {
+    static readFromSave(data: SerializedWriteItemStack): ItemStack {
         const stack = new ItemStack(data.name, data.amount);
         stack.loadComponentData(data.componentdata);
         return stack;

@@ -1,7 +1,7 @@
 import Game from "../../game.js";
 import Layer from "../../world/layer.js";
 import ItemStack from "../itemStack.js";
-import Inventory from "./inventory.js";
+import Inventory, { SerializedWriteInventory } from "./inventory.js";
 
 /** A managable collection of item stacks */
 class ChangesInventory extends Inventory {
@@ -14,11 +14,11 @@ class ChangesInventory extends Inventory {
     }
 
     /** Returns an inventory object with the given itemstacks in it */
-    static override readFromSave(inventorydata: any[]): ChangesInventory {
-        const inventory = new ChangesInventory(inventorydata.length);
+    static override readFromSave(inventorydata: SerializedWriteInventory): ChangesInventory {
+        const inventory = new ChangesInventory(inventorydata.slots.length);
 
         for(let i = 0; i < inventory.getSize(); i++){
-            const stackdata = inventorydata[i];
+            const stackdata = inventorydata.slots[i];
             const stack = stackdata ? ItemStack.readFromSave(stackdata) : null;
             inventory.setSlot(i, stack);
         }

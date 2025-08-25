@@ -2,7 +2,7 @@ import Game from "../../game.js";
 import DroppedStack from "../../objects/droppedStack.js";
 import ItemRegistry from "../../registries/itemRegistry.js";
 import Layer from "../../world/layer.js";
-import ItemStack from "../itemStack.js";
+import ItemStack, { SerializedWriteItemStack } from "../itemStack.js";
 import IInventory from "./IInventory.js";
 
 /** A managable collection of item stacks */
@@ -16,11 +16,11 @@ class Inventory implements IInventory {
     }
 
     /** Returns an inventory object with the given itemstacks in it */
-    static readFromSave(inventorydata: any[]): Inventory {
-        const inventory = new Inventory(inventorydata.length);
+    static readFromSave(inventorydata: SerializedWriteInventory): Inventory {
+        const inventory = new Inventory(inventorydata.slots.length);
 
         for(let i = 0; i < inventory.getSize(); i++){
-            const stackdata = inventorydata[i];
+            const stackdata = inventorydata.slots[i];
             const stack = stackdata ? ItemStack.readFromSave(stackdata) : null;
             inventory.setSlot(i, stack);
         }
@@ -224,11 +224,18 @@ class Inventory implements IInventory {
     }
 
     /** Returns an object representing this inventory for write */
-    serializeForWrite(): any {
-        return this.slots.map(stack => stack ? stack.serializeForWrite() : null);
+    serializeForWrite(): SerializedWriteInventory {
+        return {
+            slots: this.slots.map(stack => stack ? stack.serializeForWrite() : null),
+        };
     }
 
     // #endregion
 }
+
+/** Defines the format for serialized writes of an item stack */
+export type SerializedWriteInventory = {
+    slots: (SerializedWriteItemStack | null)[];
+};
 
 export default Inventory;

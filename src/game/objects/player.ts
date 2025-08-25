@@ -9,7 +9,7 @@ import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
-import { SerializedWriteGameObject } from "./gameObject.js";
+import { SerializedWriteInventory } from "../items/inventory/inventory.js";
 import { Color, Pos } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
@@ -86,7 +86,7 @@ class Player extends Entity {
             // Respawn
             if(RACISM_PERM) player.color = data.color;
 
-            if(KEEP_INVENTORY) player.inventory = ChangesInventory.readFromSave(data.inventory);
+            if(KEEP_INVENTORY && data.inventory !== undefined) player.inventory = ChangesInventory.readFromSave(data.inventory);
         }else{
             // Load Exact
             player.x = data.x;
@@ -425,7 +425,7 @@ export type SerializedWritePlayer = {
     health: number,
     kills: number,
     color: Color,
-    inventory: any,
+    inventory: SerializedWriteInventory,
 }
 
 /** Defines the format for serialized writes of a dead player */
@@ -435,7 +435,7 @@ export type SerializedWriteDeadPlayer = {
     gamemode: string,
     kills: number,
     color: Color,
-    inventory?: any,
+    inventory?: SerializedWriteInventory,
 }
 
 export default Player;
