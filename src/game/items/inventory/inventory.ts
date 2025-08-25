@@ -233,7 +233,7 @@ class Inventory implements IInventory {
     // #endregion
 }
 
-/** Defines the format for serialized writes of an item stack */
+/** Defines the format for serialized writes of an inventory */
 export type SerializedWriteInventory = {
     slots: (SerializedWriteItemStack | null)[];
 };

@@ -51,16 +51,21 @@ class TimeChangeComponentData extends ComponentData<TimeChangeComponent> impleme
     delayleft: number = -1;
 
     /** Sets this time change component data objects values with the given save data */
-    readFromSave(data: any): void {
+    readFromSave(data: SerializedWriteTimeChangeComponent): void {
         this.delayleft = data.delayleft;
     }
 
     /** Returns an object representing this time change component data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteTimeChangeComponent {
         return {
             delayleft: this.delayleft,
         };
     }
 }
+
+/** Defines the format for serialized writes of a time change component */
+type SerializedWriteTimeChangeComponent = {
+    delayleft: number;
+};
 
 export default TimeChangeComponent;

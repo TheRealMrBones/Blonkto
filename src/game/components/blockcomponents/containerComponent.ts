@@ -6,6 +6,7 @@ import StationComponent, { StationComponentData } from "./stationComponent.js";
 import ComponentData from "../componentData.js";
 import ISerializableForWrite from "../ISerializableForWrite.js";
 import ChangesInventory from "../../items/inventory/changesInventory.js";
+import { SerializedWriteInventory } from "../../items/inventory/inventory.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class ContainerComponent extends Component<BlockDefinition> {
@@ -54,16 +55,21 @@ class ContainerComponentData extends ComponentData<ContainerComponent> implement
     }
 
     /** Sets this container component data objects values with the given save data */
-    readFromSave(data: any): void {
+    readFromSave(data: SerializedWriteContainerComponent): void {
         this.inventory = ChangesInventory.readFromSave(data.inventory);
     }
 
     /** Returns an object representing this container component data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteContainerComponent {
         return {
             inventory: this.inventory.serializeForWrite(),
         };
     }
 }
+
+/** Defines the format for serialized writes of a container component */
+type SerializedWriteContainerComponent = {
+    inventory: SerializedWriteInventory;
+};
 
 export default ContainerComponent;

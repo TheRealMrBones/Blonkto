@@ -131,12 +131,12 @@ class BreedComponentData extends ComponentData<BreedComponent> implements ISeria
     delayticks: number = 0;
 
     /** Sets this breed component data objects values with the given save data */
-    readFromSave(data: any): void {
+    readFromSave(data: SerializedWriteBreedComponent): void {
         this.delayticks = data.delayticks;
     }
 
     /** Returns an object representing this breed component data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteBreedComponent {
         return {
             delayticks: this.delayticks,
         };
@@ -150,5 +150,10 @@ class BreedComponentData extends ComponentData<BreedComponent> implements ISeria
         this.delayticks = delayticks;
     }
 }
+
+/** Defines the format for serialized writes of a breed component */
+type SerializedWriteBreedComponent = {
+    delayticks: number;
+};
 
 export default BreedComponent;
