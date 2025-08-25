@@ -66,7 +66,7 @@ class Game {
 
         // read game save data
         if(this.fileManager.fileExists("game")){
-            const data = JSON.parse(this.fileManager.readFile("game")!);
+            const data: SerializedWriteGame = JSON.parse(this.fileManager.readFile("game")!);
             this.lifeticks = data.lifeticks;
         }else{
             this.lifeticks = 0;
@@ -210,7 +210,7 @@ class Game {
         this.logger.info("Saving game");
         
         // save global game data
-        const gamedata = {
+        const gamedata: SerializedWriteGame = {
             lifeticks: this.lifeticks,
         };
         this.fileManager.writeFile("game", JSON.stringify(gamedata));
@@ -228,6 +228,9 @@ class Game {
     backupWorld(): void {
         this.logger.info("Backing up game");
 
+        // save game first
+        this.saveGame();
+
         // create backup directory
         const backupDir = `backups/${Date.now()}`;
         this.fileManager.createDirectory(backupDir);
@@ -241,6 +244,11 @@ class Game {
     }
 
     // #endregion
+}
+
+/** Defines the format for serialized writes of the game */
+type SerializedWriteGame = {
+    lifeticks: number,
 }
 
 export default Game;
