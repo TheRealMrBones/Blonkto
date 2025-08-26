@@ -33,31 +33,29 @@ class FileManager {
     /** Writes to (replaces if needed) a file with the given data */
     writeFile(filename: string, content: string, location?: string): void {
         fs.writeFile(this.getFullFilePath(filename, location), content, "utf8", (error) => {
-            if(error) this.logger.error(`An error occurred while writing to the file: ${error}`);
+            if(error !== null) this.logger.error(`An error occurred while writing to the file: ${error}`);
         });
     }
 
     /** Appends to a file with the given data */
     appendFile(filename: string, content: string, location?: string): void {
         fs.appendFile(this.getFullFilePath(filename, location), content, "utf8", (error) => {
-            if(error) this.logger.error(`An error occurred while appending to the file: ${error}`);
+            if(error !== null) this.logger.error(`An error occurred while appending to the file: ${error}`);
         });
     }
 
     /** Copies the given file to the new location */
     copyFile(source: string, destination: string, location?: string): void {
         fs.copyFile(this.getFullFilePath(source, location), this.getFullFilePath(destination, location), (error) => {
-            if(error) this.logger.error(`An error occurred while copying the file: ${error}`);
+            if(error !== null) this.logger.error(`An error occurred while copying the file: ${error}`);
         });
     }
 
     /** Deletes the given file from save if it exists */
     deleteFile(filename: string, location?: string): void {
-        try{
-            fs.rmSync(this.getFullFilePath(filename, location));
-        } catch (error) {
-            this.logger.error(`An error occurred while deleting the file: ${error}`);
-        }
+        fs.rm(this.getFullFilePath(filename, location), (error) => {
+            if(error !== null) this.logger.error(`An error occurred while deleting the file: ${error}`);
+        });
     }
 
     /** Creates a new directory */
@@ -71,17 +69,15 @@ class FileManager {
         const sourcedir = this.getFullFolderPath(source, location);
         const destdir = this.getFullFolderPath(destination, location);
         fs.cp(sourcedir, destdir, { recursive: true }, (error) => {
-            if(error) this.logger.error(`An error occurred while copying the directory: ${error}`);
+            if(error !== null) this.logger.error(`An error occurred while copying the directory: ${error}`);
         });
     }
 
     /** Deletes the given directory from save if it exists */
     deleteDirectory(dirname: string, location?: string): void {
-        try{
-            fs.rmSync(this.getFullFolderPath(dirname, location));
-        } catch (error) {
-            this.logger.error(`An error occurred while deleting the directory: ${error}`);
-        }
+        fs.rm(this.getFullFolderPath(dirname, location), (error) => {
+            if(error !== null) this.logger.error(`An error occurred while deleting the directory: ${error}`);
+        });
     }
 
     // #endregion
@@ -91,10 +87,9 @@ class FileManager {
     /** Returns if the given file exists in the save */
     fileExists(filename: string, location?: string): boolean {
         try {
-            const data = fs.readFileSync(this.getFullFilePath(filename, location), "utf8");
-            return true;
+            const data = fs.statSync(this.getFullFilePath(filename, location));
+            return data.isFile();
         } catch (error) {
-            // Don't return error this is expected!
             return false;
         }
     }
@@ -105,7 +100,6 @@ class FileManager {
             const data = fs.statSync(this.getFullFolderPath(dirname, location));
             return data.isDirectory();
         } catch (error) {
-            // Don't return error this is expected!
             return false;
         }
     }
