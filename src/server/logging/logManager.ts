@@ -5,7 +5,7 @@ import Constants from "../../shared/constants.js";
 const { LOG_PRIORITIES } = Constants;
 
 import ServerConfig from "../../configs/server.js";
-const { LOG_PRIORITY } = ServerConfig.LOG;
+const { LOG_PRIORITY, SAVE_LOGS } = ServerConfig.LOG;
 
 /** Manages logging for the game server */
 class LogManager {
@@ -18,6 +18,8 @@ class LogManager {
 
         this.info("Logger Started");
     }
+
+    // #region management
 
     /** Returns the singleton object for log manager */
     static getLogManager(): LogManager {
@@ -32,11 +34,20 @@ class LogManager {
         this.fileManager = fileManager;
     }
 
+    // #endregion
+
+    // #region log methods
+
     /** Logs the given message */
     log(message: string, category?: string, priority?: number): void {
         const log = new Log(message, category, priority);
         this.logs.push(log);
+
+        // print log to console if match or exceed priority
         if(log.getPriority() >= LOG_PRIORITY) console.log(log.getLineFormatted());
+
+        // write to daily log file
+        if(SAVE_LOGS) this.writeLogToFile(log);
     }
 
     /** Logs the given message as priority level info */
@@ -58,6 +69,29 @@ class LogManager {
     error(message: string, category?: string): void {
         this.log(message, category, LOG_PRIORITIES.ERROR);
     }
+
+    // #endregion
+
+    // #region file management
+
+    /** Writes the given log to the daily log file */
+    writeLogToFile(log: Log): void {
+        if(this.fileManager === undefined) return;
+
+        const time = new Date();
+        const logfile = `logs/${time.toDateString().replaceAll(" ", "_")}`;
+
+        // create daily log file if it doesn't exist
+        if(!this.fileManager.fileExists(logfile)){
+            const header = `log started: ${time.toLocaleTimeString()}\n\n`;
+            this.fileManager.writeFile(logfile, header);
+        }
+
+        // append log to log file
+        this.fileManager.appendFile(logfile, `${log.getLine()}\n`);
+    }
+
+    // #endregion
 }
 
 export default LogManager;

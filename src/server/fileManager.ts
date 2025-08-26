@@ -10,6 +10,7 @@ const datadirs = [
     "players",
     "world",
     "backups",
+    "logs",
 ];
 
 /** Manages the creation and reading of save files for the server */
@@ -33,6 +34,13 @@ class FileManager {
     writeFile(filename: string, content: string, location?: string): void {
         fs.writeFile(this.getFullFilePath(filename, location), content, "utf8", (error) => {
             if(error) this.logger.error(`An error occurred while writing to the file: ${error}`);
+        });
+    }
+
+    /** Appends to a file with the given data */
+    appendFile(filename: string, content: string, location?: string): void {
+        fs.appendFile(this.getFullFilePath(filename, location), content, "utf8", (error) => {
+            if(error) this.logger.error(`An error occurred while appending to the file: ${error}`);
         });
     }
 

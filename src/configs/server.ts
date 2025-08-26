@@ -19,6 +19,7 @@ type ServerConfigSchema = {
         LOG_COMMANDS: boolean,
         LOG_CHAT: boolean,
         LOG_PERFORMANCE: boolean,
+        SAVE_LOGS: boolean,
     },
     PLAYER: {
         FILTER_USERNAME: boolean,
@@ -79,6 +80,7 @@ const ServerConfig: ServerConfigSchema = {
         LOG_COMMANDS: true,
         LOG_CHAT: true,
         LOG_PERFORMANCE: true,
+        SAVE_LOGS: true,
     },
     PLAYER: {
         FILTER_USERNAME: false,
