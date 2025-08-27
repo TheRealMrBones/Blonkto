@@ -1,4 +1,4 @@
-import { Pos } from "../../types.js";
+import { Pos } from "../types.js";
 
 class Vector2D {
     x: number;
@@ -95,6 +95,12 @@ class Vector2D {
     /** Returns the z value of the cross product between the given vectors */
     crossProduct(vector1: Vector2D, vector2: Vector2D): number {
         return vector1.x * vector2.y - vector1.y * vector2.x;
+    }
+
+    /** Returns the projection of this vector onto the given vector */
+    projectOnto(vector: Vector2D): Vector2D {
+        const mult = this.dotProduct(vector) / vector.dotProduct(vector);
+        return new Vector2D(vector.x * mult, vector.y * mult);
     }
 
     // #endregion
