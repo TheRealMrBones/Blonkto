@@ -1,13 +1,9 @@
+import { NumRange } from "../types.js";
+import CollisionObject from "./collisionObject.js";
 import Vector2D from "./vector2d.js";
 
 /** A closed convex polygon in 2d space */
-abstract class Polygon {
-    position: Vector2D;
-
-    constructor(position: Vector2D){
-        this.position = position;
-    }
-
+abstract class Polygon extends CollisionObject {
     /** Returns the vertices of this polygon relative to the origin of the polygon */
     abstract getVeticesFromOrigin(): Vector2D[];
 
@@ -26,7 +22,7 @@ abstract class Polygon {
     /** Returns the unit normal vector of each edge of this polygon */
     getNormals(): Vector2D[] {
         const vertices = this.getVeticesFromOrigin();
-        vertices.push(vertices[0], vertices[1]);
+        vertices.push(vertices[0]);
 
         const normals: Vector2D[] = [];
         for(let i = 0; i < this.getVertexCount(); i++){
@@ -35,6 +31,24 @@ abstract class Polygon {
         }
 
         return normals;
+    }
+
+    /** Returns the set of axis that should be tested between */
+    getSeperateAxisTheoremTestAxes(): Vector2D[] {
+        return this.getNormals();
+    }
+
+    /** Returns the range of this collision object over the given axis */
+    getSeperateAxisTheoremRange(axis: Vector2D): NumRange {
+        const range: NumRange = { max: -Infinity, min: Infinity };
+
+        for(const vertex of this.getVertices()){
+            const proj = axis.dotProduct(vertex);
+            if(proj > range.max) range.max = proj;
+            if(proj < range.min) range.min = proj;
+        }
+
+        return range;
     }
 }
 
