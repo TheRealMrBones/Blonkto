@@ -1,5 +1,6 @@
 import { Pos } from "../types.js";
 
+/** A 2 dimensional vector wiht an x and y component */
 class Vector2D {
     x: number;
     y: number;
@@ -30,8 +31,8 @@ class Vector2D {
         return new Vector2D(this.x, this.y);
     }
 
-    /** Returns the normal of this vector */
-    getNormal(): Vector2D {
+    /** Returns the unit vector of this vector */
+    getUnitVector(): Vector2D {
         const vector = this.getCopy();
         const magnitude = this.getMagnitude();
 
