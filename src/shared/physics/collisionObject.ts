@@ -4,9 +4,11 @@ import Vector2D from "./vector2d.js";
 /** An physics object in 2d space that can be interfaced by the SAT collision system */
 abstract class CollisionObject {
     position: Vector2D;
+    rotation: number;
 
-    constructor(position: Vector2D){
+    constructor(position: Vector2D, rotation?: number){
         this.position = position;
+        this.rotation = rotation ?? 0;
     }
 
     /** Returns the set of axis that should be tested between */

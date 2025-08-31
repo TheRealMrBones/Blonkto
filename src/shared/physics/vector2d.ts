@@ -62,6 +62,15 @@ class Vector2D {
         this.y /= amount;
     }
 
+    /** Rotates this vector by the given radians */
+    rotate(radians: number): void {
+        const newx = this.x * Math.cos(radians) - this.y * Math.sin(radians);
+        const newy = this.x * Math.sin(radians) + this.y * Math.cos(radians);
+        
+        this.x = newx;
+        this.y = newy;
+    }
+
     // #endregion
 
     // #region vector operations

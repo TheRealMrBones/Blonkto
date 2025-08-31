@@ -11,6 +11,7 @@ abstract class Polygon extends CollisionObject {
     getVertices(): Vector2D[] {
         const vertices = this.getVeticesFromOrigin();
         for(const v of vertices){
+            v.rotate(this.rotation);
             v.addVector(this.position);
         }
         return vertices;
@@ -21,7 +22,7 @@ abstract class Polygon extends CollisionObject {
 
     /** Returns the unit normal vector of each edge of this polygon */
     getNormals(): Vector2D[] {
-        const vertices = this.getVeticesFromOrigin();
+        const vertices = this.getVertices();
         vertices.push(vertices[0]);
 
         const normals: Vector2D[] = [];
