@@ -3,12 +3,17 @@ import CollisionObject from "./collisionObject.js";
 import Vector2D from "./vector2d.js";
 
 /** A uniform circle in 2d space */
-abstract class Circle extends CollisionObject {
+class Circle extends CollisionObject {
     readonly radius: number;
 
     constructor(position: Vector2D, radius: number){
         super(position);
         this.radius = radius;
+    }
+
+    /** Returns the closest point of this object to the given point */
+    getClosestPoint(point: Vector2D): Vector2D {
+        return this.position;
     }
 
     /** Returns the set of axis that should be tested between */

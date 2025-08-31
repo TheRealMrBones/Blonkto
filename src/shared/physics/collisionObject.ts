@@ -11,6 +11,9 @@ abstract class CollisionObject {
         this.rotation = rotation ?? 0;
     }
 
+    /** Returns the closest point of this object to the given point */
+    abstract getClosestPoint(point: Vector2D): Vector2D;
+
     /** Returns the set of axis that should be tested between */
     abstract getSeperateAxisTheoremTestAxes(): Vector2D[];
 

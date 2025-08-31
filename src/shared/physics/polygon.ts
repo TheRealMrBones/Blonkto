@@ -34,6 +34,31 @@ abstract class Polygon extends CollisionObject {
         return normals;
     }
 
+    /** Returns the closest point of this object to the given point */
+    getClosestPoint(point: Vector2D): Vector2D {
+        const vertices = this.getVertices();
+        let minvertex = vertices[0];
+
+        let distvector = point.getCopy();
+        distvector.subtractVector(vertices[0]);
+        let mindist = distvector.getMagnitude();
+
+        for(let i = 1; i < vertices.length; i++){
+            const vertex = vertices[i];
+
+            distvector = point.getCopy();
+            distvector.subtractVector(vertex);
+            const mag = distvector.getMagnitude();
+
+            if(mag < mindist){
+                mindist = mag;
+                minvertex = vertex;
+            }
+        }
+
+        return minvertex;
+    }
+
     /** Returns the set of axis that should be tested between */
     getSeperateAxisTheoremTestAxes(): Vector2D[] {
         return this.getNormals();
