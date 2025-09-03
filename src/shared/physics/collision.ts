@@ -9,11 +9,37 @@ export function checkCollision(object1: CollisionObject, object2: CollisionObjec
         const range1 = object1.getSeperateAxisTheoremRange(axis);
         const range2 = object2.getSeperateAxisTheoremRange(axis);
 
-        if(Math.max(range1.min, range2.min) < Math.min(range1.max, range2.max))
-            return false; // found a separating axis so no collision
+        const dist = Math.max(range1.min, range2.min) - Math.min(range1.max, range2.max);
+
+        if(dist > 0) return false; // found a separating axis so no collision
     }
 
     return true;
+}
+
+/** returns the collision push of two objects using SAT */
+export function getCollisionPush(object1: CollisionObject, object2: CollisionObject): Vector2D | null {
+    const axes = getTestAxes(object1, object2);
+
+    let minpush = Infinity;
+    let minpushvector = new Vector2D(0, 0);
+
+    for(const axis of axes){
+        const range1 = object1.getSeperateAxisTheoremRange(axis);
+        const range2 = object2.getSeperateAxisTheoremRange(axis);
+
+        const dist = Math.max(range1.min, range2.min) - Math.min(range1.max, range2.max);
+
+        if(dist > 0) return null; // found a separating axis so no collision
+
+        if(-dist < minpush){
+            minpush = dist;
+            minpushvector = axis.getOrthogonal();
+        }
+    }
+
+    minpushvector.multiplyScalar(minpush);
+    return minpushvector;
 }
 
 /** Gets all of the axes to check for the SAT between two collision objects */
@@ -31,14 +57,6 @@ function getTestAxes(object1: CollisionObject, object2: CollisionObject): Vector
         ...object1.getSeperateAxisTheoremTestAxes(),
         ...object2.getSeperateAxisTheoremTestAxes(),
     ];
-
-    // get axis for closest points of circles
-    if(axes.length == 0){
-        axes.push(new Vector2D(
-            object1.position.x - object2.position.x,
-            object1.position.y - object2.position.y
-        ).getOrthogonal().getUnitVector());
-    }
 
     return axes;
 }
