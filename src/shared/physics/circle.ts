@@ -24,7 +24,7 @@ class Circle extends CollisionObject {
     /** Returns the range of this collision object over the given axis */
     getSeperateAxisTheoremRange(axis: Vector2D): NumRange {
         const proj = axis.dotProduct(this.position);
-        const range: NumRange = { max: proj - this.radius, min: proj + this.radius };
+        const range: NumRange = { max: proj + this.radius, min: proj - this.radius };
 
         return range;
     }

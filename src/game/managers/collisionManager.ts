@@ -9,6 +9,9 @@ import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
 import * as SharedCollisions from "../../shared/collision.js";
 
 import SharedConfig from "../../configs/shared.js";
+import Circle from "../../shared/physics/circle.js";
+import Vector2D from "../../shared/physics/vector2d.js";
+import { checkCollision, getCollisionPush } from "../../shared/physics/collision.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 /** Manages Collision detection for all elements in the game world */
@@ -25,7 +28,11 @@ class CollisionManager {
 
         for(const entity of entities){
             if(!entity.canCollide()) continue;
-            if(SharedCollisions.pointEntityCollision({x: x, y: y}, entity)) return entity;
+            
+            const point = new Circle(new Vector2D(x, y), 0);
+            const entitycircle = new Circle(new Vector2D(entity.x, entity.y), entity.scale / 2);
+
+            if(checkCollision(point, entitycircle)) return entity;
         }
 
         return null;
@@ -39,9 +46,14 @@ class CollisionManager {
             if(entity.id === entity2.id) continue;
             if(!entity2.canCollide()) continue;
 
-            const push = SharedCollisions.entityCollision(entity, { x: entity2.x, y: entity2.y, scale: entity2.scale });
+            const entity1circle = new Circle(new Vector2D(entity.x, entity.y), entity.scale / 2);
+            const entity2circle = new Circle(new Vector2D(entity2.x, entity2.y), entity2.scale / 2);
+
+            const push = getCollisionPush(entity1circle, entity2circle);
             if(push === null) continue;
+
             entity.emitCollisionEvent(this.game, entity2, push);
+            entity2.emitCollisionEvent(this.game, entity2, push);
 
             entity.push(push.x / 2, push.y / 2);
             entity2.push(-push.x / 2, -push.y / 2);

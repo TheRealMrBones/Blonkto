@@ -42,7 +42,7 @@ export function getCollisionPush(object1: CollisionObject, object2: CollisionObj
     object1.position.x = minpushvector.x * minpush;
     object1.position.y = minpushvector.y * minpush;
 
-    if(!checkCollision(object1, object2)){
+    if(checkCollision(object1, object2)){
         minpushvector.multiplyScalar(minpush);
     }else{
         minpushvector.multiplyScalar(-minpush);
@@ -59,7 +59,7 @@ function getTestAxes(object1: CollisionObject, object2: CollisionObject): Vector
     const closestpointsaxis = new Vector2D(
         closestpoint2.x - closestpoint1.x,
         closestpoint2.y - closestpoint1.y
-    );
+    ).getUnitVector();
 
     const axes = [
         closestpointsaxis,
