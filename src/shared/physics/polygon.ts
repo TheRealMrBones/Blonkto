@@ -1,4 +1,3 @@
-import { NumRange } from "../types.js";
 import CollisionObject from "./collisionObject.js";
 import Vector2D from "./vector2d.js";
 
@@ -65,13 +64,13 @@ abstract class Polygon extends CollisionObject {
     }
 
     /** Returns the range of this collision object over the given axis */
-    getSeperateAxisTheoremRange(axis: Vector2D): NumRange {
-        const range: NumRange = { max: -Infinity, min: Infinity };
+    getSeperateAxisTheoremRange(axis: Vector2D): [number, number] {
+        const range: [number, number] = [-Infinity, Infinity];
 
         for(const vertex of this.getVertices()){
             const proj = axis.dotProduct(vertex);
-            if(proj > range.max) range.max = proj;
-            if(proj < range.min) range.min = proj;
+            if(proj > range[1]) range[1] = proj;
+            if(proj < range[0]) range[0] = proj;
         }
 
         return range;

@@ -1,4 +1,3 @@
-import { NumRange } from "../types.js";
 import CollisionObject from "./collisionObject.js";
 import Vector2D from "./vector2d.js";
 
@@ -22,11 +21,9 @@ class Circle extends CollisionObject {
     }
 
     /** Returns the range of this collision object over the given axis */
-    getSeperateAxisTheoremRange(axis: Vector2D): NumRange {
+    getSeperateAxisTheoremRange(axis: Vector2D): [number, number] {
         const proj = axis.dotProduct(this.position);
-        const range: NumRange = { max: proj + this.radius, min: proj - this.radius };
-
-        return range;
+        return [proj + this.radius, proj - this.radius];
     }
 }
 

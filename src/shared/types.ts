@@ -34,9 +34,3 @@ export type CircleCollisionObject = {
     x: number;
     y: number;
 }
-
-/** A max and min value that defines a range */
-export type NumRange = {
-    max: number;
-    min: number;
-}

@@ -9,7 +9,7 @@ export function checkCollision(object1: CollisionObject, object2: CollisionObjec
         const range1 = object1.getSeperateAxisTheoremRange(axis);
         const range2 = object2.getSeperateAxisTheoremRange(axis);
 
-        const dist = Math.max(range1.min, range2.min) - Math.min(range1.max, range2.max);
+        const dist = Math.max(range1[0], range2[0]) - Math.min(range1[1], range2[1]);
 
         if(dist >= 0) return false; // found a separating axis so no collision
     }
@@ -28,7 +28,7 @@ export function getCollisionPush(object1: CollisionObject, object2: CollisionObj
         const range1 = object1.getSeperateAxisTheoremRange(axis);
         const range2 = object2.getSeperateAxisTheoremRange(axis);
 
-        const dist = Math.max(range1.min, range2.min) - Math.min(range1.max, range2.max);
+        const dist = Math.max(range1[0], range2[0]) - Math.min(range1[1], range2[1]);
 
         if(dist >= 0) return null; // found a separating axis so no collision
 
