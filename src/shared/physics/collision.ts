@@ -34,11 +34,20 @@ export function getCollisionPush(object1: CollisionObject, object2: CollisionObj
 
         if(-dist < minpush){
             minpush = -dist;
-            minpushvector = axis.getOrthogonal();
+            minpushvector = axis;
         }
     }
 
-    minpushvector.multiplyScalar(minpush);
+    // make sure push goes the right way by test pushing now
+    object1.position.x = minpushvector.x * minpush;
+    object1.position.y = minpushvector.y * minpush;
+
+    if(!checkCollision(object1, object2)){
+        minpushvector.multiplyScalar(minpush);
+    }else{
+        minpushvector.multiplyScalar(-minpush);
+    }
+
     return minpushvector;
 }
 
