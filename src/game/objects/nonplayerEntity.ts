@@ -7,7 +7,7 @@ import EntityRegistry from "../registries/entityRegistry.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
-import { Pos } from "../../shared/types.js";
+import { Vector2D } from "../../shared/types.js";
 import Player from "./player.js";
 import { SerializedWriteGameObject } from "./gameObject.js";
 
@@ -60,7 +60,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     /** Emits a collision event to this object */
-    override emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
+    override emitCollisionEvent(game: Game, entity: Entity, push: Vector2D): void {
         super.emitCollisionEvent(game, entity, push);
         this.definition.emitEvent("collision", this, game, entity, push);
     }

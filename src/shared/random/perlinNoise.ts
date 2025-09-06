@@ -1,3 +1,4 @@
+import { Vector2D } from "../types.js";
 import SeededRandom from "./seededRandom.js";
 
 /** A custom randomomizer class for generating grid gradiants */
@@ -27,7 +28,7 @@ class PerlinNoise {
     }
 
     /** Returns a gradient vector procedurally generated based on grid coordinates */
-    private gradient(ix: number, iy: number): [number, number] {
+    private gradient(ix: number, iy: number): Vector2D {
         // Create a reproducible hash based on grid coordinates
         const hash = (ix * this.xhash) ^ (iy * this.yhash);
 

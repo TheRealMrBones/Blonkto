@@ -1,5 +1,6 @@
+import { Vector2D } from "../types.js";
 import CollisionObject from "./collisionObject.js";
-import Vector2D from "./vector2d.js";
+import V2D from "./vector2d.js";
 
 /** A uniform circle in 2d space */
 class Circle extends CollisionObject {
@@ -10,20 +11,15 @@ class Circle extends CollisionObject {
         this.radius = radius;
     }
 
-    /** Returns the closest point of this object to the given point */
-    getClosestPoint(point: Vector2D): Vector2D {
-        return this.position;
-    }
-
     /** Returns the set of axis that should be tested between */
     getSeperateAxisTheoremTestAxes(): Vector2D[] {
         return [];
     }
 
     /** Returns the range of this collision object over the given axis */
-    getSeperateAxisTheoremRange(axis: Vector2D): [number, number] {
-        const proj = axis.dotProduct(this.position);
-        return [proj + this.radius, proj - this.radius];
+    getSeperateAxisTheoremRange(axis: Vector2D): Vector2D {
+        const proj = V2D.dotProduct(axis, this.position);
+        return [proj - this.radius, proj + this.radius];
     }
 }
 

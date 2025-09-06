@@ -3,7 +3,7 @@ import crypto from "crypto";
 import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import Layer from "../world/layer.js";
-import { Pos } from "../../shared/types.js";
+import { Pos, Vector2D } from "../../shared/types.js";
 import Entity from "./entity.js";
 import Player from "./player.js";
 
@@ -100,7 +100,7 @@ abstract class GameObject {
     }
 
     /** Emits a collision event to this object */
-    emitCollisionEvent(game: Game, entity: Entity, push: Pos): void {
+    emitCollisionEvent(game: Game, entity: Entity, push: Vector2D): void {
 
     }
 

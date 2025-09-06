@@ -34,3 +34,6 @@ export type CircleCollisionObject = {
     x: number;
     y: number;
 }
+
+/** A 2 dimensional vector with an x and y component */
+export type Vector2D = [number, number];

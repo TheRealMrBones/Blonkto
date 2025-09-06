@@ -6,7 +6,7 @@ import NonplayerEntity from "../objects/nonplayerEntity.js";
 import ComponentHandler from "../components/componentHandler.js";
 import Entity from "../objects/entity.js";
 import Player from "../objects/player.js";
-import { Pos } from "../../shared/types.js";
+import { Vector2D } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -60,7 +60,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> {
     }
 
     /** Registers a collision event listener to this entity definitions event handler */
-    registerCollisionListener(listener: (self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => void): void {
+    registerCollisionListener(listener: (self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D) => void): void {
         this.registerListener("collision", listener);
     }
 

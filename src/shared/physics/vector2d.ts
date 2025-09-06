@@ -1,25 +1,17 @@
-import { Pos } from "../types.js";
+import { Pos, Vector2D } from "../types.js";
 
-/** A 2 dimensional vector wiht an x and y component */
-class Vector2D {
-    x: number;
-    y: number;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
-
+/** Static helper methods for Vector2D operations */
+class V2D {
     /** Returns a vector2d created from the given postion */
-    Vector2DFromPos(pos: Pos): Vector2D {
-        return new Vector2D(pos.x, pos.y);
+    static vector2DFromPos(pos: Pos): Vector2D {
+        return [pos.x, pos.y];
     }
 
     // #region getters
 
     /** Returns the magnitude this vector */
-    getMagnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+    static getMagnitude(vector: Vector2D): number {
+        return Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
     }
 
     // #endregion
@@ -27,23 +19,24 @@ class Vector2D {
     // #region vector getters
 
     /** Returns a copy of this vector */
-    getCopy(): Vector2D {
-        return new Vector2D(this.x, this.y);
+    static getCopy(vector: Vector2D): Vector2D {
+        return [vector[0], vector[1]];
     }
 
     /** Returns the unit vector of this vector */
-    getUnitVector(): Vector2D {
-        const vector = this.getCopy();
-        const magnitude = this.getMagnitude();
+    static getUnitVector(vector: Vector2D): Vector2D {
+        const magnitude = V2D.getMagnitude(vector);
 
-        vector.divideScalar(magnitude);
+        // if magnitude is 0 just return some random direction
+        if(magnitude == 0)
+            return V2D.rotate([1, 0], Math.random() * Math.PI * 2);
 
-        return vector;
+        return V2D.divideScalar(vector, magnitude);
     }
 
     /** Returns a vector orthogonal to this vector */
-    getOrthogonal(): Vector2D {
-        return new Vector2D(-this.y, this.x);
+    static getOrthogonal(vector: Vector2D): Vector2D {
+        return [-vector[1], vector[0]];
     }
     
     // #endregion
@@ -51,24 +44,21 @@ class Vector2D {
     // #region scalar operations
 
     /** Multiplies all values in this vector by the requested amount */
-    multiplyScalar(amount: number): void {
-        this.x *= amount;
-        this.y *= amount;
+    static multiplyScalar(vector: Vector2D, amount: number): Vector2D {
+        return [vector[0] * amount, vector[1] * amount];
     }
 
     /** Divides all values in this vector by the requested amount */
-    divideScalar(amount: number): void {
-        this.x /= amount;
-        this.y /= amount;
+    static divideScalar(vector: Vector2D, amount: number): Vector2D {
+        return [vector[0] / amount, vector[1] / amount];
     }
 
     /** Rotates this vector by the given radians */
-    rotate(radians: number): void {
-        const newx = this.x * Math.cos(radians) - this.y * Math.sin(radians);
-        const newy = this.x * Math.sin(radians) + this.y * Math.cos(radians);
-        
-        this.x = newx;
-        this.y = newy;
+    static rotate(vector: Vector2D, radians: number): Vector2D {
+        return [
+            vector[0] * Math.cos(radians) - vector[1] * Math.sin(radians),
+            vector[0] * Math.sin(radians) + vector[1] * Math.cos(radians)
+        ];
     }
 
     // #endregion
@@ -76,44 +66,32 @@ class Vector2D {
     // #region vector operations
 
     /** Returns the result vector from adding the two given vectors */
-    static addVectors(vector1: Vector2D, vector2: Vector2D): Vector2D {
-        return new Vector2D(vector1.x + vector2.x, vector1.y + vector2.y);
+    static add(vector1: Vector2D, vector2: Vector2D): Vector2D {
+        return [vector1[0] + vector2[0], vector1[1] + vector2[1]];
     }
 
     /** Returns the result vector from subtracting the first vector by the second vector */
-    static subtractVectors(vector1: Vector2D, vector2: Vector2D): Vector2D {
-        return new Vector2D(vector1.x - vector2.x, vector1.y - vector2.y);
-    }
-
-    /** Adds the given vector to this vector */
-    addVector(vector: Vector2D): void {
-        this.x += vector.x;
-        this.y += vector.y;
-    }
-
-    /** Subtracts the given vector from this vector */
-    subtractVector(vector: Vector2D): void {
-        this.x -= vector.x;
-        this.y -= vector.y;
+    static subtract(vector1: Vector2D, vector2: Vector2D): Vector2D {
+        return [vector1[0] - vector2[0], vector1[1] - vector2[1]];
     }
 
     /** Returns the dot product of the given vector and this vector */
-    dotProduct(vector: Vector2D): number {
-        return this.x * vector.x + this.y * vector.y;
+    static dotProduct(vector1: Vector2D, vector2: Vector2D): number {
+        return vector1[0] * vector2[0] + vector1[1] * vector2[1];
     }
 
     /** Returns the z value of the cross product between the given vectors */
-    crossProduct(vector1: Vector2D, vector2: Vector2D): number {
-        return vector1.x * vector2.y - vector1.y * vector2.x;
+    static crossProduct(vector1: Vector2D, vector2: Vector2D): number {
+        return vector1[0] * vector2[1] - vector1[1] * vector2[0];
     }
 
     /** Returns the projection of this vector onto the given vector */
-    projectOnto(vector: Vector2D): Vector2D {
-        const mult = this.dotProduct(vector) / vector.dotProduct(vector);
-        return new Vector2D(vector.x * mult, vector.y * mult);
+    static projectOnto(vector1: Vector2D, vector2: Vector2D): Vector2D {
+        const mult = V2D.dotProduct(vector1, vector2) / V2D.dotProduct(vector2, vector2);
+        return V2D.multiplyScalar(vector2, mult);
     }
 
     // #endregion
 }
 
-export default Vector2D;
+export default V2D;

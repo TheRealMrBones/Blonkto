@@ -1,5 +1,6 @@
+import { Vector2D } from "../types.js";
 import CollisionObject from "./collisionObject.js";
-import Vector2D from "./vector2d.js";
+import V2D from "./vector2d.js";
 
 /** A closed convex polygon in 2d space */
 abstract class Polygon extends CollisionObject {
@@ -9,10 +10,13 @@ abstract class Polygon extends CollisionObject {
     /** Returns the vertices of this polygon in world space */
     getVertices(): Vector2D[] {
         const vertices = this.getVeticesFromOrigin();
-        for(const v of vertices){
-            v.rotate(this.rotation);
-            v.addVector(this.position);
+
+        for(let i = 0; i < vertices.length; i++){
+            if(this.rotation != 0)
+                vertices[i] = V2D.rotate(vertices[i], this.rotation);
+            vertices[i] = V2D.add(vertices[i], this.position);
         }
+
         return vertices;
     }
 
@@ -26,36 +30,11 @@ abstract class Polygon extends CollisionObject {
 
         const normals: Vector2D[] = [];
         for(let i = 0; i < this.getVertexCount(); i++){
-            const edge = new Vector2D(vertices[i + 1].x - vertices[i].x, vertices[i + 1].y - vertices[i].y);
-            normals.push(edge.getOrthogonal().getUnitVector());
+            const edge = V2D.subtract(vertices[i + 1], vertices[i]);
+            normals.push(V2D.getUnitVector(V2D.getOrthogonal(edge)));
         }
 
         return normals;
-    }
-
-    /** Returns the closest point of this object to the given point */
-    getClosestPoint(point: Vector2D): Vector2D {
-        const vertices = this.getVertices();
-        let minvertex = vertices[0];
-
-        let distvector = point.getCopy();
-        distvector.subtractVector(vertices[0]);
-        let mindist = distvector.getMagnitude();
-
-        for(let i = 1; i < vertices.length; i++){
-            const vertex = vertices[i];
-
-            distvector = point.getCopy();
-            distvector.subtractVector(vertex);
-            const mag = distvector.getMagnitude();
-
-            if(mag < mindist){
-                mindist = mag;
-                minvertex = vertex;
-            }
-        }
-
-        return minvertex;
     }
 
     /** Returns the set of axis that should be tested between */
@@ -64,11 +43,11 @@ abstract class Polygon extends CollisionObject {
     }
 
     /** Returns the range of this collision object over the given axis */
-    getSeperateAxisTheoremRange(axis: Vector2D): [number, number] {
-        const range: [number, number] = [-Infinity, Infinity];
+    getSeperateAxisTheoremRange(axis: Vector2D): Vector2D {
+        const range: Vector2D = [-Infinity, Infinity];
 
         for(const vertex of this.getVertices()){
-            const proj = axis.dotProduct(vertex);
+            const proj = V2D.dotProduct(axis, vertex);
             if(proj > range[1]) range[1] = proj;
             if(proj < range[0]) range[0] = proj;
         }

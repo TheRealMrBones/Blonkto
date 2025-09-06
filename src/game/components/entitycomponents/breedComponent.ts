@@ -2,7 +2,7 @@ import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import Entity from "../../objects/entity.js";
-import { Pos } from "../../../shared/types.js";
+import { Pos, Vector2D } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import ComponentData from "../componentData.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
@@ -39,7 +39,7 @@ class BreedComponent extends Component<EntityDefinition> {
         this.getParent().addRequiredComponentData(BreedComponentData, this);
 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
-        this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.breed(self, game, entity, push));
+        this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D) => this.breed(self, game, entity, push));
         this.getParent().registerInteractListener((self: NonplayerEntity, game: Game, player: Player) => this.feed(self, game, player));
     }
 
@@ -72,7 +72,7 @@ class BreedComponent extends Component<EntityDefinition> {
     }
 
     /** Defines the breed action of an entity with this component after colliding with another entity */
-    breed(self: NonplayerEntity, game: Game, entity: Entity, push: Pos): void {
+    breed(self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D): void {
         const data = self.getComponentData(BreedComponentData);
         
         if(data.target === entity && data.breedstart == 0)

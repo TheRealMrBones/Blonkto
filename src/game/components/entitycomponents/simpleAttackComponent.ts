@@ -2,7 +2,7 @@ import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import Entity from "../../objects/entity.js";
-import { Pos } from "../../../shared/types.js";
+import { Vector2D } from "../../../shared/types.js";
 import Player from "../../objects/player.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import ComponentData from "../componentData.js";
@@ -31,11 +31,11 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         this.getParent().addRequiredComponentData(SimpleAttackComponentData, this);
 
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
-        this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Pos) => this.attack(self, game, entity, push));
+        this.getParent().registerCollisionListener((self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D) => this.attack(self, game, entity, push));
     }
 
     /** Defines the attack action of an entity with this component after colliding with another entity */
-    attack(self: NonplayerEntity, game: Game, entity: Entity, push: Pos): void {
+    attack(self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D): void {
         const data = self.getComponentData(SimpleAttackComponentData);
 
         if(!(entity instanceof Player)) return;
