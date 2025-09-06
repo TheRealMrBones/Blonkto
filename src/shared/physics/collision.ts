@@ -40,12 +40,13 @@ export function getCollisionPush(object1: CollisionObject, object2: CollisionObj
     }
 
     // make sure push goes the right way by test pushing now
-    object1.position = V2D.multiplyScalar(object1.position, minpush);
+    const push = V2D.multiplyScalar(minpushvector, minpush + .0001);
+    object1.position = V2D.add(object1.position, push);
 
     if(!checkCollision(object1, object2)){
-        return V2D.multiplyScalar(minpushvector, minpush);
+        return push;
     }else{
-        return V2D.multiplyScalar(minpushvector, -minpush);
+        return V2D.multiplyScalar(push, -1);
     }
 }
 
