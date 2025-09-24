@@ -57,8 +57,31 @@ function getTestAxes(object1: CollisionObject, object2: CollisionObject): Vector
         ...object2.getSeperateAxisTheoremTestAxes(),
     ];
 
-    if(axes.length == 0)
-        return [V2D.getUnitVector(V2D.subtract(object1.position, object2.position))];
+    if(object1.isRanged()){
+        axes.push(getRangedTestAxis(object1, object2));
+    }else if(object2.isRanged()){
+        axes.push(getRangedTestAxis(object2, object1));
+    }
 
     return axes;
+}
+
+/** Returns the test axis for the minimum point seperation between a ranged object and another object */
+function getRangedTestAxis(rangedobject: CollisionObject, object2: CollisionObject): Vector2D {
+    const point = rangedobject.getPointsForMinDist()[0];
+    const testpoints = object2.getPointsForMinDist();
+
+    let mindist = Infinity;
+    let mindistpoint = testpoints[0];
+
+    for(const testpoint of testpoints){
+        const dist = V2D.getDistance(point, testpoint);
+
+        if(dist < mindist){
+            mindist = dist;
+            mindistpoint = testpoint;
+        }
+    }
+
+    return V2D.getUnitVector(V2D.getOrthogonal(V2D.subtract(point, mindistpoint)));
 }

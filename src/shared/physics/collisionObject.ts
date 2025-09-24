@@ -15,6 +15,12 @@ abstract class CollisionObject {
 
     /** Returns the range of this collision object over the given axis */
     abstract getSeperateAxisTheoremRange(axis: Vector2D): Vector2D;
+
+    /** Returns if this object has ranged minimum distance (aka a curve) */
+    abstract isRanged(): boolean;
+
+    /** Returns the set of points to get the minimum distance point with a ranged object */
+    abstract getPointsForMinDist(): Vector2D[];
 }
 
 export default CollisionObject;

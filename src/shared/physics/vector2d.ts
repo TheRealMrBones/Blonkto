@@ -14,6 +14,11 @@ class V2D {
         return Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
     }
 
+    /** Returns the distance between the two given vectors */
+    static getDistance(vector1: Vector2D, vector2: Vector2D): number {
+        return V2D.getMagnitude(V2D.subtract(vector1, vector2));
+    }
+
     // #endregion
 
     // #region vector getters

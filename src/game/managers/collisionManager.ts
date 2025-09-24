@@ -5,10 +5,9 @@ import Game from "../game.js";
 import GameObject from "../objects/gameObject.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import Layer from "../world/layer.js";
-import { CollisionObject, CircleCollisionObject } from "../../shared/types.js";
-import * as SharedCollisions from "../../shared/collision.js";
 import Circle from "../../shared/physics/circle.js";
 import { checkCollision, getCollisionPush } from "../../shared/physics/collision.js";
+import CollisionObject from "../../shared/physics/collisionObject.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
@@ -61,7 +60,7 @@ class CollisionManager {
 
     /** Checks for non-player objects colliding on blocks */
     blockCollisions(object: GameObject): void {
-        const meobject: CircleCollisionObject = object as CircleCollisionObject;
+        const mecircle = new Circle([object.x, object.y], object.scale / 2);
         
         const checkcells: CollisionObject[] = [];
         for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){

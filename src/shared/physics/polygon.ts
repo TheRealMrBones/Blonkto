@@ -54,6 +54,16 @@ abstract class Polygon extends CollisionObject {
 
         return range;
     }
+
+    /** Returns if this object has ranged minimum distance (aka a curve) */
+    isRanged(): boolean {
+        return false;
+    }
+
+    /** Returns the set of points to get the minimum distance point with a ranged object */
+    getPointsForMinDist(): Vector2D[] {
+        return this.getVertices();
+    }
 }
 
 export default Polygon;

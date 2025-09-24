@@ -21,6 +21,16 @@ class Circle extends CollisionObject {
         const proj = V2D.dotProduct(axis, this.position);
         return [proj - this.radius, proj + this.radius];
     }
+
+    /** Returns if this object has ranged minimum distance (aka a curve) */
+    isRanged(): boolean {
+        return true;
+    }
+
+    /** Returns the set of points to get the minimum distance point with a ranged object */
+    getPointsForMinDist(): Vector2D[] {
+        return [this.position];
+    }
 }
 
 export default Circle;
