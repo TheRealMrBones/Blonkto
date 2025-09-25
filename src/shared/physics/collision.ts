@@ -2,6 +2,11 @@ import { Vector2D } from "../types.js";
 import CollisionObject from "./collisionObject.js";
 import V2D from "./vector2d.js";
 
+import Constants from "../constants.js";
+import Circle from "./circle.js";
+import Square from "./square.js";
+const { SHAPES } = Constants;
+
 /** checks if the two given collision objects are colliding using SAT */
 export function checkCollision(object1: CollisionObject, object2: CollisionObject): boolean {
     const axes = getTestAxes(object1, object2);
@@ -84,4 +89,18 @@ function getRangedTestAxis(rangedobject: CollisionObject, object2: CollisionObje
     }
 
     return V2D.getUnitVector(V2D.getOrthogonal(V2D.subtract(point, mindistpoint)));
+}
+
+export function getCellCollisionObject(shape: number, size: number, pos: Vector2D): CollisionObject | null {
+    switch(shape){
+        case SHAPES.CIRCLE: {
+            return new Circle(pos, size / 2);
+        }
+        case SHAPES.SQUARE: {
+            return new Square(pos, size);
+        }
+        default: {
+            return null;
+        }
+    }
 }

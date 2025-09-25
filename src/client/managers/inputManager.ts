@@ -1,6 +1,8 @@
 import PlayerClient from "../playerClient.js";
-import { CircleCollisionObject, Pos } from "../../shared/types.js";
+import { Pos, Vector2D } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
+import CollisionObject from "../../shared/physics/collisionObject.js";
+import Circle from "../../shared/physics/circle.js";
 
 import Constants from "../../shared/constants.js";
 const { GAME_MODES } = Constants;
@@ -405,13 +407,56 @@ class InputManager {
         };
     }
 
-    /** Returns  */
-    getSelfAsCollisionObject(): CircleCollisionObject {
-        return {
-            scale: this.scale,
-            x: this.x + this.dx,
-            y: this.y + this.dy,
-        };
+    /** Returns the player as a collision object */
+    getSelfAsCollisionObject(): CollisionObject {
+        return new Circle([this.x + this.dx, this.y + this.dy], this.scale);
+    }
+
+    /** Returns the coordinates of the tiles that the player is on */
+    tilesOn(): Vector2D[] {
+        const points = [];
+        const posoffset = (this.scale / 2) - .01; // offset so barely touching tiles are not counted
+        
+        // get all integer coordinate points that are within object
+        for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){
+            for(let y = Math.floor(this.y - posoffset); y < this.y + posoffset; y++){
+                const dist = Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+                if(dist <= posoffset) points.push([x, y]);
+            }
+        }
+
+        // start tile array
+        const tiles: Vector2D[] = [[Math.floor(this.x), Math.floor(this.y)]]; // include known center tile
+
+        // include tiles hit by each main axis end of the object
+        if(Math.floor(this.x - posoffset) != Math.floor(this.x)){
+            tiles.push([Math.floor(this.x - posoffset), Math.floor(this.y)]);
+        }
+        if(Math.floor(this.x + posoffset) != Math.floor(this.x)){
+            tiles.push([Math.floor(this.x + posoffset), Math.floor(this.y)]);
+        }
+        if(Math.floor(this.y - posoffset) != Math.floor(this.y)){
+            tiles.push([Math.floor(this.x), Math.floor(this.y - posoffset)]);
+        }
+        if(Math.floor(this.y + posoffset) != Math.floor(this.y)){
+            tiles.push([Math.floor(this.x), Math.floor(this.y + posoffset)]);
+        }
+
+        // get a list of the corresponding points that the points are touching
+        points.forEach(p => {
+            const tilestoadd: Vector2D[] = [
+                [p[0], p[1]],
+                [p[0] - 1, p[1]],
+                [p[0] - 1, p[1] - 1],
+                [p[0], p[1] - 1],
+            ];
+
+            tilestoadd.forEach(t => {
+                if(!tiles.some(ct => ct[0] == t[0] && ct[1] == t[1])) tiles.push(t);
+            });
+        });
+
+        return tiles;
     }
 
     // #endregion

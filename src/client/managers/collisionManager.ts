@@ -1,6 +1,8 @@
 import PlayerClient from "../playerClient.js";
-import { CollisionObject, CircleCollisionObject, Pos } from "../../shared/types.js";
-import * as SharedCollisions from "../../shared/collision.js";
+import CollisionObject from "../../shared/physics/collisionObject.js";
+import { Vector2D } from "../../shared/types.js";
+import { getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
+import V2D from "../../shared/physics/vector2d.js";
 
 /** Manages client side collisions between the player and other objects / entities in the world */
 class CollisionManager {
@@ -10,38 +12,31 @@ class CollisionManager {
         this.playerclient = playerclient;
     }
 
-    /** Checks collisions between the current player and other nearby players */
-    playerCollisions(players: any[]): void {
-        const meobject: CircleCollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
-        const playerobjects: CircleCollisionObject[] = players as CircleCollisionObject[];
-
-        const push = SharedCollisions.entityCollisions(meobject, playerobjects);
-        this.playerclient.inputManager.clientPush(push.x, push.y);
-    }
-
     /** Checks collisions between the current player and any nearby blocks with hitboxes */
     blockCollisions(): void {
-        let push: Pos = { x: 0, y: 0 };
-        for(let tries = 0; (tries < 3 && (push.x != 0 || push.y != 0)) || tries == 0; tries++){
-            const meobject: CircleCollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
+        return;
+        let push: Vector2D = [0, 0];
+        for(let tries = 0; (tries < 3 && (push[0] != 0 || push[1] != 0)) || tries == 0; tries++){
+            const playercollider: CollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
 
-            const checkcells: CollisionObject[] = [];
-            for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){
-                const block = this.playerclient.world.getCell(cellpos.x, cellpos.y).block;
-                if(!block) continue;
-                if(block.walkthrough) continue;
+            const blocks: CollisionObject[] = [];
+            for(const coords of this.playerclient.inputManager.tilesOn()){
+                const cell = this.playerclient.world.getCell(coords[0], coords[1]);
+                if(cell === null) continue;
+                if(cell.block === undefined) continue;
+                if(cell.block.walkthrough) continue;
 
-                const blockobject: CollisionObject = {
-                    shape: block.shape,
-                    scale: block.scale,
-                    x: cellpos.x,
-                    y: cellpos.y
-                };
-                checkcells.push(blockobject);
+                const blockcollider = getCellCollisionObject(cell.block.shape, cell.block.scale, [coords[0] + .5, coords[1] + .5]);
+                if(blockcollider !== null) blocks.push(blockcollider);
             }
 
-            push = SharedCollisions.blockCollisions(meobject, checkcells);
-            this.playerclient.inputManager.clientPush(push.x, push.y);
+            let push: Vector2D = [0, 0];
+            for(const blockcollider of blocks){
+                const newpush = getCollisionPush(playercollider, blockcollider);
+                if(newpush !== null) push = V2D.add(push, newpush);
+            }
+
+            this.playerclient.inputManager.clientPush(push[0], push[1]);
         }
     }
 }

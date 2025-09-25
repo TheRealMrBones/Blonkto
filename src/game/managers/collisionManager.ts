@@ -6,8 +6,10 @@ import GameObject from "../objects/gameObject.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import Layer from "../world/layer.js";
 import Circle from "../../shared/physics/circle.js";
-import { checkCollision, getCollisionPush } from "../../shared/physics/collision.js";
+import { checkCollision, getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
 import CollisionObject from "../../shared/physics/collisionObject.js";
+import { Vector2D } from "../../shared/types.js";
+import V2D from "../../shared/physics/vector2d.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
@@ -28,9 +30,9 @@ class CollisionManager {
             if(!entity.canCollide()) continue;
             
             const point = new Circle([x, y], 0);
-            const entitycircle = new Circle([entity.x, entity.y], entity.scale / 2);
+            const entitycollider = new Circle([entity.x, entity.y], entity.scale / 2);
 
-            if(checkCollision(point, entitycircle)) return entity;
+            if(checkCollision(point, entitycollider)) return entity;
         }
 
         return null;
@@ -39,15 +41,15 @@ class CollisionManager {
     /** Checks collisions between the given player and other nearby players */
     entityCollisions(entity: Entity): void {
         const entities = entity.layer.entityManager.getEntities();
+        const entity1collider = new Circle([entity.x, entity.y], entity.scale / 2);
 
         for(const entity2 of entities){
             if(entity.id === entity2.id) continue;
             if(!entity2.canCollide()) continue;
 
-            const entity1circle = new Circle([entity.x, entity.y], entity.scale / 2);
-            const entity2circle = new Circle([entity2.x, entity2.y], entity2.scale / 2);
+            const entity2collider = new Circle([entity2.x, entity2.y], entity2.scale / 2);
 
-            const push = getCollisionPush(entity1circle, entity2circle);
+            const push = getCollisionPush(entity1collider, entity2collider);
             if(push === null) continue;
 
             entity.emitCollisionEvent(this.game, entity2, push);
@@ -60,42 +62,39 @@ class CollisionManager {
 
     /** Checks for non-player objects colliding on blocks */
     blockCollisions(object: GameObject): void {
-        const mecircle = new Circle([object.x, object.y], object.scale / 2);
+        const objectcollider = new Circle([object.x, object.y], object.scale / 2);
         
-        const checkcells: CollisionObject[] = [];
-        for(const cellpos of SharedCollisions.getCollisionCheckCells(meobject)){
-            const cell = object.layer.getCell(cellpos.x, cellpos.y, false);
-            if(!cell) continue;
-            const block = cell.block;
-            if(block === null) continue;
-            if(block.definition.getWalkThrough()) continue;
+        const blocks: CollisionObject[] = [];
+        for(const coords of object.tilesOn()){
+            const cell = object.layer.getCell(coords.x, coords.y, false);
+            if(cell === null) continue;
+            if(cell.block === null) continue;
 
-            const blockobject: CollisionObject = {
-                shape: block.definition.shape,
-                scale: block.definition.scale,
-                x: cellpos.x,
-                y: cellpos.y
-            };
-            checkcells.push(blockobject);
+            const blockcollider = getCellCollisionObject(cell.block.definition.shape, cell.block.definition.scale, [coords.x + .5, coords.y + .5]);
+            if(blockcollider !== null) blocks.push(blockcollider);
         }
-    
-        const push = SharedCollisions.blockCollisions(meobject, checkcells);
-        object.push(push.x, push.y);
+        
+        let push: Vector2D = [0, 0];
+        for(const blockcollider of blocks){
+            const newpush = getCollisionPush(objectcollider, blockcollider);
+            if(newpush !== null) push = V2D.add(push, newpush);
+        }
+
+        object.push(push[0], push[1]);
     };
 
     /** Checks for dropped stacks that the given player can pick up */
     collectCheck(player: Player): void {
         const collectables = player.layer.entityManager.getDroppedStacks();
+        const playercollider = new Circle([player.x, player.y], player.scale / 2);
 
         for(const collectable of collectables){
             if(!collectable.canCollide()) continue;
 
-            const push = SharedCollisions.entityCollision(player, { x: collectable.x, y: collectable.y, scale: collectable.scale });
-            const collided = (push !== null);
-
+            const collectablecollider = new Circle([collectable.x, collectable.y], collectable.scale / 2);
             let removeignore = (collectable.ignore === player.id);
             
-            if(collided){
+            if(checkCollision(playercollider, collectablecollider)){
                 if(collectable.ignore === player.id){
                     removeignore = false;
                     continue;
@@ -110,20 +109,17 @@ class CollisionManager {
     /** Checks for dropped stacks that the given dropped stack can merge with */
     itemMergeCheck(collectable: DroppedStack): void {
         const collectables = collectable.layer.entityManager.getDroppedStacks();
+        const collectablecollider = new Circle([collectable.x, collectable.y], collectable.scale / 2);
 
         for(const collectable2 of collectables){
             if(collectable.id === collectable2.id) continue;
             if(!collectable2.canCollide()) continue;
 
-            const push = SharedCollisions.entityCollision(collectable, { x: collectable2.x, y: collectable2.y, scale: collectable2.scale });
-            const collided = (push !== null);
+            const collectable2collider = new Circle([collectable2.x, collectable2.y], collectable2.scale / 2);
 
-            if(collided){
+            if(checkCollision(collectablecollider, collectable2collider)){
                 if(collectable.itemStack.definition.key === collectable2.itemStack.definition.key){
                     if(collectable.itemStack.mergeStack(collectable2.itemStack)) this.game.entityManager.removeObject(collectable2.id);
-                }else{
-                    //collectable.push(push.x / 2, push.y / 2);
-                    //collectable2.push(-push.x / 2, -push.y / 2);
                 }
             }
         }
@@ -137,13 +133,16 @@ class CollisionManager {
             x: entity.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
             y: entity.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
         };
+        const attackcollider = new Circle([attackpos.x, attackpos.y], ATTACK_HITBOX_WIDTH);
 
         for(const entity2 of entities){
             if(!entity2.canCollide()) continue;
+            if(entity2.hit) continue;
+            if(entity2.id == entity.id) continue;
 
-            const dist = SharedCollisions.getDistance(attackpos, entity2);
-            const realdist = dist - (entity.scale + ATTACK_HITBOX_WIDTH) / 2;
-            if(entity2.id != entity.id && realdist < 0 && !entity2.hit){
+            const entity2collider = new Circle([entity2.x, entity2.y], entity2.scale / 2);
+
+            if(checkCollision(attackcollider, entity2collider)){
                 let killer = "unknown";
                 if(entity instanceof NonplayerEntity){
                     killer = entity.definition.displayname;
