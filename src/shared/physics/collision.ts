@@ -88,7 +88,7 @@ function getRangedTestAxis(rangedobject: CollisionObject, object2: CollisionObje
         }
     }
 
-    return V2D.getUnitVector(V2D.getOrthogonal(V2D.subtract(point, mindistpoint)));
+    return V2D.getUnitVector(V2D.subtract(point, mindistpoint));
 }
 
 export function getCellCollisionObject(shape: number, size: number, pos: Vector2D): CollisionObject | null {

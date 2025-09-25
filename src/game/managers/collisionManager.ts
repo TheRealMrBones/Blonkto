@@ -69,6 +69,7 @@ class CollisionManager {
             const cell = object.layer.getCell(coords.x, coords.y, false);
             if(cell === null) continue;
             if(cell.block === null) continue;
+            if(cell.block.definition.getWalkThrough()) continue;
 
             const blockcollider = getCellCollisionObject(cell.block.definition.shape, cell.block.definition.scale, [coords.x + .5, coords.y + .5]);
             if(blockcollider !== null) blocks.push(blockcollider);
@@ -90,6 +91,7 @@ class CollisionManager {
 
         for(const collectable of collectables){
             if(!collectable.canCollide()) continue;
+
 
             const collectablecollider = new Circle([collectable.x, collectable.y], collectable.scale / 2);
             let removeignore = (collectable.ignore === player.id);

@@ -409,7 +409,7 @@ class InputManager {
 
     /** Returns the player as a collision object */
     getSelfAsCollisionObject(): CollisionObject {
-        return new Circle([this.x + this.dx, this.y + this.dy], this.scale);
+        return new Circle([this.x + this.dx, this.y + this.dy], this.scale / 2);
     }
 
     /** Returns the coordinates of the tiles that the player is on */

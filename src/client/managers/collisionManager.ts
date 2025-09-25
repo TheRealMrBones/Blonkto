@@ -14,7 +14,6 @@ class CollisionManager {
 
     /** Checks collisions between the current player and any nearby blocks with hitboxes */
     blockCollisions(): void {
-        return;
         let push: Vector2D = [0, 0];
         for(let tries = 0; (tries < 3 && (push[0] != 0 || push[1] != 0)) || tries == 0; tries++){
             const playercollider: CollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();

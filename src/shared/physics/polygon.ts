@@ -44,7 +44,7 @@ abstract class Polygon extends CollisionObject {
 
     /** Returns the range of this collision object over the given axis */
     getSeperateAxisTheoremRange(axis: Vector2D): Vector2D {
-        const range: Vector2D = [-Infinity, Infinity];
+        const range: Vector2D = [Infinity, -Infinity];
 
         for(const vertex of this.getVertices()){
             const proj = V2D.dotProduct(axis, vertex);
