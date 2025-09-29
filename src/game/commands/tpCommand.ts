@@ -9,6 +9,8 @@ const { COMMAND_ARGUMENTS } = Constants;
 const args = [
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT ],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.INT, COMMAND_ARGUMENTS.INT ],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.FLOAT, COMMAND_ARGUMENTS.FLOAT ],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.FLOAT, COMMAND_ARGUMENTS.FLOAT ],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER ],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.PLAYER, COMMAND_ARGUMENTS.PLAYER ],
 ];
@@ -20,9 +22,11 @@ function tpCommand(args: any[], player: Player, game: Game){
 
     switch(argIndex){
         case 0:
-        case 1: {
+        case 1: 
+        case 2: 
+        case 3: {
             let playertoteleport: Player, x, y;
-            if(argIndex == 0){
+            if(argIndex % 2 == 0){
                 playertoteleport = player;
                 x = args[1];
                 y = args[2];
@@ -32,12 +36,17 @@ function tpCommand(args: any[], player: Player, game: Game){
                 y = args[3];
             }
 
-            playertoteleport.setPos(x + .5, y + .5);
+            if(argIndex == 0 || argIndex == 1){
+                playertoteleport.setPos(x + .5, y + .5);
+            }else{
+                playertoteleport.setPos(x, y);
+            }
+
             game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
             break;
         }
-        case 2:
-        case 3: {
+        case 4:
+        case 5: {
             let playertoteleport: Player, playertoteleportto: Player;
             if(argIndex == 2){
                 playertoteleport = player;

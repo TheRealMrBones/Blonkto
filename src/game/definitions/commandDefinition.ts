@@ -169,7 +169,7 @@ class CommandDefinition extends RegistryValue {
                         break;
                     }
                     case COMMAND_ARGUMENTS.INT: {
-                        if(isNaN(rawargs[i])){
+                        if(isNaN(rawargs[i]) || rawargs[i].includes(".")){
                             error = `"${rawargs[i]}" is not an integer`;
                             parsedargs.splice(j, 1);
                             j--;
