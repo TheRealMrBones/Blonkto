@@ -310,22 +310,14 @@ class InputManager {
             this.dx += (t - this.startd) * PLAYER_SPEED / 1000;
             this.startd = t;
         }
+        
+        // collisions
+        if(!this.falling && this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
+            this.playerclient.collisionManager.blockCollisions();
+        }
 
         // update ui
         this.playerclient.renderer.uiManager.updateCoords(this.x + this.dx, this.y + this.dy);
-        
-        // collisions
-        const others = this.playerclient.stateManager.getCurrentState().others!;
-        const self = {
-            x: this.x + this.dx,
-            y: this.y + this.dy,
-            scale: this.scale,
-        };
-        
-        if(!this.falling && this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
-            //playerCollisions(self, others);
-            this.playerclient.collisionManager.blockCollisions();
-        }
     }
 
     // #endregion
