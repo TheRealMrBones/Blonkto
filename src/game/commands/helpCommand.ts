@@ -10,6 +10,7 @@ const args = [
     [COMMAND_ARGUMENTS.KEY],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.INT],
     [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING],
+    [COMMAND_ARGUMENTS.KEY, COMMAND_ARGUMENTS.STRING, COMMAND_ARGUMENTS.STRING],
 ];
 
 export default (): void => CommandRegistry.register(new CommandDefinition("help", false, args, helpCommand, "Gives list of commands or describes a specified command"));
@@ -35,9 +36,61 @@ function helpCommand(args: any[], player: Player, game: Game){
     }else{
         if(CommandRegistry.has(args[1])){
             const command = CommandRegistry.get(args[1]);
-            game.chatManager.sendMessageTo(player, `${command.key} - ${command.getHelp()}`);
+
+            if(argIndex == 2){
+                game.chatManager.sendMessageTo(player, `${command.key} - ${command.getHelp()}`);
+            }else{
+                if(args[2] == "args"){
+                    game.chatManager.sendMessageTo(player, `args for ${command.key} command:`);
+                    for(const args of command.possibleargs){
+                        let argsmessage = `- /${command.key}`;
+
+                        for(let i = 1; i < args.length; i++){
+                            const arg = args[i]
+                            argsmessage += ` [${getArgTypeString(arg)}]`;
+                        }
+
+                        game.chatManager.sendMessageTo(player, argsmessage);
+                    }
+                }else{
+                    game.chatManager.sendMessageTo(player, `unknown help modifer "${args[2]}"`);
+                }
+            }
         }else{
             game.chatManager.sendMessageTo(player, `"${args[1]}" is not a command`);
+        }
+    }
+}
+
+/** Returns the string equivilent of the given arg type */
+function getArgTypeString(arg: number): string {
+    switch(arg){
+        case COMMAND_ARGUMENTS.KEY: {
+            return "KEY";
+        }
+        case COMMAND_ARGUMENTS.STRING: {
+            return "STRING";
+        }
+        case COMMAND_ARGUMENTS.STRING_LONG: {
+            return "STRING_LONG";
+        }
+        case COMMAND_ARGUMENTS.INT: {
+            return "INT";
+        }
+        case COMMAND_ARGUMENTS.FLOAT: {
+            return "FLOAT";
+        }
+        case COMMAND_ARGUMENTS.BOOLEAN: {
+            return "BOOLEAN";
+        }
+        case COMMAND_ARGUMENTS.USERNAME: {
+            return "USERNAME";
+        }
+        case COMMAND_ARGUMENTS.PLAYER: {
+            return "PLAYER";
+        }
+        default: {
+            return "UNKNOWN_TYPE";
         }
     }
 }

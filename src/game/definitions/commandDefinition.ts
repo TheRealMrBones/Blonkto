@@ -8,7 +8,7 @@ const { COMMAND_ARGUMENTS } = Constants;
 /** Base class for a command that can be run through chat by players in the game */
 class CommandDefinition extends RegistryValue {
     private op: boolean;
-    private possibleargs: any[][];
+    readonly possibleargs: number[][];
     private executeParsed: (args: any[], player: Player, game: Game) => void;
     private help: string;
     private customCanExecute: ((player: Player, game: Game) => boolean) | null = null;
@@ -75,7 +75,7 @@ class CommandDefinition extends RegistryValue {
     /** Returns the parsed args from the given raw args if they are compatable with this command and returns the error string otherwise */
     parseArgs(rawargs: any[], game: Game): any[] | string {
         // parsed args are the possible args but as they get checked the previous values change to the parsed rawargs
-        const parsedargs = [];
+        const parsedargs: any[][] = [];
         for(let i = 0; i < this.possibleargs.length; i++){
             parsedargs.push([...this.possibleargs[i]]);
         }
