@@ -16,7 +16,9 @@
 4. The game is now playable on port 3000
 
 # Misc helper commands
-1. Run `npm run resetworld` to reset all saved world data
+- Run `npm run resetworld` to reset all saved world data
+- Run `npm run lint` to lint code
+- Run `npm run format` to automatically format code to lint standards
 
 # Environment Variables
 - SECRET_KEY - the key used for secure token generation
