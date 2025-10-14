@@ -85,7 +85,7 @@ class Chunk {
                 if(serializedcell.ceiling) if(!usedceilings.includes(serializedcell.ceiling)) usedceilings.push(serializedcell.ceiling);
             }
         }
-        
+
         return {
             x: this.chunkx,
             y: this.chunky,

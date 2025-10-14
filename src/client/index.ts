@@ -45,7 +45,7 @@ Promise.all([
 
     playButton.onclick = joinGame;
     logoutButton.onclick = sendLogout;
-    
+
     // try silent login if have old token
     const token = getCookie("token");
     if(token !== null){
@@ -153,7 +153,7 @@ function sendLogout(): void {
                 playDiv.style.display = "none";
 
                 usernameInput.focus();
-                
+
                 document.addEventListener("keydown", devlogin);
             }else{
                 showError("Logout failed. Please try again.");
@@ -279,9 +279,9 @@ document.addEventListener("keydown", devlogin);
 
 /** Temp quick login code for development */
 function devlogin(event: any): void {
-    if(event.target.tagName.toLowerCase() !== "input" && 
+    if(event.target.tagName.toLowerCase() !== "input" &&
         event.target.tagName.toLowerCase() !== "textarea") {
-    
+
         switch(event.key){
             case "1":
                 usernameInput.value = "testuser1";

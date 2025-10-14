@@ -310,7 +310,7 @@ class InputManager {
             this.dx += (t - this.startd) * PLAYER_SPEED / 1000;
             this.startd = t;
         }
-        
+
         // collisions
         if(!this.falling && this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
             this.playerclient.collisionManager.blockCollisions();
@@ -343,7 +343,7 @@ class InputManager {
     stopCapturingInput(): void {
         // remove input listeners
         this.toggleListeners(false);
-        
+
         // reset variables
         this.dir = 0;
         this.x = 0;
@@ -363,7 +363,7 @@ class InputManager {
     pauseCapturingInputs(): void {
         // pause input listeners
         this.toggleListeners(false);
-        
+
         // do final position update then remove current movements
         this.updatePos();
         this.startw = null;
@@ -408,7 +408,7 @@ class InputManager {
     tilesOn(strict?: boolean): Vector2D[] {
         const points = [];
         const posoffset = strict ? 0 : (this.scale / 2) - .01; // offset so barely touching tiles are not counted
-        
+
         // get all integer coordinate points that are within object
         for(let x = Math.floor(this.x + this.dx - posoffset); x < this.x + this.dx + posoffset; x++){
             for(let y = Math.floor(this.y + this.dy - posoffset); y < this.y + this.dy + posoffset; y++){

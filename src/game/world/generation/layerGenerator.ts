@@ -39,7 +39,7 @@ class LayerGenerator implements ILayerGenerator {
                 }else if(rng.next() < .01){
                     cell.setBlock("grown_carrots", game);
                 }
-                
+
                 chunk.cells[x][y] = cell;
             }
         }

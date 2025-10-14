@@ -7,7 +7,7 @@ const { LOG_CATEGORIES } = Constants;
 /** Manages a definition list specific type of class */
 class Registry<T extends RegistryValue> {
     private readonly logger: Logger;
-    
+
     readonly name: string;
     private readonly map: Map<string, T> = new Map<string, T>();
 
@@ -25,7 +25,7 @@ class Registry<T extends RegistryValue> {
             this.logger.error(`[${this.name}] Key "${value.key}" already registered!`);
             throw null;
         }
-        
+
         this.map.set(value.key, value);
     }
 

@@ -17,7 +17,7 @@ const datadirs = [
 class FileManager {
     private readonly logger: Logger;
     private readonly defaultlocation: string = "data";
-    
+
     constructor(){
         this.logger = Logger.getLogger(LOG_CATEGORIES.FILE_MANAGER);
 

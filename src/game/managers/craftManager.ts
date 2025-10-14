@@ -33,7 +33,7 @@ class CraftManager {
     /** Loads a single recipe from the given file */
     loadSingleRecipe(file: string, folder?: string): void {
         const folder2 = folder || defaultrecipesfolder;
-        
+
         const data = this.game.fileManager.readFile(`${folder2}/${file}`, "definitions");
         if(data === null) return;
         this.loadRecipe(data);
@@ -98,7 +98,7 @@ class CraftManager {
     /** Returns the list of recipe data for all craftable recipes for a game update to the client */
     serializeCraftableRecipesForUpdate(player: Player): any[] {
         if(!this.playerNeedsRecipeUpdate(player)) return [];
-        
+
         const stationname = player.station !== null ? player.station.name : null;
 
         const allrecipes = this.getCraftableRecipes(player.getCombinedInventory(), stationname);

@@ -2,7 +2,7 @@
 class SeededRandom {
     private readonly startseed: number;
     private seed: number;
-    
+
     static readonly modulus: number = 2 ** 31;
     private static readonly multiplier: number = 1103515245;
     private static readonly increment: number = 12345;
@@ -13,7 +13,7 @@ class SeededRandom {
     }
 
     // #region seed
-    
+
     /** Returns the seed used to start this randomizer */
     getSeed(): number {
         return this.startseed;

@@ -47,15 +47,15 @@ class ChatManager {
 
     excecuteCommand(game: Game, player: Player, command: string): void {
         if(LOG_COMMANDS) this.logger.info(`[${player.username}] /${command}`);
-        
+
         if(command.length == 0){
             game.chatManager.sendMessageTo(player, "no command given");
             return;
         }
-    
+
         const tokens = command.split(" ");
         const key = tokens[0];
-    
+
         // Find command
         if(CommandRegistry.has(key)){
             CommandRegistry.get(key).execute(tokens, player, game);

@@ -46,7 +46,7 @@ function helpCommand(args: any[], player: Player, game: Game){
                         let argsmessage = `- /${command.key}`;
 
                         for(let i = 1; i < args.length; i++){
-                            const arg = args[i]
+                            const arg = args[i];
                             argsmessage += ` [${getArgTypeString(arg)}]`;
                         }
 

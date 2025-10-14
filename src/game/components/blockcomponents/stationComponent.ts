@@ -31,7 +31,7 @@ class StationComponent extends Component<BlockDefinition> {
     /** Defines the tick of the block with this component */
     tick(block: Block, game: Game, dt: number): void {
         const data = block.getComponentData(StationComponentData);
-        
+
         data.station.checkOpeners(game);
     }
 }

@@ -23,7 +23,7 @@ const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = S
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
 class World {
     private readonly logger: Logger;
-    
+
     private readonly game: Game;
 
     readonly seed: number;
@@ -50,7 +50,7 @@ class World {
             this.seed = SEED == 0 ? Math.floor(Math.random() * SeededRandom.modulus) : SEED;
             this.daycycletick = DAY_TRANSITION_LENGTH;
         }
-        
+
         this.layers = [
             new Layer(this.game, this, 0, new LayerGenerator(), new LayerSpawner()),
             new Layer(this.game, this, 1, new CaveLayerGenerator(), new CaveLayerSpawner())
@@ -85,7 +85,7 @@ class World {
         }
         return loaddata;
     }
-    
+
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
     private tickChunkUnloader(): void {
         // prepare active chunks array
@@ -187,7 +187,7 @@ class World {
                 layer.unloadChunk(x, y);
             }
         }
-        
+
         this.logger.info("World initialized");
     }
 
@@ -245,7 +245,7 @@ class World {
     /** Saves all of the currently loaded world data to the save */
     saveWorld(): void {
         this.logger.info("Saving world");
-        
+
         // save global world data
         const worlddata = {
             seed: this.seed,
@@ -257,7 +257,7 @@ class World {
         for(const layer of this.layers){
             layer.saveLayer();
         }
-        
+
         this.logger.info("World saved");
     }
 

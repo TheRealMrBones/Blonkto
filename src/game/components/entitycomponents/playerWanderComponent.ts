@@ -45,7 +45,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
                 x: Math.floor(currenttarget.x),
                 y: Math.floor(currenttarget.y),
             };
-            
+
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, self.layer, [currenttargetcell]);
 
             targetdata.clearQueue();
@@ -65,7 +65,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
             const players = [...self.layer.entityManager.getPlayerEntities()]
                 .filter(p => p.isValidTarget())
                 .sort((a: Player, b: Player) => self.distanceTo(a) - self.distanceTo(b));
-            
+
             let movex = 0;
             let movey = 0;
 
@@ -99,7 +99,7 @@ class PlayerWanderComponent extends Component<EntityDefinition> {
                 }
             }
             if(!found) return;
-            
+
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, self.layer);
             if(path === null) return;
 

@@ -36,7 +36,7 @@ class PlayerManager {
         this.logger = Logger.getLogger(LOG_CATEGORIES.PLAYER_MANAGER);
 
         this.game = game;
-        
+
         this.banManager = new BanManager(game);
         this.opManager = new OpManager(game);
         this.whitelistManager = new WhitelistManager(game);
@@ -95,7 +95,7 @@ class PlayerManager {
             // create new player
             spawn.layer.entityManager.addPlayer(new Player(socket, username, spawn.layer, spawn.pos.x, spawn.pos.y, true));
         }
-        
+
         // send info to client
         const player = this.game.entityManager.getPlayer(socket.id)!;
         player.socket.emit(MSG_TYPES.GAME_UPDATE, this.game.createInitialUpdate(player));
@@ -132,7 +132,7 @@ class PlayerManager {
         const player = this.game.entityManager.getPlayer(socket.id)!;
 
         this.game.chatManager.sendMessage(`${player.username} was killed by ${killedby}`);
-        
+
         socket.emit(MSG_TYPES.DEAD);
 
         const data = JSON.stringify(player.serializePlayerAfterKilled());
@@ -179,7 +179,7 @@ class PlayerManager {
         if(newUsername.trim().length === 0) newUsername = "SillyGoose";
 
         const playerlist = [...this.game.entityManager.getPlayerEntities()];
-    
+
         if(playerlist.some(e => e.username === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
@@ -196,7 +196,7 @@ class PlayerManager {
     getTab(): any[] {
         if(!SHOW_TAB) return [];
 
-        return [...this.game.entityManager.getPlayerEntities()].map(p => { 
+        return [...this.game.entityManager.getPlayerEntities()].map(p => {
             const returnobj: any = {
                 username: p.username,
             };

@@ -15,7 +15,7 @@ export default (): void => CommandRegistry.register(new CommandDefinition("opped
 
 function oppedCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
-        
+
     // special op checks
     if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
         CommandDefinition.sendNoPermission(player, game);

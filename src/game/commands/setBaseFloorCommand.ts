@@ -40,7 +40,7 @@ function setBaseFloorCommand(args: any[], player: Player, game: Game){
         }
 
         cell.setBaseFloor(val, game);
-        
+
         game.chatManager.sendMessageTo(player, `set base floor ${args[1]}, ${args[2]} to ${val}`);
     }else{
         const startx = Math.min(args[1], args[3]);

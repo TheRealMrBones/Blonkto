@@ -15,7 +15,7 @@ interface IInventory {
     // #endregion
 
     // #region inventory operations
-    
+
     /** Drops this entire inventory onto the ground */
     dropInventory(layer: Layer, x: number, y: number, game: Game): void;
 

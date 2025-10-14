@@ -15,7 +15,7 @@ export default (): void => CommandRegistry.register(new CommandDefinition("white
 
 function whitelistCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
-    
+
     // actually run command
     switch(args[1] as string){
         case "add": {
@@ -53,7 +53,7 @@ function whitelistCommand(args: any[], player: Player, game: Game){
                 game.chatManager.sendMessageTo(player, "no username given, operation ignored");
                 return;
             }
-            
+
             const whitelisted = game.playerManager.whitelistManager.isWhitelisted(args[2]);
             game.chatManager.sendMessageTo(player, `${args[2]} is ${whitelisted ? "" : "not "}whitelisted`);
             break;

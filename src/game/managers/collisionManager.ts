@@ -29,7 +29,7 @@ class CollisionManager {
 
         for(const entity of entities){
             if(!entity.canCollide()) continue;
-            
+
             const point = new Circle([x, y], 0);
             const entitycollider = new Circle([entity.x, entity.y], entity.scale / 2);
 
@@ -64,7 +64,7 @@ class CollisionManager {
     /** Checks for non-player objects colliding on blocks */
     blockCollisions(object: GameObject): void {
         const objectcollider = new Circle([object.x, object.y], object.scale / 2);
-        
+
         const blocks: CollisionObject[] = [];
         for(const coords of object.tilesOn()){
             const cell = object.layer.getCell(coords.x, coords.y, false);
@@ -75,7 +75,7 @@ class CollisionManager {
             const blockcollider = getCellCollisionObject(cell.block.definition.shape, cell.block.definition.scale, [coords.x + .5, coords.y + .5]);
             if(blockcollider !== null) blocks.push(blockcollider);
         }
-        
+
         let push: Vector2D = [0, 0];
         for(const blockcollider of blocks){
             const newpush = getCollisionPush(objectcollider, blockcollider);
@@ -96,7 +96,7 @@ class CollisionManager {
 
             const collectablecollider = new Circle([collectable.x, collectable.y], collectable.scale / 2);
             let removeignore = (collectable.ignore === player.id);
-            
+
             if(checkCollision(playercollider, collectablecollider)){
                 if(collectable.ignore === player.id){
                     removeignore = false;
@@ -131,7 +131,7 @@ class CollisionManager {
     /** Checks for entities that an attacking entity hits and damages them */
     attackHitCheck(entity: Entity, attackdir: number, swingdata: SwingData): void {
         const entities = entity.layer.entityManager.getEntities();
-        
+
         const attackpos = {
             x: entity.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
             y: entity.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,

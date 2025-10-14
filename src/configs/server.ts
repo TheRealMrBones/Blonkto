@@ -41,7 +41,7 @@ type ServerConfigSchema = {
         SERVER_UPDATE_RATE: number,
     },
     WORLD: {
-        SEED: number, 
+        SEED: number,
         SPAWN_SIZE: number,
         CHUNK_UNLOAD_RATE: number,
         AUTOSAVE_RATE: number,

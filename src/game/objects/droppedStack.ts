@@ -106,7 +106,7 @@ class DroppedStack extends GameObject {
     /** Returns an object representing this dropped stacks data for writing to the save */
     override serializeForWrite(): SerializedWriteDroppedStack {
         const base = super.serializeForWrite();
-        
+
         return {
             ...base,
             type: "dropped_stack",

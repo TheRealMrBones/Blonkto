@@ -14,7 +14,7 @@ class Cell {
     readonly chunk: Chunk;
     readonly chunkx: number;
     readonly chunky: number;
-    
+
     basefloor: FloorDefinition | null;
     block: Block | null = null;
     floor: Floor | null = null;
@@ -26,7 +26,7 @@ class Cell {
         this.chunk = chunk;
         this.chunkx = chunkx;
         this.chunky = chunky;
-        
+
         this.basefloor = basefloor ? FloorRegistry.get(basefloor) : null;
         this.floor = this.basefloor ? new Floor(this, this.basefloor.key) : null;
     }

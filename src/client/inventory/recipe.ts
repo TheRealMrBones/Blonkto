@@ -25,7 +25,7 @@ class Recipe {
 
         const maindiv = document.createElement("div");
         maindiv.className = "craftingslot";
-        
+
         const itemimg = document.createElement("img");
         itemimg.className = "item";
         itemimg.src = asset;
@@ -62,7 +62,7 @@ class Recipe {
         maindiv.onclick = (e) => {
             if(this.canCraft(playerclient.inventory.getInventory(), playerclient.inventory.station)){
                 const amount = e.ctrlKey ? this.canCraftAmount(playerclient.inventory.getInventory()) : 1;
-                
+
                 const ingredientsdictionary: { [key: string]: number } = {};
                 this.ingredients.forEach((ingredient: any) => {
                     ingredientsdictionary[ingredient.item] = ingredient.amount;

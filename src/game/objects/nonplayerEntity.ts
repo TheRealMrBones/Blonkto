@@ -96,7 +96,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     override serializeForWrite(): SerializedWriteNonplayerEntity {
         const base = super.serializeForWrite();
         const componentdata = this.serializeComponentDataForWrite();
-        
+
         const returnobj: SerializedWriteNonplayerEntity = {
             ...base,
             type: "entity",

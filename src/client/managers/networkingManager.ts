@@ -69,37 +69,37 @@ class NetworkingManager {
     play(content: JoinGameContent): void {
         this.emit(MSG_TYPES.JOIN_GAME, content);
     };
-    
+
     /** Method to send the update inputs message to the server */
     updateInputs = throttle(10, (content: InputContent) => {
         this.emit(MSG_TYPES.INPUT, content);
     });
-    
+
     /** Method to send the click message to the server */
     click = throttle(20, (content: ClickContent) => {
         this.emit(MSG_TYPES.CLICK, content);
     });
-    
+
     /** Method to send the interact message to the server */
     interact = throttle(20, (content: ClickContent) => {
         this.emit(MSG_TYPES.INTERACT, content);
     });
-    
+
     /** Method to send the drop message to the server */
     drop = throttle(20, (content: DropContent) => {
         this.emit(MSG_TYPES.DROP, content);
     });
-    
+
     /** Method to send the swap message to the server */
     swap = throttle(20, (content: SwapContent) => {
         this.emit(MSG_TYPES.SWAP, content);
     });
-    
+
     /** Method to send the craft message to the server */
     craft = throttle(20, (content: CraftContent) => {
         this.emit(MSG_TYPES.CRAFT, content);
     });
-    
+
     /** Method to send the chat message to the server */
     chat = throttle(20, (content: SendMessageContent) => {
         this.emit(MSG_TYPES.SEND_MESSAGE, content);
@@ -137,7 +137,7 @@ class NetworkingManager {
         this.emit(MSG_TYPES.PING);
         this.pingsent = Date.now();
     }
-    
+
     /** Response to the ping message from the server */
     onPing(): void {
         const ping = Date.now() - this.pingsent;

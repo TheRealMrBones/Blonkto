@@ -43,7 +43,7 @@ class SocketManager {
     handlePlayerInput(socket: Socket, content: InputContent): void {
         const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
-        
+
         player.update(content);
     }
 
@@ -53,7 +53,7 @@ class SocketManager {
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(player, content);
-        
+
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
 
@@ -71,7 +71,7 @@ class SocketManager {
                     }
                 }
             }
-            
+
             // default swing action
             player.startSwing(newinfo.dir, { damage: 1, knockback: .25 });
         }
@@ -83,7 +83,7 @@ class SocketManager {
         if(player === undefined) return;
 
         const newinfo = this.getClickInfo(player, content);
-        
+
         if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
             const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
 
@@ -101,7 +101,7 @@ class SocketManager {
             // default action
             if(newinfo.dist > BASE_REACH) return;
             if(newinfo.cell === null) return;
-            
+
             if(newinfo.cell.block !== null){
                 newinfo.cell.block.emitInteractEvent(this.game, player, newinfo);
             }else if(newinfo.cell.floor !== null){
@@ -129,7 +129,7 @@ class SocketManager {
     handlePlayerDrop(socket: Socket, content: DropContent): void {
         const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
-        
+
         player.dropFromSlot(content.slot, this.game, content.all ? undefined : 1);
     }
 
@@ -139,7 +139,7 @@ class SocketManager {
         if(player === undefined) return;
 
         const inventory = player.getCombinedInventory();
-        
+
         inventory.swapSlots(content.slot1, content.slot2);
     }
 

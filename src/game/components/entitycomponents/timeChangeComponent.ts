@@ -22,7 +22,7 @@ class TimeChangeComponent extends Component<EntityDefinition> {
     override setParent(parent: EntityDefinition): void {
         super.setParent(parent);
         this.getParent().addRequiredComponentData(TimeChangeComponentData, this);
-                
+
         this.getParent().registerTickListener((self: NonplayerEntity, game: Game, dt: number) => this.tick(self, game, dt));
     }
 

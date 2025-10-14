@@ -57,7 +57,7 @@ class CommandDefinition extends RegistryValue {
         const args = this.parseArgs(rawargs, game);
         if(typeof args === "string") // string return is a parsing error
             game.chatManager.sendMessageTo(player, args);
-        
+
         this.executeParsed(args as any[], player, game);
     }
 

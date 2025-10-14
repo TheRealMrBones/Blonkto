@@ -68,27 +68,27 @@ class StateManager {
                 const pushcontent: PushContent = otm.value;
                 this.playerclient.inputManager.serverPush(pushcontent.pushx, pushcontent.pushy);
             }
-            
+
             if(otm.type == ONE_TIME_MSG_TYPES.SET_POS){
                 const setposcontent: SetPosContent = otm.value;
                 this.playerclient.inputManager.setPos(setposcontent.pos);
             }
-            
+
             if(otm.type == ONE_TIME_MSG_TYPES.SET_GAMEMODE){
                 const setgamemodecontent: SetGamemodeContent = otm.value;
                 this.playerclient.setGamemode(setgamemodecontent.gamemode);
             }
-            
+
             if(otm.type == ONE_TIME_MSG_TYPES.SET_COLOR){
                 const setcolorcontent: SetColorContent = otm.value;
                 this.playerclient.renderer.setColor(setcolorcontent.color);
             }
-            
+
             if(otm.type == ONE_TIME_MSG_TYPES.RECIPES){
                 const recipescontent: RecipesContent = otm.value;
                 this.playerclient.inventory.addRecipes(recipescontent.recipes);
             }
-            
+
             if(otm.type == ONE_TIME_MSG_TYPES.DARKNESS){
                 const darknesscontent: DarknessContent = otm.value;
                 update.darkness = darknesscontent.darkness;
@@ -154,7 +154,7 @@ class StateManager {
                 const avgnewserverdelay = this.newserverdelays / this.newserverdelayscount;
                 if(Math.abs(avgnewserverdelay - StateManager.serverDelay) > SERVER_RESYNC_THRESHOLD)
                     StateManager.serverDelay = avgnewserverdelay;
-            
+
                 this.newserverdelays = 0;
                 this.newserverdelayscount = 0;
             }
@@ -178,7 +178,7 @@ class StateManager {
         Object.keys(this.independentObjects).forEach(id => {
             if(!this.independentObjects[id].exists) delete this.independentObjects[id];
         });
-        
+
         // keep only one update before the current server/player time
         this.purgeUpdates(update.statereset);
         Object.values(this.independentObjects).forEach(o => {
@@ -281,7 +281,7 @@ class StateManager {
         return Date.now() - this.serverDelay;
     }
 
-    /** 
+    /**
      * returns the index of the base update, the first game update before
      * current server time, or -1 if N/A.
     */

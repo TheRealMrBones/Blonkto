@@ -27,7 +27,7 @@ class WanderComponent extends Component<EntityDefinition> {
     /** Defines the tick action of an entity with this component */
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
-        
+
         if(targetdata.queueBlocked() && targetdata.currentpriotity == 1){
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
             const currenttarget = targetdata.targetposqueue[0];
@@ -40,7 +40,7 @@ class WanderComponent extends Component<EntityDefinition> {
                 x: Math.floor(currenttarget.x),
                 y: Math.floor(currenttarget.y),
             };
-            
+
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, self.layer, [currenttargetcell]);
 
             targetdata.clearQueue();
@@ -73,7 +73,7 @@ class WanderComponent extends Component<EntityDefinition> {
                 }
             }
             if(!found) return;
-            
+
             const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, self.layer);
             if(path === null) return;
 

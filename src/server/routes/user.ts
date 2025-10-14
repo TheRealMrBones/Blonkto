@@ -38,7 +38,7 @@ router.post("/login", async (req: any, res: any) => {
 
     const lowercaseUsername = username.toLowerCase();
     const result = await userController.loginUser(lowercaseUsername, password);
-    
+
     // Set cookie and update visit
     if(result.token) res.cookie("token", result.token);
 

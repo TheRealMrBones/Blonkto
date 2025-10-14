@@ -22,7 +22,7 @@ function setFloorCommand(args: any[], player: Player, game: Game){
         args.pop();
         args.push(Math.floor(player.x), Math.floor(player.y), originalarg);
     }
-    
+
     let val = argIndex == 2 ? args[5] : args[3];
     if(!FloorRegistry.has(val) && val != "air"){
         game.chatManager.sendMessageTo(player, `no floor of name: ${val}`);

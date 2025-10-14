@@ -11,7 +11,7 @@ class WhitelistManager {
         this.load();
         this.save();
     }
-    
+
     // #region setters
 
     /** Adds or removes a user on the whitelist */
@@ -28,7 +28,7 @@ class WhitelistManager {
     }
 
     // #endregion
-    
+
     // #region getters
 
     /** Checks if a given user is whitelisted */
@@ -47,7 +47,7 @@ class WhitelistManager {
     }
 
     // #endregion
-    
+
     // #region saving
 
     /** Loads the whitelist from the save */

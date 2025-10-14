@@ -239,7 +239,7 @@ class Player extends Entity {
         }else{
             this.x += data.dx;
             this.y += data.dy;
-            
+
             this.moving = (data.dx != 0 || data.dy != 0);
         }
 
@@ -407,7 +407,7 @@ class Player extends Entity {
         };
 
         if(KEEP_INVENTORY) returnobj.inventory = this.inventory.serializeForWrite();
-    
+
         return returnobj;
     }
 

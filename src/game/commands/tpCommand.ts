@@ -22,8 +22,8 @@ function tpCommand(args: any[], player: Player, game: Game){
 
     switch(argIndex){
         case 0:
-        case 1: 
-        case 2: 
+        case 1:
+        case 2:
         case 3: {
             let playertoteleport: Player, x, y;
             if(argIndex % 2 == 0){

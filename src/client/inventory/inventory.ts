@@ -35,7 +35,7 @@ class Inventory {
 
         // show item in slot ui
         const hotbarslot = document.getElementById("slot" + (slot + 1))!;
-        
+
         const itemimage = hotbarslot.querySelector("img");
         if(itemimage) hotbarslot.removeChild(itemimage);
 
@@ -77,7 +77,7 @@ class Inventory {
         const hotbarslot = document.getElementById("slot" + (slot + 1))!;
         const itemimage = hotbarslot.querySelector("img");
         if(itemimage) hotbarslot.removeChild(itemimage);
-        
+
         const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
         hotbaritemamount.innerHTML = "";
     }
@@ -149,7 +149,7 @@ class Inventory {
     // #endregion
 
     // #region station
-    
+
     /** Sets the current station being used by the player */
     setStation(station: string | null): void {
         this.station = station;

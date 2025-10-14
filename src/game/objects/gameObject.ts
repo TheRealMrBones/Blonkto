@@ -133,13 +133,13 @@ abstract class GameObject {
     /** Tries to move to target if there is one */
     private physicsTick(game: Game, dt: number): void {
         this.checkFalling(game, dt);
-        
+
         this.x += this.dx * dt;
         this.y += this.dy * dt;
-        
+
         if(this.canCollide()) this.checkCollisions(game);
     }
-    
+
     /** Default object collision checks */
     protected checkCollisions(game: Game): void {
         game.collisionManager.blockCollisions(this);
@@ -158,7 +158,7 @@ abstract class GameObject {
     /** Check for falling */
     private checkFalling(game: Game, dt: number): void {
         if(this.scale <= 0) return;
-        
+
         if(!this.falling){
             if(!this.canFall()) return;
 
@@ -212,7 +212,7 @@ abstract class GameObject {
     tilesOn(strict?: boolean): Pos[] {
         const points = [];
         const posoffset = strict ? 0 : (this.scale / 2) - .01; // offset so barely touching tiles are not counted
-        
+
         // get all integer coordinate points that are within object
         for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){
             for(let y = Math.floor(this.y - posoffset); y < this.y + posoffset; y++){

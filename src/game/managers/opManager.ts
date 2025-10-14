@@ -12,10 +12,10 @@ const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 /** Manages the list of operators for the server */
 class OpManager {
     private readonly logger: Logger;
-    
+
     private readonly game: Game;
     private readonly oppedplayers: Set<string> = new Set<string>();
-    
+
     readonly oppasscode: string;
     oppasscodeused: boolean;
 
@@ -36,7 +36,7 @@ class OpManager {
             this.oppasscodeused = true;
         }
     }
-    
+
     // #region setters
 
     /** Adds a user to the operator list */
@@ -54,15 +54,15 @@ class OpManager {
     /** Clears the entire operator list */
     clearOpList(username?: string): void {
         this.oppedplayers.clear();
-        
+
         // if username given keep that user opped
         if(username !== undefined) this.oppedplayers.add(username);
-        
+
         this.save();
     }
 
     // #endregion
-    
+
     // #region getters
 
     /** Checks if a given user is an operator */
@@ -81,7 +81,7 @@ class OpManager {
     }
 
     // #endregion
-    
+
     // #region saving
 
     /** Loads the operators list from the save */

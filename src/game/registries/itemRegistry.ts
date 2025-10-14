@@ -27,7 +27,7 @@ ItemRegistry.register(new ItemDefinition("axe", "Axe", 1, ASSETS.AXE)
     .addComponent(new MineComponent(MINE_TYPES.CHOP)));
 ItemRegistry.register(new ItemDefinition("shovel", "Shovel", 1, ASSETS.SHOVEL)
     .addComponent(new MineFloorComponent()));
-    
+
 ItemRegistry.register(new ItemDefinition("stone", "Stone", 64, ASSETS.STONE));
 ItemRegistry.register(new ItemDefinition("stone_block", "Stone Block", 64, ASSETS.STONE_BLOCK)
     .addComponent(new BuildComponent("stone_block")));
@@ -47,13 +47,13 @@ ItemRegistry.register(new ItemDefinition("wood_door", "Wood Door", 64, ASSETS.WO
     .addComponent(new BuildComponent("wood_door")));
 ItemRegistry.register(new ItemDefinition("pine_cone", "Pine Cone", 64, ASSETS.PINE_CONE)
     .addComponent(new BuildComponent("sapling", [OrganicComponent])));
-    
+
 ItemRegistry.register(new ItemDefinition("raw_pork", "Raw Pork", 64, ASSETS.RAW_PORK)
     .addComponent(new EatComponent(1)));
 ItemRegistry.register(new ItemDefinition("carrot", "Carrot", 64, ASSETS.CARROT)
     .addComponent(new BuildComponent("planted_carrots", [OrganicComponent]))
     .addComponent(new EatComponent(2)));
-    
+
 ItemRegistry.register(new ItemDefinition("work_bench", "Work Bench", 64, ASSETS.WORK_BENCH)
     .addComponent(new BuildComponent("work_bench")));
 ItemRegistry.register(new ItemDefinition("torch", "Torch", 64, ASSETS.TORCH)

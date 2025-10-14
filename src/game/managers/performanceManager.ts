@@ -59,7 +59,7 @@ class PerformanceManager {
     /** Saves the start time of the current tick */
     tickStart(): void {
         this.tickstarttime = performance.now();
-        
+
         this.lastticks.push(this.tickstarttime);
         while(this.tickstarttime - this.lastticks[0] > 1000){
             this.lastticks.shift();

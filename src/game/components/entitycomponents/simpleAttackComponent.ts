@@ -61,7 +61,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
                 this.resetTarget(self, data, targetdata);
             }
         }
-        
+
         if(data.target === null){
             let mindist = this.distance;
             for(const p of self.layer.entityManager.getPlayerEntities()){
@@ -80,7 +80,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
             this.resetTarget(self, data, targetdata);
             return;
         }
-        
+
         self.speedmultiplier = this.speedmultiplier;
         this.setRunQueue(target, targetdata);
     }

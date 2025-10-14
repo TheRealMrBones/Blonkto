@@ -157,7 +157,7 @@ const loginUser = async (username: string, password: string): Promise<any> => {
 
         const passwordMatch = await argon2.verify(user.hashedPw, password);
         if (!passwordMatch) return { error: "Invalid username or password" };
-        
+
         const token = jwt.sign({ username }, process.env.SECRET_KEY!, { expiresIn: "24h" });
         return { token };
     } catch (error) {

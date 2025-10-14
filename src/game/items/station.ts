@@ -61,7 +61,7 @@ class Station {
             name: this.name,
             isnew: isnew,
         };
-        
+
         if(this.inventories.length > 0){
             returnobj.updates = isnew ?
                 this.inventories.map(inventory => inventory.serializeForUpdate()) :

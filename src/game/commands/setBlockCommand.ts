@@ -40,7 +40,7 @@ function setBlockCommand(args: any[], player: Player, game: Game){
         }
 
         cell.setBlock(val, game);
-        
+
         game.chatManager.sendMessageTo(player, `set block ${args[1]}, ${args[2]} to ${val}`);
     }else{
         const startx = Math.min(args[1], args[3]);

@@ -43,7 +43,7 @@ class ScaredComponent extends Component<EntityDefinition> {
     /** Returns a new run target postion given the current entity */
     getRunPosition(self: NonplayerEntity): Pos {
         if(self.lasthitby === undefined) return {x: self.x, y: self.y};
-        
+
         self.speedmultiplier = this.speedmultiplier;
 
         const dir = Math.atan2(self.lasthitby.x - self.x, self.y - self.lasthitby.y);

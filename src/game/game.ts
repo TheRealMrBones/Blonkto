@@ -39,7 +39,7 @@ class Game {
     readonly performanceManager: PerformanceManager;
     readonly collisionManager: CollisionManager;
     readonly craftManager: CraftManager;
-    
+
     private readonly saveinterval: NodeJS.Timeout;
     private readonly backupinterval: NodeJS.Timeout;
 
@@ -71,7 +71,7 @@ class Game {
         }else{
             this.lifeticks = 0;
         }
-        
+
         // world
         this.world = new World(this);
         this.world.generateSpawn();
@@ -80,7 +80,7 @@ class Game {
         this.lastupdatetime = Date.now();
         this.starttime = Date.now();
         this.nextupdatetime = Date.now();
-        
+
         this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
         setTimeout(this.tick.bind(this), 1);
@@ -208,7 +208,7 @@ class Game {
     /** Saves all of the currently loaded world data to the save */
     saveGame(): void {
         this.logger.info("Saving game");
-        
+
         // save global game data
         const gamedata: SerializedWriteGame = {
             lifeticks: this.lifeticks,
@@ -220,7 +220,7 @@ class Game {
 
         // saves all of the players data
         this.playerManager.savePlayers();
-        
+
         this.logger.info("Game saved");
     }
 
@@ -239,7 +239,7 @@ class Game {
         this.fileManager.copyFile("game", `${backupDir}/game`);
         this.fileManager.copyDirectory("world", `${backupDir}/world`);
         this.fileManager.copyDirectory("players", `${backupDir}/players`);
-        
+
         this.logger.info("Game backed up");
     }
 

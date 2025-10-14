@@ -6,7 +6,7 @@ class PerlinNoise {
     private readonly rng: SeededRandom;
     private readonly xhash: number;
     private readonly yhash: number;
-    
+
     private readonly scale: number;
 
     constructor(seed: number, scale: number) {

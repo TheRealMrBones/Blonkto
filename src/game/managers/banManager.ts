@@ -11,7 +11,7 @@ class BanManager {
         this.load();
         this.save();
     }
-    
+
     // #region setters
 
     /** Adds a user to the ban list */
@@ -33,7 +33,7 @@ class BanManager {
     }
 
     // #endregion
-    
+
     // #region getters
 
     /** Checks if a given user is banned */
@@ -57,7 +57,7 @@ class BanManager {
     }
 
     // #endregion
-    
+
     // #region saving
 
     /** Loads the ban list from the save */

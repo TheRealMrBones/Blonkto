@@ -43,7 +43,7 @@ class Inventory implements IInventory {
     // #endregion
 
     // #region inventory operations
-    
+
     /** Drops this entire inventory onto the ground */
     dropInventory(layer: Layer, x: number, y: number, game: Game): void {
         for(let i = 0; i < this.size; i++){
@@ -71,7 +71,7 @@ class Inventory implements IInventory {
     collectItem(item: string, amount?: number): number {
         const stacksize = ItemRegistry.get(item).getStackSize();
         let itemamount = amount || 1;
-        
+
         for(let i = 0; i < this.size && itemamount > 0; i++){
             const itemstack = this.slots[i];
             if(itemstack != null){
@@ -170,7 +170,7 @@ class Inventory implements IInventory {
             if(amount > this.slots[slot].getAmount()) amount = this.slots[slot].getAmount();
 
             DroppedStack.dropWithSpread(game, layer, x, y, new ItemStack(this.slots[slot].definition.key, amount), .3, ignore);
-            
+
             if(this.slots[slot].removeAmount(amount)) this.slots[slot] = null;
         }
     }
@@ -179,7 +179,7 @@ class Inventory implements IInventory {
     swapSlots(slot1: number, slot2: number): void {
         const item1 = this.getSlot(slot1);
         const item2 = this.getSlot(slot2);
-        
+
         this.setSlot(slot2, item1);
         this.setSlot(slot1, item2);
     }

@@ -51,7 +51,7 @@ class MoveTargetComponent extends Component<EntityDefinition> {
 
             self.dir = Math.atan2(targetpos.x - self.x, self.y - targetpos.y);
             const dist = self.distanceTo(targetpos);
-            
+
             if(dist <= movedist){
                 self.x = targetpos.x;
                 self.y = targetpos.y;

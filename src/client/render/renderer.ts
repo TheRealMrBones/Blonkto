@@ -96,13 +96,13 @@ class Renderer {
     /** Calculates the current fps being rendered by the client */
     calculatefps(): void {
         if(this.fpscount == 0) this.uiManager.updateFps(0); else this.uiManager.updateFps(this.fpstotal / this.fpscount);
-        
+
         this.fpstotal = 0;
         this.fpscount = 0;
     }
 
     // #endregion
-    
+
     // #region main render
 
     /** Main render method for rendering the current (interpolated as needed) state of the loaded game world */
@@ -123,7 +123,7 @@ class Renderer {
         // get object states (for deciding rendering order)
         const fallingplayers = others.filter((o: any) => o.falling);
         const notfallingplayers = others.filter((o: any) => !o.falling);
-        
+
         if(this.playerclient.getGamemode() != GAME_MODES.SPECTATOR){
             if(me.falling){
                 fallingplayers.push(me);
@@ -158,12 +158,12 @@ class Renderer {
 
         notfallingentities.forEach((e: any) => this.renderEntity(me, e));
         notfallingplayers.forEach((p: any) => this.renderPlayer(me, p));
-        
+
         this.renderBlocks(firstCell, false);
 
         this.renderReach();
         this.renderDarkness(darkness, firstCell);
-        
+
         others.forEach((p: any) => this.renderPlayerUsername(me, p));
 
         // draw frame on render canvas
@@ -231,10 +231,10 @@ class Renderer {
         const renderoffset = ((1 - scale) / 2) * this.cellsize;
         x = x + renderoffset - 1;
         y = y + renderoffset - 1;
-        
+
         const model = this.assetManager.getAsset(asset, (this.cellsize) * scale + 2);
         if(model === null) return;
-        
+
         this.context.drawImage(
             model,
             x,
@@ -258,10 +258,10 @@ class Renderer {
         this.context.save();
         this.context.translate(canvasX, canvasY);
         this.context.rotate(dir);
-        
+
         // get model
         const model = entity.hit ? this.assetManager.getAsset(entity.asset, this.cellsize * scale, HIT_COLOR) : this.assetManager.getAsset(entity.asset, this.cellsize * scale);
-        
+
         // draw entity
         if(model !== null) this.context.drawImage(
             model,
@@ -345,7 +345,7 @@ class Renderer {
         this.context.beginPath();
         this.context.arc(centerX, centerY, radius, startAngle, endAngle);
         this.context.strokeStyle = "rgba(190, 190, 190, 0.35)";
-        
+
         this.context.lineWidth = 10;
         this.context.closePath();
         this.context.stroke();
@@ -372,7 +372,7 @@ class Renderer {
         this.darknesscontext.translate(canvasX, canvasY);
         this.darknesscontext.globalCompositeOperation = "destination-out";
         this.darknesscontext.fillStyle = "rgba(0, 0, 0, 1.0)";
-        
+
         const padding = 10;
         for(let dx = -padding; dx < CELLS_HORIZONTAL + padding; dx++){
             for(let dy = -padding; dy < CELLS_VERTICAL + padding; dy++){
@@ -425,7 +425,7 @@ class Renderer {
         const extraspace = (scale - this.canvas.height) / 2;
         const xoffset = xpercent * extraspace;
         const yoffset = ypercent * extraspace;
-        
+
         const model = this.assetManager.getAsset(ASSETS.SPACE_BG, scale, undefined, true);
         if(model === null) return;
 

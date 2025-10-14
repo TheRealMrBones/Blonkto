@@ -24,13 +24,13 @@ const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
 class Layer {
     private readonly logger: Logger;
-    
+
     private readonly game: Game;
     readonly world: World;
 
     readonly z: number;
     readonly seed: number;
-    
+
     readonly layergenerator: ILayerGenerator;
     readonly layerspawner: ILayerSpawner;
 
@@ -50,7 +50,7 @@ class Layer {
         this.z = z;
 
         this.seed = multiNumberHash(this.z, this.world.seed);
-        
+
         this.layergenerator = layergenerator;
         this.layerspawner = layerspawner;
 
@@ -75,11 +75,11 @@ class Layer {
         for(const chunk of this.loadedchunks.values()){
             chunk.tick(this.game, dt);
         }
-        
+
         // tick layer spawning
         this.layerspawner.tickSpawning(this, this.game);
     }
-    
+
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
     tickChunkUnloader(activechunks: { x: number; y: number; }[]): void {
         for(const c of this.loadedchunks.values()){
@@ -265,7 +265,7 @@ class Layer {
                 const loadedchunk = this.loadChunk(x, y);
                 if(loadedchunk !== null) return loadedchunk;
             }
-            
+
             // if no loaded chunk then generate a new chunk
             return this.generateChunk(x, y);
         }else{
@@ -384,7 +384,7 @@ class Layer {
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
         const celly = y - chunky * CHUNK_SIZE;
-    
+
         const chunk = this.getChunk(chunkx, chunky, canloadnew);
         return chunk ? chunk.cells[cellx][celly] : null;
     }
@@ -392,7 +392,7 @@ class Layer {
     /** Returns if the requested cell is empty (has no blocks or objects on it) */
     cellEmpty(x: number, y: number): boolean {
         const chunk = { x: Math.floor(x / CHUNK_SIZE), y: Math.floor(y / CHUNK_SIZE) };
-        
+
         let empty = true;
         for(const e of this.entityManager.getAllObjects()){
             if(Math.abs(e.getChunk().x - chunk.x) <= 1 && Math.abs(e.getChunk().y - chunk.y) <= 1){
@@ -406,7 +406,7 @@ class Layer {
     // #endregion
 
     // #region helpers
-    
+
     /** Returns the key of the given chunk based on its x and y */
     static getChunkKey(x: number, y: number): string {
         return [x,y].toString();

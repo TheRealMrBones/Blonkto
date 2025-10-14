@@ -151,7 +151,7 @@ class UiManager {
     /** Handles chat UI related focus events */
     private chatInputFocus(event: FocusEvent): void {
         if(this.inventoryopen) this.closeInventory();
-        
+
         this.playerclient.inputManager.pauseCapturingInputs();
         window.removeEventListener("keydown", this.keyDownChecksListener);
         window.removeEventListener("keyup", this.keyUpChecksListener);

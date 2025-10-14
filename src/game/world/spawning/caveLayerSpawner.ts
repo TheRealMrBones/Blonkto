@@ -27,7 +27,7 @@ class CaveLayerSpawner implements ILayerSpawner {
 
             const dir = Math.random() * Math.PI * 2;
             const dist = Math.sqrt(CELLS_HORIZONTAL * CELLS_HORIZONTAL + CELLS_VERTICAL * CELLS_VERTICAL) / 2 + 1;
-            
+
             for(let triesdist = 0; triesdist < 5; triesdist++){
                 const spawnx = p.x + Math.cos(dir) * (dist + triesdist);
                 const spawny = p.y + Math.sin(dir) * (dist + triesdist);
@@ -37,7 +37,7 @@ class CaveLayerSpawner implements ILayerSpawner {
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);
                 const cell = layer.getCell(cellx, celly, false);
-                
+
                 if(cell === null) continue;
                 if(cell.block !== null) continue;
 
@@ -50,15 +50,15 @@ class CaveLayerSpawner implements ILayerSpawner {
             }
         }
     }
-    
+
     /** Populates the given newly generated chunk */
     populateChunk(chunk: Chunk, game: Game): void {
-        
+
     }
-    
+
     /** Does repopulate checks on the given loaded chunk */
     repopulateChunk(chunk: Chunk, game: Game, entitiesdata: any[]): void {
-        
+
     }
 }
 

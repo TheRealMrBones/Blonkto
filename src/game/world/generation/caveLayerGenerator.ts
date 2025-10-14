@@ -32,7 +32,7 @@ class CaveLayerGenerator implements ILayerGenerator {
                 }else{
                     cell.setBlock("stone_block", game);
                 }
-                
+
                 chunk.cells[x][y] = cell;
             }
         }
@@ -67,7 +67,7 @@ class CaveLayerGenerator implements ILayerGenerator {
             for(let dy = -size; dy <= size; dy++){
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if(dist > size + .5) continue;
-                
+
                 const relativex = cavex + dx - chunk.chunkx * CHUNK_SIZE;
                 const relativey = cavey + dy - chunk.chunky * CHUNK_SIZE;
                 if(relativex < 0 || relativex >= CHUNK_SIZE || relativey < 0 || relativey >= CHUNK_SIZE) continue;

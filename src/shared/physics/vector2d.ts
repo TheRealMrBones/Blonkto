@@ -43,7 +43,7 @@ class V2D {
     static getOrthogonal(vector: Vector2D): Vector2D {
         return [-vector[1], vector[0]];
     }
-    
+
     // #endregion
 
     // #region scalar operations

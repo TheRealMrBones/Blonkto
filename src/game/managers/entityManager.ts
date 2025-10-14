@@ -21,7 +21,7 @@ class EntityManager {
     private readonly objects: Map<string, GameObject> = new Map<string, GameObject>();
     private readonly nonplayerentities: Map<string, NonplayerEntity> = new Map<string, NonplayerEntity>();
     private readonly players: Map<string, Player> = new Map<string, Player>();
-    
+
     private readonly allobjects: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities, this.players]);
     private readonly entities: CombinedMapIterator<Entity> = new CombinedMapIterator<Entity>([this.nonplayerentities, this.players]);
     private readonly nonplayers: CombinedMapIterator<GameObject> = new CombinedMapIterator<GameObject>([this.objects, this.nonplayerentities]);
@@ -123,7 +123,7 @@ class EntityManager {
     getPlayerEntityCount(): number {
         return this.players.size;
     }
-    
+
     // #endregion
 
     // #region setters
@@ -220,7 +220,7 @@ class CombinedMapIterator<T> {
     *[Symbol.iterator](): Iterator<T> {
         for(let m = 0; m < this.maps.length; m++){
             const map = this.maps[m];
-            
+
             for(const v of map.values()){
                 yield v;
             }

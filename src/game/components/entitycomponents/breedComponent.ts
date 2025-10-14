@@ -74,7 +74,7 @@ class BreedComponent extends Component<EntityDefinition> {
     /** Defines the breed action of an entity with this component after colliding with another entity */
     breed(self: NonplayerEntity, game: Game, entity: Entity, push: Vector2D): void {
         const data = self.getComponentData(BreedComponentData);
-        
+
         if(data.target === entity && data.breedstart == 0)
             data.breedstart = Date.now();
     }
@@ -111,7 +111,7 @@ class BreedComponent extends Component<EntityDefinition> {
             data.target = null;
             return;
         }
-        
+
         targetdata.setQueue(5, [this.getRunPosition(target)]);
     }
 

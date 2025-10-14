@@ -41,7 +41,7 @@ class EntityDefinition extends ComponentHandler<EntityDefinition> {
     dropItems(self: NonplayerEntity, game: Game): void {
         if(this.drops != null) this.drops.drop(self.layer, self.x, self.y, game);
     }
-    
+
     // #region events
 
     /** Registers a listener to this entity definitions event handler */

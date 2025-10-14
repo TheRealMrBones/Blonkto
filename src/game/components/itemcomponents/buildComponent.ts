@@ -36,7 +36,7 @@ class BuildComponent extends Component<ItemDefinition> {
 
         if(info.cell === null) return;
         if(info.cell.floor === null) return;
-        
+
         if(this.floorrequirements.length > 0){
             for(const requirement of this.floorrequirements){
                 if(!info.cell.floor.definition.hasComponent(requirement)) return;

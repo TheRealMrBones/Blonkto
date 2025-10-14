@@ -16,7 +16,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> {
     readonly asset: string;
     readonly drops: IDrop | null;
     readonly hardness: number;
-    
+
     private eventEmitter: EventEmitter = new EventEmitter();
 
     constructor(key: string, displayname: string, asset: string | null, drops?: IDrop, hardness?: number){

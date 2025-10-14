@@ -19,6 +19,7 @@ export default [
             "no-unused-vars": "off",
             "no-prototype-builtins": "off",
             "prefer-const": "error",
+            "no-trailing-spaces": "error",
             "indent": ["error", 4, { "SwitchCase": 1 }],
             "semi": ["error", "always"],
             "quotes": ["error", "double"],
