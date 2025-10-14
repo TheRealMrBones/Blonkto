@@ -83,7 +83,7 @@ class CollisionManager {
         }
 
         object.push(push[0], push[1]);
-    };
+    }
 
     /** Checks for dropped stacks that the given player can pick up */
     collectCheck(player: Player): void {
@@ -107,7 +107,7 @@ class CollisionManager {
 
             if(removeignore) collectable.ignore = null;
         }
-    };
+    }
 
     /** Checks for dropped stacks that the given dropped stack can merge with */
     itemMergeCheck(collectable: DroppedStack): void {
@@ -126,7 +126,7 @@ class CollisionManager {
                 }
             }
         }
-    };
+    }
 
     /** Checks for entities that an attacking entity hits and damages them */
     attackHitCheck(entity: Entity, attackdir: number, swingdata: SwingData): void {
@@ -159,7 +159,7 @@ class CollisionManager {
                 entity2.pushOverTime(push[0], push[1], .2);
             }
         }
-    };
+    }
 }
 
 export default CollisionManager;
