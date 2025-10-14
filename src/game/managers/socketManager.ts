@@ -73,7 +73,7 @@ class SocketManager {
             }
             
             // default swing action
-            player.startSwing(newinfo.dir, 1);
+            player.startSwing(newinfo.dir, { damage: 1, knockback: .25 });
         }
     }
 

@@ -1,6 +1,7 @@
 import GameObject from "./gameObject.js";
 import Layer from "../world/layer.js";
 import Game from "../game.js";
+import { SwingData } from "../combat/swingData.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -16,9 +17,9 @@ abstract class Entity extends GameObject {
     lasthitby: Entity | undefined = undefined;
     swinging: boolean = false;
     swinginginterval: NodeJS.Timeout | null = null;
+    swingdata: SwingData | null = null;
     lastattack: number = 0;
     lastattackdir: number = 0;
-    lastattackdamage: number = 0;
 
     private godmode: boolean = false;
 
@@ -59,7 +60,7 @@ abstract class Entity extends GameObject {
         super.emitTickEvent(game, dt);
 
         const player = this.layer.entityManager.getPlayer(this.id)!;
-        if(this.swinging) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.lastattackdamage);
+        if(this.swinging && this.swingdata !== null) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.swingdata);
     }
 
     // #endregion
@@ -110,17 +111,18 @@ abstract class Entity extends GameObject {
     }
 
     /** Starts an attack swing for this entity */
-    startSwing(dir: number, damage: number): void {
+    startSwing(dir: number, swingdata: SwingData): void {
         this.swinging = true;
         this.lastattack = Date.now();
         this.lastattackdir = dir;
-        this.lastattackdamage = damage;
+        this.swingdata = swingdata;
         this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
     }
 
     /** Ends the current attack swing if it is going on */
     private endSwing(): void {
         this.swinging = false;
+        this.swingdata = null;
         if(this.swinginginterval != null) clearInterval(this.swinginginterval);
     }
 

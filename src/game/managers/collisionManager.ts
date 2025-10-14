@@ -10,6 +10,7 @@ import { checkCollision, getCellCollisionObject, getCollisionPush } from "../../
 import CollisionObject from "../../shared/physics/collisionObject.js";
 import { Vector2D } from "../../shared/types.js";
 import V2D from "../../shared/physics/vector2d.js";
+import { SwingData } from "../combat/swingData.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
@@ -128,7 +129,7 @@ class CollisionManager {
     };
 
     /** Checks for entities that an attacking entity hits and damages them */
-    attackHitCheck(entity: Entity, attackdir: number, damage: number): void {
+    attackHitCheck(entity: Entity, attackdir: number, swingdata: SwingData): void {
         const entities = entity.layer.entityManager.getEntities();
         
         const attackpos = {
@@ -152,7 +153,10 @@ class CollisionManager {
                     killer = entity.username;
                 }
 
-                entity2.takeHit(this.game, damage, killer, entity);
+                entity2.takeHit(this.game, swingdata.damage, killer, entity);
+
+                const push = V2D.multiplyScalar(V2D.getUnitVector(V2D.subtract([entity2.x, entity2.y], [entity.x, entity.y])), swingdata.knockback);
+                entity2.push(push[0], push[1]);
             }
         }
     };
