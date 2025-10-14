@@ -40,6 +40,9 @@ class InputManager {
     private startd: number | null = null;
     private interval: NodeJS.Timeout | null = null;
 
+    private mousex: number = 0;
+    private mousey: number = 0;
+
     private selectedslot = 0;
     private hotbarslot = 0;
     private hotbarpaused = false;
@@ -95,12 +98,10 @@ class InputManager {
 
     /** Response to mouse input from client */
     private onMouseInput(e: MouseEvent): void {
-        this.handleDirection(e.clientX, e.clientY);
-    }
+        this.mousex = e.clientX;
+        this.mousey = e.clientY;
 
-    /** Sets the client direction based on mouse/touch screen position */
-    private handleDirection(x: number, y: number): void {
-        this.dir = Math.atan2(x - window.innerWidth / 2, window.innerHeight / 2 - y);
+        this.dir = Math.atan2(this.mousex - window.innerWidth / 2, window.innerHeight / 2 - this.mousey);
     }
 
     // #endregion
@@ -144,6 +145,16 @@ class InputManager {
                 };
                 this.playerclient.networkingManager.drop(content);
                 break;
+            }
+            case "f": {
+                const content: ClickContent = {
+                    xoffset: (this.mousex - window.innerWidth / 2) / this.playerclient.renderer.getCellSize(),
+                    yoffset: (this.mousey - window.innerHeight / 2) / this.playerclient.renderer.getCellSize(),
+                    mex: this.x,
+                    mey: this.y,
+                };
+
+                this.playerclient.networkingManager.interact(content);
             }
         }
 
