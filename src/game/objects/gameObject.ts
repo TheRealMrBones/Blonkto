@@ -15,6 +15,7 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
 const { FALL_RATE } = ServerConfig.OBJECT;
+const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 
 /** The base class for any simulated object (something that ticks) in the game world */
 abstract class GameObject {
@@ -70,6 +71,22 @@ abstract class GameObject {
     push(x: number, y: number): void {
         this.x += x;
         this.y += y;
+    }
+
+    /** Pushes the object the given distances over the given amount of time */
+    pushOverTime(x: number, y: number, t: number): void {
+        this.dx += x / t;
+        this.dy += y / t;
+
+        setTimeout(() => {
+            this.endPushOverTime(x, y, t);
+        }, t * 1000);
+    }
+
+    /** Ends a push over time of the given distances */
+    private endPushOverTime(x: number, y: number, t: number): void {
+        this.dx -= x / t;
+        this.dy -= y / t;
     }
 
     /** Sets the objects position to the given values */

@@ -156,7 +156,7 @@ class CollisionManager {
                 entity2.takeHit(this.game, swingdata.damage, killer, entity);
 
                 const push = V2D.multiplyScalar(V2D.getUnitVector(V2D.subtract([entity2.x, entity2.y], [entity.x, entity.y])), swingdata.knockback);
-                entity2.push(push[0], push[1]);
+                entity2.pushOverTime(push[0], push[1], .2);
             }
         }
     };
