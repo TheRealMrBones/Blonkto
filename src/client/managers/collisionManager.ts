@@ -35,7 +35,7 @@ class CollisionManager {
                 if(newpush !== null) push = V2D.add(push, newpush);
             }
 
-            this.playerclient.inputManager.clientPush(push[0], push[1]);
+            if(push[0] != 0 || push[1] != 0) this.playerclient.inputManager.clientPush(push[0], push[1]);
         }
     }
 }

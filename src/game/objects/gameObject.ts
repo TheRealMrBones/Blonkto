@@ -192,9 +192,9 @@ abstract class GameObject {
     }
 
     /** Returns the tiles that this object is on */
-    tilesOn(): Pos[] {
+    tilesOn(strict?: boolean): Pos[] {
         const points = [];
-        const posoffset = (this.scale / 2) - .01; // offset so barely touching tiles are not counted
+        const posoffset = strict ? 0 : (this.scale / 2) - .01; // offset so barely touching tiles are not counted
         
         // get all integer coordinate points that are within object
         for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){

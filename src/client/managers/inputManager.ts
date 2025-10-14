@@ -405,33 +405,33 @@ class InputManager {
     }
 
     /** Returns the coordinates of the tiles that the player is on */
-    tilesOn(): Vector2D[] {
+    tilesOn(strict?: boolean): Vector2D[] {
         const points = [];
-        const posoffset = (this.scale / 2) - .01; // offset so barely touching tiles are not counted
+        const posoffset = strict ? 0 : (this.scale / 2) - .01; // offset so barely touching tiles are not counted
         
         // get all integer coordinate points that are within object
-        for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){
-            for(let y = Math.floor(this.y - posoffset); y < this.y + posoffset; y++){
-                const dist = Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
+        for(let x = Math.floor(this.x + this.dx - posoffset); x < this.x + this.dx + posoffset; x++){
+            for(let y = Math.floor(this.y + this.dy - posoffset); y < this.y + this.dy + posoffset; y++){
+                const dist = Math.sqrt(Math.pow(this.x + this.dx - x, 2) + Math.pow(this.y + this.dy - y, 2));
                 if(dist <= posoffset) points.push([x, y]);
             }
         }
 
         // start tile array
-        const tiles: Vector2D[] = [[Math.floor(this.x), Math.floor(this.y)]]; // include known center tile
+        const tiles: Vector2D[] = [[Math.floor(this.x + this.dx), Math.floor(this.y + this.dy)]]; // include known center tile
 
         // include tiles hit by each main axis end of the object
-        if(Math.floor(this.x - posoffset) != Math.floor(this.x)){
-            tiles.push([Math.floor(this.x - posoffset), Math.floor(this.y)]);
+        if(Math.floor(this.x + this.dx - posoffset) != Math.floor(this.x + this.dx)){
+            tiles.push([Math.floor(this.x + this.dx - posoffset), Math.floor(this.y + this.dy)]);
         }
-        if(Math.floor(this.x + posoffset) != Math.floor(this.x)){
-            tiles.push([Math.floor(this.x + posoffset), Math.floor(this.y)]);
+        if(Math.floor(this.x + this.dx + posoffset) != Math.floor(this.x + this.dx)){
+            tiles.push([Math.floor(this.x + this.dx + posoffset), Math.floor(this.y + this.dy)]);
         }
-        if(Math.floor(this.y - posoffset) != Math.floor(this.y)){
-            tiles.push([Math.floor(this.x), Math.floor(this.y - posoffset)]);
+        if(Math.floor(this.y + this.dy - posoffset) != Math.floor(this.y + this.dy)){
+            tiles.push([Math.floor(this.x + this.dx), Math.floor(this.y + this.dy - posoffset)]);
         }
-        if(Math.floor(this.y + posoffset) != Math.floor(this.y)){
-            tiles.push([Math.floor(this.x), Math.floor(this.y + posoffset)]);
+        if(Math.floor(this.y + this.dy + posoffset) != Math.floor(this.y + this.dy)){
+            tiles.push([Math.floor(this.x + this.dx), Math.floor(this.y + this.dy + posoffset)]);
         }
 
         // get a list of the corresponding points that the points are touching
