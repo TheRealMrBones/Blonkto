@@ -10,7 +10,7 @@ import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
 import { SerializedWriteInventory } from "../items/inventory/inventory.js";
-import { Color, Pos } from "../../shared/types.js";
+import { Color, Vector2D } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
 
@@ -37,14 +37,14 @@ class Player extends Entity {
     private inventory: ChangesInventory;
     hotbarslot: number = 0;
     station: Station | null = null;
-    lastchunk: Pos | undefined;
+    lastchunk: Vector2D | undefined;
     recipes: Recipe[] = [];
     moving: boolean = false;
     statereset: boolean = false;
 
     pushx: number = 0;
     pushy: number = 0;
-    setpos: Pos | null = null;
+    setpos: Vector2D | null = null;
     lastsetpos: number = 0;
     setgamemode: boolean = false;
     setcolor: boolean = false;
@@ -135,10 +135,7 @@ class Player extends Entity {
     /** Sets the players position to the given values */
     override setPos(x: number, y: number): void {
         super.setPos(x, y);
-        this.setpos = {
-            x: x,
-            y: y
-        };
+        this.setpos = [x, y];
 
         this.pushx = 0;
         this.pushy = 0;
@@ -227,7 +224,7 @@ class Player extends Entity {
         const maxmovedist = (this.getSpeed() * deltatime / 1000) + allowederror;
 
         if(this.lastsetpos > data.lastserverupdate){
-            // ignore if setpos happened in future for client
+            // ignore if setVector2D happened in future for client
         }else if(data.dx > maxmovedist || data.dy > maxmovedist){
             // player moved too fast compared to known speed
             this.logger.info(`Player "${this.username}" moved too fast! Resyncing...`);

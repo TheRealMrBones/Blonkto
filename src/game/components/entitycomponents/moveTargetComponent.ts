@@ -1,7 +1,7 @@
 import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
-import { Pos } from "../../../shared/types.js";
+import { Vector2D } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import ComponentData from "../componentData.js";
 
@@ -49,12 +49,12 @@ class MoveTargetComponent extends Component<EntityDefinition> {
                 data.startofcurrenttarget = Date.now();
             }
 
-            self.dir = Math.atan2(targetpos.x - self.x, self.y - targetpos.y);
+            self.dir = Math.atan2(targetpos[0] - self.x, self.y - targetpos[1]);
             const dist = self.distanceTo(targetpos);
 
             if(dist <= movedist){
-                self.x = targetpos.x;
-                self.y = targetpos.y;
+                self.x = targetpos[0];
+                self.y = targetpos[1];
                 movedist -= dist;
                 data.targetposqueue.shift();
             }else{
@@ -67,14 +67,14 @@ class MoveTargetComponent extends Component<EntityDefinition> {
 }
 
 export class MoveTargetComponentData extends ComponentData<MoveTargetComponent> {
-    targetposqueue: Pos[] = [];
-    currenttarget: Pos | null = null;
+    targetposqueue: Vector2D[] = [];
+    currenttarget: Vector2D | null = null;
     startofcurrenttarget: number | null = null;
     blocked: boolean = false;
     currentpriotity: number = 0;
 
     /** Sets the targetposqueue if priority is higher or equal */
-    setQueue(priority: number, queue: Pos[]): boolean {
+    setQueue(priority: number, queue: Vector2D[]): boolean {
         if(priority < this.currentpriotity && !this.queueEmpty()) return false;
         this.currentpriotity = priority;
 

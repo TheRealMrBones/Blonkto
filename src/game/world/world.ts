@@ -3,6 +3,7 @@ import Game from "../game.js";
 import Layer from "./layer.js";
 import Player from "../objects/player.js";
 import SeededRandom from "../../shared/random/seededRandom.js";
+import { Vector2D } from "../../shared/types.js";
 
 import LayerGenerator from "./generation/layerGenerator.js";
 import CaveLayerGenerator from "./generation/caveLayerGenerator.js";
@@ -89,7 +90,7 @@ class World {
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
     private tickChunkUnloader(): void {
         // prepare active chunks array
-        const activechunks: { x: number; y: number; }[][] = [];
+        const activechunks: Vector2D[][] = [];
         for(let i = 0; i < this.layers.length; i++){
             activechunks.push([]);
         }

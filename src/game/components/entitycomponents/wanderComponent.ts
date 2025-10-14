@@ -4,6 +4,7 @@ import EntityDefinition from "../../definitions/entityDefinition.js";
 import { pathfind } from "../../world/helpers/pathfind.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
+import { Vector2D } from "../../../shared/types.js";
 
 /** An Entity Component that makes this entity type wander to random nearby positions */
 class WanderComponent extends Component<EntityDefinition> {
@@ -32,23 +33,17 @@ class WanderComponent extends Component<EntityDefinition> {
             const lasttarget = targetdata.targetposqueue[targetdata.targetposqueue.length - 1];
             const currenttarget = targetdata.targetposqueue[0];
 
-            const lasttargetcell = {
-                x: Math.floor(lasttarget.x),
-                y: Math.floor(lasttarget.y),
-            };
-            const currenttargetcell = {
-                x: Math.floor(currenttarget.x),
-                y: Math.floor(currenttarget.y),
-            };
+            const lasttargetcell: Vector2D = [Math.floor(lasttarget[0]), Math.floor(lasttarget[1])];
+            const currenttargetcell: Vector2D = [Math.floor(currenttarget[0]), Math.floor(currenttarget[1])];
 
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: lasttargetcell.x, y: lasttargetcell.y }, self.layer, [currenttargetcell]);
+            const path = pathfind([Math.floor(self.x), Math.floor(self.y)], lasttargetcell, self.layer, [currenttargetcell]);
 
             targetdata.clearQueue();
             if(path !== null){
-                targetdata.setQueue(1, path.map(pos => ({
-                    x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
-                    y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
-                })));
+                targetdata.setQueue(1, path.map(pos => ([
+                    pos[0] + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                    pos[1] + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                ])));
                 targetdata.startofcurrenttarget = Date.now();
             }
 
@@ -74,13 +69,13 @@ class WanderComponent extends Component<EntityDefinition> {
             }
             if(!found) return;
 
-            const path = pathfind({ x: Math.floor(self.x), y: Math.floor(self.y) }, { x: cellx, y: celly }, self.layer);
+            const path = pathfind([Math.floor(self.x), Math.floor(self.y)], [cellx, celly], self.layer);
             if(path === null) return;
 
-            targetdata.setQueue(1, path.map(pos => ({
-                x: pos.x + .5 + (Math.random() * this.randomness - this.randomness / 2),
-                y: pos.y + .5 + (Math.random() * this.randomness - this.randomness / 2),
-            })));
+            targetdata.setQueue(1, path.map(pos => ([
+                pos[0] + .5 + (Math.random() * this.randomness - this.randomness / 2),
+                pos[1] + .5 + (Math.random() * this.randomness - this.randomness / 2),
+            ])));
         }
     }
 }

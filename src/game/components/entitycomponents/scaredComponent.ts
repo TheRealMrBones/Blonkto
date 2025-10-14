@@ -1,7 +1,7 @@
 import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
-import { Pos } from "../../../shared/types.js";
+import { Vector2D } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
 
@@ -29,7 +29,7 @@ class ScaredComponent extends Component<EntityDefinition> {
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
         if(!targetdata.queueEmpty() && self.distanceTo(targetdata.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
-            if(self.distanceTo(self.lasthitby) < this.distance){
+            if(self.distanceTo([self.lasthitby.x, self.lasthitby.y]) < this.distance){
                 targetdata.setQueue(10, [this.getRunPosition(self)]);
             }else{
                 targetdata.clearQueue();
@@ -41,8 +41,8 @@ class ScaredComponent extends Component<EntityDefinition> {
     }
 
     /** Returns a new run target postion given the current entity */
-    getRunPosition(self: NonplayerEntity): Pos {
-        if(self.lasthitby === undefined) return {x: self.x, y: self.y};
+    private getRunPosition(self: NonplayerEntity): Vector2D {
+        if(self.lasthitby === undefined) return [self.x, self.y];
 
         self.speedmultiplier = this.speedmultiplier;
 
@@ -50,10 +50,7 @@ class ScaredComponent extends Component<EntityDefinition> {
         const movex = -Math.sin(dir) * this.distance * 2;
         const movey = Math.cos(dir) * this.distance * 2;
 
-        return {
-            x: self.x + movex,
-            y: self.y + movey,
-        };
+        return [self.x + movex, self.y + movey];
     }
 }
 

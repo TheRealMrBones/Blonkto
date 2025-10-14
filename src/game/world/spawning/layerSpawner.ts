@@ -33,7 +33,7 @@ class LayerSpawner implements ILayerSpawner {
                 const spawnx = p.x + Math.cos(dir) * (dist + triesdist);
                 const spawny = p.y + Math.sin(dir) * (dist + triesdist);
 
-                if(players.some(p2 => p2.id != p.id && p2.distanceTo({ x: spawnx, y: spawny }) < dist)) continue;
+                if(players.some(p2 => p2.id != p.id && p2.distanceTo([spawnx, spawny]) < dist)) continue;
 
                 const cellx = Math.floor(spawnx);
                 const celly = Math.floor(spawny);

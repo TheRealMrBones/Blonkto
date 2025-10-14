@@ -2,7 +2,7 @@ import Component from "../component.js";
 import Game from "../../game.js";
 import EntityDefinition from "../../definitions/entityDefinition.js";
 import Entity from "../../objects/entity.js";
-import { Pos, Vector2D } from "../../../shared/types.js";
+import { Vector2D } from "../../../shared/types.js";
 import NonplayerEntity from "../../objects/nonplayerEntity.js";
 import ComponentData from "../componentData.js";
 import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
@@ -59,7 +59,7 @@ class BreedComponent extends Component<EntityDefinition> {
         // look for target
         for(const entity of self.layer.entityManager.getNonplayerEntities()){
             if(entity.definition.key !== self.definition.key) continue;
-            if(self.distanceTo(entity) > this.distance) continue;
+            if(self.distanceTo([entity.x, entity.y]) > this.distance) continue;
             if(entity === self) continue;
 
             const otherdata = entity.getComponentData(BreedComponentData);
@@ -106,7 +106,7 @@ class BreedComponent extends Component<EntityDefinition> {
         const target = data.target;
         if(target === null) return;
 
-        if(self.distanceTo(target) >= this.distance * 2){
+        if(self.distanceTo([target.x, target.y]) >= this.distance * 2){
             targetdata.clearQueue();
             data.target = null;
             return;
@@ -116,11 +116,8 @@ class BreedComponent extends Component<EntityDefinition> {
     }
 
     /** Returns a new run target postion given the current target */
-    getRunPosition(target: Entity): Pos {
-        return {
-            x: target.x,
-            y: target.y,
-        };
+    getRunPosition(target: Entity): Vector2D {
+        return [target.x, target.y];
     }
 }
 

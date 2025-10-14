@@ -65,7 +65,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         if(data.target === null){
             let mindist = this.distance;
             for(const p of self.layer.entityManager.getPlayerEntities()){
-                const dist = self.distanceTo(p);
+                const dist = self.distanceTo([p.x, p.y]);
                 if(dist < mindist && p.isValidTarget()){
                     data.target = p;
                     mindist = dist;
@@ -76,7 +76,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         const target = data.target;
         if(target === null) return;
 
-        if(self.distanceTo(target) >= this.distance * 2){
+        if(self.distanceTo([target.x, target.y]) >= this.distance * 2){
             this.resetTarget(self, data, targetdata);
             return;
         }
@@ -94,10 +94,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
 
     /** Sets the run queue to move towards the targeted entity */
     setRunQueue(target: Entity, targetdata: MoveTargetComponentData): void {
-        targetdata.setQueue(10, [{
-            x: target.x,
-            y: target.y,
-        }]);
+        targetdata.setQueue(10, [[target.x, target.y]]);
     }
 }
 

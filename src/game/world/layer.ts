@@ -13,7 +13,8 @@ import NonplayerEntity from "../objects/nonplayerEntity.js";
 import BlockRegistry from "../registries/blockRegistry.js";
 import FloorRegistry from "../registries/floorRegistry.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
-import { Pos } from "../../shared/types.js";
+import V2D from "../../shared/physics/vector2d.js";
+import { Vector2D } from "../../shared/types.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -81,9 +82,9 @@ class Layer {
     }
 
     /** Unloads all previously loaded chunks that are not actively being loaded by a player */
-    tickChunkUnloader(activechunks: { x: number; y: number; }[]): void {
+    tickChunkUnloader(activechunks: Vector2D[]): void {
         for(const c of this.loadedchunks.values()){
-            if(!activechunks.find(ac => ac.x == c.chunkx && ac.y == c.chunky))
+            if(!activechunks.find(ac => ac[0] == c.chunkx && ac[1] == c.chunky))
                 this.unloadChunk(c.chunkx, c.chunky);
         }
     }
@@ -106,44 +107,44 @@ class Layer {
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
         const lastchunk = player.lastchunk;
-        player.lastchunk = { x: x, y: y };
+        player.lastchunk = [x, y];
 
-        // get positions of new and old chunks
-        const newChunks = [
-            { x: x, y: y},
-            { x: x, y: y - 1},
-            { x: x, y: y + 1},
-            { x: x - 1, y: y},
-            { x: x - 1, y: y - 1},
-            { x: x - 1, y: y + 1},
-            { x: x + 1, y: y},
-            { x: x + 1, y: y - 1},
-            { x: x + 1, y: y + 1},
+        // get Vector2Ditions of new and old chunks
+        const newChunks: Vector2D[] = [
+            [x, y],
+            [x, y - 1],
+            [x, y + 1],
+            [x - 1, y],
+            [x - 1, y - 1],
+            [x - 1, y + 1],
+            [x + 1, y],
+            [x + 1, y - 1],
+            [x + 1, y + 1],
         ];
-        const oldChunks = lastchunk === undefined ? [] : [
-            { x: lastchunk.x, y: lastchunk.y},
-            { x: lastchunk.x, y: lastchunk.y - 1},
-            { x: lastchunk.x, y: lastchunk.y + 1},
-            { x: lastchunk.x - 1, y: lastchunk.y},
-            { x: lastchunk.x - 1, y: lastchunk.y - 1},
-            { x: lastchunk.x - 1, y: lastchunk.y + 1},
-            { x: lastchunk.x + 1, y: lastchunk.y},
-            { x: lastchunk.x + 1, y: lastchunk.y - 1},
-            { x: lastchunk.x + 1, y: lastchunk.y + 1},
+        const oldChunks: Vector2D[] = lastchunk === undefined ? [] : [
+            [lastchunk[0], lastchunk[1]],
+            [lastchunk[0], lastchunk[1] - 1],
+            [lastchunk[0], lastchunk[1] + 1],
+            [lastchunk[0] - 1, lastchunk[1]],
+            [lastchunk[0] - 1, lastchunk[1] - 1],
+            [lastchunk[0] - 1, lastchunk[1] + 1],
+            [lastchunk[0] + 1, lastchunk[1]],
+            [lastchunk[0] + 1, lastchunk[1] - 1],
+            [lastchunk[0] + 1, lastchunk[1] + 1],
         ];
 
         // get chunks that are in both
-        const sameChunks: Pos[] = [];
+        const sameChunks: Vector2D[] = [];
         newChunks.forEach(nc => {
             oldChunks.forEach(oc => {
-                if(nc.x == oc.x && nc.y == oc.y) sameChunks.push(nc);
+                if(V2D.areEqual(nc, oc)) sameChunks.push(nc);
             });
         });
 
         // send chunk updates for same chunks
         const updatedcells: { data: any; x: number; y: number; }[] = [];
         sameChunks.forEach(sc => {
-            const chunk = this.getChunk(sc.x, sc.y, false);
+            const chunk = this.getChunk(sc[0], sc[1], false);
             if(chunk !== null){
                 chunk.cellupdates.forEach(cellupdate => {
                     const cell = this.getCell(cellupdate.x, cellupdate.y, false);
@@ -167,20 +168,20 @@ class Layer {
         });
 
         // compare new and old chunks to same chunks to find which ones to load and unload
-        const loadChunks: Pos[] = [];
-        const unloadChunks: Pos[] = [];
+        const loadChunks: Vector2D[] = [];
+        const unloadChunks: Vector2D[] = [];
 
         newChunks.forEach(nc => {
             let isNew = true;
             sameChunks.forEach(sc => {
-                if(nc.x == sc.x && nc.y == sc.y) isNew = false;
+                if(V2D.areEqual(nc, sc)) isNew = false;
             });
             if(isNew) loadChunks.push(nc);
         });
         oldChunks.forEach(oc => {
             let isOld = true;
             sameChunks.forEach(sc => {
-                if(oc.x == sc.x && oc.y == sc.y) isOld = false;
+                if(V2D.areEqual(oc, sc)) isOld = false;
             });
             if(isOld) unloadChunks.push(oc);
         });
@@ -189,7 +190,7 @@ class Layer {
         const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
 
         loadChunks.forEach(lc => {
-            const chunk = this.getChunk(lc.x, lc.y, true);
+            const chunk = this.getChunk(lc[0], lc[1], true);
             if(chunk !== null){
                 const serializedchunk = chunk.serializeForLoad();
                 loadChunksSerialized.push(serializedchunk);
@@ -232,19 +233,19 @@ class Layer {
     }
 
     /** Returns the list of chunks the given player has loaded */
-    getPlayerChunks(player: Player): Pos[] {
+    getPlayerChunks(player: Player): Vector2D[] {
         const playerchunk = player.getChunk();
 
         return [
-            { x: playerchunk.x, y: playerchunk.y},
-            { x: playerchunk.x, y: playerchunk.y - 1},
-            { x: playerchunk.x, y: playerchunk.y + 1},
-            { x: playerchunk.x - 1, y: playerchunk.y},
-            { x: playerchunk.x - 1, y: playerchunk.y - 1},
-            { x: playerchunk.x - 1, y: playerchunk.y + 1},
-            { x: playerchunk.x + 1, y: playerchunk.y},
-            { x: playerchunk.x + 1, y: playerchunk.y - 1},
-            { x: playerchunk.x + 1, y: playerchunk.y + 1},
+            [playerchunk[0], playerchunk[1]],
+            [playerchunk[0], playerchunk[1] - 1],
+            [playerchunk[0], playerchunk[1] + 1],
+            [playerchunk[0] - 1, playerchunk[1]],
+            [playerchunk[0] - 1, playerchunk[1] - 1],
+            [playerchunk[0] - 1, playerchunk[1] + 1],
+            [playerchunk[0] + 1, playerchunk[1]],
+            [playerchunk[0] + 1, playerchunk[1] - 1],
+            [playerchunk[0] + 1, playerchunk[1] + 1],
         ];
     }
 
@@ -252,7 +253,7 @@ class Layer {
 
     // #region Chunks
 
-    /** Returns the requested chunk object if possible or null otherwise */
+    /** Returns the requested chunk object if Vector2Dsible or null otherwise */
     getChunk(x: number, y: number, canloadnew: boolean): Chunk | null {
         const chunkkey = Layer.getChunkKey(x, y);
         const chunk = this.loadedchunks.get(chunkkey);
@@ -285,7 +286,7 @@ class Layer {
             this.loadedchunks.delete(chunkkey);
 
             // unload entities
-            EntityManager.filterToChunk({x: x, y: y }, [...this.entityManager.getNonplayers()]).forEach(e => {
+            EntityManager.filterToChunk([x, y], [...this.entityManager.getNonplayers()]).forEach(e => {
                 this.game.entityManager.removeNonplayer(e.id);
             });
         }
@@ -351,7 +352,7 @@ class Layer {
         this.game.fileManager.writeFile(chunkfilelocation, chunkdata);
 
         // save entities (and objects) seperately
-        const entities = EntityManager.filterToChunk({x: chunk.chunkx, y: chunk.chunky }, [...this.entityManager.getNonplayers()]);
+        const entities = EntityManager.filterToChunk([chunk.chunkx, chunk.chunky], [...this.entityManager.getNonplayers()]);
 
         const entitiesdata = JSON.stringify(entities.map(e => e.serializeForWrite()));
         this.game.fileManager.writeFile(entitiesfilelocation, entitiesdata);
@@ -395,8 +396,8 @@ class Layer {
 
         let empty = true;
         for(const e of this.entityManager.getAllObjects()){
-            if(Math.abs(e.getChunk().x - chunk.x) <= 1 && Math.abs(e.getChunk().y - chunk.y) <= 1){
-                if(e.tilesOn().some((t: Pos) => t.x == x && t.y == y)) empty = false;
+            if(Math.abs(e.getChunk()[0] - chunk.x) <= 1 && Math.abs(e.getChunk()[1] - chunk.y) <= 1){
+                if(e.tilesOn().some((t: Vector2D) => t[0] == x && t[1] == y)) empty = false;
             }
         }
 

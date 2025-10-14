@@ -67,12 +67,12 @@ class CollisionManager {
 
         const blocks: CollisionObject[] = [];
         for(const coords of object.tilesOn()){
-            const cell = object.layer.getCell(coords.x, coords.y, false);
+            const cell = object.layer.getCell(coords[0], coords[1], false);
             if(cell === null) continue;
             if(cell.block === null) continue;
             if(cell.block.definition.getWalkThrough()) continue;
 
-            const blockcollider = getCellCollisionObject(cell.block.definition.shape, cell.block.definition.scale, [coords.x + .5, coords.y + .5]);
+            const blockcollider = getCellCollisionObject(cell.block.definition.shape, cell.block.definition.scale, [coords[0] + .5, coords[1] + .5]);
             if(blockcollider !== null) blocks.push(blockcollider);
         }
 

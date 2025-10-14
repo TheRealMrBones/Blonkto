@@ -1,5 +1,5 @@
 import PlayerClient from "../playerClient.js";
-import { Pos, Vector2D } from "../../shared/types.js";
+import { Vector2D } from "../../shared/types.js";
 import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
 import CollisionObject from "../../shared/physics/collisionObject.js";
 import Circle from "../../shared/physics/circle.js";
@@ -468,7 +468,7 @@ class InputManager {
     }
 
     /** Sets the players position to the given spot */
-    setPos(newpos: Pos): void {
+    setPos(newpos: Vector2D): void {
         // keep current inputs running but don't include previous time held
         if(this.startw) this.startw = Date.now();
         if(this.starts) this.starts = Date.now();
@@ -476,8 +476,8 @@ class InputManager {
         if(this.startd) this.startd = Date.now();
 
         // set new position
-        this.x = newpos.x;
-        this.y = newpos.y;
+        this.x = newpos[0];
+        this.y = newpos[1];
         this.dx = 0;
         this.dx = 0;
     }

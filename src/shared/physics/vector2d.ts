@@ -1,12 +1,7 @@
-import { Pos, Vector2D } from "../types.js";
+import { Vector2D } from "../types.js";
 
 /** Static helper methods for Vector2D operations */
 class V2D {
-    /** Returns a vector2d created from the given postion */
-    static vector2DFromPos(pos: Pos): Vector2D {
-        return [pos.x, pos.y];
-    }
-
     // #region getters
 
     /** Returns the magnitude this vector */
@@ -42,6 +37,15 @@ class V2D {
     /** Returns a vector orthogonal to this vector */
     static getOrthogonal(vector: Vector2D): Vector2D {
         return [-vector[1], vector[0]];
+    }
+
+    // #endregion
+
+    // #region comparators
+
+    /** Returns if the two vectors are equal */
+    static areEqual(vector1: Vector2D, vector2: Vector2D): boolean {
+        return (vector1[0] == vector2[0] && vector1[1] == vector2[1]);
     }
 
     // #endregion

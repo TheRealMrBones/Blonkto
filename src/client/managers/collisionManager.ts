@@ -1,6 +1,5 @@
 import PlayerClient from "../playerClient.js";
 import CollisionObject from "../../shared/physics/collisionObject.js";
-import { Vector2D } from "../../shared/types.js";
 import { getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
 import V2D from "../../shared/physics/vector2d.js";
 

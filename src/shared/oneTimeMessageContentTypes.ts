@@ -1,4 +1,4 @@
-import { Color, Pos } from "./types.js";
+import { Color, Vector2D } from "./types.js";
 
 // #region base one time message
 
@@ -28,7 +28,7 @@ export type PushContent = {
 
 /** Defines the format of the set pos one time message */
 export type SetPosContent = {
-    pos: Pos;
+    pos: Vector2D;
 };
 
 /** Defines the format of the set gamemode one time message */

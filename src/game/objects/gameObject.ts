@@ -3,9 +3,10 @@ import crypto from "crypto";
 import Logger from "../../server/logging/logger.js";
 import Game from "../game.js";
 import Layer from "../world/layer.js";
-import { Pos, Vector2D } from "../../shared/types.js";
+import { Vector2D } from "../../shared/types.js";
 import Entity from "./entity.js";
 import Player from "./player.js";
+import V2D from "../../shared/physics/vector2d.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
@@ -15,7 +16,6 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 import ServerConfig from "../../configs/server.js";
 const { FALL_RATE } = ServerConfig.OBJECT;
-const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 
 /** The base class for any simulated object (something that ticks) in the game world */
 abstract class GameObject {
@@ -59,8 +59,8 @@ abstract class GameObject {
     }
 
     /** Returns the current chunk of this object */
-    getChunk(): Pos {
-        return { x: Math.floor(this.x / CHUNK_SIZE), y: Math.floor(this.y / CHUNK_SIZE)};
+    getChunk(): Vector2D {
+        return [Math.floor(this.x / CHUNK_SIZE), Math.floor(this.y / CHUNK_SIZE)];
     }
 
     // #endregion
@@ -166,7 +166,7 @@ abstract class GameObject {
             let notair = 0;
 
             tilesOn.forEach(tile => {
-                const cell = this.layer.getCell(tile.x, tile.y, false);
+                const cell = this.layer.getCell(tile[0], tile[1], false);
                 if(cell){
                     if(cell.floor) notair++;
                 }
@@ -194,22 +194,19 @@ abstract class GameObject {
     // #region helpers
 
     /** Returns the distance from this object to another object */
-    distanceTo(object: Pos): number {
-        const dx = this.x - object.x;
-        const dy = this.y - object.y;
+    distanceTo(object: Vector2D): number {
+        const dx = this.x - object[0];
+        const dy = this.y - object[1];
         return Math.sqrt(dx * dx + dy * dy);
     }
 
     /** Returns the single cell that this object is centered on */
-    getCell(): Pos {
-        return {
-            x: Math.floor(this.x),
-            y: Math.floor(this.y),
-        };
+    getCell(): Vector2D {
+        return [Math.floor(this.x), Math.floor(this.y)];
     }
 
     /** Returns the tiles that this object is on */
-    tilesOn(strict?: boolean): Pos[] {
+    tilesOn(strict?: boolean): Vector2D[] {
         const points = [];
         const posoffset = strict ? 0 : (this.scale / 2) - .01; // offset so barely touching tiles are not counted
 
@@ -217,38 +214,38 @@ abstract class GameObject {
         for(let x = Math.floor(this.x - posoffset); x < this.x + posoffset; x++){
             for(let y = Math.floor(this.y - posoffset); y < this.y + posoffset; y++){
                 const p = { x: x, y: y };
-                if(this.distanceTo({ x: x, y: y }) <= posoffset) points.push(p);
+                if(this.distanceTo([x, y]) <= posoffset) points.push(p);
             }
         }
 
         // start tile array
-        const tiles: Pos[] = [{ x: Math.floor(this.x), y: Math.floor(this.y) }]; // include known center tile
+        const tiles: Vector2D[] = [[Math.floor(this.x), Math.floor(this.y)]]; // include known center tile
 
         // include tiles hit by each main axis end of the object
         if(Math.floor(this.x - posoffset) != Math.floor(this.x)){
-            tiles.push({ x: Math.floor(this.x - posoffset), y: Math.floor(this.y) });
+            tiles.push([Math.floor(this.x - posoffset), Math.floor(this.y)]);
         }
         if(Math.floor(this.x + posoffset) != Math.floor(this.x)){
-            tiles.push({ x: Math.floor(this.x + posoffset), y: Math.floor(this.y) });
+            tiles.push([Math.floor(this.x + posoffset), Math.floor(this.y)]);
         }
         if(Math.floor(this.y - posoffset) != Math.floor(this.y)){
-            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y - posoffset) });
+            tiles.push([Math.floor(this.x), Math.floor(this.y - posoffset)]);
         }
         if(Math.floor(this.y + posoffset) != Math.floor(this.y)){
-            tiles.push({ x: Math.floor(this.x), y: Math.floor(this.y + posoffset) });
+            tiles.push([Math.floor(this.x), Math.floor(this.y + posoffset)]);
         }
 
         // get a list of the corresponding points that the points are touching
         points.forEach(p => {
-            const tilestoadd: Pos[] = [
-                { x: p.x, y: p.y },
-                { x: p.x - 1, y: p.y },
-                { x: p.x - 1, y: p.y - 1 },
-                { x: p.x, y: p.y - 1 },
+            const tilestoadd: Vector2D[] = [
+                [p.x, p.y],
+                [p.x - 1, p.y],
+                [p.x - 1, p.y - 1],
+                [p.x, p.y - 1],
             ];
 
             tilestoadd.forEach(t => {
-                if(!tiles.some(ct => ct.x == t.x && ct.y == t.y)) tiles.push(t);
+                if(!tiles.some(ct => V2D.areEqual(t, ct))) tiles.push(t);
             });
         });
 

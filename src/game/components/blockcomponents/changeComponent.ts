@@ -26,7 +26,7 @@ class ChangeComponent extends Component<BlockDefinition> {
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
         if(!this.cancollide){
             for(const object of block.cell.chunk.layer.entityManager.getAllObjects()){
-                if(object.tilesOn().some(t => t.x == block.cell.getWorldX() && t.y == block.cell.getWorldY())) return;
+                if(object.tilesOn().some(t => t[0] == block.cell.getWorldX() && t[1] == block.cell.getWorldY())) return;
             }
         }
 

@@ -4,7 +4,8 @@ import Entity from "../objects/entity.js";
 import GameObject from "../objects/gameObject.js";
 import NonplayerEntity from "../objects/nonplayerEntity.js";
 import Player from "../objects/player.js";
-import { Pos } from "../../shared/types.js";
+import V2D from "../../shared/physics/vector2d.js";
+import { Vector2D } from "../../shared/types.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
@@ -199,11 +200,8 @@ class EntityManager {
     }
 
     /** Returns the filtered list of gameobjects to only those in the given chunk */
-    static filterToChunk<T extends GameObject>(chunk: Pos, objects: T[]): T[] {
-        return objects.filter(o =>
-            o.getChunk().x == chunk.x &&
-            o.getChunk().y == chunk.y
-        );
+    static filterToChunk<T extends GameObject>(chunk: Vector2D, objects: T[]): T[] {
+        return objects.filter(o => V2D.areEqual(o.getChunk(), chunk));
     }
 
     // #endregion

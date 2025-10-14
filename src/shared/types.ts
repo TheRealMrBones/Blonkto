@@ -1,8 +1,5 @@
-/** A position in space denoted with an x and y value */
-export type Pos = {
-    x: number;
-    y: number;
-}
+/** A 2 dimensional vector with an x and y component */
+export type Vector2D = [number, number];
 
 /** A color in rgb format */
 export type Color = {
@@ -10,6 +7,3 @@ export type Color = {
     g: number;
     b: number;
 }
-
-/** A 2 dimensional vector with an x and y component */
-export type Vector2D = [number, number];
