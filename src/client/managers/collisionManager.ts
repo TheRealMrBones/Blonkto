@@ -14,28 +14,29 @@ class CollisionManager {
 
     /** Checks collisions between the current player and any nearby blocks with hitboxes */
     blockCollisions(): void {
-        let push: Vector2D = [0, 0];
-        for(let tries = 0; (tries < 3 && (push[0] != 0 || push[1] != 0)) || tries == 0; tries++){
-            const playercollider: CollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
+        let playercollider: CollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
 
-            const blocks: CollisionObject[] = [];
-            for(const coords of this.playerclient.inputManager.tilesOn()){
-                const cell = this.playerclient.world.getCell(coords[0], coords[1]);
-                if(cell === null) continue;
-                if(cell.block === undefined) continue;
-                if(cell.block.walkthrough) continue;
+        const tiles = this.playerclient.inputManager.tilesOn().sort((a, b) => {
+            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], playercollider.position);
+            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], playercollider.position);
+            return dista - distb;
+        });
 
-                const blockcollider = getCellCollisionObject(cell.block.shape, cell.block.scale, [coords[0] + .5, coords[1] + .5]);
-                if(blockcollider !== null) blocks.push(blockcollider);
-            }
+        const blocks: CollisionObject[] = [];
+        for(const coords of tiles){
+            const cell = this.playerclient.world.getCell(coords[0], coords[1]);
+            if(cell === null) continue;
+            if(cell.block === undefined) continue;
+            if(cell.block.walkthrough) continue;
 
-            let push: Vector2D = [0, 0];
-            for(const blockcollider of blocks){
-                const newpush = getCollisionPush(playercollider, blockcollider);
-                if(newpush !== null) push = V2D.add(push, newpush);
-            }
+            const blockcollider = getCellCollisionObject(cell.block.shape, cell.block.scale, [coords[0] + .5, coords[1] + .5]);
+            if(blockcollider !== null) blocks.push(blockcollider);
+        }
 
-            if(push[0] != 0 || push[1] != 0) this.playerclient.inputManager.clientPush(push[0], push[1]);
+        for(const blockcollider of blocks){
+            playercollider = this.playerclient.inputManager.getSelfAsCollisionObject();
+            const push = getCollisionPush(playercollider, blockcollider);
+            if(push !== null) this.playerclient.inputManager.clientPush(push[0], push[1]);
         }
     }
 }
