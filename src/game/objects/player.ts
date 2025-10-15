@@ -251,7 +251,7 @@ class Player extends Entity {
     /** Emits a tick event to this player */
     override emitTickEvent(game: Game, dt: number): void {
         this.inventory.resetChanges();
-        
+
         super.emitTickEvent(game, dt);
     }
 
@@ -317,7 +317,7 @@ class Player extends Entity {
     updateDarkness(darkness: number): boolean {
         const olddarkness = this.lastdarkness;
         this.lastdarkness = darkness;
-        
+
         return olddarkness != darkness;
     }
 

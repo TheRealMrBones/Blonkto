@@ -72,7 +72,7 @@ class DroppedStack extends GameObject {
     override emitTickEvent(game: Game, dt: number): void {
         game.collisionManager.itemMergeCheck(this);
         this.tickDespawn(game);
-        
+
         super.emitTickEvent(game, dt);
     }
 

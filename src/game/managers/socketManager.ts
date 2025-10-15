@@ -100,12 +100,12 @@ class SocketManager {
         const hotbarItem = player.getCurrentItem();
 
         // try to interact with entity
-        if(newinfo.entity !== null){
+        if(newinfo.entity !== null && newinfo.dist <= BASE_REACH){
             newinfo.entity.emitInteractEvent(this.game, player);
             if(!player.canAction()){
-                    player.setImmediateAction(false);
-                    return;
-                }
+                player.setImmediateAction(false);
+                return;
+            }
         }
 
         // try to use item

@@ -9,7 +9,7 @@ import IInventory from "./IInventory.js";
 class Inventory implements IInventory {
     protected readonly size: number;
     protected readonly slots: (ItemStack | null)[];
-    
+
     protected changes: boolean[];
     protected lastchanges: boolean[];
 
@@ -176,7 +176,7 @@ class Inventory implements IInventory {
     /** Drops the given amount from the given slot in this inventory */
     dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         if(this.slots[slot] === null) return;
-        
+
         this.changes[slot] = true;
 
         if(amount === undefined){
@@ -200,7 +200,7 @@ class Inventory implements IInventory {
 
         this.setSlot(slot2, item1);
         this.setSlot(slot1, item2);
-        
+
         this.changes[slot1] = true;
         this.changes[slot2] = true;
     }

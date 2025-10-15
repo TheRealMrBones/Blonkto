@@ -21,7 +21,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
 
         if(amount !== undefined) this.setAmount(amount);
     }
- 
+
     /** Returns the item stack from its save data */
     static readFromSave(data: SerializedWriteItemStack): ItemStack {
         const stack = new ItemStack(data.name, data.amount);

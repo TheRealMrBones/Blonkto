@@ -106,7 +106,7 @@ abstract class Entity extends GameObject {
     override emitTickEvent(game: Game, dt: number): void {
         const player = this.layer.entityManager.getPlayer(this.id)!;
         if(this.swinging && this.swingdata !== null) game.collisionManager.attackHitCheck(player, this.swingdata);
-        
+
         super.emitTickEvent(game, dt);
     }
 
@@ -167,7 +167,7 @@ abstract class Entity extends GameObject {
 
         this.swinging = true;
         this.swingdata = swingdata;
-        
+
         this.setActionInterval(swingdata.actionduration);
         setTimeout(this.endSwing.bind(this), swingdata.swingduration);
 

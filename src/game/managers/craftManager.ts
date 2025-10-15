@@ -117,7 +117,7 @@ class CraftManager {
     /** Returns if this player needs a recipe update */
     playerNeedsRecipeUpdate(player: Player): boolean {
         let recipesneeded = false;
-        
+
         const station = player.getStation();
 
         if(player.getInventory().anyChanges()) recipesneeded = true;

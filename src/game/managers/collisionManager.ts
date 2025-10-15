@@ -8,7 +8,6 @@ import Layer from "../world/layer.js";
 import Circle from "../../shared/physics/circle.js";
 import { checkCollision, getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
 import CollisionObject from "../../shared/physics/collisionObject.js";
-import { Vector2D } from "../../shared/types.js";
 import V2D from "../../shared/physics/vector2d.js";
 import { SwingData } from "../combat/swingData.js";
 
@@ -27,10 +26,11 @@ class CollisionManager {
     clickEntity(layer: Layer, x: number, y: number): Entity | null {
         const entities = layer.entityManager.getEntities();
 
+        const point = new Circle([x, y], 0);
+
         for(const entity of entities){
             if(!entity.canCollide()) continue;
 
-            const point = new Circle([x, y], 0);
             const entitycollider = new Circle([entity.x, entity.y], entity.scale / 2);
 
             if(checkCollision(point, entitycollider)) return entity;
