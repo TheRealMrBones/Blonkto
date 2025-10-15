@@ -128,6 +128,8 @@ class Game {
 
     /** Create an update object to be sent to the specified players client */
     createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
+        const station = player.getStation();
+
         // Get base update data
         const me = player.serializeForUpdate();
         const nearbyPlayers = EntityManager.filterToNearby(player, [...player.layer.entityManager.getPlayerEntities()])
@@ -136,7 +138,7 @@ class Game {
         const nearbyEntities = EntityManager.filterToNearby(player, [...player.layer.entityManager.getNonplayers()])
             .map(e => e.serializeForUpdate());
         const inventoryupdates = player.getInventory().getChanges();
-        const stationupdates = player.getStation() !== null ? player.getStation()!.serializeForUpdate(player) : null;
+        const stationupdates = station !== null ? station.serializeForUpdate(player) : null;
         const tab = this.playerManager.getTab();
         const tps = this.performanceManager.getTps();
         const statereset = player.updateStateReset();
@@ -166,7 +168,7 @@ class Game {
 
         // reset data
         player.getInventory().resetChanges();
-        if(player.getStation() !== null) player.getStation()!.clearIsNew(player);
+        if(station !== null) station.clearIsNew(player);
 
         // return full update object
         const content: GameUpdateContent = {

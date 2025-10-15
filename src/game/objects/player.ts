@@ -248,6 +248,13 @@ class Player extends Entity {
 
     // #region events
 
+    /** Emits a tick event to this player */
+    override emitTickEvent(game: Game, dt: number): void {
+        super.emitTickEvent(game, dt);
+
+        this.inventory.resetChanges();
+    }
+
     /** Emits a death event to this object */
     override emitDeathEvent(game: Game, killedby: string, killer: any): void {
         super.emitDeathEvent(game, killedby, killer);

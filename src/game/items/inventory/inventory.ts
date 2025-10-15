@@ -9,12 +9,16 @@ import IInventory from "./IInventory.js";
 class Inventory implements IInventory {
     protected readonly size: number;
     protected readonly slots: (ItemStack | null)[];
+    
     protected changes: boolean[];
+    protected lastchanges: boolean[];
 
     constructor(size: number){
         this.size = size;
         this.slots = Array(size).fill(null);
-        this.changes = Array(size).fill(false);
+
+        this.changes = Array(size).fill(true);
+        this.lastchanges = Array(size).fill(true);
     }
 
     /** Returns an inventory object with the given itemstacks in it */
@@ -251,11 +255,11 @@ class Inventory implements IInventory {
 
     // #region changes
 
-    /** Returns the object representing all changes to this inventory since last reset then resets them */
+    /** Returns the object representing all changes to this inventory since last reset */
     getChanges(): any[] {
         const changeslist = [];
         for(let i = 0; i < this.size; i++){
-            if(this.changes[i]){
+            if(this.lastchanges[i]){
                 const itemstack = this.slots[i];
                 changeslist.push({
                     slot: i,
@@ -269,14 +273,13 @@ class Inventory implements IInventory {
 
     /** Returns if there are any pending changes */
     anyChanges(): boolean {
-        return this.changes.some(c => c);
+        return this.lastchanges.some(c => c);
     }
 
     /** Resets the changes toggles of this inventory back to false */
     resetChanges(): void {
-        for(let i = 0; i < this.size; i++){
-            this.changes[i] = false;
-        }
+        this.lastchanges = this.changes;
+        this.changes = Array(this.size).fill(true);
     }
 
     // #endregion

@@ -5,15 +5,25 @@ import Inventory from "./inventory/inventory.js";
 /** A station (menu) with various components that can be opened and viewed by players */
 class Station {
     readonly name: string;
-    private readonly openers: {[key: string]: { player: Player, isnew: boolean }} = {};
     readonly multiopen: boolean = true;
-
+    private readonly openers: {[key: string]: { player: Player, isnew: boolean }} = {};
     readonly inventories: Inventory[] = [];
 
     constructor(name: string, multiopen?: boolean){
         this.name = name;
         if(multiopen !== undefined) this.multiopen = multiopen;
     }
+
+    // #region updates
+
+    /** The tick event for this station */
+    tick(): void {
+        this.inventories.forEach(i => i.resetChanges());
+    }
+
+    // #endregion
+
+    // #region player operations
 
     /** Has the given player open this station and returns success */
     openStation(player: Player): boolean {
@@ -51,6 +61,8 @@ class Station {
     playerNeedsRecipeUpdate(player: Player): boolean {
         return (this.openers[player.id].isnew || this.inventories.some(i => i.anyChanges()));
     }
+
+    // #endregion
 
     // #region serialization
 
