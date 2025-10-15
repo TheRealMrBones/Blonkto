@@ -33,9 +33,11 @@ class CollisionManager {
         }
 
         for(const blockcollider of blocks){
-            playercollider = this.playerclient.inputManager.getSelfAsCollisionObject();
             const push = getCollisionPush(playercollider, blockcollider);
-            if(push !== null) this.playerclient.inputManager.clientPush(push[0], push[1]);
+            if(push !== null){
+                this.playerclient.inputManager.clientPush(push[0], push[1]);
+                playercollider = this.playerclient.inputManager.getSelfAsCollisionObject();
+            }
         }
     }
 }

@@ -63,10 +63,16 @@ class CollisionManager {
 
     /** Checks for non-player objects colliding on blocks */
     blockCollisions(object: GameObject): void {
-        const objectcollider = new Circle([object.x, object.y], object.scale / 2);
+        let objectcollider = new Circle([object.x, object.y], object.scale / 2);
+
+        const tiles = object.tilesOn().sort((a, b) => {
+            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], objectcollider.position);
+            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], objectcollider.position);
+            return dista - distb;
+        });
 
         const blocks: CollisionObject[] = [];
-        for(const coords of object.tilesOn()){
+        for(const coords of tiles){
             const cell = object.layer.getCell(coords[0], coords[1], false);
             if(cell === null) continue;
             if(cell.block === null) continue;
@@ -76,13 +82,13 @@ class CollisionManager {
             if(blockcollider !== null) blocks.push(blockcollider);
         }
 
-        let push: Vector2D = [0, 0];
         for(const blockcollider of blocks){
-            const newpush = getCollisionPush(objectcollider, blockcollider);
-            if(newpush !== null) push = V2D.add(push, newpush);
+            const push = getCollisionPush(objectcollider, blockcollider);
+            if(push !== null){
+                object.push(push[0], push[1]);
+                objectcollider = new Circle([object.x, object.y], object.scale / 2);
+            }
         }
-
-        object.push(push[0], push[1]);
     }
 
     /** Checks for dropped stacks that the given player can pick up */
