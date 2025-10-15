@@ -104,10 +104,10 @@ abstract class Entity extends GameObject {
 
     /** Emits a tick event to this object */
     override emitTickEvent(game: Game, dt: number): void {
-        super.emitTickEvent(game, dt);
-
         const player = this.layer.entityManager.getPlayer(this.id)!;
         if(this.swinging && this.swingdata !== null) game.collisionManager.attackHitCheck(player, this.swingdata);
+        
+        super.emitTickEvent(game, dt);
     }
 
     // #endregion

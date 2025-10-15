@@ -47,8 +47,9 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
 
     /** Emits a tick event to this object */
     override emitTickEvent(game: Game, dt: number): void {
-        super.emitTickEvent(game, dt);
         this.definition.emitEvent("tick", this, game, dt);
+        
+        super.emitTickEvent(game, dt);
     }
 
     /** Emits a death event to this object */
