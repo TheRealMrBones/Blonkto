@@ -31,6 +31,7 @@ class ChangeComponent extends Component<BlockDefinition> {
         }
 
         block.cell.setBlock(this.newblock, game);
+        player.setImmediateAction(true);
     }
 }
 

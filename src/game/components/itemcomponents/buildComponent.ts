@@ -43,8 +43,10 @@ class BuildComponent extends Component<ItemDefinition> {
             }
         }
 
-        if(info.cell.placeBlock(this.block, game))
+        if(info.cell.placeBlock(this.block, game)){
             if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
+            player.setImmediateAction(true);
+        }
     }
 }
 

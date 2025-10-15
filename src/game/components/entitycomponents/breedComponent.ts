@@ -55,6 +55,7 @@ class BreedComponent extends Component<EntityDefinition> {
 
         data.lastfed = Date.now();
         if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
+        player.setImmediateAction(true);
 
         // look for target
         for(const entity of self.layer.entityManager.getNonplayerEntities()){

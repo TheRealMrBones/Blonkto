@@ -26,6 +26,7 @@ class StationComponent extends Component<BlockDefinition> {
     interact(block: Block, game: Game, player: Player, info: ClickContentExpanded): void {
         const data = block.getComponentData(StationComponentData);
         data.station.openStation(player);
+        player.setImmediateAction(true);
     }
 
     /** Defines the tick of the block with this component */

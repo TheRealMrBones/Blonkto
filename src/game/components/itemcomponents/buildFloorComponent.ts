@@ -32,8 +32,10 @@ class BuildFloorComponent extends Component<ItemDefinition> {
         if(info.dist > BASE_REACH) return;
 
         if(info.cell !== null){
-            if(info.cell.placeFloor(this.floor, game))
+            if(info.cell.placeFloor(this.floor, game)){
                 if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
+                player.setImmediateAction(true);
+            }
         }
     }
 }

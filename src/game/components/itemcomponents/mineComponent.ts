@@ -37,7 +37,7 @@ class MineComponent extends Component<ItemDefinition> {
         if(info.cell.block.definition.hardness > this.power) return;
         if(info.cell.block.definition.minetype !== MINE_TYPES.ANY && info.cell.block.definition.minetype != this.minetype) return;
 
-        info.cell.breakBlock(true, game);
+        if (info.cell.breakBlock(true, game)) player.setImmediateAction(true);
     }
 }
 

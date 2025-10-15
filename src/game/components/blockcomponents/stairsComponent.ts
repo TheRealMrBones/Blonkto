@@ -35,6 +35,7 @@ class StairsComponent extends Component<BlockDefinition> {
 
         player.setLayer(newlayer);
         player.updateLastChunk(null); // force chunk reload
+        player.setImmediateAction(true);
     }
 
     /** Defines the instantiate event of the block with this component */

@@ -52,35 +52,40 @@ class SocketManager {
         const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
+        if(!player.canAction()) return;
+
         const newinfo = this.getClickInfo(player, content);
 
-        if(player.canAction()){
-            const hotbarItem = player.getCurrentItem();
+        const hotbarItem = player.getCurrentItem();
 
-            // try to use item
-            if(hotbarItem !== null){
-                if(!hotbarItem.use(this.game, player, newinfo)) return;
-            }
-
-            // default break action
-            if(newinfo.cell !== null){
-                if(newinfo.cell.block !== null){
-                    if(newinfo.cell.block.definition.minetype == MINE_TYPES.ANY && newinfo.cell.block.definition.hardness <= 0){
-                        newinfo.cell.breakBlock(true, this.game);
-                        return;
-                    }
+        // try to use item
+        if(hotbarItem !== null){
+            if(!hotbarItem.use(this.game, player, newinfo)){
+                if(!player.canAction()){
+                    player.setImmediateAction(false);
+                    return;
                 }
             }
-
-            // default swing action
-            player.startSwing({
-                dir: newinfo.dir,
-                swingduration: BASE_SWING_DELAY,
-                actionduration: BASE_ACTION_DELAY,
-                damage: BASE_DAMAGE,
-                knockback: BASE_KNOCKBACK,
-            });
         }
+
+        // default break action
+        if(newinfo.cell !== null){
+            if(newinfo.cell.block !== null){
+                if(newinfo.cell.block.definition.minetype == MINE_TYPES.ANY && newinfo.cell.block.definition.hardness <= 0){
+                    newinfo.cell.breakBlock(true, this.game);
+                    return;
+                }
+            }
+        }
+
+        // default swing action
+        player.startSwing({
+            dir: newinfo.dir,
+            swingduration: BASE_SWING_DELAY * 1000,
+            actionduration: BASE_ACTION_DELAY * 1000,
+            damage: BASE_DAMAGE,
+            knockback: BASE_KNOCKBACK,
+        });
     }
 
     /** Response to a interaction (right click) message from a client */
@@ -88,34 +93,44 @@ class SocketManager {
         const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
+        if(!player.canAction()) return;
+
         const newinfo = this.getClickInfo(player, content);
 
-        if(player.canAction()){
-            const hotbarItem = player.getCurrentItem();
+        const hotbarItem = player.getCurrentItem();
 
-            // try to interact with entity
-            if(newinfo.entity !== null){
-                newinfo.entity.emitInteractEvent(this.game, player);
-                return;
-            }
+        // try to interact with entity
+        if(newinfo.entity !== null){
+            newinfo.entity.emitInteractEvent(this.game, player);
+            if(!player.canAction()){
+                    player.setImmediateAction(false);
+                    return;
+                }
+        }
 
-            // try to use item
-            if(hotbarItem !== null){
-                if(!hotbarItem.interact(this.game, player, newinfo)) return;
-            }
-
-            // default action
-            if(newinfo.dist > BASE_REACH) return;
-            if(newinfo.cell === null) return;
-
-            if(newinfo.cell.block !== null){
-                newinfo.cell.block.emitInteractEvent(this.game, player, newinfo);
-            }else if(newinfo.cell.floor !== null){
-                newinfo.cell.floor.emitInteractEvent(this.game, player, newinfo);
-            }else if(newinfo.cell.ceiling !== null){
-                newinfo.cell.ceiling.emitInteractEvent(this.game, player, newinfo);
+        // try to use item
+        if(hotbarItem !== null){
+            if(!hotbarItem.interact(this.game, player, newinfo)){
+                if(!player.canAction()){
+                    player.setImmediateAction(false);
+                    return;
+                }
             }
         }
+
+        // default action
+        if(newinfo.dist > BASE_REACH) return;
+        if(newinfo.cell === null) return;
+
+        if(newinfo.cell.block !== null){
+            newinfo.cell.block.emitInteractEvent(this.game, player, newinfo);
+        }else if(newinfo.cell.floor !== null){
+            newinfo.cell.floor.emitInteractEvent(this.game, player, newinfo);
+        }else if(newinfo.cell.ceiling !== null){
+            newinfo.cell.ceiling.emitInteractEvent(this.game, player, newinfo);
+        }
+
+        player.setImmediateAction(false);
     }
 
     /** Gets formatted click info from the raw click info in a client click message */

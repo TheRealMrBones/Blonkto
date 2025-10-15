@@ -15,6 +15,7 @@ abstract class Entity extends GameObject {
 
     private actionstart: number = 0;
     private actionend: number = 0;
+    private immediateaction: boolean = false;
 
     private hit: boolean = false;
     private lasthitby: Entity | null = null;
@@ -51,7 +52,7 @@ abstract class Entity extends GameObject {
     /** Returns if this entity is not currently doing an action */
     canAction(): boolean {
         const t = Date.now();
-        return (this.actionstart >= t || this.actionend <= t);
+        return ((this.actionstart >= t || this.actionend <= t) && !this.immediateaction);
     }
 
     /** Returns if this entity is currently being hit */
@@ -82,6 +83,19 @@ abstract class Entity extends GameObject {
     /** Sets godmode status of this entity */
     setGodmode(godmode: boolean): void {
         this.godmode = godmode;
+    }
+
+    /** Sets the start and end action to the current time + the given duration */
+    setActionInterval(duration: number): void {
+        const t = Date.now();
+
+        this.actionstart = t;
+        this.actionend = t + duration;
+    }
+
+    /** Sets the immediate action state of this entity */
+    setImmediateAction(immediateaction: boolean): void {
+        this.immediateaction = immediateaction;
     }
 
     // #endregion
@@ -149,14 +163,12 @@ abstract class Entity extends GameObject {
 
     /** Starts an attack swing for this entity and returns success */
     startSwing(swingdata: SwingData): boolean {
-        const t = Date.now();
-
         if(!this.canAction()) return false;
 
         this.swinging = true;
-        this.actionstart = t;
-        this.actionend = t + swingdata.actionduration;
         this.swingdata = swingdata;
+        
+        this.setActionInterval(swingdata.actionduration);
         setTimeout(this.endSwing.bind(this), swingdata.swingduration);
 
         return true;

@@ -29,6 +29,8 @@ class EatComponent extends Component<ItemDefinition> {
 
         if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
         player.heal(this.heal);
+
+        player.setImmediateAction(true);
     }
 }
 

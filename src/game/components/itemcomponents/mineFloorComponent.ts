@@ -31,7 +31,7 @@ class MineFloorComponent extends Component<ItemDefinition> {
         if(info.cell.floor === null) return;
         if(info.cell.floor.definition.hardness > this.power) return;
 
-        info.cell.breakFloor(true, game);
+        if(info.cell.breakFloor(true, game)) player.setImmediateAction(true);
     }
 }
 
