@@ -147,12 +147,6 @@ abstract class Entity extends GameObject {
         this.hit = false;
     }
 
-    /** Returns if the given entity is the last one to hit this entity */
-    isHitter(entity: Entity | null): boolean {
-        if(entity === null) return false;
-        return (this.lasthitby === entity);
-    }
-
     /** Starts an attack swing for this entity and returns success */
     startSwing(swingdata: SwingData): boolean {
         const t = Date.now();

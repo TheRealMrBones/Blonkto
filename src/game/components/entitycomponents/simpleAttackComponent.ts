@@ -50,7 +50,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         const data = self.getComponentData(SimpleAttackComponentData);
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
-        if(!self.isHitter(data.target) && self.getHit()) data.target = self.getLastHitter() as Entity;
+        if(data.target !== self.getLastHitter() && self.getHit()) data.target = self.getLastHitter() as Entity;
 
         if(data.target !== null){
             if(![...self.layer.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
