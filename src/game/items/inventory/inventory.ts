@@ -17,7 +17,7 @@ class Inventory implements IInventory {
         this.size = size;
         this.slots = Array(size).fill(null);
 
-        this.changes = Array(size).fill(true);
+        this.changes = Array(size).fill(false);
         this.lastchanges = Array(size).fill(true);
     }
 
