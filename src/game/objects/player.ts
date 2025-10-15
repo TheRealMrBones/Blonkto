@@ -4,7 +4,7 @@ import Entity from "./entity.js";
 import Layer from "../world/layer.js";
 import ItemStack from "../items/itemStack.js";
 import Game from "../game.js";
-import ChangesInventory from "../items/inventory/changesInventory.js";
+import Inventory from "../items/inventory/inventory.js";
 import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
@@ -34,7 +34,7 @@ class Player extends Entity {
     private gamemode: string = GAME_MODES.SURVIVAL;
     private kills: number = 0;
     private color: Color;
-    private inventory: ChangesInventory;
+    private inventory: Inventory;
     private hotbarslot: number = 0;
     private station: Station | null = null;
     private lastchunk: Vector2D | null = null;
@@ -70,7 +70,7 @@ class Player extends Entity {
         };
 
         // inventory
-        this.inventory = new ChangesInventory(INVENTORY_SIZE);
+        this.inventory = new Inventory(INVENTORY_SIZE);
         if(starter == true) this.starterInventory();
     }
 
@@ -85,14 +85,14 @@ class Player extends Entity {
             // Respawn
             if(RACISM_PERM) player.color = data.color;
 
-            if(KEEP_INVENTORY && data.inventory !== undefined) player.inventory = ChangesInventory.readFromSave(data.inventory);
+            if(KEEP_INVENTORY && data.inventory !== undefined) player.inventory = Inventory.readFromSave(data.inventory);
         }else{
             // Load Exact
             player.x = data.x;
             player.y = data.y;
             player.health = data.health;
             player.color = data.color;
-            player.inventory = ChangesInventory.readFromSave(data.inventory);
+            player.inventory = Inventory.readFromSave(data.inventory);
         }
 
         return player;
@@ -143,7 +143,7 @@ class Player extends Entity {
     }
 
     /** Returns this players inventory */
-    getInventory(): ChangesInventory {
+    getInventory(): Inventory {
         return this.inventory;
     }
 

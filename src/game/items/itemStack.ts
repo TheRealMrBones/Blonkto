@@ -36,6 +36,11 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
         return this.amount;
     }
 
+    /** Returns if this stack is full or not */
+    isFull(): boolean {
+        return (this.amount >= this.definition.getStackSize());
+    }
+
     // #endregion
 
     // #region setters

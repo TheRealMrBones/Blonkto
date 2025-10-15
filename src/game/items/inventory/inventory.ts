@@ -9,10 +9,12 @@ import IInventory from "./IInventory.js";
 class Inventory implements IInventory {
     protected readonly size: number;
     protected readonly slots: (ItemStack | null)[];
+    protected changes: boolean[];
 
     constructor(size: number){
         this.size = size;
         this.slots = Array(size).fill(null);
+        this.changes = Array(size).fill(false);
     }
 
     /** Returns an inventory object with the given itemstacks in it */
@@ -127,13 +129,18 @@ class Inventory implements IInventory {
 
     /** Sets the itemstack in the requested slot to the given itemstack */
     setSlot(slot: number, stack: ItemStack | null): void {
+        if(this.slots[slot] === stack) return;
+
         this.slots[slot] = stack;
+        this.changes[slot] = true;
     }
 
     /** Adds the given amount to the requested slot as much as possible */
     addToSlot(slot: number, amount: number): boolean {
         if(this.slots[slot] === null) return false;
+        if(this.slots[slot].isFull()) return false;
 
+        this.changes[slot] = true;
         return this.slots[slot].addAmount(amount);
     }
 
@@ -141,11 +148,14 @@ class Inventory implements IInventory {
     addStackToSlot(slot: number, itemstack: ItemStack): boolean {
         if(this.slots[slot] === null){
             this.slots[slot] = itemstack;
+            this.changes[slot] = true;
             return true;
         }
 
         if(this.slots[slot].definition.key != itemstack.definition.key) return false;
+        if(this.slots[slot].isFull()) return false;
 
+        this.changes[slot] = true;
         return this.slots[slot].mergeStack(itemstack);
     }
 
@@ -162,6 +172,8 @@ class Inventory implements IInventory {
     /** Drops the given amount from the given slot in this inventory */
     dropFromSlot(layer: Layer, x: number, y: number, slot: number, game: Game, amount?: number, ignore?: string): void {
         if(this.slots[slot] === null) return;
+        
+        this.changes[slot] = true;
 
         if(amount === undefined){
             DroppedStack.dropWithSpread(game, layer, x, y, this.slots[slot], .3, ignore);
@@ -177,11 +189,16 @@ class Inventory implements IInventory {
 
     /** Swaps the item stacks between two slots */
     swapSlots(slot1: number, slot2: number): void {
+        if(slot1 == slot2) return;
+
         const item1 = this.getSlot(slot1);
         const item2 = this.getSlot(slot2);
 
         this.setSlot(slot2, item1);
         this.setSlot(slot1, item2);
+        
+        this.changes[slot1] = true;
+        this.changes[slot2] = true;
     }
 
     // #endregion
@@ -228,6 +245,38 @@ class Inventory implements IInventory {
         return {
             slots: this.slots.map(stack => stack ? stack.serializeForWrite() : null),
         };
+    }
+
+    // #endregion
+
+    // #region changes
+
+    /** Returns the object representing all changes to this inventory since last reset then resets them */
+    getChanges(): any[] {
+        const changeslist = [];
+        for(let i = 0; i < this.size; i++){
+            if(this.changes[i]){
+                const itemstack = this.slots[i];
+                changeslist.push({
+                    slot: i,
+                    itemstack: itemstack !== null ? itemstack.serializeForUpdate() : null,
+                });
+            }
+        }
+
+        return changeslist;
+    }
+
+    /** Returns if there are any pending changes */
+    anyChanges(): boolean {
+        return this.changes.some(c => c);
+    }
+
+    /** Resets the changes toggles of this inventory back to false */
+    resetChanges(): void {
+        for(let i = 0; i < this.size; i++){
+            this.changes[i] = false;
+        }
     }
 
     // #endregion
