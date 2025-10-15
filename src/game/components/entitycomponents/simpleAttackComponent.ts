@@ -50,7 +50,7 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
         const data = self.getComponentData(SimpleAttackComponentData);
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
-        if(data.target !== self.lasthitby && self.hit) data.target = self.lasthitby as Entity;
+        if(!self.isHitter(data.target) && self.getHit()) data.target = self.getLastHitter() as Entity;
 
         if(data.target !== null){
             if(![...self.layer.entityManager.getPlayerEntities()].some(p => p.id === data.target?.id)){
@@ -81,14 +81,14 @@ class SimpleAttackComponent extends Component<EntityDefinition> {
             return;
         }
 
-        self.speedmultiplier = this.speedmultiplier;
+        self.setSpeedMultiplier(this.speedmultiplier);
         this.setRunQueue(target, targetdata);
     }
 
     /** Resets the current target */
     resetTarget(self: NonplayerEntity, data: SimpleAttackComponentData, targetdata: MoveTargetComponentData): void {
         targetdata.clearQueue();
-        self.speedmultiplier = 1;
+        self.setSpeedMultiplier(1);
         data.target = null;
     }
 

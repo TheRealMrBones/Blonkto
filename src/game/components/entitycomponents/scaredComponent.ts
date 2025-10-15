@@ -28,25 +28,29 @@ class ScaredComponent extends Component<EntityDefinition> {
     tick(self: NonplayerEntity, game: Game, dt: number): void {
         const targetdata = self.getComponentData(MoveTargetComponentData);
 
-        if(!targetdata.queueEmpty() && self.distanceTo(targetdata.targetposqueue[0]) > this.distance && self.lasthitby !== undefined){
-            if(self.distanceTo([self.lasthitby.x, self.lasthitby.y]) < this.distance){
+        const lasthitter = self.getLastHitter();
+
+        if(!targetdata.queueEmpty() && self.distanceTo(targetdata.targetposqueue[0]) > this.distance && lasthitter !== null){
+            if(self.distanceTo([lasthitter.x, lasthitter.y]) < this.distance){
                 targetdata.setQueue(10, [this.getRunPosition(self)]);
             }else{
                 targetdata.clearQueue();
-                self.speedmultiplier = 1;
+                self.setSpeedMultiplier(1);
             }
         }
 
-        if(self.hit && self.lasthitby !== undefined) targetdata.setQueue(10, [this.getRunPosition(self)]);
+        if(self.getHit() && lasthitter !== null) targetdata.setQueue(10, [this.getRunPosition(self)]);
     }
 
     /** Returns a new run target postion given the current entity */
     private getRunPosition(self: NonplayerEntity): Vector2D {
-        if(self.lasthitby === undefined) return [self.x, self.y];
+        const lasthitter = self.getLastHitter();
 
-        self.speedmultiplier = this.speedmultiplier;
+        if(lasthitter === null) return [self.x, self.y];
 
-        const dir = Math.atan2(self.lasthitby.x - self.x, self.y - self.lasthitby.y);
+        self.setSpeedMultiplier(this.speedmultiplier);
+
+        const dir = Math.atan2(lasthitter.x - self.x, self.y - lasthitter.y);
         const movex = -Math.sin(dir) * this.distance * 2;
         const movey = Math.cos(dir) * this.distance * 2;
 

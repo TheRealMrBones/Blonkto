@@ -129,18 +129,18 @@ class CollisionManager {
     }
 
     /** Checks for entities that an attacking entity hits and damages them */
-    attackHitCheck(entity: Entity, attackdir: number, swingdata: SwingData): void {
+    attackHitCheck(entity: Entity, swingdata: SwingData): void {
         const entities = entity.layer.entityManager.getEntities();
 
         const attackpos = {
-            x: entity.x + Math.sin(attackdir) * ATTACK_HITBOX_OFFSET,
-            y: entity.y + Math.cos(attackdir) * ATTACK_HITBOX_OFFSET,
+            x: entity.x + Math.sin(swingdata.dir) * ATTACK_HITBOX_OFFSET,
+            y: entity.y + Math.cos(swingdata.dir) * ATTACK_HITBOX_OFFSET,
         };
         const attackcollider = new Circle([attackpos.x, attackpos.y], ATTACK_HITBOX_WIDTH);
 
         for(const entity2 of entities){
             if(!entity2.canCollide()) continue;
-            if(entity2.hit) continue;
+            if(entity2.getHit()) continue;
             if(entity2.id == entity.id) continue;
 
             const entity2collider = new Circle([entity2.x, entity2.y], entity2.scale / 2);

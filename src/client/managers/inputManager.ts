@@ -49,7 +49,7 @@ class InputManager {
 
     private hit = false;
     private swinging = false;
-    private lastattackdir = 0;
+    private swingdir = 0;
 
     private falling = false;
 
@@ -405,7 +405,7 @@ class InputManager {
             hotbarslot: this.selectedslot,
             hit: this.hit,
             swinging: this.swinging,
-            lastattackdir: this.lastattackdir,
+            swingdir: this.swingdir,
             falling: this.falling,
         };
     }
@@ -498,7 +498,7 @@ class InputManager {
         this.scale = me.scale;
         this.hit = me.hit;
         this.swinging = me.swinging;
-        this.lastattackdir = me.lastattackdir;
+        this.swingdir = me.swingdir;
         this.falling = me.falling;
     }
 

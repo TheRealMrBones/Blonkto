@@ -59,7 +59,6 @@ class Player extends Entity {
         this.username = username;
         this.setGamemode(DEFAULT_GAME_MODE, true);
         this.scale = PLAYER_SCALE;
-        this.health = 10;
         this.basespeed = PLAYER_SPEED;
 
         // racism
@@ -218,12 +217,6 @@ class Player extends Entity {
     setColor(color: Color): void {
         this.color = color;
         this.setcolor = true;
-    }
-
-    /** Heal the player the given amount of health */
-    heal(amount: number, ignoremax?: boolean): void {
-        this.health += amount;
-        if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
     }
 
     /** Sets this players station to the given station */

@@ -20,7 +20,7 @@ logger.info("Initializing item registry");
 const ItemRegistry = new Registry<ItemDefinition>("ItemRegistry");
 
 ItemRegistry.register(new ItemDefinition("sword", "Sword", 1, ASSETS.SWORD)
-    .addComponent(new AttackComponent(2, .5)));
+    .addComponent(new AttackComponent(2, .5, .2, .5)));
 ItemRegistry.register(new ItemDefinition("pickaxe", "Pickaxe", 1, ASSETS.PICKAXE)
     .addComponent(new MineComponent(MINE_TYPES.MINE)));
 ItemRegistry.register(new ItemDefinition("axe", "Axe", 1, ASSETS.AXE)

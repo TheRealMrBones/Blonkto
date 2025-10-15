@@ -12,8 +12,8 @@ import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
-const { BASE_REACH } = SharedConfig.PLAYER;
-const { BASE_USE_DELAY } = SharedConfig.PLAYER;
+const { BASE_REACH, BASE_ACTION_DELAY } = SharedConfig.PLAYER;
+const { BASE_DAMAGE, BASE_KNOCKBACK, BASE_SWING_DELAY } = SharedConfig.ATTACK;
 
 /** Manages socket connections and inputs on the server */
 class SocketManager {
@@ -54,7 +54,7 @@ class SocketManager {
 
         const newinfo = this.getClickInfo(player, content);
 
-        if(Date.now() - player.lastattack > BASE_USE_DELAY * 1000){
+        if(player.canAction()){
             const hotbarItem = player.getCurrentItem();
 
             // try to use item
@@ -73,7 +73,13 @@ class SocketManager {
             }
 
             // default swing action
-            player.startSwing(newinfo.dir, { damage: 1, knockback: .25 });
+            player.startSwing({
+                dir: newinfo.dir,
+                swingduration: BASE_SWING_DELAY,
+                actionduration: BASE_ACTION_DELAY,
+                damage: BASE_DAMAGE,
+                knockback: BASE_KNOCKBACK,
+            });
         }
     }
 
@@ -84,7 +90,7 @@ class SocketManager {
 
         const newinfo = this.getClickInfo(player, content);
 
-        if(Date.now() - player.lastattack > BASE_USE_DELAY * 1000){
+        if(player.canAction()){
             const hotbarItem = player.getCurrentItem();
 
             // try to interact with entity

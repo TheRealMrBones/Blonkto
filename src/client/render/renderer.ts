@@ -303,9 +303,9 @@ class Renderer {
     /** Renders the given entity's swing animation */
     private renderSwing(me: any, entity: any): void {
         // prepare context
-        const { x, y, scale, lastattackdir } = entity;
-        const canvasX = this.canvas.width / 2 + this.fixCoord(x + Math.sin(lastattackdir) * ATTACK_HITBOX_OFFSET) - this.fixCoord(me.x);
-        const canvasY = this.canvas.height / 2 + this.fixCoord(y + Math.cos(lastattackdir) * ATTACK_HITBOX_OFFSET) - this.fixCoord(me.y);
+        const { x, y, scale, swingdir } = entity;
+        const canvasX = this.canvas.width / 2 + this.fixCoord(x + Math.sin(swingdir) * ATTACK_HITBOX_OFFSET) - this.fixCoord(me.x);
+        const canvasY = this.canvas.height / 2 + this.fixCoord(y + Math.cos(swingdir) * ATTACK_HITBOX_OFFSET) - this.fixCoord(me.y);
         this.context.save();
         this.context.translate(canvasX, canvasY);
 

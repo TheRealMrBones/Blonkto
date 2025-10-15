@@ -25,7 +25,7 @@ class EatComponent extends Component<ItemDefinition> {
 
     /** Defines the eat use of the item with this component */
     interact(stack: ItemStack, game: Game, player: Player, info: ClickContentExpanded): void {
-        if(player.health >= player.maxhealth) return;
+        if(!player.canHeal()) return;
 
         if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
         player.heal(this.heal);

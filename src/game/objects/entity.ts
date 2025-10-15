@@ -4,22 +4,23 @@ import Game from "../game.js";
 import { SwingData } from "../combat/swingData.js";
 
 import SharedConfig from "../../configs/shared.js";
-const { SWING_RENDER_DELAY, HIT_RENDER_DELAY } = SharedConfig.ATTACK;
+const { HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 /** The base class for an entity with health loaded in the game world */
 abstract class Entity extends GameObject {
-    maxhealth: number;
-    health: number;
-    basespeed: number;
-    speedmultiplier: number = 1;
-    hit: boolean = false;
-    hitinterval: NodeJS.Timeout | null = null;
-    lasthitby: Entity | undefined = undefined;
-    swinging: boolean = false;
-    swinginginterval: NodeJS.Timeout | null = null;
-    swingdata: SwingData | null = null;
-    lastattack: number = 0;
-    lastattackdir: number = 0;
+    protected maxhealth: number;
+    protected health: number;
+    protected basespeed: number;
+    protected speedmultiplier: number = 1;
+
+    private actionstart: number = 0;
+    private actionend: number = 0;
+
+    private hit: boolean = false;
+    private lasthitby: Entity | null = null;
+
+    private swinging: boolean = false;
+    private swingdata: SwingData | null = null;
 
     private godmode: boolean = false;
 
@@ -32,18 +33,50 @@ abstract class Entity extends GameObject {
 
     // #region getters
 
-    /** Returns the current speed of this object */
+    /** Returns the health of this entity */
+    getHealth(): number {
+        return this.health;
+    }
+
+    /** Returns if this entity is under max health */
+    canHeal(): boolean {
+        return (this.health < this.maxhealth);
+    }
+
+    /** Returns the current speed of this entity */
     override getSpeed(): number {
         return this.basespeed * this.speedmultiplier;
+    }
+
+    /** Returns if this entity is not currently doing an action */
+    canAction(): boolean {
+        const t = Date.now();
+        return (this.actionstart >= t || this.actionend <= t);
+    }
+
+    /** Returns if this entity is currently being hit */
+    getHit(): boolean {
+        return this.hit;
+    }
+
+    /** Returns the last hitter of this entity or null */
+    getLastHitter(): Entity | null {
+        return this.lasthitby;
     }
 
     // #endregion
 
     // #region setters
 
-    /** Entity action after falling */
-    override onFell(game: Game): void {
-        this.emitDeathEvent(game, "gravity", null);
+    /** Heal this entity the given amount of health */
+    heal(amount: number, ignoremax?: boolean): void {
+        this.health += amount;
+        if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
+    }
+
+    /** Sets the speed multiplier of this entity */
+    setSpeedMultiplier(speedmultiplier: number): void {
+        this.speedmultiplier = speedmultiplier;
     }
 
     /** Sets godmode status of this entity */
@@ -60,7 +93,7 @@ abstract class Entity extends GameObject {
         super.emitTickEvent(game, dt);
 
         const player = this.layer.entityManager.getPlayer(this.id)!;
-        if(this.swinging && this.swingdata !== null) game.collisionManager.attackHitCheck(player, this.lastattackdir, this.swingdata);
+        if(this.swinging && this.swingdata !== null) game.collisionManager.attackHitCheck(player, this.swingdata);
     }
 
     // #endregion
@@ -71,6 +104,11 @@ abstract class Entity extends GameObject {
     override checkCollisions(game: Game): void {
         super.checkCollisions(game);
         game.collisionManager.entityCollisions(this);
+    }
+
+    /** Entity action after falling */
+    override onFell(game: Game): void {
+        this.emitDeathEvent(game, "gravity", null);
     }
 
     // #endregion
@@ -93,8 +131,8 @@ abstract class Entity extends GameObject {
 
         this.health -= damage;
         this.hit = true;
-        this.hitinterval = setInterval(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
-        this.lasthitby = attacker;
+        setTimeout(this.endHit.bind(this), 1000 * HIT_RENDER_DELAY);
+        this.lasthitby = attacker === undefined ? null : attacker;
 
         // tell if died
         if(this.health <= 0){
@@ -107,23 +145,33 @@ abstract class Entity extends GameObject {
     /** Ends the hit animation on this entity */
     private endHit(): void {
         this.hit = false;
-        if(this.hitinterval != null) clearInterval(this.hitinterval);
     }
 
-    /** Starts an attack swing for this entity */
-    startSwing(dir: number, swingdata: SwingData): void {
+    /** Returns if the given entity is the last one to hit this entity */
+    isHitter(entity: Entity | null): boolean {
+        if(entity === null) return false;
+        return (this.lasthitby === entity);
+    }
+
+    /** Starts an attack swing for this entity and returns success */
+    startSwing(swingdata: SwingData): boolean {
+        const t = Date.now();
+
+        if(!this.canAction()) return false;
+
         this.swinging = true;
-        this.lastattack = Date.now();
-        this.lastattackdir = dir;
+        this.actionstart = t;
+        this.actionend = t + swingdata.actionduration;
         this.swingdata = swingdata;
-        this.swinginginterval = setInterval(this.endSwing.bind(this), 1000 * SWING_RENDER_DELAY);
+        setTimeout(this.endSwing.bind(this), swingdata.swingduration);
+
+        return true;
     }
 
     /** Ends the current attack swing if it is going on */
     private endSwing(): void {
         this.swinging = false;
         this.swingdata = null;
-        if(this.swinginginterval != null) clearInterval(this.swinginginterval);
     }
 
     // #endregion
@@ -140,7 +188,7 @@ abstract class Entity extends GameObject {
                 health: this.health,
                 hit: this.hit,
                 swinging: this.swinging,
-                lastattackdir: this.lastattackdir,
+                swingdir: this.swingdata === null ? 0 : this.swingdata.dir,
             },
             dynamic: {
                 ...(base.dynamic),
