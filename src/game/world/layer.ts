@@ -106,8 +106,7 @@ class Layer {
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
         const y = Math.floor(player.y / CHUNK_SIZE);
-        const lastchunk = player.lastchunk;
-        player.lastchunk = [x, y];
+        const lastchunk = player.updateLastChunk([x, y]);
 
         // get Vector2Ditions of new and old chunks
         const newChunks: Vector2D[] = [
@@ -121,7 +120,7 @@ class Layer {
             [x + 1, y - 1],
             [x + 1, y + 1],
         ];
-        const oldChunks: Vector2D[] = lastchunk === undefined ? [] : [
+        const oldChunks: Vector2D[] = lastchunk === null ? [] : [
             [lastchunk[0], lastchunk[1]],
             [lastchunk[0], lastchunk[1] - 1],
             [lastchunk[0], lastchunk[1] + 1],

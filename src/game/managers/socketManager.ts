@@ -13,7 +13,7 @@ const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
 
 import SharedConfig from "../../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
-const { ATTACK_DELAY } = SharedConfig.ATTACK;
+const { BASE_USE_DELAY } = SharedConfig.PLAYER;
 
 /** Manages socket connections and inputs on the server */
 class SocketManager {
@@ -54,8 +54,8 @@ class SocketManager {
 
         const newinfo = this.getClickInfo(player, content);
 
-        if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
+        if(Date.now() - player.lastattack > BASE_USE_DELAY * 1000){
+            const hotbarItem = player.getCurrentItem();
 
             // try to use item
             if(hotbarItem !== null){
@@ -84,8 +84,8 @@ class SocketManager {
 
         const newinfo = this.getClickInfo(player, content);
 
-        if(Date.now() - player.lastattack > ATTACK_DELAY * 1000){
-            const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
+        if(Date.now() - player.lastattack > BASE_USE_DELAY * 1000){
+            const hotbarItem = player.getCurrentItem();
 
             // try to interact with entity
             if(newinfo.entity !== null){
@@ -148,7 +148,7 @@ class SocketManager {
         const player = this.game.entityManager.getPlayer(socket.id as string);
         if(player === undefined) return;
 
-        const stationname = player.station !== null ? player.station.name : null;
+        const stationname = player.getStation() !== null ? player.getStation()!.name : null;
         const inventory = player.getCombinedInventory();
 
         this.game.craftManager.craftRecipe(inventory, stationname, player.layer, player.x, player.y, content);

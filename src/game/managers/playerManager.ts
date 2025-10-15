@@ -70,7 +70,7 @@ class PlayerManager {
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             this.logger.log(`${username} tried to log in but is not whitelisted`);
             return;
-        }else if(!ALLOW_MULTI_LOGON && [...this.game.entityManager.getPlayerEntities()].some(p => p.username == username)){
+        }else if(!ALLOW_MULTI_LOGON && [...this.game.entityManager.getPlayerEntities()].some(p => p.getUsername() == username)){
             const content: FailedConnectionContent = { reason: "User already logged in on another instance", extra: "" };
             socket.emit(MSG_TYPES.CONNECTION_REFUSED, content);
             this.logger.log(`${username} tried to log in but is already logged in on another instance`);
@@ -102,7 +102,7 @@ class PlayerManager {
         const content: PlayerInstantiatedContent = {
             x: player.x,
             y: player.y,
-            color: player.color,
+            color: player.getColor(),
         };
         socket.emit(MSG_TYPES.PLAYER_INSTANTIATED, content);
 
@@ -114,13 +114,13 @@ class PlayerManager {
     savePlayer(player: Player): void {
         const data = JSON.stringify(player.serializePlayerForWrite());
 
-        this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
+        this.game.fileManager.writeFile(getPlayerFilePath(player.getUsername()), data);
     }
 
     /** Deletes the given player from the world and removes their save file */
     deletePlayer(player: Player): void {
-        if(this.game.fileManager.fileExists(getPlayerFilePath(player.username)))
-            this.game.fileManager.deleteFile(getPlayerFilePath(player.username));
+        if(this.game.fileManager.fileExists(getPlayerFilePath(player.getUsername())))
+            this.game.fileManager.deleteFile(getPlayerFilePath(player.getUsername()));
 
         this.game.entityManager.removePlayer(player.id);
     }
@@ -131,13 +131,13 @@ class PlayerManager {
 
         const player = this.game.entityManager.getPlayer(socket.id)!;
 
-        this.game.chatManager.sendMessage(`${player.username} was killed by ${killedby}`);
+        this.game.chatManager.sendMessage(`${player.getUsername()} was killed by ${killedby}`);
 
         socket.emit(MSG_TYPES.DEAD);
 
         const data = JSON.stringify(player.serializePlayerAfterKilled());
 
-        this.game.fileManager.writeFile(getPlayerFilePath(player.username), data);
+        this.game.fileManager.writeFile(getPlayerFilePath(player.getUsername()), data);
 
         this.game.entityManager.removePlayer(player.id);
     }
@@ -149,7 +149,7 @@ class PlayerManager {
         const player = this.game.entityManager.getPlayer(socket.id)!;
 
         if(player != null){
-            this.game.chatManager.sendMessage(`${player.username} has disconnected`);
+            this.game.chatManager.sendMessage(`${player.getUsername()} has disconnected`);
 
             this.savePlayer(player);
 
@@ -166,7 +166,7 @@ class PlayerManager {
 
     /** Returns the player with the given username if they exist */
     getPlayerByUsername(username: string): Player | undefined {
-        return [...this.game.entityManager.getPlayerEntities()].find(p => (p as Player).username.toLowerCase() == username.toLowerCase());
+        return [...this.game.entityManager.getPlayerEntities()].find(p => (p as Player).getUsername().toLowerCase() == username.toLowerCase());
     }
 
     // #endregion
@@ -180,10 +180,10 @@ class PlayerManager {
 
         const playerlist = [...this.game.entityManager.getPlayerEntities()];
 
-        if(playerlist.some(e => e.username === newUsername)){
+        if(playerlist.some(e => e.getUsername() === newUsername)){
             let done = false;
             for(let i = 2; !done; i++){
-                if(!playerlist.some(e => e.username === newUsername + `${i}`)){
+                if(!playerlist.some(e => e.getUsername() === newUsername + `${i}`)){
                     done = true;
                     newUsername += `${i}`;
                 }
@@ -198,9 +198,9 @@ class PlayerManager {
 
         return [...this.game.entityManager.getPlayerEntities()].map(p => {
             const returnobj: any = {
-                username: p.username,
+                username: p.getUsername(),
             };
-            if(KILLS_TAB) returnobj.kills = p.kills;
+            if(KILLS_TAB) returnobj.kills = p.getKills();
             return returnobj;
         });
     }

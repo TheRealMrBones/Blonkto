@@ -150,7 +150,7 @@ class CollisionManager {
                 if(entity instanceof NonplayerEntity){
                     killer = entity.definition.displayname;
                 }else if(entity instanceof Player){
-                    killer = entity.username;
+                    killer = entity.getUsername();
                 }
 
                 entity2.takeHit(this.game, swingdata.damage, killer, entity);

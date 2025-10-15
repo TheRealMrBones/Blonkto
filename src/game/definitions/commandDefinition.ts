@@ -69,7 +69,7 @@ class CommandDefinition extends RegistryValue {
     /** Returns if the requesting player has permission to execute this command */
     canExecute(player: Player, game: Game): boolean {
         if(this.customCanExecute !== null) return this.customCanExecute(player, game);
-        return (!this.op || game.playerManager.opManager.isOp(player.username));
+        return (!this.op || game.playerManager.opManager.isOp(player.getUsername()));
     }
 
     /** Returns the parsed args from the given raw args if they are compatable with this command and returns the error string otherwise */
@@ -211,7 +211,7 @@ class CommandDefinition extends RegistryValue {
                     case COMMAND_ARGUMENTS.USERNAME: {
                         const p = game.playerManager.getPlayerByUsername(rawargs[i]);
                         if(p){
-                            parsedargs[j][i] = p.username;
+                            parsedargs[j][i] = p.getUsername();
                         }else{
                             parsedargs[j][i] = rawargs[i]; // fixlater to query account server for accurate username
                         }

@@ -49,12 +49,12 @@ class BreedComponent extends Component<EntityDefinition> {
 
         if(Date.now() - data.lastfed < this.fedtime || data.breedstart > 0 || data.target !== null || data.delayticks > 0) return;
 
-        const hotbarItem = player.getInventory().getSlot(player.hotbarslot);
+        const hotbarItem = player.getCurrentItem();
         if(hotbarItem === null) return;
         if(hotbarItem.definition.key != this.food) return;
 
         data.lastfed = Date.now();
-        if(player.gamemode != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
+        if(player.getGamemode() != GAME_MODES.CREATIVE) player.removeFromCurrentSlot(1);
 
         // look for target
         for(const entity of self.layer.entityManager.getNonplayerEntities()){

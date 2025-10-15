@@ -42,7 +42,7 @@ function tpCommand(args: any[], player: Player, game: Game){
                 playertoteleport.setPos(x, y);
             }
 
-            game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${x}, ${y}`);
+            game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.getUsername() + " "}to ${x}, ${y}`);
             break;
         }
         case 4:
@@ -57,7 +57,7 @@ function tpCommand(args: any[], player: Player, game: Game){
             }
 
             playertoteleport.setPos(playertoteleportto.x, playertoteleportto.y);
-            game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.username + " "}to ${playertoteleportto.username}`);
+            game.chatManager.sendMessageTo(player, `teleported ${playertoteleport == player ? "" : playertoteleport.getUsername() + " "}to ${playertoteleportto.getUsername()}`);
             break;
         }
     }

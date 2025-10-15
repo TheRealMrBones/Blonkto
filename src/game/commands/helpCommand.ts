@@ -19,7 +19,7 @@ function helpCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     const commands = [...CommandRegistry.getAll()]
-        .filter(c => !(c.getOp() && !game.playerManager.opManager.isOp(player.username)))
+        .filter(c => !(c.getOp() && !game.playerManager.opManager.isOp(player.getUsername())))
         .sort((a: CommandDefinition, b: CommandDefinition) => a.key.localeCompare(b.key));
 
     if(argIndex == 0 || argIndex == 1){

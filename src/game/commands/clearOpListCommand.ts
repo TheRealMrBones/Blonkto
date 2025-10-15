@@ -20,7 +20,7 @@ function clearOpListCommand(args: any[], player: Player, game: Game){
         game.playerManager.opManager.clearOpList();
         game.chatManager.sendMessageTo(player, "cleared op list (FORCE)");
     }else{
-        game.playerManager.opManager.clearOpList(player.username);
+        game.playerManager.opManager.clearOpList(player.getUsername());
         game.chatManager.sendMessageTo(player, "cleared op list");
     }
 }

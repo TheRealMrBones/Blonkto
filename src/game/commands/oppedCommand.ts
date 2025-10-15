@@ -17,7 +17,7 @@ function oppedCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     // special op checks
-    if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
+    if(argIndex == 1 && !game.playerManager.opManager.isOp(player.getUsername())){
         CommandDefinition.sendNoPermission(player, game);
         return;
     }
@@ -25,7 +25,7 @@ function oppedCommand(args: any[], player: Player, game: Game){
     // actually run command
     switch(argIndex){
         case 0: {
-            const isop = game.playerManager.opManager.isOp(player.username);
+            const isop = game.playerManager.opManager.isOp(player.getUsername());
             game.chatManager.sendMessageTo(player, isop ? "you are opped" : "you are not opped");
             break;
         };

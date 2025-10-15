@@ -23,7 +23,7 @@ function nickCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     // special op checks
-    if((argIndex == 1 && !game.playerManager.opManager.isOp(player.username)) || (argIndex == 0 && !game.playerManager.opManager.isOp(player.username) && !ALLOW_CHANGE_NAME)){
+    if((argIndex == 1 && !game.playerManager.opManager.isOp(player.getUsername())) || (argIndex == 0 && !game.playerManager.opManager.isOp(player.getUsername()) && !ALLOW_CHANGE_NAME)){
         CommandDefinition.sendNoPermission(player, game);
         return;
     }
@@ -31,24 +31,24 @@ function nickCommand(args: any[], player: Player, game: Game){
     // actually run command
     switch(argIndex){
         case 0: {
-            if(player.username === args[1]){
-                game.chatManager.sendMessageTo(player, `your name is already ${player.username}`);
+            if(player.getUsername() === args[1]){
+                game.chatManager.sendMessageTo(player, `your name is already ${player.getUsername()}`);
             }else{
                 const newusername = game.playerManager.getUsername(args[1]);
                 game.chatManager.sendMessageTo(player, `${newusername} is your new name`);
-                player.username = newusername;
+                player.setUsername(newusername);
             }
             break;
         };
         case 1: {
             const p: Player = args[1];
-            if(p.username === args[2]){
-                game.chatManager.sendMessageTo(player, `their name is already ${p.username}`);
+            if(p.getUsername() === args[2]){
+                game.chatManager.sendMessageTo(player, `their name is already ${p.getUsername()}`);
             }else{
                 const newusername = game.playerManager.getUsername(args[2]);
-                game.chatManager.sendMessageTo(player, `${newusername} is ${p.username}'s new name`);
+                game.chatManager.sendMessageTo(player, `${newusername} is ${p.getUsername()}'s new name`);
                 game.chatManager.sendMessageTo(p, `you have been renamed to ${newusername}`);
-                p.username = newusername;
+                p.setUsername(newusername);
             }
             break;
         };

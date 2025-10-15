@@ -25,7 +25,7 @@ function damageCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const p: Player = args[1];
-            game.chatManager.sendMessageTo(player, `made ${p.username} take ${damage} damage`);
+            game.chatManager.sendMessageTo(player, `made ${p.getUsername()} take ${damage} damage`);
             p.takeHit(game, damage, "the game");
             break;
         }

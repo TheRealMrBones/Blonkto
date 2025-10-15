@@ -30,7 +30,7 @@ function setColorCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const p: Player = args[1];
-            game.chatManager.sendMessageTo(player, `set ${p.username}'s color to "${color.r} ${color.g} ${color.b}"`);
+            game.chatManager.sendMessageTo(player, `set ${p.getUsername()}'s color to "${color.r} ${color.g} ${color.b}"`);
             p.setColor(color);
             break;
         }

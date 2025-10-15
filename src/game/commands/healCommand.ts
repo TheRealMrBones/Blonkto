@@ -25,7 +25,7 @@ function healCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const p: Player = args[1];
-            game.chatManager.sendMessageTo(player, `made ${p.username} heal ${heal} health`);
+            game.chatManager.sendMessageTo(player, `made ${p.getUsername()} heal ${heal} health`);
             p.heal(heal);
             break;
         }

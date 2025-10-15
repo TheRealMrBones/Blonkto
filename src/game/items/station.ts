@@ -23,7 +23,7 @@ class Station {
             player: player,
             isnew: true,
         };
-        player.station = this;
+        player.setStation(this);
 
         return true;
     }
@@ -31,7 +31,7 @@ class Station {
     /** Checks for openers that are moving or gone and removes them */
     checkOpeners(game: Game): void {
         for(const opener of Object.values(this.openers)){
-            if(opener.player.moving || opener.player.layer.entityManager.getPlayer(opener.player.id) === undefined)
+            if(opener.player.getMoving() || opener.player.layer.entityManager.getPlayer(opener.player.id) === undefined)
                 this.closeStation(opener.player);
         }
     }
@@ -39,7 +39,7 @@ class Station {
     /** Has the given player close this station */
     closeStation(player: Player): void {
         delete this.openers[player.id];
-        player.station = null;
+        player.setStation(null);
     }
 
     /** Clears the given players new status on this station */

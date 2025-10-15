@@ -30,7 +30,7 @@ function gameModeCommand(args: any[], player: Player, game: Game){
         };
         case 1: {
             const p: Player = args[1];
-            game.chatManager.sendMessageTo(player, `set ${p.username}'s gamemode to ${gamemode}`);
+            game.chatManager.sendMessageTo(player, `set ${p.getUsername()}'s gamemode to ${gamemode}`);
             p.setGamemode(gamemode);
             break;
         }

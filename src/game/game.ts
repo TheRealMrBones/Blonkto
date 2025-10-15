@@ -131,14 +131,15 @@ class Game {
         // Get base update data
         const me = player.serializeForUpdate();
         const nearbyPlayers = EntityManager.filterToNearby(player, [...player.layer.entityManager.getPlayerEntities()])
-            .filter(p => p.gamemode != GAME_MODES.SPECTATOR)
+            .filter(p => p.getGamemode() != GAME_MODES.SPECTATOR)
             .map(p => p.serializeForUpdate());
         const nearbyEntities = EntityManager.filterToNearby(player, [...player.layer.entityManager.getNonplayers()])
             .map(e => e.serializeForUpdate());
         const inventoryupdates = player.getInventory().getChanges();
-        const stationupdates = player.station !== null ? player.station.serializeForUpdate(player) : null;
+        const stationupdates = player.getStation() !== null ? player.getStation()!.serializeForUpdate(player) : null;
         const tab = this.playerManager.getTab();
         const tps = this.performanceManager.getTps();
+        const statereset = player.updateStateReset();
 
         // get one time update data
         const onetimemessages: OneTimeMessageContent[] = [
@@ -155,8 +156,7 @@ class Game {
         }
 
         const darkness = this.world.getDarknessPercent(player.layer.z);
-        if(darkness != player.lastdarkness){
-            player.lastdarkness = darkness;
+        if(player.updateDarkness(darkness)){
             onetimemessages.push(createOneTimeMessage<DarknessContent>(ONE_TIME_MSG_TYPES.DARKNESS,
                 {
                     darkness: darkness,
@@ -166,7 +166,7 @@ class Game {
 
         // reset data
         player.getInventory().resetChanges();
-        if(player.station !== null) player.station.clearIsNew(player);
+        if(player.getStation() !== null) player.getStation()!.clearIsNew(player);
 
         // return full update object
         const content: GameUpdateContent = {
@@ -180,12 +180,9 @@ class Game {
             worldLoad: worldload,
             tab: tab,
             tps: tps,
-            statereset: player.statereset,
+            statereset: statereset,
             onetimemessages: onetimemessages,
         };
-
-        // untoggle state reset if needed
-        if(player.statereset) player.statereset = false;
 
         // return final update content
         return content;

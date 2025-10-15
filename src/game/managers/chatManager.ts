@@ -40,13 +40,13 @@ class ChatManager {
             this.excecuteCommand(this.game, player, text.substring(1));
         }else{
             // normal message
-            const newText = `<${player.username}> ${text}`;
+            const newText = `<${player.getUsername()}> ${text}`;
             this.sendMessage(newText);
         }
     }
 
     excecuteCommand(game: Game, player: Player, command: string): void {
-        if(LOG_COMMANDS) this.logger.info(`[${player.username}] /${command}`);
+        if(LOG_COMMANDS) this.logger.info(`[${player.getUsername()}] /${command}`);
 
         if(command.length == 0){
             game.chatManager.sendMessageTo(player, "no command given");
@@ -81,7 +81,7 @@ class ChatManager {
     /** Sends a message to a specific player */
     sendMessageTo(player: Player, text: string): void {
         const message = this.createMessage(text);
-        if(LOG_CHAT) this.logger.info(`[->${player.username}] ${text}`);
+        if(LOG_CHAT) this.logger.info(`[->${player.getUsername()}] ${text}`);
 
         player.socket.emit(MSG_TYPES.RECEIVE_MESSAGE, message);
     }

@@ -24,5 +24,5 @@ function kickCommand(args: any[], player: Player, game: Game){
     };
     p.socket.emit(MSG_TYPES.KICK, content);
     game.playerManager.removePlayer(p.socket);
-    game.chatManager.sendMessageTo(player, `kicked ${p.username}`);
+    game.chatManager.sendMessageTo(player, `kicked ${p.getUsername()}`);
 }

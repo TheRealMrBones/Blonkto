@@ -99,16 +99,15 @@ class CraftManager {
     serializeCraftableRecipesForUpdate(player: Player): any[] {
         if(!this.playerNeedsRecipeUpdate(player)) return [];
 
-        const stationname = player.station !== null ? player.station.name : null;
+        const station = player.getStation();
+        const stationname = station !== null ? station.name : null;
 
         const allrecipes = this.getCraftableRecipes(player.getCombinedInventory(), stationname);
         for(let i = 0; i < allrecipes.length; i++){
             const recipe = allrecipes[i];
-            if(player.recipes.includes(recipe)){
+            if(!player.addRecipe(recipe)){
                 allrecipes.splice(i, 1);
                 i--;
-            }else{
-                player.recipes.push(recipe);
             }
         }
 
@@ -118,9 +117,11 @@ class CraftManager {
     /** Returns if this player needs a recipe update */
     playerNeedsRecipeUpdate(player: Player): boolean {
         let recipesneeded = false;
+        
+        const station = player.getStation();
 
         if(player.getInventory().anyChanges()) recipesneeded = true;
-        if(player.station !== null) if(player.station.playerNeedsRecipeUpdate(player)) recipesneeded = true;
+        if(station !== null) if(station.playerNeedsRecipeUpdate(player)) recipesneeded = true;
 
         return recipesneeded;
     }

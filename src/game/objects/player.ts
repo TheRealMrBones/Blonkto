@@ -27,28 +27,28 @@ const { DEFAULT_GAME_MODE, FORCE_GAME_MODE } = ServerConfig.GAME_MODE;
 
 /** The base class for a logged in and living player entity in the world */
 class Player extends Entity {
-    socket: Socket;
-    lastupdated: number = 0;
-    serverlastupdated: number;
-    username: string;
-    gamemode: string = GAME_MODES.SURVIVAL;
-    kills: number = 0;
-    color: Color;
+    readonly socket: Socket;
+    private lastupdated: number = 0;
+    private serverlastupdated: number;
+    private username: string;
+    private gamemode: string = GAME_MODES.SURVIVAL;
+    private kills: number = 0;
+    private color: Color;
     private inventory: ChangesInventory;
-    hotbarslot: number = 0;
-    station: Station | null = null;
-    lastchunk: Vector2D | undefined;
-    recipes: Recipe[] = [];
-    moving: boolean = false;
-    statereset: boolean = false;
+    private hotbarslot: number = 0;
+    private station: Station | null = null;
+    private lastchunk: Vector2D | null = null;
+    private recipes: Recipe[] = [];
+    private moving: boolean = false;
+    private statereset: boolean = false;
 
-    pushx: number = 0;
-    pushy: number = 0;
-    setpos: Vector2D | null = null;
-    lastsetpos: number = 0;
-    setgamemode: boolean = false;
-    setcolor: boolean = false;
-    lastdarkness: number = 0;
+    private pushx: number = 0;
+    private pushy: number = 0;
+    private setpos: Vector2D | null = null;
+    private lastsetpos: number = 0;
+    private setgamemode: boolean = false;
+    private setcolor: boolean = false;
+    private lastdarkness: number = 0;
 
     constructor(socket: Socket, username: string, layer: Layer, x: number, y: number, starter: boolean){
         super(layer, x, y, 10, 0, PLAYER_SCALE, ASSETS.PLAYER);
@@ -111,19 +111,61 @@ class Player extends Entity {
 
     // #region getters
 
+    /** Returns this players username */
+    getUsername(): string {
+        return this.username;
+    }
+
+    /** Returns this players gamemode */
+    getGamemode(): string {
+        return this.gamemode;
+    }
+
+    /** Returns this players kills */
+    getKills(): number {
+        return this.kills;
+    }
+
+    /** Returns this players color */
+    getColor(): Color {
+        return this.color;
+    }
+
+    /** Returns this players active station */
+    getStation(): Station | null {
+        return this.station;
+    }
+
+    /** Returns the combined inventory associated with this players current state */
     getCombinedInventory(): IInventory {
         const inventory = this.station === null ? this.inventory :
             new CombinedInventory([this.inventory, ...this.station.inventories]);
         return inventory;
     }
 
+    /** Returns this players inventory */
     getInventory(): ChangesInventory {
         return this.inventory;
+    }
+
+    /** Returns this players currently held item */
+    getCurrentItem(): ItemStack | null {
+        return this.inventory.getSlot(this.hotbarslot);
+    }
+
+    /** Returns if this player is currently moving */
+    getMoving(): boolean {
+        return this.moving;
     }
 
     // #endregion
 
     // #region setters
+
+    /** Sets the players username to the given value */
+    setUsername(username: string): void {
+        this.username = username;
+    }
 
     /** Pushes the player the given distances */
     override push(x: number, y: number): void {
@@ -184,6 +226,11 @@ class Player extends Entity {
         if(!ignoremax) this.health = Math.min(this.health, this.maxhealth);
     }
 
+    /** Sets this players station to the given station */
+    setStation(station: Station | null): void {
+        this.station = station;
+    }
+
     /** Rempoves the given amount from the players current slot */
     removeFromCurrentSlot(amount: number): boolean {
         return this.inventory.removeFromSlot(this.hotbarslot, amount);
@@ -194,6 +241,14 @@ class Player extends Entity {
         const inventory = this.getCombinedInventory();
         inventory.dropFromSlot(this.layer, this.x, this.y, slot, game, amount, this.id);
         const stack = inventory.getSlot(slot);
+    }
+
+    /** Adds the given recipe to this players recipes and returns if it was not already there */
+    addRecipe(recipe: Recipe): boolean {
+        if(this.recipes.includes(recipe)) return false;
+
+        this.recipes.push(recipe);
+        return true;
     }
 
     // #endregion
@@ -256,6 +311,30 @@ class Player extends Entity {
     /** Resyncs the players client with the server */
     resync(){
         this.setPos(this.x, this.y);
+    }
+
+    /** Updates this players darkness level and returns if it changed */
+    updateDarkness(darkness: number): boolean {
+        const olddarkness = this.lastdarkness;
+        this.lastdarkness = darkness;
+        
+        return olddarkness != darkness;
+    }
+
+    /** Sets this players last chunk to the given value and returns the old value */
+    updateLastChunk(lastchunk: Vector2D | null): Vector2D | null {
+        const oldlastchunk = this.lastchunk;
+        this.lastchunk = lastchunk;
+
+        return oldlastchunk;
+    }
+
+    /** Returns if state reset is true and sets it back to false */
+    updateStateReset(): boolean {
+        const oldstatereset = this.statereset;
+        this.statereset = false;
+
+        return oldstatereset;
     }
 
     // #endregion

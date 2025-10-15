@@ -14,19 +14,19 @@ export default (): void => CommandRegistry.register(new CommandDefinition("op", 
 
 function opCommand(args: any[], player: Player, game: Game){
     // special op checks
-    if(!game.playerManager.opManager.isOp(player.username) && !(args[1] == game.playerManager.opManager.oppasscode && !game.playerManager.opManager.oppasscodeused)){
+    if(!game.playerManager.opManager.isOp(player.getUsername()) && !(args[1] == game.playerManager.opManager.oppasscode && !game.playerManager.opManager.oppasscodeused)){
         CommandDefinition.sendNoPermission(player, game);
         return;
     }
 
     // actually run command
     if(args[1] == game.playerManager.opManager.oppasscode && !game.playerManager.opManager.oppasscodeused){
-        game.playerManager.opManager.op(player.username);
+        game.playerManager.opManager.op(player.getUsername());
         game.playerManager.opManager.oppasscodeused = true;
         game.chatManager.sendMessageTo(player, "you are now opped");
     }else{
         const p = game.playerManager.getPlayerByUsername(args[1]);
-        const username = p !== undefined ? p.username : args[1];
+        const username = p !== undefined ? p.getUsername() : args[1];
 
         if(game.playerManager.opManager.isOp(username)){
             game.chatManager.sendMessageTo(player, `${username} is already opped`);

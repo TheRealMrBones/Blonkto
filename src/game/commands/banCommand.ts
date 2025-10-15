@@ -25,9 +25,9 @@ function banCommand(args: any[], player: Player, game: Game){
         };
         p.socket.emit(MSG_TYPES.BAN, content);
 
-        game.playerManager.banManager.ban(p.username, args[2]);
+        game.playerManager.banManager.ban(p.getUsername(), args[2]);
         game.playerManager.removePlayer(p.socket);
-        game.chatManager.sendMessageTo(player, `banned ${p.username}`);
+        game.chatManager.sendMessageTo(player, `banned ${p.getUsername()}`);
     }else{
         if(game.playerManager.banManager.isBanned(args[1])){
             game.chatManager.sendMessageTo(player, `${args[1]} is already banned`);

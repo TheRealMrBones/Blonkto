@@ -17,7 +17,7 @@ function killCommand(args: any[], player: Player, game: Game){
     const argIndex = args[0];
 
     // special op checks
-    if(argIndex == 1 && !game.playerManager.opManager.isOp(player.username)){
+    if(argIndex == 1 && !game.playerManager.opManager.isOp(player.getUsername())){
         CommandDefinition.sendNoPermission(player, game);
         return;
     }
@@ -31,7 +31,7 @@ function killCommand(args: any[], player: Player, game: Game){
         case 1: {
             const p: Player = args[1];
             p.emitDeathEvent(game, "the Server", null);
-            game.chatManager.sendMessageTo(player, `killed ${p.username}`);
+            game.chatManager.sendMessageTo(player, `killed ${p.getUsername()}`);
             break;
         };
     }

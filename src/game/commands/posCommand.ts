@@ -17,7 +17,7 @@ function posCommand(args: any[], player: Player, game: Game){
     const p = game.playerManager.getPlayerByUsername(username);
 
     if(p !== undefined){
-        game.chatManager.sendMessageTo(player, `${p.username} is at ${Math.floor(p.x)}, ${Math.floor(p.y)}`);
+        game.chatManager.sendMessageTo(player, `${p.getUsername()} is at ${Math.floor(p.x)}, ${Math.floor(p.y)}`);
     }else{
         if(game.fileManager.fileExists(getPlayerFilePath(username))){
             const data = game.fileManager.readFile(getPlayerFilePath(username));
