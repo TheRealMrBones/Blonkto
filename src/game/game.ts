@@ -33,6 +33,8 @@ import PackageJson from "../../package.json" with { type: "json" };
 class Game {
     private readonly logger: Logger;
 
+    private readonly version: string;
+
     readonly fileManager: FileManager;
     readonly socketManager: SocketManager;
     readonly playerManager: PlayerManager;
@@ -56,6 +58,10 @@ class Game {
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
 
+        // get version
+        this.version = PackageJson.version;
+        this.logger.info(`Blonkto Version: ${this.version}`);
+
         // managers
         this.fileManager = fileManager;
         this.socketManager = new SocketManager(io, this);
@@ -70,6 +76,11 @@ class Game {
         if(this.fileManager.fileExists("game")){
             const data: SerializedWriteGame = JSON.parse(this.fileManager.readFile("game")!);
             this.lifeticks = data.lifeticks;
+
+            // handle new verison
+            if(data.version != this.version){
+                this.logger.warning(`Save Version: ${data.version} does not match Blonkto Version: ${this.version}`);
+            }
         }else{
             this.lifeticks = 0;
         }
@@ -86,10 +97,12 @@ class Game {
         // save global game data
         this.saveGlobalGameData();
 
+        // start ticking
         this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
         setTimeout(this.tick.bind(this), 1);
 
+        // init save and backup intervals
         this.saveinterval = setInterval(this.saveGame.bind(this), 1000 * AUTOSAVE_RATE);
         this.backupinterval = setInterval(this.backupWorld.bind(this), 1000 * 60 * 60 * BACKUP_RATE);
     }
@@ -229,7 +242,7 @@ class Game {
     private saveGlobalGameData(): void {
         const gamedata: SerializedWriteGame = {
             lifeticks: this.lifeticks,
-            version: PackageJson.version,
+            version: this.version,
         };
         this.fileManager.writeFile("game", JSON.stringify(gamedata));
     }
