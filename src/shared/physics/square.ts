@@ -4,7 +4,7 @@ import V2D from "./vector2d.js";
 
 /** A uniform square in 2d space */
 class Square extends Polygon {
-    halfwidth: number;
+    private readonly halfwidth: number;
 
     constructor(position: Vector2D, width: number, rotation?: number){
         super(position, rotation);
@@ -12,7 +12,7 @@ class Square extends Polygon {
         this.halfwidth = width / 2;
     }
 
-    /** Returns the vertices of this polygon relative to the origin of the polygon */
+    /** Returns the vertices of this square relative to the origin of the square */
     getVeticesFromOrigin(): Vector2D[] {
         return [
             [-this.halfwidth, -this.halfwidth],

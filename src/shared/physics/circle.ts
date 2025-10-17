@@ -4,7 +4,7 @@ import V2D from "./vector2d.js";
 
 /** A uniform circle in 2d space */
 class Circle extends CollisionObject {
-    readonly radius: number;
+    private readonly radius: number;
 
     constructor(position: Vector2D, radius: number){
         super(position);

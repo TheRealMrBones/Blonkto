@@ -2,8 +2,8 @@ import { Vector2D } from "../types.js";
 
 /** An physics object in 2d space that can be interfaced by the SAT collision system */
 abstract class CollisionObject {
-    position: Vector2D;
-    rotation: number;
+    protected position: Vector2D;
+    protected rotation: number;
 
     constructor(position: Vector2D, rotation?: number){
         this.position = position;
