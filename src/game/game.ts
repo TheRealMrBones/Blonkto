@@ -27,6 +27,8 @@ const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;
 
 const CALCULATED_UPDATE_RATE = 1000 / SERVER_UPDATE_RATE;
 
+import PackageJson from "../../package.json" with { type: "json" };
+
 /** The main class that manages the game world and the entities in it */
 class Game {
     private readonly logger: Logger;
@@ -80,6 +82,9 @@ class Game {
         this.lastupdatetime = Date.now();
         this.starttime = Date.now();
         this.nextupdatetime = Date.now();
+
+        // save global game data
+        this.saveGlobalGameData();
 
         this.logger.info("Game initialized");
         this.logger.info("Starting first tick");
@@ -209,10 +214,7 @@ class Game {
         this.logger.info("Saving game");
 
         // save global game data
-        const gamedata: SerializedWriteGame = {
-            lifeticks: this.lifeticks,
-        };
-        this.fileManager.writeFile("game", JSON.stringify(gamedata));
+        this.saveGlobalGameData();
 
         // saves the world data
         this.world.saveWorld();
@@ -221,6 +223,15 @@ class Game {
         this.playerManager.savePlayers();
 
         this.logger.info("Game saved");
+    }
+
+    /** Saves the global game data */
+    private saveGlobalGameData(): void {
+        const gamedata: SerializedWriteGame = {
+            lifeticks: this.lifeticks,
+            version: PackageJson.version,
+        };
+        this.fileManager.writeFile("game", JSON.stringify(gamedata));
     }
 
     /** Backs up the currently loaded world to a seperate save */
@@ -247,6 +258,7 @@ class Game {
 
 /** Defines the format for serialized writes of the game */
 type SerializedWriteGame = {
+    version: string,
     lifeticks: number,
 }
 
