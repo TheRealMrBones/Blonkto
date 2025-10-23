@@ -34,6 +34,7 @@ class Game {
     private readonly logger: Logger;
 
     private readonly version: string;
+    private readonly oldversion: string;
 
     readonly fileManager: FileManager;
     readonly socketManager: SocketManager;
@@ -62,8 +63,25 @@ class Game {
         this.version = PackageJson.version;
         this.logger.info(`Blonkto Version: ${this.version}`);
 
-        // managers
+        // read game save data
         this.fileManager = fileManager;
+
+        if(this.fileManager.fileExists("game")){
+            const data: SerializedWriteGame = JSON.parse(this.fileManager.readFile("game")!);
+
+            // handle new verison
+            this.oldversion = data.version;
+            if(this.oldversion != this.version){
+                this.logger.warning(`Save Version: ${data.version} does not match Blonkto Version: ${this.version}`);
+            }
+
+            this.lifeticks = data.lifeticks;
+        }else{
+            this.oldversion = "";
+            this.lifeticks = 0;
+        }
+
+        // managers
         this.socketManager = new SocketManager(io, this);
         this.playerManager = new PlayerManager(this);
         this.entityManager = new EntityManager(this);
@@ -71,19 +89,6 @@ class Game {
         this.performanceManager = new PerformanceManager(this);
         this.collisionManager = new CollisionManager(this);
         this.craftManager = new CraftManager(this);
-
-        // read game save data
-        if(this.fileManager.fileExists("game")){
-            const data: SerializedWriteGame = JSON.parse(this.fileManager.readFile("game")!);
-            this.lifeticks = data.lifeticks;
-
-            // handle new verison
-            if(data.version != this.version){
-                this.logger.warning(`Save Version: ${data.version} does not match Blonkto Version: ${this.version}`);
-            }
-        }else{
-            this.lifeticks = 0;
-        }
 
         // world
         this.world = new World(this);
