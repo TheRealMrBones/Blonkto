@@ -36,6 +36,16 @@ class LogManager {
 
     // #endregion
 
+    // #region getters
+
+    /** Returns the given amount of previous logs of the given severity or higher */
+    getLogs(amount: number, priority?: number): Log[] {
+        priority = priority === undefined ? LOG_PRIORITIES.INFO : priority;
+        return this.logs.filter(l => l.getPriority() >= priority).slice(Math.max(this.logs.length - amount, 0));
+    }
+
+    // #endregion
+
     // #region log methods
 
     /** Logs the given message */
