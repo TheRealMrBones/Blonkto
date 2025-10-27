@@ -5,6 +5,7 @@ import { Color } from "../../shared/types.js";
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
+/** The data format of game assets */
 type AssetCache = {
     image: OffscreenCanvas,
     scale: number,
@@ -34,7 +35,7 @@ class AssetManager {
                 this.assetsbase[assetName] = asset;
                 resolve();
             };
-            asset.src = `/${assetName}`;
+            asset.src = `/${assetName}.png`;
         });
     }
 
