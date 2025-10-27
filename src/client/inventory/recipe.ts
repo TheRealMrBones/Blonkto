@@ -28,7 +28,7 @@ class Recipe {
 
         const itemimg = document.createElement("img");
         itemimg.className = "item";
-        itemimg.src = asset;
+        itemimg.src = `${asset}.png`;
         maindiv.appendChild(itemimg);
 
         if(resultcount > 1){
@@ -46,7 +46,7 @@ class Recipe {
 
             const ingredientimg = document.createElement("img");
             ingredientimg.className = "item";
-            ingredientimg.src = ingredient.asset;
+            ingredientimg.src = `${ingredient.asset}.png`;
             ingredientdiv.appendChild(ingredientimg);
 
             if(ingredient.amount > 1){

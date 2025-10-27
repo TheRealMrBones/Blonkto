@@ -41,7 +41,7 @@ class Inventory {
 
         const itemimg = document.createElement("img");
         itemimg.className = "item";
-        itemimg.src = item.asset;
+        itemimg.src = `${item.asset}.png`;
         hotbarslot.appendChild(itemimg);
 
         const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
