@@ -35,7 +35,7 @@ class AssetManager {
                 this.assetsbase[assetName] = asset;
                 resolve();
             };
-            asset.src = `/${assetName}.png`;
+            asset.src = `/assets/${assetName}.png`;
         });
     }
 
