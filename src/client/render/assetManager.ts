@@ -1,17 +1,11 @@
 import PlayerClient from "../playerClient.js";
+import { AssetCache } from "./assetCache.js";
 import { equalColor, getBaseColor } from "../../shared/typeOperations.js";
 import { Color } from "../../shared/types.js";
 import { AnimationData } from "./animationData.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, ANIMATIONS } = Constants;
-
-/** The data format of game assets */
-type AssetCache = {
-    image: OffscreenCanvas,
-    scale: number,
-    color: Color,
-};
 
 /** Manages assets loaded by the client for later rendering */
 class AssetManager {
