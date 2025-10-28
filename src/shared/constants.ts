@@ -64,6 +64,9 @@ const Constants = Object.freeze({
         COPPER_ORE: "CopperOre",
         COPPER_BAR: "CopperBar",
     },
+    ANIMATIONS: {
+        TORCH_ANIMATION: "TorchAnimation",
+    },
     SHAPES: {
         NONE: 0,
         SQUARE: 1,

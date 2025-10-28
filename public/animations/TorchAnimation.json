@@ -1,0 +1,21 @@
+{
+    "name": "TorchAnimation",
+    "spritesheetwidth": 2,
+    "spritesheetheight": 1,
+    "animations": [
+        {
+            "name": "TorchAnimation",
+            "duration": 1000,
+            "frames": [
+                {
+                    "sprite": 0,
+                    "duration": 500
+                },
+                {
+                    "sprite": 1,
+                    "duration": 500
+                }
+            ]
+        }
+    ]
+}
