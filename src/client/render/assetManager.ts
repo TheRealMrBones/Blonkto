@@ -145,7 +145,7 @@ class AssetManager {
         for(const frame of animation.frames){
             if(frametime <= time && frametime + frame.duration > time){
                 const assetname = `${spritesheet}_${frame.sprite}`
-                return this.getAsset(`${spritesheet}_${frame.sprite}`, scale, color, scaleheight);
+                return this.getAsset(assetname, scale, color, scaleheight);
             }
 
             frametime += frame.duration;
