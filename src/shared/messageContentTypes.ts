@@ -1,4 +1,10 @@
 import { OneTimeMessageContent } from "./oneTimeMessageContentTypes.js";
+import { SerializedChangesInventory } from "./serialization/items/serializedInventory.js";
+import { SerializedStation } from "./serialization/items/serializedStation.js";
+import { SerializedUpdateGameObject } from "./serialization/objects/serializedGameObject.js";
+import { SerializedUpdatePlayer } from "./serialization/objects/serializedPlayer.js";
+import { SerializedTab } from "./serialization/serializedTab.js";
+import { SerializedWorldLoad } from "./serialization/world/SerializedWorldLoad.js";
 import { Color } from "./types.js";
 
 /** Defines the format of the failed connection / kicked messages */
@@ -23,13 +29,13 @@ export type PlayerInstantiatedContent = {
 export type GameUpdateContent = {
     t: number;
     lastupdatetime: number | null;
-    me: any;
-    others: any[];
-    entities: any[];
-    inventoryupdates: any[];
-    stationupdates: any | null;
-    worldLoad: any;
-    tab: any[];
+    me: SerializedUpdatePlayer;
+    others: SerializedUpdatePlayer[];
+    entities: SerializedUpdateGameObject[];
+    inventoryupdates: SerializedChangesInventory;
+    stationupdates: SerializedStation | null;
+    worldLoad: SerializedWorldLoad;
+    tab: SerializedTab;
     darkness?: number;
     tps: number;
     statereset: boolean;

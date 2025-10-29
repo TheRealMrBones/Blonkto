@@ -135,7 +135,7 @@ class AssetManager {
     /** Returns the image asset for the given time in the given animation */
     getAnimationAsset(animationname: string, time: number, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
         if(animationname === undefined) return null;
-        
+
         const spritesheet = animationname.split("_")[0];
         const animation = this.animations[animationname];
         time %= animation.duration;
@@ -144,7 +144,7 @@ class AssetManager {
 
         for(const frame of animation.frames){
             if(frametime <= time && frametime + frame.duration > time){
-                const assetname = `${spritesheet}_${frame.sprite}`
+                const assetname = `${spritesheet}_${frame.sprite}`;
                 return this.getAsset(assetname, scale, color, scaleheight);
             }
 

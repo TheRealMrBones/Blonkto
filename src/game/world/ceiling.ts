@@ -8,6 +8,7 @@ import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
+import { SerializedUpdateCeiling, SerializedWriteCeiling } from "../../shared/serialization/world/serializedCeiling.js";
 
 /** Represents a placed ceiling in the game world */
 class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
@@ -68,7 +69,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     // #region serialization
 
     /** Returns an object representing this ceilings data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedUpdateCeiling {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
@@ -148,11 +149,5 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
 
     // #endregion
 }
-
-/** Defines the format for serialized writes of a ceiling */
-export type SerializedWriteCeiling = {
-    ceilingdefinition: string,
-    componentdata?: any,
-};
 
 export default Ceiling;

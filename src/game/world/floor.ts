@@ -8,6 +8,7 @@ import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
+import { SerializedUpdateFloor, SerializedWriteFloor } from "../../shared/serialization/world/serializedFloor.js";
 
 /** Represents a placed floor in the game world */
 class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
@@ -68,7 +69,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     // #region serialization
 
     /** Returns an object representing this floors data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedUpdateFloor {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
@@ -148,11 +149,5 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
 
     // #endregion
 }
-
-/** Defines the format for serialized writes of a floor */
-export type SerializedWriteFloor = {
-    floordefinition: string,
-    componentdata?: any,
-};
 
 export default Floor;

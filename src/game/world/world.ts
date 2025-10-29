@@ -4,6 +4,7 @@ import Layer from "./layer.js";
 import Player from "../objects/player.js";
 import SeededRandom from "../../shared/random/seededRandom.js";
 import { Vector2D } from "../../shared/types.js";
+import { SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
 
 import LayerGenerator from "./generation/layerGenerator.js";
 import CaveLayerGenerator from "./generation/caveLayerGenerator.js";
@@ -65,7 +66,7 @@ class World {
     // #region ticking
 
     /** Ticks the entire game world and returns player load data */
-    tick(dt: number): {[key: string]: any } {
+    tick(dt: number): {[key: string]: SerializedWorldLoad } {
         // tick day cycle
         this.tickDayCycle();
 
@@ -75,7 +76,7 @@ class World {
         }
 
         // get world loads for all players
-        const loaddata: {[key: string]: any } = {};
+        const loaddata: {[key: string]: SerializedWorldLoad } = {};
         for(const p of this.game.entityManager.getPlayerEntities()){
             loaddata[p.id] = p.layer.loadPlayerChunks(p);
         }

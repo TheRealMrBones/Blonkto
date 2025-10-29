@@ -15,6 +15,11 @@ import FloorRegistry from "../registries/floorRegistry.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
 import V2D from "../../shared/physics/vector2d.js";
 import { Vector2D } from "../../shared/types.js";
+import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
+import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
+import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
+import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
 
 import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
@@ -94,14 +99,14 @@ class Layer {
     // #region Player
 
     /** Returns chunk data for an update to the given players client and handles new chunk loading as needed */
-    loadPlayerChunks(player: Player): any {
+    loadPlayerChunks(player: Player): SerializedWorldLoad {
         // prepare used lists
         const usedblocks: string[] = [];
         const usedfloors: string[] = [];
         const usedceilings: string[] = [];
-        const usedblocksserialized: any[] = [];
-        const usedfloorsserialized: any[] = [];
-        const usedceilingsserialized: any[] = [];
+        const usedblocksserialized: SerializedInitBlock[] = [];
+        const usedfloorsserialized: SerializedInitFloor[] = [];
+        const usedceilingsserialized: SerializedInitCeiling[] = [];
 
         // get bottom right of chunk 2 by 2 to load
         const x = Math.floor(player.x / CHUNK_SIZE);
@@ -141,7 +146,7 @@ class Layer {
         });
 
         // send chunk updates for same chunks
-        const updatedcells: { data: any; x: number; y: number; }[] = [];
+        const updatedcells: SerializedCellUpdate[] = [];
         sameChunks.forEach(sc => {
             const chunk = this.getChunk(sc[0], sc[1], false);
             if(chunk !== null){
@@ -151,9 +156,9 @@ class Layer {
                     const cellserialized = cell.serializeForLoad();
 
                     updatedcells.push({
-                        data: cellserialized,
                         x: cellupdate.x,
                         y: cellupdate.y,
+                        data: cellserialized,
                     });
 
                     if(cellserialized.block) if(!usedblocks.includes(cellserialized.block))
@@ -186,7 +191,7 @@ class Layer {
         });
 
         // load chunks
-        const loadChunksSerialized: { x: number; y: number; cells: any[][]; }[] = [];
+        const loadChunksSerialized: SerializedLoadChunk[] = [];
 
         loadChunks.forEach(lc => {
             const chunk = this.getChunk(lc[0], lc[1], true);

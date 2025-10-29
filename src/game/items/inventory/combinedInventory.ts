@@ -189,6 +189,7 @@ class CombinedInventory implements IInventory {
     // #endregion
 }
 
+/** The definition for a mapping towards a specific sub inventories specified slot */
 type RealSlot = {
     inventory: IInventory;
     slot: number;

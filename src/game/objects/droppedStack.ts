@@ -1,8 +1,9 @@
 import Layer from "../world/layer.js";
-import ItemStack, { SerializedWriteItemStack } from "../items/itemStack.js";
-import GameObject, { SerializedWriteGameObject } from "./gameObject.js";
+import ItemStack from "../items/itemStack.js";
+import GameObject from "./gameObject.js";
 import Game from "../game.js";
 import ItemRegistry from "../registries/itemRegistry.js";
+import { SerializedUpdateDroppedStack, SerializedWriteDroppedStack } from "../../shared/serialization/objects/serializedDroppedStack.js";
 
 import ServerConfig from "../../configs/server.js";
 const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
@@ -90,7 +91,7 @@ class DroppedStack extends GameObject {
     // #region serialization
 
     /** Returns an object representing this dropped stacks data for a game update to the client */
-    override serializeForUpdate(): any {
+    override serializeForUpdate(): SerializedUpdateDroppedStack {
         const base = super.serializeForUpdate();
 
         return {
@@ -116,13 +117,6 @@ class DroppedStack extends GameObject {
     }
 
     // #endregion
-}
-
-/** Defines the format for serialized writes of a dropped stack */
-export type SerializedWriteDroppedStack = SerializedWriteGameObject & {
-    type: string,
-    itemStack: SerializedWriteItemStack,
-    despawntime: number,
 }
 
 export default DroppedStack;

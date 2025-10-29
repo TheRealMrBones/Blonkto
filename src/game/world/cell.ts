@@ -5,6 +5,7 @@ import Floor from "./floor.js";
 import Ceiling from "./ceiling.js";
 import Game from "../game.js";
 import Chunk from "./chunk.js";
+import { SerializedLoadCell, SerializedWriteCell } from "../../shared/serialization/world/serializedCell.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -231,8 +232,8 @@ class Cell {
     // #region serialization
 
     /** Returns an object representing this cells data for loading to the client */
-    serializeForLoad(): any {
-        const data: any = {};
+    serializeForLoad(): SerializedLoadCell {
+        const data: SerializedLoadCell = {};
 
         if(this.block) data.block = this.block.definition.key;
         if(this.floor) data.floor = this.floor.definition.key;
@@ -242,8 +243,8 @@ class Cell {
     }
 
     /** Returns an object representing this cells data for writing to the save */
-    serializeForWrite(): any {
-        const data: any = {};
+    serializeForWrite(): SerializedWriteCell {
+        const data: SerializedWriteCell = {};
 
         if(this.basefloor) data.basefloor = this.basefloor.key;
         if(this.block) data.block = this.block.serializeForWrite();

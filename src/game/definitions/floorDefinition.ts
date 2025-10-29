@@ -6,6 +6,7 @@ import Game from "../game.js";
 import Floor from "../world/floor.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
+import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -73,7 +74,7 @@ class FloorDefinition extends ComponentHandler<FloorDefinition> {
     // #region serialization
 
     /** Returns an object representing this ceiling definition for saving to the client */
-    serializeForInit(): any {
+    serializeForInit(): SerializedInitFloor {
         const componentdata = this.serializeComponentsForInit();
 
         return {

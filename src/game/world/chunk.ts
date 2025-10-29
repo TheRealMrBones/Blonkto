@@ -1,6 +1,8 @@
 import Cell from "./cell.js";
 import Layer from "./layer.js";
 import Game from "../game.js";
+import { SerializedLoadCell } from "../../shared/serialization/world/serializedCell.js";
+import { SerializedLoadChunk, SerializedLoadChunkFull, SerializedWriteChunk } from "../../shared/serialization/world/serializedChunk.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -68,8 +70,8 @@ class Chunk {
     // #region serialization
 
     /** Returns an object representing this chunks data for loading to the client */
-    serializeForLoad(): any {
-        const serializedCells: any[][] = [];
+    serializeForLoad(): SerializedLoadChunkFull {
+        const serializedCells: SerializedLoadCell[][] = [];
         const usedblocks: string[] = [];
         const usedfloors: string[] = [];
         const usedceilings: string[] = [];
@@ -97,7 +99,7 @@ class Chunk {
     }
 
     /** Returns an object representing this chunks data for writing to the save */
-    serializeForWrite(): any {
+    serializeForWrite(): SerializedWriteChunk {
         let data = "";
         for(let x = 0; x < CHUNK_SIZE; x++){
             for(let y = 0; y < CHUNK_SIZE; y++){

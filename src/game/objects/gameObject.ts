@@ -7,6 +7,7 @@ import { Vector2D } from "../../shared/types.js";
 import Entity from "./entity.js";
 import Player from "./player.js";
 import V2D from "../../shared/physics/vector2d.js";
+import { SerializedUpdateGameObject, SerializedWriteGameObject } from "../../shared/serialization/objects/serializedGameObject.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
@@ -30,7 +31,6 @@ abstract class GameObject {
     dy: number = 0;
     dir: number;
     scale: number;
-    private readonly asset: string;
     falling: boolean = false;
 
     constructor(layer: Layer, x: number, y: number, dir?: number, scale?: number, asset?: string){
@@ -43,14 +43,13 @@ abstract class GameObject {
         this.y = y;
         this.dir = dir || 0;
         this.scale = scale || 1;
-        this.asset = asset || ASSETS.MISSING_TEXTURE;
     }
 
     // #region getters
 
     /** Returns this objects asset */
     getAsset(): string {
-        return this.asset;
+        return ASSETS.MISSING_TEXTURE;
     }
 
     /** Returns the current speed of this object */
@@ -257,7 +256,7 @@ abstract class GameObject {
     // #region serialization
 
     /** Returns an object representing this objects data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedUpdateGameObject {
         return {
             static: {
                 id: this.id,
@@ -280,22 +279,11 @@ abstract class GameObject {
             y: this.y,
             dir: this.dir,
             scale: this.scale,
-            asset: this.getAsset(),
             falling: this.falling,
         };
     }
 
     // #endregion
-}
-
-/** Defines the format for serialized writes of a game object */
-export type SerializedWriteGameObject = {
-    x: number,
-    y: number,
-    dir: number,
-    scale: number,
-    asset: string,
-    falling: boolean,
 }
 
 export default GameObject;

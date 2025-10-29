@@ -9,10 +9,10 @@ import Recipe from "../items/recipe.js";
 import Station from "../items/station.js";
 import IInventory from "../items/inventory/IInventory.js";
 import CombinedInventory from "../items/inventory/combinedInventory.js";
-import { SerializedWriteInventory } from "../items/inventory/inventory.js";
 import { Color, Vector2D } from "../../shared/types.js";
 import { InputContent } from "../../shared/messageContentTypes.js";
 import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
+import { SerializedUpdatePlayer, SerializedWriteDeadPlayer, SerializedWritePlayer } from "../../shared/serialization/objects/serializedPlayer.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, GAME_MODES, ONE_TIME_MSG_TYPES } = Constants;
@@ -109,6 +109,11 @@ class Player extends Entity {
     // #endregion
 
     // #region getters
+
+    /** Returns this players asset */
+    override getAsset(): string {
+        return ASSETS.PLAYER;
+    }
 
     /** Returns this players username */
     getUsername(): string {
@@ -439,7 +444,7 @@ class Player extends Entity {
     // #region serialization
 
     /** Returns an object representing this players data for a game update to the client */
-    override serializeForUpdate(): any {
+    override serializeForUpdate(): SerializedUpdatePlayer {
         const base = super.serializeForUpdate();
 
         return {
@@ -465,6 +470,9 @@ class Player extends Entity {
             layer: this.layer.z,
             x: this.x,
             y: this.y,
+            dir: this.dir,
+            scale: this.scale,
+            falling: this.falling,
             health: this.health,
             kills: this.kills,
             color: this.color,
@@ -488,30 +496,6 @@ class Player extends Entity {
     }
 
     // #endregion
-}
-
-/** Defines the format for serialized writes of a player */
-export type SerializedWritePlayer = {
-    dead: false,
-    username: string,
-    gamemode: string,
-    layer: number,
-    x: number,
-    y: number,
-    health: number,
-    kills: number,
-    color: Color,
-    inventory: SerializedWriteInventory,
-}
-
-/** Defines the format for serialized writes of a dead player */
-export type SerializedWriteDeadPlayer = {
-    dead: true,
-    username: string,
-    gamemode: string,
-    kills: number,
-    color: Color,
-    inventory?: SerializedWriteInventory,
 }
 
 export default Player;

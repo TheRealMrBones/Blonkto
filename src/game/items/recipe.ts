@@ -1,3 +1,4 @@
+import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
 import Game from "../game.js";
 import DroppedStack from "../objects/droppedStack.js";
 import ItemRegistry from "../registries/itemRegistry.js";
@@ -70,7 +71,7 @@ class Recipe {
     // #region serialization
 
     /** Returns an object representing this recipes data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedRecipe {
         return {
             ingredients: Object.entries(this.ingredients).map(([item, amount]) => ({
                 item: item,

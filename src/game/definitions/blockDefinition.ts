@@ -6,6 +6,7 @@ import IDrop from "../items/drops/IDrop.js";
 import Block from "../world/block.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
+import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, MINE_TYPES } = Constants;
@@ -139,7 +140,7 @@ class BlockDefinition extends ComponentHandler<BlockDefinition> {
     // #region serialization
 
     /** Returns an object representing this block definition for saving to the client */
-    serializeForInit(): any {
+    serializeForInit(): SerializedInitBlock {
         const componentdata = this.serializeComponentsForInit();
 
         return {

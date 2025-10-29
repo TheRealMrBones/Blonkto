@@ -8,6 +8,7 @@ import WhitelistManager from "./whitelistManager.js";
 import Player from "../objects/player.js";
 import { filterText } from "../../shared/filter.js";
 import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
+import { SerializedTab } from "../../shared/serialization/serializedTab.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -193,7 +194,7 @@ class PlayerManager {
     }
 
     /** Returns the tab list of current players */
-    getTab(): any[] {
+    getTab(): SerializedTab {
         if(!SHOW_TAB) return [];
 
         return [...this.game.entityManager.getPlayerEntities()].map(p => {

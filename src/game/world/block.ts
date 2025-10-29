@@ -8,6 +8,7 @@ import BlockRegistry from "../registries/blockRegistry.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
+import { SerializedUpdateBlock, SerializedWriteBlock } from "../../shared/serialization/world/serializedBlock.js";
 
 /** Represents a placed block in the game world */
 class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
@@ -68,7 +69,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     // #region serialization
 
     /** Returns an object representing this blocks data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedUpdateBlock {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
@@ -148,12 +149,5 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
 
     // #endregion
 }
-
-/** Defines the format for serialized writes of a block */
-export type SerializedWriteBlock = {
-    blockdefinition: string,
-    componentdata?: any,
-};
-
 
 export default Block;

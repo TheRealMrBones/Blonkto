@@ -1,8 +1,9 @@
+import { SerializedChangesInventory, SerializedUpdateInventory, SerializedWriteInventory } from "../../../shared/serialization/items/serializedInventory.js";
 import Game from "../../game.js";
 import DroppedStack from "../../objects/droppedStack.js";
 import ItemRegistry from "../../registries/itemRegistry.js";
 import Layer from "../../world/layer.js";
-import ItemStack, { SerializedWriteItemStack } from "../itemStack.js";
+import ItemStack from "../itemStack.js";
 import IInventory from "./IInventory.js";
 
 /** A managable collection of item stacks */
@@ -240,8 +241,8 @@ class Inventory implements IInventory {
     // #region serialization
 
     /** Returns an object representing this inventory for a game update to the client */
-    serializeForUpdate(){
-        return this.slots.map(itemstack => itemstack ? itemstack.serializeForUpdate() : false);
+    serializeForUpdate(): SerializedUpdateInventory{
+        return this.slots.map(itemstack => itemstack ? itemstack.serializeForUpdate() : null);
     }
 
     /** Returns an object representing this inventory for write */
@@ -256,7 +257,7 @@ class Inventory implements IInventory {
     // #region changes
 
     /** Returns the object representing all changes to this inventory since last reset */
-    getChanges(): any[] {
+    getChanges(): SerializedChangesInventory {
         const changeslist = [];
         for(let i = 0; i < this.size; i++){
             if(this.lastchanges[i]){
@@ -284,10 +285,5 @@ class Inventory implements IInventory {
 
     // #endregion
 }
-
-/** Defines the format for serialized writes of an inventory */
-export type SerializedWriteInventory = {
-    slots: (SerializedWriteItemStack | null)[];
-};
 
 export default Inventory;

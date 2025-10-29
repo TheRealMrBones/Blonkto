@@ -6,6 +6,7 @@ import Game from "../game.js";
 import Ceiling from "../world/ceiling.js";
 import Player from "../objects/player.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
+import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
@@ -73,7 +74,7 @@ class CeilingDefinition extends ComponentHandler<CeilingDefinition> {
     // #region serialization
 
     /** Returns an object representing this ceiling definition for saving to the client */
-    serializeForInit(): any {
+    serializeForInit(): SerializedInitCeiling {
         const componentdata = this.serializeComponentsForInit();
 
         return {

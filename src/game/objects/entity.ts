@@ -2,6 +2,7 @@ import GameObject from "./gameObject.js";
 import Layer from "../world/layer.js";
 import Game from "../game.js";
 import { SwingData } from "../combat/swingData.js";
+import { SerializedUpdateEntity, SerializedWriteEntity } from "../../shared/serialization/objects/serializedEntity.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { HIT_RENDER_DELAY } = SharedConfig.ATTACK;
@@ -185,7 +186,7 @@ abstract class Entity extends GameObject {
     // #region serialization
 
     /** Returns an object representing this entities data for a game update to the client */
-    override serializeForUpdate(): any {
+    override serializeForUpdate(): SerializedUpdateEntity {
         const base = super.serializeForUpdate();
 
         return {
@@ -199,6 +200,16 @@ abstract class Entity extends GameObject {
             dynamic: {
                 ...(base.dynamic),
             },
+        };
+    }
+
+    /** Returns an object representing this entities data for writing to the save */
+    override serializeForWrite(): SerializedWriteEntity {
+        const base = super.serializeForWrite();
+
+        return {
+            ...base,
+            health: this.health,
         };
     }
 

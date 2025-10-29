@@ -7,6 +7,7 @@ import ItemDefinition from "../definitions/itemDefinition.js";
 import { ClickContentExpanded } from "../managers/socketManager.js";
 import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
+import { SerializedWriteItemStack, SerializedUpdateItemStack } from "../../shared/serialization/items/serializedItemStack.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
@@ -93,7 +94,7 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
     // #region serialization
 
     /** Returns an object representing this items data for a game update to the client */
-    serializeForUpdate(): any {
+    serializeForUpdate(): SerializedUpdateItemStack {
         const componentdata = this.serializeComponentDataForUpdate();
 
         return {
@@ -177,12 +178,5 @@ class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {
 
     // #endregion
 }
-
-/** Defines the format for serialized writes of an item stack */
-export type SerializedWriteItemStack = {
-    name: string,
-    amount: number,
-    componentdata?: any,
-};
 
 export default ItemStack;

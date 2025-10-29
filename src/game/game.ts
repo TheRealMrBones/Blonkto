@@ -13,6 +13,7 @@ import Player from "./objects/player.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
 import { createOneTimeMessage, DarknessContent, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
+import { SerializedWorldLoad } from "../shared/serialization/world/SerializedWorldLoad.js";
 
 import Constants from "../shared/constants.js";
 const { GAME_MODES, MSG_TYPES, ONE_TIME_MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -135,7 +136,7 @@ class Game {
         }
 
         // tick world and managers
-        const worldloads: {[key: string]: any } = this.world.tick(dt);
+        const worldloads: {[key: string]: SerializedWorldLoad } = this.world.tick(dt);
         this.entityManager.tick(dt);
 
         // send fat update packets
@@ -150,7 +151,7 @@ class Game {
     }
 
     /** Create an update object to be sent to the specified players client */
-    createUpdate(t: number, player: Player, worldload: any): GameUpdateContent {
+    createUpdate(t: number, player: Player, worldload: SerializedWorldLoad): GameUpdateContent {
         const station = player.getStation();
 
         // Get base update data

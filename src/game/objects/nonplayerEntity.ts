@@ -9,7 +9,7 @@ import ISerializableForWrite from "../components/ISerializableForWrite.js";
 import Entity from "./entity.js";
 import { Vector2D } from "../../shared/types.js";
 import Player from "./player.js";
-import { SerializedWriteGameObject } from "./gameObject.js";
+import { SerializedUpdateNonplayerEntity, SerializedWriteNonplayerEntity } from "../../shared/serialization/objects/serializedNonplayerEntity.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {
@@ -31,6 +31,15 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         entity.loadComponentData(data.componentdata);
         return entity;
     }
+
+    // #region getters
+
+    /** Returns this nonplayer entities asset */
+    override getAsset(): string {
+        return this.definition.asset;
+    }
+
+    // #endregion
 
     // #region setters
 
@@ -77,7 +86,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     // #region serialization
 
     /** Returns an object representing this nonplayer entities data for a game update to the client */
-    override serializeForUpdate(): any {
+    override serializeForUpdate(): SerializedUpdateNonplayerEntity {
         const base = super.serializeForUpdate();
         const componentdata = this.serializeComponentDataForUpdate();
 
@@ -171,13 +180,6 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     }
 
     // #endregion
-}
-
-/** Defines the format for serialized writes of a nonplayer entity */
-export type SerializedWriteNonplayerEntity = SerializedWriteGameObject & {
-    type: string,
-    entitydefinition: string,
-    componentdata?: { [key: string]: any },
 }
 
 export default NonplayerEntity;
