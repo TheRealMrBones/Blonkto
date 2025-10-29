@@ -51,7 +51,7 @@ class AssetManager {
     }
 
     /** Returns the image asset with the given name */
-    getAsset(assetname: string, scale: number, color?: Color, scaleheight?: boolean): CanvasImageSource | null {
+    getAsset(assetname: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
         if(assetname === undefined) return null;
         if(color === undefined) color = getBaseColor();
         if(!this.assetscache[assetname]) this.assetscache[assetname] = [];
@@ -133,7 +133,7 @@ class AssetManager {
     }
 
     /** Returns the image asset for the given time in the given animation */
-    getAnimationAsset(animationname: string, time: number, scale: number, color?: Color, scaleheight?: boolean): CanvasImageSource | null {
+    getAnimationAsset(animationname: string, time: number, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
         if(animationname === undefined) return null;
         
         const spritesheet = animationname.split("_")[0];

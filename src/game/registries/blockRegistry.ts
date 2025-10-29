@@ -15,7 +15,7 @@ import ContainerComponent from "../components/blockcomponents/containerComponent
 import StairsComponent from "../components/blockcomponents/stairsComponent.js";
 
 import Constants from "../../shared/constants.js";
-const { ASSETS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
+const { ASSETS, ANIMATIONS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);
 logger.info("Initializing block registry");
@@ -50,7 +50,7 @@ BlockRegistry.register(new BlockDefinition("grown_carrots", "Grown Carrots", ASS
     .setUnderEntities(true));
 BlockRegistry.register(new BlockDefinition("work_bench", "Work Bench", ASSETS.WORK_BENCH, new Drop("work_bench"), MINE_TYPES.CHOP, 1, .8)
     .addComponent(new StationComponent()));
-BlockRegistry.register(new BlockDefinition("torch", "Torch", ASSETS.TORCH, new Drop("torch"), MINE_TYPES.ANY, 0, .8)
+BlockRegistry.register(new BlockDefinition("torch", "Torch", ANIMATIONS.TORCH_ANIMATION, new Drop("torch"), MINE_TYPES.ANY, 0, .8)
     .addComponent(new LightComponent(5))
     .setFloorVisible(true)
     .setWalkThrough(true)
