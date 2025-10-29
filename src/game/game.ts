@@ -14,6 +14,7 @@ import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
 import { createOneTimeMessage, DarknessContent, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
 import { SerializedWorldLoad } from "../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedWriteGame } from "../shared/serialization/serializedGame.js";
 
 import Constants from "../shared/constants.js";
 const { GAME_MODES, MSG_TYPES, ONE_TIME_MSG_TYPES, LOG_CATEGORIES } = Constants;
@@ -273,12 +274,6 @@ class Game {
     }
 
     // #endregion
-}
-
-/** Defines the format for serialized writes of the game */
-type SerializedWriteGame = {
-    version: string,
-    lifeticks: number,
 }
 
 export default Game;
