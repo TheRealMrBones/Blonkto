@@ -126,12 +126,9 @@ class AssetManager {
 
     /** Adds each animation definition from the given animation data to the  */
     private downloadAnimationDefinitions(data: AnimationData): void {
-        if(data.animations.length == 1){
-            this.animations[data.name] = data.animations[0];
-        }else{
-            for(const animation of data.animations){
-                this.animations[`${data.name}_${animation.name}`] = animation;
-            }
+        for(const animation of data.animations){
+            const animationname = animation.name == data.name ? data.name : `${data.name}_${animation.name}`;
+            this.animations[animationname] = animation;
         }
     }
 
