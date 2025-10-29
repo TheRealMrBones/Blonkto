@@ -135,6 +135,28 @@ class AssetManager {
         }
     }
 
+    /** Returns the image asset for the given time in the given animation */
+    getAnimationAsset(animationname: string, time: number, scale: number, color?: Color, scaleheight?: boolean): CanvasImageSource | null {
+        if(animationname === undefined) return null;
+        
+        const spritesheet = animationname.split("_")[0];
+        const animation = this.animations[animationname];
+        time %= animation.duration;
+
+        let frametime = 0;
+
+        for(const frame of animation.frames){
+            if(frametime <= time && frametime + frame.duration > time){
+                const assetname = `${spritesheet}_${frame.sprite}`
+                return this.getAsset(`${spritesheet}_${frame.sprite}`, scale, color, scaleheight);
+            }
+
+            frametime += frame.duration;
+        }
+
+        return null;
+    }
+
     // #endregion
 
     // #region helpers
