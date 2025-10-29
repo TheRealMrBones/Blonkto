@@ -2,6 +2,7 @@ import PlayerClient from "../playerClient.js";
 import IndependentObject from "../state/independentObject.js";
 import { GameUpdateContent } from "../../shared/messageContentTypes.js";
 import { DarknessContent, PushContent, RecipesContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
+import { SerializedChangesInventory, SerializedUpdateInventory } from "../../shared/serialization/items/serializedInventory.js";
 
 import Constants from "../../shared/constants.js";
 const { ONE_TIME_MSG_TYPES } = Constants;
@@ -57,10 +58,7 @@ class StateManager {
         this.lastserverupdate = update.t;
 
         // update local world
-        this.playerclient.world.unloadChunks(update.worldLoad.unloadChunks);
-        this.playerclient.world.saveDefinitions(update.worldLoad.usedblocks, update.worldLoad.usedfloors, update.worldLoad.usedceilings);
-        this.playerclient.world.loadChunks(update.worldLoad.loadChunks);
-        this.playerclient.world.updateCells(update.worldLoad.updatedcells);
+        this.playerclient.world.updateWorld(update.worldLoad);
 
         // read one time messages
         for(const otm of update.onetimemessages){
@@ -105,7 +103,7 @@ class StateManager {
         }
 
         // inventory updates
-        update.inventoryupdates.forEach((iu: any) => {
+        update.inventoryupdates.forEach(iu => {
             this.playerclient.inventory.setSingleInventorySlot(iu);
         });
 
@@ -114,12 +112,12 @@ class StateManager {
             if(update.stationupdates.isnew) this.playerclient.inventory.setStation(update.stationupdates.name);
 
             if(update.stationupdates.updates !== undefined){
-                const stationinventoryupdates = update.stationupdates.updates[0];
-
                 if(update.stationupdates.isnew){
+                    const stationinventoryupdates = update.stationupdates.updates[0] as SerializedUpdateInventory;
                     this.playerclient.renderer.uiManager.openStation();
                     this.playerclient.inventory.setStationInventory(stationinventoryupdates);
                 }else{
+                    const stationinventoryupdates = update.stationupdates.updates[0] as SerializedChangesInventory;
                     this.playerclient.inventory.updateStationInventory(stationinventoryupdates);
                 }
             }else if(update.stationupdates.isnew){

@@ -2,6 +2,9 @@ import PlayerClient from "../playerClient.js";
 import Item from "./item.js";
 import Recipe from "./recipe.js";
 import { SwapContent } from "../../shared/messageContentTypes.js";
+import { SerializedUpdateItemStack } from "../../shared/serialization/items/serializedItemStack.js";
+import { SerializedChangesInventory, SerializedChangesSlot, SerializedUpdateInventory } from "../../shared/serialization/items/serializedInventory.js";
+import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
@@ -37,7 +40,7 @@ class Inventory {
         const hotbarslot = document.getElementById("slot" + (slot + 1))!;
 
         const itemimage = hotbarslot.querySelector("img");
-        if(itemimage) hotbarslot.removeChild(itemimage);
+        if(itemimage !== null) hotbarslot.removeChild(itemimage);
 
         const itemimg = document.createElement("img");
         itemimg.className = "item";
@@ -49,7 +52,7 @@ class Inventory {
     }
 
     /** Sets the entire inventories data to the given inventory */
-    setInventory(itemsdata: any): void {
+    setInventory(itemsdata: SerializedUpdateItemStack[]): void {
         for(let i = 0; i < INVENTORY_SIZE; i++){
             const itemdata = itemsdata[i];
             if(itemdata){
@@ -61,7 +64,7 @@ class Inventory {
     }
 
     /** Sets a single inventory slot to the given slot data */
-    setSingleInventorySlot(data: any): void {
+    setSingleInventorySlot(data: SerializedChangesSlot): void {
         if(data.itemstack === null){
             this.clearInventorySlot(data.slot);
         }else{
@@ -116,7 +119,7 @@ class Inventory {
     // #region recipes
 
     /** Adds new recipes to the saved list */
-    addRecipes(recipesdata: any[]): void {
+    addRecipes(recipesdata: SerializedRecipe[]): void {
         for(const recipedata of recipesdata){
             this.recipes.push(new Recipe(recipedata.result, recipedata.ingredients, recipedata.resultcount, recipedata.station, recipedata.asset, this.playerclient));
         }
@@ -165,10 +168,10 @@ class Inventory {
     }
 
     /** Sets the station inventory slots */
-    setStationInventory(data: any[]): void {
+    setStationInventory(data: SerializedUpdateInventory): void {
         for(let i = 0; i < 27; i++){
             const itemdata = data[i];
-            if(itemdata){
+            if(itemdata !== null){
                 this.setInventorySlot(i + 36, new Item(itemdata.name, itemdata.asset, itemdata.amount));
             }else{
                 this.clearInventorySlot(i + 36);
@@ -177,7 +180,7 @@ class Inventory {
     }
 
     /** Updates the station inventory slots */
-    updateStationInventory(data: any[]): void {
+    updateStationInventory(data: SerializedChangesInventory): void {
         data.forEach((iu: any) => {
             iu.slot += 36;
             this.playerclient.inventory.setSingleInventorySlot(iu);

@@ -1,25 +1,43 @@
 import PlayerClient from "../playerClient.js";
 
 import SharedConfig from "../../configs/shared.js";
+import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
+import { Vector2D } from "../../shared/types.js";
+import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
+import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
+import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
+import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** The representation of world data currently loaded by the client */
 class World {
     private readonly playerclient: PlayerClient;
-    private readonly chunks: {[key: string]: any} = {};
+    private readonly chunks: {[key: string]: SerializedLoadChunk} = {};
 
-    private readonly blockdefinitions: {[key: string]: any} = {};
-    private readonly floordefinitions: {[key: string]: any} = {};
-    private readonly ceilingdefinitions: {[key: string]: any} = {};
+    private readonly blockdefinitions: {[key: string]: SerializedInitBlock} = {};
+    private readonly floordefinitions: {[key: string]: SerializedInitFloor} = {};
+    private readonly ceilingdefinitions: {[key: string]: SerializedInitCeiling} = {};
 
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
     }
 
+    // #region management
+
+    /** Updates this clients world data with the given world load information */
+    updateWorld(data: SerializedWorldLoad): void {
+        this.playerclient.world.saveDefinitions(data.usedblocks, data.usedfloors, data.usedceilings);
+        this.playerclient.world.unloadChunks(data.unloadChunks);
+        this.playerclient.world.loadChunks(data.loadChunks);
+        this.playerclient.world.updateCells(data.updatedcells);
+    }
+
+    // #endregion
+
     // #region definitions
 
     /** Saves the requested definitions to the client if not already there */
-    saveDefinitions(blockdefinitions: any[], floordefinitions: any[], ceilingdefinitions: any[]): void {
+    saveDefinitions(blockdefinitions: SerializedInitBlock[], floordefinitions: SerializedInitFloor[], ceilingdefinitions: SerializedInitCeiling[]): void {
         for(const blockdefinition of blockdefinitions){
             if(blockdefinition.name in this.blockdefinitions) continue;
             this.blockdefinitions[blockdefinition.name] = blockdefinition;
@@ -39,27 +57,27 @@ class World {
     // #region chunks
 
     /** Load the requested chunks based on the given chunks data */
-    loadChunks(chunks: any[]): void {
+    loadChunks(chunks: SerializedLoadChunk[]): void {
         chunks.forEach(chunk => {
             this.loadChunk(chunk);
         });
     }
 
     /** Load the requested chunk based on the given chunk data */
-    private loadChunk(chunk: any): void {
+    private loadChunk(chunk: SerializedLoadChunk): void {
         this.chunks[[chunk.x,chunk.y].toString()] = chunk;
     }
 
     /** Unload the requested chunks based on the given chunks data */
-    unloadChunks(chunks: any[]): void {
+    unloadChunks(chunks: Vector2D[]): void {
         chunks.forEach(chunk => {
             this.unloadChunk(chunk);
         });
     }
 
     /** Unload the requested chunk based on the given chunk data */
-    private unloadChunk(chunk: any): void {
-        delete this.chunks[[chunk.x,chunk.y].toString()];
+    private unloadChunk(chunk: Vector2D): void {
+        delete this.chunks[[chunk[0],chunk[1]].toString()];
     }
 
     // #endregion
@@ -67,14 +85,14 @@ class World {
     // #region cells
 
     /** Update the given cells with their new data */
-    updateCells(cellUpdates: any[]): void {
+    updateCells(cellUpdates: SerializedCellUpdate[]): void {
         cellUpdates.forEach(cellUpdate => {
             this.updateCell(cellUpdate);
         });
     }
 
     /** Update the given cell with its new data */
-    private updateCell(cellUpdate: any): void {
+    private updateCell(cellUpdate: SerializedCellUpdate): void {
         const chunkx = Math.floor(cellUpdate.x / CHUNK_SIZE);
         const chunky = Math.floor(cellUpdate.y / CHUNK_SIZE);
         const cellx = cellUpdate.x - chunkx * CHUNK_SIZE;

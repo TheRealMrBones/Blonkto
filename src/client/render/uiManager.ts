@@ -1,5 +1,6 @@
 import PlayerClient from "../playerClient.js";
 import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
+import { SerializedTab } from "../../shared/serialization/serializedTab.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
@@ -261,7 +262,7 @@ class UiManager {
     }
 
     /** Updates the tab list with the given data */
-    updateTab(data: any[]): void {
+    updateTab(data: SerializedTab): void {
         if(data.length == 0){
             this.tabdiv.innerHTML = "";
             return;

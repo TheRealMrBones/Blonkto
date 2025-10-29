@@ -1,4 +1,5 @@
 import { CraftContent } from "../../shared/messageContentTypes.js";
+import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
 import Game from "../game.js";
 import IInventory from "../items/inventory/IInventory.js";
 import Recipe from "../items/recipe.js";
@@ -96,7 +97,7 @@ class CraftManager {
     // #region serialization
 
     /** Returns the list of recipe data for all craftable recipes for a game update to the client */
-    serializeCraftableRecipesForUpdate(player: Player): any[] {
+    serializeCraftableRecipesForUpdate(player: Player): SerializedRecipe[] {
         if(!this.playerNeedsRecipeUpdate(player)) return [];
 
         const station = player.getStation();

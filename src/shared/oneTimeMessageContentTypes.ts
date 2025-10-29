@@ -1,3 +1,4 @@
+import { SerializedRecipe } from "./serialization/items/serializedRecipe.js";
 import { Color, Vector2D } from "./types.js";
 
 // #region base one time message
@@ -47,7 +48,7 @@ export type SetColorContent = {
 
 /** Defines the format of the set color one time message */
 export type RecipesContent = {
-    recipes: any[];
+    recipes: SerializedRecipe[];
 };
 
 /** Defines the format of the set darkness one time message */

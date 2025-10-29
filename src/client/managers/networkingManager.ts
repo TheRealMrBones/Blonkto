@@ -4,7 +4,7 @@ import { Socket } from "socket.io";
 
 import PlayerClient from "../playerClient.js";
 import { connectionRefused, connectionAccepted } from "../index.js";
-import { ClickContent, CraftContent, DropContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
+import { ClickContent, CraftContent, DropContent, FailedConnectionContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
 
 import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
@@ -39,9 +39,9 @@ class NetworkingManager {
             this.addListener(MSG_TYPES.PING, this.onPing.bind(this));
             this.addListener(MSG_TYPES.PLAYER_INSTANTIATED, this.onInstantiated.bind(this));
             this.addListener(MSG_TYPES.GAME_UPDATE, playerclient.stateManager.processGameUpdate.bind(playerclient.stateManager));
-            this.addListener(MSG_TYPES.DEAD, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
-            this.addListener(MSG_TYPES.KICK, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
-            this.addListener(MSG_TYPES.BAN, (temp: any) => this.playerclient.eventEmitter.emit("gameover", temp));
+            this.addListener(MSG_TYPES.DEAD, () => this.playerclient.eventEmitter.emit("gameover"));
+            this.addListener(MSG_TYPES.KICK, (temp: FailedConnectionContent) => this.playerclient.eventEmitter.emit("gameover", temp));
+            this.addListener(MSG_TYPES.BAN, (temp: FailedConnectionContent) => this.playerclient.eventEmitter.emit("gameover", temp));
             this.addListener(MSG_TYPES.RECEIVE_MESSAGE, this.playerclient.renderer.chatManager.receiveChatMessage.bind(this.playerclient.renderer.chatManager));
         });
     }

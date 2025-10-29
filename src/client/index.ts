@@ -238,8 +238,8 @@ export function connectionAccepted(): void {
 }
 
 /** Reverts back to the play UI after server death message */
-export function onGameOver(connectionrefusedinfo: any): void {
-    if(connectionrefusedinfo) connectionRefused(connectionrefusedinfo);
+export function onGameOver(connectionrefusedinfo?: FailedConnectionContent): void {
+    if(connectionrefusedinfo !== undefined) connectionRefused(connectionrefusedinfo);
 
     playerclient.inventory.clearInventory();
     playerclient.inventory.clearRecipes();
@@ -278,8 +278,9 @@ function getCookie(name: string): string | null {
 document.addEventListener("keydown", devlogin);
 
 /** Temp quick login code for development */
-function devlogin(event: any): void {
-    if(event.target.tagName.toLowerCase() !== "input" &&
+function devlogin(event: KeyboardEvent): void {
+    if(event.target instanceof Element &&
+        event.target.tagName.toLowerCase() !== "input" &&
         event.target.tagName.toLowerCase() !== "textarea") {
 
         switch(event.key){
