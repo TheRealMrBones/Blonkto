@@ -2,7 +2,7 @@ import PlayerClient from "../playerClient.js";
 import { AssetCache } from "./assetCache.js";
 import { equalColor, getBaseColor } from "../../shared/typeOperations.js";
 import { Color } from "../../shared/types.js";
-import { AnimationData } from "./animationData.js";
+import { AnimationData, AnimationDefinition } from "./animationData.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, ANIMATIONS } = Constants;
@@ -13,6 +13,8 @@ class AssetManager {
 
     private readonly assetsbase: {[key: string]: OffscreenCanvas} = {};
     private readonly assetscache: {[key: string]: AssetCache[] } = {};
+
+    private readonly animations: {[key: string]: AnimationDefinition} = {};
 
     private readonly downloadPromise: Promise<void[]> = Promise.all([
         ...Object.values(ASSETS).map(this.downloadAsset.bind(this)),
@@ -94,19 +96,20 @@ class AssetManager {
     /** Prepares an individual animation set and loads it into memory */
     private downloadAnimation(animationName: string): Promise<void> {
         return new Promise<void>(resolve => {
-            this.readJsonFile(`/assets/${animationName}.json`).then(data => {
+            this.readJsonFile(`/animations/${animationName}.json`).then(data => {
                 const spritesheet = new Image();
                 spritesheet.onload = () => {
-                    this.prepareAnimationFrames(spritesheet, data);
+                    this.downloadAnimationFrames(spritesheet, data);
+                    this.downloadAnimationDefinitions(data);
                     resolve();
                 };
-                spritesheet.src = `/assets/${animationName}.png`;
+                spritesheet.src = `/animations/${animationName}.png`;
             });
         });
     }
 
     /** Adds each animation frame from the given animation data and spritesheet to assetsbase */
-    private prepareAnimationFrames(spritesheet: HTMLImageElement, data: AnimationData): void {
+    private downloadAnimationFrames(spritesheet: HTMLImageElement, data: AnimationData): void {
         const framewidth = spritesheet.width / data.spritesheetwidth;
         const frameheight = spritesheet.height / data.spritesheetheight;
 
@@ -121,20 +124,31 @@ class AssetManager {
         }
     }
 
+    /** Adds each animation definition from the given animation data to the  */
+    private downloadAnimationDefinitions(data: AnimationData): void {
+        if(data.animations.length == 1){
+            this.animations[data.name] = data.animations[0];
+        }else{
+            for(const animation of data.animations){
+                this.animations[`${data.name}_${animation.name}`] = animation;
+            }
+        }
+    }
+
     // #endregion
 
     // #region helpers
 
-    /** Returns an object with the data form the given json file */
+    /** Returns an object with the data from the given json file */
     async readJsonFile(path: string): Promise<any | null> {
-        try {
+        try{
             const response = await fetch(path);
-            if (!response.ok) {
+            if(!response.ok){
                 console.error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
             return data;
-        } catch (error) {
+        }catch(error){
             console.error("Error reading JSON file:", error);
             return null;
         }
