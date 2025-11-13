@@ -1,19 +1,20 @@
 import PlayerClient from "../playerClient.js";
 import { CraftContent } from "../../shared/messageContentTypes.js";
 import Item from "./item.js";
+import { SerializedIngredient } from "../../shared/serialization/items/serializedRecipe.js";
 
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 
 /** The representation of a crafting recipe that has been learned on this client */
 class Recipe {
-    ingredients: any[];
+    ingredients: SerializedIngredient[];
     result: string;
     resultcount: number;
     station: string | null;
     asset: string;
     div: HTMLDivElement;
 
-    constructor(result: string, ingredients: any[], resultcount: number, station: string | null, asset: string, playerclient: PlayerClient) {
+    constructor(result: string, ingredients: SerializedIngredient[], resultcount: number, station: string | null, asset: string, playerclient: PlayerClient) {
         this.result = result;
         this.ingredients = ingredients;
         this.resultcount = resultcount;
@@ -64,7 +65,7 @@ class Recipe {
                 const amount = e.ctrlKey ? this.canCraftAmount(playerclient.inventory.getInventory()) : 1;
 
                 const ingredientsdictionary: { [key: string]: number } = {};
-                this.ingredients.forEach((ingredient: any) => {
+                this.ingredients.forEach(ingredient => {
                     ingredientsdictionary[ingredient.item] = ingredient.amount;
                 });
 

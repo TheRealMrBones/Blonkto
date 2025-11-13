@@ -164,7 +164,7 @@ class StateManager {
         Object.values(this.independentObjects).forEach(o => {
             o.exists = false;
         });
-        update.others.forEach((pu: any) => {
+        update.others.forEach(pu => {
             if(!this.independentObjects[pu.static.id]){
                 this.independentObjects[pu.static.id] = new IndependentObject(pu);
             }else{

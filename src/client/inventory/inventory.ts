@@ -181,7 +181,7 @@ class Inventory {
 
     /** Updates the station inventory slots */
     updateStationInventory(data: SerializedChangesInventory): void {
-        data.forEach((iu: any) => {
+        data.forEach(iu => {
             iu.slot += 36;
             this.playerclient.inventory.setSingleInventorySlot(iu);
         });

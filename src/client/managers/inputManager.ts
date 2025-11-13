@@ -57,17 +57,17 @@ class InputManager {
         this.playerclient = playerclient;
 
         // register default listeners
-        this.registerListener("mousemove", this.onMouseInput);
-        this.registerListener("keydown", this.handlekeyDown);
-        this.registerListener("keyup", this.handlekeyUp);
-        this.registerListener("mousedown", this.handleMouseDown);
-        this.registerListener("blur", this.resetMovement);
+        this.registerListener("mousemove", this.onMouseInput as EventListener);
+        this.registerListener("keydown", this.handlekeyDown as EventListener);
+        this.registerListener("keyup", this.handlekeyUp as EventListener);
+        this.registerListener("mousedown", this.handleMouseDown as EventListener);
+        this.registerListener("blur", this.resetMovement as EventListener);
     }
 
     // #region listener management
 
     /** Registers the given listener to the given event so that when it happens during the game loop it is called */
-    registerListener(event: string, callback: (e: any) => void): void {
+    registerListener(event: string, callback: EventListener): void {
         if(event.includes("mouse") || event.includes("click") || event.includes("touch")){
             this.canvaslisteners.push({
                 event: event,
