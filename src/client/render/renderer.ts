@@ -192,10 +192,19 @@ class Renderer {
 
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
-                if(cell.block)
-                    if(!cell.block.floorvisible) continue;
-                if(cell.floor) this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.floor.asset);
+                for(let dy = 0; dy < CELLS_VERTICAL; dy++){
+                    const cellx = firstCell.x + dx;
+                    const celly = firstCell.y + dy;
+
+                    const cell = this.playerclient.world.getCell(cellx, celly);
+
+                    if(cell.block)
+                        if(!cell.block.floorvisible) continue;
+                    if(cell.floor) {
+                        const id = `${cellx}_${celly}_f`;
+                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.floor.asset, id);
+                    }
+                }
             }
         }
 
@@ -211,11 +220,15 @@ class Renderer {
 
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
+                const cellx = firstCell.x + dx;
+                const celly = firstCell.y + dy;
+
+                const cell = this.playerclient.world.getCell(cellx, celly);
 
                 if(cell.block){
                     if(cell.block.underentities == underentities){
-                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.block.asset, cell.block.scale);
+                        const id = `${cellx}_${celly}_b`;
+                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.block.asset, id, cell.block.scale);
                     }
                 }
             }
@@ -225,14 +238,14 @@ class Renderer {
     }
 
     /** Renders the given asset onto the given cell */
-    private renderCell(x: number, y: number, asset: string, scale?: number): void {
+    private renderCell(x: number, y: number, asset: string, id: string, scale?: number): void {
         if(scale === undefined) scale = 1;
 
         const renderoffset = ((1 - scale) / 2) * this.cellsize;
         x = x + renderoffset - 1;
         y = y + renderoffset - 1;
 
-        const model = this.assetManager.getAsset(asset, (this.cellsize) * scale + 2);
+        const model = this.assetManager.getAssetRender(asset, id, (this.cellsize) * scale + 2);
         if(model === null) return;
 
         this.context.drawImage(
@@ -260,7 +273,7 @@ class Renderer {
         this.context.rotate(dir);
 
         // get model
-        const model = entity.hit ? this.assetManager.getAsset(entity.asset, this.cellsize * scale, HIT_COLOR) : this.assetManager.getAsset(entity.asset, this.cellsize * scale);
+        const model = entity.hit ? this.assetManager.getAssetRender(entity.asset, entity.id, this.cellsize * scale, HIT_COLOR) : this.assetManager.getAssetRender(entity.asset, entity.id, this.cellsize * scale);
 
         // draw entity
         if(model !== null) this.context.drawImage(
@@ -289,7 +302,7 @@ class Renderer {
         this.context.rotate(dir);
 
         // get player model
-        const model = player.hit ? this.assetManager.getAsset(player.asset, this.cellsize * scale, combineColors(player.color, HIT_COLOR)) : this.assetManager.getAsset(player.asset, this.cellsize * scale, player.color);
+        const model = player.hit ? this.assetManager.getAssetRender(player.asset, player.id, this.cellsize * scale, combineColors(player.color, HIT_COLOR)) : this.assetManager.getAssetRender(player.asset, player.id, this.cellsize * scale, player.color);
 
         // draw player
         if(model !== null) this.context.drawImage(
@@ -426,7 +439,7 @@ class Renderer {
         const xoffset = xpercent * extraspace;
         const yoffset = ypercent * extraspace;
 
-        const model = this.assetManager.getAsset(ASSETS.SPACE_BG, scale, undefined, true);
+        const model = this.assetManager.getAssetRender(ASSETS.SPACE_BG, "bg", scale, undefined, true);
         if(model === null) return;
 
         const canvasX = this.canvas.width / 2;

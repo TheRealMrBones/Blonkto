@@ -12,7 +12,7 @@ class AssetManager {
     private readonly playerclient: PlayerClient;
 
     private readonly assetsbase: {[key: string]: OffscreenCanvas} = {};
-    private readonly assetscache: {[key: string]: AssetCache[] } = {};
+    private readonly assetscache: {[key: string]: AssetCache[]} = {};
 
     private readonly animations: {[key: string]: AnimationDefinition} = {};
 
@@ -29,6 +29,15 @@ class AssetManager {
 
     /** Prepares all of the assets the client would be using in the game */
     downloadAssets = (): Promise<void[]> => this.downloadPromise;
+
+    /** Returns the render of the given asset or animation */
+    getAssetRender(assetname: string, id: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
+        if(!this.isAnimation(assetname)){
+            return this.getAsset(assetname, scale, color, scaleheight);
+        }else{
+            return this.getAnimationAsset(assetname, id, scale, color, scaleheight);
+        }
+    }
 
     // #endregion
 
@@ -51,7 +60,7 @@ class AssetManager {
     }
 
     /** Returns the image asset with the given name */
-    getAsset(assetname: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
+    private getAsset(assetname: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
         if(assetname === undefined) return null;
         if(color === undefined) color = getBaseColor();
         if(!this.assetscache[assetname]) this.assetscache[assetname] = [];
@@ -117,7 +126,7 @@ class AssetManager {
             for(let y = 0; y < data.spritesheetheight; y++){
                 const asset = new OffscreenCanvas(framewidth, frameheight);
                 const ctx = asset.getContext("2d")!;
-                ctx.drawImage(asset, -x * framewidth, -y * frameheight);
+                ctx.drawImage(spritesheet, -x * framewidth, -y * frameheight);
 
                 this.assetsbase[`${data.name}_${x + y * data.spritesheetwidth}`] = asset;
             }
@@ -132,9 +141,18 @@ class AssetManager {
         }
     }
 
+    /** Returns if the image is an animation or an image */
+    private isAnimation(assetName: string): boolean {
+        if(assetName === undefined) return false;
+
+        return Object.keys(this.animations).some(a => a == assetName);
+    }
+
     /** Returns the image asset for the given time in the given animation */
-    getAnimationAsset(animationname: string, time: number, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
+    private getAnimationAsset(animationname: string, id: string, scale: number, color?: Color, scaleheight?: boolean): OffscreenCanvas | null {
         if(animationname === undefined) return null;
+
+        let time = Date.now();
 
         const spritesheet = animationname.split("_")[0];
         const animation = this.animations[animationname];
