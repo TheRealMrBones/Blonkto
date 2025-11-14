@@ -15,7 +15,7 @@ import FloorRegistry from "../registries/floorRegistry.js";
 import CeilingRegistry from "../registries/ceilingRegistry.js";
 import V2D from "../../shared/physics/vector2d.js";
 import { Vector2D } from "../../shared/types.js";
-import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
 import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
 import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
 import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";

@@ -1,7 +1,7 @@
 import PlayerClient from "../playerClient.js";
 
 import SharedConfig from "../../configs/shared.js";
-import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
 import { Vector2D } from "../../shared/types.js";
 import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
 import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";

@@ -35,10 +35,14 @@ logger.info("Initializing server");
 app.use(express.static("public"));
 
 if(process.env.NODE_ENV === "development"){
-  	const compiler = webpack(webpackConfig);
-  	app.use(webpackDevMiddleware(compiler));
+    const compiler = webpack(webpackConfig);
+    if(compiler == null){
+        logger.error("Failed to create webpack compiler");
+    }else{
+        app.use(webpackDevMiddleware(compiler));
+    }
 }else{
-  	app.use(express.static("dist/webpack"));
+    app.use(express.static("dist/webpack"));
 }
 
 app.use(bodyParser.json());

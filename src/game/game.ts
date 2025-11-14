@@ -13,7 +13,7 @@ import Player from "./objects/player.js";
 import World from "./world/world.js";
 import { GameUpdateContent } from "../shared/messageContentTypes.js";
 import { createOneTimeMessage, DarknessContent, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
-import { SerializedWorldLoad } from "../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedWorldLoad } from "../shared/serialization/world/serializedWorldLoad.js";
 import { SerializedWriteGame } from "../shared/serialization/serializedGame.js";
 
 import Constants from "../shared/constants.js";

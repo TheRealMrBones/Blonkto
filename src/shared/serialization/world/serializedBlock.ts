@@ -1,5 +1,5 @@
 /** Defines the format for serialized updates of a block */
-export type SerializedUpdateBlock = {};
+export type SerializedUpdateBlock = object;
 
 /** Defines the format for serialized writes of a block */
 export type SerializedWriteBlock = {

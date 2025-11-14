@@ -4,7 +4,7 @@ import { SerializedStation } from "./serialization/items/serializedStation.js";
 import { SerializedUpdateGameObject } from "./serialization/objects/serializedGameObject.js";
 import { SerializedUpdatePlayer } from "./serialization/objects/serializedPlayer.js";
 import { SerializedTab } from "./serialization/serializedTab.js";
-import { SerializedWorldLoad } from "./serialization/world/SerializedWorldLoad.js";
+import { SerializedWorldLoad } from "./serialization/world/serializedWorldLoad.js";
 import { Color } from "./types.js";
 
 /** Defines the format of the failed connection / kicked messages */

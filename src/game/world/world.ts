@@ -4,7 +4,7 @@ import Layer from "./layer.js";
 import Player from "../objects/player.js";
 import SeededRandom from "../../shared/random/seededRandom.js";
 import { Vector2D } from "../../shared/types.js";
-import { SerializedWorldLoad } from "../../shared/serialization/world/SerializedWorldLoad.js";
+import { SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
 
 import LayerGenerator from "./generation/layerGenerator.js";
 import CaveLayerGenerator from "./generation/caveLayerGenerator.js";

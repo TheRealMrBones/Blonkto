@@ -1,5 +1,5 @@
 /** Defines the format for serialized updates of a ceiling */
-export type SerializedUpdateCeiling = {};
+export type SerializedUpdateCeiling = object;
 
 /** Defines the format for serialized writes of a ceiling */
 export type SerializedWriteCeiling = {

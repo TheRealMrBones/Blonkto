@@ -1,5 +1,5 @@
 /** Defines the format for serialized updates of a floor */
-export type SerializedUpdateFloor = {};
+export type SerializedUpdateFloor = object;
 
 /** Defines the format for serialized writes of a floor */
 export type SerializedWriteFloor = {
