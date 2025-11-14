@@ -51,7 +51,7 @@ class Cell {
     // #region on update
 
     /** Does proper update procedures after a change to this cell */
-    private onUpdate(): void {
+    onUpdate(): void {
         this.setTicks();
         this.pushCellUpdate();
     }
@@ -235,9 +235,29 @@ class Cell {
     serializeForLoad(): SerializedLoadCell {
         const data: SerializedLoadCell = {};
 
-        if(this.block) data.block = this.block.definition.key;
-        if(this.floor) data.floor = this.floor.definition.key;
-        if(this.ceiling) data.ceiling = this.ceiling.definition.key;
+        if(this.block){
+            data.block = this.block.definition.key;
+            const blockupdate = this.block.serializeForUpdate();
+
+            if(Object.keys(blockupdate).length > 0)
+                data.blockupdate = blockupdate;
+        }
+
+        if(this.floor){
+            data.floor = this.floor.definition.key;
+            const floorupdate = this.floor.serializeForUpdate();
+
+            if(Object.keys(floorupdate).length > 0)
+                data.floorupdate = floorupdate;
+        }
+
+        if(this.ceiling){
+            data.ceiling = this.ceiling.definition.key;
+            const ceilingupdate = this.ceiling.serializeForUpdate();
+
+            if(Object.keys(ceilingupdate).length > 0)
+                data.ceilingupdate = ceilingupdate;
+        }
 
         return data;
     }

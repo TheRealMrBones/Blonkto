@@ -1,5 +1,7 @@
 /** Defines the format for serialized updates of a block */
-export type SerializedUpdateBlock = object;
+export type SerializedUpdateBlock = {
+    asset?: string;
+};
 
 /** Defines the format for serialized writes of a block */
 export type SerializedWriteBlock = {

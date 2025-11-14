@@ -16,7 +16,7 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     readonly definition: BlockDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    currentasset: string;
+    private currentasset: string;
 
     constructor(cell: Cell, definition: string){
         this.cell = cell;
@@ -38,7 +38,22 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
 
     /** Returns this blocks asset */
     getAsset(): string {
+        return this.definition.asset;
+    }
+
+    /** Returns this blocks current asset */
+    getCurrentAsset(): string {
         return this.currentasset;
+    }
+
+    // #endregion
+
+    // #region setters
+
+    /** Sets this blocks current asset */
+    setCurrentAsset(asset: string): void {
+        this.currentasset = asset;
+        this.cell.onUpdate();
     }
 
     // #endregion
@@ -85,9 +100,15 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     serializeForUpdate(): SerializedUpdateBlock {
         const componentdata = this.serializeComponentDataForUpdate();
 
-        return {
+        const returnobj = {
             ...componentdata,
         };
+
+        if(this.getCurrentAsset() != this.getAsset()){
+            returnobj.asset = this.getCurrentAsset();
+        }
+
+        return returnobj;
     }
 
     /** Returns an object representing this blocks data for writing to the save */

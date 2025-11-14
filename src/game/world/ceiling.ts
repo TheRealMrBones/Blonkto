@@ -16,7 +16,7 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     readonly definition: CeilingDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    currentasset: string;
+    private currentasset: string;
 
     constructor(cell: Cell, definition: string){
         this.cell = cell;
@@ -36,9 +36,24 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
 
     // #region getters
 
-    /** Returns this blocks asset */
+    /** Returns this ceilings asset */
     getAsset(): string {
+        return this.definition.asset;
+    }
+
+    /** Returns this ceilings current asset */
+    getCurrentAsset(): string {
         return this.currentasset;
+    }
+
+    // #endregion
+
+    // #region setters
+
+    /** Sets this ceilings current asset */
+    setCurrentAsset(asset: string): void {
+        this.currentasset = asset;
+        this.cell.onUpdate();
     }
 
     // #endregion
@@ -85,9 +100,15 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     serializeForUpdate(): SerializedUpdateCeiling {
         const componentdata = this.serializeComponentDataForUpdate();
 
-        return {
+        const returnobj = {
             ...componentdata,
         };
+
+        if(this.getCurrentAsset() != this.getAsset()){
+            returnobj.asset = this.getCurrentAsset();
+        }
+
+        return returnobj;
     }
 
     /** Returns an object representing this ceilings data for writing to the save */

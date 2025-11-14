@@ -16,7 +16,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     readonly definition: FloorDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    currentasset: string;
+    private currentasset: string;
 
     constructor(cell: Cell, definition: string){
         this.cell = cell;
@@ -36,9 +36,24 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
 
     // #region getters
 
-    /** Returns this blocks asset */
+    /** Returns this floors asset */
     getAsset(): string {
+        return this.definition.asset;
+    }
+
+    /** Returns this floors current asset */
+    getCurrentAsset(): string {
         return this.currentasset;
+    }
+
+    // #endregion
+
+    // #region setters
+
+    /** Sets this floors current asset */
+    setCurrentAsset(asset: string): void {
+        this.currentasset = asset;
+        this.cell.onUpdate();
     }
 
     // #endregion
@@ -85,9 +100,15 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     serializeForUpdate(): SerializedUpdateFloor {
         const componentdata = this.serializeComponentDataForUpdate();
 
-        return {
+        const returnobj = {
             ...componentdata,
         };
+
+        if(this.getCurrentAsset() != this.getAsset()){
+            returnobj.asset = this.getCurrentAsset();
+        }
+
+        return returnobj;
     }
 
     /** Returns an object representing this floors data for writing to the save */

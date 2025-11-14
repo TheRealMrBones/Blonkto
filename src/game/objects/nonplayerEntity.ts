@@ -16,7 +16,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     readonly definition: EntityDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    currentasset: string;
+    private currentasset: string;
 
     constructor(layer: Layer, x: number, y: number, dir: number, entitydefinition: string){
         super(layer, x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
@@ -51,6 +51,11 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
         this.layer.entityManager.removeEntity(this.id);
         this.layer = newlayer;
         newlayer.entityManager.addEntity(this);
+    }
+
+    /** Sets this nonplayer entities current asset */
+    setCurrentAsset(asset: string): void {
+        this.currentasset = asset;
     }
 
     // #endregion
