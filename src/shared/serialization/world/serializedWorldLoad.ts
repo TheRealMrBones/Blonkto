@@ -1,6 +1,7 @@
 import { Vector2D } from "../../types.js";
 import { SerializedInitBlock } from "./serializedBlock.js";
 import { SerializedInitCeiling } from "./serializedCeiling.js";
+import { SerializedLoadCell } from "./serializedCell.js";
 import { SerializedLoadChunk } from "./serializedChunk.js";
 import { SerializedInitFloor } from "./serializedFloor.js";
 
@@ -18,5 +19,5 @@ export type SerializedWorldLoad = {
 export type SerializedCellUpdate = {
     x: number,
     y: number,
-    data: any,
+    data: SerializedLoadCell,
 };

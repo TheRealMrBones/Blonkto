@@ -16,7 +16,7 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     readonly definition: FloorDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
-    private currentasset: string;
+    private currentasset: string | null;
 
     constructor(cell: Cell, definition: string){
         this.cell = cell;
@@ -43,6 +43,8 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
 
     /** Returns this floors current asset */
     getCurrentAsset(): string {
+        if(this.currentasset === null) return this.definition.asset;
+
         return this.currentasset;
     }
 
@@ -53,6 +55,12 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
     /** Sets this floors current asset */
     setCurrentAsset(asset: string): void {
         this.currentasset = asset;
+        this.cell.onUpdate();
+    }
+
+    /** Sets this floors current asset back to default */
+    clearCurrentAsset(): void {
+        this.currentasset = null;
         this.cell.onUpdate();
     }
 
@@ -104,9 +112,11 @@ class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {
             ...componentdata,
         };
 
-        if(this.getCurrentAsset() != this.getAsset()){
+        if(this.currentasset != this.getAsset()){
             returnobj.asset = this.getCurrentAsset();
         }
+
+        if(this.currentasset === null) this.currentasset = this.getAsset();
 
         return returnobj;
     }

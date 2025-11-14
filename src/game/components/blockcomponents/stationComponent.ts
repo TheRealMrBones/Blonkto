@@ -41,10 +41,10 @@ class StationComponent extends Component<BlockDefinition> {
 
         const shouldbeopen = data.station.checkOpeners(game) > 0;
 
-        if(shouldbeopen && block.currentasset != this.openasset) {
-            block.currentasset = this.openasset;
-        }else if(!shouldbeopen && block.currentasset == this.openasset){
-            block.currentasset = block.definition.asset;
+        if(shouldbeopen && block.getCurrentAsset() != this.openasset) {
+            block.setCurrentAsset(this.openasset);
+        }else if(!shouldbeopen && block.getCurrentAsset() == this.openasset){
+            block.clearCurrentAsset();
         }
     }
 }
