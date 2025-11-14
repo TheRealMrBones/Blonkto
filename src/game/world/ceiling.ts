@@ -16,11 +16,15 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
     readonly definition: CeilingDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
+    currentasset: string;
+
     constructor(cell: Cell, definition: string){
         this.cell = cell;
         this.definition = CeilingRegistry.get(definition);
 
         this.initComponentData();
+
+        this.currentasset = this.definition.asset;
     }
 
     /** Returns the ceiling from its save data */
@@ -29,6 +33,15 @@ class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {
         ceiling.loadComponentData(data.componentdata);
         return ceiling;
     }
+
+    // #region getters
+
+    /** Returns this blocks asset */
+    getAsset(): string {
+        return this.currentasset;
+    }
+
+    // #endregion
 
     // #region events
 

@@ -16,11 +16,15 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
     readonly definition: BlockDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
+    currentasset: string;
+
     constructor(cell: Cell, definition: string){
         this.cell = cell;
         this.definition = BlockRegistry.get(definition);
 
         this.initComponentData();
+
+        this.currentasset = this.definition.asset;
     }
 
     /** Returns the block from its save data */
@@ -29,6 +33,15 @@ class Block implements IRegistryDefinedWithComponents<BlockDefinition> {
         block.loadComponentData(data.componentdata);
         return block;
     }
+
+    // #region getters
+
+    /** Returns this blocks asset */
+    getAsset(): string {
+        return this.currentasset;
+    }
+
+    // #endregion
 
     // #region events
 
