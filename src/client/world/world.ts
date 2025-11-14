@@ -116,9 +116,9 @@ class World {
             const cell = chunk.cells[cellx][celly];
             const returnobj: any = {};
 
-            if(cell.block !== undefined) returnobj.block = this.blockdefinitions[cell.block];
-            if(cell.floor !== undefined) returnobj.floor = this.floordefinitions[cell.floor];
-            if(cell.ceiling !== undefined) returnobj.ceiling = this.ceilingdefinitions[cell.ceiling];
+            if(cell.block !== undefined) returnobj.block = { ...this.blockdefinitions[cell.block] };
+            if(cell.floor !== undefined) returnobj.floor = { ...this.floordefinitions[cell.floor] };
+            if(cell.ceiling !== undefined) returnobj.ceiling = { ...this.ceilingdefinitions[cell.ceiling] };
 
             if(cell.blockupdate !== undefined)
                 if(cell.blockupdate.asset !== undefined)
