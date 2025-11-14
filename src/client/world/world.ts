@@ -1,12 +1,12 @@
 import PlayerClient from "../playerClient.js";
-
-import SharedConfig from "../../configs/shared.js";
 import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
 import { Vector2D } from "../../shared/types.js";
 import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
 import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
 import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
 import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
+
+import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** The representation of world data currently loaded by the client */
