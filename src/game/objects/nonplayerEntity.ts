@@ -16,12 +16,15 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
     readonly definition: EntityDefinition;
     readonly componentdata: Map<string, ComponentData<any>> = new Map<string, ComponentData<any>>();
 
+    currentasset: string;
+
     constructor(layer: Layer, x: number, y: number, dir: number, entitydefinition: string){
         super(layer, x, y, EntityRegistry.get(entitydefinition).maxhealth, dir, EntityRegistry.get(entitydefinition).scale, EntityRegistry.get(entitydefinition).asset);
 
         this.definition = EntityRegistry.get(entitydefinition);
         this.initComponentData();
 
+        this.currentasset = this.definition.asset;
         this.basespeed = this.definition.speed;
     }
 
@@ -36,7 +39,7 @@ class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<E
 
     /** Returns this nonplayer entities asset */
     override getAsset(): string {
-        return this.definition.asset;
+        return this.currentasset;
     }
 
     // #endregion
