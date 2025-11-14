@@ -61,7 +61,7 @@ class Recipe {
         }
 
         maindiv.onclick = (e) => {
-            if(this.canCraft(playerclient.inventory.getInventory(), playerclient.inventory.station)){
+            if(this.canCraft(playerclient.inventory.getInventory(), playerclient.inventory.getStation())){
                 const amount = e.ctrlKey ? this.canCraftAmount(playerclient.inventory.getInventory()) : 1;
 
                 const ingredientsdictionary: { [key: string]: number } = {};

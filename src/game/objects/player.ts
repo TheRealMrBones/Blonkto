@@ -304,6 +304,9 @@ class Player extends Entity {
         this.dir = data.dir;
         this.hotbarslot = data.hotbarslot;
 
+        if(data.closestation && this.station !== null)
+            this.station.closeStation(this);
+
         // resync if missed update
         if(data.lastupdatetime !== null)
             if(this.lastupdated != data.lastupdatetime) this.resync();

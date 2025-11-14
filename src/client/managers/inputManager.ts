@@ -280,6 +280,7 @@ class InputManager {
             dy: this.dy,
             hotbarslot: this.selectedslot,
             lastserverupdate: this.playerclient.stateManager.getLastServerUpdate(),
+            closestation: this.playerclient.inventory.isStationClosing(),
         };
         this.playerclient.networkingManager.updateInputs(content);
         this.lastupdate = t;

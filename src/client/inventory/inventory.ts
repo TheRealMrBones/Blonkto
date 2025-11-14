@@ -14,7 +14,9 @@ class Inventory {
     private readonly playerclient: PlayerClient;
     private readonly inventory: (Item | null)[] = new Array(INVENTORY_SIZE + 27).fill(null);
     private readonly recipes: Recipe[] = [];
-    station: string | null = null;
+
+    private station: string | null = null;
+    private stationclosing: boolean = false;
 
     constructor(playerclient: PlayerClient){
         this.playerclient = playerclient;
@@ -153,10 +155,20 @@ class Inventory {
 
     // #region station
 
+    /** Returns the current station being used by the player */
+    getStation(): string | null {
+        return this.station;
+    }
+
     /** Sets the current station being used by the player */
     setStation(station: string | null): void {
         this.station = station;
-        if(station === null) this.clearStationInventory();
+
+        if(station === null){
+            this.clearStationInventory();
+            this.stationclosing = true;
+        }
+
         this.setRecipeVisibility();
     }
 
@@ -185,6 +197,16 @@ class Inventory {
             iu.slot += 36;
             this.playerclient.inventory.setSingleInventorySlot(iu);
         });
+    }
+
+    /** Returns if a station is currently open */
+    isStationClosing(): boolean {
+        if(this.stationclosing){
+            this.stationclosing = false;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     // #endregion
