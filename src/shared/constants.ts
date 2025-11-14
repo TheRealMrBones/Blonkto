@@ -58,6 +58,7 @@ const Constants = Object.freeze({
         WORK_BENCH: "WorkBench",
         TORCH: "Torch",
         CHEST: "Chest",
+        CHEST_OPEN: "Chest_Open",
         WOOD_STAIRS_DOWN: "WoodStairs_Down",
         WOOD_STAIRS_UP: "WoodStairs_Up",
         COPPER_ORE_BLOCK: "CopperOreBlock",

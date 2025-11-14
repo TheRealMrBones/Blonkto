@@ -56,7 +56,7 @@ BlockRegistry.register(new BlockDefinition("torch", "Torch", ANIMATIONS.TORCH_AN
     .setWalkThrough(true)
     .setUnderEntities(true));
 BlockRegistry.register(new BlockDefinition("chest", "Chest", ASSETS.CHEST, new Drop("chest"), MINE_TYPES.CHOP, 1, .8)
-    .addComponent(new StationComponent())
+    .addComponent(new StationComponent(ASSETS.CHEST_OPEN))
     .addComponent(new ContainerComponent(27)));
 BlockRegistry.register(new BlockDefinition("wood_stairs_down", "Wood Stairs", ASSETS.WOOD_STAIRS_DOWN, new Drop("wood_stairs"), MINE_TYPES.CHOP)
     .addComponent(new StairsComponent(true, "wood_stairs_up"))

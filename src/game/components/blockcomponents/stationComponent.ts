@@ -9,8 +9,12 @@ import ComponentData from "../componentData.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class StationComponent extends Component<BlockDefinition> {
-    constructor(){
+    private openasset: string | null;
+
+    constructor(openasset?: string){
         super();
+
+        this.openasset = openasset || null;
     }
 
     /** Implements this component into its parents functionality */
@@ -33,7 +37,15 @@ class StationComponent extends Component<BlockDefinition> {
     tick(block: Block, game: Game, dt: number): void {
         const data = block.getComponentData(StationComponentData);
 
-        data.station.checkOpeners(game);
+        if(this.openasset === null) return;
+
+        const shouldbeopen = data.station.checkOpeners(game) > 0;
+
+        if(shouldbeopen && block.currentasset != this.openasset) {
+            block.currentasset = this.openasset;
+        }else if(!shouldbeopen && block.currentasset == this.openasset){
+            block.currentasset = block.definition.asset;
+        }
     }
 }
 

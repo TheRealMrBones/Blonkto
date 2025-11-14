@@ -38,12 +38,14 @@ class Station {
         return true;
     }
 
-    /** Checks for openers that are moving or gone and removes them */
-    checkOpeners(game: Game): void {
+    /** Checks for openers that are moving or gone and removes them and returns the remaining opener count */
+    checkOpeners(game: Game): number {
         for(const opener of Object.values(this.openers)){
             if(opener.player.getMoving() || opener.player.layer.entityManager.getPlayer(opener.player.id) === undefined)
                 this.closeStation(opener.player);
         }
+
+        return Object.keys(this.openers).length;
     }
 
     /** Has the given player close this station */
