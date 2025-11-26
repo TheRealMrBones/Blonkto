@@ -58,6 +58,7 @@ class StateManager {
         this.lastserverupdate = update.t;
 
         // update local world
+        if(update.statereset) this.playerclient.renderer.resetRenderCell();
         this.playerclient.world.updateWorld(update.worldLoad);
 
         // read one time messages
