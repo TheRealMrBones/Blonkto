@@ -165,6 +165,13 @@ class Renderer {
             this.renderWorld(firstcell);
         }else if(!V2D.areEqual(oldrendercell, this.rendercell)){
             this.shiftWorldRender(oldrendercell, firstcell);
+        }else{
+            for(let x = firstcell.x; x < firstcell.x + CELLS_HORIZONTAL; x++){
+                for(let y = firstcell.y; y < firstcell.y + CELLS_VERTICAL; y++){
+                    const cell = this.playerclient.world.getCell(x, y);
+                    if(cell.animated) this.renderCellUpdates(x, y, cell);
+                }
+            }
         }
 
         // render priority goes low to high
@@ -252,6 +259,22 @@ class Renderer {
 
         this.worldundercontext.drawImage(worldundercanvasold, newx * this.cellsize, newy * this.cellsize);
         this.worlduppercontext.drawImage(worlduppercanvasold, newx * this.cellsize, newy * this.cellsize);
+
+        // render over old render
+        const startx = Math.max(0, newx);
+        const starty = Math.max(0, newy);
+        const endx = Math.min(CELLS_HORIZONTAL, newx + CELLS_HORIZONTAL);
+        const endy = Math.min(CELLS_VERTICAL, newy + CELLS_VERTICAL);
+
+        for(let x = startx; x < endx; x++){
+            for(let y = starty; y < endy; y++){
+                const cellx = x + firstcell.x;
+                const celly = y + firstcell.y;
+
+                const cell = this.playerclient.world.getCell(cellx, celly);
+                if(cell.animated) this.renderCellUpdates(cellx, celly, cell);
+            }
+        }
 
         // render world under
         this.renderFloors(firstcell, newx, newy);
@@ -510,11 +533,11 @@ class Renderer {
             for(let dy = -padding; dy < CELLS_VERTICAL + padding; dy++){
                 const cell = this.playerclient.world.getCell(firstcell.x + dx, firstcell.y + dy);
                 if(!cell.block) continue;
-                if(!cell.block.light) continue;
+                if(!(cell.block as any).light) continue;
 
                 const x = firstcell.renderx + (dx + .5) * this.cellsize;
                 const y = firstcell.rendery + (dy + .5) * this.cellsize;
-                const radius = cell.block.light * this.cellsize;
+                const radius = (cell.block as any).light * this.cellsize;
 
                 this.darknesscontext.beginPath();
                 this.darknesscontext.arc(x, y, radius, 0, 2 * Math.PI, false);

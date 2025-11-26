@@ -5,6 +5,8 @@ import { SerializedInitBlock } from "../../shared/serialization/world/serialized
 import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
 import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
 import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
+import { Chunk } from "./chunk.js";
+import { Cell } from "./cell.js";
 
 import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
@@ -12,7 +14,7 @@ const { CHUNK_SIZE } = SharedConfig.WORLD;
 /** The representation of world data currently loaded by the client */
 class World {
     private readonly playerclient: PlayerClient;
-    private readonly chunks: {[key: string]: SerializedLoadChunk} = {};
+    private readonly chunks: {[key: string]: Chunk} = {};
 
     private readonly blockdefinitions: {[key: string]: SerializedInitBlock} = {};
     private readonly floordefinitions: {[key: string]: SerializedInitFloor} = {};
@@ -65,7 +67,34 @@ class World {
 
     /** Load the requested chunk based on the given chunk data */
     private loadChunk(chunk: SerializedLoadChunk): void {
-        this.chunks[[chunk.x,chunk.y].toString()] = chunk;
+        const newchunk: Chunk = {
+            x: chunk.x,
+            y: chunk.y,
+            cells: [],
+        };
+
+        for(let x = 0; x < CHUNK_SIZE; x++){
+            newchunk.cells.push([]);
+
+            for(let y = 0; y < CHUNK_SIZE; y++){
+                const cell: Cell = {
+                    animated: false,
+                };
+
+                if(chunk.cells[x][y].block !== undefined)
+                    cell.block = {...this.blockdefinitions[chunk.cells[x][y].block!]};
+                if(chunk.cells[x][y].floor !== undefined)
+                    cell.floor = {...this.floordefinitions[chunk.cells[x][y].floor!]};
+                if(chunk.cells[x][y].ceiling !== undefined)
+                    cell.ceiling = {...this.ceilingdefinitions[chunk.cells[x][y].ceiling!]};
+
+                this.updateCellAnimated(cell);
+
+                newchunk.cells[x].push(cell);
+            }
+        }
+
+        this.chunks[[chunk.x,chunk.y].toString()] = newchunk;
     }
 
     /** Unload the requested chunks based on the given chunks data */
@@ -102,11 +131,55 @@ class World {
         const celly = cellUpdate.y - chunky * CHUNK_SIZE;
 
         const chunk = this.chunks[[chunkx,chunky].toString()];
-        if(chunk) chunk.cells[cellx][celly] = cellUpdate.data;
+        if(chunk === undefined) return;
+
+        chunk.cells[cellx][celly].block = cellUpdate.data.block !== undefined ?
+            {...this.blockdefinitions[cellUpdate.data.block!]} : undefined;
+        chunk.cells[cellx][celly].floor = cellUpdate.data.floor !== undefined ?
+            {...this.floordefinitions[cellUpdate.data.floor!]} : undefined;
+        chunk.cells[cellx][celly].ceiling = cellUpdate.data.ceiling !== undefined ?
+            {...this.ceilingdefinitions[cellUpdate.data.ceiling!]} : undefined;
+
+        if(cellUpdate.data.blockupdate !== undefined){
+            for(const prop of Object.keys(cellUpdate.data.blockupdate)){
+                (chunk.cells[cellx][celly].block as any)[prop] = (cellUpdate.data.blockupdate as any)[prop];
+            }
+        }
+
+        if(cellUpdate.data.floorupdate !== undefined){
+            for(const prop of Object.keys(cellUpdate.data.floorupdate)){
+                (chunk.cells[cellx][celly].floor as any)[prop] = (cellUpdate.data.floorupdate as any)[prop];
+            }
+        }
+
+        if(cellUpdate.data.ceilingupdate !== undefined){
+            for(const prop of Object.keys(cellUpdate.data.ceilingupdate)){
+                (chunk.cells[cellx][celly].ceiling as any)[prop] = (cellUpdate.data.ceilingupdate as any)[prop];
+            }
+        }
+
+        this.updateCellAnimated(chunk.cells[cellx][celly]);
+    }
+
+    /** Updates the animated property of the given cell */
+    updateCellAnimated(cell: Cell): void {
+        cell.animated = false;
+
+        if(cell.block !== undefined)
+            if(this.playerclient.renderer.assetManager.isAnimation(cell.block.asset))
+                cell.animated = true;
+            
+        if(cell.floor !== undefined)
+            if(this.playerclient.renderer.assetManager.isAnimation(cell.floor.asset))
+                cell.animated = true;
+            
+        if(cell.ceiling !== undefined)
+            if(this.playerclient.renderer.assetManager.isAnimation(cell.ceiling.asset))
+                cell.animated = true;
     }
 
     /** Returns the requested cells data if it exists or returns default values (empty) otherwise */
-    getCell(x: number, y: number): any {
+    getCell(x: number, y: number): Cell {
         const chunkx = Math.floor(x / CHUNK_SIZE);
         const chunky = Math.floor(y / CHUNK_SIZE);
         const cellx = x - chunkx * CHUNK_SIZE;
@@ -117,25 +190,8 @@ class World {
             return this.getDefaultCell();
         }else{
             const cell = chunk.cells[cellx][celly];
-            const returnobj: any = {};
-
-            if(cell.block !== undefined) returnobj.block = { ...this.blockdefinitions[cell.block] };
-            if(cell.floor !== undefined) returnobj.floor = { ...this.floordefinitions[cell.floor] };
-            if(cell.ceiling !== undefined) returnobj.ceiling = { ...this.ceilingdefinitions[cell.ceiling] };
-
-            if(cell.blockupdate !== undefined)
-                if(cell.blockupdate.asset !== undefined)
-                    returnobj.block.asset = cell.blockupdate.asset;
-
-            if(cell.floorupdate !== undefined)
-                if(cell.floorupdate.asset !== undefined)
-                    returnobj.floor.asset = cell.floorupdate.asset;
-
-            if(cell.ceilingupdate !== undefined)
-                if(cell.ceilingupdate.asset !== undefined)
-                    returnobj.ceiling.asset = cell.ceilingupdate.asset;
-
-            return returnobj;
+            
+            return cell;
         }
     }
 
