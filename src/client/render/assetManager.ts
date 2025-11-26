@@ -142,7 +142,7 @@ class AssetManager {
     }
 
     /** Returns if the image is an animation or an image */
-    private isAnimation(assetName: string): boolean {
+    isAnimation(assetName: string): boolean {
         if(assetName === undefined) return false;
 
         return Object.keys(this.animations).some(a => a == assetName);

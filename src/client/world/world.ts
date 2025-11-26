@@ -88,6 +88,9 @@ class World {
     updateCells(cellUpdates: SerializedCellUpdate[]): void {
         cellUpdates.forEach(cellUpdate => {
             this.updateCell(cellUpdate);
+
+            const cell = this.getCell(cellUpdate.x, cellUpdate.y);
+            this.playerclient.renderer.renderCellUpdates(cellUpdate.x, cellUpdate.y, cell);
         });
     }
 

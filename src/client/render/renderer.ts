@@ -2,8 +2,9 @@ import PlayerClient from "../playerClient.js";
 import AssetManager from "./assetManager.js";
 import ChatManager from "./chatManager.js";
 import UiManager from "./uiManager.js";
-import { Color } from "../../shared/types.js";
+import { Color, Vector2D } from "../../shared/types.js";
 import { combineColors } from "../../shared/typeOperations.js";
+import V2D from "../../shared/physics/vector2d.js";
 
 import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, GAME_MODES } = Constants;
@@ -28,10 +29,14 @@ class Renderer {
     readonly chatManager: ChatManager;
     readonly uiManager: UiManager;
 
-    private readonly rendercanvas: HTMLCanvasElement = document.getElementById("gamecanvas")! as HTMLCanvasElement;
-    private readonly rendercontext: CanvasRenderingContext2D = this.rendercanvas.getContext("2d")!;
     private readonly canvas: HTMLCanvasElement = document.createElement("canvas")!;
     private readonly context: CanvasRenderingContext2D = this.canvas.getContext("2d")!;
+    private readonly rendercanvas: HTMLCanvasElement = document.getElementById("gamecanvas")! as HTMLCanvasElement;
+    private readonly rendercontext: CanvasRenderingContext2D = this.rendercanvas.getContext("2d")!;
+    private readonly worldundercanvas: HTMLCanvasElement = document.createElement("canvas")!;
+    private readonly worldundercontext: CanvasRenderingContext2D = this.worldundercanvas.getContext("2d")!;
+    private readonly worlduppercanvas: HTMLCanvasElement = document.createElement("canvas")!;
+    private readonly worlduppercontext: CanvasRenderingContext2D = this.worlduppercanvas.getContext("2d")!;
     private readonly darknesscanvas: HTMLCanvasElement = document.createElement("canvas")!;
     private readonly darknesscontext: CanvasRenderingContext2D = this.darknesscanvas.getContext("2d")!;
 
@@ -45,6 +50,8 @@ class Renderer {
 
     private animationframerequestid: number = 0;
     private updatefpsinterval: string | number | NodeJS.Timeout | undefined;
+
+    private rendercell: Vector2D | null = null;
 
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
@@ -68,7 +75,14 @@ class Renderer {
         this.rendercanvas.height = window.innerHeight;
         this.darknesscanvas.width = window.innerWidth;
         this.darknesscanvas.height = window.innerHeight;
-        this.cellsize = this.canvas.height / HEIGHT_TO_CELL_RATIO;
+        
+        this.cellsize = Math.floor(this.canvas.height / HEIGHT_TO_CELL_RATIO);
+        this.rendercell = null;
+        
+        this.worldundercanvas.width = CELLS_HORIZONTAL * this.cellsize;
+        this.worldundercanvas.height = CELLS_VERTICAL * this.cellsize;
+        this.worlduppercanvas.width = CELLS_HORIZONTAL * this.cellsize;
+        this.worlduppercanvas.height = CELLS_VERTICAL * this.cellsize;
     }
 
     // #endregion
@@ -87,6 +101,11 @@ class Renderer {
     /** Sets the players rendering color to the given value */
     setColor(color: Color): void {
         this.mycolor = color;
+    }
+
+    /** Resets the rendercell for the renderer */
+    resetRenderCell(): void {
+        this.rendercell = null;
     }
 
     // #endregion
@@ -135,34 +154,34 @@ class Renderer {
         const fallingentities = entities.filter((e: any) => e.falling);
         const notfallingentities = entities.filter((e: any) => !e.falling);
 
-        // get the actual tile the player is in
-        const playertile = {
-            x: Math.floor(me.x),
-            y: Math.floor(me.y),
-        };
-        const firstCell = {
-            x: playertile.x - CELLS_HORIZONTAL / 2,
-            y: playertile.y - CELLS_VERTICAL / 2,
-            renderx: -CELLS_HORIZONTAL / 2 * this.cellsize - (this.fixCoord(me.x) - playertile.x * this.cellsize),
-            rendery: -CELLS_VERTICAL / 2 * this.cellsize - (this.fixCoord(me.y) - playertile.y * this.cellsize),
-        };
+        // get the render cell and old render cell
+        const oldrendercell = this.rendercell;
+        this.rendercell = [Math.floor(me.x), Math.floor(me.y)];
+        
+        const firstcell = this.getFirstRenderCell(me, this.rendercell);
+
+        // update the world canvas if there is a change in render cell
+        if(oldrendercell == null){
+            this.renderWorld(firstcell);
+        }else if(!V2D.areEqual(oldrendercell, this.rendercell)){
+            this.shiftWorldRender(oldrendercell, firstcell);
+        }
 
         // render priority goes low to high
-        this.renderBackground(me, firstCell);
+        this.renderBackground(me, firstcell);
 
         fallingentities.forEach((e: any) => this.renderEntity(me, e));
         fallingplayers.forEach((p: any) => this.renderPlayer(me, p));
 
-        this.renderFloors(firstCell);
-        this.renderBlocks(firstCell, true);
+        this.renderWorldOnto(true, firstcell);
 
         notfallingentities.forEach((e: any) => this.renderEntity(me, e));
         notfallingplayers.forEach((p: any) => this.renderPlayer(me, p));
 
-        this.renderBlocks(firstCell, false);
+        this.renderWorldOnto(false, firstcell);
 
         this.renderReach();
-        this.renderDarkness(darkness, firstCell);
+        this.renderDarkness(darkness, firstcell);
 
         others.forEach((p: any) => this.renderPlayerUsername(me, p));
 
@@ -183,76 +202,176 @@ class Renderer {
 
     // #region World
 
-    /** Renders the floors of each cell within client view */
-    private renderFloors(firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
+    /** Renders the world from the world canvas onto the main canvas */
+    private renderWorldOnto(underentities: boolean, firstcell: FirstRenderCell): void {
         const canvasX = this.canvas.width / 2;
         const canvasY = this.canvas.height / 2;
         this.context.save();
         this.context.translate(canvasX, canvasY);
 
-        for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
-            for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                    const cellx = firstCell.x + dx;
-                    const celly = firstCell.y + dy;
-
-                    const cell = this.playerclient.world.getCell(cellx, celly);
-
-                    if(cell.block)
-                        if(!cell.block.floorvisible) continue;
-                    if(cell.floor) {
-                        const id = `${cellx}_${celly}_f`;
-                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.floor.asset, id);
-                    }
-                }
-            }
-        }
+        this.context.drawImage(underentities ? this.worldundercanvas : this.worlduppercanvas, firstcell.renderx, firstcell.rendery);
 
         this.context.restore();
     }
 
+    /** Renders the world onto the world canvases */
+    private renderWorld(firstcell: FirstRenderCell): void {
+        // clear world canvases
+        this.worldundercontext.clearRect(0, 0, this.worldundercanvas.width, this.worldundercanvas.height);
+        this.worlduppercontext.clearRect(0, 0, this.worlduppercanvas.width, this.worlduppercanvas.height);
+
+        // render world under
+        this.renderFloors(firstcell);
+        this.renderBlocks(firstcell, true);
+
+        // render world upper
+        this.renderBlocks(firstcell, false);
+    }
+
+    /** Shifts the world renders on the world canvases from the old cell to the new cell */
+    private shiftWorldRender(oldrendercell: Vector2D, firstcell: FirstRenderCell): void {
+        // shift old world render
+        const worldundercanvasold = document.createElement("canvas")!;
+        const worldundercontextold = worldundercanvasold.getContext("2d")!;
+        const worlduppercanvasold = document.createElement("canvas")!;
+        const worlduppercontextold = worlduppercanvasold.getContext("2d")!;
+
+        worldundercanvasold.width = CELLS_HORIZONTAL * this.cellsize;
+        worldundercanvasold.height = CELLS_VERTICAL * this.cellsize;
+        worlduppercanvasold.width = CELLS_HORIZONTAL * this.cellsize;
+        worlduppercanvasold.height = CELLS_VERTICAL * this.cellsize;
+
+        worldundercontextold.drawImage(this.worldundercanvas, 0, 0);
+        worlduppercontextold.drawImage(this.worlduppercanvas, 0, 0);
+
+        this.worldundercontext.clearRect(0, 0, this.worldundercanvas.width, this.worldundercanvas.height);
+        this.worlduppercontext.clearRect(0, 0, this.worlduppercanvas.width, this.worlduppercanvas.height);
+
+        const newx = oldrendercell[0] - (firstcell.x + CELLS_HORIZONTAL / 2);
+        const newy = oldrendercell[1] - (firstcell.y + CELLS_VERTICAL / 2);
+
+        this.worldundercontext.drawImage(worldundercanvasold, newx * this.cellsize, newy * this.cellsize);
+        this.worlduppercontext.drawImage(worlduppercanvasold, newx * this.cellsize, newy * this.cellsize);
+
+        // render world under
+        this.renderFloors(firstcell, newx, newy);
+        this.renderBlocks(firstcell, true, newx, newy);
+
+        // render world upper
+        this.renderBlocks(firstcell, false, newx, newy);
+    }
+
+    /** Renders the floors of each cell within client view */
+    private renderFloors(firstcell: FirstRenderCell, newx?: number, newy?: number): void {
+        for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
+            for(let dy = 0; dy < CELLS_VERTICAL; dy++){
+                if(newx !== undefined && newy !== undefined){
+                    if(dx >= newx && dx < newx + CELLS_HORIZONTAL &&
+                        dy >= newy && dy < newy + CELLS_VERTICAL){
+                        continue;
+                    }
+                }
+
+                const cellx = firstcell.x + dx;
+                const celly = firstcell.y + dy;
+
+                const cell = this.playerclient.world.getCell(cellx, celly);
+
+                if(cell.block)
+                    if(!cell.block.floorvisible) continue;
+                if(cell.floor){
+                    const id = `${cellx}_${celly}_f`;
+                    this.renderCell(this.worldundercontext, dx, dy, cell.floor.asset, id);
+                }
+            }
+        }
+    }
+
     /** Renders the blocks of each cell within client view */
-    private renderBlocks(firstCell: { x: number; y: number; renderx: number; rendery: number; }, underentities: boolean): void {
-        const canvasX = this.canvas.width / 2;
-        const canvasY = this.canvas.height / 2;
-        this.context.save();
-        this.context.translate(canvasX, canvasY);
+    private renderBlocks(firstcell: FirstRenderCell, underentities: boolean, newx?: number, newy?: number): void {
+        let context = underentities ? this.worldundercontext : this.worlduppercontext;
 
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                const cellx = firstCell.x + dx;
-                const celly = firstCell.y + dy;
+                if(newx !== undefined && newy !== undefined){
+                    if(dx >= newx && dx < newx + CELLS_HORIZONTAL &&
+                        dy >= newy && dy < newy + CELLS_VERTICAL){
+                        continue;
+                    }
+                }
+
+                const cellx = firstcell.x + dx;
+                const celly = firstcell.y + dy;
 
                 const cell = this.playerclient.world.getCell(cellx, celly);
 
                 if(cell.block){
                     if(cell.block.underentities == underentities){
                         const id = `${cellx}_${celly}_b`;
-                        this.renderCell(firstCell.renderx + dx * this.cellsize, firstCell.rendery + dy * this.cellsize, cell.block.asset, id, cell.block.scale);
+                        this.renderCell(context, dx, dy, cell.block.asset, id, cell.block.scale);
                     }
                 }
             }
         }
+    }
 
-        this.context.restore();
+    /** Renders updates to the given cell */
+    renderCellUpdates(x: number, y: number, cell: any): void {
+        if(this.rendercell === null) return;
+
+        const realx = x - (this.rendercell[0] - CELLS_HORIZONTAL / 2);
+        const realy = y - (this.rendercell[1] - CELLS_VERTICAL / 2);
+
+        if(realx >= 0 && realx < CELLS_HORIZONTAL &&
+            realy >= 0 && realy < CELLS_VERTICAL){
+            //clear
+            this.worldundercontext.clearRect(realx * this.cellsize, realy * this.cellsize, this.cellsize, this.cellsize);
+            this.worlduppercontext.clearRect(realx * this.cellsize, realy * this.cellsize, this.cellsize, this.cellsize);
+
+            // floor
+            let renderfloor = true;
+            if(cell.block)
+                if(!cell.block.floorvisible) renderfloor = false;
+            if(cell.floor && renderfloor){
+                const id = `${x}_${y}_f`;
+                this.renderCell(this.worldundercontext, realx, realy, cell.floor.asset, id);
+            }
+
+            // block
+            if(cell.block){
+                const context = cell.block.underentities ? this.worldundercontext : this.worlduppercontext;
+                const id = `${x}_${y}_b`;
+                this.renderCell(context, realx, realy, cell.block.asset, id, cell.block.scale);
+            }
+        }
     }
 
     /** Renders the given asset onto the given cell */
-    private renderCell(x: number, y: number, asset: string, id: string, scale?: number): void {
+    private renderCell(context: CanvasRenderingContext2D, x: number, y: number, asset: string, id: string, scale?: number): void {
         if(scale === undefined) scale = 1;
 
-        const renderoffset = ((1 - scale) / 2) * this.cellsize;
-        x = x + renderoffset - 1;
-        y = y + renderoffset - 1;
+        const renderoffset = ((1 - scale) / 2);
+        x = x + renderoffset;
+        y = y + renderoffset;
 
-        const model = this.assetManager.getAssetRender(asset, id, (this.cellsize) * scale + 2);
+        const model = this.assetManager.getAssetRender(asset, id, (this.cellsize) * scale);
         if(model === null) return;
 
-        this.context.drawImage(
+        context.drawImage(
             model,
-            x,
-            y,
+            x * this.cellsize,
+            y * this.cellsize,
         );
+    }
+
+    /** Returns the first cell object for the given player position */
+    private getFirstRenderCell(me: any, rendercell: Vector2D): FirstRenderCell {
+        return {
+            x: rendercell[0] - CELLS_HORIZONTAL / 2,
+            y: rendercell[1] - CELLS_VERTICAL / 2,
+            renderx: -CELLS_HORIZONTAL / 2 * this.cellsize - (this.fixCoord(me.x) - rendercell[0] * this.cellsize),
+            rendery: -CELLS_VERTICAL / 2 * this.cellsize - (this.fixCoord(me.y) - rendercell[1] * this.cellsize),
+        };
     }
 
     // #endregion
@@ -330,7 +449,7 @@ class Renderer {
         this.context.restore();
     }
 
-    /** Renders the given player's username above them */
+    /** Renders the given player's username upper them */
     private renderPlayerUsername(me: any, player: any): void {
         // prepare context
         const { x, y, username } = player;
@@ -370,7 +489,7 @@ class Renderer {
     // #region Background
 
     /** Renders darkness overlay on top of the world */
-    private renderDarkness(percent: number, firstCell: { x: number; y: number; renderx: number; rendery: number; }){
+    private renderDarkness(percent: number, firstcell: FirstRenderCell){
         if(percent === 0) return;
 
         // draw base darkness
@@ -389,12 +508,12 @@ class Renderer {
         const padding = 10;
         for(let dx = -padding; dx < CELLS_HORIZONTAL + padding; dx++){
             for(let dy = -padding; dy < CELLS_VERTICAL + padding; dy++){
-                const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
+                const cell = this.playerclient.world.getCell(firstcell.x + dx, firstcell.y + dy);
                 if(!cell.block) continue;
                 if(!cell.block.light) continue;
 
-                const x = firstCell.renderx + (dx + .5) * this.cellsize;
-                const y = firstCell.rendery + (dy + .5) * this.cellsize;
+                const x = firstcell.renderx + (dx + .5) * this.cellsize;
+                const y = firstcell.rendery + (dy + .5) * this.cellsize;
                 const radius = cell.block.light * this.cellsize;
 
                 this.darknesscontext.beginPath();
@@ -410,14 +529,14 @@ class Renderer {
     }
 
     /** Renders the background image under the world */
-    private renderBackground(me: any, firstCell: { x: number; y: number; renderx: number; rendery: number; }): void {
+    private renderBackground(me: any, firstcell: FirstRenderCell): void {
         // check if need to render background
         let renderbg = false;
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             if(renderbg) break;
 
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){
-                const cell = this.playerclient.world.getCell(firstCell.x + dx, firstCell.y + dy);
+                const cell = this.playerclient.world.getCell(firstcell.x + dx, firstcell.y + dy);
                 if(cell.block)
                     if(cell.block.scale == 1 && cell.block.shape == SHAPES.SQUARE) continue;
                 if(cell.floor) continue;
@@ -482,5 +601,13 @@ class Renderer {
 
     // #endregion
 }
+
+/** The data format for the first render cell */
+type FirstRenderCell = {
+    x: number;
+    y: number;
+    renderx: number;
+    rendery: number;
+};
 
 export default Renderer;
