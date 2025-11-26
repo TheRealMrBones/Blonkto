@@ -1,8 +1,8 @@
-import PlayerClient from "../playerClient.js";
-import { DropContent, SendMessageContent } from "../../shared/messageContentTypes.js";
-import { SerializedTab } from "../../shared/serialization/serializedTab.js";
+import PlayerClient from "../../playerClient.js";
+import { DropContent, SendMessageContent } from "../../../shared/messageContentTypes.js";
+import { SerializedTab } from "../../../shared/serialization/serializedTab.js";
 
-import SharedConfig from "../../configs/shared.js";
+import SharedConfig from "../../../configs/shared.js";
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 
 /** Manages all UI updating and interaction for the client */

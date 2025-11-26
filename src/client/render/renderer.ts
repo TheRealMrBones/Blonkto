@@ -1,7 +1,7 @@
 import PlayerClient from "../playerClient.js";
-import AssetManager from "./assetManager.js";
-import ChatManager from "./chatManager.js";
-import UiManager from "./uiManager.js";
+import AssetManager from "./asset/assetManager.js";
+import ChatManager from "./ui/chatManager.js";
+import UiManager from "./ui/uiManager.js";
 import { Color, Vector2D } from "../../shared/types.js";
 import { combineColors } from "../../shared/typeOperations.js";
 import V2D from "../../shared/physics/vector2d.js";

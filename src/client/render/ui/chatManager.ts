@@ -1,7 +1,7 @@
-import PlayerClient from "../playerClient.js";
-import { ReceiveMessageContent } from "../../shared/messageContentTypes.js";
+import PlayerClient from "../../playerClient.js";
+import { ReceiveMessageContent } from "../../../shared/messageContentTypes.js";
 
-import ClientConfig from "../../configs/client.js";
+import ClientConfig from "../../../configs/client.js";
 const { MESSAGE_TIME, MAX_MESSAGE_COUNT } = ClientConfig.CHAT;
 
 /** Manages the client chat log and operations */
