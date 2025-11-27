@@ -1,8 +1,8 @@
-import Registry from "./registry.js";
-import CommandDefinition from "../definitions/commandDefinition.js";
-import Logger from "../../server/logging/logger.js";
+import Logger from "server/logging/logger.js";
+import CommandDefinition from "game/definitions/commandDefinition.js";
+import Registry from "game/registries/registry.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

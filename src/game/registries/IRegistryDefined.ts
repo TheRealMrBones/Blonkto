@@ -1,4 +1,4 @@
-import RegistryValue from "./registryValue.js";
+import RegistryValue from "game/registries/registryValue.js";
 
 /** The base interface for an object that is defined by a registry value */
 interface IRegistryDefined<T extends RegistryValue> {

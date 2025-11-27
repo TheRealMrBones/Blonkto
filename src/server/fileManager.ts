@@ -1,8 +1,8 @@
 import fs from "fs";
 
-import Logger from "./logging/logger.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 const datadirs = [

@@ -1,9 +1,9 @@
-import Circle from "../../../shared/physics/circle.js";
-import { checkCollision } from "../../../shared/physics/collision.js";
-import CollisionObject from "../../../shared/physics/collisionObject.js";
-import V2D from "../../../shared/physics/vector2d.js";
-import { Vector2D } from "../../../shared/types.js";
-import { MouseEventType } from "./mouseEventType.js";
+import { MouseEventType } from "client/render/ui/mouseEventType.js";
+import Circle from "shared/physics/circle.js";
+import { checkCollision } from "shared/physics/collision.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
 /** An element of the games ui that has a position and shape on the screen */
 abstract class UiElement {

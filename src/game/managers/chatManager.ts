@@ -1,17 +1,16 @@
 import crypto from "crypto";
 import { Socket } from "socket.io-client";
 
-import Logger from "../../server/logging/logger.js";
-import Game from "../game.js";
-import Player from "../objects/player.js";
-import CommandRegistry from "../registries/commandRegistry.js";
-import { filterText } from "../../shared/filter.js";
-import { ReceiveMessageContent, SendMessageContent } from "../../shared/messageContentTypes.js";
+import ServerConfig from "configs/server.js";
+import Game from "game/game.js";
+import Player from "game/objects/player.js";
+import CommandRegistry from "game/registries/commandRegistry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import { filterText } from "shared/filter.js";
+import { SendMessageContent, ReceiveMessageContent } from "shared/messageContentTypes.js";
 
-import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
-
-import ServerConfig from "../../configs/server.js";
 const { FILTER_CHAT } = ServerConfig.CHAT;
 const { LOG_CHAT, LOG_COMMANDS } = ServerConfig.LOG;
 

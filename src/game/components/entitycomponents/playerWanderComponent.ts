@@ -1,11 +1,11 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import EntityDefinition from "../../definitions/entityDefinition.js";
-import { pathfind } from "../../world/helpers/pathfind.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
-import Player from "../../objects/player.js";
-import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
-import { Vector2D } from "../../../shared/types.js";
+import Component from "game/components/component.js";
+import MoveTargetComponent, { MoveTargetComponentData } from "game/components/entitycomponents/moveTargetComponent.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import { pathfind } from "game/world/helpers/pathfind.js";
+import { Vector2D } from "shared/types.js";
 
 /** An Entity Component that makes this entity type wander to random nearby positions skewed towards ticking players */
 class PlayerWanderComponent extends Component<EntityDefinition> {

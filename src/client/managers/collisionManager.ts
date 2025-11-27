@@ -1,7 +1,7 @@
-import PlayerClient from "../playerClient.js";
-import CollisionObject from "../../shared/physics/collisionObject.js";
-import { getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
-import V2D from "../../shared/physics/vector2d.js";
+import PlayerClient from "client/playerClient.js";
+import { getCellCollisionObject, getCollisionPush } from "shared/physics/collision.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import V2D from "shared/physics/vector2d.js";
 
 /** Manages client side collisions between the player and other objects / entities in the world */
 class CollisionManager {

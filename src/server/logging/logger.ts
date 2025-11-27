@@ -1,6 +1,6 @@
-import LogManager from "./logManager.js";
+import LogManager from "server/logging/logManager.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** A logger that explicitly works for a single category */

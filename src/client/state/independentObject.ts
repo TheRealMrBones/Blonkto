@@ -1,4 +1,4 @@
-import StateManager from "../managers/stateManager.js";
+import StateManager from "client/managers/stateManager.js";
 
 /** The object used to interpolate states for independent objects (uses personal update times instead of game updates) */
 class IndependentObject {

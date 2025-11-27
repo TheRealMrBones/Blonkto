@@ -1,13 +1,12 @@
-import PlayerClient from "../playerClient.js";
-import IndependentObject from "../state/independentObject.js";
-import { GameUpdateContent } from "../../shared/messageContentTypes.js";
-import { DarknessContent, PushContent, RecipesContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
-import { SerializedChangesInventory, SerializedUpdateInventory } from "../../shared/serialization/items/serializedInventory.js";
+import PlayerClient from "client/playerClient.js";
+import IndependentObject from "client/state/independentObject.js";
+import ClientConfig from "configs/client.js";
+import Constants from "shared/constants.js";
+import { GameUpdateContent } from "shared/messageContentTypes.js";
+import { PushContent, SetPosContent, SetGamemodeContent, SetColorContent, RecipesContent, DarknessContent } from "shared/oneTimeMessageContentTypes.js";
+import { SerializedUpdateInventory, SerializedChangesInventory } from "shared/serialization/items/serializedInventory.js";
 
-import Constants from "../../shared/constants.js";
 const { ONE_TIME_MSG_TYPES } = Constants;
-
-import ClientConfig from "../../configs/client.js";
 const { RENDER_DELAY } = ClientConfig.RENDER;
 const { SERVER_RESYNC_THRESHOLD, CONNECTION_LOST_THRESHOLD } = ClientConfig.UPDATE;
 

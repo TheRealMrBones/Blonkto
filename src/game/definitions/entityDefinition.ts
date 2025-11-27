@@ -1,14 +1,14 @@
 import EventEmitter from "events";
 
-import IDrop from "../items/drops/IDrop.js";
-import Game from "../game.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
-import ComponentHandler from "../components/componentHandler.js";
-import Entity from "../objects/entity.js";
-import Player from "../objects/player.js";
-import { Vector2D } from "../../shared/types.js";
+import ComponentHandler from "game/components/componentHandler.js";
+import Game from "game/game.js";
+import IDrop from "game/items/drops/IDrop.js";
+import Entity from "game/objects/entity.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import Constants from "shared/constants.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */

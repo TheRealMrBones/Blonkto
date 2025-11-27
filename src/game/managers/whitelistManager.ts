@@ -1,4 +1,4 @@
-import Game from "../game.js";
+import Game from "game/game.js";
 
 /** Manages the player whitelist for the server */
 class WhitelistManager {

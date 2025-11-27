@@ -1,7 +1,7 @@
-import RegistryValue from "./registryValue.js";
-import Logger from "../../server/logging/logger.js";
+import RegistryValue from "game/registries/registryValue.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Manages a definition list specific type of class */

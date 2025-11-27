@@ -1,10 +1,10 @@
-import Logger from "../../server/logging/logger.js";
-import RegistryValue from "../registries/registryValue.js";
-import Component from "./component.js";
-import ComponentData from "./componentData.js";
-import ISerializableForInit from "./ISerializableForInit.js";
+import Component from "game/components/component.js";
+import ComponentData from "game/components/componentData.js";
+import ISerializableForInit from "game/components/ISerializableForInit.js";
+import RegistryValue from "game/registries/registryValue.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** Defines functionality for a type to handle its own set of components */

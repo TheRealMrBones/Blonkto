@@ -1,6 +1,6 @@
-import IRegistryDefined from "../registries/IRegistryDefined.js";
-import ComponentData from "./componentData.js";
-import ComponentHandler from "./componentHandler.js";
+import ComponentData from "game/components/componentData.js";
+import ComponentHandler from "game/components/componentHandler.js";
+import IRegistryDefined from "game/registries/IRegistryDefined.js";
 
 /** The base interface for an object that is defined by a registry value that is a component handler */
 interface IRegistryDefinedWithComponents<T extends ComponentHandler<T>> extends IRegistryDefined<T> {

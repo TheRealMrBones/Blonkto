@@ -1,6 +1,7 @@
 import path from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 
 export default {
     entry: {
@@ -43,6 +44,17 @@ export default {
         ],
     },
     resolve: {
+        plugins: [new TsconfigPathsPlugin({
+            configFile: "./tsconfig.json",
+            extensions: [".ts", ".tsx", ".js"],
+        })],
+        alias: {
+            client: path.resolve(process.cwd(), "src/client"),
+            configs: path.resolve(process.cwd(), "src/configs"),
+            game: path.resolve(process.cwd(), "src/game"),
+            server: path.resolve(process.cwd(), "src/server"),
+            shared: path.resolve(process.cwd(), "src/shared"),
+        },
         extensions: ['.ts', '.js', '.css'],
         extensionAlias: {
             '.js': ['.ts', '.js'],

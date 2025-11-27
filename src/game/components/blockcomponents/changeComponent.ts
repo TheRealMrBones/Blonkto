@@ -1,9 +1,9 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import Player from "../../objects/player.js";
-import BlockDefinition from "../../definitions/blockDefinition.js";
-import Block from "../../world/block.js";
-import { ClickContentExpanded } from "../../managers/socketManager.js";
+import Component from "game/components/component.js";
+import BlockDefinition from "game/definitions/blockDefinition.js";
+import Game from "game/game.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import Block from "game/world/block.js";
 
 /** A Block Component that allows the block to be changed on interact */
 class ChangeComponent extends Component<BlockDefinition> {

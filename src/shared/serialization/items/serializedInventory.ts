@@ -1,4 +1,4 @@
-import { SerializedUpdateItemStack, SerializedWriteItemStack } from "./serializedItemStack.js";
+import { SerializedUpdateItemStack, SerializedWriteItemStack } from "shared/serialization/items/serializedItemStack.js";
 
 /** Defines the format for serialized updates of an inventory */
 export type SerializedUpdateInventory = (SerializedUpdateItemStack | null)[];

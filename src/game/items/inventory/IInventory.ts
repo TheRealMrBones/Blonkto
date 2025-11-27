@@ -1,6 +1,6 @@
-import Game from "../../game.js";
-import Layer from "../../world/layer.js";
-import ItemStack from "../itemStack.js";
+import Game from "game/game.js";
+import ItemStack from "game/items/itemStack.js";
+import Layer from "game/world/layer.js";
 
 /** The base interface for objects that hold itemstacks in the game world */
 interface IInventory {

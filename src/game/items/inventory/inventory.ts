@@ -1,10 +1,10 @@
-import { SerializedChangesInventory, SerializedUpdateInventory, SerializedWriteInventory } from "../../../shared/serialization/items/serializedInventory.js";
-import Game from "../../game.js";
-import DroppedStack from "../../objects/droppedStack.js";
-import ItemRegistry from "../../registries/itemRegistry.js";
-import Layer from "../../world/layer.js";
-import ItemStack from "../itemStack.js";
-import IInventory from "./IInventory.js";
+import Game from "game/game.js";
+import IInventory from "game/items/inventory/IInventory.js";
+import ItemStack from "game/items/itemStack.js";
+import DroppedStack from "game/objects/droppedStack.js";
+import ItemRegistry from "game/registries/itemRegistry.js";
+import Layer from "game/world/layer.js";
+import { SerializedWriteInventory, SerializedUpdateInventory, SerializedChangesInventory } from "shared/serialization/items/serializedInventory.js";
 
 /** A managable collection of item stacks */
 class Inventory implements IInventory {

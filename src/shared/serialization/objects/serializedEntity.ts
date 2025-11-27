@@ -1,4 +1,4 @@
-import { SerializedUpdateGameObject, SerializedWriteGameObject } from "./serializedGameObject.js";
+import { SerializedUpdateGameObject, SerializedWriteGameObject } from "shared/serialization/objects/serializedGameObject.js";
 
 /** Defines the format for serialized updates of an entity */
 export type SerializedUpdateEntity = SerializedUpdateGameObject & {

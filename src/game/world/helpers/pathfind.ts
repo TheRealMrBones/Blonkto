@@ -1,6 +1,6 @@
-import V2D from "../../../shared/physics/vector2d.js";
-import { Vector2D } from "../../../shared/types.js";
-import Layer from "../layer.js";
+import Layer from "game/world/layer.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
 /** Returns the fastest path to get from start to end as an array of positions */
 export function pathfind(start: Vector2D, end: Vector2D, layer: Layer, ghostblocked?: Vector2D[]): Vector2D[] | null {

@@ -1,9 +1,9 @@
-import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
-import Game from "../game.js";
-import DroppedStack from "../objects/droppedStack.js";
-import ItemRegistry from "../registries/itemRegistry.js";
-import Layer from "../world/layer.js";
-import IInventory from "./inventory/IInventory.js";
+import Game from "game/game.js";
+import IInventory from "game/items/inventory/IInventory.js";
+import DroppedStack from "game/objects/droppedStack.js";
+import ItemRegistry from "game/registries/itemRegistry.js";
+import Layer from "game/world/layer.js";
+import { SerializedRecipe } from "shared/serialization/items/serializedRecipe.js";
 
 class Recipe {
     readonly ingredients: { [item: string]: number };

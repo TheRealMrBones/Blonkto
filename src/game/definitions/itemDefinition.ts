@@ -1,12 +1,12 @@
 import EventEmitter from "events";
 
-import ComponentHandler from "../components/componentHandler.js";
-import Game from "../game.js";
-import ItemStack from "../items/itemStack.js";
-import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
+import ComponentHandler from "game/components/componentHandler.js";
+import Game from "game/game.js";
+import ItemStack from "game/items/itemStack.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of item with its functionality and base statistics */

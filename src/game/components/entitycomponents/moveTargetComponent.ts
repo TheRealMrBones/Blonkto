@@ -1,9 +1,9 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import EntityDefinition from "../../definitions/entityDefinition.js";
-import { Vector2D } from "../../../shared/types.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
-import ComponentData from "../componentData.js";
+import Component from "game/components/component.js";
+import ComponentData from "game/components/componentData.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import { Vector2D } from "shared/types.js";
 
 /** An Entity Component that allows an entity to set a target pos queue to move towards */
 class MoveTargetComponent extends Component<EntityDefinition> {

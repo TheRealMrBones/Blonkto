@@ -1,12 +1,12 @@
-import PlayerClient from "../playerClient.js";
-import Item from "./item.js";
-import Recipe from "./recipe.js";
-import { SwapContent } from "../../shared/messageContentTypes.js";
-import { SerializedUpdateItemStack } from "../../shared/serialization/items/serializedItemStack.js";
-import { SerializedChangesInventory, SerializedChangesSlot, SerializedUpdateInventory } from "../../shared/serialization/items/serializedInventory.js";
-import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
+import Item from "client/inventory/item.js";
+import Recipe from "client/inventory/recipe.js";
+import PlayerClient from "client/playerClient.js";
+import SharedConfig from "configs/shared.js";
+import { SwapContent } from "shared/messageContentTypes.js";
+import { SerializedChangesSlot, SerializedUpdateInventory, SerializedChangesInventory } from "shared/serialization/items/serializedInventory.js";
+import { SerializedUpdateItemStack } from "shared/serialization/items/serializedItemStack.js";
+import { SerializedRecipe } from "shared/serialization/items/serializedRecipe.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
 
 /** The representation of inventory data of the client */

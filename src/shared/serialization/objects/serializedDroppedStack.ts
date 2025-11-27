@@ -1,5 +1,5 @@
-import { SerializedWriteItemStack } from "../items/serializedItemStack.js";
-import { SerializedUpdateGameObject, SerializedWriteGameObject } from "./serializedGameObject.js";
+import { SerializedWriteItemStack } from "shared/serialization/items/serializedItemStack.js";
+import { SerializedUpdateGameObject, SerializedWriteGameObject } from "shared/serialization/objects/serializedGameObject.js";
 
 /** Defines the format for serialized updates of a dropped stack */
 export type SerializedUpdateDroppedStack = SerializedUpdateGameObject & {};

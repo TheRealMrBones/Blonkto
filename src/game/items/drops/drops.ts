@@ -1,6 +1,6 @@
-import Game from "../../game.js";
-import Layer from "../../world/layer.js";
-import IDrop from "./IDrop.js";
+import Game from "game/game.js";
+import IDrop from "game/items/drops/IDrop.js";
+import Layer from "game/world/layer.js";
 
 /** Drop composed of multiple other drops */
 class Drops implements IDrop {

@@ -1,17 +1,16 @@
 import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
-import Game from "../game.js";
-import Logger from "../../server/logging/logger.js";
-import Player from "../objects/player.js";
-import Cell from "../world/cell.js";
-import Entity from "../objects/entity.js";
-import { ClickContent, CraftContent, DropContent, InputContent, SwapContent } from "../../shared/messageContentTypes.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import Entity from "game/objects/entity.js";
+import Player from "game/objects/player.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import { InputContent, ClickContent, DropContent, SwapContent, CraftContent } from "shared/messageContentTypes.js";
+import Cell from "game/world/cell.js";
 
-import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES, MINE_TYPES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { BASE_REACH, BASE_ACTION_DELAY } = SharedConfig.PLAYER;
 const { BASE_DAMAGE, BASE_KNOCKBACK, BASE_SWING_DELAY } = SharedConfig.ATTACK;
 

@@ -1,10 +1,10 @@
-import Game from "../../game.js";
-import Chunk from "../chunk.js";
-import Layer from "../layer.js";
-import ILayerSpawner from "./ILayerSpawner.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Chunk from "game/world/chunk.js";
+import Layer from "game/world/layer.js";
+import ILayerSpawner from "game/world/spawning/ILayerSpawner.js";
 
-import SharedConfig from "../../../configs/shared.js";
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);

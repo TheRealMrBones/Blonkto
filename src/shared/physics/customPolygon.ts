@@ -1,5 +1,5 @@
-import { Vector2D } from "../types.js";
-import Polygon from "./polygon.js";
+import Polygon from "shared/physics/polygon.js";
+import { Vector2D } from "shared/types.js";
 
 /** A closed convex (hopefully) polygon in 2d space with custom vetices */
 class CustomPolygon extends Polygon {

@@ -1,6 +1,6 @@
-import { Vector2D } from "../types.js";
-import Polygon from "./polygon.js";
-import V2D from "./vector2d.js";
+import Polygon from "shared/physics/polygon.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
 /** A uniform square in 2d space */
 class Square extends Polygon {

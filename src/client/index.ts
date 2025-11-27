@@ -1,5 +1,5 @@
-import PlayerClient from "./playerClient.js";
-import { FailedConnectionContent, JoinGameContent } from "../shared/messageContentTypes.js";
+import PlayerClient from "client/playerClient.js";
+import { JoinGameContent, FailedConnectionContent } from "shared/messageContentTypes.js";
 
 import "./main.css";
 

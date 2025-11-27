@@ -1,4 +1,4 @@
-import { SerializedLoadCell } from "./serializedCell.js";
+import { SerializedLoadCell } from "shared/serialization/world/serializedCell.js";
 
 /** Defines the format for serialized loads of a chunk */
 export type SerializedLoadChunk = {

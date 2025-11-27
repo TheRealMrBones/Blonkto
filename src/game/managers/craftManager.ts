@@ -1,10 +1,10 @@
-import { CraftContent } from "../../shared/messageContentTypes.js";
-import { SerializedRecipe } from "../../shared/serialization/items/serializedRecipe.js";
-import Game from "../game.js";
-import IInventory from "../items/inventory/IInventory.js";
-import Recipe from "../items/recipe.js";
-import Player from "../objects/player.js";
-import Layer from "../world/layer.js";
+import Game from "game/game.js";
+import IInventory from "game/items/inventory/IInventory.js";
+import Recipe from "game/items/recipe.js";
+import Player from "game/objects/player.js";
+import Layer from "game/world/layer.js";
+import { CraftContent } from "shared/messageContentTypes.js";
+import { SerializedRecipe } from "shared/serialization/items/serializedRecipe.js";
 
 const defaultrecipesfolder = "recipes";
 

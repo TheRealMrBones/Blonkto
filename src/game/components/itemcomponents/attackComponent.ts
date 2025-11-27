@@ -1,10 +1,10 @@
-import Component from "../component.js";
-import ItemDefinition from "../../definitions/itemDefinition.js";
-import Game from "../../game.js";
-import Player from "../../objects/player.js";
-import ItemStack from "../../items/itemStack.js";
-import { ClickContentExpanded } from "../../managers/socketManager.js";
-import { SwingData } from "../../combat/swingData.js";
+import { SwingData } from "game/combat/swingData.js";
+import Component from "game/components/component.js";
+import ItemDefinition from "game/definitions/itemDefinition.js";
+import Game from "game/game.js";
+import ItemStack from "game/items/itemStack.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
 
 /** An Item Component that allows the item to be used to attack entities */
 class AttackComponent extends Component<ItemDefinition> {

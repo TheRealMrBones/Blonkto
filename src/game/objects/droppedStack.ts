@@ -1,11 +1,11 @@
-import Layer from "../world/layer.js";
-import ItemStack from "../items/itemStack.js";
-import GameObject from "./gameObject.js";
-import Game from "../game.js";
-import ItemRegistry from "../registries/itemRegistry.js";
-import { SerializedUpdateDroppedStack, SerializedWriteDroppedStack } from "../../shared/serialization/objects/serializedDroppedStack.js";
+import ServerConfig from "configs/server.js";
+import Game from "game/game.js";
+import ItemStack from "game/items/itemStack.js";
+import GameObject from "game/objects/gameObject.js";
+import ItemRegistry from "game/registries/itemRegistry.js";
+import Layer from "game/world/layer.js";
+import { SerializedWriteDroppedStack, SerializedUpdateDroppedStack } from "shared/serialization/objects/serializedDroppedStack.js";
 
-import ServerConfig from "../../configs/server.js";
 const { DROPPED_STACK_TTL } = ServerConfig.OBJECT;
 
 /** A stack of items that has been dropped into the game world and ticking */

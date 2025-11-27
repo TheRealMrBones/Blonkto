@@ -1,10 +1,10 @@
-import Cell from "./cell.js";
-import Layer from "./layer.js";
-import Game from "../game.js";
-import { SerializedLoadCell } from "../../shared/serialization/world/serializedCell.js";
-import { SerializedLoadChunk, SerializedLoadChunkFull, SerializedWriteChunk } from "../../shared/serialization/world/serializedChunk.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import Cell from "game/world/cell.js";
+import Layer from "game/world/layer.js";
+import { SerializedLoadCell } from "shared/serialization/world/serializedCell.js";
+import { SerializedLoadChunkFull, SerializedWriteChunk } from "shared/serialization/world/serializedChunk.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single chunk (square collection of cells) in the game world */

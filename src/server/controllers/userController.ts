@@ -2,9 +2,9 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import validator from "validator";
 
-import userModel from "../models/userModel.js";
+import ServerConfig from "configs/server.js";
+import userModel from "server/models/userModel.js";
 
-import ServerConfig from "../../configs/server.js";
 const { DEV_LOGON } = ServerConfig.DEV;
 
 /** Returns if the requested user is an admin */

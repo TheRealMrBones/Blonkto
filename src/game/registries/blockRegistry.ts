@@ -1,20 +1,17 @@
-import Registry from "./registry.js";
-import BlockDefinition from "../definitions/blockDefinition.js";
-import Drop from "../items/drops/drop.js";
-import Drops from "../items/drops/drops.js";
-import Logger from "../../server/logging/logger.js";
+import ChangeComponent from "game/components/blockcomponents/changeComponent.js";
+import ContainerComponent from "game/components/blockcomponents/containerComponent.js";
+import LightComponent from "game/components/blockcomponents/lightComponent.js";
+import PickComponent from "game/components/blockcomponents/pickComponent.js";
+import StairsComponent from "game/components/blockcomponents/stairsComponent.js";
+import StationComponent from "game/components/blockcomponents/stationComponent.js";
+import TimeChangeComponent from "game/components/blockcomponents/timeChangeComponent.js";
+import BlockDefinition from "game/definitions/blockDefinition.js";
+import Drop from "game/items/drops/drop.js";
+import Drops from "game/items/drops/drops.js";
+import Registry from "game/registries/registry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import ChangeComponent from "../components/blockcomponents/changeComponent.js";
-import RandomChangeComponent from "../components/blockcomponents/randomChangeComponent.js";
-import PickupComponent from "../components/blockcomponents/pickupComponent.js";
-import PickComponent from "../components/blockcomponents/pickComponent.js";
-import TimeChangeComponent from "../components/blockcomponents/timeChangeComponent.js";
-import StationComponent from "../components/blockcomponents/stationComponent.js";
-import LightComponent from "../components/blockcomponents/lightComponent.js";
-import ContainerComponent from "../components/blockcomponents/containerComponent.js";
-import StairsComponent from "../components/blockcomponents/stairsComponent.js";
-
-import Constants from "../../shared/constants.js";
 const { ASSETS, ANIMATIONS, SHAPES, MINE_TYPES, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

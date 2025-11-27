@@ -1,5 +1,5 @@
-import Component from "../component.js";
-import FloorDefinition from "../../definitions/floorDefinition.js";
+import Component from "game/components/component.js";
+import FloorDefinition from "game/definitions/floorDefinition.js";
 
 /** A Floor Component that allows the floor to grow plant blocks */
 class OrganicComponent extends Component<FloorDefinition> {

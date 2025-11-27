@@ -1,20 +1,18 @@
-import PlayerClient from "../playerClient.js";
-import AssetManager from "./asset/assetManager.js";
-import ChatManager from "./ui/chatManager.js";
-import UiManager from "./ui/uiManager.js";
-import { Color, Vector2D } from "../../shared/types.js";
-import { combineColors } from "../../shared/typeOperations.js";
-import V2D from "../../shared/physics/vector2d.js";
+import PlayerClient from "client/playerClient.js";
+import AssetManager from "client/render/asset/assetManager.js";
+import ChatManager from "client/render/ui/chatManager.js";
+import UiManager from "client/render/ui/uiManager.js";
+import ClientConfig from "configs/client.js";
+import SharedConfig from "configs/shared.js";
+import Constants from "shared/constants.js";
+import V2D from "shared/physics/vector2d.js";
+import { combineColors } from "shared/typeOperations.js";
+import { Color, Vector2D } from "shared/types.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS, SHAPES, GAME_MODES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { BASE_REACH } = SharedConfig.PLAYER;
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL, CHUNK_SIZE, WORLD_SIZE } = SharedConfig.WORLD;
 const { ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
-
-import ClientConfig from "../../configs/client.js";
 const { RENDER_PADDING, BACKGROUND_SCALE, USERNAME_HANG, USERNAME_SCALE, TEXT_FONT } = ClientConfig.RENDER;
 const { HIT_COLOR } = ClientConfig.ATTACK;
 

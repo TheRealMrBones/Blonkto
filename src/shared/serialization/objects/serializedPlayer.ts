@@ -1,6 +1,6 @@
-import { Color } from "../../types.js";
-import { SerializedWriteInventory } from "../items/serializedInventory.js";
-import { SerializedUpdateEntity, SerializedWriteEntity } from "./serializedEntity.js";
+import { SerializedWriteInventory } from "shared/serialization/items/serializedInventory.js";
+import { SerializedUpdateEntity, SerializedWriteEntity } from "shared/serialization/objects/serializedEntity.js";
+import { Color } from "shared/types.js";
 
 /** Defines the format for serialized updates of a player */
 export type SerializedUpdatePlayer = SerializedUpdateEntity & {

@@ -2,14 +2,13 @@ import io from "socket.io-client";
 import { throttle } from "throttle-debounce";
 import { Socket } from "socket.io";
 
-import PlayerClient from "../playerClient.js";
-import { connectionRefused, connectionAccepted } from "../index.js";
-import { ClickContent, CraftContent, DropContent, FailedConnectionContent, InputContent, JoinGameContent, PlayerInstantiatedContent, SendMessageContent, SwapContent } from "../../shared/messageContentTypes.js";
+import SharedConfig from "configs/shared.js";
+import { connectionRefused, connectionAccepted } from "client/index.js";
+import PlayerClient from "client/playerClient.js";
+import Constants from "shared/constants.js";
+import { FailedConnectionContent, JoinGameContent, InputContent, ClickContent, DropContent, SwapContent, CraftContent, SendMessageContent, PlayerInstantiatedContent } from "shared/messageContentTypes.js";
 
-import Constants from "../../shared/constants.js";
 const { MSG_TYPES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
 
 /** Manages sending and receiving messages between the client and the server */

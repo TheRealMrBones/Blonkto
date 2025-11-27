@@ -1,7 +1,7 @@
-import PlayerClient from "../playerClient.js";
-import { CraftContent } from "../../shared/messageContentTypes.js";
-import Item from "./item.js";
-import { SerializedIngredient } from "../../shared/serialization/items/serializedRecipe.js";
+import Item from "client/inventory/item.js";
+import PlayerClient from "client/playerClient.js";
+import { CraftContent } from "shared/messageContentTypes.js";
+import { SerializedIngredient } from "shared/serialization/items/serializedRecipe.js";
 
 const craftingmenudiv = document.getElementById("craftingmenu")!;
 

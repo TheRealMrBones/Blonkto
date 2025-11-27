@@ -1,24 +1,20 @@
-import Logger from "../../server/logging/logger.js";
-import Game from "../game.js";
-import Layer from "./layer.js";
-import Player from "../objects/player.js";
-import SeededRandom from "../../shared/random/seededRandom.js";
-import { Vector2D } from "../../shared/types.js";
-import { SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import Player from "game/objects/player.js";
+import CaveLayerGenerator from "game/world/generation/caveLayerGenerator.js";
+import LayerGenerator from "game/world/generation/layerGenerator.js";
+import Layer from "game/world/layer.js";
+import CaveLayerSpawner from "game/world/spawning/caveLayerSpawner.js";
+import LayerSpawner from "game/world/spawning/layerSpawner.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import SeededRandom from "shared/random/seededRandom.js";
+import { SerializedWorldLoad } from "shared/serialization/world/serializedWorldLoad.js";
+import { Vector2D } from "shared/types.js";
 
-import LayerGenerator from "./generation/layerGenerator.js";
-import CaveLayerGenerator from "./generation/caveLayerGenerator.js";
-
-import LayerSpawner from "./spawning/layerSpawner.js";
-import CaveLayerSpawner from "./spawning/caveLayerSpawner.js";
-
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
-
-import ServerConfig from "../../configs/server.js";
 const { SEED, SPAWN_SIZE } = ServerConfig.WORLD;
 const { CHUNK_UNLOAD_RATE, DAY_LENGTH, NIGHT_LENGTH, DAY_TRANSITION_LENGTH } = ServerConfig.WORLD;
 

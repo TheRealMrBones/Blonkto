@@ -1,4 +1,4 @@
-import { Color } from "./types.js";
+import { Color } from "shared/types.js";
 
 /** Returns if the 2 given color values are the same */
 export function equalColor(color1: Color, color2: Color): boolean {

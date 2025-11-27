@@ -1,6 +1,6 @@
-import Game from "../../game.js";
-import Chunk from "../chunk.js";
-import Layer from "../layer.js";
+import Game from "game/game.js";
+import Chunk from "game/world/chunk.js";
+import Layer from "game/world/layer.js";
 
 /** Base interface for layer generator classes that create new chunks */
 interface ILayerGenerator {

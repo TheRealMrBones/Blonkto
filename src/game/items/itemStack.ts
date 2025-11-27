@@ -1,13 +1,13 @@
-import ComponentData from "../components/componentData.js";
-import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
-import Game from "../game.js";
-import Player from "../objects/player.js";
-import ItemRegistry from "../registries/itemRegistry.js";
-import ItemDefinition from "../definitions/itemDefinition.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
-import ISerializableForWrite from "../components/ISerializableForWrite.js";
-import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
-import { SerializedWriteItemStack, SerializedUpdateItemStack } from "../../shared/serialization/items/serializedItemStack.js";
+import ComponentData from "game/components/componentData.js";
+import IRegistryDefinedWithComponents from "game/components/IRegistryDefinedWithComponents.js";
+import ISerializableForUpdate from "game/components/ISerializableForUpdate.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import ItemDefinition from "game/definitions/itemDefinition.js";
+import Game from "game/game.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import ItemRegistry from "game/registries/itemRegistry.js";
+import { SerializedWriteItemStack, SerializedUpdateItemStack } from "shared/serialization/items/serializedItemStack.js";
 
 /** An in game instance of an item/stack of multiple of the same item */
 class ItemStack implements IRegistryDefinedWithComponents<ItemDefinition> {

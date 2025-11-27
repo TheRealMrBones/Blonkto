@@ -1,4 +1,4 @@
-import Game from "../game.js";
+import Game from "game/game.js";
 
 /** Manages the list of banned players for the server */
 class BanManager {

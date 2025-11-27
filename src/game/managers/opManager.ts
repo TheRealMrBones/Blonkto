@@ -1,12 +1,11 @@
 import crypto from "crypto";
 
-import Game from "../game.js";
-import Logger from "../../server/logging/logger.js";
+import ServerConfig from "configs/server.js";
+import Game from "game/game.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
-
-import ServerConfig from "../../configs/server.js";
 const { OP_PASSCODE, OP_PASSCODE_WHEN_OPS } = ServerConfig.OP_PASSCODE;
 
 /** Manages the list of operators for the server */

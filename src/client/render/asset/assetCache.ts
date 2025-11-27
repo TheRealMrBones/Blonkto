@@ -1,4 +1,4 @@
-import { Color } from "../../../shared/types.js";
+import { Color } from "shared/types.js";
 
 /** The data format of game assets */
 export type AssetCache = {

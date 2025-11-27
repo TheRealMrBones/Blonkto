@@ -1,14 +1,14 @@
 import EventEmitter from "events";
 
-import ComponentHandler from "../components/componentHandler.js";
-import IDrop from "../items/drops/IDrop.js";
-import Game from "../game.js";
-import Ceiling from "../world/ceiling.js";
-import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
-import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
+import ComponentHandler from "game/components/componentHandler.js";
+import Game from "game/game.js";
+import IDrop from "game/items/drops/IDrop.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import Ceiling from "game/world/ceiling.js";
+import Constants from "shared/constants.js";
+import { SerializedInitCeiling } from "shared/serialization/world/serializedCeiling.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS } = Constants;
 
 /** The definition for a type of ceiling with its functionality and base statistics */

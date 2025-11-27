@@ -1,27 +1,25 @@
 import { Socket } from "socket.io-client";
 
-import Entity from "./entity.js";
-import Layer from "../world/layer.js";
-import ItemStack from "../items/itemStack.js";
-import Game from "../game.js";
-import Inventory from "../items/inventory/inventory.js";
-import Recipe from "../items/recipe.js";
-import Station from "../items/station.js";
-import IInventory from "../items/inventory/IInventory.js";
-import CombinedInventory from "../items/inventory/combinedInventory.js";
-import { Color, Vector2D } from "../../shared/types.js";
-import { InputContent } from "../../shared/messageContentTypes.js";
-import { createOneTimeMessage, OneTimeMessageContent, PushContent, SetColorContent, SetGamemodeContent, SetPosContent } from "../../shared/oneTimeMessageContentTypes.js";
-import { SerializedUpdatePlayer, SerializedWriteDeadPlayer, SerializedWritePlayer } from "../../shared/serialization/objects/serializedPlayer.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import CombinedInventory from "game/items/inventory/combinedInventory.js";
+import IInventory from "game/items/inventory/IInventory.js";
+import ItemStack from "game/items/itemStack.js";
+import Station from "game/items/station.js";
+import Entity from "game/objects/entity.js";
+import Layer from "game/world/layer.js";
+import Constants from "shared/constants.js";
+import { InputContent } from "shared/messageContentTypes.js";
+import { OneTimeMessageContent, createOneTimeMessage, SetPosContent, PushContent, SetGamemodeContent, SetColorContent } from "shared/oneTimeMessageContentTypes.js";
+import { SerializedWritePlayer, SerializedWriteDeadPlayer, SerializedUpdatePlayer } from "shared/serialization/objects/serializedPlayer.js";
+import { Color, Vector2D } from "shared/types.js";
+import Inventory from "game/items/inventory/inventory.js";
+import Recipe from "game/items/recipe.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS, GAME_MODES, ONE_TIME_MSG_TYPES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
 const { INVENTORY_SIZE } = SharedConfig.INVENTORY;
-
-import ServerConfig from "../../configs/server.js";
 const { RACISM, RACISM_PERM, KEEP_INVENTORY } = ServerConfig.PLAYER;
 const { DEFAULT_GAME_MODE, FORCE_GAME_MODE } = ServerConfig.GAME_MODE;
 

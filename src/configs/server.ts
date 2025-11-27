@@ -1,6 +1,7 @@
 import fs from "fs";
 
-import Constants from "../shared/constants.js";
+import Constants from "shared/constants.js";
+
 const { GAME_MODES } = Constants;
 
 /** Definition for the server configuration schema */

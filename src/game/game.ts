@@ -1,28 +1,26 @@
 import { Server as SocketIo } from "socket.io";
 
-import Logger from "../server/logging/logger.js";
-import FileManager from "../server/fileManager.js";
-import SocketManager from "./managers/socketManager.js";
-import PlayerManager from "./managers/playerManager.js";
-import EntityManager from "./managers/entityManager.js";
-import ChatManager from "./managers/chatManager.js";
-import PerformanceManager from "./managers/performanceManager.js";
-import CollisionManager from "./managers/collisionManager.js";
-import CraftManager from "./managers/craftManager.js";
-import Player from "./objects/player.js";
-import World from "./world/world.js";
-import { GameUpdateContent } from "../shared/messageContentTypes.js";
-import { createOneTimeMessage, DarknessContent, OneTimeMessageContent, RecipesContent } from "../shared/oneTimeMessageContentTypes.js";
-import { SerializedWorldLoad } from "../shared/serialization/world/serializedWorldLoad.js";
-import { SerializedWriteGame } from "../shared/serialization/serializedGame.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import ChatManager from "game/managers/chatManager.js";
+import CollisionManager from "game/managers/collisionManager.js";
+import CraftManager from "game/managers/craftManager.js";
+import EntityManager from "game/managers/entityManager.js";
+import PerformanceManager from "game/managers/performanceManager.js";
+import PlayerManager from "game/managers/playerManager.js";
+import SocketManager from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import World from "game/world/world.js";
+import FileManager from "server/fileManager.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import { GameUpdateContent } from "shared/messageContentTypes.js";
+import { OneTimeMessageContent, createOneTimeMessage, RecipesContent, DarknessContent } from "shared/oneTimeMessageContentTypes.js";
+import { SerializedWriteGame } from "shared/serialization/serializedGame.js";
+import { SerializedWorldLoad } from "shared/serialization/world/serializedWorldLoad.js";
 
-import Constants from "../shared/constants.js";
 const { GAME_MODES, MSG_TYPES, ONE_TIME_MSG_TYPES, LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
-
-import ServerConfig from "../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { AUTOSAVE_RATE, BACKUP_RATE } = ServerConfig.WORLD;
 const { IGNORE_MISSED_TICKS } = ServerConfig.PERFORMACE;

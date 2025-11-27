@@ -1,30 +1,29 @@
-import Logger from "../../server/logging/logger.js";
-import EntityManager from "../managers/entityManager.js";
-import World from "./world.js";
-import ILayerGenerator from "./generation/ILayerGenerator.js";
-import ILayerSpawner from "./spawning/ILayerSpawner.js";
-import Chunk from "./chunk.js";
-import Cell from "./cell.js";
-import DroppedStack from "../objects/droppedStack.js";
-import Game from "../game.js";
-import multiNumberHash from "../../shared/random/multiNumberHash.js";
-import Player from "../objects/player.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
-import BlockRegistry from "../registries/blockRegistry.js";
-import FloorRegistry from "../registries/floorRegistry.js";
-import CeilingRegistry from "../registries/ceilingRegistry.js";
-import V2D from "../../shared/physics/vector2d.js";
-import { Vector2D } from "../../shared/types.js";
-import { SerializedCellUpdate, SerializedWorldLoad } from "../../shared/serialization/world/serializedWorldLoad.js";
-import { SerializedLoadChunk } from "../../shared/serialization/world/serializedChunk.js";
-import { SerializedInitFloor } from "../../shared/serialization/world/serializedFloor.js";
-import { SerializedInitBlock } from "../../shared/serialization/world/serializedBlock.js";
-import { SerializedInitCeiling } from "../../shared/serialization/world/serializedCeiling.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import EntityManager from "game/managers/entityManager.js";
+import DroppedStack from "game/objects/droppedStack.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import BlockRegistry from "game/registries/blockRegistry.js";
+import CeilingRegistry from "game/registries/ceilingRegistry.js";
+import FloorRegistry from "game/registries/floorRegistry.js";
+import Cell from "game/world/cell.js";
+import Chunk from "game/world/chunk.js";
+import ILayerGenerator from "game/world/generation/ILayerGenerator.js";
+import ILayerSpawner from "game/world/spawning/ILayerSpawner.js";
+import World from "game/world/world.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import V2D from "shared/physics/vector2d.js";
+import multiNumberHash from "shared/random/multiNumberHash.js";
+import { SerializedInitBlock } from "shared/serialization/world/serializedBlock.js";
+import { SerializedInitCeiling } from "shared/serialization/world/serializedCeiling.js";
+import { SerializedLoadChunk } from "shared/serialization/world/serializedChunk.js";
+import { SerializedInitFloor } from "shared/serialization/world/serializedFloor.js";
+import { SerializedWorldLoad, SerializedCellUpdate } from "shared/serialization/world/serializedWorldLoad.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */

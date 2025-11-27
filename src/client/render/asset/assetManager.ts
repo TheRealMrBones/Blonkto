@@ -1,10 +1,10 @@
-import PlayerClient from "../../playerClient.js";
-import { AssetCache } from "./assetCache.js";
-import { equalColor, getBaseColor } from "../../../shared/typeOperations.js";
-import { Color } from "../../../shared/types.js";
-import { AnimationData, AnimationDefinition } from "./animationData.js";
+import PlayerClient from "client/playerClient.js";
+import { AnimationDefinition, AnimationData } from "client/render/asset/animationData.js";
+import { AssetCache } from "client/render/asset/assetCache.js";
+import Constants from "shared/constants.js";
+import { getBaseColor, equalColor } from "shared/typeOperations.js";
+import { Color } from "shared/types.js";
 
-import Constants from "../../../shared/constants.js";
 const { ASSETS, ANIMATIONS } = Constants;
 
 /** Manages assets loaded by the client for later rendering */

@@ -1,18 +1,17 @@
-import Registry from "./registry.js";
-import EntityDefinition from "../definitions/entityDefinition.js";
-import Drop from "../items/drops/drop.js";
-import Logger from "../../server/logging/logger.js";
+import BreedComponent from "game/components/entitycomponents/breedComponent.js";
+import DayDespawnComponent from "game/components/entitycomponents/dayDespawnComponent.js";
+import MoveTargetComponent from "game/components/entitycomponents/moveTargetComponent.js";
+import PlayerWanderComponent from "game/components/entitycomponents/playerWanderComponent.js";
+import ScaredComponent from "game/components/entitycomponents/scaredComponent.js";
+import SimpleAttackComponent from "game/components/entitycomponents/simpleAttackComponent.js";
+import TimeChangeComponent from "game/components/entitycomponents/timeChangeComponent.js";
+import WanderComponent from "game/components/entitycomponents/wanderComponent.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Drop from "game/items/drops/drop.js";
+import Registry from "game/registries/registry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import MoveTargetComponent from "../components/entitycomponents/moveTargetComponent.js";
-import WanderComponent from "../components/entitycomponents/wanderComponent.js";
-import PlayerWanderComponent from "../components/entitycomponents/playerWanderComponent.js";
-import ScaredComponent from "../components/entitycomponents/scaredComponent.js";
-import SimpleAttackComponent from "../components/entitycomponents/simpleAttackComponent.js";
-import DayDespawnComponent from "../components/entitycomponents/dayDespawnComponent.js";
-import TimeChangeComponent from "../components/entitycomponents/timeChangeComponent.js";
-import BreedComponent from "../components/entitycomponents/breedComponent.js";
-
-import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

@@ -1,10 +1,10 @@
-import { Vector2D } from "../types.js";
-import CollisionObject from "./collisionObject.js";
-import V2D from "./vector2d.js";
+import Constants from "shared/constants.js";
+import Circle from "shared/physics/circle.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import Square from "shared/physics/square.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../constants.js";
-import Circle from "./circle.js";
-import Square from "./square.js";
 const { SHAPES } = Constants;
 
 /** checks if the two given collision objects are colliding using SAT */

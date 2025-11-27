@@ -1,6 +1,6 @@
-import Game from "../game.js";
-import Player from "../objects/player.js";
-import Inventory from "./inventory/inventory.js";
+import Game from "game/game.js";
+import Inventory from "game/items/inventory/inventory.js";
+import Player from "game/objects/player.js";
 
 /** A station (menu) with various components that can be opened and viewed by players */
 class Station {

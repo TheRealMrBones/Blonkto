@@ -1,17 +1,15 @@
-import Registry from "./registry.js";
-import ItemDefinition from "../definitions/itemDefinition.js";
-import Logger from "../../server/logging/logger.js";
+import OrganicComponent from "game/components/floorcomponents/organicComponent.js";
+import AttackComponent from "game/components/itemcomponents/attackComponent.js";
+import BuildComponent from "game/components/itemcomponents/buildComponent.js";
+import BuildFloorComponent from "game/components/itemcomponents/buildFloorComponent.js";
+import EatComponent from "game/components/itemcomponents/eatComponent.js";
+import MineComponent from "game/components/itemcomponents/mineComponent.js";
+import MineFloorComponent from "game/components/itemcomponents/mineFloorComponent.js";
+import ItemDefinition from "game/definitions/itemDefinition.js";
+import Registry from "game/registries/registry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import OrganicComponent from "../components/floorcomponents/organicComponent.js";
-
-import AttackComponent from "../components/itemcomponents/attackComponent.js";
-import BuildComponent from "../components/itemcomponents/buildComponent.js";
-import BuildFloorComponent from "../components/itemcomponents/buildFloorComponent.js";
-import MineComponent from "../components/itemcomponents/mineComponent.js";
-import MineFloorComponent from "../components/itemcomponents/mineFloorComponent.js";
-import EatComponent from "../components/itemcomponents/eatComponent.js";
-
-import Constants from "../../shared/constants.js";
 const { ASSETS, MINE_TYPES, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

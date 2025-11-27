@@ -1,14 +1,14 @@
-import ComponentData from "../components/componentData.js";
-import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
-import CeilingDefinition from "../definitions/ceilingDefinition.js";
-import Cell from "./cell.js";
-import Game from "../game.js";
-import CeilingRegistry from "../registries/ceilingRegistry.js";
-import ISerializableForWrite from "../components/ISerializableForWrite.js";
-import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
-import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
-import { SerializedUpdateCeiling, SerializedWriteCeiling } from "../../shared/serialization/world/serializedCeiling.js";
+import ComponentData from "game/components/componentData.js";
+import IRegistryDefinedWithComponents from "game/components/IRegistryDefinedWithComponents.js";
+import ISerializableForUpdate from "game/components/ISerializableForUpdate.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import CeilingDefinition from "game/definitions/ceilingDefinition.js";
+import Game from "game/game.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import CeilingRegistry from "game/registries/ceilingRegistry.js";
+import Cell from "game/world/cell.js";
+import { SerializedWriteCeiling, SerializedUpdateCeiling } from "shared/serialization/world/serializedCeiling.js";
 
 /** Represents a placed ceiling in the game world */
 class Ceiling implements IRegistryDefinedWithComponents<CeilingDefinition> {

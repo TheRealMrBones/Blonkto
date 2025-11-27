@@ -1,9 +1,9 @@
-import { Vector2D } from "../../types.js";
-import { SerializedInitBlock } from "./serializedBlock.js";
-import { SerializedInitCeiling } from "./serializedCeiling.js";
-import { SerializedLoadCell } from "./serializedCell.js";
-import { SerializedLoadChunk } from "./serializedChunk.js";
-import { SerializedInitFloor } from "./serializedFloor.js";
+import { SerializedInitBlock } from "shared/serialization/world/serializedBlock.js";
+import { SerializedInitCeiling } from "shared/serialization/world/serializedCeiling.js";
+import { SerializedLoadCell } from "shared/serialization/world/serializedCell.js";
+import { SerializedLoadChunk } from "shared/serialization/world/serializedChunk.js";
+import { SerializedInitFloor } from "shared/serialization/world/serializedFloor.js";
+import { Vector2D } from "shared/types.js";
 
 /** Defines the format for serialized loads of the game world for a player */
 export type SerializedWorldLoad = {

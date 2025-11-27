@@ -1,6 +1,6 @@
-import Logger from "../../server/logging/logger.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
 
 /** An attachable component to add additional data and/or functionality to an object */

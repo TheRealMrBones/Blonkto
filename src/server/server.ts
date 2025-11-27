@@ -5,21 +5,22 @@ import bodyParser from "body-parser";
 import { Server as SocketIo } from "socket.io";
 import { Socket } from "socket.io-client";
 
-import Game from "../game/game.js";
-import userController from "./controllers/userController.js";
-import FileManager from "./fileManager.js";
-import LogManager from "./logging/logManager.js";
-import Logger from "./logging/logger.js";
 import webpackConfig from "../../webpack.dev.js";
-import { JoinGameContent } from "../shared/messageContentTypes.js";
 
-import Constants from "../shared/constants.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import userController from "server/controllers/userController.js";
+import FileManager from "server/fileManager.js";
+import Logger from "server/logging/logger.js";
+import LogManager from "server/logging/logManager.js";
+import configRoutes from "server/routes/config.js";
+import userRoutes from "server/routes/user.js";
+import Constants from "shared/constants.js";
+import { JoinGameContent } from "shared/messageContentTypes.js";
+
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../configs/shared.js";
 const { FAKE_PING } = SharedConfig.UPDATES;
-
-import ServerConfig from "../configs/server.js";
 const { LOG_CONNECTIONS } = ServerConfig.LOG;
 
 // #region init
@@ -49,10 +50,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Including routes
-import userRoutes from "./routes/user.js";
 app.use("/", userRoutes);
 
-import configRoutes from "./routes/config.js";
 app.use("/", configRoutes);
 
 // Opening server

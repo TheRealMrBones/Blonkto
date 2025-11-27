@@ -1,9 +1,9 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import EntityDefinition from "../../definitions/entityDefinition.js";
-import ComponentData from "../componentData.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
-import ISerializableForWrite from "../ISerializableForWrite.js";
+import Component from "game/components/component.js";
+import ComponentData from "game/components/componentData.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
 
 /** A Entity Component that allows the entity to be changed after a set amount of ticks have passed */
 class TimeChangeComponent extends Component<EntityDefinition> {

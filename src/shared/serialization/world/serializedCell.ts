@@ -1,6 +1,6 @@
-import { SerializedUpdateBlock, SerializedWriteBlock } from "./serializedBlock.js";
-import { SerializedUpdateCeiling, SerializedWriteCeiling } from "./serializedCeiling.js";
-import { SerializedUpdateFloor, SerializedWriteFloor } from "./serializedFloor.js";
+import { SerializedUpdateBlock, SerializedWriteBlock } from "shared/serialization/world/serializedBlock.js";
+import { SerializedUpdateCeiling, SerializedWriteCeiling } from "shared/serialization/world/serializedCeiling.js";
+import { SerializedUpdateFloor, SerializedWriteFloor } from "shared/serialization/world/serializedFloor.js";
 
 /** Defines the format for serialized loads of a cell */
 export type SerializedLoadCell = {

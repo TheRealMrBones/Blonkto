@@ -1,5 +1,5 @@
-import { Vector2D } from "../types.js";
-import SeededRandom from "./seededRandom.js";
+import SeededRandom from "shared/random/seededRandom.js";
+import { Vector2D } from "shared/types.js";
 
 /** A custom randomomizer class for generating grid gradiants */
 class PerlinNoise {

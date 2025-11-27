@@ -1,10 +1,9 @@
-import Game from "../game.js";
-import Logger from "../../server/logging/logger.js";
+import ServerConfig from "configs/server.js";
+import Game from "game/game.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_CATEGORIES } = Constants;
-
-import ServerConfig from "../../configs/server.js";
 const { SERVER_UPDATE_RATE } = ServerConfig.UPDATE;
 const { PERFORMANCE_LOG_RATE } = ServerConfig.PERFORMACE;
 const { LOG_PERFORMANCE } = ServerConfig.LOG;

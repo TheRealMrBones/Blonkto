@@ -1,14 +1,14 @@
-import ComponentData from "../components/componentData.js";
-import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
-import FloorDefinition from "../definitions/floorDefinition.js";
-import Cell from "./cell.js";
-import Game from "../game.js";
-import FloorRegistry from "../registries/floorRegistry.js";
-import ISerializableForWrite from "../components/ISerializableForWrite.js";
-import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
-import Player from "../objects/player.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
-import { SerializedUpdateFloor, SerializedWriteFloor } from "../../shared/serialization/world/serializedFloor.js";
+import ComponentData from "game/components/componentData.js";
+import IRegistryDefinedWithComponents from "game/components/IRegistryDefinedWithComponents.js";
+import ISerializableForUpdate from "game/components/ISerializableForUpdate.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import FloorDefinition from "game/definitions/floorDefinition.js";
+import Game from "game/game.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import FloorRegistry from "game/registries/floorRegistry.js";
+import Cell from "game/world/cell.js";
+import { SerializedWriteFloor, SerializedUpdateFloor } from "shared/serialization/world/serializedFloor.js";
 
 /** Represents a placed floor in the game world */
 class Floor implements IRegistryDefinedWithComponents<FloorDefinition> {

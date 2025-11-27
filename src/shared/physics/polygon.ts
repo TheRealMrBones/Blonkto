@@ -1,6 +1,6 @@
-import { Vector2D } from "../types.js";
-import CollisionObject from "./collisionObject.js";
-import V2D from "./vector2d.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
 /** A closed convex polygon in 2d space */
 abstract class Polygon extends CollisionObject {

@@ -1,12 +1,12 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import BlockDefinition from "../../definitions/blockDefinition.js";
-import Block from "../../world/block.js";
-import StationComponent, { StationComponentData } from "./stationComponent.js";
-import ComponentData from "../componentData.js";
-import ISerializableForWrite from "../ISerializableForWrite.js";
-import Inventory from "../../items/inventory/inventory.js";
-import { SerializedWriteInventory } from "../../../shared/serialization/items/serializedInventory.js";
+import StationComponent, { StationComponentData } from "game/components/blockcomponents/stationComponent.js";
+import Component from "game/components/component.js";
+import ComponentData from "game/components/componentData.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import BlockDefinition from "game/definitions/blockDefinition.js";
+import Game from "game/game.js";
+import Inventory from "game/items/inventory/inventory.js";
+import Block from "game/world/block.js";
+import { SerializedWriteInventory } from "shared/serialization/items/serializedInventory.js";
 
 /** A Block Component that allows the block to be opened as a station */
 class ContainerComponent extends Component<BlockDefinition> {

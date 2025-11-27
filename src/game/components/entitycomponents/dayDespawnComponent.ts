@@ -1,9 +1,9 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import EntityDefinition from "../../definitions/entityDefinition.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
+import SharedConfig from "configs/shared.js";
+import Component from "game/components/component.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
 
-import SharedConfig from "../../../configs/shared.js";
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);

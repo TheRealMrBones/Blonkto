@@ -1,13 +1,13 @@
-import FloorRegistry from "../registries/floorRegistry.js";
-import FloorDefinition from "../definitions/floorDefinition.js";
-import Block from "./block.js";
-import Floor from "./floor.js";
-import Ceiling from "./ceiling.js";
-import Game from "../game.js";
-import Chunk from "./chunk.js";
-import { SerializedLoadCell, SerializedWriteCell } from "../../shared/serialization/world/serializedCell.js";
+import SharedConfig from "configs/shared.js";
+import FloorDefinition from "game/definitions/floorDefinition.js";
+import Game from "game/game.js";
+import FloorRegistry from "game/registries/floorRegistry.js";
+import Block from "game/world/block.js";
+import Ceiling from "game/world/ceiling.js";
+import Chunk from "game/world/chunk.js";
+import Floor from "game/world/floor.js";
+import { SerializedLoadCell, SerializedWriteCell } from "shared/serialization/world/serializedCell.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Represents a single cell in the game world and its block, floor, and ceiling */

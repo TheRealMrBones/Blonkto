@@ -1,11 +1,10 @@
-import Registry from "./registry.js";
-import FloorDefinition from "../definitions/floorDefinition.js";
-import Drop from "../items/drops/drop.js";
-import Logger from "../../server/logging/logger.js";
+import OrganicComponent from "game/components/floorcomponents/organicComponent.js";
+import FloorDefinition from "game/definitions/floorDefinition.js";
+import Drop from "game/items/drops/drop.js";
+import Registry from "game/registries/registry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import OrganicComponent from "../components/floorcomponents/organicComponent.js";
-
-import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

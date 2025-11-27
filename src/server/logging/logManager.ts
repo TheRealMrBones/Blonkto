@@ -1,10 +1,9 @@
-import FileManager from "../fileManager.js";
-import Log from "./log.js";
+import ServerConfig from "configs/server.js";
+import FileManager from "server/fileManager.js";
+import Log from "server/logging/log.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { LOG_PRIORITIES } = Constants;
-
-import ServerConfig from "../../configs/server.js";
 const { LOG_PRIORITY, SAVE_LOGS } = ServerConfig.LOG;
 
 /** Manages logging for the game server */

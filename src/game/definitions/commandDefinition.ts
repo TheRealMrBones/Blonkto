@@ -1,8 +1,8 @@
-import Game from "../game.js";
-import Player from "../objects/player.js";
-import RegistryValue from "../registries/registryValue.js";
+import Game from "game/game.js";
+import Player from "game/objects/player.js";
+import RegistryValue from "game/registries/registryValue.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS } = Constants;
 
 /** Base class for a command that can be run through chat by players in the game */

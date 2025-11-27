@@ -1,10 +1,10 @@
-import GameObject from "./gameObject.js";
-import Layer from "../world/layer.js";
-import Game from "../game.js";
-import { SwingData } from "../combat/swingData.js";
-import { SerializedUpdateEntity, SerializedWriteEntity } from "../../shared/serialization/objects/serializedEntity.js";
+import SharedConfig from "configs/shared.js";
+import { SwingData } from "game/combat/swingData.js";
+import Game from "game/game.js";
+import GameObject from "game/objects/gameObject.js";
+import Layer from "game/world/layer.js";
+import { SerializedUpdateEntity, SerializedWriteEntity } from "shared/serialization/objects/serializedEntity.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { HIT_RENDER_DELAY } = SharedConfig.ATTACK;
 
 /** The base class for an entity with health loaded in the game world */

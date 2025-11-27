@@ -1,13 +1,13 @@
-import Game from "../game.js";
-import DroppedStack from "../objects/droppedStack.js";
-import Entity from "../objects/entity.js";
-import GameObject from "../objects/gameObject.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
-import Player from "../objects/player.js";
-import V2D from "../../shared/physics/vector2d.js";
-import { Vector2D } from "../../shared/types.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import DroppedStack from "game/objects/droppedStack.js";
+import Entity from "game/objects/entity.js";
+import GameObject from "game/objects/gameObject.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import V2D from "shared/physics/vector2d.js";
+import { Vector2D } from "shared/types.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { CELLS_ASPECT_RATIO, CELLS_VERTICAL } = SharedConfig.WORLD;
 
 const CELLS_HORIZONTAL = Math.ceil(CELLS_VERTICAL * CELLS_ASPECT_RATIO);

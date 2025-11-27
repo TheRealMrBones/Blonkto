@@ -1,21 +1,19 @@
 import crypto from "crypto";
 
-import Logger from "../../server/logging/logger.js";
-import Game from "../game.js";
-import Layer from "../world/layer.js";
-import { Vector2D } from "../../shared/types.js";
-import Entity from "./entity.js";
-import Player from "./player.js";
-import V2D from "../../shared/physics/vector2d.js";
-import { SerializedUpdateGameObject, SerializedWriteGameObject } from "../../shared/serialization/objects/serializedGameObject.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import Entity from "game/objects/entity.js";
+import Player from "game/objects/player.js";
+import Layer from "game/world/layer.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import V2D from "shared/physics/vector2d.js";
+import { SerializedUpdateGameObject, SerializedWriteGameObject } from "shared/serialization/objects/serializedGameObject.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
-
-import ServerConfig from "../../configs/server.js";
 const { FALL_RATE } = ServerConfig.OBJECT;
 
 /** The base class for any simulated object (something that ticks) in the game world */

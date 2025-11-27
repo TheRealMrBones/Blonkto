@@ -1,5 +1,5 @@
-import Game from "../../game.js";
-import Layer from "../../world/layer.js";
+import Game from "game/game.js";
+import Layer from "game/world/layer.js";
 
 /** The base interface for objects that can drop items on the ground */
 interface IDrop {

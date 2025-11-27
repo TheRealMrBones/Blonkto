@@ -1,8 +1,8 @@
-import Registry from "./registry.js";
-import CeilingDefinition from "../definitions/ceilingDefinition.js";
-import Logger from "../../server/logging/logger.js";
+import CeilingDefinition from "game/definitions/ceilingDefinition.js";
+import Registry from "game/registries/registry.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../../shared/constants.js";
 const { ASSETS, LOG_CATEGORIES } = Constants;
 
 const logger = Logger.getLogger(LOG_CATEGORIES.REGISTRY);

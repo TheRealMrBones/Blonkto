@@ -1,15 +1,15 @@
-import ComponentData from "../components/componentData.js";
-import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
-import EntityDefinition from "../definitions/entityDefinition.js";
-import Layer from "../world/layer.js";
-import Game from "../game.js";
-import EntityRegistry from "../registries/entityRegistry.js";
-import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
-import ISerializableForWrite from "../components/ISerializableForWrite.js";
-import Entity from "./entity.js";
-import { Vector2D } from "../../shared/types.js";
-import Player from "./player.js";
-import { SerializedUpdateNonplayerEntity, SerializedWriteNonplayerEntity } from "../../shared/serialization/objects/serializedNonplayerEntity.js";
+import ComponentData from "game/components/componentData.js";
+import IRegistryDefinedWithComponents from "game/components/IRegistryDefinedWithComponents.js";
+import ISerializableForUpdate from "game/components/ISerializableForUpdate.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import Entity from "game/objects/entity.js";
+import Player from "game/objects/player.js";
+import EntityRegistry from "game/registries/entityRegistry.js";
+import Layer from "game/world/layer.js";
+import { SerializedWriteNonplayerEntity, SerializedUpdateNonplayerEntity } from "shared/serialization/objects/serializedNonplayerEntity.js";
+import { Vector2D } from "shared/types.js";
 
 /** The base class for non-player entities loaded in the game world */
 class NonplayerEntity extends Entity implements IRegistryDefinedWithComponents<EntityDefinition> {

@@ -1,4 +1,4 @@
-import { SerializedChangesInventory, SerializedUpdateInventory } from "./serializedInventory.js";
+import { SerializedUpdateInventory, SerializedChangesInventory } from "shared/serialization/items/serializedInventory.js";
 
 /** Defines the format for serialized updates of a station */
 export type SerializedStation = {

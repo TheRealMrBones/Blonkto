@@ -1,12 +1,12 @@
-import ILayerGenerator from "./ILayerGenerator.js";
-import Game from "../../game.js";
-import Chunk from "../chunk.js";
-import Layer from "../layer.js";
-import multiNumberHash from "../../../shared/random/multiNumberHash.js";
-import SeededRandom from "../../../shared/random/seededRandom.js";
-import Cell from "../cell.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import Cell from "game/world/cell.js";
+import Chunk from "game/world/chunk.js";
+import ILayerGenerator from "game/world/generation/ILayerGenerator.js";
+import Layer from "game/world/layer.js";
+import multiNumberHash from "shared/random/multiNumberHash.js";
+import SeededRandom from "shared/random/seededRandom.js";
 
-import SharedConfig from "../../../configs/shared.js";
 const { CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Generator object for a layer to create new chunks underground */

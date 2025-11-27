@@ -1,15 +1,15 @@
 import EventEmitter from "events";
 
-import NetworkingManager from "./managers/networkingManager.js";
-import StateManager from "./managers/stateManager.js";
-import InputManager from "./managers/inputManager.js";
-import CollisionManager from "./managers/collisionManager.js";
-import World from "./world/world.js";
-import Inventory from "./inventory/inventory.js";
-import { onGameOver } from "./index.js";
-import Renderer from "./render/renderer.js";
+import { onGameOver } from "client/index.js";
+import Inventory from "client/inventory/inventory.js";
+import CollisionManager from "client/managers/collisionManager.js";
+import InputManager from "client/managers/inputManager.js";
+import NetworkingManager from "client/managers/networkingManager.js";
+import StateManager from "client/managers/stateManager.js";
+import Renderer from "client/render/renderer.js";
+import World from "client/world/world.js";
+import Constants from "shared/constants.js";
 
-import Constants from "../shared/constants.js";
 const { GAME_MODES } = Constants;
 
 /** The base class for the client to interact with the game once they are logged in */

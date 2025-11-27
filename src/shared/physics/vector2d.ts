@@ -1,4 +1,4 @@
-import { Vector2D } from "../types.js";
+import { Vector2D } from "shared/types.js";
 
 /** Static helper methods for Vector2D operations */
 class V2D {

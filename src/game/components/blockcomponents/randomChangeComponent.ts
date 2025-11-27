@@ -1,7 +1,7 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import BlockDefinition from "../../definitions/blockDefinition.js";
-import Block from "../../world/block.js";
+import Component from "game/components/component.js";
+import BlockDefinition from "game/definitions/blockDefinition.js";
+import Game from "game/game.js";
+import Block from "game/world/block.js";
 
 /** A Block Component that allows the block to be changed after random amount of ticks */
 class RandomChangeComponent extends Component<BlockDefinition> {

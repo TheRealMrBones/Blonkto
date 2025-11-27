@@ -1,23 +1,21 @@
 import { Socket } from "socket.io-client";
 
-import Logger from "../../server/logging/logger.js";
-import Game from "../game.js";
-import BanManager from "./banManager.js";
-import OpManager from "./opManager.js";
-import WhitelistManager from "./whitelistManager.js";
-import Player from "../objects/player.js";
-import { filterText } from "../../shared/filter.js";
-import { FailedConnectionContent, PlayerInstantiatedContent } from "../../shared/messageContentTypes.js";
-import { SerializedTab } from "../../shared/serialization/serializedTab.js";
+import ServerConfig from "configs/server.js";
+import SharedConfig from "configs/shared.js";
+import Game from "game/game.js";
+import BanManager from "game/managers/banManager.js";
+import OpManager from "game/managers/opManager.js";
+import WhitelistManager from "game/managers/whitelistManager.js";
+import Player from "game/objects/player.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
+import { filterText } from "shared/filter.js";
+import { FailedConnectionContent, PlayerInstantiatedContent } from "shared/messageContentTypes.js";
+import { SerializedTab } from "shared/serialization/serializedTab.js";
 
-import Constants from "../../shared/constants.js";
 const { MSG_TYPES, LOG_CATEGORIES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { KILLS_TAB } = SharedConfig.TAB;
 const { SHOW_TAB } = SharedConfig.TAB;
-
-import ServerConfig from "../../configs/server.js";
 const { WHITELIST_ENABLED, OP_BYPASS_WHITELIST } = ServerConfig.WHITELIST;
 const { FILTER_USERNAME, ALLOW_MULTI_LOGON } = ServerConfig.PLAYER;
 

@@ -1,15 +1,15 @@
-import Component from "../component.js";
-import Game from "../../game.js";
-import EntityDefinition from "../../definitions/entityDefinition.js";
-import Entity from "../../objects/entity.js";
-import { Vector2D } from "../../../shared/types.js";
-import NonplayerEntity from "../../objects/nonplayerEntity.js";
-import ComponentData from "../componentData.js";
-import MoveTargetComponent, { MoveTargetComponentData } from "./moveTargetComponent.js";
-import Player from "../../objects/player.js";
-import ISerializableForWrite from "../ISerializableForWrite.js";
+import Component from "game/components/component.js";
+import ComponentData from "game/components/componentData.js";
+import MoveTargetComponent, { MoveTargetComponentData } from "game/components/entitycomponents/moveTargetComponent.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import EntityDefinition from "game/definitions/entityDefinition.js";
+import Game from "game/game.js";
+import Entity from "game/objects/entity.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import Constants from "shared/constants.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../../../shared/constants.js";
 const { GAME_MODES } = Constants;
 
 /** An Entity Component that makes this entity type breed with others when fed */

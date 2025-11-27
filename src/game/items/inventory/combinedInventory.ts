@@ -1,7 +1,7 @@
-import Game from "../../game.js";
-import Layer from "../../world/layer.js";
-import ItemStack from "../itemStack.js";
-import IInventory from "./IInventory.js";
+import Game from "game/game.js";
+import IInventory from "game/items/inventory/IInventory.js";
+import ItemStack from "game/items/itemStack.js";
+import Layer from "game/world/layer.js";
 
 class CombinedInventory implements IInventory {
     private readonly inventories: IInventory[];

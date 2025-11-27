@@ -1,11 +1,11 @@
-import { OneTimeMessageContent } from "./oneTimeMessageContentTypes.js";
-import { SerializedChangesInventory } from "./serialization/items/serializedInventory.js";
-import { SerializedStation } from "./serialization/items/serializedStation.js";
-import { SerializedUpdateGameObject } from "./serialization/objects/serializedGameObject.js";
-import { SerializedUpdatePlayer } from "./serialization/objects/serializedPlayer.js";
-import { SerializedTab } from "./serialization/serializedTab.js";
-import { SerializedWorldLoad } from "./serialization/world/serializedWorldLoad.js";
-import { Color } from "./types.js";
+import { OneTimeMessageContent } from "shared/oneTimeMessageContentTypes.js";
+import { SerializedChangesInventory } from "shared/serialization/items/serializedInventory.js";
+import { SerializedStation } from "shared/serialization/items/serializedStation.js";
+import { SerializedUpdateGameObject } from "shared/serialization/objects/serializedGameObject.js";
+import { SerializedUpdatePlayer } from "shared/serialization/objects/serializedPlayer.js";
+import { SerializedTab } from "shared/serialization/serializedTab.js";
+import { SerializedWorldLoad } from "shared/serialization/world/serializedWorldLoad.js";
+import { Color } from "shared/types.js";
 
 /** Defines the format of the failed connection / kicked messages */
 export type FailedConnectionContent = {

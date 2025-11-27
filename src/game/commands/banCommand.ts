@@ -1,10 +1,10 @@
-import CommandDefinition from "../definitions/commandDefinition.js";
-import CommandRegistry from "../registries/commandRegistry.js";
-import Player from "../objects/player.js";
-import Game from "../game.js";
-import { FailedConnectionContent } from "../../shared/messageContentTypes.js";
+import CommandDefinition from "game/definitions/commandDefinition.js";
+import Game from "game/game.js";
+import Player from "game/objects/player.js";
+import CommandRegistry from "game/registries/commandRegistry.js";
+import Constants from "shared/constants.js";
+import { FailedConnectionContent } from "shared/messageContentTypes.js";
 
-import Constants from "../../shared/constants.js";
 const { COMMAND_ARGUMENTS, MSG_TYPES } = Constants;
 
 const args = [

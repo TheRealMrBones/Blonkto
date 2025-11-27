@@ -1,14 +1,14 @@
-import ComponentData from "../components/componentData.js";
-import IRegistryDefinedWithComponents from "../components/IRegistryDefinedWithComponents.js";
-import BlockDefinition from "../definitions/blockDefinition.js";
-import Cell from "./cell.js";
-import Game from "../game.js";
-import Player from "../objects/player.js";
-import BlockRegistry from "../registries/blockRegistry.js";
-import { ClickContentExpanded } from "../managers/socketManager.js";
-import ISerializableForWrite from "../components/ISerializableForWrite.js";
-import ISerializableForUpdate from "../components/ISerializableForUpdate.js";
-import { SerializedUpdateBlock, SerializedWriteBlock } from "../../shared/serialization/world/serializedBlock.js";
+import ComponentData from "game/components/componentData.js";
+import IRegistryDefinedWithComponents from "game/components/IRegistryDefinedWithComponents.js";
+import ISerializableForUpdate from "game/components/ISerializableForUpdate.js";
+import ISerializableForWrite from "game/components/ISerializableForWrite.js";
+import BlockDefinition from "game/definitions/blockDefinition.js";
+import Game from "game/game.js";
+import { ClickContentExpanded } from "game/managers/socketManager.js";
+import Player from "game/objects/player.js";
+import BlockRegistry from "game/registries/blockRegistry.js";
+import Cell from "game/world/cell.js";
+import { SerializedWriteBlock, SerializedUpdateBlock } from "shared/serialization/world/serializedBlock.js";
 
 /** Represents a placed block in the game world */
 class Block implements IRegistryDefinedWithComponents<BlockDefinition> {

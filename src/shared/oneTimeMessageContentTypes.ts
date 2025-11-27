@@ -1,5 +1,5 @@
-import { SerializedRecipe } from "./serialization/items/serializedRecipe.js";
-import { Color, Vector2D } from "./types.js";
+import { SerializedRecipe } from "shared/serialization/items/serializedRecipe.js";
+import { Vector2D, Color } from "shared/types.js";
 
 // #region base one time message
 

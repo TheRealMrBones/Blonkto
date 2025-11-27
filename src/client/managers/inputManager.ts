@@ -1,16 +1,14 @@
-import PlayerClient from "../playerClient.js";
-import { Vector2D } from "../../shared/types.js";
-import { ClickContent, DropContent, InputContent } from "../../shared/messageContentTypes.js";
-import CollisionObject from "../../shared/physics/collisionObject.js";
-import Circle from "../../shared/physics/circle.js";
+import PlayerClient from "client/playerClient.js";
+import ClientConfig from "configs/client.js";
+import SharedConfig from "configs/shared.js";
+import Constants from "shared/constants.js";
+import { DropContent, ClickContent, InputContent } from "shared/messageContentTypes.js";
+import Circle from "shared/physics/circle.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import { Vector2D } from "shared/types.js";
 
-import Constants from "../../shared/constants.js";
 const { GAME_MODES } = Constants;
-
-import SharedConfig from "../../configs/shared.js";
 const { PLAYER_SCALE, PLAYER_SPEED } = SharedConfig.PLAYER;
-
-import ClientConfig from "../../configs/client.js";
 const { CLIENT_UPDATE_RATE } = ClientConfig.UPDATE;
 
 type InputListener = {

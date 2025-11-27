@@ -1,17 +1,17 @@
-import Player from "../objects/player.js";
-import DroppedStack from "../objects/droppedStack.js";
-import Entity from "../objects/entity.js";
-import Game from "../game.js";
-import GameObject from "../objects/gameObject.js";
-import NonplayerEntity from "../objects/nonplayerEntity.js";
-import Layer from "../world/layer.js";
-import Circle from "../../shared/physics/circle.js";
-import { checkCollision, getCellCollisionObject, getCollisionPush } from "../../shared/physics/collision.js";
-import CollisionObject from "../../shared/physics/collisionObject.js";
-import V2D from "../../shared/physics/vector2d.js";
-import { SwingData } from "../combat/swingData.js";
+import SharedConfig from "configs/shared.js";
+import { SwingData } from "game/combat/swingData.js";
+import Game from "game/game.js";
+import DroppedStack from "game/objects/droppedStack.js";
+import Entity from "game/objects/entity.js";
+import GameObject from "game/objects/gameObject.js";
+import NonplayerEntity from "game/objects/nonplayerEntity.js";
+import Player from "game/objects/player.js";
+import Layer from "game/world/layer.js";
+import Circle from "shared/physics/circle.js";
+import { checkCollision, getCollisionPush, getCellCollisionObject } from "shared/physics/collision.js";
+import CollisionObject from "shared/physics/collisionObject.js";
+import V2D from "shared/physics/vector2d.js";
 
-import SharedConfig from "../../configs/shared.js";
 const { ATTACK_HITBOX_WIDTH, ATTACK_HITBOX_OFFSET } = SharedConfig.ATTACK;
 
 /** Manages Collision detection for all elements in the game world */

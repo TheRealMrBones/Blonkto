@@ -1,4 +1,4 @@
-import { SerializedUpdateEntity, SerializedWriteEntity } from "./serializedEntity.js";
+import { SerializedUpdateEntity, SerializedWriteEntity } from "shared/serialization/objects/serializedEntity.js";
 
 /** Defines the format for serialized updates of a nonplayer entity */
 export type SerializedUpdateNonplayerEntity = SerializedUpdateEntity & {};
