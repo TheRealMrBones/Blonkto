@@ -75,10 +75,10 @@ class Renderer {
         this.rendercanvas.height = window.innerHeight;
         this.darknesscanvas.width = window.innerWidth;
         this.darknesscanvas.height = window.innerHeight;
-        
+
         this.cellsize = Math.floor(this.canvas.height / HEIGHT_TO_CELL_RATIO);
         this.rendercell = null;
-        
+
         this.worldundercanvas.width = CELLS_HORIZONTAL * this.cellsize;
         this.worldundercanvas.height = CELLS_VERTICAL * this.cellsize;
         this.worlduppercanvas.width = CELLS_HORIZONTAL * this.cellsize;
@@ -157,7 +157,7 @@ class Renderer {
         // get the render cell and old render cell
         const oldrendercell = this.rendercell;
         this.rendercell = [Math.floor(me.x), Math.floor(me.y)];
-        
+
         const firstcell = this.getFirstRenderCell(me, this.rendercell);
 
         // update the world canvas if there is a change in render cell
@@ -312,7 +312,7 @@ class Renderer {
 
     /** Renders the blocks of each cell within client view */
     private renderBlocks(firstcell: FirstRenderCell, underentities: boolean, newx?: number, newy?: number): void {
-        let context = underentities ? this.worldundercontext : this.worlduppercontext;
+        const context = underentities ? this.worldundercontext : this.worlduppercontext;
 
         for(let dx = 0; dx < CELLS_HORIZONTAL; dx++){
             for(let dy = 0; dy < CELLS_VERTICAL; dy++){

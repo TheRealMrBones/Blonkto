@@ -25,6 +25,7 @@ export default [
             "quotes": ["error", "double"],
             "import/extensions": ["error", "always"],
             "eol-last": ["error", "always"],
+            "no-fallthrough": "error",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "@typescript-eslint/naming-convention": [

@@ -9,13 +9,13 @@ import { MouseEventType } from "./mouseEventType.js";
 abstract class UiElement {
     abstract body: CollisionObject;
     protected hidden: boolean;
-    
+
     protected parent: UiElement | null;
     protected children: UiElement[];
 
     constructor(){
         this.hidden = false;
-        
+
         this.parent = null;
         this.children = [];
     }
@@ -109,10 +109,18 @@ abstract class UiElement {
 
         if(checkCollision(this.body, new Circle(pos, 0))){
             switch(eventtype){
-                case MouseEventType.MouseDown: this.onMouseDown(newpos);
-                case MouseEventType.MouseUp: this.onMouseUp(newpos);
-                case MouseEventType.MouseMove: this.onMouseMove(newpos);
-                case MouseEventType.Hover: this.onHover(newpos);
+                case MouseEventType.MOUSE_DOWN:
+                    this.onMouseDown(newpos);
+                    break;
+                case MouseEventType.MOUSE_UP:
+                    this.onMouseUp(newpos);
+                    break;
+                case MouseEventType.MOUSE_MOVE:
+                    this.onMouseMove(newpos);
+                    break;
+                case MouseEventType.HOVER:
+                    this.onHover(newpos);
+                    break;
             }
 
             if(!this.eventPassthrough()) return true;

@@ -1,6 +1,6 @@
 export enum MouseEventType {
-    MouseDown,
-    MouseUp,
-    MouseMove,
-    Hover,
+    MOUSE_DOWN,
+    MOUSE_UP,
+    MOUSE_MOVE,
+    HOVER,
 }

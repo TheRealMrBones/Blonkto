@@ -168,11 +168,11 @@ class World {
         if(cell.block !== undefined)
             if(this.playerclient.renderer.assetManager.isAnimation(cell.block.asset))
                 cell.animated = true;
-            
+
         if(cell.floor !== undefined)
             if(this.playerclient.renderer.assetManager.isAnimation(cell.floor.asset))
                 cell.animated = true;
-            
+
         if(cell.ceiling !== undefined)
             if(this.playerclient.renderer.assetManager.isAnimation(cell.ceiling.asset))
                 cell.animated = true;
@@ -190,7 +190,7 @@ class World {
             return this.getDefaultCell();
         }else{
             const cell = chunk.cells[cellx][celly];
-            
+
             return cell;
         }
     }
