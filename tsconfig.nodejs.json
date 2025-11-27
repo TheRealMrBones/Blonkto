@@ -8,4 +8,10 @@
     },
     "include": ["src/**/*"],
     "exclude": ["src/client/**"],
+    "plugins": [
+        {
+            "transform": "typescript-transform-paths",
+            "useRootDirs": true,
+        },
+    ],
 }
