@@ -14,6 +14,8 @@ class UiManager {
     private readonly uielements: UiElement[];
     private readonly uiinfo: UiText;
 
+    private readonly uiinfotexts: string[] = ["", "", "", "", "", ""];
+
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
     private readonly connectionlostdiv: HTMLElement = document.getElementById("connectionlost")!;
@@ -236,34 +238,50 @@ class UiManager {
 
     // #region update ui
 
+    /** Updates the uiinfo uiText to use the new text list */
+    updateUiInfo(): void {
+        let text = this.uiinfotexts[0];
+        for(let i = 1; i < this.uiinfotexts.length; i++){
+            text += `\n${this.uiinfotexts[i]}`;
+        }
+
+        this.uiinfo.setText(text);
+    }
+
     /** Updates the health UI to the given value */
     updateHealth(health: number): void {
-        this.uiinfo.setText(`Health: ${Math.round(health).toString()}\nSILLY`);
+        this.uiinfotexts[0] = `Health: ${Math.round(health).toString()}`;
+        this.updateUiInfo();
     }
 
     /** Updates the coordinates UI to the given position */
     updateCoords(x: number, y: number): void {
-        //this.coordstext.innerHTML = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
+        this.uiinfotexts[1] = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
+        this.updateUiInfo();
     }
 
     /** Updates the kills UI to the given value */
     updateKills(kills: number): void {
-        //this.killstext.innerHTML = `Kills: ${kills.toString()}`;
+        this.uiinfotexts[2] = `Kills: ${kills.toString()}`;
+        this.updateUiInfo();
     }
 
     /** Updates the FPS UI to the given value */
     updateFps(fps: number): void {
-        //this.fpstext.innerHTML = `FPS: ${Math.round(fps).toString()}`;
+        this.uiinfotexts[3] = `FPS: ${Math.round(fps).toString()}`;
+        this.updateUiInfo();
     }
 
     /** Updates the ping UI to the given value */
     updatePing(ping: number): void {
-        //this.pingtext.innerHTML = `Ping: ${Math.round(ping).toString()}`;
+        this.uiinfotexts[4] = `Ping: ${Math.round(ping).toString()}`;
+        this.updateUiInfo();
     }
 
     /** Updates the TPS UI to the given value */
     updateTps(tps: number): void {
-        //this.tpstext.innerHTML = `TPS: ${tps}`;
+        this.uiinfotexts[5] = `TPS: ${tps}`;
+        this.updateUiInfo();
     }
 
     /** Toggles the connection lost icon to appear or disapear */
