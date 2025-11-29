@@ -1,4 +1,6 @@
 import PlayerClient from "client/playerClient.js";
+import UiElement from "client/render/ui/uiElement.js";
+import UiText from "client/render/ui/uiText.js";
 import SharedConfig from "configs/shared.js";
 import { SendMessageContent, DropContent } from "shared/messageContentTypes.js";
 import { SerializedTab } from "shared/serialization/serializedTab.js";
@@ -9,15 +11,11 @@ const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 class UiManager {
     private readonly playerclient: PlayerClient;
 
+    private readonly uielements: UiElement[];
+    private readonly uiinfo: UiText;
+
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
-    private readonly infodiv: HTMLElement = document.getElementById("info")!;
-    private readonly healthtext: HTMLElement = document.getElementById("healthtext")!;
-    private readonly coordstext: HTMLElement = document.getElementById("coordstext")!;
-    private readonly killstext: HTMLElement = document.getElementById("killstext")!;
-    private readonly fpstext: HTMLElement = document.getElementById("fpstext")!;
-    private readonly pingtext: HTMLElement = document.getElementById("pingtext")!;
-    private readonly tpstext: HTMLElement = document.getElementById("tpstext")!;
     private readonly connectionlostdiv: HTMLElement = document.getElementById("connectionlost")!;
     private readonly tabdiv: HTMLElement = document.getElementById("tab")!;
     private readonly hotbardiv: HTMLElement = document.getElementById("hotbar")!;
@@ -38,6 +36,13 @@ class UiManager {
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
 
+        // create all base ui elements
+        this.uiinfo = new UiText("hello", 12, "black");
+
+        this.uielements = [
+            this.uiinfo,
+        ];
+
         // prepare event listeners
         for(let i = 0; i < 63; i++){
             const hotbarslot = document.getElementById("slot" + (i + 1))!;
@@ -49,11 +54,17 @@ class UiManager {
 
     // #region main functions
 
+    /** Renders all of the ui onto the given canvas */
+    renderUi(context: CanvasRenderingContext2D): void {
+        for(const element of this.uielements){
+            if(!element.isHidden()) element.render(context);
+        }
+    }
+
     /** Prepares and shows the game UI */
     setupUi(): void {
         // show ui
         this.chatDiv.style.display = "block";
-        this.infodiv.style.display = "block";
         this.hotbardiv.style.display = "block";
 
         // add event listeners
@@ -71,7 +82,6 @@ class UiManager {
     hideUi(): void {
         // hide ui
         this.chatDiv.style.display = "none";
-        this.infodiv.style.display = "none";
         this.hotbardiv.style.display = "none";
         this.inventorydiv.style.display = "none";
         this.inventoryopen = false;
@@ -228,32 +238,32 @@ class UiManager {
 
     /** Updates the health UI to the given value */
     updateHealth(health: number): void {
-        this.healthtext.innerHTML = `Health: ${Math.round(health).toString()}`;
+        this.uiinfo.setText(`Health: ${Math.round(health).toString()}`);
     }
 
     /** Updates the coordinates UI to the given position */
     updateCoords(x: number, y: number): void {
-        this.coordstext.innerHTML = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
+        //this.coordstext.innerHTML = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
     }
 
     /** Updates the kills UI to the given value */
     updateKills(kills: number): void {
-        this.killstext.innerHTML = `Kills: ${kills.toString()}`;
+        //this.killstext.innerHTML = `Kills: ${kills.toString()}`;
     }
 
     /** Updates the FPS UI to the given value */
     updateFps(fps: number): void {
-        this.fpstext.innerHTML = `FPS: ${Math.round(fps).toString()}`;
+        //this.fpstext.innerHTML = `FPS: ${Math.round(fps).toString()}`;
     }
 
     /** Updates the ping UI to the given value */
     updatePing(ping: number): void {
-        this.pingtext.innerHTML = `Ping: ${Math.round(ping).toString()}`;
+        //this.pingtext.innerHTML = `Ping: ${Math.round(ping).toString()}`;
     }
 
     /** Updates the TPS UI to the given value */
     updateTps(tps: number): void {
-        this.tpstext.innerHTML = `TPS: ${tps}`;
+        //this.tpstext.innerHTML = `TPS: ${tps}`;
     }
 
     /** Toggles the connection lost icon to appear or disapear */

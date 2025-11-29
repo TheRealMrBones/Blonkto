@@ -190,6 +190,8 @@ class Renderer {
 
         others.forEach((p: any) => this.renderPlayerUsername(me, p));
 
+        this.uiManager.renderUi(this.context);
+
         // draw frame on render canvas
         this.rendercontext.drawImage(this.canvas, 0, 0);
 
