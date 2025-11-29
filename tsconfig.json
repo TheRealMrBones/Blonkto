@@ -6,13 +6,6 @@
         "outDir": "./dist",
         "esModuleInterop": true,
         "baseUrl": "./src",
-        "paths": {
-            "client/*": ["client/*"],
-            "configs/*": ["configs/*"],
-            "game/*": ["game/*"],
-            "server/*": ["server/*"],
-            "shared/*": ["shared/*"],
-        },
         "strict": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,

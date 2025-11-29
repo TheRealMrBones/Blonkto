@@ -5,14 +5,7 @@
         "target": "ESNext",
         "moduleResolution": "NodeNext",
         "outDir": "./dist/nodejs",
-        "baseUrl": "./src",                // ← required
-        "paths": {                         // ← required or inherited
-            "client/*": ["client/*"],
-            "configs/*": ["configs/*"],
-            "game/*": ["game/*"],
-            "server/*": ["server/*"],
-            "shared/*": ["shared/*"]
-        },
+        "baseUrl": "./src",
         "moduleSuffixes": [".ts", ".js", ""],
         "types": [],
     },
