@@ -39,7 +39,8 @@ class UiManager {
         this.playerclient = playerclient;
 
         // create all base ui elements
-        this.uiinfo = new UiText("hello\nhello2", 12);
+        this.uiinfo = new UiText("", 18)
+            .setPosition([5, 5]);
 
         this.uielements = [
             this.uiinfo,

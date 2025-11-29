@@ -20,6 +20,16 @@ abstract class UiElement {
         this.children = [];
     }
 
+    // #region builder methods
+
+    /** Sets the position of this ui element */
+    setPosition(pos: Vector2D): this {
+        this.body.position = pos;
+        return this;
+    }
+
+    // #endregion
+
     // #region getters
 
     /** Returns the position of this ui element */
@@ -61,11 +71,6 @@ abstract class UiElement {
     // #endregion
 
     // #region setters
-
-    /** Sets the position of this ui element */
-    setPosition(pos: Vector2D): void {
-        this.body.position = pos;
-    }
 
     /** Moves the position of this ui element the given amounts */
     movePosition(move: Vector2D): void {

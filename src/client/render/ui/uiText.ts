@@ -12,7 +12,7 @@ class UiText extends UiElement {
     private textalign: CanvasTextAlign;
     private textbaseline: CanvasTextBaseline;
     private maxwidth: number | null;
-    private lineheight: number;
+    protected lineheight: number;
 
     constructor(text: string, fontsize: number){
         super();
@@ -34,26 +34,26 @@ class UiText extends UiElement {
     // #region builder methods
 
     /** Sets the text color */
-    setColor(color: string): UiText {
+    setColor(color: string): this {
         this.color = color;
         return this;
     }
 
     /** Sets the font family */
-    setFont(font: string): UiText {
+    setFont(font: string): this {
         this.font = font;
         return this;
     }
 
     /** Sets the maximum width for text wrapping */
-    setMaxWidth(maxwidth: number | null): UiText {
+    setMaxWidth(maxwidth: number | null): this {
         this.maxwidth = maxwidth;
         this.updateBodyDimensions();
         return this;
     }
 
     /** Sets the line height */
-    setLineHeight(lineheight: number): UiText {
+    setLineHeight(lineheight: number): this {
         this.lineheight = lineheight;
         this.updateBodyDimensions();
         return this;
@@ -118,11 +118,11 @@ class UiText extends UiElement {
         if(this.maxwidth === null){
             const estimatedwidth = this.text.length * this.fontsize * 0.6;
             const estimatedheight = this.fontsize * 1.2;
-            this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight);
+            this.body = new Rectangle(this.body.position, estimatedwidth, estimatedheight);
         } else {
             const lines = this.wrapText(this.text, this.maxwidth);
             const estimatedheight = lines.length * this.lineheight;
-            this.body = new Rectangle([0, 0], this.maxwidth, estimatedheight);
+            this.body = new Rectangle(this.body.position, this.maxwidth, estimatedheight);
         }
     }
 
