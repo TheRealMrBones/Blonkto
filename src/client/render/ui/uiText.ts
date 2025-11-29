@@ -8,26 +8,58 @@ class UiText extends UiElement {
     private text: string;
     private color: string;
     private font: string;
-    private fontSize: number;
-    private textAlign: CanvasTextAlign;
-    private textBaseline: CanvasTextBaseline;
+    private fontsize: number;
+    private textalign: CanvasTextAlign;
+    private textbaseline: CanvasTextBaseline;
+    private maxwidth: number | null;
+    private lineheight: number;
 
-    constructor(text: string, fontSize: number, color: string, font: string = "Arial"){
+    constructor(text: string, fontsize: number){
         super();
 
         this.text = text;
-        this.color = color;
-        this.font = font;
-        this.fontSize = fontSize;
-        this.textAlign = "left";
-        this.textBaseline = "top";
+        this.color = "black";
+        this.font = "Arial";
+        this.fontsize = fontsize;
+        this.textalign = "left";
+        this.textbaseline = "top";
+        this.maxwidth = null;
+        this.lineheight = fontsize * 1.2;
 
-        // Create a rectangular body based on approximate text dimensions
-        // This is a rough estimate - actual text width will be measured during render
-        const estimatedWidth = text.length * fontSize * 0.6;
-        const estimatedHeight = fontSize * 1.2;
-        this.body = new Rectangle([0, 0], estimatedWidth, estimatedHeight);
+        const estimatedwidth = text.length * fontsize * 0.6;
+        const estimatedheight = fontsize * 1.2;
+        this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight);
     }
+
+    // #region builder methods
+
+    /** Sets the text color */
+    setColor(color: string): UiText {
+        this.color = color;
+        return this;
+    }
+
+    /** Sets the font family */
+    setFont(font: string): UiText {
+        this.font = font;
+        return this;
+    }
+
+    /** Sets the maximum width for text wrapping */
+    setMaxWidth(maxwidth: number | null): UiText {
+        this.maxwidth = maxwidth;
+        this.updateBodyDimensions();
+        return this;
+    }
+
+    /** Sets the line height */
+    setLineHeight(lineheight: number): UiText {
+        this.lineheight = lineheight;
+        this.updateBodyDimensions();
+        return this;
+    }
+
+    // #endregion
 
     // #region getters
 
@@ -48,7 +80,7 @@ class UiText extends UiElement {
 
     /** Returns the font size */
     getFontSize(): number {
-        return this.fontSize;
+        return this.fontsize;
     }
 
     // #endregion
@@ -61,30 +93,20 @@ class UiText extends UiElement {
         this.updateBodyDimensions();
     }
 
-    /** Sets the text color */
-    setColor(color: string): void {
-        this.color = color;
-    }
-
-    /** Sets the font family */
-    setFont(font: string): void {
-        this.font = font;
-    }
-
     /** Sets the font size */
-    setFontSize(fontSize: number): void {
-        this.fontSize = fontSize;
+    setFontSize(fontsize: number): void {
+        this.fontsize = fontsize;
         this.updateBodyDimensions();
     }
 
     /** Sets the text alignment */
     setTextAlign(align: CanvasTextAlign): void {
-        this.textAlign = align;
+        this.textalign = align;
     }
 
     /** Sets the text baseline */
     setTextBaseline(baseline: CanvasTextBaseline): void {
-        this.textBaseline = baseline;
+        this.textbaseline = baseline;
     }
 
     // #endregion
@@ -93,9 +115,49 @@ class UiText extends UiElement {
 
     /** Updates the body dimensions based on text size */
     private updateBodyDimensions(): void {
-        const estimatedWidth = this.text.length * this.fontSize * 0.6;
-        const estimatedHeight = this.fontSize * 1.2;
-        this.body = new Rectangle([0, 0], estimatedWidth, estimatedHeight);
+        if(this.maxwidth === null){
+            const estimatedwidth = this.text.length * this.fontsize * 0.6;
+            const estimatedheight = this.fontsize * 1.2;
+            this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight);
+        } else {
+            const lines = this.wrapText(this.text, this.maxwidth);
+            const estimatedheight = lines.length * this.lineheight;
+            this.body = new Rectangle([0, 0], this.maxwidth, estimatedheight);
+        }
+    }
+
+    /** Wraps text into lines based on max width and newline characters */
+    private wrapText(text: string, maxwidth: number): string[] {
+        const lines: string[] = [];
+        const paragraphs = text.split('\n');
+
+        for(const paragraph of paragraphs){
+            if(paragraph === ''){
+                lines.push('');
+                continue;
+            }
+
+            const words = paragraph.split(' ');
+            let currentline = '';
+
+            for(const word of words){
+                const testline = currentline === '' ? word : `${currentline} ${word}`;
+                const estimatedwidth = testline.length * this.fontsize * 0.6;
+
+                if(estimatedwidth > maxwidth && currentline !== ''){
+                    lines.push(currentline);
+                    currentline = word;
+                }else{
+                    currentline = testline;
+                }
+            }
+
+            if(currentline !== ''){
+                lines.push(currentline);
+            }
+        }
+
+        return lines;
     }
 
     // #endregion
@@ -108,10 +170,18 @@ class UiText extends UiElement {
 
         context.save();
         context.fillStyle = this.color;
-        context.font = `${this.fontSize}px ${this.font}`;
-        context.textAlign = this.textAlign;
-        context.textBaseline = this.textBaseline;
-        context.fillText(this.text, pos[0], pos[1]);
+        context.font = `${this.fontsize}px ${this.font}`;
+        context.textAlign = this.textalign;
+        context.textBaseline = this.textbaseline;
+
+        const lines = this.maxwidth === null ? 
+            this.text.split("\n") :
+            this.wrapText(this.text, this.maxwidth);
+
+        for(let i = 0; i < lines.length; i++){
+            context.fillText(lines[i], pos[0], pos[1] + i * this.lineheight);
+        }
+
         context.restore();
 
         super.render(context);

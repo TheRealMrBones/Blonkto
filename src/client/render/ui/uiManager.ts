@@ -37,7 +37,7 @@ class UiManager {
         this.playerclient = playerclient;
 
         // create all base ui elements
-        this.uiinfo = new UiText("hello", 12, "black");
+        this.uiinfo = new UiText("hello\nhello2", 12);
 
         this.uielements = [
             this.uiinfo,
@@ -238,7 +238,7 @@ class UiManager {
 
     /** Updates the health UI to the given value */
     updateHealth(health: number): void {
-        this.uiinfo.setText(`Health: ${Math.round(health).toString()}`);
+        this.uiinfo.setText(`Health: ${Math.round(health).toString()}\nSILLY`);
     }
 
     /** Updates the coordinates UI to the given position */
