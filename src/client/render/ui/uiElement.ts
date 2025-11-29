@@ -29,7 +29,7 @@ abstract class UiElement {
 
     /** Returns the absolute position of this ui element */
     getAbsolutePosition(): Vector2D {
-        return this.parent === null ?this.body.position :
+        return this.parent === null ? this.body.position :
             V2D.add(this.body.position, this.parent.getAbsolutePosition());
     }
 
@@ -97,9 +97,9 @@ abstract class UiElement {
     // #region events
 
     /** Renders this ui element and its children */
-    render(): void {
+    render(context: CanvasRenderingContext2D): void {
         for(const child of this.children){
-            child.render();
+            child.render(context);
         }
     }
 
@@ -138,25 +138,39 @@ abstract class UiElement {
     // #region event handlers
 
     /** Handles the mouse down event for this ui element */
-    abstract onMouseDown(pos: Vector2D): void;
+    onMouseDown(pos: Vector2D): void {
+
+    }
 
     /** Handles the mouse up event for this ui element */
-    abstract onMouseUp(pos: Vector2D): void;
+    onMouseUp(pos: Vector2D): void {
+
+    }
 
     /** Handles the mouse move event for this ui element */
-    abstract onMouseMove(pos: Vector2D): void;
+    onMouseMove(pos: Vector2D): void {
+
+    }
 
     /** Handles the hover event for this ui element */
-    abstract onHover(pos: Vector2D): void;
+    onHover(pos: Vector2D): void {
+
+    }
 
     /** Handles the hover end event for this ui element */
-    abstract onHoverEnd(pos: Vector2D): void;
+    onHoverEnd(pos: Vector2D): void {
+
+    }
 
     /** Handles the focus event for this ui element */
-    abstract onFocus(): void;
+    onFocus(): void {
+
+    }
 
     /** Handles the blur event for this ui element */
-    abstract onBlur(): void;
+    onBlur(): void {
+
+    }
 
     // #endregion
 }
