@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "prod:pack": "webpack --config webpack.prod.js",
-        "prod:build": "tsc -p tsconfig.nodejs.json && tsc-alias -p tsconfig.nodejs.json --resolve-full-paths && node copy-package.js",
+        "prod:build": "tsc -p tsconfig.nodejs.json && tsc-alias -p tsconfig.nodejs.json --resolve-full-paths --verbose && node copy-package.js",
         "prod": "npm run prod:pack && npm run prod:build",
         "dev:pack": "webpack --config webpack.dev.js",
         "dev:start": "nodemon src/server/server.js",
