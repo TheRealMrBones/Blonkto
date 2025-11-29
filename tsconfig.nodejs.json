@@ -5,13 +5,17 @@
         "target": "ESNext",
         "moduleResolution": "NodeNext",
         "outDir": "./dist/nodejs",
+        "baseUrl": "./src",                // ← required
+        "paths": {                         // ← required or inherited
+            "client/*": ["client/*"],
+            "configs/*": ["configs/*"],
+            "game/*": ["game/*"],
+            "server/*": ["server/*"],
+            "shared/*": ["shared/*"]
+        },
+        "moduleSuffixes": [".ts", ".js", ""],
+        "types": [],
     },
     "include": ["src/**/*"],
     "exclude": ["src/client/**"],
-    "plugins": [
-        {
-            "transform": "typescript-transform-paths",
-            "useRootDirs": true,
-        },
-    ],
 }

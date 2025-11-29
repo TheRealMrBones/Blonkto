@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "prod:pack": "webpack --config webpack.prod.js",
-        "prod:build": "tsc -p tsconfig.nodejs.json",
+        "prod:build": "tsc -p tsconfig.nodejs.json && tsc-alias -p tsconfig.nodejs.json --resolve-full-paths && node copy-package.js",
         "prod": "npm run prod:pack && npm run prod:build",
         "dev:pack": "webpack --config webpack.dev.js",
         "dev:start": "nodemon src/server/server.js",
@@ -53,9 +53,8 @@
         "socket.io": "^4.8.1",
         "socket.io-client": "^4.8.1",
         "throttle-debounce": "^5.0.2",
-        "ts-patch": "^3.3.0",
+        "tsc-alias": "^1.8.16",
         "tsconfig-paths-webpack-plugin": "^4.2.0",
-        "typescript-transform-paths": "^3.5.5",
         "validator": "^13.12.0",
         "webpack-dev-middleware": "^7.4.2"
     }
