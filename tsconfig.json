@@ -23,6 +23,7 @@
         "allowSyntheticDefaultImports": true,
         "noImplicitOverride": true,
         "lib": ["es2021", "dom"],
+        "moduleSuffixes": [".ts", ".js", ""],
     },
     "include": ["src/**/*"],
 }
