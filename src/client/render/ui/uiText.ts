@@ -28,7 +28,7 @@ class UiText extends UiElement {
 
         const estimatedwidth = text.length * fontsize * 0.6;
         const estimatedheight = fontsize * 1.2;
-        this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight);
+        this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight).setCornerPivot();
     }
 
     // #region builder methods

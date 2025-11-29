@@ -10,7 +10,7 @@ class UiDiv extends UiElement {
     constructor(width: number, height: number, color: string){
         super();
 
-        this.body = new Rectangle([0, 0], width, height);
+        this.body = new Rectangle([0, 0], width, height).setCornerPivot();
         this.color = color;
     }
 
