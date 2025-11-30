@@ -15,8 +15,8 @@ class UiText extends UiElement {
     private maxwidth: number | null;
     protected lineheight: number;
 
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    protected canvas: HTMLCanvasElement;
+    protected context: CanvasRenderingContext2D;
 
     constructor(text: string, fontsize: number){
         super();
@@ -130,7 +130,40 @@ class UiText extends UiElement {
 
     // #endregion
 
-    // #region private methods
+    // #region events
+
+    /** Renders this ui element and its children */
+    override render(context: CanvasRenderingContext2D): void {
+        const pos = this.getAbsolutePosition();
+
+        context.save();
+
+        if(this.backgroundcolor !== null){
+            context.fillStyle = this.backgroundcolor;
+            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
+        }
+
+        context.fillStyle = this.color;
+        context.font = `${this.fontsize}px ${this.font}`;
+        context.textAlign = this.textalign;
+        context.textBaseline = this.textbaseline;
+
+        const lines = this.maxwidth === null ?
+            this.text.split("\n") :
+            this.wrapText(this.text, this.maxwidth);
+
+        for(let i = 0; i < lines.length; i++){
+            context.fillText(lines[i], pos[0], pos[1] + i * this.lineheight);
+        }
+
+        context.restore();
+
+        super.render(context);
+    }
+
+    // #endregion
+
+    // #region helpers
 
     /** Updates the body dimensions based on text size */
     private updateBodyDimensions(): void {
@@ -188,39 +221,6 @@ class UiText extends UiElement {
         }
 
         return lines;
-    }
-
-    // #endregion
-
-    // #region events
-
-    /** Renders this ui element and its children */
-    override render(context: CanvasRenderingContext2D): void {
-        const pos = this.getAbsolutePosition();
-
-        context.save();
-
-        if(this.backgroundcolor !== null){
-            context.fillStyle = this.backgroundcolor;
-            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
-        }
-
-        context.fillStyle = this.color;
-        context.font = `${this.fontsize}px ${this.font}`;
-        context.textAlign = this.textalign;
-        context.textBaseline = this.textbaseline;
-
-        const lines = this.maxwidth === null ?
-            this.text.split("\n") :
-            this.wrapText(this.text, this.maxwidth);
-
-        for(let i = 0; i < lines.length; i++){
-            context.fillText(lines[i], pos[0], pos[1] + i * this.lineheight);
-        }
-
-        context.restore();
-
-        super.render(context);
     }
 
     // #endregion

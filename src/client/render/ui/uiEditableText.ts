@@ -76,40 +76,6 @@ class UiEditableText extends UiText {
 
     // #endregion
 
-    // #region private methods
-
-    /** Updates scroll offset to keep cursor visible */
-    private updateScrollOffset(): void {
-        if(!this.scrollmode || this.body.width === 0) return;
-
-        const text = this.getText();
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d")!;
-        context.font = `${this.getFontSize()}px ${this.getFont()}`;
-
-        const textbeforecursor = text.substring(0, this.cursorposition);
-        const cursorx = context.measureText(textbeforecursor).width;
-
-        const maxwidth = this.body.width;
-
-        // Scroll right if cursor is beyond visible area
-        if(cursorx - this.scrolloffset > maxwidth){
-            this.scrolloffset = cursorx - maxwidth;
-        }
-
-        // Scroll left if cursor is before visible area
-        if(cursorx - this.scrolloffset < 0){
-            this.scrolloffset = cursorx;
-        }
-
-        // Don't scroll past the beginning
-        if(this.scrolloffset < 0){
-            this.scrolloffset = 0;
-        }
-    }
-
-    // #endregion
-
     // #region event listeners
 
     /** Sets up keyboard event listener */
@@ -198,9 +164,7 @@ class UiEditableText extends UiText {
         this.setSelected(true);
 
         // Calculate cursor position based on click location
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d")!;
-        context.font = `${this.getFontSize()}px ${this.getFont()}`;
+        this.context.font = `${this.getFontSize()}px ${this.getFont()}`;
 
         const text = this.getText();
         const clickx = pos[0] + (this.scrollmode ? this.scrolloffset : 0);
@@ -209,7 +173,7 @@ class UiEditableText extends UiText {
         let closestdistance = Math.abs(clickx);
 
         for(let i = 0; i <= text.length; i++){
-            const textwidth = context.measureText(text.substring(0, i)).width;
+            const textwidth = this.context.measureText(text.substring(0, i)).width;
             const distance = Math.abs(clickx - textwidth);
 
             if(distance < closestdistance){
@@ -299,6 +263,38 @@ class UiEditableText extends UiText {
         // Render children
         for(const child of this.getChildren()){
             child.render(context);
+        }
+    }
+
+    // #endregion
+
+    // #region helpers
+
+    /** Updates scroll offset to keep cursor visible */
+    private updateScrollOffset(): void {
+        if(!this.scrollmode || this.body.width === 0) return;
+
+        const text = this.getText();
+        this.context.font = `${this.getFontSize()}px ${this.getFont()}`;
+
+        const textbeforecursor = text.substring(0, this.cursorposition);
+        const cursorx = this.context.measureText(textbeforecursor).width;
+
+        const maxwidth = this.body.width;
+
+        // Scroll right if cursor is beyond visible area
+        if(cursorx - this.scrolloffset > maxwidth){
+            this.scrolloffset = cursorx - maxwidth;
+        }
+
+        // Scroll left if cursor is before visible area
+        if(cursorx - this.scrolloffset < 0){
+            this.scrolloffset = cursorx;
+        }
+
+        // Don't scroll past the beginning
+        if(this.scrolloffset < 0){
+            this.scrolloffset = 0;
         }
     }
 
