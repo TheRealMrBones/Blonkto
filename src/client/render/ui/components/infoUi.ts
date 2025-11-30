@@ -24,7 +24,7 @@ class InfoUi extends UiText {
     // #region update
 
     /** Updates the uiinfo uiText to use the new text list */
-    updateUiInfo(): void {
+    private updateUiInfo(): void {
         let text = this.uiinfotexts[0];
         for(let i = 1; i < this.uiinfotexts.length; i++){
             text += `\n${this.uiinfotexts[i]}`;
