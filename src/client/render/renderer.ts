@@ -112,7 +112,7 @@ class Renderer {
 
     /** Calculates the current fps being rendered by the client */
     calculatefps(): void {
-        if(this.fpscount == 0) this.uiManager.uiinfo.updateFps(0); else this.uiManager.uiinfo.updateFps(this.fpstotal / this.fpscount);
+        if(this.fpscount == 0) this.uiManager.infoui.updateFps(0); else this.uiManager.infoui.updateFps(this.fpstotal / this.fpscount);
 
         this.fpstotal = 0;
         this.fpscount = 0;

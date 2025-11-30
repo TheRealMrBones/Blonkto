@@ -327,7 +327,7 @@ class InputManager {
         }
 
         // update ui
-        this.playerclient.renderer.uiManager.uiinfo.updateCoords(this.x + this.dx, this.y + this.dy);
+        this.playerclient.renderer.uiManager.infoui.updateCoords(this.x + this.dx, this.y + this.dy);
     }
 
     // #endregion

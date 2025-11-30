@@ -1,14 +1,11 @@
 import PlayerClient from "client/playerClient.js";
+import ConnectionLostUi from "client/render/ui/components/connectionLostUi.js";
 import InfoUi from "client/render/ui/components/infoUi.js";
 import UiElement from "client/render/ui/elements/uiElement.js";
-import UiImage from "client/render/ui/elements/uiImage.js";
 import SharedConfig from "configs/shared.js";
-import Constants from "shared/constants.js";
 import { SendMessageContent, DropContent } from "shared/messageContentTypes.js";
-import { AnchorDirection } from "shared/physics/anchorDirection.js";
 import { SerializedTab } from "shared/serialization/serializedTab.js";
 
-const { ASSETS } = Constants;
 const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
 
 /** Manages all UI updating and interaction for the client */
@@ -16,8 +13,8 @@ class UiManager {
     private readonly playerclient: PlayerClient;
 
     private readonly uielements: UiElement[];
-    readonly uiinfo: InfoUi;
-    readonly connectionlost: UiImage;
+    readonly infoui: InfoUi;
+    readonly connectionlostui: ConnectionLostUi;
 
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
@@ -41,14 +38,12 @@ class UiManager {
         this.playerclient = playerclient;
 
         // create all base ui components
-        this.uiinfo = new InfoUi();
-        this.connectionlost = new UiImage(null)
-            .setAnchorDirection(AnchorDirection.TOP_RIGHT)
-            .setPosition([5, 5]);
+        this.infoui = new InfoUi();
+        this.connectionlostui = new ConnectionLostUi(playerclient);
 
         this.uielements = [
-            this.uiinfo,
-            this.connectionlost,
+            this.infoui,
+            this.connectionlostui,
         ];
 
         // prepare event listeners
@@ -243,18 +238,6 @@ class UiManager {
     // #endregion
 
     // #region update ui
-
-    /** Toggles the connection lost icon to appear or disapear */
-    toggleConnectionLost(toggle: boolean): void {
-        if(this.connectionlost.getImage() === null)
-            this.connectionlost.setImage(this.playerclient.renderer.assetManager.getAssetRender(ASSETS.CONNECTION_LOST_ICON, "connection_lost", 80));
-
-        if(toggle){
-            this.connectionlost.show();
-        }else{
-            this.connectionlost.hide();
-        }
-    }
 
     /** Updates the tab list with the given data */
     updateTab(data: SerializedTab): void {

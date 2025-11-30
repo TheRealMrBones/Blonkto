@@ -140,7 +140,7 @@ class NetworkingManager {
     /** Response to the ping message from the server */
     onPing(): void {
         const ping = Date.now() - this.pingsent;
-        this.playerclient.renderer.uiManager.uiinfo.updatePing(ping);
+        this.playerclient.renderer.uiManager.infoui.updatePing(ping);
         this.pinginterval = setTimeout(this.ping.bind(this), 1000);
     }
 

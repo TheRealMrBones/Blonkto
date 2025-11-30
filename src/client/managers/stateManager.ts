@@ -130,11 +130,11 @@ class StateManager {
         else if(update.stationupdates !== null) if(update.stationupdates.isnew) this.playerclient.inventory.setRecipeVisibility();
 
         // update UI
-        this.playerclient.renderer.uiManager.uiinfo.updateHealth(update.me.static.health);
-        this.playerclient.renderer.uiManager.uiinfo.updateKills(update.me.static.kills);
+        this.playerclient.renderer.uiManager.infoui.updateHealth(update.me.static.health);
+        this.playerclient.renderer.uiManager.infoui.updateKills(update.me.static.kills);
         this.playerclient.renderer.uiManager.updateTab(update.tab);
         if(Date.now() - this.lasttpsupdate > 1000){
-            this.playerclient.renderer.uiManager.uiinfo.updateTps(update.tps);
+            this.playerclient.renderer.uiManager.infoui.updateTps(update.tps);
             this.lasttpsupdate = Date.now();
         }
 
@@ -304,7 +304,7 @@ class StateManager {
     /** Checks if connection might have been lost based on the time of the last game update received */
     checkIfConnectionLost(): void {
         const isconnectionlost = Date.now() - this.lastupdatetime > CONNECTION_LOST_THRESHOLD;
-        this.playerclient.renderer.uiManager.toggleConnectionLost(isconnectionlost);
+        this.playerclient.renderer.uiManager.connectionlostui.toggleConnectionLost(isconnectionlost);
     };
 
     // #endregion
