@@ -130,11 +130,11 @@ class StateManager {
         else if(update.stationupdates !== null) if(update.stationupdates.isnew) this.playerclient.inventory.setRecipeVisibility();
 
         // update UI
-        this.playerclient.renderer.uiManager.updateHealth(update.me.static.health);
-        this.playerclient.renderer.uiManager.updateKills(update.me.static.kills);
+        this.playerclient.renderer.uiManager.uiinfo.updateHealth(update.me.static.health);
+        this.playerclient.renderer.uiManager.uiinfo.updateKills(update.me.static.kills);
         this.playerclient.renderer.uiManager.updateTab(update.tab);
         if(Date.now() - this.lasttpsupdate > 1000){
-            this.playerclient.renderer.uiManager.updateTps(update.tps);
+            this.playerclient.renderer.uiManager.uiinfo.updateTps(update.tps);
             this.lasttpsupdate = Date.now();
         }
 

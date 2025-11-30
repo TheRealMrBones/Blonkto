@@ -1,4 +1,4 @@
-import UiText from "client/render/ui/uiText.js";
+import UiText from "client/render/ui/elements/uiText.js";
 import Rectangle from "shared/physics/rectangle.js";
 import { Vector2D } from "shared/types.js";
 

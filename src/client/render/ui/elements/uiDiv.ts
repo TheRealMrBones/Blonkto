@@ -1,4 +1,4 @@
-import UiElement from "client/render/ui/uiElement.js";
+import UiElement from "client/render/ui/elements/uiElement.js";
 import Rectangle from "shared/physics/rectangle.js";
 
 /** An empty frame for new ui elements to be put into */

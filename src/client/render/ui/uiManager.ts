@@ -1,7 +1,7 @@
 import PlayerClient from "client/playerClient.js";
-import UiElement from "client/render/ui/uiElement.js";
-import UiImage from "client/render/ui/uiImage.js";
-import UiText from "client/render/ui/uiText.js";
+import InfoUi from "client/render/ui/components/infoUi.js";
+import UiElement from "client/render/ui/elements/uiElement.js";
+import UiImage from "client/render/ui/elements/uiImage.js";
 import SharedConfig from "configs/shared.js";
 import Constants from "shared/constants.js";
 import { SendMessageContent, DropContent } from "shared/messageContentTypes.js";
@@ -16,10 +16,8 @@ class UiManager {
     private readonly playerclient: PlayerClient;
 
     private readonly uielements: UiElement[];
-    private readonly uiinfo: UiText;
-    private readonly connectionlost: UiImage;
-
-    private readonly uiinfotexts: string[] = ["", "", "", "", "", ""];
+    readonly uiinfo: InfoUi;
+    readonly connectionlost: UiImage;
 
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
@@ -42,11 +40,8 @@ class UiManager {
     constructor(playerclient: PlayerClient) {
         this.playerclient = playerclient;
 
-        // create all base ui elements
-        this.uiinfo = new UiText("", 18)
-            .setBackgroundColor("rgba(128, 128, 128, 0.5)")
-            .setPadding(5)
-            .setPosition([5, 5]);
+        // create all base ui components
+        this.uiinfo = new InfoUi();
         this.connectionlost = new UiImage(null)
             .setAnchorDirection(AnchorDirection.TOP_RIGHT)
             .setPosition([5, 5]);
@@ -248,52 +243,6 @@ class UiManager {
     // #endregion
 
     // #region update ui
-
-    /** Updates the uiinfo uiText to use the new text list */
-    updateUiInfo(): void {
-        let text = this.uiinfotexts[0];
-        for(let i = 1; i < this.uiinfotexts.length; i++){
-            text += `\n${this.uiinfotexts[i]}`;
-        }
-
-        this.uiinfo.setText(text);
-    }
-
-    /** Updates the health UI to the given value */
-    updateHealth(health: number): void {
-        this.uiinfotexts[0] = `Health: ${Math.round(health).toString()}`;
-        this.updateUiInfo();
-    }
-
-    /** Updates the coordinates UI to the given position */
-    updateCoords(x: number, y: number): void {
-        this.uiinfotexts[1] = `Coords: ${x.toFixed(1)}, ${y.toFixed(1)}`;
-        this.updateUiInfo();
-    }
-
-    /** Updates the kills UI to the given value */
-    updateKills(kills: number): void {
-        this.uiinfotexts[2] = `Kills: ${kills.toString()}`;
-        this.updateUiInfo();
-    }
-
-    /** Updates the FPS UI to the given value */
-    updateFps(fps: number): void {
-        this.uiinfotexts[3] = `FPS: ${Math.round(fps).toString()}`;
-        this.updateUiInfo();
-    }
-
-    /** Updates the ping UI to the given value */
-    updatePing(ping: number): void {
-        this.uiinfotexts[4] = `Ping: ${Math.round(ping).toString()}`;
-        this.updateUiInfo();
-    }
-
-    /** Updates the TPS UI to the given value */
-    updateTps(tps: number): void {
-        this.uiinfotexts[5] = `TPS: ${tps}`;
-        this.updateUiInfo();
-    }
 
     /** Toggles the connection lost icon to appear or disapear */
     toggleConnectionLost(toggle: boolean): void {
