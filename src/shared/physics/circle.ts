@@ -1,4 +1,5 @@
 import CollisionObject from "shared/physics/collisionObject.js";
+import Rectangle from "shared/physics/rectangle.js";
 import V2D from "shared/physics/vector2d.js";
 import { Vector2D } from "shared/types.js";
 
@@ -30,6 +31,11 @@ class Circle extends CollisionObject {
     /** Returns the set of points to get the minimum distance point with a ranged object */
     getPointsForMinDist(): Vector2D[] {
         return [this.position];
+    }
+
+    /** Returns the containing rectangle of this collision object */
+    getContainingRect(): Rectangle {
+        return new Rectangle([this.position[0], this.position[1]], this.radius * 2, this.radius * 2);
     }
 }
 

@@ -1,4 +1,5 @@
 import CollisionObject from "shared/physics/collisionObject.js";
+import Rectangle from "shared/physics/rectangle.js";
 import V2D from "shared/physics/vector2d.js";
 import { Vector2D } from "shared/types.js";
 
@@ -63,6 +64,30 @@ abstract class Polygon extends CollisionObject {
     /** Returns the set of points to get the minimum distance point with a ranged object */
     getPointsForMinDist(): Vector2D[] {
         return this.getVertices();
+    }
+
+    /** Returns the containing rectangle of this collision object */
+    getContainingRect(): Rectangle {
+        const points = this.getVertices();
+
+        let minx = points[0][0];
+        let miny = points[0][1];
+        let maxx = points[0][0];
+        let maxy = points[0][1];
+
+        for(let i = 1; i < this.getVertexCount(); i++){
+            const point = points[i];
+            
+            if(point[0] < minx) minx = point[0];
+            if(point[1] < miny) miny = point[1];
+            if(point[0] > maxx) maxx = point[0];
+            if(point[1] > maxy) maxy = point[1];
+        }
+
+        const width = maxx - minx;
+        const height = maxy - miny;
+
+        return new Rectangle([minx + width / 2, miny + height / 2], width, height);
     }
 }
 

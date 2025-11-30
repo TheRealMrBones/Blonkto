@@ -7,8 +7,6 @@ class Rectangle extends Polygon {
     readonly width: number;
     readonly height: number;
 
-    cornerpivot: boolean = false;
-
     constructor(position: Vector2D, width: number, height: number, rotation?: number){
         super(position, rotation);
 
@@ -16,25 +14,10 @@ class Rectangle extends Polygon {
         this.height = height;
     }
 
-    /** Makes the pivot of this rectangle the top left corner instead of the center */
-    setCornerPivot(): this {
-        this.cornerpivot = true;
-        return this;
-    }
-
     /** Returns the vertices of this rectangle relative to the origin of the rectangle */
     getVeticesFromOrigin(): Vector2D[] {
         const halfwidth = this.width / 2;
         const halfheight = this.height / 2;
-
-        if(this.cornerpivot){
-            return [
-                [0, 0],
-                [0, this.height],
-                [this.width, this.height],
-                [this.width, 0],
-            ];
-        }
 
         return [
             [-halfwidth, -halfheight],

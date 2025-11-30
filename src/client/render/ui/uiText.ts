@@ -34,7 +34,7 @@ class UiText extends UiElement {
         this.canvas = document.createElement("canvas");
         this.context = this.canvas.getContext("2d")!;
 
-        this.body = new Rectangle([0, 0], 0, 0).setCornerPivot();
+        this.body = new Rectangle([0, 0], 0, 0);
         this.updateBodyDimensions();
     }
 
@@ -185,6 +185,8 @@ class UiText extends UiElement {
         const height = lines.length * this.lineheight - (this.lineheight - this.fontsize);
 
         this.body = new Rectangle(this.body.position, maxwidth, height);
+
+        this.setPosition();
     }
 
     /** Wraps text into lines based on max width and newline characters */

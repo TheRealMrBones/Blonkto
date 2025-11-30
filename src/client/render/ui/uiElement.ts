@@ -1,3 +1,4 @@
+import { AnchorDirection } from "shared/physics/anchorDirection.js";
 import { MouseEventType } from "client/render/ui/mouseEventType.js";
 import Circle from "shared/physics/circle.js";
 import { checkCollision } from "shared/physics/collision.js";
@@ -8,12 +9,18 @@ import { Vector2D } from "shared/types.js";
 /** An element of the games ui that has a position and shape on the screen */
 abstract class UiElement {
     abstract body: CollisionObject;
+    private setposition: Vector2D;
+    private topleftposition: Vector2D;
+    private anchordirection: AnchorDirection;
     protected hidden: boolean;
 
     protected parent: UiElement | null;
     protected children: UiElement[];
 
     constructor(){
+        this.setposition = [0, 0];
+        this.topleftposition = [0, 0];
+        this.anchordirection = AnchorDirection.TOP_LEFT;
         this.hidden = false;
 
         this.parent = null;
@@ -23,8 +30,60 @@ abstract class UiElement {
     // #region builder methods
 
     /** Sets the position of this ui element */
-    setPosition(pos: Vector2D): this {
-        this.body.position = pos;
+    setPosition(pos?: Vector2D): this {
+        if(pos !== undefined) this.setposition = pos;
+
+        const windowwidth = window.innerWidth;
+        const windowheight = window.innerHeight;
+        const halfwindowwidth = windowwidth / 2;
+        const halfwindowheight = windowheight / 2;
+
+        switch(this.anchordirection){
+            case AnchorDirection.TOP_LEFT:
+                this.body.position = [this.setposition[0], this.setposition[1]];
+                break;
+            case AnchorDirection.TOP:
+                this.body.position = [this.setposition[0] + halfwindowwidth, this.setposition[1]];
+                break;
+            case AnchorDirection.TOP_RIGHT:
+                this.body.position = [windowwidth - this.setposition[0], this.setposition[1]];
+                break;
+            case AnchorDirection.LEFT:
+                this.body.position = [this.setposition[0], this.setposition[1] + halfwindowheight];
+                break;
+            case AnchorDirection.CENTER:
+                this.body.position = [this.setposition[0] + halfwindowwidth, this.setposition[1] + halfwindowheight];
+                break;
+            case AnchorDirection.RIGHT:
+                this.body.position = [windowwidth - this.setposition[0], this.setposition[1] + halfwindowheight];
+                break;
+            case AnchorDirection.BOTTOM_LEFT:
+                this.body.position = [this.setposition[0], windowheight - this.setposition[1]];
+                break;
+            case AnchorDirection.BOTTOM:
+                this.body.position = [this.setposition[0] + halfwindowwidth, windowheight - this.setposition[1]];
+                break;
+            case AnchorDirection.BOTTOM_RIGHT:
+                this.body.position = [windowwidth - this.setposition[0], windowheight - this.setposition[1]];
+                break;
+        }
+
+        this.body.moveForAnchor(this.anchordirection);
+
+        const rect = this.body.getContainingRect();
+
+        const halfwidth = rect.width / 2;
+        const halfheight = rect.height / 2;
+
+        this.topleftposition = [rect.position[0] - halfwidth, rect.position[1] - halfheight];
+
+        return this;
+    }
+
+    /** Sets the anchor direction of this ui element */
+    setAnchorDirection(anchordirection: AnchorDirection): this {
+        this.anchordirection = anchordirection;
+        this.setPosition();
         return this;
     }
 
@@ -32,15 +91,15 @@ abstract class UiElement {
 
     // #region getters
 
-    /** Returns the position of this ui element */
+    /** Returns the position of this ui element always as top left */
     getPosition(): Vector2D {
-        return this.body.position;
+        return this.topleftposition;
     }
 
-    /** Returns the absolute position of this ui element */
+    /** Returns the absolute position of this ui element always as top left */
     getAbsolutePosition(): Vector2D {
-        return this.parent === null ? this.body.position :
-            V2D.add(this.body.position, this.parent.getAbsolutePosition());
+        return this.parent === null ? this.topleftposition :
+            V2D.add(this.topleftposition, this.parent.getAbsolutePosition());
     }
 
     /** Returns if this ui element is on the base layer (has no parent) */
