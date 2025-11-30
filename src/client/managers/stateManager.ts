@@ -132,7 +132,7 @@ class StateManager {
         // update UI
         this.playerclient.renderer.uiManager.infoui.updateHealth(update.me.static.health);
         this.playerclient.renderer.uiManager.infoui.updateKills(update.me.static.kills);
-        this.playerclient.renderer.uiManager.updateTab(update.tab);
+        this.playerclient.renderer.uiManager.tabui.updateTab(update.tab);
         if(Date.now() - this.lasttpsupdate > 1000){
             this.playerclient.renderer.uiManager.infoui.updateTps(update.tps);
             this.lasttpsupdate = Date.now();

@@ -1,12 +1,12 @@
 import PlayerClient from "client/playerClient.js";
 import ConnectionLostUi from "client/render/ui/components/connectionLostUi.js";
 import InfoUi from "client/render/ui/components/infoUi.js";
+import TabUi from "client/render/ui/components/tabUi.js";
 import UiElement from "client/render/ui/elements/uiElement.js";
 import SharedConfig from "configs/shared.js";
 import { SendMessageContent, DropContent } from "shared/messageContentTypes.js";
-import { SerializedTab } from "shared/serialization/serializedTab.js";
 
-const { SHOW_TAB, KILLS_TAB } = SharedConfig.TAB;
+const { SHOW_TAB } = SharedConfig.TAB;
 
 /** Manages all UI updating and interaction for the client */
 class UiManager {
@@ -15,10 +15,10 @@ class UiManager {
     private readonly uielements: UiElement[];
     readonly infoui: InfoUi;
     readonly connectionlostui: ConnectionLostUi;
+    readonly tabui: TabUi;
 
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
-    private readonly tabdiv: HTMLElement = document.getElementById("tab")!;
     private readonly hotbardiv: HTMLElement = document.getElementById("hotbar")!;
     private readonly inventorydiv: HTMLElement = document.getElementById("inventory")!;
     private readonly stationdiv: HTMLElement = document.getElementById("station")!;
@@ -40,10 +40,12 @@ class UiManager {
         // create all base ui components
         this.infoui = new InfoUi();
         this.connectionlostui = new ConnectionLostUi(playerclient);
+        this.tabui = new TabUi();
 
         this.uielements = [
             this.infoui,
             this.connectionlostui,
+            this.tabui,
         ];
 
         // prepare event listeners
@@ -88,7 +90,6 @@ class UiManager {
         this.hotbardiv.style.display = "none";
         this.inventorydiv.style.display = "none";
         this.inventoryopen = false;
-        if(SHOW_TAB) this.tabdiv.style.display = "none";
 
         // remove event listeners
         window.removeEventListener("keydown", this.keyDownChecksListener);
@@ -106,7 +107,7 @@ class UiManager {
     private keyDownChecks(event: KeyboardEvent): void {
         switch(event.key){
             case "Tab": {
-                if(SHOW_TAB) this.tabdiv.style.display = "block";
+                if(SHOW_TAB) this.tabui.show();
                 event.preventDefault();
                 break;
             }
@@ -141,7 +142,7 @@ class UiManager {
                 break;
             }
             case "Tab": {
-                if(SHOW_TAB) this.tabdiv.style.display = "none";
+                if(SHOW_TAB) this.tabui.hide();
                 break;
             }
         }
@@ -233,31 +234,6 @@ class UiManager {
         // hotbar
         const posnum = parseInt(event.key);
         if(!Number.isNaN(posnum) && posnum != 0) this.playerclient.inventory.swapSlots(this.playerclient.inputManager.getSelectedSlot(), posnum - 1);
-    }
-
-    // #endregion
-
-    // #region update ui
-
-    /** Updates the tab list with the given data */
-    updateTab(data: SerializedTab): void {
-        if(data.length == 0){
-            this.tabdiv.innerHTML = "";
-            return;
-        };
-
-        let newtext = this.getTabString(data[0]);
-        for(let i = 1; i < data.length; i++){
-            newtext += `<br>${this.getTabString(data[i])}`;
-        }
-        this.tabdiv.innerHTML = newtext;
-    }
-
-    /** Returns string representation of a player in tab with the given data */
-    getTabString(playerdata: any): string {
-        let text = playerdata.username;
-        if(KILLS_TAB) text = playerdata.kills + " " + text;
-        return text;
     }
 
     // #endregion

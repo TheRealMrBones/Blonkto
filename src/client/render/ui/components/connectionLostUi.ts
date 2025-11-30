@@ -13,7 +13,8 @@ class ConnectionLostUi extends UiImage {
         super(null);
         
         this.setAnchorDirection(AnchorDirection.TOP_RIGHT)
-            .setPosition([5, 5]);
+            .setPosition([5, 5])
+            .hide();
 
         this.playerclient = playerclient;
     }
@@ -24,6 +25,7 @@ class ConnectionLostUi extends UiImage {
     toggleConnectionLost(toggle: boolean): void {
         if(this.getImage() === null)
             this.setImage(this.playerclient.renderer.assetManager.getAssetRender(ASSETS.CONNECTION_LOST_ICON, "connection_lost", 80));
+        
         if(toggle){
             this.show();
         }else{
