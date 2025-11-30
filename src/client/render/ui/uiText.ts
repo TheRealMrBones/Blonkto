@@ -87,6 +87,11 @@ class UiText extends UiElement {
         return this.color;
     }
 
+    /** Returns the background color */
+    getBackgroundColor(): string | null {
+        return this.backgroundcolor;
+    }
+
     /** Returns the font family */
     getFont(): string {
         return this.font;
@@ -129,7 +134,7 @@ class UiText extends UiElement {
 
     /** Updates the body dimensions based on text size */
     private updateBodyDimensions(): void {
-        const lines = this.maxwidth === null ? 
+        const lines = this.maxwidth === null ?
             this.text.split("\n") :
             this.wrapText(this.text, this.maxwidth);
 
@@ -144,7 +149,7 @@ class UiText extends UiElement {
         }else{
             maxwidth = this.maxwidth;
         }
-        const height = lines.length * this.lineheight;
+        const height = lines.length * this.lineheight - (this.lineheight - this.fontsize);
 
         this.body = new Rectangle(this.body.position, maxwidth, height);
     }
@@ -154,22 +159,22 @@ class UiText extends UiElement {
         this.context.font = `${this.fontsize}px ${this.font}`;
 
         const lines: string[] = [];
-        const paragraphs = text.split('\n');
+        const paragraphs = text.split("\n");
 
         for(const paragraph of paragraphs){
-            if(paragraph === ''){
-                lines.push('');
+            if(paragraph === ""){
+                lines.push("");
                 continue;
             }
 
-            const words = paragraph.split(' ');
-            let currentline = '';
+            const words = paragraph.split(" ");
+            let currentline = "";
 
             for(const word of words){
-                const testline = currentline === '' ? word : `${currentline} ${word}`;
+                const testline = currentline === "" ? word : `${currentline} ${word}`;
                 const width = this.context.measureText(testline).width;
 
-                if(width > maxwidth && currentline !== ''){
+                if(width > maxwidth && currentline !== ""){
                     lines.push(currentline);
                     currentline = word;
                 }else{
@@ -177,7 +182,7 @@ class UiText extends UiElement {
                 }
             }
 
-            if(currentline !== ''){
+            if(currentline !== ""){
                 lines.push(currentline);
             }
         }
@@ -205,7 +210,7 @@ class UiText extends UiElement {
         context.textAlign = this.textalign;
         context.textBaseline = this.textbaseline;
 
-        const lines = this.maxwidth === null ? 
+        const lines = this.maxwidth === null ?
             this.text.split("\n") :
             this.wrapText(this.text, this.maxwidth);
 

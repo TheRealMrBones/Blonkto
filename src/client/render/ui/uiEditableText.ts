@@ -8,6 +8,9 @@ class UiEditableText extends UiText {
     private cursorblinktime: number;
     private lastblinkupdate: number;
     private onsubmitcallbacks: ((text: string) => void)[];
+    private cursorposition: number;
+    private scrollmode: boolean;
+    private scrolloffset: number;
 
     constructor(text: string, fontsize: number){
         super(text, fontsize);
@@ -17,15 +20,33 @@ class UiEditableText extends UiText {
         this.cursorblinktime = 500;
         this.lastblinkupdate = Date.now();
         this.onsubmitcallbacks = [];
+        this.cursorposition = text.length;
+        this.scrollmode = false;
+        this.scrolloffset = 0;
 
         this.setupKeyboardListener();
     }
+
+    // #region builder methods
+
+    /** Enables scroll mode instead of text wrapping */
+    setScrollMode(enabled: boolean): this {
+        this.scrollmode = enabled;
+        return this;
+    }
+
+    // #endregion
 
     // #region getters
 
     /** Returns if this text element is selected */
     isSelected(): boolean {
         return this.selected;
+    }
+
+    /** Returns the current cursor position */
+    getCursorPosition(): number {
+        return this.cursorposition;
     }
 
     // #endregion
@@ -46,30 +67,110 @@ class UiEditableText extends UiText {
         this.cursorblinktime = time;
     }
 
+    /** Sets the cursor position */
+    setCursorPosition(position: number): void {
+        const text = this.getText();
+        this.cursorposition = Math.max(0, Math.min(position, text.length));
+        this.updateScrollOffset();
+    }
+
+    // #endregion
+
+    // #region private methods
+
+    /** Updates scroll offset to keep cursor visible */
+    private updateScrollOffset(): void {
+        if(!this.scrollmode || this.body.width === 0) return;
+
+        const text = this.getText();
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d")!;
+        context.font = `${this.getFontSize()}px ${this.getFont()}`;
+
+        const textbeforecursor = text.substring(0, this.cursorposition);
+        const cursorx = context.measureText(textbeforecursor).width;
+
+        const maxwidth = this.body.width;
+
+        // Scroll right if cursor is beyond visible area
+        if(cursorx - this.scrolloffset > maxwidth){
+            this.scrolloffset = cursorx - maxwidth;
+        }
+
+        // Scroll left if cursor is before visible area
+        if(cursorx - this.scrolloffset < 0){
+            this.scrolloffset = cursorx;
+        }
+
+        // Don't scroll past the beginning
+        if(this.scrolloffset < 0){
+            this.scrolloffset = 0;
+        }
+    }
+
     // #endregion
 
     // #region event listeners
 
     /** Sets up keyboard event listener */
     private setupKeyboardListener(): void {
-        document.addEventListener('keydown', (e: KeyboardEvent) => {
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
             if(!this.selected) return;
 
-            if(e.key === 'Enter'){
+            if(e.key === "Enter"){
                 this.selected = false;
                 this.emitSubmit();
                 e.preventDefault();
-            }else if(e.key === 'Backspace'){
+            }else if(e.key === "Backspace"){
                 const currenttext = this.getText();
-                if(currenttext.length > 0){
-                    this.setText(currenttext.slice(0, -1));
+                if(this.cursorposition > 0){
+                    const newtext = currenttext.slice(0, this.cursorposition - 1) +
+                                   currenttext.slice(this.cursorposition);
+                    this.setText(newtext);
+                    this.cursorposition--;
+                    this.updateScrollOffset();
                 }
                 e.preventDefault();
-            }else if(e.key === 'Escape'){
+            }else if(e.key === "Delete"){
+                const currenttext = this.getText();
+                if(this.cursorposition < currenttext.length){
+                    const newtext = currenttext.slice(0, this.cursorposition) +
+                                   currenttext.slice(this.cursorposition + 1);
+                    this.setText(newtext);
+                    this.updateScrollOffset();
+                }
+                e.preventDefault();
+            }else if(e.key === "ArrowLeft"){
+                this.setCursorPosition(this.cursorposition - 1);
+                this.cursorvisible = true;
+                this.lastblinkupdate = Date.now();
+                e.preventDefault();
+            }else if(e.key === "ArrowRight"){
+                this.setCursorPosition(this.cursorposition + 1);
+                this.cursorvisible = true;
+                this.lastblinkupdate = Date.now();
+                e.preventDefault();
+            }else if(e.key === "Home"){
+                this.setCursorPosition(0);
+                this.cursorvisible = true;
+                this.lastblinkupdate = Date.now();
+                e.preventDefault();
+            }else if(e.key === "End"){
+                this.setCursorPosition(this.getText().length);
+                this.cursorvisible = true;
+                this.lastblinkupdate = Date.now();
+                e.preventDefault();
+            }else if(e.key === "Escape"){
                 this.selected = false;
                 e.preventDefault();
             }else if(e.key.length === 1){
-                this.setText(this.getText() + e.key);
+                const currenttext = this.getText();
+                const newtext = currenttext.slice(0, this.cursorposition) +
+                               e.key +
+                               currenttext.slice(this.cursorposition);
+                this.setText(newtext);
+                this.cursorposition++;
+                this.updateScrollOffset();
                 e.preventDefault();
             }
         });
@@ -95,6 +196,29 @@ class UiEditableText extends UiText {
     /** Handles the mouse down event for this ui element */
     override onMouseDown(pos: Vector2D): void {
         this.setSelected(true);
+
+        // Calculate cursor position based on click location
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d")!;
+        context.font = `${this.getFontSize()}px ${this.getFont()}`;
+
+        const text = this.getText();
+        const clickx = pos[0] + (this.scrollmode ? this.scrolloffset : 0);
+
+        let closestposition = 0;
+        let closestdistance = Math.abs(clickx);
+
+        for(let i = 0; i <= text.length; i++){
+            const textwidth = context.measureText(text.substring(0, i)).width;
+            const distance = Math.abs(clickx - textwidth);
+
+            if(distance < closestdistance){
+                closestdistance = distance;
+                closestposition = i;
+            }
+        }
+
+        this.setCursorPosition(closestposition);
     }
 
     // #endregion
@@ -119,31 +243,63 @@ class UiEditableText extends UiText {
         const pos = this.getAbsolutePosition();
 
         context.save();
+
+        // Render background if set
+        const bgcolor = this.getBackgroundColor();
+        if(bgcolor !== null){
+            context.fillStyle = bgcolor;
+            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
+        }
+
         context.fillStyle = this.getColor();
         context.font = `${this.getFontSize()}px ${this.getFont()}`;
         context.textAlign = "left";
         context.textBaseline = "top";
 
         const text = this.getText();
-        const lines = text.split("\n");
 
-        for(let i = 0; i < lines.length; i++){
-            context.fillText(lines[i], pos[0], pos[1] + i * this.lineheight);
-        }
+        if(this.scrollmode && this.selected){
+            // Render with scrolling in scroll mode
+            context.save();
+            context.beginPath();
+            context.rect(pos[0], pos[1], this.body.width, this.body.height);
+            context.clip();
 
-        // Render cursor
-        if(this.selected && this.cursorvisible){
-            const lastline = lines[lines.length - 1];
-            const textwidth = context.measureText(lastline).width;
-            const cursorx = pos[0] + textwidth;
-            const cursory = pos[1] + (lines.length - 1) * this.lineheight;
+            context.fillText(text, pos[0] - this.scrolloffset, pos[1]);
 
-            context.fillRect(cursorx, cursory, 2, this.getFontSize());
+            // Render cursor
+            if(this.cursorvisible){
+                const textbeforecursor = text.substring(0, this.cursorposition);
+                const cursorx = pos[0] + context.measureText(textbeforecursor).width - this.scrolloffset;
+                context.fillRect(cursorx, pos[1], 2, this.getFontSize());
+            }
+
+            context.restore();
+        }else{
+            // Render normally (with wrapping if parent class handles it)
+            const lines = text.split("\n");
+
+            for(let i = 0; i < lines.length; i++){
+                context.fillText(lines[i], pos[0], pos[1] + i * this.lineheight);
+            }
+
+            // Render cursor at end if selected and not in scroll mode
+            if(this.selected && this.cursorvisible && !this.scrollmode){
+                const lastline = lines[lines.length - 1];
+                const textwidth = context.measureText(lastline).width;
+                const cursorx = pos[0] + textwidth;
+                const cursory = pos[1] + (lines.length - 1) * this.lineheight;
+
+                context.fillRect(cursorx, cursory, 2, this.getFontSize());
+            }
         }
 
         context.restore();
 
-        super.render(context);
+        // Render children
+        for(const child of this.getChildren()){
+            child.render(context);
+        }
     }
 
     // #endregion
