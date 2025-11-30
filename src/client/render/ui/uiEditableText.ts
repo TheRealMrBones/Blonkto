@@ -336,15 +336,15 @@ class UiEditableText extends UiText {
 
         const text = this.getText();
 
-        if(this.scrollmode && this.selected){
-            // Render with scrolling in scroll mode
+        if(this.scrollmode){
+            // Render with scrolling in scroll mode - ALWAYS clip, not just when selected
             context.save();
             context.beginPath();
             context.rect(pos[0], pos[1], this.body.width, this.body.height);
             context.clip();
 
-            // Render selection highlight
-            if(this.hasSelection()){
+            // Render selection highlight (only when selected)
+            if(this.selected && this.hasSelection()){
                 const start = Math.min(this.selectionstart!, this.selectionend!);
                 const end = Math.max(this.selectionstart!, this.selectionend!);
 
@@ -361,8 +361,8 @@ class UiEditableText extends UiText {
 
             context.fillText(text, pos[0] - this.scrolloffset, pos[1]);
 
-            // Render cursor
-            if(this.cursorvisible && !this.hasSelection()){
+            // Render cursor (only when selected)
+            if(this.selected && this.cursorvisible && !this.hasSelection()){
                 const textbeforecursor = text.substring(0, this.cursorposition);
                 const cursorx = pos[0] + context.measureText(textbeforecursor).width - this.scrolloffset;
                 context.fillRect(cursorx, pos[1], 2, this.getFontSize());
