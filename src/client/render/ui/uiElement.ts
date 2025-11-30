@@ -25,6 +25,8 @@ abstract class UiElement {
 
         this.parent = null;
         this.children = [];
+
+        window.addEventListener('resize', () => this.setPosition());
     }
 
     // #region builder methods
