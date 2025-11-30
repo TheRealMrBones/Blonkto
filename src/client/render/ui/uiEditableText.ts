@@ -316,18 +316,13 @@ class UiEditableText extends UiText {
 
     /** Renders this ui element and its children */
     override render(context: CanvasRenderingContext2D): void {
+        this.renderBackground(context);
+
         this.updateCursor();
 
         const pos = this.getAbsolutePosition();
 
         context.save();
-
-        // Render background if set
-        const bgcolor = this.getBackgroundColor();
-        if(bgcolor !== null){
-            context.fillStyle = bgcolor;
-            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
-        }
 
         context.fillStyle = this.getColor();
         context.font = `${this.getFontSize()}px ${this.getFont()}`;
@@ -406,10 +401,7 @@ class UiEditableText extends UiText {
 
         context.restore();
 
-        // Render children
-        for(const child of this.getChildren()){
-            if(!child.isHidden()) child.render(context);
-        }
+        this.renderChildren(context);
     }
 
     // #endregion

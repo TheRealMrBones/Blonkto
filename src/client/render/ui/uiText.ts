@@ -7,7 +7,6 @@ class UiText extends UiElement {
 
     private text: string;
     private color: string;
-    private backgroundcolor: string | null;
     private font: string;
     private fontsize: number;
     private textalign: CanvasTextAlign;
@@ -46,12 +45,6 @@ class UiText extends UiElement {
         return this;
     }
 
-    /** Sets the background color */
-    setBackgroundColor(color: string): this {
-        this.backgroundcolor = color;
-        return this;
-    }
-
     /** Sets the font family */
     setFont(font: string): this {
         this.font = font;
@@ -85,11 +78,6 @@ class UiText extends UiElement {
     /** Returns the text color */
     getColor(): string {
         return this.color;
-    }
-
-    /** Returns the background color */
-    getBackgroundColor(): string | null {
-        return this.backgroundcolor;
     }
 
     /** Returns the font family */
@@ -133,15 +121,12 @@ class UiText extends UiElement {
     // #region events
 
     /** Renders this ui element and its children */
-    override render(context: CanvasRenderingContext2D): void {
+    render(context: CanvasRenderingContext2D): void {
+        this.renderBackground(context);
+
         const pos = this.getAbsolutePosition();
 
         context.save();
-
-        if(this.backgroundcolor !== null){
-            context.fillStyle = this.backgroundcolor;
-            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
-        }
 
         context.fillStyle = this.color;
         context.font = `${this.fontsize}px ${this.font}`;
@@ -158,7 +143,7 @@ class UiText extends UiElement {
 
         context.restore();
 
-        super.render(context);
+        this.renderChildren(context);
     }
 
     // #endregion

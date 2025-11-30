@@ -44,6 +44,8 @@ class UiManager {
 
         // create all base ui elements
         this.uiinfo = new UiText("", 18)
+            .setBackgroundColor("rgba(128, 128, 128, 0.5)")
+            .setPadding(5)
             .setPosition([5, 5]);
         this.connectionlost = new UiImage(null)
             .setAnchorDirection(AnchorDirection.TOP_RIGHT)

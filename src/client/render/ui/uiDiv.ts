@@ -18,6 +18,8 @@ class UiDiv extends UiElement {
 
     /** Renders this ui element and its children */
     override render(context: CanvasRenderingContext2D): void {
+        this.renderBackground(context);
+
         const pos = this.getAbsolutePosition();
 
         context.save();
@@ -25,7 +27,7 @@ class UiDiv extends UiElement {
         context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
         context.restore();
 
-        super.render(context);
+        this.renderChildren(context);
     }
 
     // #endregion

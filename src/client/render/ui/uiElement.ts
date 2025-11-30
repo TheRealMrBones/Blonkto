@@ -14,6 +14,9 @@ abstract class UiElement {
     private anchordirection: AnchorDirection;
     protected hidden: boolean;
 
+    protected padding: number;
+    protected backgroundcolor: string | null;
+
     protected parent: UiElement | null;
     protected children: UiElement[];
 
@@ -22,6 +25,9 @@ abstract class UiElement {
         this.topleftposition = [0, 0];
         this.anchordirection = AnchorDirection.TOP_LEFT;
         this.hidden = false;
+
+        this.padding = 0;
+        this.backgroundcolor = null;
 
         this.parent = null;
         this.children = [];
@@ -77,7 +83,7 @@ abstract class UiElement {
         const halfwidth = rect.width / 2;
         const halfheight = rect.height / 2;
 
-        this.topleftposition = [rect.position[0] - halfwidth, rect.position[1] - halfheight];
+        this.topleftposition = [rect.position[0] - halfwidth + this.padding, rect.position[1] - halfheight + this.padding];
 
         return this;
     }
@@ -86,6 +92,19 @@ abstract class UiElement {
     setAnchorDirection(anchordirection: AnchorDirection): this {
         this.anchordirection = anchordirection;
         this.setPosition();
+        return this;
+    }
+
+    /** Sets the padding */
+    setPadding(padding: number): this {
+        this.padding = padding;
+        this.setPosition();
+        return this;
+    }
+
+    /** Sets the background color */
+    setBackgroundColor(color: string): this {
+        this.backgroundcolor = color;
         return this;
     }
 
@@ -104,6 +123,11 @@ abstract class UiElement {
             V2D.add(this.topleftposition, this.parent.getAbsolutePosition());
     }
 
+    /** Returns the position of this ui element as set on build */
+    getSetPosition(): Vector2D {
+        return this.setposition;
+    }
+
     /** Returns if this ui element is on the base layer (has no parent) */
     isBaseElement(): boolean {
         return (this.parent === null);
@@ -117,6 +141,16 @@ abstract class UiElement {
     /** Returns the children elements of this ui element */
     getChildren(): UiElement[] {
         return this.children;
+    }
+
+    /** Returns the padding */
+    getPadding(): number {
+        return this.padding;
+    }
+
+    /** Returns the background color */
+    getBackgroundColor(): string | null {
+        return this.backgroundcolor;
     }
 
     /** Returns if this ui element is hidden or not */
@@ -163,11 +197,7 @@ abstract class UiElement {
     // #region events
 
     /** Renders this ui element and its children */
-    render(context: CanvasRenderingContext2D): void {
-        for(const child of this.children){
-            if(!child.isHidden()) child.render(context);
-        }
-    }
+    abstract render(context: CanvasRenderingContext2D): void;
 
     /** Checks if this ui element or its children are candidates for a mouse event and returns if the click is terminated */
     checkMouseEvent(pos: Vector2D, eventtype: MouseEventType): boolean {
@@ -236,6 +266,32 @@ abstract class UiElement {
     /** Handles the blur event for this ui element */
     onBlur(): void {
 
+    }
+
+    // #endregion
+
+    // #region helpers
+
+    /** Renders the background on the given canvas */
+    protected renderBackground(context: CanvasRenderingContext2D): void {
+        context.save();
+
+        const rect = this.body.getContainingRect();
+        const pos = V2D.subtract(this.topleftposition, [this.padding, this.padding]);
+
+        if(this.backgroundcolor !== null){
+            context.fillStyle = this.backgroundcolor;
+            context.fillRect(pos[0], pos[1], rect.width + this.padding * 2, rect.height + this.padding * 2);
+        }
+
+        context.restore();
+    }
+
+    /** Renders the children of this ui element on the given canvas */
+    protected renderChildren(context: CanvasRenderingContext2D): void {
+        for(const child of this.children){
+            if(!child.isHidden()) child.render(context);
+        }
     }
 
     // #endregion

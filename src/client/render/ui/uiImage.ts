@@ -37,7 +37,9 @@ class UiImage extends UiElement {
     // #region events
 
     /** Renders this ui element and its children */
-    override render(context: CanvasRenderingContext2D): void {
+    render(context: CanvasRenderingContext2D): void {
+        this.renderBackground(context);
+
         const pos = this.getAbsolutePosition();
 
         if(this.image !== null){
@@ -46,7 +48,7 @@ class UiImage extends UiElement {
             context.restore();
         }
 
-        super.render(context);
+        this.renderChildren(context);
     }
 
     // #endregion
