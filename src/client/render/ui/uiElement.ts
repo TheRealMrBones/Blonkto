@@ -163,7 +163,7 @@ abstract class UiElement {
     /** Renders this ui element and its children */
     render(context: CanvasRenderingContext2D): void {
         for(const child of this.children){
-            child.render(context);
+            if(!child.isHidden()) child.render(context);
         }
     }
 

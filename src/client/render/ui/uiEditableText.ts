@@ -408,7 +408,7 @@ class UiEditableText extends UiText {
 
         // Render children
         for(const child of this.getChildren()){
-            child.render(context);
+            if(!child.isHidden()) child.render(context);
         }
     }
 

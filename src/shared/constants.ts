@@ -29,6 +29,7 @@ const Constants = Object.freeze({
     },
     ASSETS: {
         MISSING_TEXTURE: "MissingTexture",
+        CONNECTION_LOST_ICON: "ConnectionLostIcon",
         PLAYER: "BlonktoPlayer",
         TILE: "Tile",
         WOOD_WALL: "WoodWall",
