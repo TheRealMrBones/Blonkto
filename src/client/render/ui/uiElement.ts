@@ -133,7 +133,7 @@ abstract class UiElement {
 
     /** Moves the position of this ui element the given amounts */
     movePosition(move: Vector2D): void {
-        this.body.position = V2D.add(this.body.position, move);
+        this.setPosition(V2D.add(this.setposition, move));
     }
 
     /** Sets the parent element of this ui element */

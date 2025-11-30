@@ -77,7 +77,7 @@ abstract class Polygon extends CollisionObject {
 
         for(let i = 1; i < this.getVertexCount(); i++){
             const point = points[i];
-            
+
             if(point[0] < minx) minx = point[0];
             if(point[1] < miny) miny = point[1];
             if(point[0] > maxx) maxx = point[0];

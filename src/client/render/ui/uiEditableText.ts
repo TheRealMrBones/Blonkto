@@ -99,7 +99,7 @@ class UiEditableText extends UiText {
                 this.selectionstart = oldposition;
             }
             this.selectionend = this.cursorposition;
-            
+
             // Clear selection if start and end are the same
             if(this.selectionstart === this.selectionend){
                 this.clearSelection();
@@ -138,23 +138,23 @@ class UiEditableText extends UiText {
 
     /** Sets up keyboard event listener */
     private setupKeyboardListener(): void {
-        document.addEventListener('keydown', (e: KeyboardEvent) => {
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
             if(!this.selected) return;
 
             const isshift = e.shiftKey;
             const isctrl = e.ctrlKey || e.metaKey;
 
-            if(e.key === 'Enter'){
+            if(e.key === "Enter"){
                 this.selected = false;
                 this.emitSubmit();
                 e.preventDefault();
-            }else if(e.key === 'Backspace'){
+            }else if(e.key === "Backspace"){
                 if(this.hasSelection()){
                     this.deleteSelection();
                 }else{
                     const currenttext = this.getText();
                     if(this.cursorposition > 0){
-                        const newtext = currenttext.slice(0, this.cursorposition - 1) + 
+                        const newtext = currenttext.slice(0, this.cursorposition - 1) +
                                        currenttext.slice(this.cursorposition);
                         this.setText(newtext);
                         this.cursorposition--;
@@ -162,63 +162,63 @@ class UiEditableText extends UiText {
                     }
                 }
                 e.preventDefault();
-            }else if(e.key === 'Delete'){
+            }else if(e.key === "Delete"){
                 if(this.hasSelection()){
                     this.deleteSelection();
                 }else{
                     const currenttext = this.getText();
                     if(this.cursorposition < currenttext.length){
-                        const newtext = currenttext.slice(0, this.cursorposition) + 
+                        const newtext = currenttext.slice(0, this.cursorposition) +
                                        currenttext.slice(this.cursorposition + 1);
                         this.setText(newtext);
                         this.updateScrollOffset();
                     }
                 }
                 e.preventDefault();
-            }else if(e.key === 'ArrowLeft'){
+            }else if(e.key === "ArrowLeft"){
                 this.setCursorPosition(this.cursorposition - 1, isshift);
                 this.cursorvisible = true;
                 this.lastblinkupdate = Date.now();
                 e.preventDefault();
-            }else if(e.key === 'ArrowRight'){
+            }else if(e.key === "ArrowRight"){
                 this.setCursorPosition(this.cursorposition + 1, isshift);
                 this.cursorvisible = true;
                 this.lastblinkupdate = Date.now();
                 e.preventDefault();
-            }else if(e.key === 'Home'){
+            }else if(e.key === "Home"){
                 this.setCursorPosition(0, isshift);
                 this.cursorvisible = true;
                 this.lastblinkupdate = Date.now();
                 e.preventDefault();
-            }else if(e.key === 'End'){
+            }else if(e.key === "End"){
                 this.setCursorPosition(this.getText().length, isshift);
                 this.cursorvisible = true;
                 this.lastblinkupdate = Date.now();
                 e.preventDefault();
-            }else if(e.key === 'a' && isctrl){
+            }else if(e.key === "a" && isctrl){
                 this.selectionstart = 0;
                 this.selectionend = this.getText().length;
                 this.cursorposition = this.getText().length;
                 e.preventDefault();
-            }else if(e.key === 'c' && isctrl){
+            }else if(e.key === "c" && isctrl){
                 if(this.hasSelection()){
                     const selectedtext = this.getSelectedText();
                     navigator.clipboard.writeText(selectedtext).catch(err => {
-                        console.error('Failed to copy to clipboard:', err);
+                        console.error("Failed to copy to clipboard:", err);
                     });
                 }
                 e.preventDefault();
-            }else if(e.key === 'x' && isctrl){
+            }else if(e.key === "x" && isctrl){
                 if(this.hasSelection()){
                     const selectedtext = this.getSelectedText();
                     navigator.clipboard.writeText(selectedtext).then(() => {
                         this.deleteSelection();
                     }).catch(err => {
-                        console.error('Failed to cut to clipboard:', err);
+                        console.error("Failed to cut to clipboard:", err);
                     });
                 }
                 e.preventDefault();
-            }else if(e.key === 'v' && isctrl){
+            }else if(e.key === "v" && isctrl){
                 navigator.clipboard.readText().then(clipboardtext => {
                     if(this.hasSelection()){
                         this.deleteSelection();
@@ -232,10 +232,10 @@ class UiEditableText extends UiText {
                     this.cursorposition += clipboardtext.length;
                     this.updateScrollOffset();
                 }).catch(err => {
-                    console.error('Failed to read from clipboard:', err);
+                    console.error("Failed to read from clipboard:", err);
                 });
                 e.preventDefault();
-            }else if(e.key === 'Escape'){
+            }else if(e.key === "Escape"){
                 this.selected = false;
                 this.clearSelection();
                 e.preventDefault();
@@ -245,8 +245,8 @@ class UiEditableText extends UiText {
                 }
 
                 const currenttext = this.getText();
-                const newtext = currenttext.slice(0, this.cursorposition) + 
-                               e.key + 
+                const newtext = currenttext.slice(0, this.cursorposition) +
+                               e.key +
                                currenttext.slice(this.cursorposition);
                 this.setText(newtext);
                 this.cursorposition++;
@@ -276,26 +276,26 @@ class UiEditableText extends UiText {
     /** Handles the mouse down event for this ui element */
     override onMouseDown(pos: Vector2D): void {
         this.setSelected(true);
-        
+
         // Calculate cursor position based on click location
         this.context.font = `${this.getFontSize()}px ${this.getFont()}`;
-        
+
         const text = this.getText();
         const clickx = pos[0] + (this.scrollmode ? this.scrolloffset : 0);
-        
+
         let closestposition = 0;
         let closestdistance = Math.abs(clickx);
-        
+
         for(let i = 0; i <= text.length; i++){
             const textwidth = this.context.measureText(text.substring(0, i)).width;
             const distance = Math.abs(clickx - textwidth);
-            
+
             if(distance < closestdistance){
                 closestdistance = distance;
                 closestposition = i;
             }
         }
-        
+
         this.setCursorPosition(closestposition);
     }
 
