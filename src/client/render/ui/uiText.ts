@@ -166,7 +166,7 @@ class UiText extends UiElement {
     // #region helpers
 
     /** Updates the body dimensions based on text size */
-    private updateBodyDimensions(): void {
+    protected updateBodyDimensions(): void {
         const lines = this.maxwidth === null ?
             this.text.split("\n") :
             this.wrapText(this.text, this.maxwidth);
@@ -188,7 +188,7 @@ class UiText extends UiElement {
     }
 
     /** Wraps text into lines based on max width and newline characters */
-    private wrapText(text: string, maxwidth: number): string[] {
+    protected wrapText(text: string, maxwidth: number): string[] {
         this.context.font = `${this.fontsize}px ${this.font}`;
 
         const lines: string[] = [];

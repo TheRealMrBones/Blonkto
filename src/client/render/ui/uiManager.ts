@@ -1,4 +1,5 @@
 import PlayerClient from "client/playerClient.js";
+import UiEditableText from "client/render/ui/uiEditableText.js";
 import UiElement from "client/render/ui/uiElement.js";
 import UiText from "client/render/ui/uiText.js";
 import SharedConfig from "configs/shared.js";
@@ -15,6 +16,7 @@ class UiManager {
     private readonly uiinfo: UiText;
 
     private readonly uiinfotexts: string[] = ["", "", "", "", "", ""];
+    readonly testinput: UiEditableText;
 
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
@@ -41,9 +43,14 @@ class UiManager {
         // create all base ui elements
         this.uiinfo = new UiText("", 18)
             .setPosition([5, 5]);
+        this.testinput = new UiEditableText("Edit Me!", 18)
+            .setPosition([205, 5])
+            .setMaxWidth(200)
+            .setBackgroundColor("grey")
+            .setScrollMode(true);
 
         this.uielements = [
-            this.uiinfo,
+            this.uiinfo, this.testinput
         ];
 
         // prepare event listeners
@@ -165,6 +172,7 @@ class UiManager {
     /** Handles chat UI related focus events */
     private chatInputFocus(event: FocusEvent): void {
         if(this.inventoryopen) this.closeInventory();
+        this.testinput.setSelected(true);
 
         this.playerclient.inputManager.pauseCapturingInputs();
         window.removeEventListener("keydown", this.keyDownChecksListener);
