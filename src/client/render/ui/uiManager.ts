@@ -40,7 +40,7 @@ class UiManager {
 
         // create all base ui elements
         this.uiinfo = new UiText("", 18)
-            .setPosition([5, 5]);
+            .setPosition([5, 5]).setBackgroundColor("grey");
 
         this.uielements = [
             this.uiinfo,

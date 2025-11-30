@@ -15,6 +15,9 @@ class UiText extends UiElement {
     private maxwidth: number | null;
     protected lineheight: number;
 
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
+
     constructor(text: string, fontsize: number){
         super();
 
@@ -27,6 +30,9 @@ class UiText extends UiElement {
         this.textbaseline = "top";
         this.maxwidth = null;
         this.lineheight = fontsize * 1.2;
+
+        this.canvas = document.createElement("canvas");
+        this.context = this.canvas.getContext("2d")!;
 
         this.body = new Rectangle([0, 0], 0, 0).setCornerPivot();
         this.updateBodyDimensions();
@@ -49,6 +55,7 @@ class UiText extends UiElement {
     /** Sets the font family */
     setFont(font: string): this {
         this.font = font;
+        this.updateBodyDimensions();
         return this;
     }
 
@@ -126,22 +133,26 @@ class UiText extends UiElement {
             this.text.split("\n") :
             this.wrapText(this.text, this.maxwidth);
 
-        let estimatedwidth = 0;
+        this.context.font = `${this.fontsize}px ${this.font}`;
+
+        let maxwidth = 0;
         if(this.maxwidth === null){
             for(const line of lines){
-                if(line.length > estimatedwidth) estimatedwidth = line.length;
+                const width = this.context.measureText(line).width;
+                if(width > maxwidth) maxwidth = width;
             }
-            estimatedwidth *= this.fontsize * 0.6;
         }else{
-            estimatedwidth = this.maxwidth;
+            maxwidth = this.maxwidth;
         }
-        const estimatedheight = lines.length * this.lineheight;
+        const height = lines.length * this.lineheight;
 
-        this.body = new Rectangle(this.body.position, estimatedwidth, estimatedheight);
+        this.body = new Rectangle(this.body.position, maxwidth, height);
     }
 
     /** Wraps text into lines based on max width and newline characters */
     private wrapText(text: string, maxwidth: number): string[] {
+        this.context.font = `${this.fontsize}px ${this.font}`;
+
         const lines: string[] = [];
         const paragraphs = text.split('\n');
 
@@ -156,9 +167,9 @@ class UiText extends UiElement {
 
             for(const word of words){
                 const testline = currentline === '' ? word : `${currentline} ${word}`;
-                const estimatedwidth = testline.length * this.fontsize * 0.6;
+                const width = this.context.measureText(testline).width;
 
-                if(estimatedwidth > maxwidth && currentline !== ''){
+                if(width > maxwidth && currentline !== ''){
                     lines.push(currentline);
                     currentline = word;
                 }else{
