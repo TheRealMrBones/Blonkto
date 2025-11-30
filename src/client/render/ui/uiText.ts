@@ -7,6 +7,7 @@ class UiText extends UiElement {
 
     private text: string;
     private color: string;
+    private backgroundcolor: string | null;
     private font: string;
     private fontsize: number;
     private textalign: CanvasTextAlign;
@@ -19,6 +20,7 @@ class UiText extends UiElement {
 
         this.text = text;
         this.color = "black";
+        this.backgroundcolor = null;
         this.font = "Arial";
         this.fontsize = fontsize;
         this.textalign = "left";
@@ -26,9 +28,8 @@ class UiText extends UiElement {
         this.maxwidth = null;
         this.lineheight = fontsize * 1.2;
 
-        const estimatedwidth = text.length * fontsize * 0.6;
-        const estimatedheight = fontsize * 1.2;
-        this.body = new Rectangle([0, 0], estimatedwidth, estimatedheight).setCornerPivot();
+        this.body = new Rectangle([0, 0], 0, 0).setCornerPivot();
+        this.updateBodyDimensions();
     }
 
     // #region builder methods
@@ -36,6 +37,12 @@ class UiText extends UiElement {
     /** Sets the text color */
     setColor(color: string): this {
         this.color = color;
+        return this;
+    }
+
+    /** Sets the background color */
+    setBackgroundColor(color: string): this {
+        this.backgroundcolor = color;
         return this;
     }
 
@@ -115,15 +122,22 @@ class UiText extends UiElement {
 
     /** Updates the body dimensions based on text size */
     private updateBodyDimensions(): void {
+        const lines = this.maxwidth === null ? 
+            this.text.split("\n") :
+            this.wrapText(this.text, this.maxwidth);
+
+        let estimatedwidth = 0;
         if(this.maxwidth === null){
-            const estimatedwidth = this.text.length * this.fontsize * 0.6;
-            const estimatedheight = this.fontsize * 1.2;
-            this.body = new Rectangle(this.body.position, estimatedwidth, estimatedheight);
-        } else {
-            const lines = this.wrapText(this.text, this.maxwidth);
-            const estimatedheight = lines.length * this.lineheight;
-            this.body = new Rectangle(this.body.position, this.maxwidth, estimatedheight);
+            for(const line of lines){
+                if(line.length > estimatedwidth) estimatedwidth = line.length;
+            }
+            estimatedwidth *= this.fontsize * 0.6;
+        }else{
+            estimatedwidth = this.maxwidth;
         }
+        const estimatedheight = lines.length * this.lineheight;
+
+        this.body = new Rectangle(this.body.position, estimatedwidth, estimatedheight);
     }
 
     /** Wraps text into lines based on max width and newline characters */
@@ -169,6 +183,12 @@ class UiText extends UiElement {
         const pos = this.getAbsolutePosition();
 
         context.save();
+
+        if(this.backgroundcolor !== null){
+            context.fillStyle = this.backgroundcolor;
+            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
+        }
+
         context.fillStyle = this.color;
         context.font = `${this.fontsize}px ${this.font}`;
         context.textAlign = this.textalign;
