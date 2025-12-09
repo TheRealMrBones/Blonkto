@@ -10,7 +10,7 @@ class InfoUi extends UiText {
         "Ping:",
         "TPS:",
     ];
-    
+
     constructor(){
         super("", 18);
 

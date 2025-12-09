@@ -8,10 +8,10 @@ const { ASSETS } = Constants;
 /** The ui display for when the connection to the server is lost or delayed */
 class ConnectionLostUi extends UiImage {
     private readonly playerclient: PlayerClient;
-    
+
     constructor(playerclient: PlayerClient){
         super(null);
-        
+
         this.setAnchorDirection(AnchorDirection.TOP_RIGHT)
             .setPosition([5, 5])
             .hide();
@@ -25,7 +25,7 @@ class ConnectionLostUi extends UiImage {
     toggleConnectionLost(toggle: boolean): void {
         if(this.getImage() === null)
             this.setImage(this.playerclient.renderer.assetManager.getAssetRender(ASSETS.CONNECTION_LOST_ICON, "connection_lost", 80));
-        
+
         if(toggle){
             this.show();
         }else{

@@ -10,9 +10,9 @@ class CombinedCollisionObject extends CollisionObject {
     constructor(position: Vector2D, collisionobjects: CollisionObject[], rotation?: number){
         super(position, rotation);
 
-        this.collisionobjects = collisionobjects.map(co => 
+        this.collisionobjects = collisionobjects.map(co =>
             [co.getPosition(), co.getRotation(), co]);
-            
+
         this.updateCollisionObjects();
     }
 
