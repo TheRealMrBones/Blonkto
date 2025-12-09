@@ -169,7 +169,7 @@ class UiText extends UiElement {
         }
         const height = lines.length * this.lineheight - (this.lineheight - this.fontsize);
 
-        this.body = new Rectangle(this.body.position, maxwidth, height);
+        this.body = new Rectangle(this.body.getPosition(), maxwidth, height);
 
         this.setPosition();
     }

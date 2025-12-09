@@ -1,16 +1,57 @@
 import { AnchorDirection } from "shared/physics/anchorDirection.js";
 import Rectangle from "shared/physics/rectangle.js";
+import V2D from "shared/physics/vector2d.js";
 import { Vector2D } from "shared/types.js";
 
-/** An physics object in 2d space that can be interfaced by the SAT collision system */
+/** A physics object in 2d space that can be interfaced by the SAT collision system */
 abstract class CollisionObject {
-    position: Vector2D;
-    rotation: number;
+    private position: Vector2D = [0, 0];
+    private rotation: number = 0;
 
     constructor(position: Vector2D, rotation?: number){
-        this.position = position;
-        this.rotation = rotation ?? 0;
+        this.setPosition(position);
+        if(rotation !== undefined) this.setRotation(rotation);
     }
+
+    // #region getters
+
+    /** Returns the position of this collision object */
+    getPosition(): Vector2D {
+        return this.position;
+    }
+
+    /** Returns the rotation of this collision object */
+    getRotation(): number {
+        return this.rotation;
+    }
+
+    /** Returns the composite collision objects of this collision object if any */
+    getCompositeObjects(): CollisionObject[] {
+        return [];
+    }
+
+    // #endregion
+
+    // #region setters
+
+    /** Sets the position of this collision object */
+    setPosition(position: Vector2D): void {
+        this.position = position;
+    }
+
+    /** Moves the position of this collision object the given amounts */
+    movePosition(move: Vector2D): void {
+        this.setPosition(V2D.add(this.position, move));
+    }
+
+    /** Sets the rotation of this collision object */
+    setRotation(rotation: number): void {
+        this.rotation = rotation;
+    }
+
+    // #endregion
+
+    // #region SAT
 
     /** Returns the set of axis that should be tested between */
     abstract getSeperateAxisTheoremTestAxes(): Vector2D[];
@@ -23,6 +64,10 @@ abstract class CollisionObject {
 
     /** Returns the set of points to get the minimum distance point with a ranged object */
     abstract getPointsForMinDist(): Vector2D[];
+
+    // #endregion
+
+    // #region helper
 
     /** Returns the containing rectangle of this collision object */
     abstract getContainingRect(): Rectangle;
@@ -67,6 +112,8 @@ abstract class CollisionObject {
                 break;
         }
     }
+
+    // #endregion
 }
 
 export default CollisionObject;

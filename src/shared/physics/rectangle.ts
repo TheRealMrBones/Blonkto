@@ -14,6 +14,8 @@ class Rectangle extends Polygon {
         this.height = height;
     }
 
+    // #region getters
+
     /** Returns the vertices of this rectangle relative to the origin of the rectangle */
     getVeticesFromOrigin(): Vector2D[] {
         const halfwidth = this.width / 2;
@@ -45,6 +47,8 @@ class Rectangle extends Polygon {
 
         return normals;
     }
+
+    // #endregion
 }
 
 export default Rectangle;

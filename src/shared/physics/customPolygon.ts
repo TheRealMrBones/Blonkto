@@ -11,6 +11,8 @@ class CustomPolygon extends Polygon {
         this.points = points;
     }
 
+    // #region getters
+
     /** Returns the vertices of this polygon relative to the origin of the polygon */
     getVeticesFromOrigin(): Vector2D[] {
         return this.points;
@@ -20,6 +22,8 @@ class CustomPolygon extends Polygon {
     getVertexCount(): number {
         return this.points.length;
     }
+
+    // #endregion
 }
 
 export default CustomPolygon;

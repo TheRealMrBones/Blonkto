@@ -16,8 +16,8 @@ class CollisionManager {
         let playercollider: CollisionObject = this.playerclient.inputManager.getSelfAsCollisionObject();
 
         const tiles = this.playerclient.inputManager.tilesOn().sort((a, b) => {
-            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], playercollider.position);
-            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], playercollider.position);
+            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], playercollider.getPosition());
+            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], playercollider.getPosition());
             return dista - distb;
         });
 

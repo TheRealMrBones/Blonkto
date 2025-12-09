@@ -66,8 +66,8 @@ class CollisionManager {
         let objectcollider = new Circle([object.x, object.y], object.scale / 2);
 
         const tiles = object.tilesOn().sort((a, b) => {
-            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], objectcollider.position);
-            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], objectcollider.position);
+            const dista = V2D.getDistance([a[0] + .5, a[1] + .5], objectcollider.getPosition());
+            const distb = V2D.getDistance([b[0] + .5, b[1] + .5], objectcollider.getPosition());
             return dista - distb;
         });
 

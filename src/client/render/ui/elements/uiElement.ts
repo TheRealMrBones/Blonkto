@@ -48,31 +48,31 @@ abstract class UiElement {
 
         switch(this.anchordirection){
             case AnchorDirection.TOP_LEFT:
-                this.body.position = [this.setposition[0], this.setposition[1]];
+                this.body.setPosition([this.setposition[0], this.setposition[1]]);
                 break;
             case AnchorDirection.TOP:
-                this.body.position = [this.setposition[0] + halfwindowwidth, this.setposition[1]];
+                this.body.setPosition([this.setposition[0] + halfwindowwidth, this.setposition[1]]);
                 break;
             case AnchorDirection.TOP_RIGHT:
-                this.body.position = [windowwidth - this.setposition[0], this.setposition[1]];
+                this.body.setPosition([windowwidth - this.setposition[0], this.setposition[1]]);
                 break;
             case AnchorDirection.LEFT:
-                this.body.position = [this.setposition[0], this.setposition[1] + halfwindowheight];
+                this.body.setPosition([this.setposition[0], this.setposition[1] + halfwindowheight]);
                 break;
             case AnchorDirection.CENTER:
-                this.body.position = [this.setposition[0] + halfwindowwidth, this.setposition[1] + halfwindowheight];
+                this.body.setPosition([this.setposition[0] + halfwindowwidth, this.setposition[1] + halfwindowheight]);
                 break;
             case AnchorDirection.RIGHT:
-                this.body.position = [windowwidth - this.setposition[0], this.setposition[1] + halfwindowheight];
+                this.body.setPosition([windowwidth - this.setposition[0], this.setposition[1] + halfwindowheight]);
                 break;
             case AnchorDirection.BOTTOM_LEFT:
-                this.body.position = [this.setposition[0], windowheight - this.setposition[1]];
+                this.body.setPosition([this.setposition[0], windowheight - this.setposition[1]]);
                 break;
             case AnchorDirection.BOTTOM:
-                this.body.position = [this.setposition[0] + halfwindowwidth, windowheight - this.setposition[1]];
+                this.body.setPosition([this.setposition[0] + halfwindowwidth, windowheight - this.setposition[1]]);
                 break;
             case AnchorDirection.BOTTOM_RIGHT:
-                this.body.position = [windowwidth - this.setposition[0], windowheight - this.setposition[1]];
+                this.body.setPosition([windowwidth - this.setposition[0], windowheight - this.setposition[1]]);
                 break;
         }
 
@@ -83,7 +83,7 @@ abstract class UiElement {
         const halfwidth = rect.width / 2;
         const halfheight = rect.height / 2;
 
-        this.topleftposition = [rect.position[0] - halfwidth + this.padding, rect.position[1] - halfheight + this.padding];
+        this.topleftposition = [rect.getPosition()[0] - halfwidth + this.padding, rect.getPosition()[1] - halfheight + this.padding];
 
         return this;
     }

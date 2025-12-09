@@ -12,6 +12,8 @@ class Circle extends CollisionObject {
         this.radius = radius;
     }
 
+    // #region SAT
+
     /** Returns the set of axis that should be tested between */
     getSeperateAxisTheoremTestAxes(): Vector2D[] {
         return [];
@@ -19,7 +21,7 @@ class Circle extends CollisionObject {
 
     /** Returns the range of this collision object over the given axis */
     getSeperateAxisTheoremRange(axis: Vector2D): Vector2D {
-        const proj = V2D.dotProduct(axis, this.position);
+        const proj = V2D.dotProduct(axis, this.getPosition());
         return [proj - this.radius, proj + this.radius];
     }
 
@@ -30,13 +32,20 @@ class Circle extends CollisionObject {
 
     /** Returns the set of points to get the minimum distance point with a ranged object */
     getPointsForMinDist(): Vector2D[] {
-        return [this.position];
+        return [this.getPosition()];
     }
+
+    // #endregion
+
+    // #region helper
 
     /** Returns the containing rectangle of this collision object */
     getContainingRect(): Rectangle {
-        return new Rectangle([this.position[0], this.position[1]], this.radius * 2, this.radius * 2);
+        const position = this.getPosition();
+        return new Rectangle([position[0], position[1]], this.radius * 2, this.radius * 2);
     }
+
+    // #endregion
 }
 
 export default Circle;

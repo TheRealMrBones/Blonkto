@@ -5,6 +5,8 @@ import { Vector2D } from "shared/types.js";
 
 /** A closed convex polygon in 2d space */
 abstract class Polygon extends CollisionObject {
+    // #region getters
+
     /** Returns the vertices of this polygon relative to the origin of the polygon */
     abstract getVeticesFromOrigin(): Vector2D[];
 
@@ -13,9 +15,9 @@ abstract class Polygon extends CollisionObject {
         const vertices = this.getVeticesFromOrigin();
 
         for(let i = 0; i < vertices.length; i++){
-            if(this.rotation != 0)
-                vertices[i] = V2D.rotate(vertices[i], this.rotation);
-            vertices[i] = V2D.add(vertices[i], this.position);
+            if(this.getRotation() != 0)
+                vertices[i] = V2D.rotate(vertices[i], this.getRotation());
+            vertices[i] = V2D.add(vertices[i], this.getPosition());
         }
 
         return vertices;
@@ -37,6 +39,10 @@ abstract class Polygon extends CollisionObject {
 
         return normals;
     }
+
+    // #endregion
+
+    // #region SAT
 
     /** Returns the set of axis that should be tested between */
     getSeperateAxisTheoremTestAxes(): Vector2D[] {
@@ -66,6 +72,10 @@ abstract class Polygon extends CollisionObject {
         return this.getVertices();
     }
 
+    // #endregion
+
+    // #region helper
+
     /** Returns the containing rectangle of this collision object */
     getContainingRect(): Rectangle {
         const points = this.getVertices();
@@ -89,6 +99,8 @@ abstract class Polygon extends CollisionObject {
 
         return new Rectangle([minx + width / 2, miny + height / 2], width, height);
     }
+
+    // #endregion
 }
 
 export default Polygon;
