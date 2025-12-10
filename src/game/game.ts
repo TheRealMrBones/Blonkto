@@ -14,7 +14,7 @@ import World from "game/world/world.js";
 import FileManager from "server/fileManager.js";
 import Logger from "server/logging/logger.js";
 import Constants from "shared/constants.js";
-import { GameUpdateContent } from "shared/messageContentTypes.js";
+import { FailedConnectionContent, GameUpdateContent } from "shared/messageContentTypes.js";
 import { OneTimeMessageContent, createOneTimeMessage, RecipesContent, DarknessContent } from "shared/oneTimeMessageContentTypes.js";
 import { SerializedWriteGame } from "shared/serialization/serializedGame.js";
 import { SerializedWorldLoad } from "shared/serialization/world/serializedWorldLoad.js";
@@ -32,6 +32,8 @@ import PackageJson from "../../package.json" with { type: "json" };
 /** The main class that manages the game world and the entities in it */
 class Game {
     private readonly logger: Logger;
+
+    private readonly io: SocketIo;
 
     private readonly version: string;
     private readonly oldversion: string;
@@ -54,10 +56,14 @@ class Game {
     private nextupdatetime: number;
     lifeticks: number;
     starttime: number;
+    private exiting: boolean = false;
 
     constructor(io: SocketIo, fileManager: FileManager){
         this.logger = Logger.getLogger(LOG_CATEGORIES.GAME);
         this.logger.info("Initializing game");
+
+        // get socketio server
+        this.io = io;
 
         // get version
         this.version = PackageJson.version;
@@ -116,6 +122,10 @@ class Game {
 
     /** Tick the game world and all currently loaded objects */
     tick(): void {
+        // check for safe exit
+        if(this.exiting) return;
+
+        // start tick
         this.performanceManager.tickStart();
         this.lifeticks++;
 
@@ -146,6 +156,7 @@ class Game {
             , FAKE_PING / 2);
         }
 
+        // end tick
         this.performanceManager.tickEnd();
     }
 
@@ -223,6 +234,36 @@ class Game {
         return gameupdate;
     }
 
+    /** Stops ticking and safely saves all worl data */
+    safeExit(): void {
+        this.logger.info("Performing Safe Exit");
+
+        // close save intervals
+        clearInterval(this.saveinterval);
+        clearInterval(this.backupinterval);
+
+        // save the game state
+        this.exiting = true;
+        this.saveGame();
+
+        // remove all players
+        const content: FailedConnectionContent = {
+            reason: "Kicked",
+            extra: "Server Closed",
+        };
+
+        for(const p of this.entityManager.getPlayerEntities()){
+            p.socket.emit(MSG_TYPES.KICK, content);
+            p.socket.disconnect();
+            this.entityManager.removePlayer(p.id);
+        }
+
+        // close the server
+        this.io.close();
+
+        this.logger.info("Safe Exit Completed");
+    }
+
     // #endregion
 
     // #region serialization
@@ -265,6 +306,7 @@ class Game {
 
         // copy data to backup directory
         this.fileManager.copyFile("game", `${backupDir}/game`);
+        this.fileManager.copyFile("world", `${backupDir}/world`);
         this.fileManager.copyDirectory("world", `${backupDir}/world`);
         this.fileManager.copyDirectory("players", `${backupDir}/players`);
 
