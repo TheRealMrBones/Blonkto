@@ -50,6 +50,7 @@ type ServerConfigSchema = {
         DAY_LENGTH: number,
         NIGHT_LENGTH: number,
         DAY_TRANSITION_LENGTH: number,
+        EXIT_ON_CORRUPTED: boolean,
     },
     CHAT: {
         FILTER_CHAT: boolean,
@@ -111,6 +112,7 @@ const ServerConfig: ServerConfigSchema = {
         DAY_LENGTH: 6000,
         NIGHT_LENGTH: 3000,
         DAY_TRANSITION_LENGTH: 250,
+        EXIT_ON_CORRUPTED: true,
     },
     CHAT: {
         FILTER_CHAT: false,

@@ -235,7 +235,7 @@ class Game {
     }
 
     /** Stops ticking and safely saves all worl data */
-    safeExit(): void {
+    private safeExit(): void {
         this.logger.info("Performing Safe Exit");
 
         // close save intervals
@@ -262,6 +262,12 @@ class Game {
         this.io.close();
 
         this.logger.info("Safe Exit Completed");
+    }
+
+    /** Queues a safe exit to start immediatly after current event loop */
+    queueSafeExit(): void {
+        this.logger.info("Safe Exit Queued");
+        setImmediate(this.safeExit.bind(this));
     }
 
     // #endregion

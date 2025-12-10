@@ -1,3 +1,4 @@
+import ServerConfig from "configs/server.js";
 import SharedConfig from "configs/shared.js";
 import Game from "game/game.js";
 import EntityManager from "game/managers/entityManager.js";
@@ -24,6 +25,7 @@ import { SerializedWorldLoad, SerializedCellUpdate } from "shared/serialization/
 import { Vector2D } from "shared/types.js";
 
 const { LOG_CATEGORIES } = Constants;
+const { EXIT_ON_CORRUPTED } = ServerConfig.WORLD;
 const { WORLD_SIZE, CHUNK_SIZE } = SharedConfig.WORLD;
 
 /** Manages the reading, loading, and unloading of the game world along with the loading and unloading of ticking entities inside of it */
@@ -267,11 +269,11 @@ class Layer {
             // load chunk
             if(this.chunkFileExists(x, y)){
                 const loadedchunk = this.loadChunk(x, y);
-                if(loadedchunk !== null) return loadedchunk;
+                return loadedchunk;
+            }else{
+                // if no loaded chunk then generate a new chunk
+                return this.generateChunk(x, y);
             }
-
-            // if no loaded chunk then generate a new chunk
-            return this.generateChunk(x, y);
         }else{
             return null;
         }
@@ -313,7 +315,12 @@ class Layer {
         const chunk = Chunk.readFromSave(this, x, y, data, this.game);
         if(chunk === null){
             this.logger.error(`Chunk ${x},${y} failed to load. File may have been corrupted`);
-            return this.generateChunk(x, y);
+            if(EXIT_ON_CORRUPTED){
+                this.game.queueSafeExit();
+                return null;
+            }else{
+                return this.generateChunk(x, y);
+            }
         }
         this.loadedchunks.set(Layer.getChunkKey(x, y), chunk);
 

@@ -13,5 +13,5 @@ const args = [
 export default (): void => CommandRegistry.register(new CommandDefinition("safeexit", true, args, safeExitCommand, "Saves and closes the server"));
 
 function safeExitCommand(args: any[], player: Player, game: Game){
-    game.safeExit();
+    game.queueSafeExit();
 }
