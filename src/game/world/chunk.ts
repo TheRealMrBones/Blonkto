@@ -2,13 +2,18 @@ import SharedConfig from "configs/shared.js";
 import Game from "game/game.js";
 import Cell from "game/world/cell.js";
 import Layer from "game/world/layer.js";
+import Logger from "server/logging/logger.js";
+import Constants from "shared/constants.js";
 import { SerializedLoadCell } from "shared/serialization/world/serializedCell.js";
 import { SerializedLoadChunkFull, SerializedWriteChunk } from "shared/serialization/world/serializedChunk.js";
 
 const { CHUNK_SIZE } = SharedConfig.WORLD;
+const { LOG_CATEGORIES } = Constants;
 
 /** Represents a single chunk (square collection of cells) in the game world */
 class Chunk {
+    private readonly logger: Logger;
+    
     readonly layer: Layer;
     readonly chunkx: number;
     readonly chunky: number;
@@ -16,6 +21,8 @@ class Chunk {
     cellupdates: any[];
 
     constructor(layer: Layer, chunkx: number, chunky: number){
+        this.logger = Logger.getLogger(LOG_CATEGORIES.WORLD);
+
         this.layer = layer;
         this.chunkx = chunkx;
         this.chunky = chunky;
@@ -39,6 +46,8 @@ class Chunk {
                 }
             }
         }catch(e){
+            if(e instanceof Error)
+                if(e.stack !== undefined) chunk.logger.error(e.stack);
             return null;
         }
 
