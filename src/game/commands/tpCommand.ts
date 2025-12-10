@@ -48,12 +48,17 @@ function tpCommand(args: any[], player: Player, game: Game){
         case 4:
         case 5: {
             let playertoteleport: Player, playertoteleportto: Player;
-            if(argIndex == 2){
+            if(argIndex == 4){
                 playertoteleport = player;
                 playertoteleportto = args[1];
             }else{
                 playertoteleport = args[1];
                 playertoteleportto = args[2];
+            }
+
+            if(playertoteleport.id == playertoteleportto.id){
+                game.chatManager.sendMessageTo(player, "cannot teleport a player to themselves");
+                break;
             }
 
             playertoteleport.setPos(playertoteleportto.x, playertoteleportto.y);
