@@ -231,10 +231,10 @@ class InputManager {
 
     /** Selects the given hotbar slot as in use */
     selectSlot(index: number): void {
-        const oldslot = document.getElementById("slot" + (this.selectedslot + 1))!;
-        const newslot = document.getElementById("slot" + (index + 1))!;
-        oldslot.classList.remove("slotselected");
-        newslot.classList.add("slotselected");
+        this.playerclient.renderer.uiManager.hotbarui.getSlot(this.selectedslot)
+            .unselect();
+        this.playerclient.renderer.uiManager.hotbarui.getSlot(index)
+            .select();
 
         this.selectedslot = index;
         if(index < 9 && !this.hotbarpaused) this.hotbarslot = index;

@@ -38,19 +38,11 @@ class Inventory {
     setInventorySlot(slot: number, item: Item): void {
         this.inventory[slot] = item;
 
-        // show item in slot ui
-        const hotbarslot = document.getElementById("slot" + (slot + 1))!;
-
-        const itemimage = hotbarslot.querySelector("img");
-        if(itemimage !== null) hotbarslot.removeChild(itemimage);
-
-        const itemimg = document.createElement("img");
-        itemimg.className = "item";
-        itemimg.src = `/assets/${item.asset}.png`;
-        hotbarslot.appendChild(itemimg);
-
-        const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
-        hotbaritemamount.innerHTML = item.amount.toString();
+        if(slot < 9){
+            const asset = this.playerclient.renderer.assetManager.getAssetRender(item.asset, "", 64)!;
+            this.playerclient.renderer.uiManager.hotbarui.getSlot(slot)
+                .updateItem(item, asset);
+        }
     }
 
     /** Sets the entire inventories data to the given inventory */
@@ -78,13 +70,9 @@ class Inventory {
     clearInventorySlot(slot: number): void {
         this.inventory[slot] = null;
 
-        // remove item in slot ui
-        const hotbarslot = document.getElementById("slot" + (slot + 1))!;
-        const itemimage = hotbarslot.querySelector("img");
-        if(itemimage) hotbarslot.removeChild(itemimage);
-
-        const hotbaritemamount = document.getElementById("itemamount" + (slot + 1))!;
-        hotbaritemamount.innerHTML = "";
+        if(slot < 9)
+            this.playerclient.renderer.uiManager.hotbarui.getSlot(slot)
+                .updateItem(null);
     }
 
     /** Clears the entire inventory of its data */

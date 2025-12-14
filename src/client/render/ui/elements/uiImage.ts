@@ -1,17 +1,25 @@
 import UiElement from "client/render/ui/elements/uiElement.js";
 import Rectangle from "shared/physics/rectangle.js";
+import { Vector2D } from "shared/types.js";
 
 /** A ui element that displays an offscreen canvas image */
 class UiImage extends UiElement {
     override body: Rectangle;
 
     private image: OffscreenCanvas | null;
+    private dimensions: Vector2D | null = null;
 
-    constructor(image: OffscreenCanvas | null){
+    constructor(image: OffscreenCanvas | null, dimensions?: Vector2D){
         super();
 
         this.image = image;
-        this.body = new Rectangle([0, 0], image === null ? 0 : image.width, image === null ? 0 : image.height);
+
+        if(dimensions === undefined){
+            this.body = new Rectangle([0, 0], image === null ? 0 : image.width, image === null ? 0 : image.height);
+        }else{
+            this.dimensions = dimensions;
+            this.body = new Rectangle([0, 0], dimensions[0], dimensions[1]);
+        }
     }
 
     // #region getters
@@ -28,7 +36,8 @@ class UiImage extends UiElement {
     /** Sets the image of this ui element */
     setImage(image: OffscreenCanvas | null): void {
         this.image = image;
-        this.body = new Rectangle([0, 0], image === null ? 0 : image.width, image === null ? 0 : image.height);
+        if(this.dimensions === null)
+            this.body = new Rectangle([0, 0], image === null ? 0 : image.width, image === null ? 0 : image.height);
         this.setPosition();
     }
 

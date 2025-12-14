@@ -49,14 +49,6 @@ span {
     display: none;
 }
 
-#hotbar{
-    bottom: 20px;
-    left: 50%;
-    width: 100%;
-    text-align: center;
-    transform: translate(-50%, 0%);
-}
-
 #inventory{
     top: 50px;
     left: 50%;
@@ -71,8 +63,8 @@ span {
     background-color:rgba(134, 134, 134, 0.5);
     transform: none;
     margin: 2px;
-    width: 100px;
-    height: 100px;
+    width: 64px;
+    height: 64px;
     text-align: left;
     vertical-align: top;
 }
@@ -98,8 +90,8 @@ span {
     background-color:rgba(134, 134, 134, 0.5);
     transform: none;
     margin: 1px;
-    width: 75px;
-    height: 75px;
+    width: 48px;
+    height: 48px;
     text-align: left;
     vertical-align: top;
 }
@@ -110,8 +102,8 @@ span {
     background-color:rgba(134, 134, 134, 0.5);
     transform: none;
     margin: 1px;
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
     text-align: left;
     vertical-align: top;
 }

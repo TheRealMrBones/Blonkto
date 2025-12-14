@@ -5,13 +5,13 @@ import Rectangle from "shared/physics/rectangle.js";
 class UiDiv extends UiElement {
     override body: Rectangle;
 
-    private color: string;
+    private color: string | null = null;
 
-    constructor(width: number, height: number, color: string){
+    constructor(width: number, height: number, color?: string){
         super();
 
         this.body = new Rectangle([0, 0], width, height);
-        this.color = color;
+        if(color !== undefined) this.color = color;
     }
 
     // #region events
@@ -20,12 +20,14 @@ class UiDiv extends UiElement {
     override render(context: CanvasRenderingContext2D): void {
         this.renderBackground(context);
 
-        const pos = this.getAbsolutePosition();
+        if(this.color !== null){
+            const pos = this.getAbsolutePosition();
 
-        context.save();
-        context.fillStyle = this.color;
-        context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
-        context.restore();
+            context.save();
+            context.fillStyle = this.color;
+            context.fillRect(pos[0], pos[1], this.body.width, this.body.height);
+            context.restore();
+        }
 
         this.renderChildren(context);
     }

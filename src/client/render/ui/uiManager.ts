@@ -1,5 +1,6 @@
 import PlayerClient from "client/playerClient.js";
 import ConnectionLostUi from "client/render/ui/components/connectionLostUi.js";
+import HotbarUi from "client/render/ui/components/hotbarUi.js";
 import InfoUi from "client/render/ui/components/infoUi.js";
 import TabUi from "client/render/ui/components/tabUi.js";
 import UiElement from "client/render/ui/elements/uiElement.js";
@@ -13,13 +14,13 @@ class UiManager {
     private readonly playerclient: PlayerClient;
 
     private readonly uielements: UiElement[];
+    readonly hotbarui: HotbarUi;
     readonly infoui: InfoUi;
     readonly connectionlostui: ConnectionLostUi;
     readonly tabui: TabUi;
 
     private readonly chatDiv: HTMLElement = document.getElementById("chat")!;
     private readonly chatInput: HTMLInputElement = document.getElementById("chatinput") as HTMLInputElement;
-    private readonly hotbardiv: HTMLElement = document.getElementById("hotbar")!;
     private readonly inventorydiv: HTMLElement = document.getElementById("inventory")!;
     private readonly stationdiv: HTMLElement = document.getElementById("station")!;
 
@@ -38,23 +39,17 @@ class UiManager {
         this.playerclient = playerclient;
 
         // create all base ui components
+        this.hotbarui = new HotbarUi();
         this.infoui = new InfoUi();
         this.connectionlostui = new ConnectionLostUi(playerclient);
         this.tabui = new TabUi();
 
         this.uielements = [
+            this.hotbarui,
             this.infoui,
             this.connectionlostui,
             this.tabui,
         ];
-
-        // prepare event listeners
-        for(let i = 0; i < 63; i++){
-            const hotbarslot = document.getElementById("slot" + (i + 1))!;
-            hotbarslot.addEventListener("click", function() {
-                playerclient.inputManager.selectSlot(i);
-            });
-        }
     }
 
     // #region main functions
@@ -70,7 +65,6 @@ class UiManager {
     setupUi(): void {
         // show ui
         this.chatDiv.style.display = "block";
-        this.hotbardiv.style.display = "block";
 
         // add event listeners
         window.addEventListener("keydown", this.keyDownChecksListener);
@@ -87,7 +81,6 @@ class UiManager {
     hideUi(): void {
         // hide ui
         this.chatDiv.style.display = "none";
-        this.hotbardiv.style.display = "none";
         this.inventorydiv.style.display = "none";
         this.inventoryopen = false;
 

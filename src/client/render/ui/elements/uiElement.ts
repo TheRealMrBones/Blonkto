@@ -16,6 +16,8 @@ abstract class UiElement {
 
     protected padding: number;
     protected backgroundcolor: string | null;
+    protected bordercolor: string | null;
+    protected borderwidth: number;
 
     protected parent: UiElement | null;
     protected children: UiElement[];
@@ -28,6 +30,8 @@ abstract class UiElement {
 
         this.padding = 0;
         this.backgroundcolor = null;
+        this.bordercolor = null;
+        this.borderwidth = 3;
 
         this.parent = null;
         this.children = [];
@@ -41,38 +45,40 @@ abstract class UiElement {
     setPosition(pos?: Vector2D): this {
         if(pos !== undefined) this.setposition = pos;
 
-        const windowwidth = window.innerWidth;
-        const windowheight = window.innerHeight;
-        const halfwindowwidth = windowwidth / 2;
-        const halfwindowheight = windowheight / 2;
+        const containerwidth = this.parent === null ? window.innerWidth :
+            this.parent.getWidth();
+        const containerheight = this.parent === null ? window.innerHeight :
+            this.parent.getHeight();
+        const halfcontainerwidth = containerwidth / 2;
+        const halfcontainerheight = containerheight / 2;
 
         switch(this.anchordirection){
             case AnchorDirection.TOP_LEFT:
                 this.body.setPosition([this.setposition[0], this.setposition[1]]);
                 break;
             case AnchorDirection.TOP:
-                this.body.setPosition([this.setposition[0] + halfwindowwidth, this.setposition[1]]);
+                this.body.setPosition([this.setposition[0] + halfcontainerwidth, this.setposition[1]]);
                 break;
             case AnchorDirection.TOP_RIGHT:
-                this.body.setPosition([windowwidth - this.setposition[0], this.setposition[1]]);
+                this.body.setPosition([containerwidth - this.setposition[0], this.setposition[1]]);
                 break;
             case AnchorDirection.LEFT:
-                this.body.setPosition([this.setposition[0], this.setposition[1] + halfwindowheight]);
+                this.body.setPosition([this.setposition[0], this.setposition[1] + halfcontainerheight]);
                 break;
             case AnchorDirection.CENTER:
-                this.body.setPosition([this.setposition[0] + halfwindowwidth, this.setposition[1] + halfwindowheight]);
+                this.body.setPosition([this.setposition[0] + halfcontainerwidth, this.setposition[1] + halfcontainerheight]);
                 break;
             case AnchorDirection.RIGHT:
-                this.body.setPosition([windowwidth - this.setposition[0], this.setposition[1] + halfwindowheight]);
+                this.body.setPosition([containerwidth - this.setposition[0], this.setposition[1] + halfcontainerheight]);
                 break;
             case AnchorDirection.BOTTOM_LEFT:
-                this.body.setPosition([this.setposition[0], windowheight - this.setposition[1]]);
+                this.body.setPosition([this.setposition[0], containerheight - this.setposition[1]]);
                 break;
             case AnchorDirection.BOTTOM:
-                this.body.setPosition([this.setposition[0] + halfwindowwidth, windowheight - this.setposition[1]]);
+                this.body.setPosition([this.setposition[0] + halfcontainerwidth, containerheight - this.setposition[1]]);
                 break;
             case AnchorDirection.BOTTOM_RIGHT:
-                this.body.setPosition([windowwidth - this.setposition[0], windowheight - this.setposition[1]]);
+                this.body.setPosition([containerwidth - this.setposition[0], containerheight - this.setposition[1]]);
                 break;
         }
 
@@ -103,8 +109,20 @@ abstract class UiElement {
     }
 
     /** Sets the background color */
-    setBackgroundColor(color: string): this {
+    setBackgroundColor(color: string | null): this {
         this.backgroundcolor = color;
+        return this;
+    }
+
+    /** Sets the border color */
+    setBorderColor(color: string | null): this {
+        this.bordercolor = color;
+        return this;
+    }
+
+    /** Sets the background color */
+    setBorderWidth(width: number): this {
+        this.borderwidth = width;
         return this;
     }
 
@@ -161,6 +179,16 @@ abstract class UiElement {
     /** Returns if this ui element has event passthrough */
     eventPassthrough(): boolean {
         return false;
+    }
+
+    /** Gets the width of this ui element */
+    getWidth(): number {
+        return this.body.getContainingRect().width + this.padding * 2;
+    }
+
+    /** Gets the height of this ui element */
+    getHeight(): number {
+        return this.body.getContainingRect().height + this.padding * 2;
     }
 
     // #endregion
@@ -277,11 +305,18 @@ abstract class UiElement {
         context.save();
 
         const rect = this.body.getContainingRect();
-        const pos = V2D.subtract(this.topleftposition, [this.padding, this.padding]);
+        const pos = V2D.subtract(this.getAbsolutePosition(), [this.padding, this.padding]);
 
         if(this.backgroundcolor !== null){
             context.fillStyle = this.backgroundcolor;
             context.fillRect(pos[0], pos[1], rect.width + this.padding * 2, rect.height + this.padding * 2);
+        }
+
+        if(this.bordercolor !== null){
+            context.strokeStyle = this.bordercolor;
+            context.lineWidth = this.borderwidth;
+
+            context.strokeRect(pos[0], pos[1], rect.width + this.padding * 2, rect.height + this.padding * 2);
         }
 
         context.restore();
